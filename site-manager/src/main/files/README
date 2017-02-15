@@ -1,0 +1,26 @@
+Before using 'siteManager', the file 'siteManager.properties' needs to be
+edited to configure the parameters used to access the database:
+
+    javax.persistence.jdbc.driver - typically 'org.mariadb.jdbc.Driver'
+    javax.persistence.jdbc.url - URL referring to the database,
+        which typically has the form: 'jdbc:mariadb://<host>:<port>/<db>'
+		('<db>' is probably 'xacml' in this case)
+    javax.persistence.jdbc.user - the user id for accessing the database
+    javax.persistence.jdbc.password - password for accessing the database
+
+Once the properties file has been updated, the 'siteManager' script can be
+invoked as follows:
+
+    siteManager show [ -s <site> | -r <resourceName> ] :
+        display node information
+    siteManager setAdminState { -s <site> | -r <resourceName> } <new-state> :
+        update admin state on selected nodes
+    siteManager lock { -s <site> | -r <resourceName> } :
+        lock selected nodes
+    siteManager unlock { -s <site> | -r <resourceName> } :
+        unlock selected nodes
+
+Note that the 'siteManager' script assumes that the script,
+'site-manager-${project.version}.jar' file and 'siteManager.properties' file
+are all in the same directory. If the files are separated, the 'siteManager'
+script will need to be modified so it can locate the jar and properties files.

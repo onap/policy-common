@@ -1,0 +1,7 @@
+#! /bin/bash
+
+dir="${0%/*}"
+CLASSPATH="${dir}/site-manager-${project.version}.jar" java \
+	-DsiteManager.properties=${dir}/siteManager.properties \
+	org.openecomp.policy.common.sitemanager.Main "$@" | \
+	grep -v "^\[EL Info\]"

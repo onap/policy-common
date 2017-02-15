@@ -1,0 +1,120 @@
+<!--
+  ============LICENSE_START=======================================================
+  ECOMP Policy Engine - Common Modules
+  ================================================================================
+  Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+  ================================================================================
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+       http://www.apache.org/licenses/LICENSE-2.0
+  
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  ============LICENSE_END=========================================================
+  -->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  	<parent>
+		<groupId>org.openecomp.policy.common</groupId>
+		<artifactId>common-modules</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+  <groupId>org.openecomp.policy.common</groupId>
+  <artifactId>ECOMP-Logging</artifactId>
+  <description>ECOMP Logging Framework</description>
+  <packaging>jar</packaging>
+
+  <dependencies>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>javax.servlet-api</artifactId>
+      <version>3.0.1</version>
+      <scope>compile</scope>
+    </dependency>
+	<dependency>
+		<groupId>org.slf4j</groupId>
+		<artifactId>slf4j-api</artifactId>
+		<version>1.7.12</version>
+	</dependency>
+	<dependency>
+	    <groupId>com.att.eelf</groupId>
+		<artifactId>eelf-core</artifactId>
+		<version>0.0.1</version>
+	</dependency>
+	<dependency>
+		<groupId>log4j</groupId>
+		<artifactId>log4j</artifactId>
+		<version>1.2.17</version>
+		<scope>provided</scope>
+	</dependency>
+  </dependencies>
+  
+  <repositories>
+  	   <repository>   
+  	     <id>eelf-framework</id>
+			<url>http://search.maven.org/#search|ga|1|EELF</url> 
+			<name>EELF repository</name>
+  	   </repository>
+  </repositories>
+  
+  <pluginRepositories>
+			<pluginRepository>
+				<releases />
+				<snapshots />
+				<id>eelf-framework</id>
+				<url>http://search.maven.org/#search|ga|1|EELF</url> 
+			</pluginRepository>
+  </pluginRepositories>
+
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>com.att.eelf</groupId>
+				<artifactId>eelf-maven-plugin</artifactId>
+				<version>0.0.1</version>
+				<executions>
+					<execution>
+						<phase>install</phase>
+						<goals>
+							<goal>WikiMsgGenerator</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<!-- We need to include the dependency of the project so that its include 
+						in classpath when running plugin -->
+					<dependency>
+						<groupId>org.openecomp.policy.common</groupId>
+						<artifactId>ECOMP-Logging</artifactId>
+						<version>1.0.0-SNAPSHOT</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<outputDirectory>target/messages</outputDirectory>
+					<outputFile>messages.html</outputFile>
+					<resources>
+						<resource>
+							<messageClass>org.openecomp.policy.common.logging.eelf.MessageCodes</messageClass>
+							This needs to be replaced with your Enum class name .which
+							implements EELFResolvableErrorEnum and have your defined error
+							codes.
+							<header><![CDATA[<p>   <ac:macro ac:name="toc" /> </p>
+                <p>
+        <ac:macro ac:name="anchor"> <ac:default-parameter>Application Messages</ac:default-parameter>  </ac:macro> </p> <h2>Application Messages</h2>]]></header>
+						</resource>
+
+					</resources>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>
