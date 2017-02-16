@@ -77,7 +77,7 @@
 		</snapshotRepository>
 		<site>
 			<id>ecomp-javadoc</id>
-			<url>dav:https://ecomp-nexus:8443/repository/mso-javadoc/${project.version}</url>
+			<url>dav:https://ecomp-nexus:8443/repository/policy-javadoc/${project.version}</url>
 		</site>
 	</distributionManagement>
 
