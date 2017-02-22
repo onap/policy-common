@@ -1,3 +1,4 @@
+.DS_Store
 .project
 .settings
 .classpath
@@ -15,17 +16,5 @@ integrity-audit/testingLogs/common-modules/integrity-audit/audit.log
 integrity-audit/testingLogs/common-modules/integrity-audit/debug.log
 integrity-audit/testingLogs/common-modules/integrity-audit/error.log
 integrity-audit/testingLogs/common-modules/integrity-audit/metrics.log
-integrity-monitor/IntegrityMonitor.log.2016-09-02
-integrity-monitor/IntegrityMonitor.log.2016-09-06
-integrity-monitor/IntegrityMonitor.log.2016-09-15
-integrity-monitor/IntegrityMonitor.log.2016-09-19
-integrity-monitor/IntegrityMonitor.log.2016-09-20
-integrity-monitor/IntegrityMonitor.log.2016-09-26
-integrity-monitor/IntegrityMonitor.log.2016-09-30
-integrity-monitor/IntegrityMonitor.log.2016-10-01
-integrity-monitor/IntegrityMonitor.log.2016-10-03
-integrity-monitor/IntegrityMonitor.log.2016-10-07
-integrity-monitor/IntegrityMonitor.log.2016-10-11
-integrity-monitor/IntegrityMonitor.log.2016-10-12
-integrity-monitor/IntegrityMonitor.log.2016-10-18
+integrity-monitor/IntegrityMonitor.log.*
 *.log
