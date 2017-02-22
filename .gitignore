@@ -5,6 +5,7 @@
 .jupiter
 .pydevproject
 target
+bin
 .metadata/
 integrity-audit/sql/generatedCreateIA.ddl
 integrity-audit/sql/generatedDropIA.ddl
