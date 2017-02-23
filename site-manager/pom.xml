@@ -25,7 +25,6 @@
 	
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>org.openecomp.policy.common</groupId>
 	<artifactId>site-manager</artifactId>
 	<packaging>jar</packaging>
 
@@ -36,11 +35,6 @@
 	</parent>
 
 	<name>site-manager</name>
-
-	<properties>
-		<maven.compiler.source>1.7</maven.compiler.source>
-		<maven.compiler.target>1.7</maven.compiler.target>
-	</properties>
 
 	<build>
 		<plugins>
