@@ -62,11 +62,6 @@
 			<artifactId>h2</artifactId>
 			<version>[1.4.186,)</version>
 		</dependency>
-		<!-- <dependency>
-			<groupId>org.openecomp.policy.common</groupId>
-			<artifactId>integrity-monitor</artifactId>
-			<version>[1.0.0-SNAPSHOT],[1607.31.6-1,) </version>
-		</dependency> -->
 		<dependency>
 			 <groupId>org.apache.commons</groupId>
 			 <artifactId>commons-lang3</artifactId>
