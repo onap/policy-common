@@ -125,7 +125,13 @@ public class PolicyLogger {
 		}
 		
 		if(component != null && component.equalsIgnoreCase("DROOLS")){
+			MDC.put(TARGET_ENTITY, "POLICY");
+			MDC.put(TARGET_SERVICE_NAME,  "drools evaluate rule");	
 			return postMDCInfoForEvent(transId, new DroolsPDPMDCInfo());
+		} else {
+			// For Xacml
+			MDC.put(TARGET_ENTITY, "POLICY");
+			MDC.put(TARGET_SERVICE_NAME,  "PE Process");
 		}
 		
 		MDC.put(MDC_REMOTE_HOST, "");
@@ -140,16 +146,16 @@ public class PolicyLogger {
 		}
 		Instant startTime = Instant.now();
 		Instant endTime = Instant.now();
-		long ns = Duration.between(startTime, endTime).getSeconds();
-		String unit = " Seconds";
-		if(ns == 1){
-			unit = " Second";
-		}
+		long ns = Duration.between(startTime, endTime).toMillis(); // use millisecond as default and remove unit from log
+		//String unit = " Seconds";
+		//if(ns == 1){
+			//unit = " Second";
+		//}
 		
-		if(ns < 1){
-			ns = Duration.between(startTime, endTime).toMillis();
-			unit = " milliseconds";
-		}
+		//if(ns < 1){
+			//ns = Duration.between(startTime, endTime).toMillis();
+			//unit = " milliseconds";
+		//}
 		MDC.put(MDC_INSTANCE_UUID, "");
 		MDC.put(MDC_ALERT_SEVERITY, "");
 		
@@ -161,11 +167,11 @@ public class PolicyLogger {
 		//set default values for these required fields below, they can be overridden
 		formatedTime = sdf.format(Date.from(endTime));
 		MDC.put(END_TIME_STAMP, formatedTime);
-		MDC.put(ELAPSED_TIME, ns + unit);
+		MDC.put(ELAPSED_TIME, Long.toString(ns)); // + unit);
 		
 		MDC.put(PARTNER_NAME, "N/A");
 		
-		MDC.put(STATUS_CODE, "N/A");
+		MDC.put(STATUS_CODE, "COMPLETE");
 		MDC.put(RESPONSE_CODE, "N/A");
 		MDC.put(RESPONSE_DESCRIPTION, "N/A");
 		
@@ -203,16 +209,16 @@ public class PolicyLogger {
 		}
 		Instant startTime = Instant.now();
 		Instant endTime = Instant.now();
-		long ns = Duration.between(startTime, endTime).getSeconds();
-		String unit = " Seconds";
-		if(ns == 1){
-			unit = " Second";
-		}
+		long ns = Duration.between(startTime, endTime).toMillis(); // use millisecond as default and remove unit from log
+		//String unit = " Seconds";
+		//if(ns == 1){
+			//unit = " Second";
+		//}
 		
-		if(ns < 1){
-			ns = Duration.between(startTime, endTime).toMillis();
-			unit = " milliseconds";
-		}
+		//if(ns < 1){
+			//ns = Duration.between(startTime, endTime).toMillis();
+			//unit = " milliseconds";
+		//}
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS+00:00");
 	
@@ -222,7 +228,7 @@ public class PolicyLogger {
 		//set default values for these required fields below, they can be overridden
 		formatedTime = sdf.format(Date.from(endTime));
 		MDC.put(END_TIME_STAMP, formatedTime);
-		MDC.put(ELAPSED_TIME, ns + unit);
+		MDC.put(ELAPSED_TIME, Long.toString(ns)); // + unit);
 
 		return transId;
 	}
@@ -234,16 +240,16 @@ public class PolicyLogger {
 		
 		Instant startTime = Instant.now();
 		Instant endTime = Instant.now();
-		long ns = Duration.between(startTime, endTime).getSeconds();
-		String unit = " Seconds";
-		if(ns == 1){
-			unit = " Second";
-		}
+		long ns = Duration.between(startTime, endTime).toMillis();
+		//String unit = " Seconds";
+		//if(ns == 1){
+			//unit = " Second";
+		//}
 		
-		if(ns < 1){
-			ns = Duration.between(startTime, endTime).toMillis();
-			unit = " milliseconds";
-		}
+		//if(ns < 1){
+			//ns = Duration.between(startTime, endTime).toMillis();
+			//unit = " milliseconds";
+		//}
 		MDC.put(MDC_INSTANCE_UUID, "");
 		MDC.put(MDC_ALERT_SEVERITY, "");
 		
@@ -255,11 +261,11 @@ public class PolicyLogger {
 		//set default values for these required fields below, they can be overridden
 		formatedTime = sdf.format(Date.from(endTime));
 		MDC.put(END_TIME_STAMP, formatedTime);
-		MDC.put(ELAPSED_TIME, ns + unit);
+		MDC.put(ELAPSED_TIME, Long.toString(ns)); // + unit);
 		
 		MDC.put(PARTNER_NAME, "N/A");
 		
-		MDC.put(STATUS_CODE, "N/A");
+		MDC.put(STATUS_CODE, "COMPLETE");
 		MDC.put(RESPONSE_CODE, "N/A");
 		MDC.put(RESPONSE_DESCRIPTION, "N/A");
 
@@ -315,7 +321,7 @@ public class PolicyLogger {
 		}
 		MDC.put(MDC_INSTANCE_UUID, "");
 		MDC.put(MDC_ALERT_SEVERITY, "");
-		MDC.put(STATUS_CODE, "N/A");
+		MDC.put(STATUS_CODE, "COMPLETE");
 		
 		return transId;
 
@@ -634,7 +640,7 @@ public class PolicyLogger {
 	 * @param arg0
 	 */
 	public static void audit(String className, Object arg0) {
-		MDC.put(STATUS_CODE, "N/A");
+		MDC.put(STATUS_CODE, "COMPLETE");
 		MDC.put(CLASS_NAME, className);
 		auditLogger.info("" + arg0);
 	}
@@ -644,7 +650,7 @@ public class PolicyLogger {
 	 * @param arg0
 	 */
 	public static void audit(Object arg0) {
-		MDC.put(STATUS_CODE, "N/A");
+		MDC.put(STATUS_CODE, "COMPLETE");
 		MDC.put(CLASS_NAME, "");
 		auditLogger.info("" + arg0);
 	}
@@ -748,7 +754,7 @@ public class PolicyLogger {
 	 */
 	public static void recordAuditEventStart(String eventId) {
 		
-		MDC.put(STATUS_CODE, "N/A");		
+		MDC.put(STATUS_CODE, "COMPLETE");		
 		postMDCInfoForEvent(eventId);
 		
 		if(eventTracker == null){
@@ -955,21 +961,21 @@ public class PolicyLogger {
 		MDC.put(RESPONSE_CODE, "N/A");
 		MDC.put(RESPONSE_DESCRIPTION, "N/A");
 		
-		long ns = Duration.between(startTime, endTime).getSeconds();
-		String unit = " Seconds";
-		if(ns == 1){
-			unit = " Second";
-		}
+		long ns = Duration.between(startTime, endTime).toMillis();
+		//String unit = " Seconds";
+		//if(ns == 1){
+			//unit = " Second";
+		//}
 		
-		if(ns < 1){
-			ns = Duration.between(startTime, endTime).toMillis();
-			unit = " milliseconds";
-		}
+		//if(ns < 1){
+			//ns = Duration.between(startTime, endTime).toMillis();
+			//unit = " milliseconds";
+		//}
 		
-		MDC.put(ELAPSED_TIME, ns + unit);
+		MDC.put(ELAPSED_TIME, Long.toString(ns)); // + unit);
 		
 		auditLogger.info(MessageCodes.RULE_AUDIT_START_END_INFO,
-			serviceName, rule, startTime.toString(), endTime.toString(), ns+unit, policyVersion);
+			serviceName, rule, startTime.toString(), endTime.toString(), Long.toString(ns), policyVersion);
 		
 		//--- remove the record from the concurrentHashMap
 		if(eventTracker != null){

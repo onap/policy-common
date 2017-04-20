@@ -37,14 +37,15 @@ import javax.persistence.LockModeType;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 
-//import org.apache.log4j.Logger;
-
-import org.openecomp.policy.common.im.jmx.*;
 import org.openecomp.policy.common.im.jpa.ForwardProgressEntity;
 import org.openecomp.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.openecomp.policy.common.im.jpa.StateManagementEntity;
-import org.openecomp.policy.common.logging.flexlogger.FlexLogger; 
+import org.openecomp.policy.common.logging.flexlogger.FlexLogger;
 import org.openecomp.policy.common.logging.flexlogger.Logger;
+//import org.apache.log4j.Logger;
+import org.openecomp.policy.common.im.jmx.ComponentAdmin;
+import org.openecomp.policy.common.im.jmx.ComponentAdminMBean;
+import org.openecomp.policy.common.im.jmx.JmxAgentConnection;
 
 /**
  * IntegrityMonitor
@@ -309,7 +310,6 @@ public class IntegrityMonitor {
         	em.persist(rrx);
         	// flush to the DB
         	synchronized(IMFLUSHLOCK){
-        		em.flush();
         		et.commit();
         	}
         
@@ -442,59 +442,145 @@ public class IntegrityMonitor {
 		}
 
 	}
-	
-	private String stateCheck(String dep) {
-		logger.debug("checking state of dependent resource: " + dep);
-		
-		// get state management entry for dependent resource
-		StateManagementEntity stateManagementEntity = null;
-		String error_msg = null;
-		try {
-			// Start a transaction
-			EntityTransaction et = em.getTransaction();
-			et.begin();
 
-			// query if StateManagement entry exists for dependent resource
-			Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
+	/*
+	 * This method checks the forward progress counter and the state of
+	 * a dependency.  If the dependency is unavailable or failed, an
+	 * error message is created which is checked when evaluateSanity interface
+	 * is called.  If the error message is set then the  evaluateSanity
+	 * will return an error.  
+	 */
+	public String stateCheck(String dep) {
+		logger.debug("checking state of dependent resource: " + dep);
+
+		String error_msg = null;
+		ForwardProgressEntity forwardProgressEntity = null;
+		StateManagementEntity stateManagementEntity = null;
+		
+		// Start a transaction
+		EntityTransaction et = em.getTransaction();
+		et.begin();
+
+		try{
+			Query query = em.createQuery("Select p from ForwardProgressEntity p where p.resourceName=:resource");
 			query.setParameter("resource", dep);
 
 			@SuppressWarnings("rawtypes")
-			List smList = query.setLockMode(
-					  LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
-			if (!smList.isEmpty()) {
-				// exist 
-				stateManagementEntity = (StateManagementEntity) smList.get(0);
+			List fpList = query.setLockMode(
+					LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+
+			if (!fpList.isEmpty()) {
+				// exists
+				forwardProgressEntity = (ForwardProgressEntity) fpList.get(0);
 				// refresh the object from DB in case cached data was returned
-        		em.refresh(stateManagementEntity);
-				logger.debug("Found entry in StateManagementEntity table for dependent Resource=" + dep);
+				em.refresh(forwardProgressEntity);
+				logger.debug("Found entry in ForwardProgressEntity table for dependent Resource=" + dep);
 			} else {
-				error_msg = dep + ": resource not found in state management entity database table";
+				error_msg = dep + ": resource not found in ForwardProgressEntity database table";
+				logger.debug(error_msg);
 				logger.error(error_msg);
 			}
-
 			synchronized(IMFLUSHLOCK){
 				et.commit();
 			}
-		} catch (Exception e) {
+		}
+		catch(Exception ex){
 			// log an error
-			error_msg = dep + ": StateManagementEntity DB read failed with exception: " + e;
+			error_msg = dep + ": ForwardProgressEntity DB operation failed with exception: " + ex;
+			logger.debug(error_msg);
 			logger.error(error_msg);
+			synchronized(IMFLUSHLOCK){
+				if(et.isActive()){
+					et.rollback();
+				}
+			}
+		}
+
+		if(error_msg==null){
+			// Start a transaction
+			et = em.getTransaction();
+			et.begin();
+			try {
+				// query if StateManagement entry exists for dependent resource
+				Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
+				query.setParameter("resource", dep);
+
+				@SuppressWarnings("rawtypes")
+				List smList = query.setLockMode(
+						LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+				if (!smList.isEmpty()) {
+					// exist 
+					stateManagementEntity = (StateManagementEntity) smList.get(0);
+					// refresh the object from DB in case cached data was returned
+					em.refresh(stateManagementEntity);
+					logger.debug("Found entry in StateManagementEntity table for dependent Resource=" + dep);
+				} else {
+					error_msg = dep + ": resource not found in state management entity database table";
+					logger.debug(error_msg);
+					logger.error(error_msg);
+				}
+
+				synchronized(IMFLUSHLOCK){
+					et.commit();
+				}
+			} catch (Exception e) {
+				// log an error
+				error_msg = dep + ": StateManagementEntity DB read failed with exception: " + e;
+				logger.debug(error_msg);
+				logger.error(error_msg);
+				synchronized(IMFLUSHLOCK){
+					if(et.isActive()){
+						et.rollback();
+					}
+				}
+			}
+		}
+
+		//verify that the ForwardProgress is current (check last_updated)
+		if(error_msg==null){
+			Date date = new Date();
+			long diffMs = date.getTime() - forwardProgressEntity.getLastUpdated().getTime();
+			logger.debug("IntegrityMonitor.stateCheck(): diffMs = " + diffMs);
+
+			//Threshold for a stale entry
+			long staleMs = failedCounterThreshold * monitorInterval * 1000;
+			logger.debug("IntegrityMonitor.stateCheck(): staleMs = " + staleMs);
+
+			if(diffMs > staleMs){
+				//ForwardProgress is stale.  Disable it
+				try {
+					if(!stateManagementEntity.getOpState().equals(StateManagement.DISABLED)){
+						logger.debug("IntegrityMonitor.stateCheck(): Changing OpStat = disabled for " + dep);
+						stateManager.disableFailed(dep);
+					}
+				} catch (Exception e) {
+					String msg = "IntegrityMonitor.stateCheck(): Failed to diableFail dependent resource = " + dep 
+							+ "; " + e.getMessage();
+					logger.debug(msg);
+					logger.error(msg);
+				}
+			}
 		}
 		
 		// check operation, admin and standby states of dependent resource
 		if (error_msg == null) {
 			if ((stateManager.getAdminState() != null) && stateManagementEntity.getAdminState().equals(StateManagement.LOCKED)) {
 				error_msg = dep + ": resource is administratively locked";
+				logger.debug(error_msg);
 				logger.error(error_msg);
 			} else if ((stateManager.getOpState() != null) && stateManagementEntity.getOpState().equals(StateManagement.DISABLED)) {
 				error_msg = dep + ": resource is operationally disabled";
+				logger.debug(error_msg);
 				logger.error(error_msg);
 			} else if ((stateManager.getStandbyStatus() != null) && stateManagementEntity.getStandbyStatus().equals(StateManagement.COLD_STANDBY)) {
 				error_msg = dep + ": resource is cold standby";
+				logger.debug(error_msg);
 				logger.error(error_msg);
 			}
 		}
 		
+		String returnMsg = "IntegrityMonitor.stateCheck(): returned error_msg: " + error_msg;
+		logger.debug(returnMsg);
 		return error_msg;
 	}
 	
@@ -551,6 +637,11 @@ public class IntegrityMonitor {
 			// log an error and continue
 			error_msg = dep + ": ForwardProgressEntity DB read failed with exception: " + e;
 			logger.error(error_msg);
+			synchronized(IMFLUSHLOCK){
+				if(et.isActive()){
+					et.rollback();
+				}
+			}
 		}
 		
 		return error_msg;
@@ -563,11 +654,10 @@ public class IntegrityMonitor {
 
 		// get the JMX URL from the database
 		String jmxUrl = null;
+		// Start a transaction
+		EntityTransaction et = em.getTransaction();
+		et.begin();
 		try {
-			// Start a transaction
-			EntityTransaction et = em.getTransaction();
-			et.begin();
-
 			// query if ResourceRegistration entry exists for resourceName
 			Query rquery = em.createQuery("Select r from ResourceRegistrationEntity r where r.resourceName=:rn");
 			rquery.setParameter("rn", dep);
@@ -595,6 +685,11 @@ public class IntegrityMonitor {
 		} catch (Exception e) {
 			error_msg = dep + ": ResourceRegistrationEntity DB read failed with exception: " + e;
 			logger.error(error_msg);
+			synchronized(IMFLUSHLOCK){
+				if(et.isActive()){
+					et.rollback();
+				}
+			}
 		}
 
 
@@ -876,7 +971,6 @@ public class IntegrityMonitor {
 				em.persist(fpx);
 				// flush to the DB and commit
 				synchronized(IMFLUSHLOCK){
-					em.flush();
 					et.commit();
 				}
 			}
@@ -887,8 +981,10 @@ public class IntegrityMonitor {
 			}
         } catch (Exception e) {
         	try {
-        		if (et.isActive()) {
-        			et.rollback();
+        		synchronized(IMFLUSHLOCK){
+        			if (et.isActive()) {
+        				et.rollback();
+        			}
         		}
         	} catch (Exception e1) {
         		// ignore
@@ -964,18 +1060,6 @@ public class IntegrityMonitor {
 				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.WRITE_FPC_INTERVAL);
 			}
 		}
-		
-		/***********************
-		// followers are a comma separated list of resource names
-		if (prop.getProperty(IntegrityMonitorProperties.SS_FOLLOWERS) != null) {
-			try {
-				followers = prop.getProperty(IntegrityMonitorProperties.SS_FOLLOWERS).split(",");
-				logger.debug("followers property = " + Arrays.toString(followers));
-			} catch (Exception e) {
-				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.SS_FOLLOWERS);
-			}
-		}
-		**************************/
 		
 		// dependency_groups are a semi-colon separated list of groups
 		// each group is a comma separated list of resource names

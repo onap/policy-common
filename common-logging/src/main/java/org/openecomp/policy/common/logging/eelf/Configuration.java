@@ -43,6 +43,16 @@ public interface Configuration  extends com.att.eelf.configuration.Configuration
 	  */
 	public String PARTNER_NAME = "PartnerName";
 	
+	/**
+	 * Target Entity
+	 */
+    public String TARGET_ENTITY = "TargetEntity"; 
+	
+    /**
+     * Target service name
+     */
+	public String TARGET_SERVICE_NAME = "TargetServiceName"; 
+	
 	 /**
 	  * High level success or failure (COMPLETE or ERROR)
 	  */

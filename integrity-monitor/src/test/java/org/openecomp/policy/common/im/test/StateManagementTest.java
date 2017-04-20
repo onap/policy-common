@@ -41,6 +41,7 @@ import javax.persistence.Query;
 
 
 
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -49,7 +50,6 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-
 import org.openecomp.policy.common.im.StateManagement;
 import org.openecomp.policy.common.im.StateTransition;
 import org.openecomp.policy.common.im.StandbyStatusException; 
@@ -57,6 +57,11 @@ import org.openecomp.policy.common.im.StateChangeNotifier;
 import org.openecomp.policy.common.logging.flexlogger.FlexLogger; 
 import org.openecomp.policy.common.logging.flexlogger.Logger;
 
+/*
+ * All JUnits are designed to run in the local development environment
+ * where they have write privileges and can execute time-sensitive
+ * tasks.
+ */
 public class StateManagementTest {
 	private static Logger logger = FlexLogger.getLogger(StateManagementTest.class);
 	

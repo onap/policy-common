@@ -55,6 +55,11 @@ import org.openecomp.policy.common.ia.jpa.IntegrityAuditEntity;
 import org.openecomp.policy.common.logging.flexlogger.FlexLogger; 
 import org.openecomp.policy.common.logging.flexlogger.Logger;
 
+/*
+ * All JUnits are designed to run in the local development environment
+ * where they have write privileges and can execute time-sensitive
+ * tasks.
+ */
 public class DbAuditTest {
 	
 	private static Logger logger = FlexLogger.getLogger(DbAuditTest.class);

@@ -75,6 +75,10 @@ public class ECOMPLoggingContext {
 	private static final String THREAD_ID = "threadId";
 	private static final String SERVER_NAME = "serverName";
 	private static final String SERVICE_NAME = "serviceName";
+	private static final String PARTNER_NAME = "partnerName";
+	private static final String STATUS_CODE = "statusCode";
+	private static final String TARGET_ENTITY = "targetEntity";
+	private static final String TARGET_SERVICE_NAME = "targetServiceName";
 	private static final String INSTANCE_UUID = "instanceUuid";
 	private static final String SEVERITY = "severity";
 	private static final String SERVER_IP_ADDRESS = "serverIpAddress";
@@ -123,6 +127,11 @@ public class ECOMPLoggingContext {
 		MDC.clear();
 		baseContext.context.transferTo(context);
 		transactionStartTime = baseContext.transactionStartTime;
+		setServiceName("POLICY");
+		setPartnerName("USER");
+		setStatusCode("COMPLETE");
+		setTargetEntity("POLICY");
+		setTargetServiceName("PE Process");
 	}
 	
 	/**
@@ -250,6 +259,70 @@ public class ECOMPLoggingContext {
 	 */
 	public String getServiceName() {
 		return context.get(SERVICE_NAME, "");
+	}
+	
+	/**
+	 * Set the value for the data item with key "partnerName"
+	 * 
+	 * @param id
+	 */
+	public void setPartnerName(String name) {
+		context.put(PARTNER_NAME, name);
+	}
+	/**
+	 * Get the value for the data item with key "partnerName"
+	 * @return current value, or empty string if not set
+	 */
+	public String getPartnerName() {
+		return context.get(PARTNER_NAME, "");
+	}
+	
+	/**
+	 * Set the value for the data item with key "statusCode"
+	 * 
+	 * @param id
+	 */
+	public void setStatusCode(String name) {
+		context.put(STATUS_CODE, name);
+	}
+	/**
+	 * Get the value for the data item with key "statusCode"
+	 * @return current value, or empty string if not set
+	 */
+	public String getStatusCode() {
+		return context.get(STATUS_CODE, "");
+	}
+	
+	/**
+	 * Set the value for the data item with key "targetEntity"
+	 * 
+	 * @param id
+	 */
+	public void setTargetEntity(String name) {
+		context.put(TARGET_ENTITY, name);
+	}
+	/**
+	 * Get the value for the data item with key "targetEntity"
+	 * @return current value, or empty string if not set
+	 */
+	public String getTargetEntity() {
+		return context.get(TARGET_ENTITY, "");
+	}
+	
+	/**
+	 * Set the value for the data item with key "targetServiceName"
+	 * 
+	 * @param id
+	 */
+	public void setTargetServiceName(String name) {
+		context.put(TARGET_SERVICE_NAME, name);
+	}
+	/**
+	 * Get the value for the data item with key "targetServiceName"
+	 * @return current value, or empty string if not set
+	 */
+	public String getTargetServiceName() {
+		return context.get(TARGET_SERVICE_NAME, "");
 	}
 	
 	/**
@@ -433,17 +506,17 @@ public class ECOMPLoggingContext {
 	 */
 	
 	public void setTransactionElapsedTime(Instant transactionEndTime) {
-		long ns = Duration.between(transactionStartTime, transactionEndTime).getSeconds();
-		String unit = " Seconds";
-		if(ns == 1){
-			unit = " Second";
-		}
+		long ns = Duration.between(transactionStartTime, transactionEndTime).toMillis();
+		//String unit = " Seconds";
+		//if(ns == 1){
+			//unit = " Second";
+		//}
 		
-		if(ns < 1){
-			ns = Duration.between(transactionStartTime, transactionEndTime).toMillis();
-			unit = " milliseconds";
-		}
-		context.put(TRANSACTION_ELAPSED_TIME, ns + unit);
+		//if(ns < 1){
+			//ns = Duration.between(transactionStartTime, transactionEndTime).toMillis();
+			//unit = " milliseconds";
+		//}
+		context.put(TRANSACTION_ELAPSED_TIME, ns); // + unit);
 	}
 
 	/**
@@ -506,17 +579,17 @@ public class ECOMPLoggingContext {
 	 */
 	
 	public void setMetricElapsedTime(Instant metricEndTime) {
-		long ns = Duration.between(metricStartTime, metricEndTime).getSeconds();
-		String unit = " Seconds";
-		if(ns == 1){
-			unit = " Second";
-		}
+		long ns = Duration.between(metricStartTime, metricEndTime).toMillis();
+		//String unit = " Seconds";
+		//if(ns == 1){
+			//unit = " Second";
+		//}
 		
-		if(ns < 1){
-			ns = Duration.between(metricStartTime, metricEndTime).toMillis();
-			unit = " milliseconds";
-		}
-		context.put(METRIC_ELAPSED_TIME, ns + unit);
+		//if(ns < 1){
+			//ns = Duration.between(metricStartTime, metricEndTime).toMillis();
+			//unit = " milliseconds";
+		//}
+		context.put(METRIC_ELAPSED_TIME, ns); // + unit);
 	}
 
 	/**

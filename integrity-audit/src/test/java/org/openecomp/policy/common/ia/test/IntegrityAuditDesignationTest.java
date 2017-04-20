@@ -51,6 +51,11 @@ import org.openecomp.policy.common.ia.IntegrityAuditProperties;
 import org.openecomp.policy.common.logging.flexlogger.FlexLogger; 
 import org.openecomp.policy.common.logging.flexlogger.Logger;
 
+/*
+ * All JUnits are designed to run in the local development environment
+ * where they have write privileges and can execute time-sensitive
+ * tasks.
+ */
 public class IntegrityAuditDesignationTest {
 	
 	private static Logger logger = FlexLogger.getLogger(IntegrityAuditDesignationTest.class);
@@ -58,7 +63,7 @@ public class IntegrityAuditDesignationTest {
 	/*
 	 * Provides a little cushion for timing events.
 	 */
-	private static int FUDGE_FACTOR = 5000;
+	private static int FUDGE_FACTOR = 15000;
 	
 	private static String persistenceUnit;
 	private static Properties properties;
@@ -1028,29 +1033,31 @@ public class IntegrityAuditDesignationTest {
 		IntegrityAudit integrityAudit3 = new IntegrityAudit(resourceName3, persistenceUnit3, properties3);
 				
 		// Start audit on pdp1
+		logger.info("testDesignatedNodeDead: Start audit on pdp1");
 		integrityAudit.startAuditThread();			
 
-		// Sleep long enough for pdp1 figure out that it should be auditing and start the audit.
-		Thread.sleep(500); 
-		
 		// Start the auditing threads on other nodes.
+		logger.info("testDesignatedNodeDead: Start audit on pdp2");
 		integrityAudit2.startAuditThread();	
+		logger.info("testDesignatedNodeDead: Start audit on pdp3");
 		integrityAudit3.startAuditThread();		
 		
-		// Sleep long enough to ensure the other two audits have registered. 
-		Thread.sleep(500); 
-		
+
 		// Kill audit on pdp1
+		logger.info("testDesignatedNodeDead: Kill audit on pdp1");
 		integrityAudit.stopAuditThread();
 		
 		// Sleep long enough for pdp1 to get stale and pdp2 to take over
+		logger.info("testDesignatedNodeDead: Sleep long enough for pdp1 to get stale and pdp2 to take over");
 		Thread.sleep(AuditThread.AUDIT_COMPLETION_INTERVAL + FUDGE_FACTOR); 
 		
 		// Start audit thread on pdp1 again.
+		logger.info("testDesignatedNodeDead: Start audit thread on pdp1 again.");
 		integrityAudit.startAuditThread(); 
 		
 		// Sleep long enough for pdp2 to complete its audit and get stale, at
 		// which point pdp3 should take over
+		logger.info("testDesignatedNodeDead: Sleep long enough for pdp2 to complete its audit and get stale, at which point pdp3 should take over");
 		Thread.sleep((AuditThread.AUDIT_SIMULATION_SLEEP_INTERVAL * AuditThread.AUDIT_SIMULATION_ITERATIONS)
 				+ AuditThread.AUDIT_COMPLETION_INTERVAL + FUDGE_FACTOR);
 		
@@ -1059,6 +1066,7 @@ public class IntegrityAuditDesignationTest {
 		integrityAudit3.stopAuditThread();
 		
 		// Sleep long enough for pdp3 to get stale and pdp1 to take over
+		logger.info("testDesignatedNodeDead: Sleep long enough for pdp3 to get stale and pdp1 to take over");
 		Thread.sleep(AuditThread.AUDIT_COMPLETION_INTERVAL + FUDGE_FACTOR); 
 				
 		FileInputStream fstream = new FileInputStream(TEST_LOG);

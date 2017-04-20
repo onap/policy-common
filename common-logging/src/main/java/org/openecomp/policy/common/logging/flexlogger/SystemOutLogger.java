@@ -20,6 +20,7 @@
 
 package org.openecomp.policy.common.logging.flexlogger;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import org.openecomp.policy.common.logging.eelf.MessageCodes;
@@ -31,7 +32,7 @@ import com.att.eelf.configuration.EELFLogger.Level;
  * SystemOutLogger implements all the methods of interface Logger by calling System.out.println
  *
  */
-public class SystemOutLogger implements Logger {
+public class SystemOutLogger implements Logger, Serializable {
 	
 	private String className = "";
 	private boolean isDebugEnabled = true;

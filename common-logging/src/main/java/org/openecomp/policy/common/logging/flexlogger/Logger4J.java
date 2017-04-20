@@ -20,6 +20,10 @@
 
 package org.openecomp.policy.common.logging.flexlogger;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -34,7 +38,7 @@ import com.att.eelf.configuration.EELFLogger.Level;
  * Logger4J implements all the methods of interface Logger by calling org.apache.log4j.Logger
  *
  */
-public class Logger4J implements org.openecomp.policy.common.logging.flexlogger.Logger {
+public class Logger4J implements org.openecomp.policy.common.logging.flexlogger.Logger, Serializable {
 	
 	private Logger log = null;
     private String methodName = "";
@@ -450,5 +454,31 @@ public class Logger4J implements org.openecomp.policy.common.logging.flexlogger.
     @Override
 	public void postMDCInfoForEvent(Object o){
     	log.info(o);
+	}
+
+	/* ============================================================ */
+
+	/*
+	 * Support for 'Serializable' --
+	 * the default rules don't work for the 'log' field
+	 */
+
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		// write out 'methodName', 'className', 'transId' strings
+		out.writeObject(methodName);
+		out.writeObject(className);
+		out.writeObject(transId);
+	}
+
+	private void readObject(ObjectInputStream in)
+			throws IOException, ClassNotFoundException {
+
+		// read in 'methodName', 'className', 'transId' strings
+		methodName = (String)(in.readObject());
+		className = (String)(in.readObject());
+		transId = (String)(in.readObject());
+	
+		// look up associated logger
+		log = Logger.getLogger(className);
 	}
 }

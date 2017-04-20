@@ -20,6 +20,7 @@
 
 package org.openecomp.policy.common.logging.flexlogger;
 
+import java.io.Serializable;
 import java.util.UUID;
 
 import org.openecomp.policy.common.logging.eelf.MessageCodes;
@@ -33,7 +34,7 @@ import com.att.eelf.configuration.EELFLogger.Level;
  *
  */
 
-public class EelfLogger implements Logger {
+public class EelfLogger implements Logger, Serializable {
 	
     private String className = "";
     private String transId = UUID.randomUUID().toString();

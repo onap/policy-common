@@ -242,8 +242,6 @@ public class DbAudit {
 		}
 		
 		// If misMatchedMap is not empty, retrieve the entries in each misMatched list and compare again
-		
-		//classNameSet = (HashSet<String>) misMatchedMap.keySet();
 		classNameSet = new HashSet<String>(misMatchedMap.keySet());
 		// We need to keep track of how long the audit is taking
 		startTime = System.currentTimeMillis();

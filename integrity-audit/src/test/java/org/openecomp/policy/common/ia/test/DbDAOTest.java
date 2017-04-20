@@ -22,6 +22,11 @@ package org.openecomp.policy.common.ia.test;
 
 import static org.junit.Assert.*;
 
+/*
+ * All JUnits are designed to run in the local development environment
+ * where they have write privileges and can execute time-sensitive
+ * tasks.
+ */
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -49,6 +54,11 @@ import org.openecomp.policy.common.ia.DbDaoTransactionException;
 import org.openecomp.policy.common.ia.IntegrityAuditProperties;
 import org.openecomp.policy.common.ia.jpa.IntegrityAuditEntity;
 
+/*
+ * All JUnits are designed to run in the local development environment
+ * where they have write privileges and can execute time-sensitive
+ * tasks.
+ */
 public class DbDAOTest {
 	private static String persistenceUnit;
 	private static Properties properties;

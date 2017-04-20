@@ -53,6 +53,11 @@ import org.openecomp.policy.common.im.jpa.StateManagementEntity;
 import org.openecomp.policy.common.logging.flexlogger.FlexLogger; 
 import org.openecomp.policy.common.logging.flexlogger.Logger;
 
+/*
+ * All JUnits are designed to run in the local development environment
+ * where they have write privileges and can execute time-sensitive
+ * tasks.
+ */
 public class IntegrityMonitorTest {
 	private static Logger logger = FlexLogger.getLogger(IntegrityMonitorTest.class);
 	private static Properties myProp;
@@ -103,6 +108,21 @@ public class IntegrityMonitorTest {
 		// clear jmx remote port setting
 		systemProps.remove("com.sun.management.jmxremote.port");
 	}
+	
+	/*
+	 * The following runs all tests and controls the order of execution. If you allow
+	 * the tests to execute individually, you cannot predict the order and some
+	 * conflicts occur.
+	 */
+	@Ignore
+	@Test
+	public void runAllTests() throws Exception{
+		testSanityJmx();
+		testIM();
+		testSanityState();
+		testRefreshStateAudit();
+		testStateCheck();
+	}
 
 	/*
 	 * The following test verifies the following test cases:
@@ -114,8 +134,6 @@ public class IntegrityMonitorTest {
 	 * Unlock
 	 * Unlock restart
 	 */
-	@Ignore // Test passed 10/18/16 
-	@Test
 	public void testSanityJmx() throws Exception {
 		System.out.println("\nIntegrityMonitorTest: Entering testSanityJmx\n\n");
 		
@@ -267,8 +285,6 @@ public class IntegrityMonitorTest {
 	}
 	
 
-	@Ignore  // Test passed 10/18/16 
-	@Test
 	public void testIM() throws Exception {
 		System.out.println("\nIntegrityMonitorTest: Entering testIM\n\n");
 		
@@ -554,8 +570,6 @@ public class IntegrityMonitorTest {
 	}
 	
 
-	@Ignore  // Test passed 10/18/16 
-	@Test
 	public void testSanityState() throws Exception {
 		System.out.println("\nIntegrityMonitorTest: Entering testSanityState\n\n");
 		
@@ -618,8 +632,6 @@ public class IntegrityMonitorTest {
 		System.out.println("\n\ntestSanityState: Exit\n\n");
 	}
 	
-	@Ignore  // Test passed 10/18/16 
-	@Test
 	public void testRefreshStateAudit() throws Exception {
 		logger.debug("\nIntegrityMonitorTest: testRefreshStateAudit Enter\n\n");
 
@@ -731,4 +743,94 @@ public class IntegrityMonitorTest {
 
 		logger.debug("\nIntegrityMonitorTest: testRefreshStateAudit Exit\n\n");
 	}
+	
+	public void testStateCheck() throws Exception {
+		System.out.println("\nIntegrityMonitorTest: Entering testStateCheck\n\n");
+		
+		// parameters are passed via a properties file
+		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "group1_dep1");
+		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
+		myProp.put(IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD, "1");
+		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "10");
+		IntegrityMonitor.updateProperties(myProp);
+		/*
+		 *  The default monitorInterval is 30 and the default failedCounterThreshold is 3
+		 *  Since stateCheck() uses the faileCounterThreshold * monitorInterval to determine
+		 *  if an entry is stale, it will be stale after 30 seconds.
+		 */
+		
+		et = em.getTransaction();
+		et.begin();
+
+		// Make sure we start with the DB clean
+		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
+		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
+		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
+
+		em.flush();
+		et.commit();
+
+		IntegrityMonitor.deleteInstance();
+		
+		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+		
+		// Add a group1 dependent resources to put an entry in the forward progress table
+		// This sets lastUpdated to the current time
+		ForwardProgressEntity fpe = new ForwardProgressEntity();
+		fpe.setFpcCount(0);
+		fpe.setResourceName("group1_dep1");
+		et = em.getTransaction();
+		et.begin();
+		em.persist(fpe);
+		em.flush();
+		et.commit();
+
+		//Now add new group1 stateManager instances
+		StateManagement sm2 = new StateManagement(emf, "group1_dep1");
+		
+		boolean sanityPass = true;
+		//Thread.sleep(15000);
+		Thread.sleep(5000);
+		try {
+			im.evaluateSanity();
+		} catch (Exception e) {
+			System.out.println("testStateCheck: After 15 sec sleep - evaluateSanity exception: " + e);
+			sanityPass = false;
+		}
+		assertTrue(sanityPass);  // expect sanity test to pass
+		
+		//now wait 30 seconds.  The dependency entry should now be stale and the sanitry check should fail
+		
+		sanityPass = true;
+		//Thread.sleep(30000);
+		Thread.sleep(10000);
+		try {
+			im.evaluateSanity();
+		} catch (Exception e) {
+			System.out.println("testStateCheck: After 10 sec sleep - evaluateSanity exception: " + e);
+			sanityPass = false;
+		}
+		assertFalse(sanityPass);  // expect sanity test to fail
+		
+		// undo dependency groups, jmx test properties settings and failed counter threshold
+		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
+		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
+		myProp.put(IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD, Integer.toString(IntegrityMonitorProperties.DEFAULT_FAILED_COUNTER_THRESHOLD));
+		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, Integer.toString(IntegrityMonitorProperties.DEFAULT_MONITOR_INTERVAL));
+		IntegrityMonitor.updateProperties(myProp);
+
+		et = em.getTransaction();
+		
+		et.begin();
+		// Make sure we leave the DB clean
+		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
+		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
+		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
+
+		em.flush();
+		et.commit();
+		
+		System.out.println("\n\ntestStateCheck: Exit\n\n");
+	}
+	
 }
