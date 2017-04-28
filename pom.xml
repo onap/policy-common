@@ -28,7 +28,7 @@
 
 	<packaging>pom</packaging>
 
-	<name>ECOMP Policy Engine - Common Modules</name>
+	<name>Policy Engine - Common Modules</name>
 	<description>Common Modules for Policy-Engine in both XACML and Drools flavor</description>
 
 	<properties>
