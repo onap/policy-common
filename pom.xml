@@ -52,9 +52,9 @@
 
 	<repositories>
 		<repository>
-			<id>central</id>
-			<name>Maven 2 repository</name>
-			<url>http://central.maven.org/maven2/</url>
+			<id>ecomp-snapshots</id>
+			<name>OpenECOMP Snapshots Repository</name>
+			<url>${nexusproxy}/${snapshots.path}</url>
 		</repository>
 		<repository>
 			<id>ecomp-releases</id>
