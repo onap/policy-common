@@ -22,6 +22,7 @@ package org.openecomp.policy.common.im.test;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -31,6 +32,7 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.TemporalType;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -117,11 +119,13 @@ public class IntegrityMonitorTest {
 	@Ignore
 	@Test
 	public void runAllTests() throws Exception{
-		testSanityJmx();
-		testIM();
-		testSanityState();
-		testRefreshStateAudit();
-		testStateCheck();
+		//testSanityJmx();
+		//testIM();
+		//testSanityState();
+		//testRefreshStateAudit();
+		//testStateCheck();
+		//testGetAllForwardProgressEntity();
+		testStateAudit();
 	}
 
 	/*
@@ -833,4 +837,398 @@ public class IntegrityMonitorTest {
 		System.out.println("\n\ntestStateCheck: Exit\n\n");
 	}
 	
+	public void testGetAllForwardProgressEntity() throws Exception{
+		System.out.println("\nIntegrityMonitorTest: Entering testGetAllForwardProgressEntity\n\n");
+		logger.debug("\nIntegrityMonitorTest: Entering testGetAllForwardProgressEntity\n\n");
+		
+		// parameters are passed via a properties file
+		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
+		IntegrityMonitor.updateProperties(myProp);
+		
+		et = em.getTransaction();
+		et.begin();
+
+		// Make sure we start with the DB clean
+		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
+		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
+		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
+
+		em.flush();
+		et.commit();
+
+		
+		IntegrityMonitor.deleteInstance();
+		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+		
+		logger.debug("\nIntegrityMonitorTest: Creating ForwardProgressEntity entries\n\n");
+		// Add a resources to put an entry in the forward progress table
+		ForwardProgressEntity fpe = new ForwardProgressEntity();
+		ForwardProgressEntity fpe2 = new ForwardProgressEntity();
+		ForwardProgressEntity fpe3 = new ForwardProgressEntity();
+		fpe.setFpcCount(0);
+		fpe.setResourceName("siteA_pap2");
+		fpe2.setFpcCount(0);
+		fpe2.setResourceName("siteB_pap1");
+		fpe3.setFpcCount(0);
+		fpe3.setResourceName("siteB_pap2");
+		et = em.getTransaction();
+		et.begin();
+		em.persist(fpe);
+		em.persist(fpe2);
+		em.persist(fpe3);
+		em.flush();
+		et.commit();
+
+		logger.debug("\nIntegrityMonitorTest:testGetAllForwardProgressEntity Calling im.getAllForwardProgressEntity()\n\n");
+		ArrayList<ForwardProgressEntity> fpeList = im.getAllForwardProgressEntity();
+		
+		assertTrue(fpeList.size()==4);
+		
+		et = em.getTransaction();
+		
+		et.begin();
+		// Make sure we leave the DB clean
+		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
+		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
+		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
+
+		em.flush();
+		et.commit();
+		
+		logger.debug("\nIntegrityMonitorTest: Exit testGetAllForwardProgressEntity\n\n");
+		System.out.println("\n\ntestGetAllForwardProgressEntity: Exit\n\n");
+	}
+	
+	public void testStateAudit() throws Exception{
+		System.out.println("\nIntegrityMonitorTest: Entering testStateAudit\n\n");
+		logger.debug("\nIntegrityMonitorTest: Entering testStateAudit\n\n");
+		
+		// parameters are passed via a properties file
+		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
+		myProp.put(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, "100");
+		IntegrityMonitor.updateProperties(myProp);
+		
+		et = em.getTransaction();
+		et.begin();
+
+		// Make sure we start with the DB clean
+		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
+		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
+		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
+
+		em.flush();
+		et.commit();
+
+		
+		IntegrityMonitor.deleteInstance();
+		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+		
+		logger.debug("\nIntegrityMonitorTest: Creating ForwardProgressEntity entries\n\n");
+		// Add resources to put an entry in the forward progress table
+		Date staleDate = new Date(0);
+		ForwardProgressEntity fpe1 = new ForwardProgressEntity();
+		ForwardProgressEntity fpe2 = new ForwardProgressEntity();
+		ForwardProgressEntity fpe3 = new ForwardProgressEntity();
+		fpe1.setFpcCount(0);
+		fpe1.setResourceName("siteA_pap2");
+		fpe2.setFpcCount(0);
+		fpe2.setResourceName("siteB_pap1");
+		fpe3.setFpcCount(0);
+		fpe3.setResourceName("siteB_pap2");
+		logger.debug("\nIntegrityMonitorTest: Creating StateManagementEntity entries\n\n");
+		StateManagementEntity sme1 = new StateManagementEntity();
+		StateManagementEntity sme2 = new StateManagementEntity();
+		StateManagementEntity sme3= new StateManagementEntity();
+		sme1.setResourceName("siteA_pap2");
+		sme1.setAdminState(StateManagement.UNLOCKED);
+		sme1.setOpState(StateManagement.ENABLED);
+		sme1.setAvailStatus(StateManagement.NULL_VALUE);
+		sme1.setStandbyStatus(StateManagement.NULL_VALUE);
+		sme2.setResourceName("siteB_pap1");
+		sme2.setAdminState(StateManagement.UNLOCKED);
+		sme2.setOpState(StateManagement.ENABLED);
+		sme2.setAvailStatus(StateManagement.NULL_VALUE);
+		sme2.setStandbyStatus(StateManagement.NULL_VALUE);
+		sme3.setResourceName("siteB_pap2");
+		sme3.setAdminState(StateManagement.UNLOCKED);
+		sme3.setOpState(StateManagement.ENABLED);
+		sme3.setAvailStatus(StateManagement.NULL_VALUE);
+		sme3.setStandbyStatus(StateManagement.NULL_VALUE);
+		et = em.getTransaction();
+		et.begin();
+		em.persist(fpe1);
+		em.persist(fpe2);
+		em.persist(fpe3);
+		em.persist(sme1);
+		em.persist(sme2);
+		em.persist(sme3);
+		em.flush();
+		et.commit();
+		
+		Query updateQuery = em.createQuery("UPDATE ForwardProgressEntity f "
+				+ "SET f.lastUpdated = :newDate "
+				+ "WHERE f.resourceName=:resource");
+		updateQuery.setParameter("newDate", staleDate, TemporalType.TIMESTAMP);
+		updateQuery.setParameter("resource", fpe1.getResourceName());
+		
+		et = em.getTransaction();
+		et.begin();
+		updateQuery.executeUpdate();
+		et.commit();
+		
+		logger.debug("\nIntegrityMonitorTest:testStateAudit Calling im.getAllForwardProgressEntity()\n\n");
+		ArrayList<ForwardProgressEntity> fpeList = im.getAllForwardProgressEntity();
+		
+		logger.debug("\n\n");
+		logger.debug("IntegrityMonitorTest:testStateAudit:ForwardProgressEntity entries");
+		for(ForwardProgressEntity myFpe : fpeList){
+			logger.debug("\n    ResourceName: " + myFpe.getResourceName()
+					+ "\n        LastUpdated: " + myFpe.getLastUpdated());
+		}
+		logger.debug("\n\n");
+		
+		logger.debug("\nIntegrityMonitorTest:testStateAudit getting list of StateManagementEntity entries\n\n");
+		Query query = em.createQuery("SELECT s FROM StateManagementEntity s");
+		List smeList = query.getResultList();
+		
+		logger.debug("\n\n");
+		logger.debug("IntegrityMonitorTest:testStateAudit:StateManagementEntity entries");
+		for(Object mySme : smeList){
+			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
+			em.refresh(tmpSme);
+			logger.debug("\n    ResourceName: " + tmpSme.getResourceName()
+					+ "\n        AdminState: " + tmpSme.getAdminState()
+					+ "\n        OpState: " + tmpSme.getOpState()
+					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
+					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+					);
+		}
+		logger.debug("\n\n");
+		
+		logger.debug("IntegrityMonitorTest:testStateAudit: sleeping 2 sec");
+		Thread.sleep(3000);
+		logger.debug("IntegrityMonitorTest:testStateAudit: Awake!");
+		
+		logger.debug("\nIntegrityMonitorTest:testStateAudit getting list of StateManagementEntity entries\n\n");
+		smeList = query.getResultList();
+		
+		logger.debug("\n\n");
+		logger.debug("IntegrityMonitorTest:testStateAudit:StateManagementEntity entries");
+		for(Object mySme : smeList){
+			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
+			em.refresh(tmpSme);
+			logger.debug("\n    ResourceName: " + tmpSme.getResourceName()
+					+ "\n        AdminState: " + tmpSme.getAdminState()
+					+ "\n        OpState: " + tmpSme.getOpState()
+					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
+					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+					);
+		}
+		logger.debug("\n\n");
+		
+		em.refresh(sme1);
+		assertTrue(sme1.getOpState().equals(StateManagement.DISABLED));
+		
+		
+		//Now lock this IM
+		StateManagement sm = im.getStateManager();
+		sm.lock();
+		
+		//Give it time to write the db
+		Thread.sleep(2000);
+
+		//Put things back to their starting condition		
+		et = em.getTransaction();
+		et.begin();
+		sme1.setOpState(StateManagement.ENABLED);
+		sme1.setAvailStatus(StateManagement.NULL_VALUE);
+		em.persist(sme1);
+		et.commit();
+
+		//Now it should not update sme1
+		logger.debug("IntegrityMonitorTest:testStateAudit: 2nd sleeping 2 sec");
+		Thread.sleep(2000);
+		logger.debug("IntegrityMonitorTest:testStateAudit: 2nd Awake!");
+		
+		logger.debug("\nIntegrityMonitorTest:testStateAudit 2nd getting list of StateManagementEntity entries\n\n");
+		smeList = query.getResultList();
+		
+		logger.debug("\n\n");
+		logger.debug("IntegrityMonitorTest:testStateAudit:StateManagementEntity 2nd entries");
+		for(Object mySme : smeList){
+			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
+			em.refresh(tmpSme);
+			logger.debug("\n    2nd ResourceName: " + tmpSme.getResourceName()
+					+ "\n        AdminState: " + tmpSme.getAdminState()
+					+ "\n        OpState: " + tmpSme.getOpState()
+					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
+					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+					);
+		}
+		logger.debug("\n\n");
+		
+		em.refresh(sme1);
+		assertTrue(sme1.getOpState().equals(StateManagement.ENABLED));
+		
+		//Now create a reason for this IM to be disabled.  Add a bogus dependency
+		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "Bogus_Node");
+		IntegrityMonitor.updateProperties(myProp);
+
+		//Restart the IM
+		IntegrityMonitor.deleteInstance();
+		im = IntegrityMonitor.getInstance(resourceName, myProp);
+		
+		//Give it time to initialize and check dependencies
+		logger.debug("IntegrityMonitorTest:testStateAudit: (restart) sleeping 10 sec");
+		Thread.sleep(7000);
+		logger.debug("IntegrityMonitorTest:testStateAudit: (restart) Awake!");
+		
+		//Now unlock this IM.  Now it should be unlocked, but disabled due to dependency
+		sm.unlock();
+		
+		//Now check its state
+		logger.debug("\nIntegrityMonitorTest:testStateAudit (restart) getting list of StateManagementEntity entries\n\n");
+		smeList = query.getResultList();
+		
+		logger.debug("\n\n");
+		logger.debug("IntegrityMonitorTest:testStateAudit:StateManagementEntity (restart) entries");
+		for(Object mySme : smeList){
+			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
+			em.refresh(tmpSme);
+			logger.debug("\n    (restart) ResourceName: " + tmpSme.getResourceName()
+					+ "\n        AdminState: " + tmpSme.getAdminState()
+					+ "\n        OpState: " + tmpSme.getOpState()
+					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
+					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+					);
+		}
+		logger.debug("\n\n");
+		
+		em.refresh(sme1);
+		assertTrue(sme1.getOpState().equals(StateManagement.ENABLED));
+		
+		//Now lock this IM so it will not audit when it comes back up
+		sm.lock();
+		
+		//Remove the bogus dependency and restart it
+		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
+		IntegrityMonitor.updateProperties(myProp);
+
+		//Restart the IM
+		IntegrityMonitor.deleteInstance();
+		im = IntegrityMonitor.getInstance(resourceName, myProp);
+
+		//Give it time to initialize and check dependencies
+		logger.debug("IntegrityMonitorTest:testStateAudit: (restart2) sleeping 10 sec");
+		Thread.sleep(7000);
+		logger.debug("IntegrityMonitorTest:testStateAudit: (restart2) Awake!");
+		
+		//Now check its state
+		logger.debug("\nIntegrityMonitorTest:testStateAudit (restart2) getting list of StateManagementEntity entries\n\n");
+		smeList = query.getResultList();
+		
+		logger.debug("\n\n");
+		logger.debug("IntegrityMonitorTest:testStateAudit:StateManagementEntity (restart2) entries");
+		for(Object mySme : smeList){
+			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
+			em.refresh(tmpSme);
+			logger.debug("\n    (restart2) ResourceName: " + tmpSme.getResourceName()
+					+ "\n        AdminState: " + tmpSme.getAdminState()
+					+ "\n        OpState: " + tmpSme.getOpState()
+					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
+					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+					);
+		}
+		logger.debug("\n\n");
+		
+		em.refresh(sme1);
+		assertTrue(sme1.getOpState().equals(StateManagement.ENABLED));
+		
+		//Make this IM coldstandby
+		sm.demote();
+		//Give it time to write the DB
+		Thread.sleep(2000);
+		//unlock it
+		sm.unlock();
+		//Give it time to write the DB
+		Thread.sleep(2000);
+		
+		//Now check its state
+		logger.debug("\nIntegrityMonitorTest:testStateAudit (restart3) getting list of StateManagementEntity entries\n\n");
+		smeList = query.getResultList();
+		
+		logger.debug("\n\n");
+		logger.debug("IntegrityMonitorTest:testStateAudit:StateManagementEntity (restart3) entries");
+		for(Object mySme : smeList){
+			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
+			em.refresh(tmpSme);
+			logger.debug("\n    (restart3) ResourceName: " + tmpSme.getResourceName()
+					+ "\n        AdminState: " + tmpSme.getAdminState()
+					+ "\n        OpState: " + tmpSme.getOpState()
+					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
+					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+					);
+		}
+		logger.debug("\n\n");
+		
+		//sme1 should not be changed because this IM is hotstandby and cannot change its state
+		em.refresh(sme1);
+		assertTrue(sme1.getOpState().equals(StateManagement.ENABLED));
+		
+		//Now let's add sme2 to the mix
+		updateQuery = em.createQuery("UPDATE ForwardProgressEntity f "
+				+ "SET f.lastUpdated = :newDate "
+				+ "WHERE f.resourceName=:resource");
+		updateQuery.setParameter("newDate", staleDate, TemporalType.TIMESTAMP);
+		updateQuery.setParameter("resource", fpe2.getResourceName());
+		
+		et = em.getTransaction();
+		et.begin();
+		updateQuery.executeUpdate();
+		et.commit();
+		
+		//Finally, we want to promote this IM so it will disable sme1
+		sm.promote();
+		//Give it a chance to write the DB and run the audit
+		logger.debug("IntegrityMonitorTest:testStateAudit: (restart4) sleeping 2 sec");
+		Thread.sleep(3000);
+		logger.debug("IntegrityMonitorTest:testStateAudit: (restart4) Awake!");
+		
+		//Now check its state
+		logger.debug("\nIntegrityMonitorTest:testStateAudit (restart4) getting list of StateManagementEntity entries\n\n");
+		smeList = query.getResultList();
+		
+		logger.debug("\n\n");
+		logger.debug("IntegrityMonitorTest:testStateAudit:StateManagementEntity (restart4) entries");
+		for(Object mySme : smeList){
+			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
+			em.refresh(tmpSme);
+			logger.debug("\n    (restart4) ResourceName: " + tmpSme.getResourceName()
+					+ "\n        AdminState: " + tmpSme.getAdminState()
+					+ "\n        OpState: " + tmpSme.getOpState()
+					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
+					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+					);
+		}
+		logger.debug("\n\n");
+		
+		em.refresh(sme1);
+		assertTrue(sme1.getOpState().equals(StateManagement.DISABLED));
+		
+		em.refresh(sme2);
+		assertTrue(sme2.getOpState().equals(StateManagement.DISABLED));
+		
+		et = em.getTransaction();
+		et.begin();
+		// Make sure we leave the DB clean
+		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
+		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
+		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
+
+		em.flush();
+		et.commit();
+		
+		logger.debug("\nIntegrityMonitorTest: Exit testStateAudit\n\n");
+		System.out.println("\n\ntestStateAudit: Exit\n\n");
+	}
 }

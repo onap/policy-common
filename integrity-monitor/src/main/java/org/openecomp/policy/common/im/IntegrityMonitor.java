@@ -21,6 +21,7 @@
 package org.openecomp.policy.common.im;
 
 import java.net.InetAddress;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -100,6 +101,14 @@ public class IntegrityMonitor {
 	// last dependency health check time. Initialize so that the periodic check starts after 60 seconds.
 	// This allows time for dependents to come up.
 	private long lastDependencyCheckTime = System.currentTimeMillis();
+	
+	// Time of the last state audit.  It is initialized at the time of the IM construction
+	private Date lastStateAuditTime = new Date();
+	
+	//Interval between state audits in ms.  We leave it turned off by default so that it will only
+	//be run on the nodes which we want doing the audit. In particular, we only want it to run
+	//on the droolspdps
+	private static long stateAuditIntervalMs = 0L;
 	
 	// the number of cycles since 'fpCounter' was last changed
 	private int missedCycles = 0;
@@ -647,6 +656,53 @@ public class IntegrityMonitor {
 		return error_msg;
 	}
 	
+	public ArrayList<ForwardProgressEntity> getAllForwardProgressEntity(){
+		if(logger.isDebugEnabled()){
+			logger.debug("getAllForwardProgressEntity: entry");
+		}
+		ArrayList<ForwardProgressEntity> fpList = new ArrayList<ForwardProgressEntity>();
+		// Start a transaction
+		EntityTransaction et = em.getTransaction();
+		et.begin();
+		try {
+			Query fquery = em.createQuery("Select e from ForwardProgressEntity e");
+			@SuppressWarnings("rawtypes")
+			List myList = fquery.setLockMode(
+					  LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+			synchronized(IMFLUSHLOCK){
+				et.commit();
+			}
+			if(logger.isDebugEnabled()){
+				logger.debug("getAllForwardProgressEntity: myList.size(): " + myList.size());
+			}
+			if(!myList.isEmpty()){
+				for(int i = 0; i < myList.size(); i++){
+					if(logger.isDebugEnabled()){
+						logger.debug("getAllForwardProgressEntity: myList.get(" + i +").getResourceName()" 
+							+ ": " + ((ForwardProgressEntity)myList.get(i)).getResourceName());
+					}
+					fpList.add((ForwardProgressEntity) myList.get(i));
+				}
+			}
+			synchronized(IMFLUSHLOCK){
+				if(et.isActive()){
+					et.commit();
+				}
+			}
+		} catch (Exception e) {
+			// log an error and continue
+			String msg = "getAllForwardProgessEntity DB read failed with exception: " + e;
+			logger.error(msg);
+			synchronized(IMFLUSHLOCK){
+				if(et.isActive()){
+					et.rollback();
+				}
+			}
+		}
+		return fpList;
+	}
+	  
+	
 	private String jmxCheck(String dep) {
 		logger.debug("checking health of dependent by calling test() via JMX on resource: " + dep);
 
@@ -1117,6 +1173,14 @@ public class IntegrityMonitor {
 			}
 		}
 		
+		if (prop.getProperty(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS) != null){
+			try{
+				stateAuditIntervalMs = Long.parseLong(prop.getProperty(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS));
+			}catch(NumberFormatException e){
+				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS);
+			}
+		}
+		
 		
 		return;
 	}
@@ -1203,6 +1267,111 @@ public class IntegrityMonitor {
 		}
 	}
 	
+	/**
+	 * Look for "Forward Progress" on other nodes.  If they are not making forward progress,
+	 * check their operational state.  If it is not disabled, then disable them.
+	 */
+	public void stateAudit() {
+		
+		//TODO add stateAuditIntervalMs to the IntegrityMonitor properties here and in droolspdp
+		// monitoring interval checks
+		if (stateAuditIntervalMs <= 0) {
+			return; // stateAudit is disabled
+		}
+		
+		//Only run from nodes that are operational
+		if(stateManager.getOpState().equals(StateManagement.DISABLED)){
+			return;
+		}
+		if(stateManager.getAdminState().equals(StateManagement.LOCKED)){
+			return;
+		}
+		if(!stateManager.getStandbyStatus().equals(StateManagement.NULL_VALUE) &&
+				stateManager.getStandbyStatus()!= null){
+			if(!stateManager.getStandbyStatus().equals(StateManagement.PROVIDING_SERVICE)){
+				return;
+			}
+		}
+
+		Date date = new Date();		
+		long timeSinceLastStateAudit = date.getTime() - lastStateAuditTime.getTime(); 
+		if (timeSinceLastStateAudit < stateAuditIntervalMs){
+			return;
+		}
+
+		// Get all entries in the forwardprogressentity table
+		ArrayList<ForwardProgressEntity> fpList = getAllForwardProgressEntity();
+
+		// Check if each forwardprogressentity entry is current
+		for(ForwardProgressEntity fpe : fpList){
+			//If the this is my ForwardProgressEntity, continue
+			if(fpe.getResourceName().equals(IntegrityMonitor.resourceName)){
+				continue;
+			}
+			long diffMs = date.getTime() - fpe.getLastUpdated().getTime();
+			logger.debug("IntegrityMonitor.stateAudit(): diffMs = " + diffMs);
+
+			//Threshold for a stale entry
+			long staleMs = failedCounterThreshold * monitorInterval * 1000;
+			logger.debug("IntegrityMonitor.stateAudit(): staleMs = " + staleMs);
+
+			if(diffMs > staleMs){
+				//ForwardProgress is stale.  Disable it
+				// Start a transaction
+				EntityTransaction et = em.getTransaction();
+				et.begin();
+				StateManagementEntity sme = null;
+				try {
+					// query if StateManagement entry exists for fpe resource
+					Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
+					query.setParameter("resource", fpe.getResourceName());
+
+					@SuppressWarnings("rawtypes")
+					List smList = query.setLockMode(
+							LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+					if (!smList.isEmpty()) {
+						// exists
+						sme = (StateManagementEntity) smList.get(0);
+						// refresh the object from DB in case cached data was returned
+						em.refresh(sme);
+						logger.debug("IntegrityMonitor.stateAudit(): Found entry in StateManagementEntity table for Resource=" + sme.getResourceName());
+					} else {
+						String msg = "IntegrityMonitor.stateAudit(): " + fpe.getResourceName() + ": resource not found in state management entity database table";
+						logger.debug(msg);
+						logger.error(msg);
+					}
+					synchronized(IMFLUSHLOCK){
+						et.commit();
+					}
+				} catch (Exception e) {
+					// log an error
+					String msg = "IntegrityMonitor.stateAudit(): " + fpe.getResourceName() + ": StateManagementEntity DB read failed with exception: " + e;
+					logger.debug(msg);
+					logger.error(msg);
+					synchronized(IMFLUSHLOCK){
+						if(et.isActive()){
+							et.rollback();
+						}
+					}
+				}
+
+				if(sme != null){
+					if(!sme.getOpState().equals(StateManagement.DISABLED)){
+						logger.debug("IntegrityMonitor.stateAudit(): Changing OpStat = disabled for " + sme.getResourceName());
+						try {
+							stateManager.disableFailed(sme.getResourceName());
+						} catch (Exception e) {
+							String msg = "IntegrityMonitor.stateAudit(): Failed to disable " + sme.getResourceName();
+							logger.debug(msg);
+							logger.error(msg);
+						}
+					}
+				}
+			}// end if(diffMs > staleMs)
+		}// end for(ForwardProgressEntity fpe : fpList)
+		lastStateAuditTime = date;
+	}// end stateAudit()
+
 	/**
 	 * Execute a test transaction when test transaction interval has elapsed.
 	 */
@@ -1319,7 +1488,7 @@ public class IntegrityMonitor {
 	
 	/**
 	 * The following nested class periodically performs the forward progress check,
-	 * checks dependencies and does a refresh state audit.
+	 * checks dependencies, does a refresh state audit and runs the stateAudit.
 	 */
 	class FPManager extends Thread {
 		
@@ -1371,6 +1540,12 @@ public class IntegrityMonitor {
 					}
 					// check if it is time to run the refreshStateAudit
 					IntegrityMonitor.this.refreshStateAudit();
+					
+					if(logger.isDebugEnabled()){
+						logger.debug("FPManager calling stateAudit()");
+					}
+					// check if it is time to run the stateAudit
+					IntegrityMonitor.this.stateAudit();
 					
 				} catch (Exception e) {
 					logger.debug("Ignore FPManager thread processing timer(s) exception: " + e);

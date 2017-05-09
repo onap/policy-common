@@ -51,5 +51,6 @@ public class IntegrityMonitorProperties {
 	public static final String TEST_VIA_JMX = "test_via_jmx";
 	public static final String JMX_FQDN = "jmx_fqdn";
 	public static final String MAX_FPC_UPDATE_INTERVAL = "max_fpc_update_interval";
+	public static final String STATE_AUDIT_INTERVAL_MS = "state_audit_interval_ms";
 	
 }
