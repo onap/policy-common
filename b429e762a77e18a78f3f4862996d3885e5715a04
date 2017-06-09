@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da141535_2f0639cf",
+        "filename": "common-logging/src/main/java/org/openecomp/policy/common/logging/flexlogger/FlexLogger.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2017-06-09T16:29:28Z",
+      "side": 0,
+      "message": "Didn\u0027t this code serve a needed function? The method \u0027FlexLogger.getLogger()\u0027 would typically be called during static initialization -- are we guaranteed that \u0027FlexLogger\u0027 static initialization would always occur before the static initialization of classes referencing \u0027FlexLogger.getLogger()\u0027?",
+      "revId": "b429e762a77e18a78f3f4862996d3885e5715a04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
