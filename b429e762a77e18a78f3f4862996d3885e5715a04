@@ -16,6 +16,24 @@
       "revId": "b429e762a77e18a78f3f4862996d3885e5715a04",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da141535_af77e9d3",
+        "filename": "common-logging/src/main/java/org/openecomp/policy/common/logging/flexlogger/FlexLogger.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2017-06-09T18:34:27Z",
+      "side": 0,
+      "message": "The class static section I believe it to be executed when class is loaded/initialized, before any instances or static methods can be invoked (so it is thread safe).   Under this belief, the code removed is ok as it is unnecessary.   Based on my tests, it seems to be working as I expected.\n\nThere were/are multiple issues with previous logging code, and in fact what that removed code was trying to achieve, it didn\u0027t.  I\u0027ve seeing output from the PolicyLogger.init() being hit more than once in junits.  So, it didn\u0027t guarantee one single invokation. Further, the previous initLogger() may never initialize the flag, and may be calling initLogger() every single time there is a getLogger() invocation, under the right set of conditions, such as absence of policyLogger.properties, or with parameters missing in the properties files (nullpointerexception issues).   Note in previous version, the flag was updated at the very end of initLogger() and there were paths for abortion.\n\nI think overall this improves several issues.\nI would hope we move away from FlexLogger in the future, so we can deprecate it at some point.",
+      "parentUuid": "da141535_2f0639cf",
+      "revId": "b429e762a77e18a78f3f4862996d3885e5715a04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
