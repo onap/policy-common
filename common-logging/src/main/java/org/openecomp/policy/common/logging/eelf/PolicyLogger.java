@@ -52,9 +52,6 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class PolicyLogger {
 
-	private static EELFLogger applicationLogger = EELFManager.getInstance()
-			.getApplicationLogger();
-
 	private static EELFLogger errorLogger = EELFManager.getInstance()
 			.getErrorLogger();
 
@@ -1147,27 +1144,34 @@ public class PolicyLogger {
 	/**
 	 * Loads all the attributes from policyLogger.properties file
 	 */
-	public  static  LoggerType init(Properties properties) throws Exception  {
-		// read in properties
-		Properties logger_properties = properties;
+	public  static  LoggerType init(Properties properties) {
+
+		Properties loggerProperties;
+		if (properties != null) {
+			loggerProperties = properties;
+		} else {
+			System.err.println("PolicyLogger cannot find its configuration - continue");
+			loggerProperties = new Properties();
+		}
+			
 		LoggerType logger_type = LoggerType.EELF;
 
 		// fetch and verify definitions of some properties
 		try{
 			
-			int timerDelayTime = Integer.parseInt(logger_properties.getProperty("timer.delay.time"));
-			int checkInterval = Integer.parseInt(logger_properties.getProperty("check.interval"));
-			int expiredDate = Integer.parseInt(logger_properties.getProperty("event.expired.time"));
-			int concurrentHashMapLimit = Integer.parseInt(logger_properties.getProperty("concurrentHashMap.limit"));
-			int stopCheckPoint = Integer.parseInt(logger_properties.getProperty("stop.check.point"));			
-		    String loggerType = logger_properties.getProperty("logger.type");
+			int timerDelayTime = Integer.parseInt(loggerProperties.getProperty("timer.delay.time", ""+1000));
+			int checkInterval = Integer.parseInt(loggerProperties.getProperty("check.interval", ""+30000));
+			int expiredDate = Integer.parseInt(loggerProperties.getProperty("event.expired.time",""+86400));
+			int concurrentHashMapLimit = Integer.parseInt(loggerProperties.getProperty("concurrentHashMap.limit", ""+5000));
+			int stopCheckPoint = Integer.parseInt(loggerProperties.getProperty("stop.check.point",""+2500));			
+		    String loggerType = loggerProperties.getProperty("logger.type",logger_type.toString());
 		    
-		    String debugLevel = logger_properties.getProperty("debugLogger.level");
-		    String metricsLevel = logger_properties.getProperty("metricsLogger.level");
-		    String auditLevel = logger_properties.getProperty("error.level");
-		    String errorLevel = logger_properties.getProperty("audit.level");
-		    component = logger_properties.getProperty("policy.component");	
-		    String overrideLogbackLevel = logger_properties.getProperty("override.logback.level.setup");
+		    String debugLevel = loggerProperties.getProperty("debugLogger.level","INFO");
+		    String metricsLevel = loggerProperties.getProperty("metricsLogger.level","ON");
+		    String auditLevel = loggerProperties.getProperty("error.level","ON");
+		    String errorLevel = loggerProperties.getProperty("audit.level","ON");
+		    component = loggerProperties.getProperty("policy.component","DROOLS");	
+		    String overrideLogbackLevel = loggerProperties.getProperty("override.logback.level.setup");
 
 		    if(overrideLogbackLevel != null && !overrideLogbackLevel.isEmpty()) {
 		    	if(overrideLogbackLevel.equalsIgnoreCase("TRUE")){
@@ -1212,7 +1216,7 @@ public class PolicyLogger {
             }
 			isEventTrackerRunning = false;
 			
-			debugLogger.info("timerDelayTiime value: " + timerDelayTime);
+			debugLogger.info("timerDelayTime value: " + timerDelayTime);
 
 			debugLogger.info("checkInterval value: " + checkInterval);
 

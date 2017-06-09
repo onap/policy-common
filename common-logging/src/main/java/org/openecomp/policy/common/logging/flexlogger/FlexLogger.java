@@ -29,7 +29,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.openecomp.policy.common.logging.eelf.PolicyLogger;
-import org.openecomp.policy.common.logging.flexlogger.PropertyUtil;
 import org.openecomp.policy.common.logging.flexlogger.PropertyUtil.Listener;
 
 /**
@@ -40,7 +39,6 @@ import org.openecomp.policy.common.logging.flexlogger.PropertyUtil.Listener;
 public class FlexLogger extends SecurityManager{
 
 	private static LoggerType loggerType = LoggerType.EELF;
-	private static boolean initLoggerCalled = false;
     private static ConcurrentHashMap<String, Logger4J> logger4JMap = new ConcurrentHashMap<String, Logger4J>();
     private static ConcurrentHashMap<String, EelfLogger> eelfLoggerMap = new ConcurrentHashMap<String, EelfLogger>();
     private static ConcurrentHashMap<String, SystemOutLogger> systemOutMap = new ConcurrentHashMap<String, SystemOutLogger>();
@@ -53,11 +51,7 @@ public class FlexLogger extends SecurityManager{
 	 * Returns an instance of Logger
 	 * @param clazz
 	 */
-	static public Logger getLogger(Class clazz) {
-		
-		if (initLoggerCalled == false) {
-			loggerType = initlogger();
-		}
+	static public Logger getLogger(Class<?> clazz) {
 		Logger logger = null;
 		System.out.println("FlexLogger:getLogger : loggerType = " + loggerType);
 		switch (loggerType) {
@@ -81,11 +75,7 @@ public class FlexLogger extends SecurityManager{
 	 * Returns an instance of Logger
 	 * @param s
 	 */
-	static public Logger getLogger(String s) {
-
-		if (initLoggerCalled == false) {
-			loggerType = initlogger();
-		}		
+	static public Logger getLogger(String s) {	
 		Logger logger = null;
 		System.out.println("FlexLogger:getLogger : loggerType = " + loggerType);
 		switch (loggerType) {
@@ -110,11 +100,7 @@ public class FlexLogger extends SecurityManager{
 	 * @param clazz
 	 * @param isNewTransaction
 	 */
-	static public Logger getLogger(Class clazz, boolean isNewTransaction) {
-
-		if (initLoggerCalled == false) {
-			loggerType = initlogger();
-		}
+	static public Logger getLogger(Class<?> clazz, boolean isNewTransaction) {
 		Logger logger = null;
 		System.out.println("FlexLogger:getLogger : loggerType = " + loggerType);
 		switch (loggerType) {
@@ -140,10 +126,6 @@ public class FlexLogger extends SecurityManager{
 	 * @param isNewTransaction
 	 */
 	static public Logger getLogger(String s, boolean isNewTransaction) {
-
-		if (initLoggerCalled == false) {
-			loggerType = initlogger();
-		}
 		Logger logger = null;
 		System.out.println("FlexLogger:getLogger : loggerType = " + loggerType);
 		switch (loggerType) {
@@ -174,7 +156,7 @@ public class FlexLogger extends SecurityManager{
 	 * Returns an instance of Logger4J
 	 * @param clazz
 	 */
-   private static Logger4J getLog4JLogger(Class clazz){
+   private static Logger4J getLog4JLogger(Class<?> clazz){
 		 String className = new FlexLogger().getClassName();
 
 		if(!logger4JMap.containsKey(className)){
@@ -206,7 +188,7 @@ public class FlexLogger extends SecurityManager{
 	 * @param clazz
 	 * @param isNewTransaction
 	 */
-   private static EelfLogger getEelfLogger(Class clazz, boolean isNewTransaction){
+   private static EelfLogger getEelfLogger(Class<?> clazz, boolean isNewTransaction){
 
 		String className = "";
 		EelfLogger logger = null;
@@ -239,7 +221,7 @@ public class FlexLogger extends SecurityManager{
 	 * Returns an instance of SystemOutLogger
 	 * @param clazz
 	 */
-   private static SystemOutLogger getSystemOutLogger(Class clazz){
+   private static SystemOutLogger getSystemOutLogger(Class<?> clazz){
 
 		 String className = new FlexLogger().getClassName();
 		
@@ -257,59 +239,41 @@ public class FlexLogger extends SecurityManager{
 	private static LoggerType initlogger() {
 		LoggerType loggerType = LoggerType.EELF;
 		String overrideLogbackLevel = "FALSE";
-		String logger_Type = "";
+		String loggerTypeString = "";
+		Properties properties = null;
+		
 		try {
-
-			 Properties properties = null;
-		     properties = PropertyUtil.getProperties(
-				 "config/policyLogger.properties");
+			 properties = PropertyUtil.getProperties("config/policyLogger.properties");
 		     System.out.println("FlexLogger:properties => " + properties); 
 		     
 		    if(properties != null) {
 		    	overrideLogbackLevel = properties.getProperty("override.logback.level.setup");	
 		    	System.out.println("FlexLogger:overrideLogbackLevel => " + overrideLogbackLevel);
-		    	logger_Type = properties.getProperty("logger.type");
-				if (logger_Type != null){
-					
-					if (logger_Type.equalsIgnoreCase("EELF")){
-						
+		    	loggerTypeString = properties.getProperty("logger.type");
+				if (loggerTypeString != null){					
+					if (loggerTypeString.equalsIgnoreCase("EELF")){					
 						loggerType = LoggerType.EELF;
-						
-					}else if (logger_Type.equalsIgnoreCase("LOG4J")){
-						
-						loggerType = LoggerType.LOG4J;
-						
-					}else if (logger_Type.equalsIgnoreCase("SYSTEMOUT")){
-						
-						loggerType = LoggerType.SYSTEMOUT;
-						
+						if (overrideLogbackLevel != null && 
+							overrideLogbackLevel.equalsIgnoreCase("TRUE")) {
+							 System.out.println("FlexLogger: start listener.");
+						     properties = PropertyUtil.getProperties
+										 ("config/policyLogger.properties", 
+										   new PropertiesCallBack("FlexLogger-CallBack"));							
+						}
+					}else if (loggerTypeString.equalsIgnoreCase("LOG4J")){			
+						loggerType = LoggerType.LOG4J;				
+					}else if (loggerTypeString.equalsIgnoreCase("SYSTEMOUT")){
+						loggerType = LoggerType.SYSTEMOUT;	
 					}
 					
-				    System.out.println("FlexLogger.logger_Type value: " + logger_Type);
+				    System.out.println("FlexLogger.logger_Type value: " + loggerTypeString);
 				}
 		    }
-			//--- only use reload policyLogger.properties file listener for logger type EEFL and overrideLogbackLevel flag is true
-			if(logger_Type.equalsIgnoreCase("EELF") && overrideLogbackLevel != null && overrideLogbackLevel.equalsIgnoreCase("TRUE")){
-				
-				 System.out.println("FlexLogger: start listener.");
-			     properties = PropertyUtil.getProperties(
-					 "config/policyLogger.properties", new PropertiesCallBack(
-							"FlexLogger-CallBack"));
-			}else{
-				System.out.println("FlexLogger: no listener needed.");
-			}
-			
-			try {
-
-				loggerType = PolicyLogger.init(properties);
-				initLoggerCalled = true;
-
-			} catch (Exception e) {
-				System.out.println("initlogger" + e);
-			}
-			
 		} catch (IOException e1) {
 			System.out.println("initlogger" + e1);
+		} finally {
+			// OK to pass no properties (null)
+			loggerType = PolicyLogger.init(properties);		
 		}
 
 		return loggerType;

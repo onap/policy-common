@@ -20,12 +20,7 @@
 
 package org.openecomp.policy.common.logging.flexlogger;
 
-import static org.openecomp.policy.common.logging.eelf.Configuration.STATUS_CODE;
-
-import static com.att.eelf.configuration.Configuration.MDC_SERVICE_NAME;
 import java.util.UUID;
-
-import org.slf4j.MDC;
 
 import org.openecomp.policy.common.logging.eelf.MessageCodes;
 
