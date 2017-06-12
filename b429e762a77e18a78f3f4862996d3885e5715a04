@@ -70,6 +70,24 @@
       "revId": "b429e762a77e18a78f3f4862996d3885e5715a04",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da141535_9e7338b1",
+        "filename": "common-logging/src/main/java/org/openecomp/policy/common/logging/flexlogger/FlexLogger.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2017-06-12T16:53:39Z",
+      "side": 0,
+      "message": "I think it is all ok as it is.  There is only one single call to initLogger() now, all other ones have been removed including the shared static data in this class.\n\nCheck this out: \n\nhttps://stackoverflow.com/questions/32976943/java-static-initialization-thread-safety-guarantee-in-language-spec \n\nand the reference to the section in the Java Language Specification that details the synchronized static initialization.\n\nI also corroborated it with this little multithreaded test program:\n\njh1730@newton:~/dev/open/LF/tmp$ cat StaticTest.java\nimport java.util.Date;\n\npublic class StaticTest {\n\n  public static volatile int count \u003d 0;\n\n  static {\n    count(\"start-static-block\", count);\n    System.out.println(\".... start 30 sec. sleep within static block ..\");\n    try {Thread.sleep(30000);} catch(Exception e) {e.printStackTrace();}\n    System.out.println(\".... end 30 sec. sleep within static block ..\");\n    count(\"end-static-block\", 1);\n  }\n\n  public StaticTest() {\n\tcount(\"constructor\",999);\n  }\n\n  public static void count(String m, int c) {\n    count\u003dc;\n    System.out.println(new Date() + \": \" + m + \" count\u003d\" + count);\n  }\n}\njh1730@newton:~/dev/open/LF/tmp$ \njh1730@newton:~/dev/open/LF/tmp$ cat Main.java\npublic class Main {\n\n  public static void main(String[] args) {\n    for (int i\u003d100; i\u003c110; i++) {\n      final int t\u003di;\n      new Thread() {\n      \t  public void run() {System.out.println(\".. thread-\" + t + \" ready to set count ...\"); StaticTest.count(\"thread-\"+t, t);}\n      }.start();\n    }\n\n    try {Thread.sleep(60000);} catch(Exception e) {e.printStackTrace();}\n  }\n}\njh1730@newton:~/dev/open/LF/tmp$ \njh1730@newton:~/dev/open/LF/tmp$ java Main\n.. thread-100 ready to set count ...\n.. thread-101 ready to set count ...\n.. thread-102 ready to set count ...\n.. thread-103 ready to set count ...\n.. thread-104 ready to set count ...\n.. thread-105 ready to set count ...\n.. thread-106 ready to set count ...\n.. thread-107 ready to set count ...\n.. thread-108 ready to set count ...\n.. thread-109 ready to set count ...\nMon Jun 12 11:49:32 CDT 2017: start-static-block count\u003d0\n.... start 30 sec. sleep within static block ..\n.... end 30 sec. sleep within static block ..\nMon Jun 12 11:50:02 CDT 2017: end-static-block count\u003d1\nMon Jun 12 11:50:02 CDT 2017: thread-102 count\u003d102\nMon Jun 12 11:50:02 CDT 2017: thread-103 count\u003d103\nMon Jun 12 11:50:02 CDT 2017: thread-101 count\u003d101\nMon Jun 12 11:50:02 CDT 2017: thread-104 count\u003d105\nMon Jun 12 11:50:02 CDT 2017: thread-105 count\u003d105\nMon Jun 12 11:50:02 CDT 2017: thread-109 count\u003d109\nMon Jun 12 11:50:02 CDT 2017: thread-108 count\u003d108\nMon Jun 12 11:50:02 CDT 2017: thread-106 count\u003d106\nMon Jun 12 11:50:02 CDT 2017: thread-100 count\u003d100",
+      "parentUuid": "da141535_fe26b4b9",
+      "revId": "b429e762a77e18a78f3f4862996d3885e5715a04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
