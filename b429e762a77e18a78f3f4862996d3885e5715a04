@@ -34,6 +34,24 @@
       "revId": "b429e762a77e18a78f3f4862996d3885e5715a04",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da141535_ca49eb8c",
+        "filename": "common-logging/src/main/java/org/openecomp/policy/common/logging/flexlogger/FlexLogger.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2017-06-12T08:17:46Z",
+      "side": 0,
+      "message": "Note the output from running the following class:\n\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\npublic class Junk\n{\n  static String str1 \u003d initString(\"Initializing \u0027str1\u0027\");\n  static String str2;\n  static\n  {\n\tstr2 \u003d \"Initializing \u0027str2\u0027\";\n\tSystem.out.println(str2);\n  }\n  static String str3 \u003d initString(\"Initializing \u0027str3\u0027\");\n\n  private static String initString(String value)\n  {\n\tSystem.out.println(value);\n\treturn(value);\n  }\n\n  static public void main(String args[])\n  {\n\tSystem.out.println(\"Running \u0027main\u0027\");\n  }\n}\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n$ java Junk\nInitializing \u0027str1\u0027\nInitializing \u0027str2\u0027\nInitializing \u0027str3\u0027\nRunning \u0027main\u0027\n\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\n\nNote that \u0027str2\u0027, is initialized after \u0027str1\u0027, even though \u0027str1\u0027 initialization is through a method, and \u0027str2\u0027 using a static block. Java does try to initialize dependencies before dependents, but I don\u0027t know if that always works as expected, particularly when there is the possibility of a dependency loop between classes.",
+      "parentUuid": "da141535_af77e9d3",
+      "revId": "b429e762a77e18a78f3f4862996d3885e5715a04",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
