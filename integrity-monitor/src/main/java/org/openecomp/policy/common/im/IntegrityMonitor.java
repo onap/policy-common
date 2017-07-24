@@ -133,7 +133,7 @@ public class IntegrityMonitor {
 	
 	private static String jmxFqdn = null;
 
-	// this is the max interval allowed without any forward progress counter updates
+	// this is the max interval seconds allowed without any forward progress counter updates
 	private static int maxFpcUpdateInterval = IntegrityMonitorProperties.DEFAULT_MAX_FPC_UPDATE_INTERVAL;
 	
 	// Node types
@@ -153,7 +153,7 @@ public class IntegrityMonitor {
 	private static String site_name;
 	private static String node_type;
 	private Date refreshStateAuditLastRunDate;
-	private int refreshStateAuditIntervalMs = 60000; //run it once per minute
+	private static long refreshStateAuditIntervalMs = 600000; //run it once per 10 minutes
 	
 	//lock objects
 	private final Object evaluateSanityLock = new Object();
@@ -626,8 +626,10 @@ public class IntegrityMonitor {
 						// create instance of StateMangement class for dependent
 						StateManagement depStateManager = new StateManagement(emf, dep);
 						if (depStateManager != null) {
-							logger.info("Forward progress not detected for dependent resource " + dep + ". Setting dependent's state to disable failed.");
-							depStateManager.disableFailed();
+							if(!depStateManager.getOpState().equals(StateManagement.DISABLED)){
+								logger.info("Forward progress not detected for dependent resource " + dep + ". Setting dependent's state to disable failed.");
+								depStateManager.disableFailed();
+							}
 						}
 					} catch (Exception e) {
 						// ignore errors
@@ -1181,6 +1183,13 @@ public class IntegrityMonitor {
 			}
 		}
 		
+		if (prop.getProperty(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS) != null){
+			try{
+				refreshStateAuditIntervalMs = Long.parseLong(prop.getProperty(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS));
+			}catch(NumberFormatException e){
+				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS);
+			}
+		}
 		
 		return;
 	}
@@ -1272,9 +1281,7 @@ public class IntegrityMonitor {
 	 * check their operational state.  If it is not disabled, then disable them.
 	 */
 	public void stateAudit() {
-		
-		//TODO add stateAuditIntervalMs to the IntegrityMonitor properties here and in droolspdp
-		// monitoring interval checks
+
 		if (stateAuditIntervalMs <= 0) {
 			return; // stateAudit is disabled
 		}
@@ -1308,11 +1315,13 @@ public class IntegrityMonitor {
 			if(fpe.getResourceName().equals(IntegrityMonitor.resourceName)){
 				continue;
 			}
+			//Make sure you are not getting a cached version
+			em.refresh(fpe);
 			long diffMs = date.getTime() - fpe.getLastUpdated().getTime();
 			logger.debug("IntegrityMonitor.stateAudit(): diffMs = " + diffMs);
 
 			//Threshold for a stale entry
-			long staleMs = failedCounterThreshold * monitorInterval * 1000;
+			long staleMs = maxFpcUpdateInterval * 1000;
 			logger.debug("IntegrityMonitor.stateAudit(): staleMs = " + staleMs);
 
 			if(diffMs > staleMs){
@@ -1449,6 +1458,10 @@ public class IntegrityMonitor {
 	 * send a notification to all registered observers.
 	 */
 	private void refreshStateAudit(){
+		if(refreshStateAuditIntervalMs <=0){
+			// The audit is deactivated
+			return;
+		}
 		synchronized(refreshStateAuditLock){
 			logger.debug("refreshStateAudit: entry");
 			Date now = new Date();

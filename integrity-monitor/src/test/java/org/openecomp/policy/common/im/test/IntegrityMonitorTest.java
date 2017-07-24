@@ -122,10 +122,10 @@ public class IntegrityMonitorTest {
 		//testSanityJmx();
 		//testIM();
 		//testSanityState();
-		//testRefreshStateAudit();
+		testRefreshStateAudit();
 		//testStateCheck();
 		//testGetAllForwardProgressEntity();
-		testStateAudit();
+		//testStateAudit();
 	}
 
 	/*
@@ -642,6 +642,7 @@ public class IntegrityMonitorTest {
 		// parameters are passed via a properties file
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
 		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
+		myProp.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, "60000");
 		IntegrityMonitor.updateProperties(myProp);
 		
 		et = em.getTransaction();

@@ -37,7 +37,7 @@ public class IntegrityMonitorProperties {
 	public static final int DEFAULT_FAILED_COUNTER_THRESHOLD = 3;
 	public static final int DEFAULT_TEST_INTERVAL = 10; //20;
 	public static final int DEFAULT_WRITE_FPC_INTERVAL = 5;
-	public static final int DEFAULT_MAX_FPC_UPDATE_INTERVAL = 60;
+	public static final int DEFAULT_MAX_FPC_UPDATE_INTERVAL = 120;
 	
 	public static final String FP_MONITOR_INTERVAL = "fp_monitor_interval";
 	public static final String FAILED_COUNTER_THRESHOLD = "failed_counter_threshold";
@@ -52,5 +52,6 @@ public class IntegrityMonitorProperties {
 	public static final String JMX_FQDN = "jmx_fqdn";
 	public static final String MAX_FPC_UPDATE_INTERVAL = "max_fpc_update_interval";
 	public static final String STATE_AUDIT_INTERVAL_MS = "state_audit_interval_ms";
+	public static final String REFRESH_STATE_AUDIT_INTERVAL_MS = "refresh_state_audit_interval_ms";
 	
 }
