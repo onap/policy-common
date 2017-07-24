@@ -167,7 +167,7 @@ public class Main
 		System.exit(1);
 	  }
 
-	if (cmd.getOptionValue('h') != null || cmd.getOptionValue('?') != null)
+	if (cmd == null || cmd.getOptionValue('h') != null || cmd.getOptionValue('?') != null)
 	  {
 		help();
 		System.exit(0);
