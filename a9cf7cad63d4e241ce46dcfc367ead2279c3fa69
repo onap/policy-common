@@ -16,6 +16,24 @@
       "revId": "a9cf7cad63d4e241ce46dcfc367ead2279c3fa69",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a202591_89b689db",
+        "filename": "common-logging/src/main/java/org/openecomp/policy/common/logging/eelf/EventData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2017-07-25T11:41:37Z",
+      "side": 1,
+      "message": "The idea of this code inspection is to resolve sonar blockers.   I agree, this is bad coding, and wanted to remove but I decided to leave the functionality as it was before so not to break it, even though it is bad.   I haven\u0027t written any of this code, and a proponent to remove all together.  \n\nNote the pre-inspection before code of the equals():\n\n\tString requestId \u003d (String) obj;\n\t\tif(requestID !\u003d null \u0026\u0026 requestID.equals(requestId)){\n\t\t\treturn true;\n\t\t}\n\nIt does not even check the type of the obj, blindly typecast it to String.   Again, the previous code in this module is horrible.   But provided this may be in functionality out there that is using the commons module in other repos as policy/engine, I didn\u0027t want to go there, and handle the regression testing there, so this review is just preserving existing functionality but fixing the sonar blocker which is the line that does the \"String requestId \u003d (String) obj;\".\n\nIn general, the problems that I\u0027ve seen in these common-logging modules are really bad, but is not my intent to redesign it or regression testing all its uses, at this point as part of this activity.",
+      "parentUuid": "5a202591_49b4f1f1",
+      "revId": "a9cf7cad63d4e241ce46dcfc367ead2279c3fa69",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
