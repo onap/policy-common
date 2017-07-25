@@ -73,21 +73,36 @@ public class EventData {
 	public String toString(){
 		return requestID + " Starting Time : " + this.startTime + " Ending Time : " + this.endTime;
 	}
+
 	@Override
-	public int hashCode(){
-		final int prime =31;
-		int result =1;
-		result = prime * result +((requestID == null) ? 0: requestID.hashCode());
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((requestID == null) ? 0 : requestID.hashCode());
 		return result;
 	}
-	@Override
-	public boolean equals(Object obj){
-		
-		String requestId = (String) obj;
-		if(requestID != null && requestID.equals(requestId)){
-			return true;
-		}
-		return false;
-	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;	
+		if (obj instanceof String) {
+			String requestId = (String) obj;
+			if(requestID != null && requestID.equals(requestId)){
+				return true;
+			}
+			return false;
+		}
+		if (getClass() != obj.getClass())
+			return false;
+		EventData other = (EventData) obj;
+		if (requestID == null) {
+			if (other.requestID != null)
+				return false;
+		} else if (!requestID.equals(other.requestID))
+			return false;
+		return true;
+	}
 }
