@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a202591_49b4f1f1",
+        "filename": "common-logging/src/main/java/org/openecomp/policy/common/logging/eelf/EventData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2017-07-25T07:54:01Z",
+      "side": 1,
+      "message": "I don\u0027t think it is a good idea to allow EventData to be equal to a String. Shouldn\u0027t the following always hold true?\n\na.equals(b) \u003d\u003d b.equals(a)\n\nThis won\u0027t always be the case if \u0027a\u0027 is of class \u0027EventData\u0027 and \u0027b\u0027 is of class \u0027String\u0027.",
+      "revId": "a9cf7cad63d4e241ce46dcfc367ead2279c3fa69",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
