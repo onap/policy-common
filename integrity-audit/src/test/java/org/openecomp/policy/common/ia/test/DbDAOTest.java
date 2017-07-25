@@ -228,9 +228,9 @@ public class DbDAOTest {
 		try {
 			// Add some entries to the DB
 			d = new DbDAO(resourceName, persistenceUnit, properties);
-			DbDAO d2 = new DbDAO("pdp1", persistenceUnit, properties);
+			new DbDAO("pdp1", persistenceUnit, properties);
 			properties.put(IntegrityAuditProperties.NODE_TYPE, "pdp_drools");
-			DbDAO d3 = new DbDAO("pdp2", persistenceUnit, properties);
+			new DbDAO("pdp2", persistenceUnit, properties);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -474,8 +474,8 @@ public class DbDAOTest {
 		try {
 			// create entries for the IntegrityAuditEntity table
 			d = new DbDAO(resourceName, persistenceUnit, properties);
-			DbDAO d2 = new DbDAO("pdp1", persistenceUnit, properties);
-			DbDAO d3 = new DbDAO("pdp2", persistenceUnit, properties);
+			new DbDAO("pdp1", persistenceUnit, properties);
+			new DbDAO("pdp2", persistenceUnit, properties);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -516,8 +516,8 @@ public class DbDAOTest {
 		try {
 			// create entries for the IntegrityAuditEntity table
 			d = new DbDAO(resourceName, persistenceUnit, properties);
-			DbDAO d2 = new DbDAO("pdp1", persistenceUnit, properties);
-			DbDAO d3 = new DbDAO("pdp2", persistenceUnit, properties);
+			new DbDAO("pdp1", persistenceUnit, properties);
+			new DbDAO("pdp2", persistenceUnit, properties);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -578,8 +578,8 @@ public class DbDAOTest {
 		try {
 			// create entries for the IntegrityAuditEntity table
 			d = new DbDAO(resourceName, persistenceUnit, properties);
-			DbDAO d2 = new DbDAO("pdp1", persistenceUnit, properties);
-			DbDAO d3 = new DbDAO("pdp2", persistenceUnit, properties);
+			new DbDAO("pdp1", persistenceUnit, properties);
+			new DbDAO("pdp2", persistenceUnit, properties);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -620,8 +620,8 @@ public class DbDAOTest {
 		try {
 			// create entries for the IntegrityAuditEntity table
 			d = new DbDAO(resourceName, persistenceUnit, properties);
-			DbDAO d2 = new DbDAO("pdp1", persistenceUnit, properties);
-			DbDAO d3 = new DbDAO("pdp2", persistenceUnit, properties);
+			new DbDAO("pdp1", persistenceUnit, properties);
+			new DbDAO("pdp2", persistenceUnit, properties);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -682,8 +682,8 @@ public class DbDAOTest {
 		try {
 			// create entries for the IntegrityAuditEntity table
 			d = new DbDAO(resourceName, persistenceUnit, properties);
-			DbDAO d2 = new DbDAO("pdp1", persistenceUnit, properties);
-			DbDAO d3 = new DbDAO("pdp2", persistenceUnit, properties);
+			new DbDAO("pdp1", persistenceUnit, properties);
+			new DbDAO("pdp2", persistenceUnit, properties);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -40,6 +40,10 @@ import com.att.eelf.configuration.EELFLogger.Level;
  */
 public class Logger4J implements org.openecomp.policy.common.logging.flexlogger.Logger, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 3183729429888828471L;
 	private Logger log = null;
     private String methodName = "";
     private String className = "";
@@ -49,7 +53,7 @@ public class Logger4J implements org.openecomp.policy.common.logging.flexlogger.
      * Constructor
      * @param clazz
      */
-	public Logger4J (Class clazz){
+	public Logger4J (Class<?> clazz){
 		System.out.println("create instance of Logger4J");
 		if(clazz != null){
 		   log = Logger.getLogger(clazz);

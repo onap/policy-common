@@ -22,8 +22,6 @@ package org.openecomp.policy.common.logging.eelf;
 
 import java.time.Instant;
 
-import javax.swing.text.html.parser.Entity;
-
 /**
  * 
  * EventData can be used for logging a rule event.

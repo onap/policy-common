@@ -34,6 +34,10 @@ import com.att.eelf.configuration.EELFLogger.Level;
  */
 public class SystemOutLogger implements Logger, Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4956408061058933929L;
 	private String className = "";
 	private boolean isDebugEnabled = true;
 	private boolean isInfoEnabled = true;
@@ -47,7 +51,7 @@ public class SystemOutLogger implements Logger, Serializable {
      * Constructor
      * @param clazz
      */
-	public SystemOutLogger (Class clazz){
+	public SystemOutLogger (Class<?> clazz){
 		System.out.println("create instance of SystemOutLogger");
 		if(clazz != null){
 			className = clazz.getName();

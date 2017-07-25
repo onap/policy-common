@@ -20,38 +20,16 @@
 
 package org.openecomp.policy.common.im.test;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
-import java.util.StringTokenizer;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.LockModeType;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
-
-
-
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openecomp.policy.common.im.StateManagement;
-import org.openecomp.policy.common.im.StateTransition;
 import org.openecomp.policy.common.im.StandbyStatusException; 
 import org.openecomp.policy.common.im.StateChangeNotifier; 
 import org.openecomp.policy.common.logging.flexlogger.FlexLogger; 

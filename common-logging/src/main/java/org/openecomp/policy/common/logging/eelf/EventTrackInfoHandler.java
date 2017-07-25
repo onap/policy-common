@@ -23,8 +23,6 @@ package org.openecomp.policy.common.logging.eelf;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Timer;
 import java.util.TimerTask;
 
 /**

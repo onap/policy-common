@@ -126,7 +126,7 @@ public class StateTransition {
 		 }  
 	     String key = adminState + "," + opState + "," + availStatus2 + "," + standbyStatus + "," + actionName;
 	     logger.debug("Ending State search key: " + key);
-	     String value = (String)StateTable.get(key); 
+	     String value = StateTable.get(key); 
 	      
 	     if (value != null) {
              try {
@@ -715,11 +715,11 @@ public class StateTransition {
   
   public void displayStateTable()
   {
-	  Set set = StateTable.entrySet();
-      Iterator iter = set.iterator();
+	  Set<?> set = StateTable.entrySet();
+      Iterator<?> iter = set.iterator();
  
 	  while(iter.hasNext()) {
-	      Map.Entry me = (Map.Entry)iter.next();
+	      Map.Entry<?, ?> me = (Map.Entry<?, ?>)iter.next();
 	      logger.debug((String)me.getKey() + ((String)me.getValue()).replace(".",  ",")); 
 	  }
   }

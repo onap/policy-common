@@ -20,21 +20,8 @@
 
 package org.openecomp.policy.common.im.test;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
-import java.util.StringTokenizer;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -46,8 +33,6 @@ import org.junit.Test;
 
 import org.openecomp.policy.common.im.StateTransition;
 import org.openecomp.policy.common.im.StateElement;
-import org.openecomp.policy.common.im.StandbyStatusException; 
-import org.openecomp.policy.common.im.StateChangeNotifier; 
 import org.openecomp.policy.common.logging.flexlogger.FlexLogger; 
 import org.openecomp.policy.common.logging.flexlogger.Logger;
 /*
@@ -90,8 +75,6 @@ public class StateTransitionTest {
 	@Test
 	public void testJPA() throws Exception {
 		logger.info("\n\nlogger.infor StateTransitionTest: Entering\n\n");
-		boolean standbyExceptionThrown = false; 
-		
 		//These parameters are in a properties file
 		EntityManagerFactory emf = null; 
 		try {

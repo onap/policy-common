@@ -49,7 +49,6 @@ import org.openecomp.policy.common.im.IntegrityMonitor;
 import org.openecomp.policy.common.im.IntegrityMonitorProperties;
 import org.openecomp.policy.common.im.StateManagement;
 import org.openecomp.policy.common.im.jpa.ForwardProgressEntity;
-import org.openecomp.policy.common.im.jpa.ImTestEntity;
 import org.openecomp.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.openecomp.policy.common.im.jpa.StateManagementEntity;
 import org.openecomp.policy.common.logging.flexlogger.FlexLogger; 
@@ -603,9 +602,8 @@ public class IntegrityMonitorTest {
 		StateManagement stateManager = new StateManagement(emf, "group2_dep1");
 		stateManager.lock();
 		
-		//Now add new group1 stateManager instances
-		StateManagement sm2 = new StateManagement(emf, "group1_dep1");
-		StateManagement sm3 = new StateManagement(emf, "group1_dep2");
+		new StateManagement(emf, "group1_dep1");
+		new StateManagement(emf, "group1_dep2");
 		
 		boolean sanityPass = true;
 		Thread.sleep(15000);
@@ -658,7 +656,7 @@ public class IntegrityMonitorTest {
 
 		IntegrityMonitor.deleteInstance();
 
-		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+		IntegrityMonitor.getInstance(resourceName, myProp);
 
 		//the state here is unlocked, enabled, null, null
 		StateManagementEntity sme = null;
@@ -790,8 +788,7 @@ public class IntegrityMonitorTest {
 		em.flush();
 		et.commit();
 
-		//Now add new group1 stateManager instances
-		StateManagement sm2 = new StateManagement(emf, "group1_dep1");
+		new StateManagement(emf, "group1_dep1");
 		
 		boolean sanityPass = true;
 		//Thread.sleep(15000);
@@ -990,7 +987,7 @@ public class IntegrityMonitorTest {
 		
 		logger.debug("\nIntegrityMonitorTest:testStateAudit getting list of StateManagementEntity entries\n\n");
 		Query query = em.createQuery("SELECT s FROM StateManagementEntity s");
-		List smeList = query.getResultList();
+		List<?> smeList = query.getResultList();
 		
 		logger.debug("\n\n");
 		logger.debug("IntegrityMonitorTest:testStateAudit:StateManagementEntity entries");

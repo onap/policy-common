@@ -24,18 +24,10 @@ package org.openecomp.policy.common.logging;
 //import static org.openecomp.policy.common.logging.eelf.Configuration.TRANSACTION_ELAPSED_TIME;
 //import static org.openecomp.policy.common.logging.eelf.Configuration.TRANSACTION_END_TIME_STAMP;
 
-import static com.att.eelf.configuration.Configuration.MDC_ALERT_SEVERITY;
-import static com.att.eelf.configuration.Configuration.MDC_INSTANCE_UUID;
-
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.ZoneOffset;
 import java.util.Date;
-import java.util.Properties;
-import java.util.Timer;
-import java.util.TimerTask;
-
 import org.slf4j.MDC;
 
 import org.openecomp.policy.common.logging.nsa.LoggingContextFactory;

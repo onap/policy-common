@@ -20,13 +20,7 @@
 
 package org.openecomp.policy.common.logging.eelf;
 
-import java.io.IOException;
-import java.time.Instant;
-import java.util.Properties;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-
-import org.openecomp.policy.common.logging.flexlogger.PropertyUtil;
 
 /**
  * 

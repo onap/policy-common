@@ -21,6 +21,11 @@
 package org.openecomp.policy.common.im;
 
 public class StandbyStatusException extends Exception {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -5262512285108747134L;
+
 	public StandbyStatusException()
 	{
 	}

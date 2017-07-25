@@ -26,8 +26,6 @@ package org.openecomp.policy.common.im.jmx;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
-
 import javax.management.MBeanServerConnection;
 import javax.management.Notification;
 import javax.management.NotificationListener;

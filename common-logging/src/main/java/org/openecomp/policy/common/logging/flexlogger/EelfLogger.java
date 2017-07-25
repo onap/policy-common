@@ -36,14 +36,18 @@ import com.att.eelf.configuration.EELFLogger.Level;
 
 public class EelfLogger implements Logger, Serializable {
 	
-    private String className = "";
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 5385586713941277192L;
+	private String className = "";
     private String transId = UUID.randomUUID().toString();
     
     /**
      * Constructor
      * @param clazz
      */
-	public EelfLogger(Class clazz) {
+	public EelfLogger(Class<?> clazz) {
 		if(clazz != null){
 		   className = clazz.getName();
 		}
@@ -66,7 +70,7 @@ public class EelfLogger implements Logger, Serializable {
 	 * @param clazz
 	 * @param isNewTransaction
 	 */
-	public EelfLogger(Class clazz, boolean isNewTransaction) {
+	public EelfLogger(Class<?> clazz, boolean isNewTransaction) {
 		if(clazz != null){
 		   className = clazz.getName();
 		}
@@ -98,7 +102,7 @@ public class EelfLogger implements Logger, Serializable {
 	 * @param clazz
 	 * @param transId
 	 */
-	public EelfLogger(Class clazz, String transId) {
+	public EelfLogger(Class<?> clazz, String transId) {
 		if(clazz != null){
 		   className = clazz.getName();
 		}

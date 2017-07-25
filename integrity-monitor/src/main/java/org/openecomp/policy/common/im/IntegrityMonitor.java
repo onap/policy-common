@@ -62,7 +62,6 @@ public class IntegrityMonitor {
 	private static IntegrityMonitor instance = null;
 	
 	private static String resourceName = null;
-	private boolean fpcError = false;
 	boolean alarmExists = false;
 	
 	/*
@@ -79,7 +78,6 @@ public class IntegrityMonitor {
 	// Persistence Unit for JPA 
 	private static final String PERSISTENCE_UNIT = "operationalPU";
 	
-	private ComponentAdmin admin = null;
 	private StateManagement stateManager = null;
 	
 	private static final int CYCLE_INTERVAL_MILLIS = 1000;
@@ -350,13 +348,12 @@ public class IntegrityMonitor {
 		
 		// create management bean
 		try {
-			admin = new ComponentAdmin(resourceName, this, stateManager);
+			new ComponentAdmin(resourceName, this, stateManager);
 		} catch (Exception e) {
 			logger.error("ComponentAdmin constructor exception: " + e.toString());
 		}
 		
-		// create FPManager inner class
-		FPManager fpMonitor = new FPManager();
+		new FPManager();
 		
 
 	}
@@ -1244,8 +1241,6 @@ public class IntegrityMonitor {
 					// no forward progress
 					missedCycles += 1;
 					if (missedCycles >= failedCounterThreshold && !alarmExists) {
-						// set op state to disabled failed
-						fpcError = true;
 						logger.info("Forward progress not detected for resource " + resourceName + ". Setting state to disable failed.");
 						if(!(stateManager.getOpState()).equals(StateManagement.DISABLED)){
 							// Note: The refreshStateAudit will make redundant calls
@@ -1258,7 +1253,6 @@ public class IntegrityMonitor {
 					// forward progress has occurred
 					lastFpCounter = fpCounter;
 					missedCycles = 0;
-					fpcError = false;
 					// set op state to enabled
 					logger.debug("Forward progress detected for resource " + resourceName + ". Setting state to enable not failed.");
 					if(!(stateManager.getOpState()).equals(StateManagement.ENABLED)){

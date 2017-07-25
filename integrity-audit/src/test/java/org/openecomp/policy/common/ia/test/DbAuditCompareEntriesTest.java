@@ -340,12 +340,9 @@ public class DbAuditCompareEntriesTest {
 		dbDAO = new DbDAO(resourceName, persistenceUnit, properties);
 		DbAudit dbAudit = new DbAudit(dbDAO);
 		
-		@SuppressWarnings("unused")
-		String className = null;
 		HashSet<String> classNameSet = dbDAO.getPersistenceClassNames();
 		HashSet<Object> mismatchResult = new HashSet<Object>();
 		for(String c : classNameSet) {
-			className = c;
 			if (c.equals("org.openecomp.policy.common.ia.jpa.IntegrityAuditEntity")){
 				String resourceName1 = resourceName;
 				String resourceName2 = resourceName;
@@ -529,12 +526,12 @@ public class DbAuditCompareEntriesTest {
 		
 		// Add entries into DB1
 		dbDAO = new DbDAO(resourceName, persistenceUnit, properties);
-		DbDAO dbDAO2 = new DbDAO("pdp2", persistenceUnit, properties);
+		new DbDAO("pdp2", persistenceUnit, properties);
 		DbAudit dbAudit = new DbAudit(dbDAO);
 		
 		// Add entries into DB2
 		DbDAO dbDAO3 = new DbDAO(resourceName, persistenceUnit, properties2);
-		DbDAO dbDAO4 = new DbDAO("pdp2", persistenceUnit, properties2);
+		new DbDAO("pdp2", persistenceUnit, properties2);
 		
 		// Pull all entries and compare
 		HashSet<String> classNameSet = dbDAO.getPersistenceClassNames();

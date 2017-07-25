@@ -21,7 +21,6 @@
 package org.openecomp.policy.common.logging.eelf;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 
@@ -31,7 +30,7 @@ import java.util.Map;
 public class ErrorCodeMap {
 	
 
-    public static HashMap<MessageCodes, ErrorCodeInfo> hm = new HashMap();
+    public static HashMap<MessageCodes, ErrorCodeInfo> hm = new HashMap<MessageCodes, ErrorCodeInfo>();
     
     private static String ERROR_PERMISSIONS = "POLICY-100E";
 	private static String ERROR_PERMISSIONS_DESCRIPTION = "This is a Permissions Error. Please check the error message for detail information";

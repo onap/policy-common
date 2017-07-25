@@ -597,13 +597,13 @@ public class Main
 	String formatString = sb.toString();
 
 	// display column headers
-	System.out.printf(formatString, labels);
-	System.out.printf(formatString, underlines);
+	System.out.printf(formatString, (Object[])labels);
+	System.out.printf(formatString, (Object[])underlines);
 
 	// display all of the rows
 	for (String[] values : treeset)
 	  {
-		System.out.printf(formatString, values);
+		System.out.printf(formatString, (Object[])values);
 	  }
   }
 }

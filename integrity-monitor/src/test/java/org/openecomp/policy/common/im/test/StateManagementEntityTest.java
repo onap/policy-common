@@ -20,9 +20,6 @@
 
 package org.openecomp.policy.common.im.test;
 
-import static org.junit.Assert.*;
-
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -160,7 +157,6 @@ public class StateManagementEntityTest {
 	        //Just test that we are retrieving the right object
 	        @SuppressWarnings("rawtypes")
 	        List resourceList = query.getResultList();
-	        String resource = null; 
 	        if (!resourceList.isEmpty()) {
 	           // exist 
 	           StateManagementEntity sme2 = (StateManagementEntity) resourceList.get(0);

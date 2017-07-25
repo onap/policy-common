@@ -20,8 +20,6 @@
 
 package org.openecomp.policy.common.im;
 
-import java.util.*;
-
 //import org.apache.log4j.Logger;
 import org.openecomp.policy.common.logging.flexlogger.FlexLogger; 
 import org.openecomp.policy.common.logging.flexlogger.Logger;
@@ -40,7 +38,7 @@ public class StateElement {
 	String endingStandbyStatus = null;
 	String exception  = null;
 	 
-	public void StateElement()
+	public StateElement()
 	{
 	}
 	

@@ -42,7 +42,6 @@ import javax.persistence.metamodel.Metamodel;
 
 //import org.apache.log4j.Logger;
 
-import org.openecomp.policy.common.ia.IntegrityAuditProperties.NodeTypeEnum;
 import org.openecomp.policy.common.ia.jpa.IntegrityAuditEntity;
 import org.openecomp.policy.common.logging.flexlogger.FlexLogger; 
 import org.openecomp.policy.common.logging.flexlogger.Logger;

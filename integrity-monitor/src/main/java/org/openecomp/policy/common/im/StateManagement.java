@@ -34,7 +34,6 @@ import javax.persistence.Query;
 import org.openecomp.policy.common.im.jpa.StateManagementEntity;
 import org.openecomp.policy.common.im.StateElement;
 import org.openecomp.policy.common.im.StandbyStatusException;
-import org.openecomp.policy.common.im.StateChangeNotifier; 
 import org.openecomp.policy.common.logging.flexlogger.FlexLogger; 
 import org.openecomp.policy.common.logging.flexlogger.Logger;
 
@@ -73,16 +72,12 @@ public class StateManagement extends Observable {
   public static final String AVAILABLE_STATUS= "availStatus"; 
   public static final String STANDBY_STATUS  = "standbyStatus"; 
   
-  private static final String REMOVE  = "remove"; 
-  private static final String ADD     = "add"; 
-  
   private String resourceName = null; 
   private String adminState = null; 
   private String opState = null; 
   private String availStatus = null; 
   private String standbyStatus = null; 
   private EntityManager em; 
-  private EntityManagerFactory emf = null; 
   private StateTransition st = null;
     
   /*
@@ -108,7 +103,6 @@ public class StateManagement extends Observable {
   public StateManagement(EntityManagerFactory emf, String resourceName) throws Exception
   {
 	  logger.debug("StateManagement: constructor, resourceName: " + resourceName);
-	  this.emf = emf; 
 	  em = emf.createEntityManager();
       EntityTransaction et = em.getTransaction();
 
