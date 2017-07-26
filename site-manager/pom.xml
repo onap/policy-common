@@ -70,6 +70,13 @@
 						<goals>
 							<goal>shade</goal>
 						</goals>
+						<configuration>
+							<artifactSet>
+								<excludes>
+									<exclude>org.eclipse.persistence:javax.persistence</exclude>
+								</excludes>
+							</artifactSet>
+						</configuration>	
 					</execution>
 				</executions>
 			</plugin>
