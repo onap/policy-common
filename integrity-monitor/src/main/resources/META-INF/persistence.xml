@@ -23,10 +23,10 @@
 	<persistence-unit name="schemaPU" transaction-type="RESOURCE_LOCAL">
 	<!-- Limited use for generating the DB and schema files for imtest DB - uses eclipselink -->
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<class>org.openecomp.policy.common.im.jpa.ImTestEntity</class>
-		<class>org.openecomp.policy.common.im.jpa.StateManagementEntity</class>
-		<class>org.openecomp.policy.common.im.jpa.ForwardProgressEntity</class>
-		<class>org.openecomp.policy.common.im.jpa.ResourceRegistrationEntity</class>
+		<class>org.onap.policy.common.im.jpa.ImTestEntity</class>
+		<class>org.onap.policy.common.im.jpa.StateManagementEntity</class>
+		<class>org.onap.policy.common.im.jpa.ForwardProgressEntity</class>
+		<class>org.onap.policy.common.im.jpa.ResourceRegistrationEntity</class>
 		<shared-cache-mode>NONE</shared-cache-mode>
 		<properties>
 			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
@@ -39,10 +39,10 @@
 	<persistence-unit name="operationalPU" transaction-type="RESOURCE_LOCAL">
 	<!-- For operational use -->
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<class>org.openecomp.policy.common.im.jpa.ImTestEntity</class>
-		<class>org.openecomp.policy.common.im.jpa.StateManagementEntity</class>
-		<class>org.openecomp.policy.common.im.jpa.ForwardProgressEntity</class>
-		<class>org.openecomp.policy.common.im.jpa.ResourceRegistrationEntity</class>
+		<class>org.onap.policy.common.im.jpa.ImTestEntity</class>
+		<class>org.onap.policy.common.im.jpa.StateManagementEntity</class>
+		<class>org.onap.policy.common.im.jpa.ForwardProgressEntity</class>
+		<class>org.onap.policy.common.im.jpa.ResourceRegistrationEntity</class>
 		<shared-cache-mode>NONE</shared-cache-mode>	
 		<properties>
 			<!-- none -->

@@ -23,8 +23,8 @@
 	<persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
 	<!-- Limited use for generating the DB and schema files for iatest DB - uses eclipselink -->
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<class>org.openecomp.policy.common.ia.jpa.IntegrityAuditEntity</class>
-		<class>org.openecomp.policy.common.ia.test.jpa.IaTestEntity</class>
+		<class>org.onap.policy.common.ia.jpa.IntegrityAuditEntity</class>
+		<class>org.onap.policy.common.ia.test.jpa.IaTestEntity</class>
 		<shared-cache-mode>NONE</shared-cache-mode>
 		<properties>
 			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
@@ -37,7 +37,7 @@
 	<persistence-unit name="integrityAuditPU" transaction-type="RESOURCE_LOCAL">
 	<!-- For operational use -->
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<class>org.openecomp.policy.common.ia.jpa.IntegrityAuditEntity</class>		
+		<class>org.onap.policy.common.ia.jpa.IntegrityAuditEntity</class>		
 		<shared-cache-mode>NONE</shared-cache-mode>	
 		<properties>
 			<!-- none -->
