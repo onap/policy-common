@@ -16,6 +16,24 @@
       "revId": "6b2439a6b812616aa9e91559d791ab756ed0693c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_33dda843",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/ONAPLoggingUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-07-28T15:35:19Z",
+      "side": 1,
+      "message": "Yes I agree. Let\u0027s keep X-ECOMP-RequestID. We should probably open a JIRA for all the former ECOMP components to make this fix.",
+      "parentUuid": "1a1a2d67_132bcc31",
+      "revId": "6b2439a6b812616aa9e91559d791ab756ed0693c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
