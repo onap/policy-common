@@ -381,7 +381,7 @@ public class PolicyLogger {
 	 */
 	public static void info(Object arg0) {
 		MDC.put(CLASS_NAME, "");
-		info(arg0);
+		info((String)arg0);
 	}
 
 	/**
