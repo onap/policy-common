@@ -366,14 +366,6 @@ public class PolicyLogger {
 		debugLogger.info(MessageCodes.GENERAL_INFO, arg0);
 	}
 
-	/**
-	 * Records only one String message without its class name passed in
-	 * @param arg0
-	 */
-	public static void info(String arg0) {
-		MDC.put(CLASS_NAME, "");
-		debugLogger.info(MessageCodes.GENERAL_INFO, arg0);
-	}
 	
 	/**
 	 * Records only one String message
@@ -381,7 +373,7 @@ public class PolicyLogger {
 	 */
 	public static void info(Object arg0) {
 		MDC.put(CLASS_NAME, "");
-		info(arg0);
+		debugLogger.info(MessageCodes.GENERAL_INFO, String.valueOf(arg0));
 	}
 
 	/**
