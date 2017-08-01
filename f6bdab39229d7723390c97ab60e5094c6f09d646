@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_16405a55",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2017-08-01T01:14:56Z",
+      "side": 1,
+      "message": "This should be\n\ninfo(\"\" + arg0)\n\nor it may throw a ClassCastException for non-String objects.",
+      "revId": "f6bdab39229d7723390c97ab60e5094c6f09d646",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
