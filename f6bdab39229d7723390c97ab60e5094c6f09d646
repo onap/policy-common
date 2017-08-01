@@ -34,6 +34,24 @@
       "revId": "f6bdab39229d7723390c97ab60e5094c6f09d646",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_d96e9396",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2017-08-01T08:10:09Z",
+      "side": 1,
+      "message": "Why does the \u0027info(String arg0)\u0027 method even need to exist? Just remove the String version, and call \u0027debugLogger.info(MessageCodes.GENERAL_INFO, arg0.toString())\u0027 here -- it will work for String arguments, and everything else.",
+      "parentUuid": "1a1a2d67_d93d73bd",
+      "revId": "f6bdab39229d7723390c97ab60e5094c6f09d646",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
