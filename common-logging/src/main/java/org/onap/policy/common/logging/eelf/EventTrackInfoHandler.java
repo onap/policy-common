@@ -56,8 +56,8 @@ public class EventTrackInfoHandler extends TimerTask {
 			return;
 		}
 
-		Instant startTime = null;
-		long ns = 0;
+		Instant startTime;
+		long ns;
 
 		ArrayList<String> expiredEvents = null;
 
@@ -76,7 +76,7 @@ public class EventTrackInfoHandler extends TimerTask {
 
 			if (ns > PolicyLogger.EXPIRED_TIME){	
 				if (expiredEvents == null) {
-					expiredEvents = new ArrayList<String>();
+					expiredEvents = new ArrayList<>();
 				}
 				expiredEvents.add(key);
 

@@ -30,7 +30,7 @@ import java.util.HashMap;
 public class ErrorCodeMap {
 	
 
-    public static HashMap<MessageCodes, ErrorCodeInfo> hm = new HashMap<MessageCodes, ErrorCodeInfo>();
+    protected static final HashMap<MessageCodes, ErrorCodeInfo> hm = new HashMap<>();
     
     private static String ERROR_PERMISSIONS = "POLICY-100E";
 	private static String ERROR_PERMISSIONS_DESCRIPTION = "This is a Permissions Error. Please check the error message for detail information";
@@ -79,7 +79,7 @@ public class ErrorCodeMap {
     	hm.put(MessageCodes.ERROR_UNKNOWN, new ErrorCodeInfo(ERROR_UNKNOWN, ERROR_UNKNOWN_DESCRIPTION));
     	hm.put(MessageCodes.ERROR_AUDIT, new ErrorCodeInfo(ERROR_AUDIT, ERROR_AUDIT_DESCRIPTION));
     }
-    
+    private ErrorCodeMap() {};
     static class ErrorCodeInfo {
     	
     	private String errorCode;

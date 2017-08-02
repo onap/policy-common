@@ -40,12 +40,13 @@ public class Slf4jLoggingContext implements LoggingContext
 		MDC.put ( key, value );
 	}
 
+	@Override
 	public void put ( String key, long value )
 	{
-		put ( key, "" + value );
+		put ( key, Long.toString(value));
 	}
 
-	
+	@Override
 	public String get ( String key, String defaultValue )
 	{
 		String result = MDC.get ( key );
@@ -56,9 +57,10 @@ public class Slf4jLoggingContext implements LoggingContext
 		return result;
 	}
 
+	@Override
 	public long get ( String key, long defaultValue )
 	{
-		final String str = get ( key, "" + defaultValue );
+		final String str = get ( key, Long.toString(defaultValue));
 		try
 		{
 			return Long.parseLong ( str );
