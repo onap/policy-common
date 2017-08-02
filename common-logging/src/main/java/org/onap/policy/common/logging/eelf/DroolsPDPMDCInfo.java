@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class DroolsPDPMDCInfo implements MDCInfo{
 
-    private static ConcurrentHashMap<String, String> mdcMap = new ConcurrentHashMap<String, String>();
+    private static ConcurrentHashMap<String, String> mdcMap = new ConcurrentHashMap<>();
 
     static {
     	

@@ -121,7 +121,7 @@ public class PolicyLogger {
 			transId = UUID.randomUUID().toString();
 		}
 		
-		if(component != null && component.equalsIgnoreCase("DROOLS")){
+		if("DROOLS".equalsIgnoreCase(component)){
 			MDC.put(TARGET_ENTITY, "POLICY");
 			MDC.put(TARGET_SERVICE_NAME,  "drools evaluate rule");	
 			return postMDCInfoForEvent(transId, new DroolsPDPMDCInfo());
@@ -144,15 +144,7 @@ public class PolicyLogger {
 		Instant startTime = Instant.now();
 		Instant endTime = Instant.now();
 		long ns = Duration.between(startTime, endTime).toMillis(); // use millisecond as default and remove unit from log
-		//String unit = " Seconds";
-		//if(ns == 1){
-			//unit = " Second";
-		//}
-		
-		//if(ns < 1){
-			//ns = Duration.between(startTime, endTime).toMillis();
-			//unit = " milliseconds";
-		//}
+
 		MDC.put(MDC_INSTANCE_UUID, "");
 		MDC.put(MDC_ALERT_SEVERITY, "");
 		
@@ -164,7 +156,7 @@ public class PolicyLogger {
 		//set default values for these required fields below, they can be overridden
 		formatedTime = sdf.format(Date.from(endTime));
 		MDC.put(END_TIME_STAMP, formatedTime);
-		MDC.put(ELAPSED_TIME, Long.toString(ns)); // + unit);
+		MDC.put(ELAPSED_TIME, Long.toString(ns));
 		
 		MDC.put(PARTNER_NAME, "N/A");
 		
@@ -190,7 +182,7 @@ public class PolicyLogger {
 			
 			ConcurrentHashMap<String, String> mdcMap = mdcInfo.getMDCInfo();
 		    Iterator<String> keyIterator = mdcMap.keySet().iterator();
-		    String key = "";
+		    String key;
 		    
 		    while(keyIterator.hasNext()){
 		    	key = keyIterator.next();
@@ -207,15 +199,6 @@ public class PolicyLogger {
 		Instant startTime = Instant.now();
 		Instant endTime = Instant.now();
 		long ns = Duration.between(startTime, endTime).toMillis(); // use millisecond as default and remove unit from log
-		//String unit = " Seconds";
-		//if(ns == 1){
-			//unit = " Second";
-		//}
-		
-		//if(ns < 1){
-			//ns = Duration.between(startTime, endTime).toMillis();
-			//unit = " milliseconds";
-		//}
 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS+00:00");
 	
@@ -225,7 +208,7 @@ public class PolicyLogger {
 		//set default values for these required fields below, they can be overridden
 		formatedTime = sdf.format(Date.from(endTime));
 		MDC.put(END_TIME_STAMP, formatedTime);
-		MDC.put(ELAPSED_TIME, Long.toString(ns)); // + unit);
+		MDC.put(ELAPSED_TIME, Long.toString(ns));
 
 		return transId;
 	}
@@ -238,15 +221,7 @@ public class PolicyLogger {
 		Instant startTime = Instant.now();
 		Instant endTime = Instant.now();
 		long ns = Duration.between(startTime, endTime).toMillis();
-		//String unit = " Seconds";
-		//if(ns == 1){
-			//unit = " Second";
-		//}
-		
-		//if(ns < 1){
-			//ns = Duration.between(startTime, endTime).toMillis();
-			//unit = " milliseconds";
-		//}
+
 		MDC.put(MDC_INSTANCE_UUID, "");
 		MDC.put(MDC_ALERT_SEVERITY, "");
 		
@@ -258,7 +233,7 @@ public class PolicyLogger {
 		//set default values for these required fields below, they can be overridden
 		formatedTime = sdf.format(Date.from(endTime));
 		MDC.put(END_TIME_STAMP, formatedTime);
-		MDC.put(ELAPSED_TIME, Long.toString(ns)); // + unit);
+		MDC.put(ELAPSED_TIME, Long.toString(ns));
 		
 		MDC.put(PARTNER_NAME, "N/A");
 		
@@ -770,11 +745,9 @@ public class PolicyLogger {
 			    isEventTrackerRunning = true;
 			}
 			
-		}else if( size <= STOP_CHECK_POINT){
+		}else if( size <= STOP_CHECK_POINT && isEventTrackerRunning){
 		    
-			if(isEventTrackerRunning){
-				stopCleanUp();
-			}			
+			stopCleanUp();	
 		}
 	}
 	
@@ -951,27 +924,18 @@ public class PolicyLogger {
 		MDC.put(RESPONSE_DESCRIPTION, "N/A");
 		
 		long ns = Duration.between(startTime, endTime).toMillis();
-		//String unit = " Seconds";
-		//if(ns == 1){
-			//unit = " Second";
-		//}
 		
-		//if(ns < 1){
-			//ns = Duration.between(startTime, endTime).toMillis();
-			//unit = " milliseconds";
-		//}
-		
-		MDC.put(ELAPSED_TIME, Long.toString(ns)); // + unit);
+		MDC.put(ELAPSED_TIME, Long.toString(ns));
 		
 		auditLogger.info(MessageCodes.RULE_AUDIT_START_END_INFO,
 			serviceName, rule, startTime.toString(), endTime.toString(), Long.toString(ns), policyVersion);
 		
 		//--- remove the record from the concurrentHashMap
-		if(eventTracker != null){
-			if(eventTracker.getEventDataByRequestID(eventId) != null){
-				eventTracker.remove(eventId);
-				debugLogger.info("eventTracker.remove(" + eventId + ")");
-			}
+		if(eventTracker != null && eventTracker.getEventDataByRequestID(eventId) != null){
+
+			eventTracker.remove(eventId);
+			debugLogger.info("eventTracker.remove(" + eventId + ")");
+			
 		}	
 	}
 
@@ -1089,7 +1053,7 @@ public class PolicyLogger {
         PrintWriter pw = new PrintWriter(sw);
         t.printStackTrace(pw);
         String newStValue = sw.toString().replace ('|', '!').replace ("\n", " - ");
-        int curSize = (arguments == null ? 0 : arguments.length);
+        int curSize = arguments == null ? 0 : arguments.length;
         StringBuffer newArgument = new StringBuffer();
         for(int i=0; i<curSize; i++) {
         	newArgument.append(arguments[i]);
@@ -1151,11 +1115,11 @@ public class PolicyLogger {
 		// fetch and verify definitions of some properties
 		try{
 			
-			int timerDelayTime = Integer.parseInt(loggerProperties.getProperty("timer.delay.time", ""+1000));
-			int checkInterval = Integer.parseInt(loggerProperties.getProperty("check.interval", ""+30000));
-			int expiredDate = Integer.parseInt(loggerProperties.getProperty("event.expired.time",""+86400));
-			int concurrentHashMapLimit = Integer.parseInt(loggerProperties.getProperty("concurrentHashMap.limit", ""+5000));
-			int stopCheckPoint = Integer.parseInt(loggerProperties.getProperty("stop.check.point",""+2500));			
+			int timerDelayTime = Integer.parseInt(loggerProperties.getProperty("timer.delay.time", Integer.toString(1000)));
+			int checkInterval = Integer.parseInt(loggerProperties.getProperty("check.interval", Integer.toString(30000)));
+			int expiredDate = Integer.parseInt(loggerProperties.getProperty("event.expired.time", Integer.toString(86400)));
+			int concurrentHashMapLimit = Integer.parseInt(loggerProperties.getProperty("concurrentHashMap.limit", Integer.toString(5000)));
+			int stopCheckPoint = Integer.parseInt(loggerProperties.getProperty("stop.check.point", Integer.toString(2500)));			
 		    String loggerType = loggerProperties.getProperty("logger.type",logger_type.toString());
 		    
 		    String debugLevel = loggerProperties.getProperty("debugLogger.level","INFO");
@@ -1166,7 +1130,7 @@ public class PolicyLogger {
 		    String overrideLogbackLevel = loggerProperties.getProperty("override.logback.level.setup");
 
 		    if(overrideLogbackLevel != null && !overrideLogbackLevel.isEmpty()) {
-		    	if(overrideLogbackLevel.equalsIgnoreCase("TRUE")){
+		    	if("TRUE".equalsIgnoreCase(overrideLogbackLevel)){
 		    		isOverrideLogbackLevel = true;
 		    	}else{
 		    		isOverrideLogbackLevel = false;
@@ -1295,15 +1259,15 @@ public class PolicyLogger {
 			
 			if (loggerType != null){
 				
-				if (loggerType.equalsIgnoreCase("EELF")){
+				if ("EELF".equalsIgnoreCase(loggerType)){
 					
 					logger_type = LoggerType.EELF;
 					
-				}else if (loggerType.equalsIgnoreCase("LOG4J")){
+				}else if ("LOG4J".equalsIgnoreCase(loggerType)){
 					
 					logger_type = LoggerType.LOG4J;
 					
-				}else if (loggerType.equalsIgnoreCase("SYSTEMOUT")){
+				}else if ("SYSTEMOUT".equalsIgnoreCase(loggerType)){
 					
 					logger_type = LoggerType.SYSTEMOUT;
 					
@@ -1368,7 +1332,7 @@ public class PolicyLogger {
 	public static void setErrorLevel(String errorLevel){	
 		
 		if(isOverrideLogbackLevel){
-			if(errorLevel != null && errorLevel.equalsIgnoreCase("OFF")){
+			if("OFF".equalsIgnoreCase(errorLevel)){
 				PolicyLogger.ERROR_LEVEL = Level.OFF; 
 				errorLogger.setLevel(ERROR_LEVEL);
 			}else{
@@ -1385,7 +1349,7 @@ public class PolicyLogger {
 	public static void setMetricsLevel(String metricsLevel){
 		
 		if(isOverrideLogbackLevel){
-			if(metricsLevel != null && metricsLevel.equalsIgnoreCase("OFF")){
+			if("OFF".equalsIgnoreCase(metricsLevel)){
 				PolicyLogger.METRICS_LEVEL = Level.OFF;
 				metricsLogger.setLevel(METRICS_LEVEL);
 			}else {
@@ -1403,7 +1367,7 @@ public class PolicyLogger {
 	public static void setAuditLevel(String auditLevel){
 		
 		if(isOverrideLogbackLevel){
-			if(auditLevel != null && auditLevel.equalsIgnoreCase("OFF")){
+			if("OFF".equalsIgnoreCase(auditLevel)){
 				PolicyLogger.AUDIT_LEVEL = Level.OFF; 
 				auditLogger.setLevel(AUDIT_LEVEL);
 			}else {

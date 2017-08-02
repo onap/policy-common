@@ -20,9 +20,6 @@
 
 package org.onap.policy.common.logging;
 
-//import static org.onap.policy.common.logging.eelf.Configuration.TRANSACTION_BEGIN_TIME_STAMP;
-//import static org.onap.policy.common.logging.eelf.Configuration.TRANSACTION_ELAPSED_TIME;
-//import static org.onap.policy.common.logging.eelf.Configuration.TRANSACTION_END_TIME_STAMP;
 
 import java.text.SimpleDateFormat;
 import java.time.Duration;
@@ -88,7 +85,6 @@ public class ONAPLoggingContext {
     private static LoggingContextFactory.Builder loggingContextBuilder = new LoggingContextFactory.Builder();
 
     protected SharedLoggingContext context = null;
-//    private long transactionStartTime = 0;
     private Instant transactionStartTime;
     private Instant metricStartTime;
     
@@ -132,7 +128,6 @@ public class ONAPLoggingContext {
 	 * the duration of the transaction.
 	 */
 	public void transactionStarted() {
-//		transactionStartTime = System.currentTimeMillis();
 		transactionStartTime = Instant.now();
 		setTransactionBeginTimestamp(transactionStartTime);
 	}
@@ -154,7 +149,6 @@ public class ONAPLoggingContext {
 	 * the duration of the metric.
 	 */
 	public void metricStarted() {
-//		transactionStartTime = System.currentTimeMillis();
 		metricStartTime = Instant.now();
 		setMetricBeginTimestamp(metricStartTime);
 	}
@@ -419,32 +413,6 @@ public class ONAPLoggingContext {
 		return context.get(CLASSNAME, "");
 	}
 
-	/**
-	 * Set the value for the data item with key "timer".
-	 * An alternative to calling this method directly is to call
-	 * <code>transactionStarted()</code> at the start of transaction
-	 * processing and <code>transactionEnded()</code> at the end,
-	 * which will compute the time difference in milliseconds
-	 * and store the result as the "timer" value.
-	 * 
-	 * @param id
-	 */
-//	public void setTimer(Long timer) {
-//		context.put(TIMER, timer);
-//	}
-	
-//	public void setTimer(Long elapsedtime) {
-//		String unit = " milliseconds";
-//		context.put(TRANSACTION_ELAPSED_TIME, elapsedtime + unit);
-//	}
-
-	/**
-	 * Get the value for the data item with key "timer"
-	 * @return current value, or 0 if not set
-	 */
-//	public long getTimer() {
-//		return context.get(TRANSACTION_ELAPSED_TIME, 0);
-//	}
 	
 	/**
 	 * Set the value for the data item with key "TransactionBeginTimestamp"
@@ -499,16 +467,8 @@ public class ONAPLoggingContext {
 	
 	public void setTransactionElapsedTime(Instant transactionEndTime) {
 		long ns = Duration.between(transactionStartTime, transactionEndTime).toMillis();
-		//String unit = " Seconds";
-		//if(ns == 1){
-			//unit = " Second";
-		//}
-		
-		//if(ns < 1){
-			//ns = Duration.between(transactionStartTime, transactionEndTime).toMillis();
-			//unit = " milliseconds";
-		//}
-		context.put(TRANSACTION_ELAPSED_TIME, ns); // + unit);
+
+		context.put(TRANSACTION_ELAPSED_TIME, ns); 
 	}
 
 	/**
@@ -572,16 +532,8 @@ public class ONAPLoggingContext {
 	
 	public void setMetricElapsedTime(Instant metricEndTime) {
 		long ns = Duration.between(metricStartTime, metricEndTime).toMillis();
-		//String unit = " Seconds";
-		//if(ns == 1){
-			//unit = " Second";
-		//}
-		
-		//if(ns < 1){
-			//ns = Duration.between(metricStartTime, metricEndTime).toMillis();
-			//unit = " milliseconds";
-		//}
-		context.put(METRIC_ELAPSED_TIME, ns); // + unit);
+
+		context.put(METRIC_ELAPSED_TIME, ns);
 	}
 
 	/**
