@@ -27,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Interface needs to be implemented by DroolsPDPMDCInfo
  *
  */
-
+@FunctionalInterface
 public interface MDCInfo {
 	
 	public ConcurrentHashMap<String, String> getMDCInfo();

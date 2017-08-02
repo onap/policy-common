@@ -24,6 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 
 public class ONAPLoggingUtils {
 
+	private ONAPLoggingUtils() {};
+	
 	public static ONAPLoggingContext getLoggingContextForRequest(HttpServletRequest request,
 			ONAPLoggingContext baseContext)
 	{

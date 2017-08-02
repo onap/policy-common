@@ -35,7 +35,7 @@ public class SharedContext extends Slf4jLoggingContext implements SharedLoggingC
 	public SharedContext ( LoggingContext base )
 	{
 		super ( base );
-		fMap = new HashMap<String,String> ();
+		fMap = new HashMap<> ();
 	}
 
 	@Override

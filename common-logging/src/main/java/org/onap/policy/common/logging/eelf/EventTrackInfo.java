@@ -37,7 +37,7 @@ public class EventTrackInfo {
 		 * Load factor of 0,9 ensures a dense packaging inside ConcurrentHashMap which will optimize memory use
 		 * ConcurencyLevel set to 1 will ensure that only one shard is created and maintained 
 		 */
-		eventInfo = new ConcurrentHashMap<String, EventData>(16, 0.9f, 1);	
+		eventInfo = new ConcurrentHashMap<>(16, 0.9f, 1);	
 	}
    
 	/**

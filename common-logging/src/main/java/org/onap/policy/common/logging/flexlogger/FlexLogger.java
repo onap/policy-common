@@ -39,9 +39,9 @@ import org.onap.policy.common.logging.flexlogger.PropertyUtil.Listener;
 public class FlexLogger extends SecurityManager{
 
 	private static LoggerType loggerType = LoggerType.EELF;
-    private static ConcurrentHashMap<String, Logger4J> logger4JMap = new ConcurrentHashMap<String, Logger4J>();
-    private static ConcurrentHashMap<String, EelfLogger> eelfLoggerMap = new ConcurrentHashMap<String, EelfLogger>();
-    private static ConcurrentHashMap<String, SystemOutLogger> systemOutMap = new ConcurrentHashMap<String, SystemOutLogger>();
+    private static ConcurrentHashMap<String, Logger4J> logger4JMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, EelfLogger> eelfLoggerMap = new ConcurrentHashMap<>();
+    private static ConcurrentHashMap<String, SystemOutLogger> systemOutMap = new ConcurrentHashMap<>();
     //--- init logger first
 	static {
 		loggerType = initlogger();
@@ -60,10 +60,10 @@ public class FlexLogger extends SecurityManager{
 			logger = getEelfLogger(clazz, false);			
 			break;
 		case LOG4J:			
-			logger = getLog4JLogger(clazz);			
+			logger = getLog4JLogger();			
 			break;
 		case SYSTEMOUT:
-			logger = getSystemOutLogger(null);
+			logger = getSystemOutLogger();
 			break;
 		}
 
@@ -87,7 +87,7 @@ public class FlexLogger extends SecurityManager{
 			logger = getLog4JLogger(s);
 			break;			
 		case SYSTEMOUT:
-			logger = getSystemOutLogger(null);
+			logger = getSystemOutLogger();
 			break;
 		}
 
@@ -109,10 +109,10 @@ public class FlexLogger extends SecurityManager{
 			logger = getEelfLogger(clazz, isNewTransaction);
 			break;
 		case LOG4J:
-			logger = getLog4JLogger(clazz);
+			logger = getLog4JLogger();
 			break;
 		case SYSTEMOUT:
-			logger = getSystemOutLogger(null);
+			logger = getSystemOutLogger();
 			break;
 		}
 
@@ -137,7 +137,7 @@ public class FlexLogger extends SecurityManager{
 			logger = getLog4JLogger(s);
 			break;
 		case SYSTEMOUT:
-			logger = getSystemOutLogger(null);
+			logger = getSystemOutLogger();
 			break;
 		}
 
@@ -156,7 +156,7 @@ public class FlexLogger extends SecurityManager{
 	 * Returns an instance of Logger4J
 	 * @param clazz
 	 */
-   private static Logger4J getLog4JLogger(Class<?> clazz){
+   private static Logger4J getLog4JLogger(){
 		 String className = new FlexLogger().getClassName();
 
 		if(!logger4JMap.containsKey(className)){
@@ -190,8 +190,8 @@ public class FlexLogger extends SecurityManager{
 	 */
    private static EelfLogger getEelfLogger(Class<?> clazz, boolean isNewTransaction){
 
-		String className = "";
-		EelfLogger logger = null;
+		String className;
+		EelfLogger logger;
 		if(clazz != null){
 			className = clazz.getName();
 		}else{
@@ -221,7 +221,7 @@ public class FlexLogger extends SecurityManager{
 	 * Returns an instance of SystemOutLogger
 	 * @param clazz
 	 */
-   private static SystemOutLogger getSystemOutLogger(Class<?> clazz){
+   private static SystemOutLogger getSystemOutLogger(){
 
 		 String className = new FlexLogger().getClassName();
 		
@@ -254,7 +254,7 @@ public class FlexLogger extends SecurityManager{
 					if (loggerTypeString.equalsIgnoreCase("EELF")){					
 						loggerType = LoggerType.EELF;
 						if (overrideLogbackLevel != null && 
-							overrideLogbackLevel.equalsIgnoreCase("TRUE")) {
+							"TRUE".equalsIgnoreCase(overrideLogbackLevel)) {
 							 System.out.println("FlexLogger: start listener.");
 						     properties = PropertyUtil.getProperties
 										 ("config/policyLogger.properties", 
@@ -292,6 +292,7 @@ public class FlexLogger extends SecurityManager{
 		/**
 		 * This method will be called automatically if he policyLogger.properties got updated
 		 */
+		@Override
 		public void propertiesChanged(Properties properties,
 				Set<String> changedKeys) {
 			

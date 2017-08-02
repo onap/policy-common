@@ -33,6 +33,9 @@ public class EventData {
 	private Instant startTime = null;
 	private Instant endTime = null;
 
+		//Default constructor takes no arguments.
+		//Is empty because instance variables are assigned
+		//their default values upon declaration.
 	public EventData() {
 		
 	}
@@ -68,6 +71,7 @@ public class EventData {
 		this.endTime = endTime;
 	}
 	
+	@Override
 	public String toString(){
 		return requestID + " Starting Time : " + this.startTime + " Ending Time : " + this.endTime;
 	}

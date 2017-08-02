@@ -30,8 +30,6 @@ public class FlexLoggerTester {
 		// get an instance of logger 
 		Logger  logger = FlexLogger.getLogger(FlexLoggerTester.class);
 		
-		//logger.info("this is a testing of FlexLogger with logger type:" + FlexLogger.loggerType);
-		
 		logger.info("logger.isAuditEnabled():" + logger.isAuditEnabled());
 		logger.info("logger.isDebugEnabled():" + logger.isDebugEnabled());
 		logger.info("logger.isErrorEnabled():" + logger.isErrorEnabled());
