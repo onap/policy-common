@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_82e9c41c",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-08-03T09:44:22Z",
+      "side": 1,
+      "message": "I\u0027m wondering if the distributionManagement section would (could) be included in o-parent also?",
+      "range": {
+        "startLine": 56,
+        "startChar": 1,
+        "endLine": 56,
+        "endChar": 25
+      },
+      "revId": "64c9d49be4f5a14f02d4fe06595a5fc86d199a4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
