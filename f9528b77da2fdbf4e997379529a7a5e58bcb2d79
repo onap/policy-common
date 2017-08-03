@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_42260c6a",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2017-08-03T12:47:50Z",
+      "side": 1,
+      "message": "You can actually remote the \u0027component !\u003d null \u0026\u0026\u0027 part -- switching \"DROOLS\" and \u0027component\u0027 avoids the \u0027nullPointerException\u0027",
+      "revId": "f9528b77da2fdbf4e997379529a7a5e58bcb2d79",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_e21cf815",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1335,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2017-08-03T12:47:50Z",
+      "side": 1,
+      "message": "Again, you can remove \u0027errorLevel !\u003d null \u0026\u0026\u0027",
+      "revId": "f9528b77da2fdbf4e997379529a7a5e58bcb2d79",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_a21600f0",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1352,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2017-08-03T12:47:50Z",
+      "side": 1,
+      "message": "You can remove \u0027metricsLevel !\u003d null \u0026\u0026\u0027",
+      "revId": "f9528b77da2fdbf4e997379529a7a5e58bcb2d79",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_62d8e853",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1370,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2017-08-03T12:47:50Z",
+      "side": 1,
+      "message": "You can remove \u0027auditLevel !\u003d null \u0026\u0026\u0027",
+      "revId": "f9528b77da2fdbf4e997379529a7a5e58bcb2d79",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_22e2f003",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/FlexLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2017-08-03T12:47:50Z",
+      "side": 1,
+      "message": "You can remove \u0027overrideLogbackLevel !\u003d null \u0026\u0026\u0027",
+      "revId": "f9528b77da2fdbf4e997379529a7a5e58bcb2d79",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
