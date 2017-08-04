@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a1a2d67_adedd1f1",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2017-08-04T04:59:55Z",
+      "side": 1,
+      "message": "This is interesting that is using 1.0.0-SNAPSHOT as their version .. ??",
+      "revId": "64c9d49be4f5a14f02d4fe06595a5fc86d199a4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_8dba15e0",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2017-08-04T04:59:55Z",
+      "side": 1,
+      "message": "Why removing the maven.compiler properties to force to 1.8.   I don\u0027t see anything in oparent forcing it.",
+      "revId": "64c9d49be4f5a14f02d4fe06595a5fc86d199a4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a1a2d67_82e9c41c",
         "filename": "pom.xml",
         "patchSetId": 3
@@ -19,6 +53,23 @@
         "endLine": 56,
         "endChar": 25
       },
+      "revId": "64c9d49be4f5a14f02d4fe06595a5fc86d199a4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_6dbfb9d1",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2017-08-04T04:59:55Z",
+      "side": 1,
+      "message": "license-maven-plugin should go away ..",
       "revId": "64c9d49be4f5a14f02d4fe06595a5fc86d199a4a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
