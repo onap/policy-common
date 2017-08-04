@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "1a1a2d67_cdc7ed63",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 591
+      },
+      "writtenOn": "2017-08-04T05:45:29Z",
+      "side": 1,
+      "message": "right. oparent suggest to use it but we can override it. I am trying to use same version from oparent.\nI can restore back",
+      "parentUuid": "1a1a2d67_8dba15e0",
+      "revId": "64c9d49be4f5a14f02d4fe06595a5fc86d199a4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a1a2d67_82e9c41c",
         "filename": "pom.xml",
         "patchSetId": 3
@@ -70,6 +88,24 @@
       "writtenOn": "2017-08-04T04:59:55Z",
       "side": 1,
       "message": "license-maven-plugin should go away ..",
+      "revId": "64c9d49be4f5a14f02d4fe06595a5fc86d199a4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_adc4b15f",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 591
+      },
+      "writtenOn": "2017-08-04T05:45:29Z",
+      "side": 1,
+      "message": "we can have another patch to remove it such as stylecheck.",
+      "parentUuid": "1a1a2d67_6dbfb9d1",
       "revId": "64c9d49be4f5a14f02d4fe06595a5fc86d199a4a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
