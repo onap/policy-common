@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a1a2d67_ad8f11cc",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-08-04T12:05:28Z",
+      "side": 1,
+      "message": "Yes according to ONAP everything from Open-O or brand new is version 1.0.0. There will not be alignment with the OpenECOMP versioning.",
+      "parentUuid": "1a1a2d67_adedd1f1",
+      "revId": "64c9d49be4f5a14f02d4fe06595a5fc86d199a4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a1a2d67_8dba15e0",
         "filename": "pom.xml",
         "patchSetId": 3
@@ -48,6 +66,24 @@
       "side": 1,
       "message": "right. oparent suggest to use it but we can override it. I am trying to use same version from oparent.\nI can restore back",
       "parentUuid": "1a1a2d67_8dba15e0",
+      "revId": "64c9d49be4f5a14f02d4fe06595a5fc86d199a4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_8dbc556e",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-08-04T12:05:28Z",
+      "side": 1,
+      "message": "I that\u0027s fine, we should just inherit as much as possible for oparent and only override when necessary.",
+      "parentUuid": "1a1a2d67_cdc7ed63",
       "revId": "64c9d49be4f5a14f02d4fe06595a5fc86d199a4a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
