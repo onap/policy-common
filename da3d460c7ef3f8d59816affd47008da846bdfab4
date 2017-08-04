@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_2db9c1e9",
+        "filename": "common-logging/config/policyLogger.properties",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2017-08-04T05:10:54Z",
+      "side": 1,
+      "message": "I think we need to keep the license in this file (or remove the file if unnecessary, and I think it may be unnecessary here, you can test it out by removing and building)??",
+      "revId": "da3d460c7ef3f8d59816affd47008da846bdfab4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_0dce0584",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/MDCInfo.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2017-08-04T05:10:54Z",
+      "side": 1,
+      "message": "interesting need to mark it with this marker, I suppose we don\u0027t use it lambda expressions .. just a note, no comment",
+      "revId": "da3d460c7ef3f8d59816affd47008da846bdfab4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
