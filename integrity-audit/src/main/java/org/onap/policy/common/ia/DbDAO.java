@@ -709,21 +709,45 @@ public class DbDAO {
 				 * two or three milliseconds)
 				 */
 			} catch (LockTimeoutException e) {
-				em.getTransaction().rollback();
-				String msg = "DbDAO: " + "changeDesignated() "
-						+ "caught LockTimeoutException, message=" + e.getMessage();
-				logger.error(msg + e);
-				System.out.println(new Date());
-				e.printStackTrace();
-				throw new DbDaoTransactionException(msg, e);
+				if (em != null) {
+					em.getTransaction().rollback();
+				
+					String msg = "DbDAO: " + "changeDesignated() "
+							+ "caught LockTimeoutException, message=" + e.getMessage();
+					logger.error(msg + e);
+					System.out.println(new Date());
+					e.printStackTrace();
+					throw new DbDaoTransactionException(msg, e);
+				}
+				else {
+					String msg = "DbDAO: " + "changeDesignated() "
+							+ "caught LockTimeoutException, message=" + e.getMessage()
+							+ ". Error rolling back transaction.";
+					logger.error(msg + e);
+					System.out.println(new Date());
+					e.printStackTrace();
+					throw new DbDaoTransactionException(msg, e);	
+				}
 			} catch (Exception e) {
-				em.getTransaction().rollback();
-				String msg = "DbDAO: " + "changeDesignated() "
-						+ "caught Exception, message=" + e.getMessage();
-				logger.error(msg + e);
-				System.out.println(new Date());
-				e.printStackTrace();
-				throw new DbDaoTransactionException(msg, e);
+				if (em != null) {
+					em.getTransaction().rollback();
+				
+					String msg = "DbDAO: " + "changeDesignated() "
+							+ "caught Exception, message=" + e.getMessage();
+					logger.error(msg + e);
+					System.out.println(new Date());
+					e.printStackTrace();
+					throw new DbDaoTransactionException(msg, e);
+				}
+				else {
+					String msg = "DbDAO: " + "changeDesignated() "
+							+ "caught LockTimeoutException, message=" + e.getMessage()
+							+ ". Error rolling back transaction.";
+					logger.error(msg + e);
+					System.out.println(new Date());
+					e.printStackTrace();
+					throw new DbDaoTransactionException(msg, e);	
+				}
 			}
 
 		} // end synchronized block
