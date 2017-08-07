@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_1cf8747b",
+        "filename": "README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2017-08-07T12:11:32Z",
+      "side": 1,
+      "message": "Is \u0027using\u0027 a command, or should this be part of the text above?",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 1
+      },
+      "revId": "a790f4031d1b2abadf1e8a64713fb0f734a32926",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
