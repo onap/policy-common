@@ -56,6 +56,30 @@
       "revId": "66221823c8cb131b8cea03c4d011ddd728608451",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_bc2bc093",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1645
+      },
+      "writtenOn": "2017-08-07T20:03:25Z",
+      "side": 1,
+      "message": "Sonar said to \"change this condition so that it does not always evaluate to \u0027true\u0027\". It\u0027s possible that the StateManagement constructor throws an exception, but I\u0027m pretty sure that even if this happens, the new object is still instantiated (probably in an incomplete state). So, simply checking if the \"depStateManager\" \u003d\u003d null isn\u0027t really useful.",
+      "parentUuid": "1a1a2d67_6887a762",
+      "range": {
+        "startLine": 658,
+        "startChar": 10,
+        "endLine": 658,
+        "endChar": 39
+      },
+      "revId": "66221823c8cb131b8cea03c4d011ddd728608451",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
