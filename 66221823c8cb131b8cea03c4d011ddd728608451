@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a1a2d67_3f9e8257",
+        "filename": "integrity-audit/src/main/java/org/onap/policy/common/ia/DbDAO.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 712,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-08-07T19:54:09Z",
+      "side": 1,
+      "message": "Good catch on this one.",
+      "revId": "66221823c8cb131b8cea03c4d011ddd728608451",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_5f993e6d",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 599,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-08-07T19:54:09Z",
+      "side": 1,
+      "message": "It doesn\u0027t hurt to have this, but we know stateManagementEntity is not null because back up around line 519, we retrieve it from the DB. If it was not retrieved, the error_msg is set.  So, we would never enter this block of code.",
+      "revId": "66221823c8cb131b8cea03c4d011ddd728608451",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a1a2d67_6887a762",
         "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
         "patchSetId": 1
