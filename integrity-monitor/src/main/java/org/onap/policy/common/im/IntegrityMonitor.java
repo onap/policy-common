@@ -544,42 +544,75 @@ public class IntegrityMonitor {
 
 		//verify that the ForwardProgress is current (check last_updated)
 		if(error_msg==null){
-			Date date = new Date();
-			long diffMs = date.getTime() - forwardProgressEntity.getLastUpdated().getTime();
-			logger.debug("IntegrityMonitor.stateCheck(): diffMs = " + diffMs);
+			if (forwardProgressEntity != null && stateManagementEntity != null) {
+				Date date = new Date();
+				long diffMs = date.getTime() - forwardProgressEntity.getLastUpdated().getTime();
+				logger.debug("IntegrityMonitor.stateCheck(): diffMs = " + diffMs);
 
-			//Threshold for a stale entry
-			long staleMs = failedCounterThreshold * monitorInterval * 1000;
-			logger.debug("IntegrityMonitor.stateCheck(): staleMs = " + staleMs);
+				//Threshold for a stale entry
+				long staleMs = failedCounterThreshold * monitorInterval * 1000;
+				logger.debug("IntegrityMonitor.stateCheck(): staleMs = " + staleMs);
 
-			if(diffMs > staleMs){
-				//ForwardProgress is stale.  Disable it
-				try {
-					if(!stateManagementEntity.getOpState().equals(StateManagement.DISABLED)){
-						logger.debug("IntegrityMonitor.stateCheck(): Changing OpStat = disabled for " + dep);
-						stateManager.disableFailed(dep);
+				if(diffMs > staleMs){
+					//ForwardProgress is stale.  Disable it
+					try {
+						if(!stateManagementEntity.getOpState().equals(StateManagement.DISABLED)){
+							logger.debug("IntegrityMonitor.stateCheck(): Changing OpStat = disabled for " + dep);
+							stateManager.disableFailed(dep);
+						}
+					} catch (Exception e) {
+						String msg = "IntegrityMonitor.stateCheck(): Failed to diableFail dependent resource = " + dep 
+								+ "; " + e.getMessage();
+						logger.debug(msg);
+						logger.error(msg);
 					}
-				} catch (Exception e) {
+				}
+			}
+			else {
+				
+				if(forwardProgressEntity == null) {
 					String msg = "IntegrityMonitor.stateCheck(): Failed to diableFail dependent resource = " + dep 
-							+ "; " + e.getMessage();
+							+ "; " + " forwardProgressEntity == null.";
 					logger.debug(msg);
 					logger.error(msg);
+				}
+				
+				else if(stateManagementEntity == null) {
+					String msg = "IntegrityMonitor.stateCheck(): Failed to diableFail dependent resource = " + dep 
+							+ "; " + " stateManagementEntity == null.";
+					logger.debug(msg);
+					logger.error(msg);
+				}
+				
+				else {
+					String msg = "IntegrityMonitor.stateCheck(): Failed to diableFail dependent resource = " + dep 
+							+ "; " + " forwardProgressEntity or stateManagementEntity == null.";
+					logger.debug(msg);
+					logger.error(msg);
+									
 				}
 			}
 		}
 		
 		// check operation, admin and standby states of dependent resource
 		if (error_msg == null) {
-			if ((stateManager.getAdminState() != null) && stateManagementEntity.getAdminState().equals(StateManagement.LOCKED)) {
-				error_msg = dep + ": resource is administratively locked";
-				logger.debug(error_msg);
-				logger.error(error_msg);
-			} else if ((stateManager.getOpState() != null) && stateManagementEntity.getOpState().equals(StateManagement.DISABLED)) {
-				error_msg = dep + ": resource is operationally disabled";
-				logger.debug(error_msg);
-				logger.error(error_msg);
-			} else if ((stateManager.getStandbyStatus() != null) && stateManagementEntity.getStandbyStatus().equals(StateManagement.COLD_STANDBY)) {
-				error_msg = dep + ": resource is cold standby";
+			if(stateManagementEntity != null) {
+				if ((stateManager.getAdminState() != null) && stateManagementEntity.getAdminState().equals(StateManagement.LOCKED)) {
+					error_msg = dep + ": resource is administratively locked";
+					logger.debug(error_msg);
+					logger.error(error_msg);
+				} else if ((stateManager.getOpState() != null) && stateManagementEntity.getOpState().equals(StateManagement.DISABLED)) {
+					error_msg = dep + ": resource is operationally disabled";
+					logger.debug(error_msg);
+					logger.error(error_msg);
+				} else if ((stateManager.getStandbyStatus() != null) && stateManagementEntity.getStandbyStatus().equals(StateManagement.COLD_STANDBY)) {
+					error_msg = dep + ": resource is cold standby";
+					logger.debug(error_msg);
+					logger.error(error_msg);
+				}
+			}
+			else {
+				error_msg = dep + ": could not check standy state of resource. stateManagementEntity == null.";
 				logger.debug(error_msg);
 				logger.error(error_msg);
 			}
@@ -622,12 +655,10 @@ public class IntegrityMonitor {
 					try {
 						// create instance of StateMangement class for dependent
 						StateManagement depStateManager = new StateManagement(emf, dep);
-						if (depStateManager != null) {
 							if(!depStateManager.getOpState().equals(StateManagement.DISABLED)){
 								logger.info("Forward progress not detected for dependent resource " + dep + ". Setting dependent's state to disable failed.");
 								depStateManager.disableFailed();
 							}
-						}
 					} catch (Exception e) {
 						// ignore errors
 						logger.info("Update dependent state failed with exception: " + e);
