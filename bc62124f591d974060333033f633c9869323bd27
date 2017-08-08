@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_b012c1b2",
+        "filename": "integrity-audit/src/main/java/org/onap/policy/common/ia/AuditThread.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 644,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-08-08T18:57:04Z",
+      "side": 1,
+      "message": "Lines 635 - 643 must be outside the while(true) loop.  They needed to be added at line 142.",
+      "revId": "bc62124f591d974060333033f633c9869323bd27",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
