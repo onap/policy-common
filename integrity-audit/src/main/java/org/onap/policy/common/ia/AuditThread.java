@@ -26,7 +26,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-//import org.apache.log4j.Logger;
+
 
 
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
@@ -133,6 +133,7 @@ public class AuditThread extends Thread {
 
 	}
 
+	@Override
 	public void run() {
 
 		logger.info("AuditThread.run: Entering");
@@ -142,8 +143,6 @@ public class AuditThread extends Thread {
 			/*
 			 * Triggers change in designation, unless no other viable candidate.
 			 */
-			boolean auditCompleted = false;
-
 			DbAudit dbAudit = new DbAudit(dbDAO);
 
 			IntegrityAuditEntity entityCurrentlyDesignated = null;
@@ -174,114 +173,9 @@ public class AuditThread extends Thread {
 					 */
 					thisEntity = getThisEntity(integrityAuditEntityList);
 
-					/*
-					 * If we haven't done the audit yet, note that we're current and
-					 * see if we're designated.
-					 */
-					if (!auditCompleted) {
-						dbDAO.setLastUpdated();
-
-						/*
-						 * If no current designation or currently designated node is
-						 * stale, see if we're the next node to be designated.
-						 */
-						if (entityCurrentlyDesignated == null
-								|| isStale(entityCurrentlyDesignated)) {
-							IntegrityAuditEntity designationCandidate = getDesignationCandidate(integrityAuditEntityList);
-
-							/*
-							 * If we're the next node to be designated, run the
-							 * audit.
-							 */
-							if (designationCandidate.getResourceName().equals(
-									this.resourceName)) {
-								runAudit(dbAudit);
-								auditCompleted = true;
-							} else {
-								if (logger.isDebugEnabled()) {
-									logger.debug("AuditThread.run: designationCandidate, "
-											+ designationCandidate
-											.getResourceName()
-											+ ", not this entity, "
-											+ thisEntity.getResourceName());
-								}
-							}
-
-							/*
-							 * Application may have been stopped and restarted, in
-							 * which case we might be designated but auditCompleted
-							 * will have been reset to false, so account for this.
-							 */
-						} else if (thisEntity.getResourceName().equals(
-								entityCurrentlyDesignated.getResourceName())) {
-
-							if (logger.isDebugEnabled()) {
-								logger.debug("AuditThread.run: Re-running audit for "
-										+ thisEntity.getResourceName());
-							}
-							runAudit(dbAudit);
-							auditCompleted = true;
-
-						} else {
-							if (logger.isDebugEnabled()) {
-								logger.debug("AuditThread.run: Currently designated node, "
-										+ entityCurrentlyDesignated
-										.getResourceName()
-										+ ", not yet stale and not this node");
-							}
-						}
-
-
-						/*
-						 * Audit already completed on this node, so allow the node
-						 * to go stale until twice the AUDIT_COMPLETION_PERIOD has
-						 * elapsed. This should give plenty of time for another node
-						 * (if another node is out there) to pick up designation.
-						 */
-					} else {
-
-						auditCompleted = resetAuditCompleted(auditCompleted,
-								thisEntity);
-
-					}
-
-					/*
-					 * If we've just run audit, sleep per the
-					 * integrity_audit_period_seconds property, otherwise just sleep
-					 * the normal interval.
-					 */
-					if (auditCompleted) {
-
-						if (logger.isDebugEnabled()) {
-							logger.debug("AuditThread.run: Audit completed; resourceName="
-									+ this.resourceName
-									+ " sleeping "
-									+ integrityAuditPeriodMillis + "ms");
-						}
-						Thread.sleep(integrityAuditPeriodMillis);
-						if (logger.isDebugEnabled()) {
-							logger.debug("AuditThread.run: resourceName="
-									+ this.resourceName + " awaking from "
-									+ integrityAuditPeriodMillis + "ms sleep");
-						}
-
-					} else {
-
-						if (logger.isDebugEnabled()) {
-							logger.debug("AuditThread.run: resourceName="
-									+ this.resourceName + ": Sleeping "
-									+ AuditThread.AUDIT_THREAD_SLEEP_INTERVAL
-									+ "ms");
-						}
-						Thread.sleep(AuditThread.AUDIT_THREAD_SLEEP_INTERVAL);
-						if (logger.isDebugEnabled()) {
-							logger.debug("AuditThread.run: resourceName="
-									+ this.resourceName + ": Awaking from "
-									+ AuditThread.AUDIT_THREAD_SLEEP_INTERVAL
-									+ "ms sleep");
-						}
-
-					}
+					
+					auditThreadLogic(false, entityCurrentlyDesignated, thisEntity, dbAudit, integrityAuditEntityList);
+					
 				} catch (Exception e){
 					String msg = "AuditThread.run loop - Exception thrown: " + e.getMessage() 
 							+ "; Will try audit again in " + (integrityAuditPeriodMillis/1000) + " seconds";
@@ -323,12 +217,10 @@ public class AuditThread extends Thread {
 		
 		//Note: assumes integrityAuditEntityList is already lexicographically sorted by resourceName
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("getDesignationCandidate: Entering, integrityAuditEntityList.size()="
+			logToDebug("getDesignationCandidate: Entering, integrityAuditEntityList.size()="
 					+ integrityAuditEntityList.size());
-		}
 
-		IntegrityAuditEntity designationCandidate = null;
+		IntegrityAuditEntity designationCandidate;
 		IntegrityAuditEntity thisEntity = null;
 
 		int designatedEntityIndex = -1;
@@ -338,29 +230,23 @@ public class AuditThread extends Thread {
 
 		for (IntegrityAuditEntity integrityAuditEntity : integrityAuditEntityList) {
 
-			if (logger.isDebugEnabled()) {
-				logIntegrityAuditEntity(integrityAuditEntity);
-			}
+			logIntegrityAuditEntity(integrityAuditEntity);
 
 			if (integrityAuditEntity.getResourceName()
 					.equals(this.resourceName)) {
-				if (logger.isDebugEnabled()) {
-					logger.debug("getDesignationCandidate: thisEntity="
+					logToDebug("getDesignationCandidate: thisEntity="
 							+ integrityAuditEntity.getResourceName());
-				}
 				thisEntity = integrityAuditEntity;
 			}
 
 			if (integrityAuditEntity.isDesignated()) {
-				if (logger.isDebugEnabled()) {
-					logger.debug("getDesignationCandidate: Currently designated entity resourceName="
+					logToDebug("getDesignationCandidate: Currently designated entity resourceName="
 							+ integrityAuditEntity.getResourceName()
 							+ ", persistenceUnit="
 							+ integrityAuditEntity.getPersistenceUnit()
 							+ ", lastUpdated="
 							+ integrityAuditEntity.getLastUpdated()
 							+ ", entityIndex=" + entityIndex);
-				}
 				designatedEntityIndex = entityIndex;
 
 				/*
@@ -373,16 +259,13 @@ public class AuditThread extends Thread {
 				 */
 				if (isStale(integrityAuditEntity)) {
 
-					if (logger.isDebugEnabled()) {
-						logger.debug("getDesignationCandidate: Entity is stale; resourceName="
+					logToDebug("getDesignationCandidate: Entity is stale; resourceName="
 								+ integrityAuditEntity.getResourceName()
 								+ ", persistenceUnit="
 								+ integrityAuditEntity.getPersistenceUnit()
 								+ ", lastUpdated="
 								+ integrityAuditEntity.getLastUpdated()
 								+ ", entityIndex=" + entityIndex);
-					}
-
 					/*
 					 * Entity is current.
 					 */
@@ -391,8 +274,7 @@ public class AuditThread extends Thread {
 					if (designatedEntityIndex == -1) {
 
 						if (priorCandidateIndex == -1) {
-							if (logger.isDebugEnabled()) {
-								logger.debug("getDesignationCandidate: Prior candidate found, resourceName="
+							logToDebug("getDesignationCandidate: Prior candidate found, resourceName="
 										+ integrityAuditEntity
 												.getResourceName()
 										+ ", persistenceUnit="
@@ -401,11 +283,9 @@ public class AuditThread extends Thread {
 										+ ", lastUpdated="
 										+ integrityAuditEntity.getLastUpdated()
 										+ ", entityIndex=" + entityIndex);
-							}
 							priorCandidateIndex = entityIndex;
 						} else {
-							if (logger.isDebugEnabled()) {
-								logger.debug("getDesignationCandidate: Prior entity current but prior candidate already found; resourceName="
+							logToDebug("getDesignationCandidate: Prior entity current but prior candidate already found; resourceName="
 										+ integrityAuditEntity
 												.getResourceName()
 										+ ", persistenceUnit="
@@ -414,12 +294,10 @@ public class AuditThread extends Thread {
 										+ ", lastUpdated="
 										+ integrityAuditEntity.getLastUpdated()
 										+ ", entityIndex=" + entityIndex);
-							}
 						}
 					} else {
 						if (subsequentCandidateIndex == -1) {
-							if (logger.isDebugEnabled()) {
-								logger.debug("getDesignationCandidate: Subsequent candidate found, resourceName="
+							logToDebug("getDesignationCandidate: Subsequent candidate found, resourceName="
 										+ integrityAuditEntity
 												.getResourceName()
 										+ ", persistenceUnit="
@@ -428,11 +306,9 @@ public class AuditThread extends Thread {
 										+ ", lastUpdated="
 										+ integrityAuditEntity.getLastUpdated()
 										+ ", entityIndex=" + entityIndex);
-							}
 							subsequentCandidateIndex = entityIndex;
 						} else {
-							if (logger.isDebugEnabled()) {
-								logger.debug("getDesignationCandidate: Subsequent entity current but subsequent candidate already found; resourceName="
+							logToDebug("getDesignationCandidate: Subsequent entity current but subsequent candidate already found; resourceName="
 										+ integrityAuditEntity
 												.getResourceName()
 										+ ", persistenceUnit="
@@ -441,7 +317,6 @@ public class AuditThread extends Thread {
 										+ ", lastUpdated="
 										+ integrityAuditEntity.getLastUpdated()
 										+ ", entityIndex=" + entityIndex);
-							}
 						}
 					}
 
@@ -464,20 +339,16 @@ public class AuditThread extends Thread {
 		if (subsequentCandidateIndex != -1) {
 			designationCandidate = integrityAuditEntityList
 					.get(subsequentCandidateIndex);
-			if (logger.isDebugEnabled()) {
-				logger.debug("getDesignationCandidate: Exiting and returning subsequent designationCandidate="
+			logToDebug("getDesignationCandidate: Exiting and returning subsequent designationCandidate="
 						+ designationCandidate.getResourceName());
-			}
 		} else {
 			if (priorCandidateIndex != -1) {
 				designationCandidate = integrityAuditEntityList
 						.get(priorCandidateIndex);
-				if (logger.isDebugEnabled()) {
-					logger.debug("getDesignationCandidate: Exiting and returning prior designationCandidate="
+			logToDebug("getDesignationCandidate: Exiting and returning prior designationCandidate="
 							+ designationCandidate.getResourceName());
-				}
 			} else {
-				logger.debug("getDesignationCandidate: No subsequent or prior candidate found; designating thisEntity, resourceName="
+				logToDebug("getDesignationCandidate: No subsequent or prior candidate found; designating thisEntity, resourceName="
 						+ thisEntity.getResourceName());
 				designationCandidate = thisEntity;
 			}
@@ -496,37 +367,31 @@ public class AuditThread extends Thread {
 	private IntegrityAuditEntity getEntityCurrentlyDesignated(
 			List<IntegrityAuditEntity> integrityAuditEntityList) {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("getEntityCurrentlyDesignated: Entering, integrityAuditEntityList.size="
+		logToDebug("getEntityCurrentlyDesignated: Entering, integrityAuditEntityList.size="
 					+ integrityAuditEntityList.size());
-		}
 
 		IntegrityAuditEntity entityCurrentlyDesignated = null;
 
 		for (IntegrityAuditEntity integrityAuditEntity : integrityAuditEntityList) {
 
 			if (integrityAuditEntity.isDesignated()) {
-				if (logger.isDebugEnabled()) {
-					logger.debug("getEntityCurrentlyDesignated: Currently designated entity resourceName="
+				logToDebug("getEntityCurrentlyDesignated: Currently designated entity resourceName="
 							+ integrityAuditEntity.getResourceName()
 							+ ", persistenceUnit="
 							+ integrityAuditEntity.getPersistenceUnit()
 							+ ", lastUpdated="
 							+ integrityAuditEntity.getLastUpdated());
-				}
 				entityCurrentlyDesignated = integrityAuditEntity;
 			}
 
 		} // end for loop
 
-		if (logger.isDebugEnabled()) {
-			if (entityCurrentlyDesignated != null) {
-				logger.debug("getEntityCurrentlyDesignated: Exiting and returning entityCurrentlyDesignated="
+		if (entityCurrentlyDesignated != null) {
+				logToDebug("getEntityCurrentlyDesignated: Exiting and returning entityCurrentlyDesignated="
 						+ entityCurrentlyDesignated.getResourceName());
-			} else {
-				logger.debug("getEntityCurrentlyDesignated: Exiting and returning entityCurrentlyDesignated="
+		} else {
+				logToDebug("getEntityCurrentlyDesignated: Exiting and returning entityCurrentlyDesignated="
 						+ entityCurrentlyDesignated);
-			}
 		}
 		return entityCurrentlyDesignated;
 
@@ -540,9 +405,7 @@ public class AuditThread extends Thread {
 	private List<IntegrityAuditEntity> getIntegrityAuditEntityList()
 			throws DbDaoTransactionException {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("getIntegrityAuditEntityList: Entering");
-		}
+		logToDebug("getIntegrityAuditEntityList: Entering");
 
 		/*
 		 * Get all records for this nodeType and persistenceUnit and then sort
@@ -553,21 +416,18 @@ public class AuditThread extends Thread {
 		 * Sorted list of entities for a particular nodeType and
 		 * persistenceUnit.
 		 */
-		List<IntegrityAuditEntity> integrityAuditEntityList = new ArrayList<IntegrityAuditEntity>();
+		List<IntegrityAuditEntity> integrityAuditEntityList;
 		integrityAuditEntityList = dbDAO.getIntegrityAuditEntities(
 				this.persistenceUnit, this.nodeType);
 		int listSize = integrityAuditEntityList.size();
-		if (logger.isDebugEnabled()) {
-			logger.debug("getIntegrityAuditEntityList: Got " + listSize
+		logToDebug("getIntegrityAuditEntityList: Got " + listSize
 					+ " IntegrityAuditEntity records");
-		}
 		Collections.sort((List<IntegrityAuditEntity>) integrityAuditEntityList,
 				comparator);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("getIntegrityAuditEntityList: Exiting and returning integrityAuditEntityList, size="
+		logToDebug("getIntegrityAuditEntityList: Exiting and returning integrityAuditEntityList, size="
 					+ listSize);
-		}
+
 		return integrityAuditEntityList;
 
 	}
@@ -581,38 +441,35 @@ public class AuditThread extends Thread {
 	private IntegrityAuditEntity getThisEntity(
 			List<IntegrityAuditEntity> integrityAuditEntityList) {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("getThisEntity: Entering, integrityAuditEntityList.size="
+		logToDebug("getThisEntity: Entering, integrityAuditEntityList.size="
 					+ integrityAuditEntityList.size());
-		}
 
 		IntegrityAuditEntity thisEntity = null;
 
 		for (IntegrityAuditEntity integrityAuditEntity : integrityAuditEntityList) {
 
 			if (integrityAuditEntity.getResourceName().equals(this.resourceName)) {
-				if (logger.isDebugEnabled()) {
-					logger.debug("getThisEntity: For this entity, resourceName="
+				logToDebug("getThisEntity: For this entity, resourceName="
 							+ integrityAuditEntity.getResourceName()
 							+ ", persistenceUnit="
 							+ integrityAuditEntity.getPersistenceUnit()
 							+ ", lastUpdated="
 							+ integrityAuditEntity.getLastUpdated());
-				}
+				
 				thisEntity = integrityAuditEntity;
 			}
 
 		} // end for loop
 
-		if (logger.isDebugEnabled()) {
+		
 			if (thisEntity != null) {
-				logger.debug("getThisEntity: Exiting and returning thisEntity="
+				logToDebug("getThisEntity: Exiting and returning thisEntity="
 						+ thisEntity.getResourceName());
 			} else {
-				logger.debug("getThisEntity: Exiting and returning thisEntity="
+				logToDebug("getThisEntity: Exiting and returning thisEntity="
 						+ thisEntity);
 			}
-		}
+		
 		return thisEntity;
 
 	}
@@ -628,13 +485,11 @@ public class AuditThread extends Thread {
 	 */
 	private boolean isStale(IntegrityAuditEntity integrityAuditEntity) {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("isStale: Entering, resourceName="
+		logToDebug("isStale: Entering, resourceName="
 					+ integrityAuditEntity.getResourceName()
 					+ ", persistenceUnit="
 					+ integrityAuditEntity.getPersistenceUnit()
 					+ ", lastUpdated=" + integrityAuditEntity.getLastUpdated());
-		}
 
 		boolean stale = false;
 
@@ -654,10 +509,8 @@ public class AuditThread extends Thread {
 			stale = true;
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("isStale: Exiting and returning stale=" + stale
+		logToDebug("isStale: Exiting and returning stale=" + stale
 					+ ", timeDifference=" + timeDifference);
-		}
 
 		return stale;
 	}
@@ -665,7 +518,7 @@ public class AuditThread extends Thread {
 	private void logIntegrityAuditEntity(
 			IntegrityAuditEntity integrityAuditEntity) {
 
-		logger.debug("logIntegrityAuditEntity: id="
+		logToDebug("logIntegrityAuditEntity: id="
 				+ integrityAuditEntity.getId() + ", jdbcDriver="
 				+ integrityAuditEntity.getJdbcDriver() + ", jdbcPassword="
 				+ integrityAuditEntity.getJdbcPassword() + ", jdbcUrl="
@@ -694,15 +547,14 @@ public class AuditThread extends Thread {
 	private boolean resetAuditCompleted(boolean auditCompleted,
 			IntegrityAuditEntity thisEntity) {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("resetAuditCompleted: auditCompleted="
+		logToDebug("resetAuditCompleted: auditCompleted="
 					+ auditCompleted + "; for thisEntity, resourceName="
 					+ thisEntity.getResourceName() + ", persistenceUnit="
 					+ thisEntity.getPersistenceUnit() + ", lastUpdated="
 					+ thisEntity.getLastUpdated());
-		}
 
-		long timeDifference = -1;
+
+		long timeDifference;
 
 		Date currentTime = new Date();
 		Date lastUpdated = thisEntity.getLastUpdated();
@@ -711,34 +563,27 @@ public class AuditThread extends Thread {
 		timeDifference = currentTime.getTime() - lastUpdatedTime;
 
 		if (timeDifference > (AUDIT_COMPLETION_INTERVAL * 2)) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("resetAuditCompleted: Resetting auditCompleted for resourceName="
+			logToDebug("resetAuditCompleted: Resetting auditCompleted for resourceName="
 						+ this.resourceName);
-			}
 			auditCompleted = false;
 		} else {
-			if (logger.isDebugEnabled()) {
-				logger.debug("resetAuditCompleted: For resourceName="
+			logToDebug("resetAuditCompleted: For resourceName="
 						+ resourceName
 						+ ", time since last update is only "
 						+ timeDifference + "; retaining current value for auditCompleted");
-			}
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("resetAuditCompleted: Exiting and returning auditCompleted="
+		logToDebug("resetAuditCompleted: Exiting and returning auditCompleted="
 					+ auditCompleted + ", timeDifference=" + timeDifference);
-		}
+
 		return auditCompleted;
 	}
 
 	private void runAudit(DbAudit dbAudit) throws Exception {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("runAudit: Entering, dbAudit=" + dbAudit
+		logToDebug("runAudit: Entering, dbAudit=" + dbAudit
 					+ "; notifying other resources that resourceName="
 					+ this.resourceName + " is current");
-		}
 
 		/*
 		 * changeDesignated marks all other nodes as non-designated and this
@@ -747,11 +592,10 @@ public class AuditThread extends Thread {
 		dbDAO.changeDesignated(this.resourceName, this.persistenceUnit,
 				this.nodeType);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("runAudit: Running audit for persistenceUnit="
-					+ this.persistenceUnit + " on resourceName="
-					+ this.resourceName);
-		}
+		logToDebug("runAudit: Running audit for persistenceUnit="
+				+ this.persistenceUnit + " on resourceName="
+				+ this.resourceName);
+
 		if (IntegrityAudit.isUnitTesting) {
 			dbAudit.dbAuditSimulate(this.resourceName, this.persistenceUnit,
 					this.nodeType);
@@ -760,10 +604,118 @@ public class AuditThread extends Thread {
 					this.nodeType);
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("runAudit: Exiting");
-		}
+		logToDebug("runAudit: Exiting");
+
 
 	}
+	private void auditThreadLogic(boolean auditCompleted,
+									IntegrityAuditEntity entityCurrentlyDesignated,
+									IntegrityAuditEntity thisEntity,
+									DbAudit dbAudit,
+									List<IntegrityAuditEntity> integrityAuditEntityList) throws Exception {
+		/*
+		 * If we haven't done the audit yet, note that we're current and
+		 * see if we're designated.
+		 */
+		if (!auditCompleted) {
+			dbDAO.setLastUpdated();
 
+			/*
+			 * If no current designation or currently designated node is
+			 * stale, see if we're the next node to be designated.
+			 */
+			if (entityCurrentlyDesignated == null || isStale(entityCurrentlyDesignated)) {
+				
+				IntegrityAuditEntity designationCandidate = getDesignationCandidate(integrityAuditEntityList);
+				auditCompleted = auditNextDesignated(dbAudit, designationCandidate, thisEntity);
+			}
+				/*
+				 * Application may have been stopped and restarted, in
+				 * which case we might be designated but auditCompleted
+				 * will have been reset to false, so account for this.
+				 */
+			 else if (thisEntity.getResourceName().equals(entityCurrentlyDesignated.getResourceName())) {
+				 logToDebug("AuditThread.run: Re-running audit for "
+							+ thisEntity.getResourceName());
+				runAudit(dbAudit);
+				auditCompleted = true;
+
+			} else {
+				logToDebug("AuditThread.run: Currently designated node, "
+						+ entityCurrentlyDesignated
+						.getResourceName()
+						+ ", not yet stale and not this node");
+			}
+
+
+			/*
+			 * Audit already completed on this node, so allow the node
+			 * to go stale until twice the AUDIT_COMPLETION_PERIOD has
+			 * elapsed. This should give plenty of time for another node
+			 * (if another node is out there) to pick up designation.
+			 */
+		} else {
+
+			auditCompleted = resetAuditCompleted(auditCompleted,
+					thisEntity);
+
+		}
+
+		/*
+		 * If we've just run audit, sleep per the
+		 * integrity_audit_period_seconds property, otherwise just sleep
+		 * the normal interval.
+		 */
+		if (auditCompleted) {
+
+			logToDebug("AuditThread.run: Audit completed; resourceName="
+					+ this.resourceName
+					+ " sleeping "
+					+ integrityAuditPeriodMillis + "ms");
+			
+			Thread.sleep(integrityAuditPeriodMillis);
+			logToDebug("AuditThread.run: resourceName="
+					+ this.resourceName + " awaking from "
+					+ integrityAuditPeriodMillis + "ms sleep");
+		} else {
+			logToDebug("AuditThread.run: resourceName="
+					+ this.resourceName + ": Sleeping "
+					+ AuditThread.AUDIT_THREAD_SLEEP_INTERVAL
+					+ "ms");
+			Thread.sleep(AuditThread.AUDIT_THREAD_SLEEP_INTERVAL);
+			logToDebug("AuditThread.run: resourceName="
+					+ this.resourceName + ": Awaking from "
+					+ AuditThread.AUDIT_THREAD_SLEEP_INTERVAL
+					+ "ms sleep");
+		}		
+
+		
+	}
+	
+	private boolean auditNextDesignated(DbAudit dbAudit, IntegrityAuditEntity designationCandidate, IntegrityAuditEntity thisEntity) throws Exception{
+		/*
+		 * If we're the next node to be designated, run the
+		 * audit.
+		 */
+		if (designationCandidate.getResourceName().equals(
+				this.resourceName)) {
+			runAudit(dbAudit);
+			return true;
+		} else {
+			logToDebug("AuditThread.run: designationCandidate, "
+						+ designationCandidate
+						.getResourceName()
+						+ ", not this entity, "
+						+ thisEntity.getResourceName());
+		}
+		
+		return false;
+	}
+
+	private void logToDebug(Object statement) {
+		if (logger.isDebugEnabled()) {
+			logger.debug(statement);
+		}
+		
+	}
 }
