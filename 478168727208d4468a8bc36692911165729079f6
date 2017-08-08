@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_2b41a439",
+        "filename": "integrity-audit/src/main/java/org/onap/policy/common/ia/AuditThread.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-08-08T22:59:17Z",
+      "side": 1,
+      "message": "I don\u0027t think this will work.  The audit is designed to only run ONCE. Then it stops and another node takes over.  You cannot tell it over and over that the audit has not run.  It will never relinquish control so it can run from another node and get the perspective of that node.  That is why auditCompleted\u003dfalse must be outside the loop.",
+      "revId": "478168727208d4468a8bc36692911165729079f6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_0b3ee8b8",
+        "filename": "integrity-audit/src/main/java/org/onap/policy/common/ia/AuditThread.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-08-08T22:59:17Z",
+      "side": 1,
+      "message": "This block of code would never be entered because every time this method is called, auditCompleted is set to false. The same is true for other blocks below this. You must maintain the original flow of the logic.  It is a fairly complicated distributed algorithm.  I suggest you don\u0027t change it and just tell sonar to ignore it.",
+      "revId": "478168727208d4468a8bc36692911165729079f6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
