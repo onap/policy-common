@@ -26,7 +26,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-//import org.apache.log4j.Logger;
+
 
 
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
@@ -133,155 +133,20 @@ public class AuditThread extends Thread {
 
 	}
 
+	@Override
 	public void run() {
 
 		logger.info("AuditThread.run: Entering");
 
 		try {
 			
-			/*
-			 * Triggers change in designation, unless no other viable candidate.
-			 */
-			boolean auditCompleted = false;
-
-			DbAudit dbAudit = new DbAudit(dbDAO);
-
-			IntegrityAuditEntity entityCurrentlyDesignated = null;
-			IntegrityAuditEntity thisEntity = null;
 			integrityAudit.setThreadInitialized(true); // An exception will set
 														// it to false
-
 			while (true) {
-				try{
+				try {
+				
+					threadLogic();
 
-					/*
-					 * It may have been awhile since we last cycled through this
-					 * loop, so refresh the list of IntegrityAuditEntities.
-					 */
-					List<IntegrityAuditEntity> integrityAuditEntityList = getIntegrityAuditEntityList();
-
-					/*
-					 * We could've set entityCurrentlyDesignated as a side effect of
-					 * getIntegrityAuditEntityList(), but then we would've had to
-					 * make entityCurrentlyDesignated a class level attribute. Using
-					 * this approach, we can keep it local to the run() method.
-					 */
-					entityCurrentlyDesignated = getEntityCurrentlyDesignated(integrityAuditEntityList);
-
-					/*
-					 * Need to refresh thisEntity each time through loop, because we
-					 * need a fresh version of lastUpdated.
-					 */
-					thisEntity = getThisEntity(integrityAuditEntityList);
-
-					/*
-					 * If we haven't done the audit yet, note that we're current and
-					 * see if we're designated.
-					 */
-					if (!auditCompleted) {
-						dbDAO.setLastUpdated();
-
-						/*
-						 * If no current designation or currently designated node is
-						 * stale, see if we're the next node to be designated.
-						 */
-						if (entityCurrentlyDesignated == null
-								|| isStale(entityCurrentlyDesignated)) {
-							IntegrityAuditEntity designationCandidate = getDesignationCandidate(integrityAuditEntityList);
-
-							/*
-							 * If we're the next node to be designated, run the
-							 * audit.
-							 */
-							if (designationCandidate.getResourceName().equals(
-									this.resourceName)) {
-								runAudit(dbAudit);
-								auditCompleted = true;
-							} else {
-								if (logger.isDebugEnabled()) {
-									logger.debug("AuditThread.run: designationCandidate, "
-											+ designationCandidate
-											.getResourceName()
-											+ ", not this entity, "
-											+ thisEntity.getResourceName());
-								}
-							}
-
-							/*
-							 * Application may have been stopped and restarted, in
-							 * which case we might be designated but auditCompleted
-							 * will have been reset to false, so account for this.
-							 */
-						} else if (thisEntity.getResourceName().equals(
-								entityCurrentlyDesignated.getResourceName())) {
-
-							if (logger.isDebugEnabled()) {
-								logger.debug("AuditThread.run: Re-running audit for "
-										+ thisEntity.getResourceName());
-							}
-							runAudit(dbAudit);
-							auditCompleted = true;
-
-						} else {
-							if (logger.isDebugEnabled()) {
-								logger.debug("AuditThread.run: Currently designated node, "
-										+ entityCurrentlyDesignated
-										.getResourceName()
-										+ ", not yet stale and not this node");
-							}
-						}
-
-
-						/*
-						 * Audit already completed on this node, so allow the node
-						 * to go stale until twice the AUDIT_COMPLETION_PERIOD has
-						 * elapsed. This should give plenty of time for another node
-						 * (if another node is out there) to pick up designation.
-						 */
-					} else {
-
-						auditCompleted = resetAuditCompleted(auditCompleted,
-								thisEntity);
-
-					}
-
-					/*
-					 * If we've just run audit, sleep per the
-					 * integrity_audit_period_seconds property, otherwise just sleep
-					 * the normal interval.
-					 */
-					if (auditCompleted) {
-
-						if (logger.isDebugEnabled()) {
-							logger.debug("AuditThread.run: Audit completed; resourceName="
-									+ this.resourceName
-									+ " sleeping "
-									+ integrityAuditPeriodMillis + "ms");
-						}
-						Thread.sleep(integrityAuditPeriodMillis);
-						if (logger.isDebugEnabled()) {
-							logger.debug("AuditThread.run: resourceName="
-									+ this.resourceName + " awaking from "
-									+ integrityAuditPeriodMillis + "ms sleep");
-						}
-
-					} else {
-
-						if (logger.isDebugEnabled()) {
-							logger.debug("AuditThread.run: resourceName="
-									+ this.resourceName + ": Sleeping "
-									+ AuditThread.AUDIT_THREAD_SLEEP_INTERVAL
-									+ "ms");
-						}
-						Thread.sleep(AuditThread.AUDIT_THREAD_SLEEP_INTERVAL);
-						if (logger.isDebugEnabled()) {
-							logger.debug("AuditThread.run: resourceName="
-									+ this.resourceName + ": Awaking from "
-									+ AuditThread.AUDIT_THREAD_SLEEP_INTERVAL
-									+ "ms sleep");
-						}
-
-					}
 				} catch (Exception e){
 					String msg = "AuditThread.run loop - Exception thrown: " + e.getMessage() 
 							+ "; Will try audit again in " + (integrityAuditPeriodMillis/1000) + " seconds";
@@ -290,7 +155,6 @@ public class AuditThread extends Thread {
 					Thread.sleep(integrityAuditPeriodMillis);
 					continue;
 				}
-
 			}
 
 		} catch (Exception e) {
@@ -765,5 +629,147 @@ public class AuditThread extends Thread {
 		}
 
 	}
+	
+	private void threadLogic() throws Exception{
+		
+		/*
+		 * Triggers change in designation, unless no other viable candidate.
+		 */
+		boolean auditCompleted = false;
+
+		DbAudit dbAudit = new DbAudit(dbDAO);
+
+		IntegrityAuditEntity entityCurrentlyDesignated = null;
+		IntegrityAuditEntity thisEntity = null;
+
+			/*
+			 * It may have been awhile since we last cycled through this
+			 * loop, so refresh the list of IntegrityAuditEntities.
+			 */
+			List<IntegrityAuditEntity> integrityAuditEntityList = getIntegrityAuditEntityList();
+
+			/*
+			 * We could've set entityCurrentlyDesignated as a side effect of
+			 * getIntegrityAuditEntityList(), but then we would've had to
+			 * make entityCurrentlyDesignated a class level attribute. Using
+			 * this approach, we can keep it local to the run() method.
+			 */
+			entityCurrentlyDesignated = getEntityCurrentlyDesignated(integrityAuditEntityList);
+
+			/*
+			 * Need to refresh thisEntity each time through loop, because we
+			 * need a fresh version of lastUpdated.
+			 */
+			thisEntity = getThisEntity(integrityAuditEntityList);
+
+			/*
+			 * If we haven't done the audit yet, note that we're current and
+			 * see if we're designated.
+			 */
+			if (!auditCompleted) {
+				dbDAO.setLastUpdated();
+
+				/*
+				 * If no current designation or currently designated node is
+				 * stale, see if we're the next node to be designated.
+				 */
+				if (entityCurrentlyDesignated == null
+						|| isStale(entityCurrentlyDesignated)) {
+					IntegrityAuditEntity designationCandidate = getDesignationCandidate(integrityAuditEntityList);
+
+					/*
+					 * If we're the next node to be designated, run the
+					 * audit.
+					 */
+					if (designationCandidate.getResourceName().equals(
+							this.resourceName)) {
+						runAudit(dbAudit);
+						auditCompleted = true;
+					} else {
+						if (logger.isDebugEnabled()) {
+							logger.debug("AuditThread.run: designationCandidate, "
+									+ designationCandidate
+									.getResourceName()
+									+ ", not this entity, "
+									+ thisEntity.getResourceName());
+						}
+					}
+
+					/*
+					 * Application may have been stopped and restarted, in
+					 * which case we might be designated but auditCompleted
+					 * will have been reset to false, so account for this.
+					 */
+				} else if (thisEntity.getResourceName().equals(
+						entityCurrentlyDesignated.getResourceName())) {
+
+					if (logger.isDebugEnabled()) {
+						logger.debug("AuditThread.run: Re-running audit for "
+								+ thisEntity.getResourceName());
+					}
+					runAudit(dbAudit);
+					auditCompleted = true;
+
+				} else {
+					if (logger.isDebugEnabled()) {
+						logger.debug("AuditThread.run: Currently designated node, "
+								+ entityCurrentlyDesignated
+								.getResourceName()
+								+ ", not yet stale and not this node");
+					}
+				}
+
+
+				/*
+				 * Audit already completed on this node, so allow the node
+				 * to go stale until twice the AUDIT_COMPLETION_PERIOD has
+				 * elapsed. This should give plenty of time for another node
+				 * (if another node is out there) to pick up designation.
+				 */
+			} else {
+
+				auditCompleted = resetAuditCompleted(auditCompleted,
+						thisEntity);
+
+			}
+
+			/*
+			 * If we've just run audit, sleep per the
+			 * integrity_audit_period_seconds property, otherwise just sleep
+			 * the normal interval.
+			 */
+			if (auditCompleted) {
+
+				if (logger.isDebugEnabled()) {
+					logger.debug("AuditThread.run: Audit completed; resourceName="
+							+ this.resourceName
+							+ " sleeping "
+							+ integrityAuditPeriodMillis + "ms");
+				}
+				Thread.sleep(integrityAuditPeriodMillis);
+				if (logger.isDebugEnabled()) {
+					logger.debug("AuditThread.run: resourceName="
+							+ this.resourceName + " awaking from "
+							+ integrityAuditPeriodMillis + "ms sleep");
+				}
+
+			} else {
+
+				if (logger.isDebugEnabled()) {
+					logger.debug("AuditThread.run: resourceName="
+							+ this.resourceName + ": Sleeping "
+							+ AuditThread.AUDIT_THREAD_SLEEP_INTERVAL
+							+ "ms");
+				}
+				Thread.sleep(AuditThread.AUDIT_THREAD_SLEEP_INTERVAL);
+				if (logger.isDebugEnabled()) {
+					logger.debug("AuditThread.run: resourceName="
+							+ this.resourceName + ": Awaking from "
+							+ AuditThread.AUDIT_THREAD_SLEEP_INTERVAL
+							+ "ms sleep");
+				}
+
+			}
+		}
 
 }
