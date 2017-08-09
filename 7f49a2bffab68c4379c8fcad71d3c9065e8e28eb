@@ -33,6 +33,24 @@
       "revId": "7f49a2bffab68c4379c8fcad71d3c9065e8e28eb",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_c64a27ac",
+        "filename": "integrity-audit/src/main/java/org/onap/policy/common/ia/IntegrityAudit.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1645
+      },
+      "writtenOn": "2017-08-09T20:38:21Z",
+      "side": 1,
+      "message": "Yeah, I agree your correct solution to my error is more complicated than the original. I will restore this part to the original.",
+      "parentUuid": "1a1a2d67_465f3773",
+      "revId": "7f49a2bffab68c4379c8fcad71d3c9065e8e28eb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
