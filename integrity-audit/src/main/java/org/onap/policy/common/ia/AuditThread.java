@@ -26,7 +26,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-//import org.apache.log4j.Logger;
 
 
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
@@ -146,8 +145,8 @@ public class AuditThread extends Thread {
 
 			DbAudit dbAudit = new DbAudit(dbDAO);
 
-			IntegrityAuditEntity entityCurrentlyDesignated = null;
-			IntegrityAuditEntity thisEntity = null;
+			IntegrityAuditEntity entityCurrentlyDesignated;
+			IntegrityAuditEntity thisEntity;
 			integrityAudit.setThreadInitialized(true); // An exception will set
 														// it to false
 
@@ -702,7 +701,7 @@ public class AuditThread extends Thread {
 					+ thisEntity.getLastUpdated());
 		}
 
-		long timeDifference = -1;
+		long timeDifference;
 
 		Date currentTime = new Date();
 		Date lastUpdated = thisEntity.getLastUpdated();
@@ -752,9 +751,8 @@ public class AuditThread extends Thread {
 					+ this.persistenceUnit + " on resourceName="
 					+ this.resourceName);
 		}
-		if (IntegrityAudit.isUnitTesting) {
-			dbAudit.dbAuditSimulate(this.resourceName, this.persistenceUnit,
-					this.nodeType);
+		if (IntegrityAudit.isUnitTesting()) {
+			dbAudit.dbAuditSimulate(this.resourceName, this.persistenceUnit);
 		} else {
 			dbAudit.dbAudit(this.resourceName, this.persistenceUnit,
 					this.nodeType);

@@ -33,7 +33,6 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.builder.RecursiveToStringStyle;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-//import org.apache.log4j.Logger;
 
 
 
@@ -140,7 +139,7 @@ public class DbAudit {
 		 * This is the map of mismatched entries indexed by className. For
 		 * each class name there is a list of mismatched entries
 		 */
-		HashMap<String,HashSet<Object>> misMatchedMap = new HashMap<String,HashSet<Object>>();
+		HashMap<String,HashSet<Object>> misMatchedMap = new HashMap<>();
 		
 		// We need to keep track of how long the audit is taking
 		long startTime = System.currentTimeMillis();
@@ -350,8 +349,7 @@ public class DbAudit {
 	 * @throws InterruptedException
 	 * @throws DbDaoTransactionException
 	 */
-	public void dbAuditSimulate(String resourceName, String persistenceUnit,
-			String nodeType) throws InterruptedException,
+	public void dbAuditSimulate(String resourceName, String persistenceUnit) throws InterruptedException,
 			DbDaoTransactionException {
 
 		logger.info("dbAuditSimulate: Starting audit simulation for resourceName="
@@ -386,7 +384,7 @@ public class DbAudit {
 		 * it is currently working on.
 		 * 
 		 */
-		HashSet<Object> misMatchedKeySet = new HashSet<Object>();
+		HashSet<Object> misMatchedKeySet = new HashSet<>();
 		for(Object key: myEntries.keySet()){
 			byte[] mySerializedEntry = SerializationUtils.serialize((Serializable) myEntries.get(key));
 			byte[] theirSerializedEntry = SerializationUtils.serialize((Serializable) theirEntries.get(key));

@@ -22,7 +22,6 @@ package org.onap.policy.common.ia;
 
 import java.util.Properties;
 
-//import org.apache.log4j.Logger;
 
 import org.onap.policy.common.ia.IntegrityAuditProperties.NodeTypeEnum;
 import org.onap.policy.common.logging.flexlogger.FlexLogger; 
@@ -36,7 +35,7 @@ public class IntegrityAudit {
 	
 	private static final Logger logger = FlexLogger.getLogger(IntegrityAudit.class);
 
-	public static boolean isUnitTesting;
+	private static boolean isUnitTesting;
 	private boolean isThreadInitialized = false; 
 	
 	AuditThread auditThread = null;
@@ -65,7 +64,7 @@ public class IntegrityAudit {
 	 * @param properties
 	 * @throws Exception
 	 */
-	public IntegrityAudit(String resourceName, String persistenceUnit, Properties properties) throws Exception {
+	public IntegrityAudit(String resourceName, String persistenceUnit, Properties properties) throws IntegrityAuditException {
 		
 		logger.info("Constructor: Entering and checking for nulls");
 		String parmList = "";
@@ -73,7 +72,7 @@ public class IntegrityAudit {
 			logger.error("Constructor: Parms contain nulls; cannot run audit for resourceName="
 					+ resourceName + ", persistenceUnit=" + persistenceUnit
 					+ ", bad parameters: " + parmList);
-			throw new Exception(
+			throw new IntegrityAuditException(
 					"Constructor: Parms contain nulls; cannot run audit for resourceName="
 							+ resourceName + ", persistenceUnit="
 							+ persistenceUnit
@@ -237,5 +236,13 @@ public class IntegrityAudit {
 	public void setThreadInitialized(boolean isThreadInitialized) {
 		logger.info("setThreadInitialized: Setting isThreadInitialized=" + isThreadInitialized);
 		this.isThreadInitialized = isThreadInitialized;
+	}
+
+	public static boolean isUnitTesting() {
+		return isUnitTesting;
+	}
+
+	public static void setUnitTesting(boolean isUnitTesting) {
+		IntegrityAudit.isUnitTesting = isUnitTesting;
 	}
 }

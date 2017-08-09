@@ -74,7 +74,7 @@ public class AuditPeriodTest {
 
 		logger.info("setUp: Entering");
 
-		IntegrityAudit.isUnitTesting = true;
+		IntegrityAudit.setUnitTesting(true);
 		
 		properties = new Properties();
 		properties.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
