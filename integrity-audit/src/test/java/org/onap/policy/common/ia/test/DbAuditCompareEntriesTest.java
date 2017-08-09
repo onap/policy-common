@@ -80,7 +80,7 @@ public class DbAuditCompareEntriesTest {
 
 		logger.info("setUp: Entering");
 
-		IntegrityAudit.isUnitTesting = true;
+		IntegrityAudit.setUnitTesting(true);
 		
 		properties = new Properties();
 		properties.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
@@ -446,7 +446,7 @@ public class DbAuditCompareEntriesTest {
 
 		logger.info("Setting up DB");
 
-		IntegrityAudit.isUnitTesting = true;
+		IntegrityAudit.setUnitTesting(true);
 		
 		properties = new Properties();
 		properties.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);

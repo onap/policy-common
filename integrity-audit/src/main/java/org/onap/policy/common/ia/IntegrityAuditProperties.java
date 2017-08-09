@@ -38,7 +38,7 @@ public class IntegrityAuditProperties {
 	public static final String SITE_NAME = "site_name";
 	public static final String NODE_TYPE = "node_type";
 	
-	public static enum NodeTypeEnum {
+	public enum NodeTypeEnum {
 		pdp_xacml,
 		pdp_drools,
 		pap,
@@ -49,6 +49,10 @@ public class IntegrityAuditProperties {
 		elk_server,
 		pypdp
 
+	}
+	
+	private IntegrityAuditProperties() {
+		
 	}
 	
 }

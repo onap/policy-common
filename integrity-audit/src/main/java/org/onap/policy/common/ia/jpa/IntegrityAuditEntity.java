@@ -49,7 +49,7 @@ import javax.persistence.TemporalType;
 public class IntegrityAuditEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
-	public static boolean isUnitTesting;
+	private static boolean isUnitTesting;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -104,7 +104,7 @@ public class IntegrityAuditEntity implements Serializable {
 	
 	@PreUpdate
 	public void preUpdate() {
-		if (!isUnitTesting) {
+		if (!isUnitTesting()) {
 			this.lastUpdated = new Date();
 		}
 	}
@@ -199,5 +199,13 @@ public class IntegrityAuditEntity implements Serializable {
 	
 	public void setCreatedDate(Date created) {
 		this.createdDate = created;
+	}
+
+	public static boolean isUnitTesting() {
+		return isUnitTesting;
+	}
+
+	public static void setUnitTesting(boolean isUnitTesting) {
+		IntegrityAuditEntity.isUnitTesting = isUnitTesting;
 	}
 }
