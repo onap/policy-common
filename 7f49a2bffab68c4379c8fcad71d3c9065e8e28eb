@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_665a3385",
+        "filename": "integrity-audit/src/main/java/org/onap/policy/common/ia/DbDAO.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-08-09T20:09:19Z",
+      "side": 1,
+      "message": "Boy that is picky.  How many times have I been dinged for NOT initializing a local variable.",
+      "revId": "7f49a2bffab68c4379c8fcad71d3c9065e8e28eb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a1a2d67_465f3773",
+        "filename": "integrity-audit/src/main/java/org/onap/policy/common/ia/IntegrityAudit.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-08-09T20:09:19Z",
+      "side": 1,
+      "message": "There  are two problems.  1) The variable badparms is supposed to be a list of bad parameters.  You are not creating a list with tempBadParms.  You are assigning single values to it. 2) You never assign tempBadParms (which I assume you meant to be a list) back to badparams.  badparams is a string that is passed in by the parent method and when you are done updating it, the badparams is utilized in a log and exception message at the parent/calling level.\n\nI think your assignment statements should have been:\ntempBadParams \u003d tempBadParams.concat(\"whatever the param\");\n\nThen at the bottom: \nbadparams \u003d badparams.concat(tempBadParams);\n\nBut, this is all more complicated than the original code.",
+      "revId": "7f49a2bffab68c4379c8fcad71d3c9065e8e28eb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
