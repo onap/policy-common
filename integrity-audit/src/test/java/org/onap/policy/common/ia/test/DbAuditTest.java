@@ -113,8 +113,8 @@ public class DbAuditTest {
 
 		logger.info("setUp: Entering");
 
-		IntegrityAudit.isUnitTesting = true;
-		IntegrityAuditEntity.isUnitTesting = true;
+		IntegrityAudit.setUnitTesting(true);
+		IntegrityAuditEntity.setUnitTesting(true);
 		
 		properties = new Properties();
 		properties.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);

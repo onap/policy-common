@@ -33,7 +33,7 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.builder.RecursiveToStringStyle;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-//import org.apache.log4j.Logger;
+
 
 
 
@@ -55,16 +55,12 @@ public class DbAudit {
 	
 	public DbAudit(DbDAO dbDAO) {
 		
-		if (logger.isDebugEnabled()) {
-			logger.debug("Constructor: Entering");
-		}
-
+		logger.debug("Constructor: Entering");
+		
 		this.dbDAO = dbDAO;
 		
-		if (logger.isDebugEnabled()) {
-			logger.debug("Constructor: Exiting");
-		}
-
+		logger.debug("Constructor: Exiting");
+		
 	}
 	
 	/**
@@ -76,12 +72,10 @@ public class DbAudit {
 	 */
 	public void dbAudit(String resourceName, String persistenceUnit, String nodeType) throws Exception {
 		
-		if (logger.isDebugEnabled()) {
-			logger.debug("dbAudit: Entering, resourceName=" + resourceName
+		logger.debug("dbAudit: Entering, resourceName=" + resourceName
 					+ ", persistenceUnit=" + persistenceUnit + ", nodeType="
 					+ nodeType);
-		}
-	
+		
 		// Get all IntegrityAudit entries so we can get the DB access info
 		List<IntegrityAuditEntity> iaeList = dbDAO.getIntegrityAuditEntities(persistenceUnit, nodeType);
 		if(iaeList == null || iaeList.isEmpty()){
@@ -140,40 +134,34 @@ public class DbAudit {
 		 * This is the map of mismatched entries indexed by className. For
 		 * each class name there is a list of mismatched entries
 		 */
-		HashMap<String,HashSet<Object>> misMatchedMap = new HashMap<String,HashSet<Object>>();
+		HashMap<String,HashSet<Object>> misMatchedMap = new HashMap<>();
 		
 		// We need to keep track of how long the audit is taking
 		long startTime = System.currentTimeMillis();
 		
 		// Retrieve all instances of the class for each node			
-		if (logger.isDebugEnabled()) {
-			logger.debug("dbAudit: Traversing classNameSet, size=" + classNameSet.size());
-		}
+		logger.debug("dbAudit: Traversing classNameSet, size=" + classNameSet.size());
+		
 		for(String clazzName: classNameSet){
 			
-			if (logger.isDebugEnabled()) {
-				logger.debug("dbAudit: clazzName=" + clazzName);
-			}
+			logger.debug("dbAudit: clazzName=" + clazzName);
+		
 	
 			// all instances of the class for myIae
 			HashMap<Object,Object> myEntries = dbDAO.getAllMyEntries(clazzName);
 			//get a map of the objects indexed by id. Does not necessarily have any entries
 			
-			if (logger.isDebugEnabled()) {
-				logger.debug("dbAudit: Traversing iaeList, size=" + iaeList.size());
-			}
+			logger.debug("dbAudit: Traversing iaeList, size=" + iaeList.size());
+		
 			for (IntegrityAuditEntity iae : iaeList){
 				if(iae.getId() == myIae.getId()){
-					if (logger.isDebugEnabled()) {
-						logger.debug("dbAudit: My Id=" + iae.getId()
+					logger.debug("dbAudit: My Id=" + iae.getId()
 								+ ", resourceName=" + iae.getResourceName());
-					}
 					continue; //no need to compare with self
 				} else {
-					if (logger.isDebugEnabled()) {
-						logger.debug("dbAudit: Id=" + iae.getId()
+					logger.debug("dbAudit: Id=" + iae.getId()
 								+ ", resourceName=" + iae.getResourceName());
-					}
+					
 				}
 				// Create properties for the other db node
 				Properties theirProperties = new Properties();
@@ -186,12 +174,12 @@ public class DbAudit {
 				
 				//get a map of the instances for their iae indexed by id
 				HashMap<Object,Object> theirEntries = dbDAO.getAllEntries(persistenceUnit, theirProperties, clazzName);
-				if (logger.isDebugEnabled()) {
-					logger.debug("dbAudit: For persistenceUnit="
+				
+				logger.debug("dbAudit: For persistenceUnit="
 							+ persistenceUnit + ", clazzName=" + clazzName
 							+ ", theirEntries.size()="
 							+ theirEntries.size());
-				}
+				
 				
 				/*
 				 * Compare myEntries with theirEntries and get back a set of mismatched IDs.
@@ -209,7 +197,8 @@ public class DbAudit {
 					}
 				}
 			} //end for (IntegrityAuditEntity iae : iaeList)
-			//Time check
+			
+				//Time check
 			if((System.currentTimeMillis() - startTime) >= 5000){ //5 seconds
 				//update the timestamp
 				dbDAO.setLastUpdated();
@@ -217,68 +206,57 @@ public class DbAudit {
 				startTime=System.currentTimeMillis();
 			}else{
 				//sleep a couple seconds to break up the activity
-				if (logger.isDebugEnabled()) {
-					logger.debug("dbAudit: Sleeping 2 seconds");
-				}
+				logger.debug("dbAudit: Sleeping 2 seconds");
+				
 				Thread.sleep(2000);
-				if (logger.isDebugEnabled()) {
-					logger.debug("dbAudit: Waking from sleep");
-				}
+				logger.debug("dbAudit: Waking from sleep");
+				
 			}
 		}//end: for(String clazzName: classNameList)
 		
 		//check if misMatchedMap is empty
 		if(misMatchedMap.isEmpty()){
 			
-			if (logger.isDebugEnabled()) {
-				logger.debug("dbAudit: Exiting, misMatchedMap is empty");
-			}
+			logger.debug("dbAudit: Exiting, misMatchedMap is empty");
+			
 			//we are done
 			return;
 		} else {
-			if (logger.isDebugEnabled()) {
-				logger.debug("dbAudit: Doing another comparison; misMatchedMap.size()=" + misMatchedMap.size());
-			}
+			logger.debug("dbAudit: Doing another comparison; misMatchedMap.size()=" + misMatchedMap.size());
+			
 		}
 		
 		// If misMatchedMap is not empty, retrieve the entries in each misMatched list and compare again
-		classNameSet = new HashSet<String>(misMatchedMap.keySet());
+		classNameSet = new HashSet<>(misMatchedMap.keySet());
 		// We need to keep track of how long the audit is taking
 		startTime = System.currentTimeMillis();
 		
 		// Retrieve all instances of the class for each node			
-		if (logger.isDebugEnabled()) {
-			logger.debug("dbAudit: Second comparison; traversing classNameSet, size=" + classNameSet.size());
-		}
+		logger.debug("dbAudit: Second comparison; traversing classNameSet, size=" + classNameSet.size());
+		
 		
 		int errorCount = 0;
 		
 		for(String clazzName: classNameSet){
 			
-			if (logger.isDebugEnabled()) {
-				logger.debug("dbAudit: Second comparison; clazzName=" + clazzName);
-			}
+			logger.debug("dbAudit: Second comparison; clazzName=" + clazzName);
+		
 	
 			// all instances of the class for myIae
 			HashSet<Object> keySet = misMatchedMap.get(clazzName);
 			HashMap<Object,Object> myEntries = dbDAO.getAllMyEntries(clazzName, keySet);
 			//get a map of the objects indexed by id
 			
-			if (logger.isDebugEnabled()) {
-				logger.debug("dbAudit: Second comparison; traversing iaeList, size=" + iaeList.size());
-			}
+			logger.debug("dbAudit: Second comparison; traversing iaeList, size=" + iaeList.size());
+		
 			for (IntegrityAuditEntity iae : iaeList){
 				if(iae.getId() == myIae.getId()){
-					if (logger.isDebugEnabled()) {
-						logger.debug("dbAudit: Second comparison; My Id=" + iae.getId()
-								+ ", resourceName=" + iae.getResourceName());
-					}
+					logger.debug("dbAudit: Second comparison; My Id=" + iae.getId()
+							+ ", resourceName=" + iae.getResourceName());
 					continue; //no need to compare with self
 				} else {
-					if (logger.isDebugEnabled()) {
-						logger.debug("dbAudit: Second comparison; Id=" + iae.getId()
-								+ ", resourceName=" + iae.getResourceName());
-					}
+					logger.debug("dbAudit: Second comparison; Id=" + iae.getId()
+							+ ", resourceName=" + iae.getResourceName());
 				}
 				// Create properties for the other db node
 				Properties theirProperties = new Properties();
@@ -305,11 +283,9 @@ public class DbAudit {
 						errorCount ++;
 					}
 					writeAuditSummaryLog(clazzName, resourceName, iae.getResourceName(), keysString);
-					if(logger.isDebugEnabled()){
 						for(Object key : misMatchedKeySet){
 							writeAuditDebugLog(clazzName, resourceName, iae.getResourceName(), myEntries.get(key), theirEntries.get(key));
 						}
-					}
 				}
 			}
 			//Time check
@@ -320,13 +296,10 @@ public class DbAudit {
 				startTime=System.currentTimeMillis();
 			}else{
 				//sleep a couple seconds to break up the activity
-				if (logger.isDebugEnabled()) {
-					logger.debug("dbAudit: Second comparison; sleeping 2 seconds");
-				}
+				logger.debug("dbAudit: Second comparison; sleeping 2 seconds");
+			
 				Thread.sleep(2000);
-				if (logger.isDebugEnabled()) {
-					logger.debug("dbAudit: Second comparison; waking from sleep");
-				}
+				logger.debug("dbAudit: Second comparison; waking from sleep");
 			}
 		}//end: for(String clazzName: classNameList)
 		
@@ -335,9 +308,7 @@ public class DbAudit {
 			logger.error(MessageCodes.ERROR_AUDIT,  msg);
 		}
 		
-		if (logger.isDebugEnabled()) {
-			logger.debug("dbAudit: Exiting");
-		}
+		logger.debug("dbAudit: Exiting");
 	
 		return; //all done
 	}
@@ -350,9 +321,7 @@ public class DbAudit {
 	 * @throws InterruptedException
 	 * @throws DbDaoTransactionException
 	 */
-	public void dbAuditSimulate(String resourceName, String persistenceUnit,
-			String nodeType) throws InterruptedException,
-			DbDaoTransactionException {
+	public void dbAuditSimulate(String resourceName, String persistenceUnit) throws InterruptedException, DbDaoTransactionException {
 
 		logger.info("dbAuditSimulate: Starting audit simulation for resourceName="
 				+ resourceName + ", persistenceUnit=" + persistenceUnit);
@@ -386,7 +355,7 @@ public class DbAudit {
 		 * it is currently working on.
 		 * 
 		 */
-		HashSet<Object> misMatchedKeySet = new HashSet<Object>();
+		HashSet<Object> misMatchedKeySet = new HashSet<>();
 		for(Object key: myEntries.keySet()){
 			byte[] mySerializedEntry = SerializationUtils.serialize((Serializable) myEntries.get(key));
 			byte[] theirSerializedEntry = SerializationUtils.serialize((Serializable) theirEntries.get(key));

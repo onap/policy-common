@@ -40,7 +40,6 @@ import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
 
-//import org.apache.log4j.Logger;
 
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
 import org.onap.policy.common.logging.flexlogger.FlexLogger; 
@@ -125,7 +124,7 @@ public class DbDAO {
 	public HashMap<Object, Object> getAllMyEntries(String className) {
 		logger.debug("getAllMyEntries: Entering, className="
 				+ className);
-		HashMap<Object, Object> resultMap = new HashMap<Object,Object>();
+		HashMap<Object, Object> resultMap = new HashMap<>();
 		EntityManager em = emf.createEntityManager();
 		try{
 			CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -162,7 +161,7 @@ public class DbDAO {
 		logger.debug("getAllMyEntries: Entering, className="
 				+ className + ",\n keySet=" + keySet);
 
-		HashMap<Object, Object> resultMap = new HashMap<Object,Object>();
+		HashMap<Object, Object> resultMap = new HashMap<>();
 		EntityManager em = emf.createEntityManager();
 		try{
 			Class<?> clazz = Class.forName(className);
@@ -193,7 +192,7 @@ public class DbDAO {
 		
 		logger.debug("getAllEntries: Entering, persistenceUnit="
 				+ persistenceUnit + ",\n className=" + className);
-		HashMap<Object, Object> resultMap = new HashMap<Object,Object>();
+		HashMap<Object, Object> resultMap = new HashMap<>();
 
 		EntityManagerFactory theEmf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
 		EntityManager em = theEmf.createEntityManager();
@@ -238,7 +237,7 @@ public class DbDAO {
 				+ persistenceUnit + ",\n properties= " + properties + ",\n className=" + className + ",\n keySet= " + keySet);
 		EntityManagerFactory theEmf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
 		EntityManager em = theEmf.createEntityManager();
-		HashMap<Object, Object> resultMap = new HashMap<Object,Object>();
+		HashMap<Object, Object> resultMap = new HashMap<>();
 		try{
 			Class<?> clazz = Class.forName(className);
 			for(Object key : keySet){
@@ -386,7 +385,7 @@ public class DbDAO {
 	 */
 	public HashSet<String> getPersistenceClassNames(){
 		logger.debug("DbDAO: getPersistenceClassNames() entry");
-		HashSet<String> returnList = new HashSet<String>();
+		HashSet<String> returnList = new HashSet<>();
 		final Metamodel mm = emf.getMetamodel();
 		logger.debug("\n" + persistenceUnit +" persistence unit classes:");
 		for (final ManagedType<?> managedType : mm.getManagedTypes()) {
@@ -417,7 +416,7 @@ public class DbDAO {
 
 			@SuppressWarnings("rawtypes")
 			List iaeList = iaequery.getResultList();
-			IntegrityAuditEntity iae = null;
+			IntegrityAuditEntity iae;
 
 			//If it already exists, we just want to update the properties and lastUpdated date
 			if(!iaeList.isEmpty()){
@@ -453,7 +452,7 @@ public class DbDAO {
 			et.commit();
 			em.close();
 		}catch (Exception e){
-			String msg = "DbDAO: " + "register() " + "ecountered a problem in execution: ";
+			String msg = "DbDAO: " + "register() " + "encountered a problem in execution: ";
 			logger.error(msg + e);
 			System.out.println(new Date());
 			e.printStackTrace();
@@ -486,7 +485,7 @@ public class DbDAO {
 
 			@SuppressWarnings("rawtypes")
 			List iaeList = iaequery.getResultList();
-			IntegrityAuditEntity iae = null;
+			IntegrityAuditEntity iae;
 
 			if(!iaeList.isEmpty()){
 				//ignores multiple results
@@ -539,7 +538,7 @@ public class DbDAO {
 
 			@SuppressWarnings("rawtypes")
 			List iaeList = iaequery.getResultList();
-			IntegrityAuditEntity iae = null;
+			IntegrityAuditEntity iae;
 
 			if(!iaeList.isEmpty()){
 				//ignores multiple results
@@ -582,7 +581,7 @@ public class DbDAO {
 		
 		try{
 			
-			if (!IntegrityAudit.isUnitTesting) {
+			if (!IntegrityAudit.isUnitTesting()) {
 				String msg = "DbDAO: " + "deleteAllIntegrityAuditEntities() " + "should only be invoked during JUnit testing";
 				logger.error(msg);
 				throw new DbDaoTransactionException(msg);
@@ -677,27 +676,21 @@ public class DbDAO {
 						IntegrityAuditEntity integrityAuditEntity = (IntegrityAuditEntity) o;
 						if (integrityAuditEntity.getResourceName().equals(
 								resourceName)) {
-							if (logger.isDebugEnabled()) {
-								logger.debug("changeDesignated: Designating resourceName="
+							logger.debug("changeDesignated: Designating resourceName="
 										+ integrityAuditEntity
 												.getResourceName());
-							}
 							integrityAuditEntity.setDesignated(true);
 						} else {
-							if (logger.isDebugEnabled()) {
-								logger.debug("changeDesignated: Removing designation from resourceName="
+							logger.debug("changeDesignated: Removing designation from resourceName="
 										+ integrityAuditEntity
 												.getResourceName());
-							}
 							integrityAuditEntity.setDesignated(false);
 						}
 					}
 				}
 				
-				if (logger.isDebugEnabled()) {
-					logger.debug("changeDesignated: Committing designation to resourceName="
+				logger.debug("changeDesignated: Committing designation to resourceName="
 							+ resourceName);
-				}
 				em.getTransaction().commit();
 
 				/*
@@ -752,10 +745,8 @@ public class DbDAO {
 
 		} // end synchronized block
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("changeDesignated: Exiting; time expended="
+		logger.debug("changeDesignated: Exiting; time expended="
 					+ (System.currentTimeMillis() - startTime) + "ms");
-		}
 
 	}
 

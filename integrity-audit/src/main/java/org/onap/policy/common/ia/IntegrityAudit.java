@@ -22,7 +22,6 @@ package org.onap.policy.common.ia;
 
 import java.util.Properties;
 
-//import org.apache.log4j.Logger;
 
 import org.onap.policy.common.ia.IntegrityAuditProperties.NodeTypeEnum;
 import org.onap.policy.common.logging.flexlogger.FlexLogger; 
@@ -36,7 +35,7 @@ public class IntegrityAudit {
 	
 	private static final Logger logger = FlexLogger.getLogger(IntegrityAudit.class);
 
-	public static boolean isUnitTesting;
+	private static boolean isUnitTesting;
 	private boolean isThreadInitialized = false; 
 	
 	AuditThread auditThread = null;
@@ -65,7 +64,7 @@ public class IntegrityAudit {
 	 * @param properties
 	 * @throws Exception
 	 */
-	public IntegrityAudit(String resourceName, String persistenceUnit, Properties properties) throws Exception {
+	public IntegrityAudit(String resourceName, String persistenceUnit, Properties properties) throws IntegrityAuditException {
 		
 		logger.info("Constructor: Entering and checking for nulls");
 		String parmList = "";
@@ -73,7 +72,7 @@ public class IntegrityAudit {
 			logger.error("Constructor: Parms contain nulls; cannot run audit for resourceName="
 					+ resourceName + ", persistenceUnit=" + persistenceUnit
 					+ ", bad parameters: " + parmList);
-			throw new Exception(
+			throw new IntegrityAuditException(
 					"Constructor: Parms contain nulls; cannot run audit for resourceName="
 							+ resourceName + ", persistenceUnit="
 							+ persistenceUnit
@@ -121,50 +120,51 @@ public class IntegrityAudit {
 			Properties properties, String badparams) {
 
 		boolean parmsAreBad = false;
+		String tempBadParams;
 		
 		if(resourceName == null || resourceName.isEmpty()){
-			badparams = badparams.concat("resourceName ");
+			tempBadParams = badparams.concat("resourceName ");
 			parmsAreBad = true;
 		}
 		
 		if(persistenceUnit == null || persistenceUnit.isEmpty()){
-			badparams = badparams.concat("persistenceUnit ");
+			tempBadParams = badparams.concat("persistenceUnit ");
 			parmsAreBad = true;
 		}
 		
 		String dbDriver = properties.getProperty(IntegrityAuditProperties.DB_DRIVER).trim();
 		if(dbDriver == null || dbDriver.isEmpty()){
-			badparams = badparams.concat("dbDriver ");
+			tempBadParams = badparams.concat("dbDriver ");
 			parmsAreBad = true;
 		}
 
 		String dbUrl = properties.getProperty(IntegrityAuditProperties.DB_URL).trim();
 		if(dbUrl == null || dbUrl.isEmpty()){
-			badparams = badparams.concat("dbUrl ");
+			tempBadParams = badparams.concat("dbUrl ");
 			parmsAreBad = true;
 		}
 		
 		String dbUser = properties.getProperty(IntegrityAuditProperties.DB_USER).trim();
 		if(dbUser == null || dbUser.isEmpty()){
-			badparams = badparams.concat("dbUser ");
+			tempBadParams = badparams.concat("dbUser ");
 			parmsAreBad = true;
 		}
 		
 		String dbPwd = properties.getProperty(IntegrityAuditProperties.DB_PWD).trim();
 		if(dbPwd == null){ //may be empty
-			badparams = badparams.concat("dbPwd ");
+			tempBadParams = badparams.concat("dbPwd ");
 			parmsAreBad = true;
 		}
 		
 		String siteName = properties.getProperty(IntegrityAuditProperties.SITE_NAME).trim();
 		if(siteName == null || siteName.isEmpty()){
-			badparams = badparams.concat("siteName ");
+			tempBadParams = badparams.concat("siteName ");
 			parmsAreBad = true;
 		}
 		
 		String nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE).trim();
 		if(nodeType == null || nodeType.isEmpty()){
-			badparams = badparams.concat("nodeType ");
+			tempBadParams = badparams.concat("nodeType ");
 			parmsAreBad = true;
 		} else {
 			if (!isNodeTypeEnum(nodeType)) {
@@ -172,7 +172,7 @@ public class IntegrityAudit {
 				for (NodeTypeEnum n : NodeTypeEnum.values()) {
 					nodetypes = nodetypes.concat(n.toString() + " ");
 				}
-				badparams = badparams.concat(nodetypes + "] ");
+				tempBadParams = badparams.concat(nodetypes + "] ");
 				parmsAreBad = true;
 			}
 		}
@@ -180,7 +180,7 @@ public class IntegrityAudit {
 			try{
 				Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
 			}catch(NumberFormatException nfe){
-				badparams = badparams.concat(", auditPeriodSeconds=" 
+				tempBadParams = badparams.concat(", auditPeriodSeconds=" 
 						+ properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
 				parmsAreBad = true;
 			}
@@ -237,5 +237,13 @@ public class IntegrityAudit {
 	public void setThreadInitialized(boolean isThreadInitialized) {
 		logger.info("setThreadInitialized: Setting isThreadInitialized=" + isThreadInitialized);
 		this.isThreadInitialized = isThreadInitialized;
+	}
+
+	public static boolean isUnitTesting() {
+		return isUnitTesting;
+	}
+
+	public static void setUnitTesting(boolean isUnitTesting) {
+		IntegrityAudit.isUnitTesting = isUnitTesting;
 	}
 }
