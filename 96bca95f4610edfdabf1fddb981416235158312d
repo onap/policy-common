@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a1a2d67_e1574d25",
+        "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/test/DbAuditTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2017-08-10T13:16:25Z",
+      "side": 0,
+      "message": "In general, \"unit-testing\" should not be reflected back in real source code.   No action required on this since this is existing code, but keep on the back of your mind to see if it can be resolved, so not intertwine real code with testing code",
+      "revId": "96bca95f4610edfdabf1fddb981416235158312d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
