@@ -22,7 +22,6 @@ package org.onap.policy.common.im;
 
 import java.util.*;
 
-//import org.apache.log4j.Logger;
 
 import org.onap.policy.common.im.StateElement; 
 import org.onap.policy.common.im.StateManagement; 
@@ -41,23 +40,22 @@ public class StateTransition {
   public static final String STANDBY_STATUS  = "standbyStatus"; 
   public static final String ACTOIN_NAME     = "actionName";
    
-  private HashMap<String, String> StateTable = new HashMap<String, String>(); 
+  private HashMap<String, String> StateTable = new HashMap<>(); 
     
   /**
    * StateTransition constructor
    * @throws Exception
    */
-  public StateTransition() throws Exception
+  public StateTransition() throws StateTransitionException
   {
 	  logger.debug("StateTransition constructor");
 
       try {
     	  logger.debug("Load StateTable started"); 
  
-  		  setupStateTable(); // 
-  		  //displayStateTable();
+  		  setupStateTable();
       } catch(Exception ex) {
-    	  throw new Exception("StateTransition Exception: " + ex.toString());
+    	  throw new StateTransitionException("StateTransition Exception: " + ex.toString());
       } 
   }
   
@@ -72,7 +70,7 @@ public class StateTransition {
    * @throws Exception
    */
   public StateElement getEndingState(String adminState, String opState, String availStatus, 
-		  String standbyStatus, String actionName) throws Exception
+		  String standbyStatus, String actionName) throws StateTransitionException
   {
 	 logger.info("getEndingState");
 	 logger.info("adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
@@ -84,25 +82,25 @@ public class StateTransition {
 		 standbyStatus="null";
 	 }
 	 if(adminState==null || opState==null || actionName==null){
-		 throw new Exception("Exception:StateTransition unable to process state: adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
+		 throw new StateTransitionException("Exception:StateTransition unable to process state: adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
 		            availStatus + "], standbyStatus=[" + standbyStatus + "], actionName=[" + actionName + "]");
 	 }else if(!(adminState.equals(StateManagement.LOCKED) || adminState.equals(StateManagement.UNLOCKED))){
-		 throw new Exception("Exception:StateTransition unable to process state: adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
+		 throw new StateTransitionException("Exception:StateTransition unable to process state: adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
 		            availStatus + "], standbyStatus=[" + standbyStatus + "], actionName=[" + actionName + "]");
 	 }else if(!(opState.equals(StateManagement.ENABLED) || opState.equals(StateManagement.DISABLED))){
-		 throw new Exception("Exception:StateTransition unable to process state: adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
+		 throw new StateTransitionException("Exception:StateTransition unable to process state: adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
 		            availStatus + "], standbyStatus=[" + standbyStatus + "], actionName=[" + actionName + "]");
 	 }else if(!(standbyStatus.equals(StateManagement.NULL_VALUE) || 
 			 standbyStatus.equals(StateManagement.COLD_STANDBY) ||
 			 standbyStatus.equals(StateManagement.HOT_STANDBY) ||
 			 standbyStatus.equals(StateManagement.PROVIDING_SERVICE))){
-		 throw new Exception("Exception:StateTransition unable to process state: adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
+		 throw new StateTransitionException("Exception:StateTransition unable to process state: adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
 		            availStatus + "], standbyStatus=[" + standbyStatus + "], actionName=[" + actionName + "]");
 	 }else if(!(availStatus.equals(StateManagement.NULL_VALUE) ||
 			 availStatus.equals(StateManagement.DEPENDENCY) ||
 			 availStatus.equals(StateManagement.DEPENDENCY_FAILED) ||
 			 availStatus.equals(StateManagement.FAILED))){
-		 throw new Exception("Exception:StateTransition unable to process state: adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
+		 throw new StateTransitionException("Exception:StateTransition unable to process state: adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
 		            availStatus + "], standbyStatus=[" + standbyStatus + "], actionName=[" + actionName + "]");
 	 }
 	 else if(!(actionName.equals(StateManagement.DEMOTE) || 
@@ -113,7 +111,7 @@ public class StateTransition {
 			 actionName.equals(StateManagement.LOCK) ||
 			 actionName.equals(StateManagement.PROMOTE) ||
 			 actionName.equals(StateManagement.UNLOCK))){
-		 throw new Exception("Exception:StateTransition unable to process state: adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
+		 throw new StateTransitionException("Exception:StateTransition unable to process state: adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
 		            availStatus + "], standbyStatus=[" + standbyStatus + "], actionName=[" + actionName + "]");
 	 }
 
@@ -151,10 +149,10 @@ public class StateTransition {
        	     String msg = "Ending state not found, adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
              availStatus + "], standbyStatus=[" + standbyStatus + "], actionName=[" + actionName + "]"; 
        	     logger.error(msg);
-       	     throw new Exception(msg);
+       	     throw new StateTransitionException(msg);
        	 }
 	 } catch (Exception ex) {
-		 throw new Exception("Exception: " + ex.toString() + ", adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
+		 throw new StateTransitionException("Exception: " + ex.toString() + ", adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
             availStatus + "], standbyStatus=[" + standbyStatus + "], actionName=[" + actionName + "]");
 	 }
 
