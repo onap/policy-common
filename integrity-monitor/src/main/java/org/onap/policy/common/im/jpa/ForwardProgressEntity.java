@@ -71,6 +71,7 @@ public class ForwardProgressEntity implements Serializable {
 	private Date lastUpdated;
 
 	public ForwardProgressEntity() {
+		//default constructor
 	}
 
 	@PrePersist

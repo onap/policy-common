@@ -79,7 +79,7 @@ public class IntegrityMonitorTest {
 
 	@Before
 	public void setUp() throws Exception {
-		IntegrityMonitor.isUnitTesting = true;
+		IntegrityMonitor.setUnitTesting(true);
 		
 		myProp = new Properties();
 		myProp.put(IntegrityMonitorProperties.DB_DRIVER, IntegrityMonitorProperties.DEFAULT_DB_DRIVER);

@@ -77,6 +77,7 @@ public class ResourceRegistrationEntity implements Serializable {
 	private Date lastUpdated;
 
 	public ResourceRegistrationEntity() {
+		//default constructor
 	}
 
 	@PrePersist

@@ -22,6 +22,7 @@ package org.onap.policy.common.im;
 
 public class IntegrityMonitorProperties {
 
+	private IntegrityMonitorProperties() {}
 	public static final String DEFAULT_DB_DRIVER = "org.h2.Driver";
 	public static final String DEFAULT_DB_URL = "jdbc:h2:file:./sql/imTest";
 	public static final String DEFAULT_DB_USER = "sa";
@@ -35,7 +36,7 @@ public class IntegrityMonitorProperties {
 	// intervals specified are in seconds
 	public static final int DEFAULT_MONITOR_INTERVAL = 30;
 	public static final int DEFAULT_FAILED_COUNTER_THRESHOLD = 3;
-	public static final int DEFAULT_TEST_INTERVAL = 10; //20;
+	public static final int DEFAULT_TEST_INTERVAL = 10;
 	public static final int DEFAULT_WRITE_FPC_INTERVAL = 5;
 	public static final int DEFAULT_MAX_FPC_UPDATE_INTERVAL = 120;
 	
