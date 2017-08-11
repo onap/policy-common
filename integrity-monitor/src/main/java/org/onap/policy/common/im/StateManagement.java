@@ -29,7 +29,6 @@ import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
 import javax.persistence.Query;
 
-//import org.apache.log4j.Logger;
 
 import org.onap.policy.common.im.jpa.StateManagementEntity;
 import org.onap.policy.common.im.StateElement;
@@ -100,7 +99,7 @@ public class StateManagement extends Observable {
    * @param resourceName
    * @throws Exception
    */
-  public StateManagement(EntityManagerFactory emf, String resourceName) throws Exception
+  public StateManagement(EntityManagerFactory emf, String resourceName) throws StateManagementException
   {
 	  logger.debug("StateManagement: constructor, resourceName: " + resourceName);
 	  em = emf.createEntityManager();
@@ -143,7 +142,7 @@ public class StateManagement extends Observable {
     			  et.rollback();
     		  }
     	  }
-    	  throw new Exception("StateManagement: Exception: " + ex.toString());
+    	  throw new StateManagementException("StateManagement: Exception: " + ex.toString());
       } 
   }
   
@@ -153,7 +152,7 @@ public class StateManagement extends Observable {
    * Starting from this state, the IntegrityMonitory will determine the Operational State and the
    * owning application will set the StandbyStatus.
    */
-  public void initializeState() throws Exception
+  public void initializeState() throws StateManagementException
   {
 	  synchronized (SYNCLOCK){
 		  logger.debug("\nStateManagement: SYNCLOCK initializeState() operation for resourceName = " + this.resourceName + "\n");
@@ -189,7 +188,7 @@ public class StateManagement extends Observable {
 					  et.rollback();
 				  }
 			  }
-			  throw new Exception("StateManagement.initializeState() Exception: " + ex);
+			  throw new StateManagementException("StateManagement.initializeState() Exception: " + ex);
 		  }
 	  }
   } 
@@ -198,7 +197,7 @@ public class StateManagement extends Observable {
    * lock() changes the administrative state to locked.
    * @throws Exception
    */
-  public void lock() throws Exception
+  public void lock() throws StateManagementException
   {
 	  synchronized (SYNCLOCK){
 		  logger.debug("\nStateManagement: SYNCLOCK lock() operation for resourceName = " + this.resourceName + "\n");
@@ -237,7 +236,7 @@ public class StateManagement extends Observable {
 					  et.rollback();
 				  }
 			  }
-			  throw new Exception("StateManagement.lock() Exception: " + ex.toString());
+			  throw new StateManagementException("StateManagement.lock() Exception: " + ex.toString());
 		  } 
 	  }
   }
@@ -246,7 +245,7 @@ public class StateManagement extends Observable {
    * unlock() changes the administrative state to unlocked.
    * @throws Exception
    */
-  public void unlock() throws Exception
+  public void unlock() throws StateManagementException
   {
 	  synchronized (SYNCLOCK){
 		  logger.debug("\nStateManagement: SYNCLOCK unlock() operation for resourceName = " + this.resourceName + "\n");
@@ -284,7 +283,7 @@ public class StateManagement extends Observable {
 					  et.rollback();
 				  }
 			  }
-			  throw new Exception("StateManagement.unlock() Exception: " + ex);
+			  throw new StateManagementException("StateManagement.unlock() Exception: " + ex);
 		  }
 	  }
   } 
@@ -294,7 +293,7 @@ public class StateManagement extends Observable {
    * state to enabled if no dependency is also failed.
    * @throws Exception
    */
-  public void enableNotFailed() throws Exception
+  public void enableNotFailed() throws StateManagementException
   {
 	  synchronized (SYNCLOCK){
 		  logger.debug("\nStateManagement: SYNCLOCK enabledNotFailed() operation for resourceName = " + this.resourceName + "\n");
@@ -332,7 +331,7 @@ public class StateManagement extends Observable {
 					  et.rollback();
 				  }
 			  }
-			  throw new Exception("StateManagement.enableNotFailed() Exception: " + ex);
+			  throw new StateManagementException("StateManagement.enableNotFailed() Exception: " + ex);
 		  }
 	  }
   } 
@@ -341,7 +340,7 @@ public class StateManagement extends Observable {
    * disableFailed() changes the operational state to disabled and adds availability status of "failed"
    * @throws Exception
    */
-  public void disableFailed() throws Exception
+  public void disableFailed() throws StateManagementException
   {
 	  synchronized (SYNCLOCK){
 		  logger.debug("\nStateManagement: SYNCLOCK disabledFailed() operation for resourceName = " + this.resourceName + "\n");
@@ -378,7 +377,7 @@ public class StateManagement extends Observable {
 					  et.rollback();
 				  }
 			  }
-			  throw new Exception("StateManagement.disableFailed() Exception: " + ex);
+			  throw new StateManagementException("StateManagement.disableFailed() Exception: " + ex);
 		  }
 	  }
   } 
@@ -387,7 +386,7 @@ public class StateManagement extends Observable {
    * that remote resource has failed but its state is still showing that it is viable.
    * @throws Exception
    */
-  public void disableFailed(String otherResourceName) throws Exception
+  public void disableFailed(String otherResourceName) throws StateManagementException
   {
 	  synchronized (SYNCLOCK){
 		  if(otherResourceName == null){
@@ -431,7 +430,7 @@ public class StateManagement extends Observable {
 					  et.rollback();
 				  }
 			  }
-			  throw new Exception("StateManagement.disableFailed(otherResourceName) Exception: " + ex);
+			  throw new StateManagementException("StateManagement.disableFailed(otherResourceName) Exception: " + ex);
 		  }
 	  }
   } 
@@ -440,7 +439,7 @@ public class StateManagement extends Observable {
    * disableDependency() changes operational state to disabled and adds availability status of "dependency"
    * @throws Exception
    */
-  public void disableDependency() throws Exception
+  public void disableDependency() throws StateManagementException
   {
 	  synchronized (SYNCLOCK){
 		  logger.debug("\nStateManagement: SYNCLOCK disableDependency() operation for resourceName = " + this.resourceName + "\n");
@@ -478,7 +477,7 @@ public class StateManagement extends Observable {
 					  et.rollback();
 				  }
 			  }
-			  throw new Exception("StateManagement.disableDependency() Exception: " + ex);
+			  throw new StateManagementException("StateManagement.disableDependency() Exception: " + ex);
 		  }
 	  }
   } 
@@ -488,7 +487,7 @@ public class StateManagement extends Observable {
    * operational state to enabled if not otherwise failed.
    * @throws Exception
    */
-  public void enableNoDependency() throws Exception
+  public void enableNoDependency() throws StateManagementException
   {
 	  synchronized (SYNCLOCK){
 		  logger.debug("\nStateManagement: SYNCLOCK enableNoDependency() operation for resourceName = " + this.resourceName + "\n");
@@ -526,7 +525,7 @@ public class StateManagement extends Observable {
 					  et.rollback();
 				  }
 			  }
-			  throw new Exception("StateManagement.enableNoDependency() Exception: " + ex);
+			  throw new StateManagementException("StateManagement.enableNoDependency() Exception: " + ex);
 		  }
 	  }
   } 
@@ -536,7 +535,7 @@ public class StateManagement extends Observable {
    * @throws StandbyStatusException
    * @throws Exception
    */
-  public void promote() throws StandbyStatusException, Exception
+  public void promote() throws StandbyStatusException, StateManagementException
   {
 	  synchronized (SYNCLOCK){
 		  logger.debug("\nStateManagement: SYNCLOCK promote() operation for resourceName = " + this.resourceName + "\n");
@@ -576,7 +575,7 @@ public class StateManagement extends Observable {
 					  et.rollback();
 				  }
 			  }
-			  throw new Exception("StateManagement.promote() Exception: " + ex);
+			  throw new StateManagementException("StateManagement.promote() Exception: " + ex);
 		  }
 
 		  logger.debug("StateManagement: promote() operation completed, resourceName = " + this.resourceName);
@@ -591,7 +590,7 @@ public class StateManagement extends Observable {
    * demote() changes standbystatus to hotstandby or, if failed, coldstandby
    * @throws Exception
    */
-  public void demote() throws Exception
+  public void demote() throws StateManagementException
   {
 	  synchronized (SYNCLOCK){
 		  logger.debug("\nStateManagement: SYNCLOCK demote() operation for resourceName = " + this.resourceName + "\n");
@@ -629,7 +628,7 @@ public class StateManagement extends Observable {
 					  et.rollback();
 				  }
 			  }
-			  throw new Exception("StateManagement.demote() Exception: " + ex);
+			  throw new StateManagementException("StateManagement.demote() Exception: " + ex);
 		  }
 	  }
   } 
@@ -643,7 +642,7 @@ public class StateManagement extends Observable {
    * @param otherResourceName
    * @throws Exception
    */
-  public void demote(String otherResourceName) throws Exception
+  public void demote(String otherResourceName) throws StateManagementException
   {
 	  synchronized (SYNCLOCK){
 		  if(otherResourceName==null){
@@ -684,7 +683,7 @@ public class StateManagement extends Observable {
 					  et.rollback();
 				  }
 			  }
-			  throw new Exception("StateManagement.demote(otherResourceName) Exception: " + ex);
+			  throw new StateManagementException("StateManagement.demote(otherResourceName) Exception: " + ex);
 		  }
 	  }
   } 
@@ -870,7 +869,7 @@ public String getOpState()
 					+ otherResourceName + "'");
 		}
 
-		String standbyStatus = null;
+		String tempStandbyStatus = null;
 		
 		// The transaction is required for the LockModeType
 		EntityTransaction et = em.getTransaction();
@@ -890,10 +889,10 @@ public String getOpState()
 						.get(0);
 	        	// refresh the object from DB in case cached data was returned
 	        	em.refresh(stateManagementEntity);
-				standbyStatus = stateManagementEntity.getStandbyStatus();
+				tempStandbyStatus = stateManagementEntity.getStandbyStatus();
 				if (logger.isDebugEnabled()) {
 					logger.debug("getStandbyStatus: resourceName =" + otherResourceName
-							+ " has standbyStatus=" + standbyStatus);
+							+ " has standbyStatus=" + tempStandbyStatus);
 				}
 			} else {
 				logger.error("getStandbyStatus: resourceName =" + otherResourceName
@@ -914,10 +913,10 @@ public String getOpState()
 		}
 		if (logger.isDebugEnabled()) {
 			logger.debug("getStandbyStatus: Returning standbyStatus="
-					+ standbyStatus);
+					+ tempStandbyStatus);
 		}
 
-		return standbyStatus;
+		return tempStandbyStatus;
   }
   
   /**

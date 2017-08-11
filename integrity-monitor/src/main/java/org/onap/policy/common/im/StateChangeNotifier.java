@@ -35,7 +35,7 @@ import java.util.Observer;
  * Observer who is monitoring the state changes. 
  */
 
-//import org.apache.log4j.Logger; 
+
 import org.onap.policy.common.logging.flexlogger.FlexLogger; 
 import org.onap.policy.common.logging.flexlogger.Logger;
 
