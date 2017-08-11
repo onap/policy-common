@@ -47,17 +47,10 @@ public final class JmxAgentConnection {
 	private JMXConnector connector;
 	private String jmxUrl = null;
 	
-	//private final static Logger Log = Logger.getLogger(JmxAgentConnection.class);
-	
 	/**
 	 * Set up the host/port from the properties.   Use defaults if missing from the properties.
 	 * @param properties the properties used to look for host and port
 	 */
-	//JmxAgentConnection(Properties properties) {
-		//host = properties.getProperty("jmxAgent.host", DEFAULT_HOST);
-		//port = properties.getProperty("jmxAgent.port", DEFAULT_PORT);
-	//}
-	
 	public JmxAgentConnection() {
 		host = DEFAULT_HOST;
 		port = DEFAULT_PORT;
@@ -98,7 +91,7 @@ public final class JmxAgentConnection {
 		else {
 			url = new JMXServiceURL(jmxUrl);
 		}
-		Map<String, Object> env = new HashMap<String, Object>();
+		Map<String, Object> env = new HashMap<>();
 		
 		connector = JMXConnectorFactory.newJMXConnector(url, env);
 		connector.connect();
@@ -110,7 +103,6 @@ public final class JmxAgentConnection {
 							Notification notification, Object handback) {
 						if (notification.getType().equals(
 								JMXConnectionNotification.FAILED)) {
-							//Log.debug("JMXAgent connection failure");
 							// handle disconnect
 							disconnect();
 						}

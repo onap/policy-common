@@ -86,14 +86,13 @@ public class ComponentAdmin implements ComponentAdminMBean {
 			MBeanRegistrationException, InstanceNotFoundException,
 			InstanceAlreadyExistsException, NotCompliantMBeanException {
 
-		//if (LOGGER.isDebugEnabled()) {
+
 			logger.info("Registering " + name + " MBean");
-		//}
+
 
 		MBeanServer mbeanServer = findMBeanServer();
 
 		if (mbeanServer == null) {
-			//LOGGER.warn("No MBeanServer to register " + name + " MBean");
 			return;
 		}
 
@@ -130,9 +129,6 @@ public class ComponentAdmin implements ComponentAdminMBean {
 			return;
 		}
 
-		//if (LOGGER.isDebugEnabled()) {
-			//LOGGER.debug("Unregistering " + name + " MBean");
-		//}
 
 		registeredMBeanServer.unregisterMBean(registeredObjectName);
 		registeredMBeanServer = null;
@@ -142,6 +138,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public String toString() {
 		return ComponentAdmin.class.getSimpleName() + "[" + name + "]";
 	}
@@ -155,11 +152,11 @@ public class ComponentAdmin implements ComponentAdminMBean {
 			MBeanServerFactory.findMBeanServer(null);
 
 		Iterator<MBeanServer> iter = mbeanServers.iterator();
-		MBeanServer mbeanServer = null;
+		MBeanServer mbeanServer;
 
 		while (iter.hasNext()) {
 			mbeanServer = iter.next();
-			if (mbeanServer.getDefaultDomain().equals("DefaultDomain")) {
+			if ("DefaultDomain".equals(mbeanServer.getDefaultDomain())) {
 				return mbeanServer;
 			}
 		}

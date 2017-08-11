@@ -68,6 +68,7 @@ public class ImTestEntity implements Serializable {
 	private Date modifiedDate;
 
 	public ImTestEntity() {
+		//default constructor
 	}
 
 	@PrePersist
