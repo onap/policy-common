@@ -84,6 +84,7 @@ public class StateManagementEntity implements Serializable {
 	}
 	
 	public StateManagementEntity() {
+		//default constructor
 	}
 	
 	public String getResourceName() {
