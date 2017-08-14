@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_52bb92c4",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2017-08-14T22:09:56Z",
+      "side": 1,
+      "message": "I think you need the else for the sonar blocker so it should be:\n\n\t\t\t\telse  {\n\t\t\t\t\tString msg \u003d \"IntegrityMonitor.stateCheck(): Failed to diableFail dependent resource \u003d \" + dep \n\t\t\t\t\t\t\t+ \"; \" + \" stateManagementEntity \u003d\u003d null.\";\n\t\t\t\t\tlogger.debug(msg);\n\t\t\t\t\tlogger.error(msg);",
+      "revId": "acd90b97189480882a8bcf3314271b42d04e93e4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
