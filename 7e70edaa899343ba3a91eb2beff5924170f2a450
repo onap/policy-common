@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da3975d1_51a034f4",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitorException.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-08-14T13:12:42Z",
+      "side": 1,
+      "message": "This would need a license header",
+      "revId": "7e70edaa899343ba3a91eb2beff5924170f2a450",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da3975d1_31a5b004",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/StateManagementException.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-08-14T13:12:42Z",
+      "side": 1,
+      "message": "License header missing.",
+      "revId": "7e70edaa899343ba3a91eb2beff5924170f2a450",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da3975d1_11aaacd4",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/StateTransitionException.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-08-14T13:12:42Z",
+      "side": 1,
+      "message": "License header missing.",
+      "revId": "7e70edaa899343ba3a91eb2beff5924170f2a450",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
