@@ -152,7 +152,7 @@ public enum MessageCodes implements EELFResolvableErrorEnum {
      * Here this application loads messages from three bundles
      */
     static {
-        EELFResourceManager.loadMessageBundle("org.onap.policy/common/logging/eelf/Resources");
+        EELFResourceManager.loadMessageBundle("org/onap/policy/common/logging/eelf/Resources");
         String id = EELFResourceManager.getIdentifier(RULE_AUDIT_EXEC_INFO);
         String value = EELFResourceManager.getMessage(RULE_AUDIT_EXEC_INFO);
                 
