@@ -20,7 +20,7 @@
 
 package org.onap.policy.common.im;
 
-//import org.apache.log4j.Logger;
+
 import org.onap.policy.common.logging.flexlogger.FlexLogger; 
 import org.onap.policy.common.logging.flexlogger.Logger;
 
