@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_d878c12d",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-08-15T15:13:30Z",
+      "side": 1,
+      "message": "This does no harm, but is not really needed.  This block of code is just clean-up after an error occurs. If you look above there is already an error logged.  If this clean-up fails, there is really nothing to do, so, logging is not necessary.",
+      "revId": "d1077082cafafdd275aa8e210cf5f430ec11934d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
