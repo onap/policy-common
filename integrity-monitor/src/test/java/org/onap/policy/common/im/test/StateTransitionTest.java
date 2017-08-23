@@ -71,7 +71,7 @@ public class StateTransitionTest {
 	public void tearDown() throws Exception {
 	}
 
-	@Ignore
+	//@Ignore
 	@Test
 	public void testJPA() throws Exception {
 		logger.info("\n\nlogger.infor StateTransitionTest: Entering\n\n");

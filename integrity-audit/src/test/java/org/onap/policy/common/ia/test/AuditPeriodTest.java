@@ -53,6 +53,9 @@ import org.onap.policy.common.logging.flexlogger.Logger;
  * All JUnits are designed to run in the local development environment
  * where they have write privileges and can execute time-sensitive
  * tasks.
+ * 
+ * If any have been ignored (@Ignore) they will not run at the same time
+ * as others. You should run them as JUnits by themselves.
  */
 public class AuditPeriodTest {
 	
@@ -121,7 +124,7 @@ public class AuditPeriodTest {
 	 * Verifies (via log parsing) that when a negative audit period is
 	 * specified, the audit is suppressed.
 	 */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testNegativeAuditPeriod() throws Exception {
 		

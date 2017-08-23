@@ -81,7 +81,7 @@ public class StateManagementEntityTest {
 	public void tearDown() throws Exception {
 	}
 
-	@Ignore
+	//@Ignore
 	@Test
 	public void testJPA() throws Exception {
 		System.out.println("\n??? logger.infor StateManagementEntityTest: Entering\n\n");

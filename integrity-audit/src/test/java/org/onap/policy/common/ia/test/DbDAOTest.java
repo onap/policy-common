@@ -58,6 +58,9 @@ import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
  * All JUnits are designed to run in the local development environment
  * where they have write privileges and can execute time-sensitive
  * tasks.
+ * 
+ * If any have been ignored (@Ignore) they will not run at the same time
+ * as others. You should run them as JUnits by themselves.
  */
 public class DbDAOTest {
 	private static String persistenceUnit;
@@ -76,7 +79,8 @@ public class DbDAOTest {
 		properties.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 				
-		persistenceUnit = "integrityAuditPU";
+		//persistenceUnit = "integrityAuditPU";
+		persistenceUnit = "testPU";
 		resourceName = "pdp0";		
 	}
 
@@ -85,7 +89,7 @@ public class DbDAOTest {
 	}
 	
 	/* Tests registering a new IntegrityAuditEntity object in the DB */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testNewRegistration() {
 		try {
@@ -131,7 +135,7 @@ public class DbDAOTest {
 	}
 	
 	/* Tests updating an IntegrityAuditEntity if it has already been registered */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testUpdateRegistration() {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
@@ -202,7 +206,7 @@ public class DbDAOTest {
 	}
 	
 	/* Tests obtaining all Integrity Audit Entities from a table */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testGetIntegrityAuditEntities() {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
@@ -247,13 +251,14 @@ public class DbDAOTest {
 	}
 
 	/* Tests retrieving a DbDAO instance's IntegrityAuditEntity */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testGetMyIntegrityAuditEntity() {
 		try {
 			d = new DbDAO(resourceName, persistenceUnit, properties);
 			IntegrityAuditEntity iae = d.getMyIntegrityAuditEntity();
-			assertEquals("integrityAuditPU", iae.getPersistenceUnit());
+			//assertEquals("integrityAuditPU", iae.getPersistenceUnit());
+			assertEquals("testPU", iae.getPersistenceUnit());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -261,7 +266,7 @@ public class DbDAOTest {
 	}
 	
 	/* Tests obtaining an IntegrityAuditEntity by ID */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testGetIntegrityAuditEntity() {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
@@ -323,7 +328,7 @@ public class DbDAOTest {
 	}
 
 	/* Tests setting an IntegrityAuditEntity as the designated node */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testSetDesignated() {
 		try {
@@ -385,7 +390,7 @@ public class DbDAOTest {
 	}
 
 	/* Tests that the lastUpdated column in the database is updated properly */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testSetLastUpdated() {
 		try {
@@ -449,7 +454,7 @@ public class DbDAOTest {
 	}
 	
 	/* Tests that all the entries from a class can be retrieved */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testGetAllMyEntriesString() {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
@@ -494,7 +499,7 @@ public class DbDAOTest {
 	}
 	
 	/* Tests retrieving all entities in a Persistence Unit using the class name and a hashset of IDs */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testGetAllMyEntriesStringHashSet() {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
@@ -553,7 +558,7 @@ public class DbDAOTest {
 	}
 	
 	/* Tests retrieving all entities in a Persistence Unit using the persistence unit, properties, and class name */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testGetAllEntriesStringPropertiesString() {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
@@ -598,7 +603,7 @@ public class DbDAOTest {
 	}
 	
 	/* Tests retrieving all entities in a Persistence Unit using the persistence unit, properties, class name, and a hashset of IDs */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testGetAllEntriesStringPropertiesStringHashSet() {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
@@ -657,7 +662,7 @@ public class DbDAOTest {
 	}
 	
 	/* Tests getting all the entries from a class based on persistenceUnit, properties, and className */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testGetAllEntries() {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit, properties);

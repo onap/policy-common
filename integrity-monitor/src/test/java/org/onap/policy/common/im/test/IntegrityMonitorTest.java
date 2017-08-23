@@ -115,16 +115,16 @@ public class IntegrityMonitorTest {
 	 * the tests to execute individually, you cannot predict the order and some
 	 * conflicts occur.
 	 */
-	@Ignore
+	//@Ignore
 	@Test
 	public void runAllTests() throws Exception{
-		//testSanityJmx();
-		//testIM();
+		testSanityJmx();
+		testIM();
 		//testSanityState();
-		testRefreshStateAudit();
-		//testStateCheck();
+		//testRefreshStateAudit();
+		testStateCheck();
 		//testGetAllForwardProgressEntity();
-		//testStateAudit();
+		testStateAudit();
 	}
 
 	/*
