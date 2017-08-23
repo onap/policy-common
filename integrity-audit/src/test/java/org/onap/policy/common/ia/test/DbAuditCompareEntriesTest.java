@@ -55,6 +55,9 @@ import org.onap.policy.common.logging.flexlogger.Logger;
  * All JUnits are designed to run in the local development environment
  * where they have write privileges and can execute time-sensitive
  * tasks.
+ * 
+ * If any have been ignored (@Ignore) they will not run at the same time
+ * as others. You should run them as JUnits by themselves.
  */
 public class DbAuditCompareEntriesTest {
 
@@ -116,7 +119,7 @@ public class DbAuditCompareEntriesTest {
 	 * Tests that a comparison between hashsets is successful if
 	 * the entries match
 	 */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testSuccessfulComparison() throws Exception {
 		logger.info("testSuccessfulComparison: Entering");
@@ -186,7 +189,7 @@ public class DbAuditCompareEntriesTest {
 	 * Tests that an error is detected if an entry in one hashset doesn't
 	 * match the other
 	 */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testComparisonError() throws Exception {
 		logger.info("testComparisonError: Entering");
@@ -246,7 +249,7 @@ public class DbAuditCompareEntriesTest {
 	 * Tests that a mismatch/miss entry is detected if there are missing entries in 
 	 * one or both of the hashsets
 	 */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testCompareMissingEntries() throws Exception {
 		logger.info("testCompareMissingEntries: Entering");
@@ -332,7 +335,7 @@ public class DbAuditCompareEntriesTest {
 	/*
 	 * Tests that comparison algorithm works for each entity in the hashsets 
 	 */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testCompareAllHashEntities() throws Exception {
 		logger.info("testCompareAllHashEntities: Entering");
@@ -559,7 +562,7 @@ public class DbAuditCompareEntriesTest {
 	/*
 	 * Tests that differences in embedded classes are still caught  
 	 */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testEmbeddedClass() throws Exception {
 		logger.info("testEmbeddedClasses: Entering");

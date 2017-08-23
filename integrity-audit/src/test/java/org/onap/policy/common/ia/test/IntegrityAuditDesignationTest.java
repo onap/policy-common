@@ -55,6 +55,9 @@ import org.onap.policy.common.logging.flexlogger.Logger;
  * All JUnits are designed to run in the local development environment
  * where they have write privileges and can execute time-sensitive
  * tasks.
+ * 
+ * If any have been ignored (@Ignore) they will not run at the same time
+ * as others. You should run them as JUnits by themselves.
  */
 public class IntegrityAuditDesignationTest {
 	
@@ -136,7 +139,7 @@ public class IntegrityAuditDesignationTest {
 	 * 
 	 * Note: console.log must be examined to ascertain whether or not this test was successful.
 	 */
-	@Ignore
+	//@Ignore
 	@Test
 	public void testOneResource() throws Exception {
 		
