@@ -34,16 +34,14 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
 
 import org.onap.policy.common.im.StateManagement;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
-import org.onap.policy.common.logging.flexlogger.FlexLogger; 
-import org.onap.policy.common.logging.flexlogger.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StateManagementEntityTest {
-	private static Logger logger = FlexLogger.getLogger(StateManagementEntityTest.class);
+	private static Logger logger = LoggerFactory.getLogger(StateManagementEntityTest.class);
 	
 	private static final String DEFAULT_DB_DRIVER = "org.h2.Driver";
 	private static final String DEFAULT_DB_URL = "jdbc:h2:file:./sql/smTest";
@@ -83,7 +81,7 @@ public class StateManagementEntityTest {
 	//@Ignore
 	@Test
 	public void testJPA() throws Exception {
-		System.out.println("\n??? logger.infor StateManagementEntityTest: Entering\n\n");
+		logger.debug("\n??? logger.infor StateManagementEntityTest: Entering\n\n");
 		
 		Properties myProp = new Properties();
 		myProp.put(DB_DRIVER, DEFAULT_DB_DRIVER);
@@ -91,62 +89,62 @@ public class StateManagementEntityTest {
 		myProp.put(DB_USER,   DEFAULT_DB_USER);
 		myProp.put(DB_PWD,    DEFAULT_DB_PWD);
 		
-		System.out.println("??? " + DB_DRIVER + "=" + DEFAULT_DB_DRIVER); 
-		System.out.println("??? " + DB_URL    + "=" + DEFAULT_DB_URL); 
-		System.out.println("??? " + DB_USER   + "=" + DEFAULT_DB_USER); 
-		System.out.println("??? " + DB_PWD    + "=" + DEFAULT_DB_PWD); 
+		logger.debug("??? {} = {}", DB_DRIVER, DEFAULT_DB_DRIVER); 
+		logger.debug("??? {} = {}",  DB_URL, DEFAULT_DB_URL); 
+		logger.debug("??? {} = {}",  DB_USER, DEFAULT_DB_USER); 
+		logger.debug("??? {} = {}",  DB_PWD, DEFAULT_DB_PWD); 
 		
 		//Create the data schema and entity manager factory
-		System.out.println("??? createEntityManagerFactory for schemaPU"); 
+		logger.debug("??? createEntityManagerFactory for schemaPU"); 
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("schemaPU", myProp);
 
 		// Create an entity manager to use the DB
-		System.out.println("??? createEntityManager");
+		logger.debug("??? createEntityManager");
 		EntityManager em = emf.createEntityManager();
-		System.out.println("??? getTransaction");
+		logger.debug("??? getTransaction");
 		EntityTransaction et = em.getTransaction();
 		et.begin();
 		// Make sure the DB is clean
-		System.out.println("??? clean StateManagementEntity");
+		logger.debug("??? clean StateManagementEntity");
 		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
 
 		//Define the resourceName for the StateManagement constructor
 		String resourceName = "test_resource1";
 		
 		//
-		System.out.println("Create StateManagementEntity, resourceName: " + resourceName);
-		System.out.println("??? instantiate StateManagementEntity object");
+		logger.debug("Create StateManagementEntity, resourceName: {}", resourceName);
+		logger.debug("??? instantiate StateManagementEntity object");
 		StateManagementEntity sme = new StateManagementEntity(); 
 		
-		System.out.println("??? setResourceName : " + resourceName);
+		logger.debug("??? setResourceName : {}", resourceName);
 		sme.setResourceName(resourceName);
-		System.out.println("??? getResourceName : " + sme.getResourceName());
+		logger.debug("??? getResourceName : {}", sme.getResourceName());
 
-		System.out.println("??? setAdminState   : " + StateManagement.UNLOCKED);
+		logger.debug("??? setAdminState   : {}", StateManagement.UNLOCKED);
 		sme.setAdminState(StateManagement.UNLOCKED); 
-		System.out.println("??? getAdminState   : " + sme.getAdminState());
+		logger.debug("??? getAdminState   : {}", sme.getAdminState());
 		
-		System.out.println("??? setOpState      : " + StateManagement.ENABLED);
+		logger.debug("??? setOpState      : {}", StateManagement.ENABLED);
 		sme.setOpState(StateManagement.ENABLED);
-		System.out.println("??? getOpState      : " + sme.getOpState());
+		logger.debug("??? getOpState      : {}", sme.getOpState());
 		
-		System.out.println("??? setAvailStatus   : " + StateManagement.NULL_VALUE);
+		logger.debug("??? setAvailStatus   : {}", StateManagement.NULL_VALUE);
 		sme.setAvailStatus(StateManagement.NULL_VALUE);
-		System.out.println("??? getAvailStatus   : " + sme.getAvailStatus());
+		logger.debug("??? getAvailStatus   : {}", sme.getAvailStatus());
 		
-		System.out.println("??? setStandbyStatus: " + StateManagement.COLD_STANDBY);
+		logger.debug("??? setStandbyStatus: {}", StateManagement.COLD_STANDBY);
 		sme.setStandbyStatus(StateManagement.COLD_STANDBY);
-		System.out.println("??? getStandbyStatus: " + sme.getStandbyStatus());
+		logger.debug("??? getStandbyStatus: {}", sme.getStandbyStatus());
 		
-		System.out.println("??? before persist");
+		logger.debug("??? before persist");
 		em.persist(sme); 
-		System.out.println("??? after  persist");
+		logger.debug("??? after  persist");
 		
 		em.flush(); 
-		System.out.println("??? after flush");
+		logger.debug("??? after flush");
 
 		et.commit(); 
-		System.out.println("??? after commit");
+		logger.debug("??? after commit");
 		
 		try {
 	        Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
@@ -159,17 +157,20 @@ public class StateManagementEntityTest {
 	        if (!resourceList.isEmpty()) {
 	           // exist 
 	           StateManagementEntity sme2 = (StateManagementEntity) resourceList.get(0);
-	       	   System.out.println("??? -- Retrieve StateManagementEntity from database --"
-	       	   		+ "\n\nsme.getResourceName() = " + sme.getResourceName() 
-	       	   		+ "\nsme2getResourceName() = " + sme2.getResourceName() 
-	       	   		+ "\n\nsme.getAdminState() = " + sme.getAdminState()
-	       	   		+ "\nsme2.getAdminState() = " + sme2.getAdminState()
-	       	   		+ "\n\nsme.getOpState() = " + sme.getOpState()
-	       	   		+ "\nsme2.getOpState() = " + sme2.getOpState()
-	       			+ "\n\nsme.getAvailStatus() = " + sme.getAvailStatus()
-	       			+ "\nsme2.getAvailStatus() = " + sme.getAvailStatus()
-	       	   		+ "\n\nsme.getStandbyStatus() = " + sme.getStandbyStatus()
-	       	   		+ "\nsme2.getStandbyStatus() = " + sme2.getStandbyStatus());
+	       	   logger.debug("??? -- Retrieve StateManagementEntity from database --\n\nsme.getResourceName() = {}\n" + 
+	       			   			"sme2getResourceName() = {}\n\nsme.getAdminState() = {}\nsme2.getAdminState() = {}\n\n" + 
+	       			   			"sme.getOpState() = {}\nsme2.getOpState() = {}\n\nsme.getAvailStatus() = {}\n" +
+	       			   			"sme2.getAvailStatus() = {}\n\nsme.getStandbyStatus() = {}\nsme2.getStandbyStatus() = {}",
+	       			   			sme.getResourceName(), 
+	       			   			sme2.getResourceName(), 
+	       			   			sme.getAdminState(),
+	       			   			sme2.getAdminState(),
+	       			   			sme.getOpState(),
+	       			   			sme2.getOpState(),
+	       			   			sme.getAvailStatus(),
+	       			   			sme.getAvailStatus(),
+	       			   			sme.getStandbyStatus(),
+	       			   			sme2.getStandbyStatus());
 	       	   		
 	       	   
 	       	   assert(sme2.getResourceName().equals(sme.getResourceName())); 
@@ -177,16 +178,16 @@ public class StateManagementEntityTest {
 	       	   assert(sme2.getOpState().equals(sme.getOpState())); 
 	       	   assert(sme2.getAvailStatus().equals(sme.getAvailStatus())); 
 	       	   assert(sme2.getStandbyStatus().equals(sme.getStandbyStatus())); 
-			   System.out.println("--");
+			   logger.debug("--");
 	        } else {
-	           System.out.println("Record not found, resourceName: " + resourceName);
+	           logger.debug("Record not found, resourceName: {}", resourceName);
 	        }
 		  } catch(Exception ex) {
 			logger.error("Exception on select query: " + ex.toString());
 	    }
 		
 		em.close(); 
-		System.out.println("\n??? after close");
-		System.out.println("\n\nJpaTest: Exit\n\n");
+		logger.debug("\n??? after close");
+		logger.debug("\n\nJpaTest: Exit\n\n");
 	}
 }

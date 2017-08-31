@@ -21,12 +21,12 @@
 package org.onap.policy.common.im;
 
 
-import org.onap.policy.common.logging.flexlogger.FlexLogger; 
-import org.onap.policy.common.logging.flexlogger.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StateElement {
-	private static final Logger logger = FlexLogger.getLogger(StateElement.class);
-	  
+	private static final Logger logger = LoggerFactory.getLogger(StateElement.class);
+
 	String adminState = null; 
 	String opState = null; 
 	String availStatus = null;
@@ -144,15 +144,20 @@ public class StateElement {
 	
 	public void displayStateElement()
 	{
-       logger.debug("adminState=[" + getAdminState() + 
- 	   	    	"], opState=[" + getOpState() + 
- 	   	    	"], availStatus=[" + getAvailStatus() + 
- 	   	    	"], standbyStatus=[" + getStandbyStatus() + 
- 	   	    	"], actionName=[" + getActionName() + 
-	   	    	"], endingAdminState=[" + getEndingAdminState() + 
-	   	    	"], endingOpState=[" + getEndingOpState() + 
- 	   	    	"], endingAvailStatus=[" + getEndingAvailStatus() + 
- 	   	    	"], endingStandbyStatus=[" + getEndingStandbyStatus() + 
- 	   	    	"], exception=[" + getException() + "]"); 
+		if(logger.isDebugEnabled()){
+			logger.debug("adminState=[{}], opState=[{}], availStatus=[{}], standbyStatus=[{}], " +
+    		   		"actionName=[{}], endingAdminState=[{}], endingOpState=[{}], " +
+    		   		"endingAvailStatus=[{}], endingStandbyStatus=[{}], exception=[{}]",
+    		   			getAdminState(), 
+    		   			getOpState(), 
+    		   			getAvailStatus(), 
+    		   			getStandbyStatus(), 
+    		   			getActionName(),
+    		   			getEndingAdminState(), 
+    		   			getEndingOpState(),
+    		   			getEndingAvailStatus(), 
+    		   			getEndingStandbyStatus(), 
+    		   			getException());
+		}
 	}
 }
