@@ -32,8 +32,8 @@ import org.junit.Test;
 import org.onap.policy.common.im.StateManagement;
 import org.onap.policy.common.im.StandbyStatusException; 
 import org.onap.policy.common.im.StateChangeNotifier; 
-import org.onap.policy.common.logging.flexlogger.FlexLogger; 
-import org.onap.policy.common.logging.flexlogger.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * All JUnits are designed to run in the local development environment
@@ -41,7 +41,7 @@ import org.onap.policy.common.logging.flexlogger.Logger;
  * tasks.
  */
 public class StateManagementTest {
-	private static Logger logger = FlexLogger.getLogger(StateManagementTest.class);
+	private static Logger logger = LoggerFactory.getLogger(StateManagementTest.class);
 	
 	private static final String DEFAULT_DB_DRIVER = "org.h2.Driver";
 	private static final String DEFAULT_DB_URL    = "jdbc:h2:file:./sql/smTest";
@@ -91,47 +91,47 @@ public class StateManagementTest {
 		    emf = Persistence.createEntityManagerFactory("schemaPU", myProp);
 
 		    StateManagement sm = new StateManagement(emf, resourceName);
-		    System.out.println("\n\ntest lock()");
+		    logger.info("\n\ntest lock()");
 		    displayState(resourceName, sm);
 		    logger.info("\n??? test lock()");
-		    logger.info(resourceName + " before adminState   = " + sm.getAdminState()); 
-		    logger.info(resourceName + " before opState      = " + sm.getOpState()); 
-		   	logger.info(resourceName + " before availStatus  = " + sm.getAvailStatus()); 
-		   	logger.info(resourceName + " before standbyStatus= " + sm.getStandbyStatus()); 
+		    logger.info("{} before adminState   = {}", resourceName, sm.getAdminState()); 
+		    logger.info("{} before opState      = {}", resourceName, sm.getOpState()); 
+		   	logger.info("{} before availStatus  = {}", resourceName, sm.getAvailStatus()); 
+		   	logger.info("{} before standbyStatus= {}", resourceName, sm.getStandbyStatus()); 
 		    sm.lock(); 
 		    System.out.println("\n\nafter lock()");
 		    displayState(resourceName, sm);		    
-		    logger.info(resourceName + " after  adminState   = " + sm.getAdminState()); 
-		    logger.info(resourceName + " after  opState      = " + sm.getOpState()); 
-		   	logger.info(resourceName + " after  availStatus  = " + sm.getAvailStatus()); 
-		   	logger.info(resourceName + " after  standbyStatus= " + sm.getStandbyStatus()); 
+		    logger.info("{} after  adminState   = {}", resourceName, sm.getAdminState()); 
+		    logger.info("{} after  opState      = {}", resourceName, sm.getOpState()); 
+		   	logger.info("{} after  availStatus  = {}", resourceName, sm.getAvailStatus()); 
+		   	logger.info("{} after  standbyStatus= {}", resourceName, sm.getStandbyStatus()); 
 		   	 
 		    logger.info("\n??? test unlock()");
 		    sm.unlock(); 
 		    System.out.println("\n\nafter unlock()");
 		    displayState(resourceName, sm);		
-		    logger.info(resourceName + " adminState   = " + sm.getAdminState()); 
-		    logger.info(resourceName + " opState      = " + sm.getOpState()); 
-		   	logger.info(resourceName + " availStatus  = " + sm.getAvailStatus()); 
-		   	logger.info(resourceName + " standbyStatus= " + sm.getStandbyStatus()); 
+		    logger.info("{} adminState   = {}", resourceName, sm.getAdminState()); 
+		    logger.info("{} opState      = {}", resourceName, sm.getOpState()); 
+		   	logger.info("{} availStatus  = {}", resourceName, sm.getAvailStatus()); 
+		   	logger.info("{} standbyStatus= {}", resourceName, sm.getStandbyStatus()); 
 		   	
 		    logger.info("\n??? test enableNotFailed()");
 		    sm.enableNotFailed(); 
 		    System.out.println("\n\nafter enableNotFailed()");
 		    displayState(resourceName, sm);		
-		    logger.info(resourceName + " adminState   = " + sm.getAdminState()); 
-		    logger.info(resourceName + " opState      = " + sm.getOpState()); 
-		   	logger.info(resourceName + " availStatus  = " + sm.getAvailStatus()); 
-		   	logger.info(resourceName + " standbyStatus= " + sm.getStandbyStatus()); 
+		    logger.info("{} adminState   = {}", resourceName, sm.getAdminState()); 
+		    logger.info("{} opState      = {}", resourceName, sm.getOpState()); 
+		   	logger.info("{} availStatus  = {}", resourceName, sm.getAvailStatus()); 
+		   	logger.info("{} standbyStatus= {}", resourceName, sm.getStandbyStatus()); 
 		    
 		    logger.info("\n??? test disableFailed()");
 		    sm.disableFailed();
 		    System.out.println("\n\nafter disableFailed()");
 		    displayState(resourceName, sm);		
-		    logger.info(resourceName + " adminState   = " + sm.getAdminState()); 
-		    logger.info(resourceName + " opState      = " + sm.getOpState()); 
-		   	logger.info(resourceName + " availStatus  = " + sm.getAvailStatus()); 
-		   	logger.info(resourceName + " standbyStatus= " + sm.getStandbyStatus()); 
+		    logger.info("{} adminState   = {}", resourceName, sm.getAdminState()); 
+		    logger.info("{} opState      = {}", resourceName, sm.getOpState()); 
+		   	logger.info("{} availStatus  = {}", resourceName, sm.getAvailStatus()); 
+		   	logger.info("{} standbyStatus= {}", resourceName, sm.getStandbyStatus()); 
 		   	
 		    // P4 If promote() is called while either the opState is disabled or the adminState is locked,  
 		    // the standbystatus shall transition to coldstandby and a StandbyStatusException shall be thrown
@@ -141,9 +141,9 @@ public class StateManagementTest {
 		    	sm.lock();
 			    System.out.println("\n\nafter lock() and disableFailed");
 			    displayState(resourceName, sm);		
-			    logger.info(resourceName + " adminState   = " + sm.getAdminState()); 
-			    logger.info(resourceName + " opState      = " + sm.getOpState()); 
-			   	logger.info(resourceName + " standbyStatus= " + sm.getStandbyStatus());
+			    logger.info("{} adminState   = {}", resourceName, sm.getAdminState()); 
+			    logger.info("{} opState      = {}", resourceName, sm.getOpState());
+			   	logger.info("{} standbyStatus= {}", resourceName, sm.getStandbyStatus()); 
 			   	sm.promote(); 
 			    System.out.println("\n\nafter promote");
 			    displayState(resourceName, sm);		
@@ -171,7 +171,7 @@ public class StateManagementTest {
 		    }	
 		   	assert(standbyExceptionThrown); 
 	    	assert(sm.getStandbyStatus().equals(StateManagement.COLD_STANDBY)); 
-		    System.out.println("\n\nP3 after promote()");
+		    logger.info("\n\nP3 after promote()");
 		    displayState(resourceName, sm);	
 	    	standbyExceptionThrown = false; 		    
 		    
@@ -182,13 +182,13 @@ public class StateManagementTest {
 		    StateManagement sm2 = new StateManagement(emf, resourceName);
 		    sm2.enableNotFailed();
 		    sm2.unlock(); 
-		    System.out.println("\n\nafter sm2.enableNotFailed() and sm2.unlock()");
+		    logger.info("\n\nafter sm2.enableNotFailed() and sm2.unlock()");
 		    displayState(resourceName, sm2);	
-		    logger.info(resourceName + " adminState   = " + sm2.getAdminState()); 
-		    logger.info(resourceName + " opState      = " + sm2.getOpState()); 
-		   	logger.info(resourceName + " standbyStatus= " + sm2.getStandbyStatus()); 		    
+		    logger.info("{} adminState   = {}", resourceName, sm2.getAdminState()); 
+		    logger.info("{} opState      = {}", resourceName, sm2.getOpState());
+		   	logger.info("{} standbyStatus= {}", resourceName, sm2.getStandbyStatus()); 	    
 		    sm2.promote(); 
-		    System.out.println("\n\nP2 after sm2.promote");
+		    logger.info("\n\nP2 after sm2.promote");
 		    displayState(resourceName, sm2);	
 		    assert(sm2.getAdminState().equals(StateManagement.UNLOCKED)); 
 		    assert(sm2.getOpState().equals(StateManagement.ENABLED)); 
@@ -198,7 +198,7 @@ public class StateManagementTest {
 		    logger.info("\n??? promote() test case P5");
 		   	logger.info(resourceName + " standbyStatus= " + sm2.getStandbyStatus()); 
 		    sm2.promote();  
-		    System.out.println("\n\nP5 after sm2.promote()");
+		    logger.info("\n\nP5 after sm2.promote()");
 		    displayState(resourceName, sm2);	
 		    assert(sm2.getStandbyStatus().equals(StateManagement.PROVIDING_SERVICE));
 		    
@@ -206,7 +206,7 @@ public class StateManagementTest {
 		    logger.info("\n??? demote() test case D1");
 		    logger.info(resourceName + " standbyStatus= " + sm2.getStandbyStatus()); 
 		    sm2.demote(); 
-		    System.out.println("\n\nD1 after sm2.demote()");
+		    logger.info("\n\nD1 after sm2.demote()");
 		    displayState(resourceName, sm2);	
 		    assert(sm2.getStandbyStatus().equals(StateManagement.HOT_STANDBY));
 		    
@@ -214,7 +214,7 @@ public class StateManagementTest {
 		    logger.info("\n??? demote() test case D4");
 		    logger.info(resourceName + " standbyStatus= " + sm2.getStandbyStatus()); 
 		    sm2.demote(); 
-		    System.out.println("\n\nD4 after sm2.demote()");
+		    logger.info("\n\nD4 after sm2.demote()");
 		    displayState(resourceName, sm2);	
 		    assert(sm2.getStandbyStatus().equals(StateManagement.HOT_STANDBY));
 		    
@@ -225,13 +225,13 @@ public class StateManagementTest {
 		    StateManagement sm3 = new StateManagement(emf, resourceName);
 		    sm3.lock(); 
 		    sm3.disableFailed(); 
-		    System.out.println("\n\nD3 after sm3.lock() and sm3.disableFailed()");
+		    logger.info("\n\nD3 after sm3.lock() and sm3.disableFailed()");
 		    displayState(resourceName, sm3);	
-		    logger.info(resourceName + " adminState   = " + sm3.getAdminState()); 
-		    logger.info(resourceName + " opState      = " + sm3.getOpState()); 
-		   	logger.info(resourceName + " standbyStatus= " + sm3.getStandbyStatus()); 		    
+		    logger.info("{} adminState   = {}", resourceName, sm3.getAdminState()); 
+		    logger.info("{} opState      = {}", resourceName, sm3.getOpState());
+		   	logger.info("{} standbyStatus= {}", resourceName, sm3.getStandbyStatus()); 		    
 		    sm3.demote(); 
-		    System.out.println("\n\nD3 after sm3.demote()");
+		    logger.info("\n\nD3 after sm3.demote()");
 		    displayState(resourceName, sm3);	
 		    assert(sm3.getStandbyStatus().equals(StateManagement.COLD_STANDBY));
 		    
@@ -239,7 +239,7 @@ public class StateManagementTest {
 		    logger.info("\n??? demote() test case D5");	
 		    logger.info(resourceName + " standbyStatus= " + sm3.getStandbyStatus()); 
 		    sm3.demote(); 
-		    System.out.println("\n\nD5 after sm3.demote()");
+		    logger.info("\n\nD5 after sm3.demote()");
 		    displayState(resourceName, sm3);	
 		    assert(sm3.getStandbyStatus().equals(StateManagement.COLD_STANDBY));		    
 		    
@@ -250,11 +250,11 @@ public class StateManagementTest {
 		    StateManagement sm4 = new StateManagement(emf, resourceName);
 		    sm4.unlock(); 
 		    sm4.enableNotFailed(); 
-		    System.out.println("\n\nD2 after sm4.unlock() and sm4.enableNotFailed()");
+		    logger.info("\n\nD2 after sm4.unlock() and sm4.enableNotFailed()");
 		    displayState(resourceName, sm4);	
-		    logger.info(resourceName + " adminState   = " + sm4.getAdminState()); 
-		    logger.info(resourceName + " opState      = " + sm4.getOpState()); 
-		   	logger.info(resourceName + " standbyStatus= " + sm4.getStandbyStatus()); 
+		    logger.info("{} adminState   = {}", resourceName, sm4.getAdminState()); 
+		    logger.info("{} opState      = {}", resourceName, sm4.getOpState());
+		   	logger.info("{} standbyStatus= {}", resourceName, sm4.getStandbyStatus());
 		    sm4.demote(); 
 		    assert(sm4.getStandbyStatus().equals(StateManagement.HOT_STANDBY));
 		    
@@ -262,7 +262,7 @@ public class StateManagementTest {
 		    logger.info("\n??? promote() test case P1");
 		    logger.info(resourceName + " standbyStatus= " + sm4.getStandbyStatus()); 
 		    sm4.promote(); 
-		    System.out.println("\n\nP1 after sm4.promote()");
+		    logger.info("\n\nP1 after sm4.promote()");
 		    displayState(resourceName, sm4);	
 		    assert(sm4.getStandbyStatus().equals(StateManagement.PROVIDING_SERVICE));
 		    
@@ -288,14 +288,14 @@ public class StateManagementTest {
 		    try {
 		      sm.promote(); 
 		    } catch(Exception ex) {
-		    	logger.info("Exception from promote(): " + ex.toString());
+		    	logger.info("Exception from promote(): {}", ex.toString());
 		    }
  
 		   	if (emf.isOpen()) {
 		   		emf.close(); 
 		   	}
 		} catch(Exception ex) {
-			logger.error("Exception: " + ex.toString());
+			logger.error("Exception: {}", ex.toString());
 		} finally {
 			if (emf.isOpen()) {
 			    emf.close(); 
@@ -307,15 +307,10 @@ public class StateManagementTest {
 	
 	private void displayState(String resourceName, StateManagement sm) 
 	{
-		System.out.println("\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
-	    logger.info(resourceName + " adminState   = " + sm.getAdminState()); 
-	    logger.info(resourceName + " opState      = " + sm.getOpState()); 
-	   	logger.info(resourceName + " availStatus  = " + sm.getAvailStatus()); 
-	   	logger.info(resourceName + " standbyStatus= " + sm.getStandbyStatus()); 
+		logger.info("{} adminState   = {}", resourceName, sm.getAdminState()); 
+	    logger.info("{} opState      = {}", resourceName, sm.getOpState()); 
+	   	logger.info("{} availStatus  = {}", resourceName, sm.getAvailStatus()); 
+	   	logger.info("{} standbyStatus= {}", resourceName, sm.getStandbyStatus()); 
 	}
 }
 

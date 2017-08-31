@@ -32,7 +32,8 @@ import javax.management.MalformedObjectNameException;
 import javax.management.NotCompliantMBeanException;
 import javax.management.ObjectName;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import org.onap.policy.common.im.IntegrityMonitor;
 import org.onap.policy.common.im.StateManagement;
@@ -41,7 +42,7 @@ import org.onap.policy.common.im.StateManagement;
  * Base class for component MBeans.
  */
 public class ComponentAdmin implements ComponentAdminMBean {
-	private static final Logger logger = Logger.getLogger(ComponentAdmin.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(ComponentAdmin.class.getName());
 
 	private final String name;
 	private MBeanServer registeredMBeanServer;
@@ -87,7 +88,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 			InstanceAlreadyExistsException, NotCompliantMBeanException {
 
 
-			logger.info("Registering " + name + " MBean");
+			logger.info("Registering {} MBean", name);
 
 
 		MBeanServer mbeanServer = findMBeanServer();
@@ -99,8 +100,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 		ObjectName objectName = new ObjectName(name);
 
 		if (mbeanServer.isRegistered(objectName)) {
-			logger.info("Unregistering a previously registered "
-				+ name + " MBean");
+			logger.info("Unregistering a previously registered {} MBean", name);
 			mbeanServer.unregisterMBean(objectName);
 		}
 

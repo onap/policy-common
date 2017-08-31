@@ -24,15 +24,15 @@ import java.util.*;
 
 
 import org.onap.policy.common.im.StateElement; 
-import org.onap.policy.common.im.StateManagement; 
-import org.onap.policy.common.logging.flexlogger.FlexLogger; 
-import org.onap.policy.common.logging.flexlogger.Logger;
+import org.onap.policy.common.im.StateManagement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The StateTransition class coordinates all state transitions.
  */
 public class StateTransition {
-  private static final Logger logger = FlexLogger.getLogger(StateTransition.class);
+  private static final Logger logger = LoggerFactory.getLogger(StateTransition.class);
   
   public static final String ADMIN_STATE     = "adminState"; 
   public static final String OPERATION_STATE = "opState"; 
@@ -73,8 +73,13 @@ public class StateTransition {
 		  String standbyStatus, String actionName) throws StateTransitionException
   {
 	 logger.info("getEndingState");
-	 logger.info("adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
-       availStatus + "], standbyStatus=[" + standbyStatus + "], actionName=[" + actionName + "]");
+	 logger.info("adminState=[{}], opState=[{}], availStatus=[{}], standbyStatus=[{}], actionName[{}]",
+			 adminState,
+			 opState, 
+			 availStatus,
+			 standbyStatus,
+			 actionName);
+	 
 	 if(availStatus==null){
 		 availStatus="null";
 	 }
@@ -123,7 +128,7 @@ public class StateTransition {
 			 availStatus2 = availStatus.replace(",", "."); 
 		 }  
 	     String key = adminState + "," + opState + "," + availStatus2 + "," + standbyStatus + "," + actionName;
-	     logger.debug("Ending State search key: " + key);
+	     logger.debug("Ending State search key: {}", key);
 	     String value = StateTable.get(key); 
 	      
 	     if (value != null) {
@@ -142,7 +147,7 @@ public class StateTransition {
 		     
 		         stateElement.displayStateElement();
              } catch(Exception ex) {
-        	     logger.error("String split exception: " + ex.toString());
+        	     logger.error("String split exception: {}", ex.toString());
              }
  
        	 } else {
@@ -718,7 +723,8 @@ public class StateTransition {
  
 	  while(iter.hasNext()) {
 	      Map.Entry<?, ?> me = (Map.Entry<?, ?>)iter.next();
-	      logger.debug((String)me.getKey() + ((String)me.getValue()).replace(".",  ",")); 
+	      String key = (String)me.getKey() + ((String)me.getValue()).replace(".",  ",");
+	      logger.debug(key); 
 	  }
   }
 }
