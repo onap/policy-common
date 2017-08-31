@@ -40,8 +40,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
 
 
 
@@ -51,8 +49,8 @@ import org.onap.policy.common.im.StateManagement;
 import org.onap.policy.common.im.jpa.ForwardProgressEntity;
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
-import org.onap.policy.common.logging.flexlogger.FlexLogger; 
-import org.onap.policy.common.logging.flexlogger.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /*
  * All JUnits are designed to run in the local development environment
@@ -60,7 +58,7 @@ import org.onap.policy.common.logging.flexlogger.Logger;
  * tasks.
  */
 public class IntegrityMonitorTest {
-	private static Logger logger = FlexLogger.getLogger(IntegrityMonitorTest.class);
+	private static Logger logger = LoggerFactory.getLogger(IntegrityMonitorTest.class);
 	private static Properties myProp;
 	private static EntityManagerFactory emf;
 	private static EntityManager em;
@@ -138,7 +136,7 @@ public class IntegrityMonitorTest {
 	 * Unlock restart
 	 */
 	public void testSanityJmx() throws Exception {
-		System.out.println("\nIntegrityMonitorTest: Entering testSanityJmx\n\n");
+		logger.debug("\nIntegrityMonitorTest: Entering testSanityJmx\n\n");
 		
 		String dependent = "group1_logparser";
 		
@@ -148,12 +146,11 @@ public class IntegrityMonitorTest {
 		IntegrityMonitor.updateProperties(myProp);
 		
 		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
-		System.out.println("\n\ntestSanityJmx starting im state"
-				+ "\nAdminState = " + im.getStateManager().getAdminState()
-				+ "\nOpState() = " + im.getStateManager().getOpState()
-				+ "\nAvailStatus = " + im.getStateManager().getAvailStatus()
-				+ "\nStandbyStatus = " + im.getStateManager().getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\ntestSanityJmx starting im state \nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				im.getStateManager().getAdminState(),
+				im.getStateManager().getOpState(),
+				im.getStateManager().getAvailStatus(),
+				im.getStateManager().getStandbyStatus());
 		// add an entry to Resource registration table in the DB for the dependent resource
 		
 		
@@ -167,7 +164,7 @@ public class IntegrityMonitorTest {
     	ResourceRegistrationEntity rrx = null;
     	if(rrList.isEmpty()){
     		// register resource by adding entry to table in DB
-    		System.out.println("Adding resource " + dependent + " to ResourceRegistration table");  	
+    		logger.debug("Adding resource {}  to ResourceRegistration table", dependent);  	
     		rrx = new ResourceRegistrationEntity();
     		// set columns in entry
     		rrx.setResourceName(dependent);
@@ -188,7 +185,7 @@ public class IntegrityMonitorTest {
 		try {
 			im.evaluateSanity();
 		} catch (Exception e) {
-			System.out.println("evaluateSanity exception: " + e);
+			logger.error("evaluateSanity exception: ", e);
 			sanityPass = false;
 		}
 		assertFalse(sanityPass);  // expect sanity test to fail
@@ -198,32 +195,31 @@ public class IntegrityMonitorTest {
 		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
 		IntegrityMonitor.updateProperties(myProp);
 
-		System.out.println("\ntestSantityJmx ending properties: " + myProp);
+		logger.debug("\ntestSantityJmx ending properties: {}", myProp);
 		
 		//We know at this point that the IM is disable-dependency.  We want to be
 		//sure it will recover from this condition since the properties were
 		//updated.
 		
 		
-		System.out.println("\n\ntestSanityJmx ending im state"
-				+ "\nAdminState = " + im.getStateManager().getAdminState()
-				+ "\nOpState() = " + im.getStateManager().getOpState()
-				+ "\nAvailStatus = " + im.getStateManager().getAvailStatus()
-				+ "\nStandbyStatus = " + im.getStateManager().getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\ntestSanityJmx ending im state\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				im.getStateManager().getAdminState(),
+				im.getStateManager().getOpState(),
+				im.getStateManager().getAvailStatus(),
+				im.getStateManager().getStandbyStatus());
 		
 		//Destroy the instance
-		System.out.println("\ntestSanityJmx restarting the IntegrityMonitor");
+		logger.debug("\ntestSanityJmx restarting the IntegrityMonitor");
 		IntegrityMonitor.deleteInstance();
 		//Create a new instance.  It should recover from the disabled-dependency condition
 		im = IntegrityMonitor.getInstance(resourceName, myProp);
 		
-		System.out.println("\n\ntestSanityJmx state after creating new im"
-				+ "\nAdminState = " + im.getStateManager().getAdminState()
-				+ "\nOpState() = " + im.getStateManager().getOpState()
-				+ "\nAvailStatus = " + im.getStateManager().getAvailStatus()
-				+ "\nStandbyStatus = " + im.getStateManager().getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\ntestSanityJmx state after creating new im\n"+
+					"AdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+						im.getStateManager().getAdminState(),
+						im.getStateManager().getOpState(),
+						im.getStateManager().getAvailStatus(),
+						im.getStateManager().getStandbyStatus());
 
 		//Verify the state
 		assertEquals(im.getStateManager().getAdminState(), StateManagement.UNLOCKED);
@@ -236,60 +232,59 @@ public class IntegrityMonitorTest {
 		
 		// Verify lock state
 		sm.lock();
-		System.out.println("\n\nsm.lock()"
-			+ "\nAdminState = " + sm.getAdminState()
-			+ "\nOpState() = " + sm.getOpState()
-			+ "\nAvailStatus = " + sm.getAvailStatus()
-			+ "\nStandbyStatus = " + sm.getStandbyStatus()
-			+ "\n");
+		logger.debug("\n\nsm.lock()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+			sm.getAdminState(),
+			sm.getOpState(),
+			sm.getAvailStatus(),
+			sm.getStandbyStatus());
 		assert(sm.getAdminState().equals(StateManagement.LOCKED));
 		
 		//Verify lock persists across a restart
 		//Destroy the instance
-		System.out.println("\ntestSanityJmx restarting the IntegrityMonitor");
+		logger.debug("\ntestSanityJmx restarting the IntegrityMonitor");
 		IntegrityMonitor.deleteInstance();
 		//Create a new instance.  It should come up with the admin state locked
 		im = IntegrityMonitor.getInstance(resourceName, myProp);
 		sm = im.getStateManager();
-		System.out.println("\n\ntestSanityJmx restart with AdminState=locked"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\ntestSanityJmx restart with AdminState=locked"+
+					 "\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+					 	sm.getAdminState(),
+					 	sm.getOpState(),
+					 	sm.getAvailStatus(),
+					 	sm.getStandbyStatus());
 		assert(sm.getAdminState().equals(StateManagement.LOCKED));
 		
 		// Verify unlock
 		sm.unlock();
-		System.out.println("\n\ntestSanityJmx sm.unlock"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\ntestSanityJmx sm.unlock\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				sm.getAdminState(),
+				sm.getOpState(),
+				sm.getAvailStatus(),
+				sm.getStandbyStatus());
 		assert(sm.getAdminState().equals(StateManagement.UNLOCKED));		
 		
 		// Verify unlock restart
 		//Destroy the instance
-		System.out.println("\ntestSanityJmx restarting the IntegrityMonitor");
+		logger.debug("\ntestSanityJmx restarting the IntegrityMonitor");
 		IntegrityMonitor.deleteInstance();
 		//Create a new instance.  It should come up with the admin state locked
 		im = IntegrityMonitor.getInstance(resourceName, myProp);
 		sm = im.getStateManager();
-		System.out.println("\n\ntestSanityJmx restart with AdminState=unlocked"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\ntestSanityJmx restart with AdminState=unlocked\n" + 
+					"AdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+						sm.getAdminState(),
+						sm.getOpState(),
+						sm.getAvailStatus(),
+						sm.getStandbyStatus());
+		
 		assert(sm.getAdminState().equals(StateManagement.UNLOCKED));
 		
-		System.out.println("\n\ntestSanityJmx: Exit\n\n");
+		logger.debug("\n\ntestSanityJmx: Exit\n\n");
 	}
 	
 
 	public void testIM() throws Exception {
-		System.out.println("\nIntegrityMonitorTest: Entering testIM\n\n");
+		logger.debug("\nIntegrityMonitorTest: Entering testIM\n\n");
 		
 		// parameters are passed via a properties file
 		
@@ -300,29 +295,27 @@ public class IntegrityMonitorTest {
 		 */
 		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
 		
-		System.out.println("\n\nim before sleep"
-				+ "\nAdminState = " + im.getStateManager().getAdminState()
-				+ "\nOpState() = " + im.getStateManager().getOpState()
-				+ "\nAvailStatus = " + im.getStateManager().getAvailStatus()
-				+ "\nStandbyStatus = " + im.getStateManager().getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\nim before sleep\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+						im.getStateManager().getAdminState(),
+						im.getStateManager().getOpState(),
+						im.getStateManager().getAvailStatus(),
+						im.getStateManager().getStandbyStatus());
 		
 		// wait for test transactions to fire and increment fpc
 		Thread.sleep(20000);
 		
-		System.out.println("\n\nim after sleep"
-				+ "\nAdminState = " + im.getStateManager().getAdminState()
-				+ "\nOpState() = " + im.getStateManager().getOpState()
-				+ "\nAvailStatus = " + im.getStateManager().getAvailStatus()
-				+ "\nStandbyStatus = " + im.getStateManager().getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\nim after sleep\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+						im.getStateManager().getAdminState(),
+						im.getStateManager().getOpState(),
+						im.getStateManager().getAvailStatus(),
+						im.getStateManager().getStandbyStatus());
 		
 		// test evaluate sanity
 		boolean sanityPass = true;
 		try {
 			im.evaluateSanity();
 		} catch (Exception e) {
-			System.out.println("evaluateSanity exception: " + e);
+			logger.error("evaluateSanity exception: ", e);
 			sanityPass = false;
 		}
 		assertTrue(sanityPass);  // expect sanity test to pass
@@ -332,7 +325,7 @@ public class IntegrityMonitorTest {
 		try{
 			im.startTransaction();
 		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
+			logger.error("startTransaction exception: ", e);
 			transPass = false;
 		}
 		assertTrue(transPass);
@@ -341,12 +334,12 @@ public class IntegrityMonitorTest {
 		StateManagement sm = im.getStateManager();
 		
 		sm.lock();
-		System.out.println("\n\nsm.lock()"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\nsm.lock()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+					sm.getAdminState(),
+					sm.getOpState(),
+					sm.getAvailStatus(),
+					sm.getStandbyStatus());
+		
 		assert(sm.getAdminState().equals(StateManagement.LOCKED));
 		
 		//test startTransaction.  It should fail since it is locked
@@ -354,18 +347,17 @@ public class IntegrityMonitorTest {
 		try{
 			im.startTransaction();
 		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
+			logger.error("startTransaction exception: ", e);
 			transPass = false;
 		}
 		assertTrue(!transPass); //expect it to fail
 		
 		sm.unlock();
-		System.out.println("\n\nsm.unlock()"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\nsm.unlock()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+						sm.getAdminState(),
+						sm.getOpState(),
+						sm.getAvailStatus(),
+						sm.getStandbyStatus());
 		assert(sm.getAdminState().equals(StateManagement.UNLOCKED));
 		
 		//test startTransaction.  It should succeed
@@ -373,18 +365,18 @@ public class IntegrityMonitorTest {
 		try{
 			im.startTransaction();
 		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
+			logger.error("startTransaction exception: ", e);
 			transPass = false;
 		}
 		assertTrue(transPass); //expect it to succeed
 		
 		sm.disableDependency();
-		System.out.println("\n\nsm.disableDependency()"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\nsm.disableDependency()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				sm.getAdminState(),
+				sm.getOpState(),
+				sm.getAvailStatus(),
+				sm.getStandbyStatus());
+		
 		assert(sm.getOpState().equals(StateManagement.DISABLED));
 		assert(sm.getAvailStatus().equals(StateManagement.DEPENDENCY));
 		
@@ -393,18 +385,18 @@ public class IntegrityMonitorTest {
 		try{
 			im.startTransaction();
 		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
+			logger.error("startTransaction exception: ", e);
 			transPass = false;
 		}
 		assertTrue(transPass); //expect it to succeed
 	
 		sm.enableNoDependency();
-		System.out.println("\n\nsm.enableNoDependency()"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+
+		logger.debug("\n\nsm.enableNoDependency()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				sm.getAdminState(),
+				sm.getOpState(),
+				sm.getAvailStatus(),
+				sm.getStandbyStatus());
 		assert(sm.getOpState().equals(StateManagement.ENABLED));
 		//test startTransaction.  It should succeed since standby status is null and unlocked
 		transPass = true;
@@ -418,12 +410,12 @@ public class IntegrityMonitorTest {
 	
 		
 		sm.disableFailed();
-		System.out.println("\n\nsm.disableFailed()"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\nsm.disableFailed()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				sm.getAdminState(),
+				sm.getOpState(),
+				sm.getAvailStatus(),
+				sm.getStandbyStatus());
+
 		assert(sm.getOpState().equals(StateManagement.DISABLED));
 		assert(sm.getAvailStatus().equals(StateManagement.FAILED));
 		//test startTransaction.  It should succeed since standby status is null and unlocked
@@ -437,30 +429,32 @@ public class IntegrityMonitorTest {
 		assertTrue(transPass); //expect it to succeed
 	
 		sm.enableNotFailed();
-		System.out.println("\n\nsm.enabledNotFailed()"
-							+ "\nAdminState = " + sm.getAdminState()
-							+ "\nOpState() = " + sm.getOpState()
-							+ "\nAvailStatus = " + sm.getAvailStatus()
-							+ "\nStandbyStatus = " + sm.getStandbyStatus()
-							+ "\n");
+		
+		logger.debug("\n\nsm.enabledNotFailed()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				sm.getAdminState(),
+				sm.getOpState(),
+				sm.getAvailStatus(),
+				sm.getStandbyStatus());
+		
 		assert(sm.getOpState().equals(StateManagement.ENABLED));
 		//test startTransaction.  It should succeed since standby status is null and unlocked
 		transPass = true;
 		try{
 			im.startTransaction();
 		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
+			logger.error("startTransaction exception: ", e);
 			transPass = false;
 		}
 		assertTrue(transPass); //expect it to succeed
 	
 		sm.demote();
-		System.out.println("\n\nsm.demote()"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+
+		logger.debug("\n\nsm.demote()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				sm.getAdminState(),
+				sm.getOpState(),
+				sm.getAvailStatus(),
+				sm.getStandbyStatus());
+		
 		assert(sm.getStandbyStatus().equals(StateManagement.HOT_STANDBY));
 
 		//test startTransaction.  It should fail since it is standby
@@ -468,18 +462,19 @@ public class IntegrityMonitorTest {
 		try{
 			im.startTransaction();
 		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
+			logger.error("startTransaction exception: ", e);
 			transPass = false;
 		}
 		assertTrue(!transPass); //expect it to fail
 		
 		sm.promote();
-		System.out.println("\n\nsm.promote()"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+
+		logger.debug("\n\nsm.promote()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				sm.getAdminState(),
+				sm.getOpState(),
+				sm.getAvailStatus(),
+				sm.getStandbyStatus());
+		
 		assert(sm.getStandbyStatus().equals(StateManagement.PROVIDING_SERVICE));
 
 		//test startTransaction.  It should succeed since it is providing service
@@ -487,7 +482,7 @@ public class IntegrityMonitorTest {
 		try{
 			im.startTransaction();
 		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
+			logger.error("startTransaction exception: ", e);
 			transPass = false;
 		}
 		assertTrue(transPass); //expect it to succeed
@@ -496,12 +491,13 @@ public class IntegrityMonitorTest {
 		//Test the multi-valued availability status
 		sm.disableDependency();
 		sm.disableFailed();
-		System.out.println("\n\nsm.disableDependency(), sm.disableFailed"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+
+		logger.debug("\n\nsm.disableDependency(), sm.disableFailed\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				sm.getAdminState(),
+				sm.getOpState(),
+				sm.getAvailStatus(),
+				sm.getStandbyStatus());
+		
 		assert(sm.getAvailStatus().equals(StateManagement.DEPENDENCY_FAILED));
 		
 		//Test startTransaction.  Should fail since standby status is cold standby
@@ -509,72 +505,72 @@ public class IntegrityMonitorTest {
 		try{
 			im.startTransaction();
 		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
+			logger.error("startTransaction exception: ", e);
 			transPass = false;
 		}
 		assertTrue(!transPass); //expect it to fail
 		
 		sm.enableNoDependency();
-		System.out.println("\n\nsm.enableNoDependency()"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+
+		logger.debug("\n\nsm.enableNoDependency()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				sm.getAdminState(),
+				sm.getOpState(),
+				sm.getAvailStatus(),
+				sm.getStandbyStatus());
 		assert(sm.getAvailStatus().equals(StateManagement.FAILED));
 		//Test startTransaction.  Should fail since standby status is cold standby
 		transPass = true;
 		try{
 			im.startTransaction();
 		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
+			logger.error("startTransaction exception: ", e);
 			transPass = false;
 		}
 		assertTrue(!transPass); //expect it to fail
 	
 		sm.disableDependency();
 		sm.enableNotFailed();
-		System.out.println("\n\nsm.disableDependency(),sm.enableNotFailed()"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+		
+		logger.debug("\n\nsm.disableDependency(),sm.enableNotFailed()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				sm.getAdminState(),
+				sm.getOpState(),
+				sm.getAvailStatus(),
+				sm.getStandbyStatus());		
+
 		assert(sm.getAvailStatus().equals(StateManagement.DEPENDENCY));
 		//Test startTransaction.  Should fail since standby status is cold standby
 		transPass = true;
 		try{
 			im.startTransaction();
 		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
+			logger.error("startTransaction exception: ", e);
 			transPass = false;
 		}
 		assertTrue(!transPass); //expect it to fail
 	
 		sm.enableNoDependency();
-		System.out.println("\n\nsm.enableNoDependency()"
-				+ "\nAdminState = " + sm.getAdminState()
-				+ "\nOpState() = " + sm.getOpState()
-				+ "\nAvailStatus = " + sm.getAvailStatus()
-				+ "\nStandbyStatus = " + sm.getStandbyStatus()
-				+ "\n");
+		logger.debug("\n\nsm.enableNoDependency()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+				sm.getAdminState(),
+				sm.getOpState(),
+				sm.getAvailStatus(),
+				sm.getStandbyStatus());
 		assert(sm.getOpState().equals(StateManagement.ENABLED));
 		//test startTransaction.  It should fail since standby status is hot standby
 		transPass = true;
 		try{
 			im.startTransaction();
 		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
+			logger.error("startTransaction exception: ", e);
 			transPass = false;
 		}
 		assertTrue(!transPass); //expect it to fail
 	
-		System.out.println("\n\ntestIM: Exit\n\n");
+		logger.debug("\n\ntestIM: Exit\n\n");
 	}
 	
 
 	public void testSanityState() throws Exception {
-		System.out.println("\nIntegrityMonitorTest: Entering testSanityState\n\n");
+		logger.debug("\nIntegrityMonitorTest: Entering testSanityState\n\n");
 		
 		// parameters are passed via a properties file
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "group1_dep1,group1_dep2; group2_dep1");
@@ -610,7 +606,7 @@ public class IntegrityMonitorTest {
 		try {
 			im.evaluateSanity();
 		} catch (Exception e) {
-			System.out.println("evaluateSanity exception: " + e);
+			logger.error("evaluateSanity exception: ", e);
 			sanityPass = false;
 		}
 		assertFalse(sanityPass);  // expect sanity test to fail
@@ -631,7 +627,7 @@ public class IntegrityMonitorTest {
 		em.flush();
 		et.commit();
 		
-		System.out.println("\n\ntestSanityState: Exit\n\n");
+		logger.debug("\n\ntestSanityState: Exit\n\n");
 	}
 	
 	public void testRefreshStateAudit() throws Exception {
@@ -673,12 +669,13 @@ public class IntegrityMonitorTest {
 			sme = (StateManagementEntity) resourceList.get(0);
 			em.refresh(sme);
 
-			logger.debug("??? -- Retrieve StateManagementEntity from database --"
-					+ "\nsme.getResourceName() = " + sme.getResourceName() 
-					+ "\nsme.getAdminState() = " + sme.getAdminState()
-					+ "\nsme.getOpState() = " + sme.getOpState()
-					+ "\nsme.getAvailStatus() = " + sme.getAvailStatus()
-					+ "\nsme.getStandbyStatus() = " + sme.getStandbyStatus());
+			logger.debug("??? -- Retrieve StateManagementEntity from database --\nsme.getResourceName() = {}\n"+
+						"sme.getAdminState() = {}\nsme.getOpState() = {}\nsme.getAvailStatus() = {}\nsme.getStandbyStatus() = {}",
+							sme.getResourceName(), 
+							sme.getAdminState(),
+							sme.getOpState(),
+							sme.getAvailStatus(),
+							sme.getStandbyStatus());
 
 			assertTrue(sme.getAdminState().equals(StateManagement.UNLOCKED)); 
 			assertTrue(sme.getOpState().equals(StateManagement.ENABLED)); 
@@ -714,12 +711,13 @@ public class IntegrityMonitorTest {
 			// exist 
 			sme1 = (StateManagementEntity) resourceList1.get(0);
 			em.refresh(sme1);
-			logger.debug("??? -- Retrieve StateManagementEntity from database --"
-					+ "\nsme1.getResourceName() = " + sme1.getResourceName() 
-					+ "\nsme1.getAdminState() = " + sme1.getAdminState()
-					+ "\nsme1.getOpState() = " + sme1.getOpState()
-					+ "\nsme1.getAvailStatus() = " + sme1.getAvailStatus()
-					+ "\nsme1.getStandbyStatus() = " + sme1.getStandbyStatus());
+			logger.debug("??? -- Retrieve StateManagementEntity from database --\nsme1.getResourceName() = {}\n" +
+							"sme1.getAdminState() = {}\nsme1.getOpState() = {}\nsme1.getAvailStatus() = {}\nsme1.getStandbyStatus() = {}",
+							sme1.getResourceName(), 
+							sme1.getAdminState(),
+							sme1.getOpState(),
+							sme1.getAvailStatus(),
+							sme1.getStandbyStatus());
 
 			assertTrue(sme1.getAdminState().equals(StateManagement.UNLOCKED)); 
 			assertTrue(sme1.getOpState().equals(StateManagement.ENABLED)); 
@@ -748,7 +746,7 @@ public class IntegrityMonitorTest {
 	}
 	
 	public void testStateCheck() throws Exception {
-		System.out.println("\nIntegrityMonitorTest: Entering testStateCheck\n\n");
+		logger.debug("\nIntegrityMonitorTest: Entering testStateCheck\n\n");
 		
 		// parameters are passed via a properties file
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "group1_dep1");
@@ -796,7 +794,7 @@ public class IntegrityMonitorTest {
 		try {
 			im.evaluateSanity();
 		} catch (Exception e) {
-			System.out.println("testStateCheck: After 15 sec sleep - evaluateSanity exception: " + e);
+			logger.error("testStateCheck: After 15 sec sleep - evaluateSanity exception: ", e);
 			sanityPass = false;
 		}
 		assertTrue(sanityPass);  // expect sanity test to pass
@@ -809,7 +807,7 @@ public class IntegrityMonitorTest {
 		try {
 			im.evaluateSanity();
 		} catch (Exception e) {
-			System.out.println("testStateCheck: After 10 sec sleep - evaluateSanity exception: " + e);
+			logger.error("testStateCheck: After 10 sec sleep - evaluateSanity exception: ", e);
 			sanityPass = false;
 		}
 		assertFalse(sanityPass);  // expect sanity test to fail
@@ -832,11 +830,10 @@ public class IntegrityMonitorTest {
 		em.flush();
 		et.commit();
 		
-		System.out.println("\n\ntestStateCheck: Exit\n\n");
+		logger.debug("\n\ntestStateCheck: Exit\n\n");
 	}
 	
 	public void testGetAllForwardProgressEntity() throws Exception{
-		System.out.println("\nIntegrityMonitorTest: Entering testGetAllForwardProgressEntity\n\n");
 		logger.debug("\nIntegrityMonitorTest: Entering testGetAllForwardProgressEntity\n\n");
 		
 		// parameters are passed via a properties file
@@ -894,11 +891,9 @@ public class IntegrityMonitorTest {
 		et.commit();
 		
 		logger.debug("\nIntegrityMonitorTest: Exit testGetAllForwardProgressEntity\n\n");
-		System.out.println("\n\ntestGetAllForwardProgressEntity: Exit\n\n");
 	}
 	
 	public void testStateAudit() throws Exception{
-		System.out.println("\nIntegrityMonitorTest: Entering testStateAudit\n\n");
 		logger.debug("\nIntegrityMonitorTest: Entering testStateAudit\n\n");
 		
 		// parameters are passed via a properties file
@@ -980,8 +975,10 @@ public class IntegrityMonitorTest {
 		logger.debug("\n\n");
 		logger.debug("IntegrityMonitorTest:testStateAudit:ForwardProgressEntity entries");
 		for(ForwardProgressEntity myFpe : fpeList){
-			logger.debug("\n    ResourceName: " + myFpe.getResourceName()
-					+ "\n        LastUpdated: " + myFpe.getLastUpdated());
+			logger.debug("\n    ResourceName: {}" + 
+						 "\n        LastUpdated: {}",
+						 myFpe.getResourceName(),
+						 myFpe.getLastUpdated());
 		}
 		logger.debug("\n\n");
 		
@@ -994,11 +991,16 @@ public class IntegrityMonitorTest {
 		for(Object mySme : smeList){
 			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
 			em.refresh(tmpSme);
-			logger.debug("\n    ResourceName: " + tmpSme.getResourceName()
-					+ "\n        AdminState: " + tmpSme.getAdminState()
-					+ "\n        OpState: " + tmpSme.getOpState()
-					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
-					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+			logger.debug("\n    ResourceName: {}" + 
+					 "\n        AdminState: {}" + 
+					 "\n        OpState: {}" + 
+					 "\n        AvailStatus: {}" + 
+					 "\n        StandbyStatus: {}",
+					 tmpSme.getResourceName(),
+					 tmpSme.getAdminState(),
+					 tmpSme.getOpState(),
+					 tmpSme.getAvailStatus(),
+					 tmpSme.getStandbyStatus()
 					);
 		}
 		logger.debug("\n\n");
@@ -1015,11 +1017,16 @@ public class IntegrityMonitorTest {
 		for(Object mySme : smeList){
 			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
 			em.refresh(tmpSme);
-			logger.debug("\n    ResourceName: " + tmpSme.getResourceName()
-					+ "\n        AdminState: " + tmpSme.getAdminState()
-					+ "\n        OpState: " + tmpSme.getOpState()
-					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
-					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+			logger.debug("\n    ResourceName: {}" + 
+					 "\n        AdminState: {}" + 
+					 "\n        OpState: {}" + 
+					 "\n        AvailStatus: {}" + 
+					 "\n        StandbyStatus: {}",
+					 tmpSme.getResourceName(),
+					 tmpSme.getAdminState(),
+					 tmpSme.getOpState(),
+					 tmpSme.getAvailStatus(),
+					 tmpSme.getStandbyStatus()
 					);
 		}
 		logger.debug("\n\n");
@@ -1056,11 +1063,16 @@ public class IntegrityMonitorTest {
 		for(Object mySme : smeList){
 			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
 			em.refresh(tmpSme);
-			logger.debug("\n    2nd ResourceName: " + tmpSme.getResourceName()
-					+ "\n        AdminState: " + tmpSme.getAdminState()
-					+ "\n        OpState: " + tmpSme.getOpState()
-					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
-					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+			logger.debug("\n    2nd ResourceName: {}" + 
+					 "\n        AdminState: {}" + 
+					 "\n        OpState: {}" + 
+					 "\n        AvailStatus: {}" + 
+					 "\n        StandbyStatus: {}",
+					 tmpSme.getResourceName(),
+					 tmpSme.getAdminState(),
+					 tmpSme.getOpState(),
+					 tmpSme.getAvailStatus(),
+					 tmpSme.getStandbyStatus()
 					);
 		}
 		logger.debug("\n\n");
@@ -1093,12 +1105,19 @@ public class IntegrityMonitorTest {
 		for(Object mySme : smeList){
 			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
 			em.refresh(tmpSme);
-			logger.debug("\n    (restart) ResourceName: " + tmpSme.getResourceName()
-					+ "\n        AdminState: " + tmpSme.getAdminState()
-					+ "\n        OpState: " + tmpSme.getOpState()
-					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
-					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+
+			logger.debug("\n    (restart) ResourceName: {}" + 
+					 "\n        AdminState: {}" + 
+					 "\n        OpState: {}" + 
+					 "\n        AvailStatus: {}" + 
+					 "\n        StandbyStatus: {}",
+					 tmpSme.getResourceName(),
+					 tmpSme.getAdminState(),
+					 tmpSme.getOpState(),
+					 tmpSme.getAvailStatus(),
+					 tmpSme.getStandbyStatus()
 					);
+			
 		}
 		logger.debug("\n\n");
 		
@@ -1130,11 +1149,17 @@ public class IntegrityMonitorTest {
 		for(Object mySme : smeList){
 			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
 			em.refresh(tmpSme);
-			logger.debug("\n    (restart2) ResourceName: " + tmpSme.getResourceName()
-					+ "\n        AdminState: " + tmpSme.getAdminState()
-					+ "\n        OpState: " + tmpSme.getOpState()
-					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
-					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+
+			logger.debug("\n    (restart2) ResourceName: {}" + 
+					 "\n        AdminState: {}" + 
+					 "\n        OpState: {}" + 
+					 "\n        AvailStatus: {}" + 
+					 "\n        StandbyStatus: {}",
+					 tmpSme.getResourceName(),
+					 tmpSme.getAdminState(),
+					 tmpSme.getOpState(),
+					 tmpSme.getAvailStatus(),
+					 tmpSme.getStandbyStatus()
 					);
 		}
 		logger.debug("\n\n");
@@ -1160,11 +1185,17 @@ public class IntegrityMonitorTest {
 		for(Object mySme : smeList){
 			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
 			em.refresh(tmpSme);
-			logger.debug("\n    (restart3) ResourceName: " + tmpSme.getResourceName()
-					+ "\n        AdminState: " + tmpSme.getAdminState()
-					+ "\n        OpState: " + tmpSme.getOpState()
-					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
-					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+
+			logger.debug("\n    (restart3) ResourceName: {}" + 
+					 "\n        AdminState: {}" + 
+					 "\n        OpState: {}" + 
+					 "\n        AvailStatus: {}" + 
+					 "\n        StandbyStatus: {}",
+					 tmpSme.getResourceName(),
+					 tmpSme.getAdminState(),
+					 tmpSme.getOpState(),
+					 tmpSme.getAvailStatus(),
+					 tmpSme.getStandbyStatus()
 					);
 		}
 		logger.debug("\n\n");
@@ -1201,11 +1232,17 @@ public class IntegrityMonitorTest {
 		for(Object mySme : smeList){
 			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
 			em.refresh(tmpSme);
-			logger.debug("\n    (restart4) ResourceName: " + tmpSme.getResourceName()
-					+ "\n        AdminState: " + tmpSme.getAdminState()
-					+ "\n        OpState: " + tmpSme.getOpState()
-					+ "\n        AvailStatus: " + tmpSme.getAvailStatus()
-					+ "\n        StandbyStatus: " + tmpSme.getStandbyStatus()
+
+			logger.debug("\n    (restart4) ResourceName: {}" + 
+					 "\n        AdminState: {}" + 
+					 "\n        OpState: {}" + 
+					 "\n        AvailStatus: {}" + 
+					 "\n        StandbyStatus: {}",
+					 tmpSme.getResourceName(),
+					 tmpSme.getAdminState(),
+					 tmpSme.getOpState(),
+					 tmpSme.getAvailStatus(),
+					 tmpSme.getStandbyStatus()
 					);
 		}
 		logger.debug("\n\n");
