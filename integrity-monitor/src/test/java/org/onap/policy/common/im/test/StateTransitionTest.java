@@ -30,15 +30,15 @@ import org.junit.Test;
 
 import org.onap.policy.common.im.StateTransition;
 import org.onap.policy.common.im.StateElement;
-import org.onap.policy.common.logging.flexlogger.FlexLogger; 
-import org.onap.policy.common.logging.flexlogger.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /*
  * All JUnits are designed to run in the local development environment
  * where they have write privileges and can execute time-sensitive
  * tasks.
  */
 public class StateTransitionTest {
-	private static Logger logger = FlexLogger.getLogger(StateTransitionTest.class);
+	private static Logger logger = LoggerFactory.getLogger(StateTransitionTest.class);
 	
 	private static final String DEFAULT_DB_DRIVER = "org.h2.Driver";
 	private static final String DEFAULT_DB_URL    = "jdbc:h2:file:./sql/smTest";
@@ -2146,7 +2146,7 @@ public class StateTransitionTest {
 		   		//emf.close(); 
 		   	//}
 		} catch(Exception ex) {
-			logger.error("Exception: " + ex.toString());
+			logger.error("Exception: {}" + ex.toString());
 			throw new Exception("Failure getting ending state. " + ex );
 		} finally {
 			if (emf != null && emf.isOpen()) {
@@ -2163,10 +2163,10 @@ public class StateTransitionTest {
 		if (endingStandbyStatus != null) {
 			endingStandbyStatus.replace(".",  ",");
 		}
-	    logger.info("EndingAdminState   = [" + se.getEndingAdminState() +"]"); 
-	    logger.info("EndingOpState      = [" + se.getEndingOpState() +"]"); 
-	   	logger.info("EndingAvailStatus  = [" + se.getEndingAvailStatus() +"]"); 
-	   	logger.info("EndingStandbyStatus= [" + endingStandbyStatus +"]");
-	   	logger.info("Exception          = [" + se.getException() +"]"); 	   	
+	    logger.info("EndingAdminState   = [{}]" + se.getEndingAdminState()); 
+	    logger.info("EndingOpState      = [{}]" + se.getEndingOpState()); 
+	   	logger.info("EndingAvailStatus  = [{}]" + se.getEndingAvailStatus()); 
+	   	logger.info("EndingStandbyStatus= [{}]" + endingStandbyStatus);
+	   	logger.info("Exception          = [{}]" + se.getException()); 	   	
 	} 
 }

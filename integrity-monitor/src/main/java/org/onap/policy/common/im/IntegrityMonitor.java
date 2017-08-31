@@ -41,11 +41,11 @@ import javax.persistence.Query;
 import org.onap.policy.common.im.jpa.ForwardProgressEntity;
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
-import org.onap.policy.common.logging.flexlogger.FlexLogger;
-import org.onap.policy.common.logging.flexlogger.Logger;
 import org.onap.policy.common.im.jmx.ComponentAdmin;
 import org.onap.policy.common.im.jmx.ComponentAdminMBean;
 import org.onap.policy.common.im.jmx.JmxAgentConnection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * IntegrityMonitor
@@ -53,7 +53,7 @@ import org.onap.policy.common.im.jmx.JmxAgentConnection;
  * the X.731 ITU standard.
  */
 public class IntegrityMonitor {
-	private static final Logger logger = FlexLogger.getLogger(IntegrityMonitor.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(IntegrityMonitor.class.getName());
 	
 	
 	// only allow one instance of IntegrityMonitor
@@ -174,14 +174,18 @@ public class IntegrityMonitor {
 	 */
 	public static IntegrityMonitor getInstance(String resourceName, Properties properties) throws Exception {
 		synchronized(getInstanceLock){
-			logger.info("getInstance() called - resourceName=" + resourceName);
+			if(logger.isDebugEnabled()){
+				logger.debug("getInstance() called - resourceName= {}", resourceName);
+			}
 			if (resourceName == null || resourceName.isEmpty() || properties == null) {
 				logger.error("Error: getIntegrityMonitorInstance() called with invalid input");
 				return null;
 			}
 
 			if (instance == null) {
-				logger.info("Creating new instance of IntegrityMonitor");
+				if(logger.isDebugEnabled()){
+					logger.debug("Creating new instance of IntegrityMonitor");
+				}
 				instance = new IntegrityMonitor(resourceName, properties);
 			}
 			return instance;
@@ -189,7 +193,9 @@ public class IntegrityMonitor {
 	}
 	
 	public static IntegrityMonitor getInstance() throws Exception{
-		logger.info("getInstance() called");
+		if(logger.isDebugEnabled()){
+			logger.debug("getInstance() called");
+		}
 		if (instance == null) {
 			String msg = "No IntegrityMonitor instance exists."
 					+ " Please use the method IntegrityMonitor.getInstance(String resourceName, Properties properties)";
@@ -200,11 +206,15 @@ public class IntegrityMonitor {
 	}
 	
 	public static void deleteInstance(){
-		logger.info("deleteInstance() called");
+		if(logger.isDebugEnabled()){
+			logger.debug("deleteInstance() called");
+		}
 		if(isUnitTesting()){
 			instance=null;
 		}
-		logger.info("deleteInstance() exit");
+		if(logger.isDebugEnabled()){
+			logger.debug("deleteInstance() exit");
+		}
 	}
 	/**
 	 * IntegrityMonitor constructor. It is invoked from the getInstance() method in
@@ -221,7 +231,7 @@ public class IntegrityMonitor {
 		// singleton check since this constructor can be called from a child or sub-class
 		if (instance != null) {
 			String msg = "IM object exists and only one instance allowed";
-			logger.error(msg);
+			logger.error("{}", msg);
 			throw new IntegrityMonitorException("IntegrityMonitor constructor exception: " + msg);
 		}
 		instance = this;
@@ -245,8 +255,8 @@ public class IntegrityMonitor {
 		// Did it get created?
 		//
 		if (emf == null) {
-			logger.error("Error creating IM entity manager factory with persistence unit: "
-					+ PERSISTENCE_UNIT);	
+			logger.error("Error creating IM entity manager factory with persistence unit: {}",
+					PERSISTENCE_UNIT);	
 			throw new IntegrityMonitorException("Unable to create IM Entity Manager Factory");
 		}
 		
@@ -272,11 +282,15 @@ public class IntegrityMonitor {
         		fpx = (ForwardProgressEntity) fpList.get(0);
         		// refresh the object from DB in case cached data was returned
         		em.refresh(fpx);
-        		logger.info("Resource " + resourceName + " exists and will be updated - old fpc=" + fpx.getFpcCount() + ", lastUpdated=" + fpx.getLastUpdated());
+        		if(logger.isDebugEnabled()){
+        			logger.debug("Resource {} exists and will be updated - old fpc= {}, lastUpdated= {}", resourceName, fpx.getFpcCount(), fpx.getLastUpdated());
+        		}
         		fpx.setFpcCount(fpCounter);
         	}else{
         		//Create a forward progress object
-        		logger.info("Adding resource " + resourceName + " to ForwardProgress table");  	
+        		if(logger.isDebugEnabled()){
+        			logger.debug("Adding resource {} to ForwardProgress table", resourceName);
+        		}
         		fpx = new ForwardProgressEntity(); 
         	}
         	//update/set columns in entry            
@@ -300,11 +314,15 @@ public class IntegrityMonitor {
         		rrx = (ResourceRegistrationEntity) rrList.get(0);
         		// refresh the object from DB in case cached data was returned
         		em.refresh(rrx);
-        		logger.info("Resource " + resourceName + " exists and will be updated - old url=" + rrx.getResourceUrl() + ", createdDate=" + rrx.getCreatedDate());
+        		if(logger.isDebugEnabled()){
+        			logger.debug("Resource {} exists and will be updated - old url= {}, createdDate={}", resourceName, rrx.getResourceUrl(), rrx.getCreatedDate());
+        		}
         		rrx.setLastUpdated(new Date());
         	}else{
         		// register resource by adding entry to table in DB
-        		logger.info("Adding resource " + resourceName + " to ResourceRegistration table");  	
+        		if(logger.isDebugEnabled()){
+        			logger.debug("Adding resource {} to ResourceRegistration table", resourceName);
+        		}
         		rrx = new ResourceRegistrationEntity();
         	}
         	//update/set columns in entry
@@ -319,7 +337,7 @@ public class IntegrityMonitor {
         	}
         
         } catch (Exception e) {
-        	logger.error("IntegrityMonitor constructor DB table update failed with exception: " + e);
+        	logger.error("IntegrityMonitor constructor DB table update failed with exception: ", e);
         	try {
         		if (et.isActive()) {
         			synchronized(IMFLUSHLOCK){
@@ -327,7 +345,7 @@ public class IntegrityMonitor {
         			}
         		}
         	} catch (Exception e1) {
-        		logger.error("IntegrityMonitor constructor threw exception: " + e1);
+        		logger.error("IntegrityMonitor constructor threw exception: ", e1);
         	}
         	throw e;
         }
@@ -348,7 +366,7 @@ public class IntegrityMonitor {
 		try {
 			new ComponentAdmin(resourceName, this, stateManager);
 		} catch (Exception e) {
-			logger.error("ComponentAdmin constructor exception: " + e);
+			logger.error("ComponentAdmin constructor exception: {}", e.toString(), e);
 		}
 		
 		new FPManager();
@@ -364,7 +382,7 @@ public class IntegrityMonitor {
 		String jmx_err_msg;
 		if (jmx_port == null) {
 			jmx_err_msg = "System property com.sun.management.jmxremote.port for JMX remote port is not set";
-			logger.error(jmx_err_msg);
+			logger.error("{}", jmx_err_msg);
 			throw new IntegrityMonitorException("getJmxUrl exception: " + jmx_err_msg);
 		}
 		
@@ -373,7 +391,7 @@ public class IntegrityMonitor {
 			port = Integer.parseInt(jmx_port);
 		} catch (NumberFormatException e) {
 			jmx_err_msg = "JMX remote port is not a valid integer value - " + jmx_port;
-			logger.error(jmx_err_msg);
+			logger.error("{}", jmx_err_msg);
 			throw new IntegrityMonitorException("getJmxUrl exception: " + jmx_err_msg);
 		}
 
@@ -382,19 +400,22 @@ public class IntegrityMonitor {
 				jmxFqdn = InetAddress.getLocalHost().getCanonicalHostName();  // get FQDN of this host
 			}
 		} catch (Exception e) {
-			String msg = "getJmxUrl could not get hostname" + e;
-			logger.error(msg);
+			String msg = "getJmxUrl could not get hostname";
+			logger.error("{}", msg, e);
 			throw new IntegrityMonitorException("getJmxUrl Exception: " + msg);
 		}
 		if (jmxFqdn == null) {
 			String msg = "getJmxUrl encountered null hostname";
-			logger.error(msg);
+			logger.error("{}", msg);
 			throw new IntegrityMonitorException("getJmxUrl error: " + msg);
 		}
 
 		// assemble the jmx url
 		String jmx_url = "service:jmx:rmi:///jndi/rmi://" + jmxFqdn + ":" + port + "/jmxrmi";
-		logger.info("IntegerityMonitor - jmx url=" + jmx_url);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("IntegerityMonitor - jmx url={}", jmx_url);
+		}
 		
 		return jmx_url;
 	}
@@ -405,29 +426,38 @@ public class IntegrityMonitor {
 	 * which includes information about any dependency (node) which has failed.
 	 */
 	public void evaluateSanity() throws Exception {
-		logger.debug("evaluateSanity called ....");
+		if(logger.isDebugEnabled()){
+			logger.debug("evaluateSanity called ....");
+		}
 		synchronized(evaluateSanityLock){
 
 			String error_msg = dependencyCheckErrorMsg;
-			logger.debug("evaluateSanity dependencyCheckErrorMsg = " + error_msg);
-
+			if(logger.isDebugEnabled()){
+				logger.debug("evaluateSanity dependencyCheckErrorMsg = {}", error_msg);
+			}
 			// check op state and throw exception if disabled
 			if ((stateManager.getOpState() != null) && stateManager.getOpState().equals(StateManagement.DISABLED)) {
 				String msg = "Resource " + resourceName + " operation state is disabled. " + error_msg;
-				logger.debug(msg);
+				if(logger.isDebugEnabled()){
+					logger.debug("{}", msg);
+				}
 				throw new IntegrityMonitorException(msg);
 			}
 
 			// check admin state and throw exception if locked
 			if ((stateManager.getAdminState() != null) && stateManager.getAdminState().equals(StateManagement.LOCKED)) {
 				String msg = "Resource " + resourceName + " is administratively locked";
-				logger.debug(msg);
+				if(logger.isDebugEnabled()){
+					logger.debug("{}", msg);
+				}
 				throw new AdministrativeStateException("IntegrityMonitor Admin State Exception: " + msg);
 			}
 			// check standby state and throw exception if cold standby
 			if ((stateManager.getStandbyStatus() != null) && stateManager.getStandbyStatus().equals(StateManagement.COLD_STANDBY)){
 				String msg = "Resource " + resourceName + " is cold standby";
-				logger.debug(msg);
+				if(logger.isDebugEnabled()){
+					logger.debug("{}", msg);
+				}
 				throw new StandbyStatusException("IntegrityMonitor Standby Status Exception: " + msg);
 			}
 
@@ -443,8 +473,9 @@ public class IntegrityMonitor {
 	 * will return an error.  
 	 */
 	public String stateCheck(String dep) {
-		logger.debug("checking state of dependent resource: " + dep);
-
+		if(logger.isDebugEnabled()){
+			logger.debug("checking state of dependent resource: {}", dep);
+		}
 		String error_msg = null;
 		ForwardProgressEntity forwardProgressEntity = null;
 		StateManagementEntity stateManagementEntity = null;
@@ -466,11 +497,12 @@ public class IntegrityMonitor {
 				forwardProgressEntity = (ForwardProgressEntity) fpList.get(0);
 				// refresh the object from DB in case cached data was returned
 				em.refresh(forwardProgressEntity);
-				logger.debug("Found entry in ForwardProgressEntity table for dependent Resource=" + dep);
+				if(logger.isDebugEnabled()){
+					logger.debug("Found entry in ForwardProgressEntity table for dependent Resource={}", dep);
+				}
 			} else {
 				error_msg = dep + ": resource not found in ForwardProgressEntity database table";
-				logger.debug(error_msg);
-				logger.error(error_msg);
+				logger.error("{}", error_msg);
 			}
 			synchronized(IMFLUSHLOCK){
 				et.commit();
@@ -478,9 +510,8 @@ public class IntegrityMonitor {
 		}
 		catch(Exception ex){
 			// log an error
-			error_msg = dep + ": ForwardProgressEntity DB operation failed with exception: " + ex;
-			logger.debug(error_msg);
-			logger.error(error_msg);
+			error_msg = dep + ": ForwardProgressEntity DB operation failed with exception: ";
+			logger.error("{}", error_msg, ex);
 			synchronized(IMFLUSHLOCK){
 				if(et.isActive()){
 					et.rollback();
@@ -505,11 +536,12 @@ public class IntegrityMonitor {
 					stateManagementEntity = (StateManagementEntity) smList.get(0);
 					// refresh the object from DB in case cached data was returned
 					em.refresh(stateManagementEntity);
-					logger.debug("Found entry in StateManagementEntity table for dependent Resource=" + dep);
+					if(logger.isDebugEnabled()){
+						logger.debug("Found entry in StateManagementEntity table for dependent Resource={}", dep);
+					}
 				} else {
 					error_msg = dep + ": resource not found in state management entity database table";
-					logger.debug(error_msg);
-					logger.error(error_msg);
+					logger.error("{}", error_msg);
 				}
 
 				synchronized(IMFLUSHLOCK){
@@ -517,9 +549,8 @@ public class IntegrityMonitor {
 				}
 			} catch (Exception e) {
 				// log an error
-				error_msg = dep + ": StateManagementEntity DB read failed with exception: " + e;
-				logger.debug(error_msg);
-				logger.error(error_msg);
+				error_msg = dep + ": StateManagementEntity DB read failed with exception: ";
+				logger.error("{}", error_msg, e);
 				synchronized(IMFLUSHLOCK){
 					if(et.isActive()){
 						et.rollback();
@@ -533,24 +564,29 @@ public class IntegrityMonitor {
 			if (forwardProgressEntity != null && stateManagementEntity != null) {
 				Date date = new Date();
 				long diffMs = date.getTime() - forwardProgressEntity.getLastUpdated().getTime();
-				logger.debug("IntegrityMonitor.stateCheck(): diffMs = " + diffMs);
+				if(logger.isDebugEnabled()){
+					logger.debug("IntegrityMonitor.stateCheck(): diffMs = {}", diffMs);
+				}
 
 				//Threshold for a stale entry
 				long staleMs = failedCounterThreshold * monitorInterval * (long)1000;
-				logger.debug("IntegrityMonitor.stateCheck(): staleMs = " + staleMs);
+				if(logger.isDebugEnabled()){
+					logger.debug("IntegrityMonitor.stateCheck(): staleMs = {}", staleMs);
+				}
 
 				if(diffMs > staleMs){
 					//ForwardProgress is stale.  Disable it
 					try {
 						if(!stateManagementEntity.getOpState().equals(StateManagement.DISABLED)){
-							logger.debug("IntegrityMonitor.stateCheck(): Changing OpStat = disabled for " + dep);
+							if(logger.isDebugEnabled()){
+								logger.debug("IntegrityMonitor.stateCheck(): Changing OpStat = disabled for {}", dep);
+							}
 							stateManager.disableFailed(dep);
 						}
 					} catch (Exception e) {
 						String msg = "IntegrityMonitor.stateCheck(): Failed to diableFail dependent resource = " + dep 
 								+ "; " + e.getMessage();
-						logger.debug(msg, e);
-						logger.error(msg, e);
+						logger.error("{}",msg, e);
 					}
 				}
 			}
@@ -559,15 +595,13 @@ public class IntegrityMonitor {
 				if(forwardProgressEntity == null) {
 					String msg = "IntegrityMonitor.stateCheck(): Failed to diableFail dependent resource = " + dep 
 							+ "; " + " forwardProgressEntity == null.";
-					logger.debug(msg);
-					logger.error(msg);
+					logger.error("{}", msg);
 				}
 				
 				else  {
 					String msg = "IntegrityMonitor.stateCheck(): Failed to diableFail dependent resource = " + dep 
 							+ "; " + " stateManagementEntity == null.";
-					logger.debug(msg);
-					logger.error(msg);
+					logger.error("{}", msg);
 				}
 			}
 		}
@@ -577,32 +611,32 @@ public class IntegrityMonitor {
 			if(stateManagementEntity != null) {
 				if ((stateManager.getAdminState() != null) && stateManagementEntity.getAdminState().equals(StateManagement.LOCKED)) {
 					error_msg = dep + ": resource is administratively locked";
-					logger.debug(error_msg);
-					logger.error(error_msg);
+					logger.error("{}", error_msg);
 				} else if ((stateManager.getOpState() != null) && stateManagementEntity.getOpState().equals(StateManagement.DISABLED)) {
 					error_msg = dep + ": resource is operationally disabled";
-					logger.debug(error_msg);
-					logger.error(error_msg);
+					logger.error("{}", error_msg);
 				} else if ((stateManager.getStandbyStatus() != null) && stateManagementEntity.getStandbyStatus().equals(StateManagement.COLD_STANDBY)) {
 					error_msg = dep + ": resource is cold standby";
-					logger.debug(error_msg);
-					logger.error(error_msg);
+					logger.error("{}", error_msg);
 				}
 			}
 			else {
 				error_msg = dep + ": could not check standy state of resource. stateManagementEntity == null.";
-				logger.debug(error_msg);
-				logger.error(error_msg);
+				logger.error("{}", error_msg);
 			}
 		}
 		
 		String returnMsg = "IntegrityMonitor.stateCheck(): returned error_msg: " + error_msg;
-		logger.debug(returnMsg);
+		if(logger.isDebugEnabled()){
+			logger.debug("{}", returnMsg);
+		}
 		return error_msg;
 	}
 	
 	private String fpCheck(String dep) {
-		logger.debug("checking forward progress count of dependent resource: " + dep);
+		if(logger.isDebugEnabled()){
+			logger.debug("checking forward progress count of dependent resource: {}", dep);
+		}
 		
 		String error_msg = null;
 		
@@ -624,36 +658,40 @@ public class IntegrityMonitor {
 				fpx = (ForwardProgressEntity) fpList.get(0);
 				// refresh the object from DB in case cached data was returned
 				em.refresh(fpx);
-				logger.debug("Dependent resource " + dep + " - fpc=" + fpx.getFpcCount() + ", lastUpdated=" + fpx.getLastUpdated());
+				if(logger.isDebugEnabled()){
+					logger.debug("Dependent resource {} - fpc= {}, lastUpdated={}", dep, fpx.getFpcCount(), fpx.getLastUpdated());	
+				}
 				long currTime = System.currentTimeMillis();
 				// if dependent resource FPC has not been updated, consider it an error
 				if ((currTime - fpx.getLastUpdated().getTime()) > (1000 * maxFpcUpdateInterval)) {
 					error_msg = dep + ": FP count has not been updated in the last " + maxFpcUpdateInterval + " seconds";
-					logger.error(error_msg);
+					logger.error("{}", error_msg);
 					try {
 						// create instance of StateMangement class for dependent
 						StateManagement depStateManager = new StateManagement(emf, dep);
 							if(!depStateManager.getOpState().equals(StateManagement.DISABLED)){
-								logger.info("Forward progress not detected for dependent resource " + dep + ". Setting dependent's state to disable failed.");
+								if(logger.isDebugEnabled()){
+									logger.debug("Forward progress not detected for dependent resource {}. Setting dependent's state to disable failed.", dep);
+								}
 								depStateManager.disableFailed();
 							}
 					} catch (Exception e) {
 						// ignore errors
-						logger.info("Update dependent state failed with exception: " + e);
+						logger.error("Update dependent state failed with exception: ", e);
 					}
 				}
 			} else {
 				// resource entry not found in FPC table
 				error_msg = dep + ": resource not found in ForwardProgressEntity table in the DB";
-				logger.error(error_msg);
+				logger.error("{}", error_msg);
 			}
 			synchronized(IMFLUSHLOCK){
 				et.commit();
 			}
 		} catch (Exception e) {
 			// log an error and continue
-			error_msg = dep + ": ForwardProgressEntity DB read failed with exception: " + e;
-			logger.error(error_msg);
+			error_msg = dep + ": ForwardProgressEntity DB read failed with exception: ";
+			logger.error("{}", error_msg, e);
 			synchronized(IMFLUSHLOCK){
 				if(et.isActive()){
 					et.rollback();
@@ -681,13 +719,13 @@ public class IntegrityMonitor {
 				et.commit();
 			}
 			if(logger.isDebugEnabled()){
-				logger.debug("getAllForwardProgressEntity: myList.size(): " + myList.size());
+				logger.debug("getAllForwardProgressEntity: myList.size(): {}", myList.size());
 			}
 			if(!myList.isEmpty()){
 				for(int i = 0; i < myList.size(); i++){
 					if(logger.isDebugEnabled()){
-						logger.debug("getAllForwardProgressEntity: myList.get(" + i +").getResourceName()" 
-							+ ": " + ((ForwardProgressEntity)myList.get(i)).getResourceName());
+						logger.debug("getAllForwardProgressEntity: myList.get({}).getResourceName(): {}",i, 
+							((ForwardProgressEntity)myList.get(i)).getResourceName());
 					}
 					fpList.add((ForwardProgressEntity) myList.get(i));
 				}
@@ -699,8 +737,8 @@ public class IntegrityMonitor {
 			}
 		} catch (Exception e) {
 			// log an error and continue
-			String msg = "getAllForwardProgessEntity DB read failed with exception: " + e;
-			logger.error(msg);
+			String msg = "getAllForwardProgessEntity DB read failed with exception: ";
+			logger.error("{}", msg, e);
 			synchronized(IMFLUSHLOCK){
 				if(et.isActive()){
 					et.rollback();
@@ -712,7 +750,9 @@ public class IntegrityMonitor {
 	  
 	
 	private String jmxCheck(String dep) {
-		logger.debug("checking health of dependent by calling test() via JMX on resource: " + dep);
+		if(logger.isDebugEnabled()){
+			logger.debug("checking health of dependent by calling test() via JMX on resource: {}", dep);
+		}
 
 		String error_msg = null;
 
@@ -737,18 +777,20 @@ public class IntegrityMonitor {
 				// refresh the object from DB in case cached data was returned
         		em.refresh(rrx);
 				jmxUrl = rrx.getResourceUrl();
-				logger.debug("Dependent Resource=" + dep + ", url=" + jmxUrl + ", createdDate=" + rrx.getCreatedDate());
+				if(logger.isDebugEnabled()){
+					logger.debug("Dependent Resource={}, url={}, createdDate={}", dep, jmxUrl, rrx.getCreatedDate());
+				}
 			} else {
 				error_msg = dep + ": resource not found in ResourceRegistrationEntity table in the DB";
-				logger.error(error_msg);
+				logger.error("{}", error_msg);
 			}
 
 			synchronized(IMFLUSHLOCK){
 				et.commit();
 			}
 		} catch (Exception e) {
-			error_msg = dep + ": ResourceRegistrationEntity DB read failed with exception: " + e;
-			logger.error(error_msg);
+			error_msg = dep + ": ResourceRegistrationEntity DB read failed with exception: ";
+			logger.error("{}", error_msg, e);
 			synchronized(IMFLUSHLOCK){
 				if(et.isActive()){
 					et.rollback();
@@ -767,10 +809,12 @@ public class IntegrityMonitor {
 
 				// invoke the test method via the jmx proxy
 				admin.test();
-				logger.debug("Dependent resource " + dep + " sanity test passed");
+				if(logger.isDebugEnabled()){
+					logger.debug("Dependent resource {} sanity test passed", dep);
+				}
 			} catch (Exception e) {
-				error_msg = dep + ": resource sanity test failed with exception: " + e;
-				logger.error(error_msg);
+				error_msg = dep + ": resource sanity test failed with exception: ";
+				logger.error("{}", error_msg, e);
 				// TODO: extract real error message from exception which may be nested
 			} finally {
 				// close the JMX connector
@@ -784,7 +828,9 @@ public class IntegrityMonitor {
 	}
 	
 	private String dependencyCheck() {
-		logger.debug("dependencyCheck: entry - checking health of dependent groups and setting resource's state");
+		if(logger.isDebugEnabled()){
+			logger.debug("dependencyCheck: entry - checking health of dependent groups and setting resource's state");
+		}
 		synchronized(dependencyCheckLock){
 
 			// Start with the error message empty
@@ -802,7 +848,9 @@ public class IntegrityMonitor {
 						continue;
 					}
 					String [] dependencies = group.split(",");
-					logger.debug("group dependencies = " + Arrays.toString(dependencies));
+					if(logger.isDebugEnabled()){
+						logger.debug("group dependencies = {}", Arrays.toString(dependencies));
+					}
 					int real_dep_count = 0;
 					int fail_dep_count = 0;
 					for (String dep : dependencies) {
@@ -833,7 +881,9 @@ public class IntegrityMonitor {
 					if ((real_dep_count > 0) && (fail_dep_count == real_dep_count)) {
 						dependencyFailure=true;
 						try {
-							logger.info("All dependents in group " + group + " have failed their health check. Updating this resource's state to disableDependency");
+							if(logger.isDebugEnabled()){
+								logger.debug("All dependents in group {} have failed their health check. Updating this resource's state to disableDependency", group);
+							}
 							if( !( (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY) ||
 									(stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED) ) ){
 								// Note: redundant calls are made by refreshStateAudit
@@ -844,7 +894,7 @@ public class IntegrityMonitor {
 									this.stateManager.disableDependency();
 								}
 						} catch (Exception e) {
-							logger.error(e);
+							logger.error("IntegrityMonitor threw exception.", e);
 							if (!error_msg.isEmpty()) {
 								error_msg = error_msg.concat(",");
 							}
@@ -861,14 +911,16 @@ public class IntegrityMonitor {
 				 */
 				if(!dependencyFailure){
 					try {
-						logger.debug("All dependency groups have at least one viable member. Updating this resource's state to enableNoDependency");
+						if(logger.isDebugEnabled()){
+							logger.debug("All dependency groups have at least one viable member. Updating this resource's state to enableNoDependency");
+						}
 						if( (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY) ||
 								(stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED) ){
 							// Note: redundant calls are made by refreshStateAudit
 							this.stateManager.enableNoDependency();	
 						} // The refreshStateAudit will catch the case where it is disabled but availStatus != failed
 					} catch (Exception e) {
-						logger.error(e);
+						logger.error("IntegrityMonitor threw exception.", e);
 						if (!error_msg.isEmpty()) {
 							error_msg = error_msg.concat(",");
 						}
@@ -882,14 +934,16 @@ public class IntegrityMonitor {
 				 * this happen in the lab, but is not very likely in a production environment...but you never know.
 				 */
 				try {
-					logger.debug("There are no dependents. Updating this resource's state to enableNoDependency");
+					if(logger.isDebugEnabled()){
+						logger.debug("There are no dependents. Updating this resource's state to enableNoDependency");
+					}
 					if( (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY) ||
 							(stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED) ){
 						// Note: redundant calls are made by refreshStateAudit
 						this.stateManager.enableNoDependency();	
 					}// The refreshStateAudit will catch the case where it is disabled but availStatus != failed
 				} catch (Exception e) {
-					logger.error(e);
+					logger.error("IntegrityMonitor threw exception.", e);
 					if (!error_msg.isEmpty()) {
 						error_msg = error_msg.concat(",");
 					}
@@ -906,10 +960,12 @@ public class IntegrityMonitor {
 				//Test any subsystems that are not covered under the dependency relationship
 				subsystemTest();
 			}catch (Exception e){
-				logger.error(e);
+				logger.error("IntegrityMonitor threw exception", e);
 				//This indicates a subsystemTest failure
 				try {
-					logger.info(resourceName + ": There has been a subsystemTest failure with error: " + e.getMessage() + "  Updating this resource's state to disableDependency");
+					if(logger.isDebugEnabled()){
+						logger.debug("{}: There has been a subsystemTest failure with error:{} Updating this resource's state to disableDependency", resourceName, e.getMessage());
+					}
 					//Capture the subsystemTest failure info
 					if(!error_msg.isEmpty()){
 						error_msg = error_msg.concat(",");
@@ -917,7 +973,7 @@ public class IntegrityMonitor {
 					error_msg = error_msg.concat(resourceName + ": " + e.getMessage());
 					this.stateManager.disableDependency();
 				} catch (Exception ex) {
-					logger.error(ex);
+					logger.error("IntegrityMonitor threw exception.", ex);
 					if (!error_msg.isEmpty()) {
 						error_msg = error_msg.concat(",");
 					}
@@ -926,7 +982,7 @@ public class IntegrityMonitor {
 			}
 
 			if (!error_msg.isEmpty()) {
-				logger.error("Sanity failure detected in a dependent resource: " + error_msg);
+				logger.error("Sanity failure detected in a dependent resource: {}", error_msg);
 
 			}
 			
@@ -943,12 +999,14 @@ public class IntegrityMonitor {
 	 */
 	public void testTransaction() {
 		synchronized (testTransactionLock){
-			logger.debug("testTransaction called...");
+			if(logger.isDebugEnabled()){
+				logger.debug("testTransaction called...");
+			}
 			// start Transaction - resets transaction timer and check admin state
 			try {
 				startTransaction();
 			} catch (AdministrativeStateException | StandbyStatusException e) {
-				logger.debug(e);
+				logger.error("IntegrityMonitor threw exception.", e);
 			}
 
 			// TODO: add test functionality if needed
@@ -964,7 +1022,9 @@ public class IntegrityMonitor {
 	 */
 	public void subsystemTest() throws IntegrityMonitorException {
 		// Testing provided by subsystem
-		logger.debug("IntegrityMonitor subsystemTest() OK");
+		if(logger.isDebugEnabled()){
+			logger.debug("IntegrityMonitor subsystemTest() OK");
+		}
 	}
 	
 	/**
@@ -1032,8 +1092,13 @@ public class IntegrityMonitor {
 				fpx = (ForwardProgressEntity) fpList.get(0);
 				// refresh the object from DB in case cached data was returned
         		em.refresh(fpx);
-				logger.debug("Updating FP entry: Resource=" + resourceName + ", fpcCount=" + fpx.getFpcCount() + 
-						", lastUpdated=" + fpx.getLastUpdated()  + ", new fpcCount=" + fpCounter);
+        		if(logger.isDebugEnabled()){
+        			logger.debug("Updating FP entry: Resource={}, fpcCount={}, lastUpdated={}, new fpcCount={}",
+        					resourceName,
+        					fpx.getFpcCount(), 
+        					fpx.getLastUpdated(),
+        					fpCounter);
+        		}
 				fpx.setFpcCount(fpCounter);
 				em.persist(fpx);
 				// flush to the DB and commit
@@ -1054,9 +1119,9 @@ public class IntegrityMonitor {
         			}
         		}
         	} catch (Exception e1) {
-        		logger.debug(e1);
+        		logger.error("IntegrityMonitor threw exception.", e1);
         	}
-        	logger.error("writeFpc DB table commit failed with exception: " + e);
+        	logger.error("writeFpc DB table commit failed with exception: {}", e);
         	throw e;
         }
 	}
@@ -1074,25 +1139,25 @@ public class IntegrityMonitor {
 		
 		if (prop.getProperty(IntegrityMonitorProperties.DB_DRIVER)== null){
 			String msg = IntegrityMonitorProperties.DB_DRIVER + " property is null";
-			logger.error(msg);
+			logger.error("{}", msg);
 			throw new IntegrityMonitorPropertiesException("IntegrityMonitor Property Exception: " + msg);
 		}
         
 		if (prop.getProperty(IntegrityMonitorProperties.DB_URL)== null){
 			String msg = IntegrityMonitorProperties.DB_URL + " property is null";
-			logger.error(msg);
+			logger.error("{}", msg);
 			throw new IntegrityMonitorPropertiesException("IntegrityMonitor Property Exception: " + msg);
 		}
 		
 		if (prop.getProperty(IntegrityMonitorProperties.DB_USER)== null){
 			String msg = IntegrityMonitorProperties.DB_USER + " property is null";
-			logger.error(msg);
+			logger.error("{}", msg);
 			throw new IntegrityMonitorPropertiesException("IntegrityMonitor Property Exception: " + msg);
 		}
 		
 		if (prop.getProperty(IntegrityMonitorProperties.DB_PWD)== null){
 			String msg = IntegrityMonitorProperties.DB_PWD + " property is null";
-			logger.error(msg);
+			logger.error("{}", msg);
 			throw new IntegrityMonitorPropertiesException("IntegrityMonitor Property Exception: " + msg);
 		}
 		
@@ -1100,7 +1165,7 @@ public class IntegrityMonitor {
 			try {
 				monitorInterval = Integer.parseInt(prop.getProperty(IntegrityMonitorProperties.FP_MONITOR_INTERVAL).trim());
 			} catch (NumberFormatException e) {
-				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.FP_MONITOR_INTERVAL);
+				logger.warn("Ignored invalid property: {}", IntegrityMonitorProperties.FP_MONITOR_INTERVAL, e);
 			}
 		}
 		
@@ -1108,7 +1173,7 @@ public class IntegrityMonitor {
 			try {
 				failedCounterThreshold = Integer.parseInt(prop.getProperty(IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD).trim());
 			} catch (NumberFormatException e) {
-				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD);
+				logger.warn("Ignored invalid property: {}", IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD, e);
 			}
 		}
 		
@@ -1116,7 +1181,7 @@ public class IntegrityMonitor {
 			try {
 				testTransInterval = Integer.parseInt(prop.getProperty(IntegrityMonitorProperties.TEST_TRANS_INTERVAL).trim());
 			} catch (NumberFormatException e) {
-				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.TEST_TRANS_INTERVAL);
+				logger.warn("Ignored invalid property: {}", IntegrityMonitorProperties.TEST_TRANS_INTERVAL, e);
 			}
 		}
 		
@@ -1124,7 +1189,7 @@ public class IntegrityMonitor {
 			try {
 				writeFpcInterval = Integer.parseInt(prop.getProperty(IntegrityMonitorProperties.WRITE_FPC_INTERVAL).trim());
 			} catch (NumberFormatException e) {
-				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.WRITE_FPC_INTERVAL);
+				logger.warn("Ignored invalid property: {}", IntegrityMonitorProperties.WRITE_FPC_INTERVAL, e);
 			}
 		}
 		
@@ -1134,16 +1199,18 @@ public class IntegrityMonitor {
 		if (prop.getProperty(IntegrityMonitorProperties.DEPENDENCY_GROUPS) != null) {
 			try {
 				dep_groups = prop.getProperty(IntegrityMonitorProperties.DEPENDENCY_GROUPS).split(";");
-				logger.info("dependency groups property = " + Arrays.toString(dep_groups));
+				if(logger.isDebugEnabled()){
+					logger.debug("dependency groups property = {}", Arrays.toString(dep_groups));
+				}
 			} catch (Exception e) {
-				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.DEPENDENCY_GROUPS, e);
+				logger.warn("Ignored invalid property: {}", IntegrityMonitorProperties.DEPENDENCY_GROUPS, e);
 			}
 		}
 		
 		site_name = prop.getProperty(IntegrityMonitorProperties.SITE_NAME);
 		if (site_name == null) {
 			String msg = IntegrityMonitorProperties.SITE_NAME + " property is null";
-			logger.error(msg);
+			logger.error("{}", msg);
 			throw new IntegrityMonitorPropertiesException("IntegrityMonitor Property Exception: " + msg);
 		}else{
 			site_name = site_name.trim();
@@ -1152,13 +1219,13 @@ public class IntegrityMonitor {
 		node_type = prop.getProperty(IntegrityMonitorProperties.NODE_TYPE);
 		if (node_type == null) {
 			String msg = IntegrityMonitorProperties.NODE_TYPE + " property is null";
-			logger.error(msg);
+			logger.error("{}", msg);
 			throw new IntegrityMonitorPropertiesException("IntegrityMonitor Property Exception: " + msg);
 		} else {
 			node_type = node_type.trim();
 			if (!isNodeTypeEnum(node_type)) {
 				String msg = IntegrityMonitorProperties.NODE_TYPE + " property " + node_type + " is invalid";
-				logger.error(msg);
+				logger.error("{}", msg);
 				throw new IntegrityMonitorPropertiesException("IntegrityMonitor Property Exception: " + msg);
 			}
 		}
@@ -1180,7 +1247,7 @@ public class IntegrityMonitor {
 			try {
 				maxFpcUpdateInterval = Integer.parseInt(prop.getProperty(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL).trim());
 			} catch (NumberFormatException e) {
-				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL);
+				logger.warn("Ignored invalid property: {}", IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL, e);
 			}
 		}
 		
@@ -1188,7 +1255,7 @@ public class IntegrityMonitor {
 			try{
 				stateAuditIntervalMs = Long.parseLong(prop.getProperty(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS));
 			}catch(NumberFormatException e){
-				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS);
+				logger.warn("Ignored invalid property: {}", IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, e);
 			}
 		}
 		
@@ -1196,7 +1263,7 @@ public class IntegrityMonitor {
 			try{
 				refreshStateAuditIntervalMs = Long.parseLong(prop.getProperty(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS));
 			}catch(NumberFormatException e){
-				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS);
+				logger.warn("Ignored invalid property: {}", IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, e);
 			}
 		}
 		
@@ -1208,11 +1275,13 @@ public class IntegrityMonitor {
 			try {
 				validateProperties(newprop);
 			} catch (IntegrityMonitorPropertiesException e) {
-				logger.debug(e);
+				logger.error("IntegrityMonitor threw exception.", e);
 			}
 		}
 		else {
-			logger.info("Update integrity monitor properties not allowed");
+			if(logger.isDebugEnabled()){
+				logger.debug("Update integrity monitor properties not allowed");
+			}
 		}
 	}
 	
@@ -1253,7 +1322,9 @@ public class IntegrityMonitor {
 					// no forward progress
 					missedCycles += 1;
 					if (missedCycles >= failedCounterThreshold && !alarmExists) {
-						logger.info("Forward progress not detected for resource " + resourceName + ". Setting state to disable failed.");
+						if(logger.isDebugEnabled()){
+							logger.debug("Forward progress not detected for resource {}. Setting state to disable failed.", resourceName);
+						}
 						if(!(stateManager.getOpState()).equals(StateManagement.DISABLED)){
 							// Note: The refreshStateAudit will make redundant calls
 							stateManager.disableFailed();
@@ -1266,7 +1337,9 @@ public class IntegrityMonitor {
 					lastFpCounter = fpCounter;
 					missedCycles = 0;
 					// set op state to enabled
-					logger.debug("Forward progress detected for resource " + resourceName + ". Setting state to enable not failed.");
+					if(logger.isDebugEnabled()){
+						logger.debug("Forward progress detected for resource {}. Setting state to enable not failed.", resourceName);
+					}
 					if(!(stateManager.getOpState()).equals(StateManagement.ENABLED)){
 						// Note: The refreshStateAudit will make redundant calls
 						stateManager.enableNotFailed();	
@@ -1324,11 +1397,15 @@ public class IntegrityMonitor {
 			//Make sure you are not getting a cached version
 			em.refresh(fpe);
 			long diffMs = date.getTime() - fpe.getLastUpdated().getTime();
-			logger.debug("IntegrityMonitor.stateAudit(): diffMs = " + diffMs);
+			if(logger.isDebugEnabled()){
+				logger.debug("IntegrityMonitor.stateAudit(): diffMs = {}", diffMs);
+			}
 
 			//Threshold for a stale entry
 			long staleMs = maxFpcUpdateInterval * (long)1000;
-			logger.debug("IntegrityMonitor.stateAudit(): staleMs = " + staleMs);
+			if(logger.isDebugEnabled()){
+				logger.debug("IntegrityMonitor.stateAudit(): staleMs = {}", staleMs);
+			}
 
 			if(diffMs > staleMs){
 				//ForwardProgress is stale.  Disable it
@@ -1349,20 +1426,19 @@ public class IntegrityMonitor {
 						sme = (StateManagementEntity) smList.get(0);
 						// refresh the object from DB in case cached data was returned
 						em.refresh(sme);
-						logger.debug("IntegrityMonitor.stateAudit(): Found entry in StateManagementEntity table for Resource=" + sme.getResourceName());
+						if(logger.isDebugEnabled()){
+							logger.debug("IntegrityMonitor.stateAudit(): Found entry in StateManagementEntity table for Resource={}", sme.getResourceName());
+						}
 					} else {
 						String msg = "IntegrityMonitor.stateAudit(): " + fpe.getResourceName() + ": resource not found in state management entity database table";
-						logger.debug(msg);
-						logger.error(msg);
+							logger.error("{}", msg);
 					}
 					synchronized(IMFLUSHLOCK){
 						et.commit();
 					}
 				} catch (Exception e) {
 					// log an error
-					String msg = "IntegrityMonitor.stateAudit(): " + fpe.getResourceName() + ": StateManagementEntity DB read failed with exception: ";
-					logger.error(msg, e);
-					logger.debug(msg);
+					logger.error("IntegrityMonitor.stateAudit(): {}: StateManagementEntity DB read failed with exception: ", fpe.getResourceName(), e);
 					synchronized(IMFLUSHLOCK){
 						if(et.isActive()){
 							et.rollback();
@@ -1371,13 +1447,14 @@ public class IntegrityMonitor {
 				}
 
 				if(sme != null && !sme.getOpState().equals(StateManagement.DISABLED)){
-						logger.debug("IntegrityMonitor.stateAudit(): Changing OpStat = disabled for " + sme.getResourceName());
+					if(logger.isDebugEnabled()){	
+						logger.debug("IntegrityMonitor.stateAudit(): Changing OpStat = disabled for {}", sme.getResourceName());
+					}
 						try {
 							stateManager.disableFailed(sme.getResourceName());
 						} catch (Exception e) {
 							String msg = "IntegrityMonitor.stateAudit(): Failed to disable " + sme.getResourceName();
-							logger.debug(msg);
-							logger.error(msg, e);
+							logger.error("{}", msg, e);
 						}
 				}
 			}// end if(diffMs > staleMs)
@@ -1432,7 +1509,7 @@ public class IntegrityMonitor {
 			try {
 				writeFpc();
 			} catch (Exception e) {
-				logger.debug(e);
+				logger.error("IntegrityMonitor threw exception.", e);
 			}
 		}
 	}
@@ -1441,10 +1518,14 @@ public class IntegrityMonitor {
 	 * Execute a dependency health check periodically which also updates this resource's state.
 	 */
 	private void checkDependentHealth() {
-		logger.debug("checkDependentHealth: entry");
+		if(logger.isDebugEnabled()){
+			logger.debug("checkDependentHealth: entry");
+		}
 		
 		long currTime = System.currentTimeMillis();
-		logger.debug("checkDependentHealth currTime - lastDependencyCheckTime = " + (currTime - lastDependencyCheckTime));
+		if(logger.isDebugEnabled()){
+			logger.debug("checkDependentHealth currTime - lastDependencyCheckTime = {}", (currTime - lastDependencyCheckTime));
+		}
 		if ((currTime - lastDependencyCheckTime) > (1000 * IntegrityMonitorProperties.DEFAULT_TEST_INTERVAL)) {
 			// execute dependency check and update this resource's state
 			
@@ -1467,32 +1548,44 @@ public class IntegrityMonitor {
 			return;
 		}
 		synchronized(refreshStateAuditLock){
-			logger.debug("refreshStateAudit: entry");
+			if(logger.isDebugEnabled()){
+				logger.debug("refreshStateAudit: entry");
+			}
 			Date now = new Date();
 			long nowMs = now.getTime();
 			long lastTimeMs = refreshStateAuditLastRunDate.getTime();
-			logger.debug("refreshStateAudit: ms since last run = " + (nowMs - lastTimeMs)); 
+			if(logger.isDebugEnabled()){
+				logger.debug("refreshStateAudit: ms since last run = {}", (nowMs - lastTimeMs));
+			}
 
 			if((nowMs - lastTimeMs) > refreshStateAuditIntervalMs){
 				String adminState = stateManager.getAdminState();
-				logger.debug("refreshStateAudit: adminState = " + adminState);
+				if(logger.isDebugEnabled()){
+					logger.debug("refreshStateAudit: adminState = {}", adminState);
+				}
 				if(adminState.equals(StateManagement.LOCKED)){
 					try {
-						logger.debug("refreshStateAudit: calling lock()");
+						if(logger.isDebugEnabled()){
+							logger.debug("refreshStateAudit: calling lock()");
+						}
 						stateManager.lock();
 					} catch (Exception e) {
-						logger.error("refreshStateAudit: caught unexpected exception from stateManager.lock(): " + e );
+						logger.error("refreshStateAudit: caught unexpected exception from stateManager.lock(): ", e);
 					}
 				}else{//unlocked
 					try {
-						logger.debug("refreshStateAudit: calling unlock()");
+						if(logger.isDebugEnabled()){
+							logger.debug("refreshStateAudit: calling unlock()");
+						}
 						stateManager.unlock();;
 					} catch (Exception e) {
-						logger.error("refreshStateAudit: caught unexpected exception from stateManager.unlock(): " + e );
+						logger.error("refreshStateAudit: caught unexpected exception from stateManager.unlock(): ", e);
 					}
 				}
 				refreshStateAuditLastRunDate = new Date();
-				logger.debug("refreshStateAudit: exit");
+				if(logger.isDebugEnabled()){
+					logger.debug("refreshStateAudit: exit");
+				}
 			}
 		}
 	}
@@ -1521,13 +1614,17 @@ public class IntegrityMonitor {
 		
 		@Override
 		public void run() {
-			logger.info("FPManager thread running");
+			if(logger.isDebugEnabled()){
+				logger.debug("FPManager thread running");
+			}
 			while (true) {
 				try {
 					Thread.sleep(CYCLE_INTERVAL_MILLIS);
 				} catch (InterruptedException e) {
 					// The 'sleep' call was interrupted
-					logger.debug(e);
+					if(logger.isDebugEnabled()){
+						logger.debug("IntegrityMonitor threw exception.", e);
+					}
 					Thread.currentThread().interrupt();
 					continue;
 				}
@@ -1570,7 +1667,7 @@ public class IntegrityMonitor {
 					IntegrityMonitor.this.stateAudit();
 					
 				} catch (Exception e) {
-					logger.debug("Ignore FPManager thread processing timer(s) exception: " + e);
+					logger.error("Ignore FPManager thread processing timer(s) exception: ", e);
 				}
 			}
 		}

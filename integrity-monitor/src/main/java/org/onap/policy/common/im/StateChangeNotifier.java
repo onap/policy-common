@@ -22,6 +22,8 @@ package org.onap.policy.common.im;
  
 import java.util.Observable; 
 import java.util.Observer; 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 /* 
  * This is implementing the Observer interface to make it specific for
  * state management.
@@ -36,8 +38,7 @@ import java.util.Observer;
  */
 
 
-import org.onap.policy.common.logging.flexlogger.FlexLogger; 
-import org.onap.policy.common.logging.flexlogger.Logger;
+
 
 /**
  * 
@@ -47,7 +48,7 @@ import org.onap.policy.common.logging.flexlogger.Logger;
  *
  */
 public class StateChangeNotifier implements Observer { 
-	private static final Logger logger = FlexLogger.getLogger(StateChangeNotifier.class);
+	private static final Logger logger = LoggerFactory.getLogger(StateChangeNotifier.class);
 	//The observable class 
 	StateManagement stateManagement; 
  
@@ -63,7 +64,9 @@ public class StateChangeNotifier implements Observer {
 	} 
  
 	public void handleStateChange() {
-		logger.debug("handleStateChange, message: " + this.message);
+		if(logger.isDebugEnabled()){
+			logger.debug("handleStateChange, message: {}", this.message);
+		}
 	}
 
 	public StateManagement getStateManagement() {
