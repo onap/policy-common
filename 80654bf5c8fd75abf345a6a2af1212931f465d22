@@ -1,0 +1,326 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_0121f6fa",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "Also log \"e\" to avoid Sonar.",
+      "range": {
+        "startLine": 351,
+        "startChar": 3,
+        "endLine": 351,
+        "endChar": 72
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_e11b92c8",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 553,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "Let\u0027s pick one and also ensure that \"e\" is logged to avoid sonar.",
+      "range": {
+        "startLine": 550,
+        "startChar": 6,
+        "endLine": 553,
+        "endChar": 24
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_c17acef0",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1102,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "Log \"e\" to avoid sonar.",
+      "range": {
+        "startLine": 1101,
+        "startChar": 4,
+        "endLine": 1102,
+        "endChar": 4
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_a17d8ae9",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1110,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "Log e to avoid sonar.",
+      "range": {
+        "startLine": 1109,
+        "startChar": 4,
+        "endLine": 1110,
+        "endChar": 4
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_8184c6d4",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1118,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "Log e to avoid sonar",
+      "range": {
+        "startLine": 1117,
+        "startChar": 4,
+        "endLine": 1118,
+        "endChar": 4
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_6187a2d8",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1126,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "Log e to avoid sonar",
+      "range": {
+        "startLine": 1125,
+        "startChar": 4,
+        "endLine": 1126,
+        "endChar": 4
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_416ede30",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1138,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "Log e to avoid sonar",
+      "range": {
+        "startLine": 1137,
+        "startChar": 4,
+        "endLine": 1138,
+        "endChar": 4
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_21699a25",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1182,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 1181,
+        "startChar": 4,
+        "endLine": 1182,
+        "endChar": 4
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_e1727210",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1190,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 1189,
+        "startChar": 4,
+        "endLine": 1190,
+        "endChar": 4
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_0178d6f0",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1198,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 1197,
+        "startChar": 4,
+        "endLine": 1198,
+        "endChar": 4
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_c161ae3a",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1354,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "should we pick one?",
+      "range": {
+        "startLine": 1353,
+        "startChar": 6,
+        "endLine": 1354,
+        "endChar": 24
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_a1646a49",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 1362,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "Same here, we should pick one.",
+      "range": {
+        "startLine": 1361,
+        "startChar": 5,
+        "endLine": 1362,
+        "endChar": 136
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_615e8278",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/StateManagement.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "Log e to avoid sonar",
+      "range": {
+        "startLine": 901,
+        "startChar": 3,
+        "endLine": 901,
+        "endChar": 131
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_4155be4e",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/StateTransition.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-07T22:11:29Z",
+      "side": 1,
+      "message": "log \"ex\" to avoid sonar",
+      "range": {
+        "startLine": 150,
+        "startChar": 14,
+        "endLine": 151,
+        "endChar": 14
+      },
+      "revId": "80654bf5c8fd75abf345a6a2af1212931f465d22",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
