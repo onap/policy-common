@@ -35,7 +35,7 @@
 
 	<packaging>pom</packaging>
 
-	<name>Policy Engine - Common Modules</name>
+	<name>policy-common</name>
 	<description>Common Modules for Policy-Engine in both XACML and Drools flavor</description>
 
 	<properties>
