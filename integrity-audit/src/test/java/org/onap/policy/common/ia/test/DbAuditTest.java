@@ -41,7 +41,6 @@ import javax.persistence.Query;
 //import org.apache.commons.logging.LogFactory;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import org.onap.policy.common.ia.DbAudit;
