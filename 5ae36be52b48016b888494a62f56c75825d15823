@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_addb2f1a",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-09-11T17:40:04Z",
+      "side": 1,
+      "message": "Global: This code is executed quite frequently.  Here is how you should treat the log statements:\n - Convert all statements to use the {} parameter insertion format.  This also includes all that have a string msg built before being inserted into the logger statement.\n - Surround all logger.debug statements with a block: if(logger.isDebugEnabled{...}\n - Convert all logger.info statements to logger.debug and surround with isDebugEnabled block.\n\nThis applies to all the classes except the test class.",
+      "range": {
+        "startLine": 55,
+        "startChar": 13,
+        "endLine": 55,
+        "endChar": 29
+      },
+      "revId": "5ae36be52b48016b888494a62f56c75825d15823",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a437d4f_edca574e",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 550,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-09-11T17:40:04Z",
+      "side": 1,
+      "message": "You should delete the msg and just put the string in logger.debug statement so you can change the format to include the \"dep\" as a parameter with {}.\n\nThis is a global comment everywhere there is a msg defined and then inserted into a logger.error/debug statement.",
+      "range": {
+        "startLine": 550,
+        "startChar": 20,
+        "endLine": 550,
+        "endChar": 21
+      },
+      "revId": "5ae36be52b48016b888494a62f56c75825d15823",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
