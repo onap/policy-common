@@ -38,12 +38,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
-
-
 
 import org.onap.policy.common.im.IntegrityMonitor;
 import org.onap.policy.common.im.IntegrityMonitorProperties;
