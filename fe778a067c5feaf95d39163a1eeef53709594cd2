@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_b8c36656",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/StateManagement.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 766,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-12T15:32:48Z",
+      "side": 1,
+      "message": "oops - I\u0027ll put this back",
+      "range": {
+        "startLine": 766,
+        "startChar": 55,
+        "endLine": 766,
+        "endChar": 65
+      },
+      "revId": "fe778a067c5feaf95d39163a1eeef53709594cd2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
