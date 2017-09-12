@@ -26,6 +26,7 @@ package org.onap.policy.common.im.jmx;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
 import javax.management.MBeanServerConnection;
 import javax.management.Notification;
 import javax.management.NotificationListener;
@@ -34,10 +35,16 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import org.onap.policy.common.logging.flexlogger.FlexLogger;
+import org.onap.policy.common.logging.flexlogger.Logger;
+
 /**
  * Class to create a JMX RMI connection to the JmxAgent.
  */
 public final class JmxAgentConnection {
+	
+    private static final Logger logger = FlexLogger.getLogger(JmxAgentConnection.class);
+
 
 	private static final String DEFAULT_HOST = "localhost";
 	private static final String DEFAULT_PORT = "9996";
@@ -117,7 +124,7 @@ public final class JmxAgentConnection {
 	 */
 	public void disconnect() {
 		if (connector != null) {
-			try { connector.close(); } catch (IOException e) { }
+			try { connector.close(); } catch (IOException e) { logger.debug(e); }
 		}
 	}
 }

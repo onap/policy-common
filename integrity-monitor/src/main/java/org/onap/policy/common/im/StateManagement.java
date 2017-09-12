@@ -136,7 +136,6 @@ public class StateManagement extends Observable {
         logger.debug("StateManagement: constructor end, resourceName: " + this.resourceName);
       } catch(Exception ex) {
     	  logger.error("StateManagement: constructor caught unexpected exception: " + ex);
-    	  ex.printStackTrace();
     	  synchronized(FLUSHLOCK){
     		  if(et.isActive()){
     			  et.rollback();
@@ -182,7 +181,6 @@ public class StateManagement extends Observable {
 			  logger.debug("StateManagement: initializeState() operation completed, resourceName = " + this.resourceName);
 		  } catch(Exception ex) {
 			  logger.error("StateManagement.initializeState() caught unexpected exception: " + ex);
-			  ex.printStackTrace();
 			  synchronized(FLUSHLOCK){
 				  if(et.isActive()){
 					  et.rollback();
@@ -230,7 +228,6 @@ public class StateManagement extends Observable {
 			  logger.debug("StateManagement: lock() operation completed, resourceName = " + this.resourceName);
 		  } catch(Exception ex) {
 			  logger.error("StateManagement.lock() caught unexpected exception: " + ex);
-			  ex.printStackTrace();
 			  synchronized(FLUSHLOCK){
 				  if(et.isActive()){
 					  et.rollback();
@@ -277,7 +274,6 @@ public class StateManagement extends Observable {
 			  logger.debug("StateManagement: unlock() operation completed, resourceName = " + this.resourceName);
 		  } catch(Exception ex) {
 			  logger.error("StateManagement.unlock() caught unexpected exception: " + ex);
-			  ex.printStackTrace();
 			  synchronized(FLUSHLOCK){
 				  if(et.isActive()){
 					  et.rollback();
@@ -325,7 +321,6 @@ public class StateManagement extends Observable {
 			  logger.debug("StateManagement enableNotFailed() operation completed, resourceName = " + this.resourceName);
 		  } catch(Exception ex) {
 			  logger.error("StateManagement.enableNotFailed() caught unexpected exception: " + ex);
-			  ex.printStackTrace();
 			  synchronized(FLUSHLOCK){
 				  if(et.isActive()){
 					  et.rollback();
@@ -371,7 +366,6 @@ public class StateManagement extends Observable {
 			  logger.debug("StateManagement: disableFailed() operation completed, resourceName = " + this.resourceName);
 		  } catch(Exception ex) {
 			  logger.error("StateManagement.disableFailed() caught unexpected exception: " + ex);
-			  ex.printStackTrace();
 			  synchronized(FLUSHLOCK){
 				  if(et.isActive()){
 					  et.rollback();
@@ -424,7 +418,6 @@ public class StateManagement extends Observable {
 					  + otherResourceName);
 		  } catch(Exception ex) {
 			  logger.error("StateManagement.disableFailed(otherResourceName) caught unexpected exception: " + ex);
-			  ex.printStackTrace();
 			  synchronized(FLUSHLOCK){
 				  if(et.isActive()){
 					  et.rollback();
@@ -471,7 +464,6 @@ public class StateManagement extends Observable {
 			  logger.debug("StateManagement: disableDependency() operation completed, resourceName = " + this.resourceName);
 		  } catch(Exception ex) {
 			  logger.error("StateManagement.disableDependency() caught unexpected exception: " + ex);
-			  ex.printStackTrace();
 			  synchronized(FLUSHLOCK){
 				  if(et.isActive()){
 					  et.rollback();
@@ -519,7 +511,6 @@ public class StateManagement extends Observable {
 			  logger.debug("StateManagement: enableNoDependency() operation completed, resourceName = " + this.resourceName);
 		  } catch(Exception ex) {
 			  logger.error("StateManagement.enableNoDependency() caught unexpected exception: " + ex);
-			  ex.printStackTrace();
 			  synchronized(FLUSHLOCK){
 				  if(et.isActive()){
 					  et.rollback();
@@ -569,7 +560,6 @@ public class StateManagement extends Observable {
 			  notifyObservers(STANDBY_STATUS);
 		  }catch(Exception ex){
 			  logger.error("StateManagement.promote() caught unexpected exception: " + ex);
-			  ex.printStackTrace();
 			  synchronized(FLUSHLOCK){
 				  if(et.isActive()){
 					  et.rollback();
@@ -622,7 +612,6 @@ public class StateManagement extends Observable {
 			  logger.debug("StateManagement: demote() operation completed, resourceName = " + this.resourceName);
 		  } catch(Exception ex) {
 			  logger.error("StateManagement.demote() caught unexpected exception: " + ex);
-			  ex.printStackTrace();
 			  synchronized(FLUSHLOCK){
 				  if(et.isActive()){
 					  et.rollback();
@@ -677,7 +666,6 @@ public class StateManagement extends Observable {
 			  logger.debug("StateManagement: demote(otherResourceName) operation completed, resourceName = " + otherResourceName);
 		  } catch(Exception ex) {
 			  logger.error("StateManagement.demote(otherResourceName) caught unexpected exception: " + ex);
-			  ex.printStackTrace();
 			  synchronized(FLUSHLOCK){
 				  if(et.isActive()){
 					  et.rollback();
@@ -713,8 +701,7 @@ public String getAdminState()
         	  this.adminState = null; 
           }
 	  } catch(Exception ex) {
-		  ex.printStackTrace();
-		  logger.error("StateManagement: getAdminState exception: " + ex.toString()); 
+		  logger.error("StateManagement: getAdminState exception: " + ex); 
 	  }	  
       
 	  return this.adminState;
@@ -745,8 +732,7 @@ public String getOpState()
         	  this.opState = null; 
           }
 	  } catch(Exception ex) {
-		  ex.printStackTrace();
-		  logger.error("StateManagement: getOpState exception: " + ex.toString()); 
+		  logger.error("StateManagement: getOpState exception: " + ex); 
 	  }	  
       
 	  return this.opState;
@@ -777,8 +763,7 @@ public String getOpState()
         	  this.availStatus = null; 
           }
 	  } catch(Exception ex) {
-		  ex.printStackTrace();
-		  logger.error("StateManagement: getAvailStatus exception: " + ex.toString()); 
+		  logger.error("StateManagement: getAvailStatus exception: "); 
 	  }	  
       
 	  return this.availStatus;
@@ -809,8 +794,7 @@ public String getOpState()
         	  this.standbyStatus = null; 
           }
 	  } catch(Exception ex) {
-		  ex.printStackTrace();
-		  logger.error("StateManagement: getStandbyStatus exception: " + ex.toString()); 
+		  logger.error("StateManagement: getStandbyStatus exception: " + ex); 
 	  }	  
       
 	  return this.standbyStatus;
@@ -851,8 +835,7 @@ public String getOpState()
         	  stateManagementEntity.setStandbyStatus(NULL_VALUE); // default
           }
 	  } catch(Exception ex) {
-		  ex.printStackTrace();
-		  logger.error("findStateManagementEntity exception: " + ex.toString()); 
+		  logger.error("findStateManagementEntity exception: " + ex); 
 	  }	  
 	  return stateManagementEntity; 
   }
@@ -903,8 +886,7 @@ public String getOpState()
 			}
 		} catch (Exception e) {
 			logger.error("getStandbyStatus: Caught Exception attempting to get statemanagemententity record, message='"
-					+ e.getMessage() + "'");
-			e.printStackTrace();
+					+ e.getMessage() + "'", e);
 			synchronized(FLUSHLOCK){
 				if(et.isActive()){
 					et.rollback();
@@ -954,7 +936,6 @@ public String getOpState()
 		  }
 	  }catch(Exception ex){
 		  logger.error("StateManagement.deleteAllStateManagementEntities() caught Exception: " + ex);
-		  ex.printStackTrace();
 		  synchronized(FLUSHLOCK){
 			  if(et.isActive()){
 				  et.rollback();
