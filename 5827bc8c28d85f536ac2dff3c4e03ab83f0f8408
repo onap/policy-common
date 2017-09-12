@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a437d4f_58deba40",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1359,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-09-12T15:25:18Z",
+      "side": 0,
+      "message": "Maybe I should not have removed these?",
+      "range": {
+        "startLine": 1359,
+        "startChar": 5,
+        "endLine": 1359,
+        "endChar": 23
+      },
+      "revId": "5827bc8c28d85f536ac2dff3c4e03ab83f0f8408",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
