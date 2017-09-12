@@ -298,7 +298,7 @@ public class Main
 		  }
 		catch (Exception e)
 		  {
-			// ignore exception
+			System.err.println(e);
 		  }
 	  }
 
@@ -486,7 +486,7 @@ public class Main
 			  }
 			catch (Exception e)
 			  {
-				// ignore any errors here
+				System.err.println(e);
 			  }
 		  }
 	  }
