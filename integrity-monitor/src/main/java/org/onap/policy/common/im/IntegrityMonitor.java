@@ -549,8 +549,7 @@ public class IntegrityMonitor {
 					} catch (Exception e) {
 						String msg = "IntegrityMonitor.stateCheck(): Failed to diableFail dependent resource = " + dep 
 								+ "; " + e.getMessage();
-						logger.debug(msg);
-						logger.error(msg);
+						logger.debug(msg, e);
 					}
 				}
 			}
@@ -844,6 +843,7 @@ public class IntegrityMonitor {
 									this.stateManager.disableDependency();
 								}
 						} catch (Exception e) {
+							logger.error(e);
 							if (!error_msg.isEmpty()) {
 								error_msg = error_msg.concat(",");
 							}
@@ -867,6 +867,7 @@ public class IntegrityMonitor {
 							this.stateManager.enableNoDependency();	
 						} // The refreshStateAudit will catch the case where it is disabled but availStatus != failed
 					} catch (Exception e) {
+						logger.error(e);
 						if (!error_msg.isEmpty()) {
 							error_msg = error_msg.concat(",");
 						}
@@ -887,6 +888,7 @@ public class IntegrityMonitor {
 						this.stateManager.enableNoDependency();	
 					}// The refreshStateAudit will catch the case where it is disabled but availStatus != failed
 				} catch (Exception e) {
+					logger.error(e);
 					if (!error_msg.isEmpty()) {
 						error_msg = error_msg.concat(",");
 					}
@@ -913,6 +915,7 @@ public class IntegrityMonitor {
 					error_msg = error_msg.concat(resourceName + ": " + e.getMessage());
 					this.stateManager.disableDependency();
 				} catch (Exception ex) {
+					logger.error(ex);
 					if (!error_msg.isEmpty()) {
 						error_msg = error_msg.concat(",");
 					}
@@ -943,7 +946,7 @@ public class IntegrityMonitor {
 			try {
 				startTransaction();
 			} catch (AdministrativeStateException | StandbyStatusException e) {
-				// ignore
+				logger.debug(e);
 			}
 
 			// TODO: add test functionality if needed
@@ -1049,7 +1052,7 @@ public class IntegrityMonitor {
         			}
         		}
         	} catch (Exception e1) {
-        		// ignore
+        		logger.debug(e1);
         	}
         	logger.error("writeFpc DB table commit failed with exception: " + e);
         	throw e;
@@ -1131,7 +1134,7 @@ public class IntegrityMonitor {
 				dep_groups = prop.getProperty(IntegrityMonitorProperties.DEPENDENCY_GROUPS).split(";");
 				logger.info("dependency groups property = " + Arrays.toString(dep_groups));
 			} catch (Exception e) {
-				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.DEPENDENCY_GROUPS);
+				logger.warn("Ignored invalid property: " + IntegrityMonitorProperties.DEPENDENCY_GROUPS, e);
 			}
 		}
 		
@@ -1203,7 +1206,7 @@ public class IntegrityMonitor {
 			try {
 				validateProperties(newprop);
 			} catch (IntegrityMonitorPropertiesException e) {
-				// ignore
+				logger.debug(e);
 			}
 		}
 		else {
@@ -1355,9 +1358,8 @@ public class IntegrityMonitor {
 					}
 				} catch (Exception e) {
 					// log an error
-					String msg = "IntegrityMonitor.stateAudit(): " + fpe.getResourceName() + ": StateManagementEntity DB read failed with exception: " + e;
-					logger.debug(msg);
-					logger.error(msg);
+					String msg = "IntegrityMonitor.stateAudit(): " + fpe.getResourceName() + ": StateManagementEntity DB read failed with exception: ";
+					logger.error(msg, e);
 					synchronized(IMFLUSHLOCK){
 						if(et.isActive()){
 							et.rollback();
@@ -1371,8 +1373,7 @@ public class IntegrityMonitor {
 							stateManager.disableFailed(sme.getResourceName());
 						} catch (Exception e) {
 							String msg = "IntegrityMonitor.stateAudit(): Failed to disable " + sme.getResourceName();
-							logger.debug(msg);
-							logger.error(msg);
+							logger.error(msg, e);
 						}
 				}
 			}// end if(diffMs > staleMs)
@@ -1427,7 +1428,7 @@ public class IntegrityMonitor {
 			try {
 				writeFpc();
 			} catch (Exception e) {
-				// ignore
+				logger.debug(e);
 			}
 		}
 	}
@@ -1477,9 +1478,6 @@ public class IntegrityMonitor {
 						stateManager.lock();
 					} catch (Exception e) {
 						logger.error("refreshStateAudit: caught unexpected exception from stateManager.lock(): " + e );
-						System.out.println(new Date() + " refreshStateAudit: caught unexpected exception "
-								+ "from stateManager.lock()");
-						e.printStackTrace();
 					}
 				}else{//unlocked
 					try {
@@ -1487,9 +1485,6 @@ public class IntegrityMonitor {
 						stateManager.unlock();;
 					} catch (Exception e) {
 						logger.error("refreshStateAudit: caught unexpected exception from stateManager.unlock(): " + e );
-						System.out.println(new Date() + " refreshStateAudit: caught unexpected exception "
-								+ "from stateManager.unlock()");
-						e.printStackTrace();
 					}
 				}
 				refreshStateAuditLastRunDate = new Date();
@@ -1528,6 +1523,8 @@ public class IntegrityMonitor {
 					Thread.sleep(CYCLE_INTERVAL_MILLIS);
 				} catch (InterruptedException e) {
 					// The 'sleep' call was interrupted
+					logger.debug(e);
+					Thread.currentThread().interrupt();
 					continue;
 				}
 				

@@ -55,6 +55,7 @@ public class StateTransition {
  
   		  setupStateTable();
       } catch(Exception ex) {
+    	  logger.debug(ex);
     	  throw new StateTransitionException("StateTransition Exception: " + ex.toString());
       } 
   }
@@ -142,7 +143,7 @@ public class StateTransition {
 		     
 		         stateElement.displayStateElement();
              } catch(Exception ex) {
-        	     logger.error("String split exception: " + ex.toString());
+        	     logger.error("String split exception: " + ex);
              }
  
        	 } else {
@@ -152,6 +153,7 @@ public class StateTransition {
        	     throw new StateTransitionException(msg);
        	 }
 	 } catch (Exception ex) {
+		 logger.debug(ex);
 		 throw new StateTransitionException("Exception: " + ex.toString() + ", adminState=[" + adminState + "], opState=[" + opState + "], availStatus=[" + 
             availStatus + "], standbyStatus=[" + standbyStatus + "], actionName=[" + actionName + "]");
 	 }
