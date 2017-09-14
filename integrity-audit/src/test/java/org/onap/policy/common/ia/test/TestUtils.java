@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- * Integrity Audit
+ * Test Utils
  * ================================================================================
  * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -17,38 +17,11 @@
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
+package org.onap.policy.common.ia.test;
 
-package org.onap.policy.common.ia;
-
-public class IntegrityAuditProperties {
-
-	public static final int DEFAULT_AUDIT_PERIOD_SECONDS = -1; // Audit does not run
-	
-	public static final String DB_DRIVER = "javax.persistence.jdbc.driver";
-	public static final String DB_URL = "javax.persistence.jdbc.url";
-	public static final String DB_USER = "javax.persistence.jdbc.user";
-	public static final String DB_PWD = "javax.persistence.jdbc.password";
-	public static final String AUDIT_PERIOD_SECONDS = "integrity_audit_period_seconds";
-	
-	
-	public static final String SITE_NAME = "site_name";
-	public static final String NODE_TYPE = "node_type";
-	
-	public enum NodeTypeEnum {
-		pdp_xacml,
-		pdp_drools,
-		pap,
-		pap_admin,
-		logparser,
-		brms_gateway,
-		astra_gateway,
-		elk_server,
-		pypdp
-
-	}
-	
-	private IntegrityAuditProperties() {
-		
-	}
-	
+public class TestUtils {
+	public static final String DEFAULT_DB_DRIVER = "org.h2.Driver";
+	public static final String DEFAULT_DB_URL = "jdbc:h2:file:./sql/iaTest";
+	public static final String DEFAULT_DB_USER = "sa";
+	public static final String DEFAULT_DB_PWD = "";
 }

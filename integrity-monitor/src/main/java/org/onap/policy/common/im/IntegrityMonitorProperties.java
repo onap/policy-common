@@ -23,10 +23,6 @@ package org.onap.policy.common.im;
 public class IntegrityMonitorProperties {
 
 	private IntegrityMonitorProperties() {}
-	public static final String DEFAULT_DB_DRIVER = "org.h2.Driver";
-	public static final String DEFAULT_DB_URL = "jdbc:h2:file:./sql/imTest";
-	public static final String DEFAULT_DB_USER = "sa";
-	public static final String DEFAULT_DB_PWD = "";
 	
 	public static final String DB_DRIVER = "javax.persistence.jdbc.driver";
 	public static final String DB_URL = "javax.persistence.jdbc.url";

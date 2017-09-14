@@ -85,10 +85,10 @@ public class IntegrityAuditDesignationTest {
 		IntegrityAudit.setUnitTesting(true);
 		
 		properties = new Properties();
-		properties.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		
@@ -256,10 +256,10 @@ public class IntegrityAuditDesignationTest {
 		 * Start audit for pdp2.
 		 */
 		Properties properties2 = new Properties();
-		properties2.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties2.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties2.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties2.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties2.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties2.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties2.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties2.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties2.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties2.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties2.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -347,10 +347,10 @@ public class IntegrityAuditDesignationTest {
 		 * Start audit for pdp2.
 		 */
 		Properties properties2 = new Properties();
-		properties2.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties2.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties2.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties2.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties2.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties2.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties2.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties2.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties2.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties2.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties2.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -441,10 +441,10 @@ public class IntegrityAuditDesignationTest {
 		 * Populate DB for pdp2, which will simulate it having registered but then having died.
 		 */
 		Properties properties2 = new Properties();
-		properties2.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties2.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties2.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties2.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties2.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties2.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties2.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties2.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties2.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties2.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties2.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -523,10 +523,10 @@ public class IntegrityAuditDesignationTest {
 		 * Start audit for pdp2.
 		 */
 		Properties properties2 = new Properties();
-		properties2.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties2.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties2.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties2.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties2.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties2.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties2.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties2.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties2.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties2.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties2.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -539,10 +539,10 @@ public class IntegrityAuditDesignationTest {
 		 * Start audit for pdp3.
 		 */
 		Properties properties3 = new Properties();
-		properties3.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties3.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties3.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties3.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties3.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties3.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties3.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties3.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties3.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties3.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties3.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -636,10 +636,10 @@ public class IntegrityAuditDesignationTest {
 		 * Start audit for pdp2, integrityAuditPU.
 		 */
 		Properties properties2 = new Properties();
-		properties2.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties2.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties2.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties2.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties2.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties2.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties2.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties2.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties2.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties2.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties2.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -652,10 +652,10 @@ public class IntegrityAuditDesignationTest {
 		 * Start audit for pdp3, testPU.
 		 */
 		Properties properties3 = new Properties();
-		properties3.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties3.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties3.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties3.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties3.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties3.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties3.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties3.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties3.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties3.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties3.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -668,10 +668,10 @@ public class IntegrityAuditDesignationTest {
 		 * Start audit for pdp4, integrityAuditPU.
 		 */
 		Properties properties4 = new Properties();
-		properties4.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties4.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties4.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties4.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties4.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties4.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties4.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties4.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties4.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties4.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties4.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -763,10 +763,10 @@ public class IntegrityAuditDesignationTest {
 		 * Start audit for pdp2.
 		 */
 		Properties properties2 = new Properties();
-		properties2.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties2.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties2.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties2.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties2.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties2.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties2.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties2.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties2.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties2.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties2.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -779,10 +779,10 @@ public class IntegrityAuditDesignationTest {
 		 * Populate DB for pdp3, which will simulate it having registered but then having died.
 		 */
 		Properties properties3 = new Properties();
-		properties3.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties3.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties3.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties3.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties3.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties3.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties3.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties3.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties3.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties3.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties3.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -794,10 +794,10 @@ public class IntegrityAuditDesignationTest {
 		 * Start audit for pdp4.
 		 */
 		Properties properties4 = new Properties();
-		properties4.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties4.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties4.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties4.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties4.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties4.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties4.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties4.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties4.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties4.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties4.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -895,10 +895,10 @@ public class IntegrityAuditDesignationTest {
 		 * Populate DB for pdp2, which will simulate it having registered but then having died.
 		 */
 		Properties properties2 = new Properties();
-		properties2.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties2.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties2.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties2.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties2.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties2.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties2.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties2.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties2.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties2.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties2.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -910,10 +910,10 @@ public class IntegrityAuditDesignationTest {
 		 * Start audit for pdp3.
 		 */
 		Properties properties3 = new Properties();
-		properties3.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties3.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties3.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties3.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties3.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties3.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties3.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties3.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties3.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties3.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties3.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -926,10 +926,10 @@ public class IntegrityAuditDesignationTest {
 		 * Populate DB for pdp4, which will simulate it having registered but then having died.
 		 */
 		Properties properties4 = new Properties();
-		properties4.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties4.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties4.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties4.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties4.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties4.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties4.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties4.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties4.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties4.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties4.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -1009,10 +1009,10 @@ public class IntegrityAuditDesignationTest {
 		 * Start audit for pdp2.
 		 */
 		Properties properties2 = new Properties();
-		properties2.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties2.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties2.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties2.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties2.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties2.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties2.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties2.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties2.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties2.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties2.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");
@@ -1024,10 +1024,10 @@ public class IntegrityAuditDesignationTest {
 		 * Instantiate audit object for pdp3.
 		 */
 		Properties properties3 = new Properties();
-		properties3.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties3.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties3.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties3.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties3.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties3.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties3.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties3.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties3.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties3.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 		properties3.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "5");

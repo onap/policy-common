@@ -71,10 +71,10 @@ public class DbDAOTest {
 	@Before
 	public void setUp() throws Exception {
 		properties = new Properties();
-		properties.put(IntegrityAuditProperties.DB_DRIVER, IntegrityAuditProperties.DEFAULT_DB_DRIVER);
-		properties.put(IntegrityAuditProperties.DB_URL, IntegrityAuditProperties.DEFAULT_DB_URL);
-		properties.put(IntegrityAuditProperties.DB_USER, IntegrityAuditProperties.DEFAULT_DB_USER);
-		properties.put(IntegrityAuditProperties.DB_PWD, IntegrityAuditProperties.DEFAULT_DB_PWD);
+		properties.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
+		properties.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
+		properties.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
+		properties.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
 		properties.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
 		properties.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 				

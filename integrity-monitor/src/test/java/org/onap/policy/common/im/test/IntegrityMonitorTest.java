@@ -63,6 +63,11 @@ public class IntegrityMonitorTest {
 	private static String resourceName;
 	private static Properties systemProps;
 	
+	private static final String DEFAULT_DB_DRIVER = "org.h2.Driver";
+	private static final String DEFAULT_DB_URL = "jdbc:h2:file:./sql/imTest";
+	private static final String DEFAULT_DB_USER = "sa";
+	private static final String DEFAULT_DB_PWD = "";
+	
 	@BeforeClass
 	public static void setUpClass() throws Exception {
 
@@ -77,10 +82,10 @@ public class IntegrityMonitorTest {
 		IntegrityMonitor.setUnitTesting(true);
 		
 		myProp = new Properties();
-		myProp.put(IntegrityMonitorProperties.DB_DRIVER, IntegrityMonitorProperties.DEFAULT_DB_DRIVER);
-		myProp.put(IntegrityMonitorProperties.DB_URL, IntegrityMonitorProperties.DEFAULT_DB_URL);
-		myProp.put(IntegrityMonitorProperties.DB_USER, IntegrityMonitorProperties.DEFAULT_DB_USER);
-		myProp.put(IntegrityMonitorProperties.DB_PWD, IntegrityMonitorProperties.DEFAULT_DB_PWD);
+		myProp.put(IntegrityMonitorProperties.DB_DRIVER, IntegrityMonitorTest.DEFAULT_DB_DRIVER);
+		myProp.put(IntegrityMonitorProperties.DB_URL, IntegrityMonitorTest.DEFAULT_DB_URL);
+		myProp.put(IntegrityMonitorProperties.DB_USER, IntegrityMonitorTest.DEFAULT_DB_USER);
+		myProp.put(IntegrityMonitorProperties.DB_PWD, IntegrityMonitorTest.DEFAULT_DB_PWD);
 		myProp.put(IntegrityMonitorProperties.SITE_NAME, "SiteA");
 		myProp.put(IntegrityMonitorProperties.NODE_TYPE, "pap");
 		
