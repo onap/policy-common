@@ -348,7 +348,7 @@ public class IntegrityMonitor {
 		try {
 			new ComponentAdmin(resourceName, this, stateManager);
 		} catch (Exception e) {
-			logger.error("ComponentAdmin constructor exception: " + e.toString());
+			logger.error("ComponentAdmin constructor exception: " + e);
 		}
 		
 		new FPManager();
@@ -906,6 +906,7 @@ public class IntegrityMonitor {
 				//Test any subsystems that are not covered under the dependency relationship
 				subsystemTest();
 			}catch (Exception e){
+				logger.error(e);
 				//This indicates a subsystemTest failure
 				try {
 					logger.info(resourceName + ": There has been a subsystemTest failure with error: " + e.getMessage() + "  Updating this resource's state to disableDependency");

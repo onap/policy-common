@@ -237,9 +237,7 @@ public class DbDAO {
 			}
 		}catch(Exception e){
 			String msg = "getAllEntries encountered exception: " + e;
-			logger.error(msg);
-			System.out.println(new Date());
-			e.printStackTrace();
+			logger.error(msg, e);
 		}
 		em.close();
 		logger.debug("getAllEntries: Exit, resultMap, size=" + resultMap.size());
@@ -331,8 +329,6 @@ public class DbDAO {
 		}catch (Exception e){
 			String msg = "DbDAO: " + "setLastUpdated() " + "ecountered a problem in execution: ";
 			logger.error(msg + e);
-			System.out.println(new Date());
-			e.printStackTrace();
 			throw new DbDaoTransactionException(e);
 		}	
 	}
@@ -362,8 +358,6 @@ public class DbDAO {
 		}catch (Exception e){
 			String msg = "DbDAO: " + "getIntegrityAuditEntity() " + "ecountered a problem in execution: ";
 			logger.error(msg + e);
-			System.out.println(new Date());
-			e.printStackTrace();
 			throw new DbDaoTransactionException(e);
 		}
 	}
@@ -711,8 +705,6 @@ public class DbDAO {
 					String msg = "DbDAO: " + "changeDesignated() "
 							+ "caught Exception, message=" + e.getMessage();
 					logger.error(msg + e);
-					System.out.println(new Date());
-					e.printStackTrace();
 					throw new DbDaoTransactionException(msg, e);
 				}
 				else {
