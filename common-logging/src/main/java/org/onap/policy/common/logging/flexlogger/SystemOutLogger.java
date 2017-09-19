@@ -76,7 +76,7 @@ public class SystemOutLogger implements Logger, Serializable {
 	 */
 	private void initLevel(){
 		
-		if(PolicyLogger.DEBUG_LEVEL != null && PolicyLogger.DEBUG_LEVEL.toString().equals(Level.DEBUG.toString())){
+		if(PolicyLogger.getDebugLevel() != null && PolicyLogger.getDebugLevel().toString().equals(Level.DEBUG.toString())){
 			isDebugEnabled = true;
 			isInfoEnabled = true;
 			isWarnEnabled = true;
@@ -84,27 +84,27 @@ public class SystemOutLogger implements Logger, Serializable {
 			isDebugEnabled = false;
 		}
 		
-		if(PolicyLogger.DEBUG_LEVEL != null && PolicyLogger.DEBUG_LEVEL.toString().equals(Level.INFO.toString())){
+		if(PolicyLogger.getDebugLevel() != null && PolicyLogger.getDebugLevel().toString().equals(Level.INFO.toString())){
 			isInfoEnabled = true;
 			isWarnEnabled = true;
 			isDebugEnabled = false;
 		}
 		
-		if(PolicyLogger.DEBUG_LEVEL != null && PolicyLogger.DEBUG_LEVEL.toString().equals(Level.OFF.toString())){
+		if(PolicyLogger.getDebugLevel() != null && PolicyLogger.getDebugLevel().toString().equals(Level.OFF.toString())){
 			isInfoEnabled = false;
 			isWarnEnabled = false;
 			isDebugEnabled = false;
 		}
 		
-		if(PolicyLogger.ERROR_LEVEL != null && PolicyLogger.ERROR_LEVEL.toString().equals(Level.OFF.toString())){
+		if(PolicyLogger.getErrorLevel() != null && PolicyLogger.getErrorLevel().toString().equals(Level.OFF.toString())){
 			isErrorEnabled = false;
 		}
 
-		if(PolicyLogger.AUDIT_LEVEL != null && PolicyLogger.AUDIT_LEVEL.toString().equals(Level.OFF.toString())){
+		if(PolicyLogger.getAuditLevel() != null && PolicyLogger.getAuditLevel().toString().equals(Level.OFF.toString())){
 			isAuditEnabled = false;
 		}
 		
-		if(PolicyLogger.METRICS_LEVEL != null && PolicyLogger.METRICS_LEVEL.toString().equals(Level.OFF.toString())){
+		if(PolicyLogger.getMetricsLevel() != null && PolicyLogger.getMetricsLevel().toString().equals(Level.OFF.toString())){
 			isMetricsEnabled = false;
 		}
 	}

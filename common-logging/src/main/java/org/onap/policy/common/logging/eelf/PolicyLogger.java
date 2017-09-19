@@ -91,11 +91,11 @@ public class PolicyLogger {
 	
 	private static boolean isOverrideLogbackLevel = false;
 	
-	public static Level DEBUG_LEVEL = Level.INFO;
-	public static Level AUDIT_LEVEL = Level.INFO;
-	public static Level METRICS_LEVEL = Level.INFO;
-	public static Level ERROR_LEVEL = Level.ERROR;
-	public static String CLASS_NAME = "ClassName";
+	private static Level DEBUG_LEVEL = Level.INFO;
+	private static Level AUDIT_LEVEL = Level.INFO;
+	private static Level METRICS_LEVEL = Level.INFO;
+	private static Level ERROR_LEVEL = Level.ERROR;
+	private static String CLASS_NAME = "ClassName";
 	
 
 	static{
@@ -107,6 +107,46 @@ public class PolicyLogger {
 				PolicyLogger.error(MessageCodes.EXCEPTION_ERROR, e, "PolicyLogger", "UnknownHostException");
 			}
 		}
+	}
+	
+	public static Level	getDebugLevel() {
+		return DEBUG_LEVEL;
+	}
+	
+	public synchronized static void setDebugLevel(Level level) {
+		DEBUG_LEVEL = level;
+	}
+	
+	public static Level getAuditLevel() {
+		return AUDIT_LEVEL;
+	}
+	
+	public synchronized static void setAuditLevel(Level level) {
+		AUDIT_LEVEL = level;
+	}
+	
+	public static Level getMetricsLevel() {
+		return METRICS_LEVEL;
+	}
+	
+	public synchronized static void setMetricsLevel(Level level) {
+		METRICS_LEVEL = level;
+	}
+	
+	public static Level getErrorLevel() {
+		return ERROR_LEVEL;
+	}
+	
+	public synchronized static void setErrorLevel(Level level) {
+		ERROR_LEVEL = level;
+	}
+	
+	public static String getClassname() {
+		return CLASS_NAME;
+	}
+	
+	public synchronized static void setClassname(String name) {
+		CLASS_NAME = name;
 	}
 	
 	/**
@@ -1140,25 +1180,25 @@ public class PolicyLogger {
 		
 			if (debugLevel != null && !debugLevel.isEmpty()){
 				
-				DEBUG_LEVEL = Level.valueOf(debugLevel);
+				PolicyLogger.setDebugLevel(Level.valueOf(debugLevel));
 				
 			}
 			//Only check if it is to turn off or not
 			if (errorLevel != null && errorLevel.equalsIgnoreCase(Level.OFF.toString())){
 				
-				ERROR_LEVEL = Level.valueOf(errorLevel);
+				PolicyLogger.setErrorLevel(Level.valueOf(errorLevel));
 				
 			}
 			//Only check if it is to turn off or not
 			if (metricsLevel != null && metricsLevel.equalsIgnoreCase(Level.OFF.toString())){
 				
-				METRICS_LEVEL = Level.valueOf(metricsLevel);
+				PolicyLogger.setMetricsLevel(Level.valueOf(metricsLevel));
 				
 			}
 			//Only check if it is to turn off or not
 			if (auditLevel != null && auditLevel.equalsIgnoreCase(Level.OFF.toString())){
 				
-				AUDIT_LEVEL = Level.valueOf(auditLevel);
+				PolicyLogger.setAuditLevel(Level.valueOf(auditLevel));
 				
 			}			
 

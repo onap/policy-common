@@ -227,7 +227,7 @@ public class EelfLogger implements Logger, Serializable {
 	 */
 	@Override
 	public boolean isAuditEnabled(){		
-		if(PolicyLogger.AUDIT_LEVEL != null && PolicyLogger.AUDIT_LEVEL.toString().equals(Level.OFF.toString())){
+		if(PolicyLogger.getAuditLevel() != null && PolicyLogger.getAuditLevel().toString().equals(Level.OFF.toString())){
 			return false;
 		}else {
 			return true;
@@ -240,7 +240,7 @@ public class EelfLogger implements Logger, Serializable {
 	 */
 	@Override
 	public boolean isMetricsEnabled(){			
-		if(PolicyLogger.METRICS_LEVEL != null && PolicyLogger.METRICS_LEVEL.toString().equals(Level.OFF.toString())){
+		if(PolicyLogger.getMetricsLevel() != null && PolicyLogger.getMetricsLevel().toString().equals(Level.OFF.toString())){
 			return false;
 		}else {
 			return true;
