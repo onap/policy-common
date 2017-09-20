@@ -21,81 +21,80 @@
 package org.onap.policy.common.logging.eelf;
 
 
-public interface Configuration  extends com.att.eelf.configuration.Configuration{
-	
-	 /**
-	  * The Date-time of the start of a transaction
-	  */
-	 public String BEGIN_TIME_STAMP = "BeginTimestamp";
-	 
-	 /**
-	  * The Date-time of the end of transaction
-	  */
-	 public String END_TIME_STAMP = "EndTimestamp";
+public interface Configuration extends com.att.eelf.configuration.Configuration {
 
-	 /**
-	  * Externally advertised API invoked by clients of this component
-	  */
-	public String SERVICE_NAME = "ServiceName";
-	
-	 /**
-	  * Client or user invoking the API
-	  */
-	public String PARTNER_NAME = "PartnerName";
-	
-	/**
-	 * Target Entity
-	 */
-    public String TARGET_ENTITY = "TargetEntity"; 
-	
+    /**
+     * The Date-time of the start of a transaction
+     */
+    String BEGIN_TIME_STAMP = "BeginTimestamp";
+
+    /**
+     * The Date-time of the end of transaction
+     */
+    String END_TIME_STAMP = "EndTimestamp";
+
+    /**
+     * Externally advertised API invoked by clients of this component
+     */
+    String SERVICE_NAME = "ServiceName";
+
+    /**
+     * Client or user invoking the API
+     */
+    String PARTNER_NAME = "PartnerName";
+
+    /**
+     * Target Entity
+     */
+    String TARGET_ENTITY = "TargetEntity";
+
     /**
      * Target service name
      */
-	public String TARGET_SERVICE_NAME = "TargetServiceName"; 
-	
-	 /**
-	  * High level success or failure (COMPLETE or ERROR)
-	  */
-	public String STATUS_CODE = "StatusCode";
-	
-	 /**
-	  * Application specific response code
-	  */
-	public String RESPONSE_CODE = "ResponseCode";
-	
-	 /**
-	  * Human readable description of the application specific response code
-	  */
-	public String RESPONSE_DESCRIPTION = "ResponseDescription";
-	
-	 /**
-	  * Externally advertised API invoked by clients of this component
-	  */
-	public String ELAPSED_TIME = "ElapsedTime";
-	
-	 /**
-	  * High level failure (ERROR)
-	  */
-	public String ERROR_CATEGORY = "ErrorCategory";
-	
-	 /**
-	  * Error Code
-	  */
-	public String ERROR_CODE = "ErrorCode";	
-	
-	 /**
-	  * Error Description
-	  */
-	public String ERROR_DESCRIPTION = "ErrorDesciption";	
-	
-	 /**
-	  * Class name
-	  */
-	public String CLASS_NAME = "ClassName";		
-	
-	 /**
-	  * Server name
-	  */
-	public String SERVER_NAME = "ServerName";
-	
+    String TARGET_SERVICE_NAME = "TargetServiceName";
+
+    /**
+     * High level success or failure (COMPLETE or ERROR)
+     */
+    String STATUS_CODE = "StatusCode";
+
+    /**
+     * Application specific response code
+     */
+    String RESPONSE_CODE = "ResponseCode";
+
+    /**
+     * Human readable description of the application specific response code
+     */
+    String RESPONSE_DESCRIPTION = "ResponseDescription";
+
+    /**
+     * Externally advertised API invoked by clients of this component
+     */
+    String ELAPSED_TIME = "ElapsedTime";
+
+    /**
+     * High level failure (ERROR)
+     */
+    String ERROR_CATEGORY = "ErrorCategory";
+
+    /**
+     * Error Code
+     */
+    String ERROR_CODE = "ErrorCode";
+
+    /**
+     * Error Description
+     */
+    String ERROR_DESCRIPTION = "ErrorDescription";
+
+    /**
+     * Class name
+     */
+    String CLASS_NAME = "ClassName";
+
+    /**
+     * Server name
+     */
+    String SERVER_NAME = "ServerName";
 }
