@@ -24,84 +24,74 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 
- * EventTrackInfoHandler is the handler of clean up all expired event objcts
+ *
+ * EventTrackInfoHandler is the handler of clean up all expired event objects
  *
  */
 public class EventTrackInfoHandler extends TimerTask {
 
-	String className = this.getClass().getSimpleName();
+    String className = this.getClass().getSimpleName();
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-		PolicyLogger.info(className
-				+ " Release expired event records start...");
+        PolicyLogger.info(className + " Release expired event records start...");
 
-		CleanUp();
+        cleanUp();
 
-		PolicyLogger.info(className + " Release expired event records done");
-	}
-    
-	/**
-	 * Removes all expired event objects from the ConcurrentHashMap of EventData
-	 */
-	private void CleanUp() {
+        PolicyLogger.info(className + " Release expired event records done");
+    }
 
-		if (PolicyLogger.getEventTracker() == null
-				|| PolicyLogger.getEventTracker().getEventInfo() == null
-				|| PolicyLogger.getEventTracker().getEventInfo().isEmpty()) {
-			return;
-		}
+    /**
+     * Removes all expired event objects from the ConcurrentHashMap of EventData
+     */
+    private void cleanUp() {
 
-		Instant startTime;
-		long ns;
+        EventTrackInfo eventTrackInfo = PolicyLogger.getEventTracker();
+        if (eventTrackInfo != null) {
+            ConcurrentHashMap<String, EventData> eventInfo = eventTrackInfo.getEventInfo();
+            if (eventInfo == null || eventInfo.isEmpty()) {
+                return;
+            }
 
-		ArrayList<String> expiredEvents = null;
+            Instant startTime;
+            long ns;
 
-		for (String key: PolicyLogger.getEventTracker().getEventInfo().keySet()) {
-			EventData event  = PolicyLogger.getEventTracker().getEventInfo().get(key);
-			startTime = event.getStartTime();
-			ns = Duration.between(startTime, Instant.now()).getSeconds();
+            ArrayList<String> expiredEvents = null;
 
-			PolicyLogger.info(className
-					+ " duration time : " + ns);
+            for (ConcurrentHashMap.Entry<String, EventData> entry : eventInfo.entrySet()) {
+                EventData event = entry.getValue();
+                startTime = event.getStartTime();
+                ns = Duration.between(startTime, Instant.now()).getSeconds();
 
-			PolicyLogger.info(className
-					+ " PolicyLogger.EXPIRED_TIME : " + PolicyLogger.EXPIRED_TIME);	
+                PolicyLogger.info(className + " duration time : " + ns);
 
-			// if longer than EXPIRED_TIME, remove the object
+                PolicyLogger.info(className + " PolicyLogger.EXPIRED_TIME : " + PolicyLogger.EXPIRED_TIME);
 
-			if (ns > PolicyLogger.EXPIRED_TIME){	
-				if (expiredEvents == null) {
-					expiredEvents = new ArrayList<>();
-				}
-				expiredEvents.add(key);
+                // if longer than EXPIRED_TIME, remove the object
 
-				PolicyLogger.info(className
-						+ " add expired event request ID: "
-						+ event.getRequestID());
-			}
-		}
-		
-		synchronized (PolicyLogger.getEventTracker().getEventInfo()) {  
-			if (expiredEvents != null) {
-				for (String expiredKey : expiredEvents) {
-					PolicyLogger.getEventTracker().getEventInfo()
-							.remove(expiredKey);
-					System.out.println(className
-							+ " removed expired event request ID: "
-							+ expiredKey);
-					PolicyLogger.info(className
-							+ " removed expired event request ID: "
-							+ expiredKey);
-				}
-			}
+                if (ns > PolicyLogger.EXPIRED_TIME) {
+                    if (expiredEvents == null) {
+                        expiredEvents = new ArrayList<>();
+                    }
+                    expiredEvents.add(entry.getKey());
 
-		}
+                    PolicyLogger.info(className + " add expired event request ID: " + event.getRequestID());
+                }
+            }
 
-	}
-
+            synchronized (eventInfo) {
+                if (expiredEvents != null) {
+                    for (String expiredKey : expiredEvents) {
+                        eventInfo.remove(expiredKey);
+                        System.out.println(className + " removed expired event request ID: " + expiredKey);
+                        PolicyLogger.info(className + " removed expired event request ID: " + expiredKey);
+                    }
+                }
+            }
+        }
+    }
 }
