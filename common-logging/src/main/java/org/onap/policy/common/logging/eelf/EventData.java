@@ -23,88 +23,88 @@ package org.onap.policy.common.logging.eelf;
 import java.time.Instant;
 
 /**
- * 
+ *
  * EventData can be used for logging a rule event.
  *
  */
 public class EventData {
-	
-	private String requestID = null;
-	private Instant startTime = null;
-	private Instant endTime = null;
 
-		//Default constructor takes no arguments.
-		//Is empty because instance variables are assigned
-		//their default values upon declaration.
-	public EventData() {
-		
-	}
-	
-	public EventData(String requestID, Instant startTime, Instant endTime) {
-		
-		this.requestID = requestID;
-		this.startTime = startTime;
-		this.endTime = endTime;		
-	}
+    private String requestID = null;
+    private Instant startTime = null;
+    private Instant endTime = null;
 
-	public String getRequestID() {
-		return requestID;
-	}
+    //Default constructor takes no arguments.
+    //Is empty because instance variables are assigned
+    //their default values upon declaration.
+    public EventData() {
+    }
 
-	public void setRequestID(String requestID) {
-		this.requestID = requestID;
-	}
+    public EventData(String requestID, Instant startTime, Instant endTime) {
+        this.requestID = requestID;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
 
-	public Instant getStartTime() {
-		return startTime;
-	}
+    public String getRequestID() {
+        return requestID;
+    }
 
-	public void setStartTime(Instant startTime) {
-		this.startTime = startTime;
-	}
+    public void setRequestID(String requestID) {
+        this.requestID = requestID;
+    }
 
-	public Instant getEndTime() {
-		return endTime;
-	}
+    public Instant getStartTime() {
+        return startTime;
+    }
 
-	public void setEndTime(Instant endTime) {
-		this.endTime = endTime;
-	}
-	
-	@Override
-	public String toString(){
-		return requestID + " Starting Time : " + this.startTime + " Ending Time : " + this.endTime;
-	}
+    public void setStartTime(Instant startTime) {
+        this.startTime = startTime;
+    }
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((requestID == null) ? 0 : requestID.hashCode());
-		return result;
-	}
+    public Instant getEndTime() {
+        return endTime;
+    }
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;	
-		if (obj instanceof String) {
-			String requestId = (String) obj;
-			if(requestID != null && requestID.equals(requestId)){
-				return true;
-			}
-			return false;
-		}
-		if (getClass() != obj.getClass())
-			return false;
-		EventData other = (EventData) obj;
-		if (requestID == null) {
-			if (other.requestID != null)
-				return false;
-		} else if (!requestID.equals(other.requestID))
-			return false;
-		return true;
-	}
+    public void setEndTime(Instant endTime) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public String toString() {
+        return requestID + " Starting Time : " + this.startTime + " Ending Time : " + this.endTime;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((requestID == null) ? 0 : requestID.hashCode());
+        return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (obj instanceof String) {
+            String requestId = (String) obj;
+            return requestID != null && requestID.equals(requestId);
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        EventData other = (EventData) obj;
+        if (requestID == null) {
+            if (other.requestID != null) {
+                return false;
+            }
+        } else if (!requestID.equals(other.requestID)) {
+            return false;
+        }
+        return true;
+    }
 }

@@ -23,62 +23,62 @@ package org.onap.policy.common.logging.eelf;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 
- * EventTrackInfo contains a ConcurrentHashMap of EventData
- *
+ * EventTrackInfo contains a ConcurrentHashMap of EventData.
  */
 public class EventTrackInfo {
 
-    private ConcurrentHashMap<String, EventData> eventInfo = null;    
-       
-	public EventTrackInfo() {
-		/*
-		 * An initial capacity of 16 ensures the number of elements before resizing happens
-		 * Load factor of 0,9 ensures a dense packaging inside ConcurrentHashMap which will optimize memory use
-		 * ConcurencyLevel set to 1 will ensure that only one shard is created and maintained 
-		 */
-		eventInfo = new ConcurrentHashMap<>(16, 0.9f, 1);	
-	}
-   
-	/**
-	 * Returns an instance of EventData associated to this requestID
-	 * @param requestID
-	 * @return EventData
-	 */
-	public EventData getEventDataByRequestID(String requestID){
-		return eventInfo.get(requestID);
-	}
-	
-	/**
-	 * Stores an EventData object in a ConcurrentHashMap using its requestID as key.
-	 * @param event
-	 */
-	public void storeEventData(EventData event){
-		
-		if(event == null || event.getRequestID() == null || event.getRequestID().isEmpty()){
-			return;
-		}
-		//in case override the start time, check the original event was already stored or not 
-		if(!eventInfo.containsKey(event.getRequestID())){
-			eventInfo.put(event.getRequestID(), event);		
-		}
-	}
-	
-	/**
-	 * Removes an EventData object from a ConcurrentHashMap using the eventId as key. 
-	 * @param eventId
-	 */
-	public void remove(String eventId){
-		if(eventInfo != null){
-			eventInfo.remove(eventId);
-		}
-	}
-	
-	/**
-	 * Returns a ConcurrentHashMap of EventData
-	 */
-	public ConcurrentHashMap<String, EventData> getEventInfo() {
-		return eventInfo;
-	}
+    private ConcurrentHashMap<String, EventData> eventInfo = null;
 
+    public EventTrackInfo() {
+        /*
+         * An initial capacity of 16 ensures the number of elements before resizing happens
+         * Load factor of 0,9 ensures a dense packaging inside ConcurrentHashMap which will optimize memory use
+         * Concurrency Level set to 1 will ensure that only one shard is created and maintained
+         */
+        eventInfo = new ConcurrentHashMap<>(16, 0.9f, 1);
+    }
+
+    /**
+     * Returns an instance of EventData associated to this requestID
+     * @param requestID request id
+     * @return EventData
+     */
+    public EventData getEventDataByRequestID(String requestID) {
+        return eventInfo.get(requestID);
+    }
+
+    /**
+     * Stores an EventData object in a ConcurrentHashMap using its requestID as key.
+     * @param event event data
+     */
+    public void storeEventData(EventData event) {
+
+        if (event != null) {
+            String id = event.getRequestID();
+            if (id == null || id.isEmpty()) {
+                return;
+            }
+            //in case override the start time, check the original event was already stored or not
+            if (!eventInfo.containsKey(id)) {
+                eventInfo.put(id, event);
+            }
+        }
+    }
+
+    /**
+     * Removes an EventData object from a ConcurrentHashMap using the eventId as key.
+     * @param eventId event id
+     */
+    public void remove(String eventId) {
+        if (eventInfo != null) {
+            eventInfo.remove(eventId);
+        }
+    }
+
+    /**
+     * Returns a ConcurrentHashMap of EventData
+     */
+    public ConcurrentHashMap<String, EventData> getEventInfo() {
+        return eventInfo;
+    }
 }
