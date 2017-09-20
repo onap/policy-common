@@ -22,32 +22,28 @@ package org.onap.policy.common.logging.eelf;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-public class DroolsPDPMDCInfo implements MDCInfo{
+public class DroolsPDPMDCInfo implements MDCInfo {
 
     private static ConcurrentHashMap<String, String> mdcMap = new ConcurrentHashMap<>();
 
     static {
-    	
-    	mdcMap.put(org.onap.policy.common.logging.eelf.Configuration.MDC_REMOTE_HOST, "");
-    	mdcMap.put(org.onap.policy.common.logging.eelf.Configuration.MDC_SERVICE_NAME, "Policy.droolsPdp");
-    	mdcMap.put(org.onap.policy.common.logging.eelf.Configuration.MDC_SERVICE_INSTANCE_ID, "Policy.droolsPdp.event");
-    	mdcMap.put(org.onap.policy.common.logging.eelf.Configuration.MDC_INSTANCE_UUID, "");
-    	mdcMap.put(org.onap.policy.common.logging.eelf.Configuration.MDC_ALERT_SEVERITY, "");
-    	mdcMap.put(org.onap.policy.common.logging.eelf.Configuration.PARTNER_NAME, "N/A");    	
-    	mdcMap.put(org.onap.policy.common.logging.eelf.Configuration.STATUS_CODE, "N/A");
-    	mdcMap.put(org.onap.policy.common.logging.eelf.Configuration.RESPONSE_CODE, "N/A");
-    	mdcMap.put(org.onap.policy.common.logging.eelf.Configuration.RESPONSE_DESCRIPTION, "N/A");
-    	
+
+        mdcMap.put(Configuration.MDC_REMOTE_HOST, "");
+        mdcMap.put(Configuration.MDC_SERVICE_NAME, "Policy.droolsPdp");
+        mdcMap.put(Configuration.MDC_SERVICE_INSTANCE_ID, "Policy.droolsPdp.event");
+        mdcMap.put(Configuration.MDC_INSTANCE_UUID, "");
+        mdcMap.put(Configuration.MDC_ALERT_SEVERITY, "");
+        mdcMap.put(Configuration.PARTNER_NAME, "N/A");
+        mdcMap.put(Configuration.STATUS_CODE, "N/A");
+        mdcMap.put(Configuration.RESPONSE_CODE, "N/A");
+        mdcMap.put(Configuration.RESPONSE_DESCRIPTION, "N/A");
     }
 
-	@Override
-	/**
-	 * @return the instance of ConcurrentHashMap
-	 */
-	public ConcurrentHashMap<String, String> getMDCInfo() {
-
-		return mdcMap;
-	}
-	
-	
+    /**
+     * @return the instance of ConcurrentHashMap
+     */
+    @Override
+    public ConcurrentHashMap<String, String> getMDCInfo() {
+        return mdcMap;
+    }
 }
