@@ -23,13 +23,16 @@ package org.onap.policy.common.logging.eelf;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 
+ *
  * Interface needs to be implemented by DroolsPDPMDCInfo
  *
  */
 @FunctionalInterface
 public interface MDCInfo {
-	
-	public ConcurrentHashMap<String, String> getMDCInfo();
-     
+
+    /**
+     * Returns MDC info.
+     * @return MDC info
+     */
+    ConcurrentHashMap<String, String> getMDCInfo();
 }
