@@ -1002,14 +1002,10 @@ public class IntegrityMonitor {
 			if(logger.isDebugEnabled()){
 				logger.debug("testTransaction called...");
 			}
-			// start Transaction - resets transaction timer and check admin state
-			try {
-				startTransaction();
-			} catch (AdministrativeStateException | StandbyStatusException e) {
-				logger.error("IntegrityMonitor threw exception.", e);
-			}
-
-			// TODO: add test functionality if needed
+			
+			//
+			// startTransaction() not required for testTransaction
+			// 
 
 			// end transaction - increments local FP counter
 			endTransaction();
