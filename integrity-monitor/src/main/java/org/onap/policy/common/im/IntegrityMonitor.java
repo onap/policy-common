@@ -815,7 +815,6 @@ public class IntegrityMonitor {
 			} catch (Exception e) {
 				error_msg = dep + ": resource sanity test failed with exception: ";
 				logger.error("{}", error_msg, e);
-				// TODO: extract real error message from exception which may be nested
 			} finally {
 				// close the JMX connector
 				if (jmxAgentConnection != null) {
@@ -836,6 +835,35 @@ public class IntegrityMonitor {
 			// Start with the error message empty
 			String error_msg = "";
 			boolean dependencyFailure = false;
+			
+			/*
+			 * Before we check dependency groups we need to check subsystemTest.
+			 */
+			try {
+				//Test any subsystems that are not covered under the dependency relationship
+				subsystemTest();
+			}catch (Exception e){
+				logger.error("IntegrityMonitor threw exception", e);
+				dependencyFailure=true;
+				//This indicates a subsystemTest failure
+				try {
+					if(logger.isDebugEnabled()){
+						logger.debug("{}: There has been a subsystemTest failure with error:{} Updating this resource's state to disableDependency", resourceName, e.getMessage());
+					}
+					//Capture the subsystemTest failure info
+					if(!error_msg.isEmpty()){
+						error_msg = error_msg.concat(",");
+					}
+					error_msg = error_msg.concat(resourceName + ": " + e.getMessage());
+					this.stateManager.disableDependency();
+				} catch (Exception ex) {
+					logger.error("IntegrityMonitor threw exception.", ex);
+					if (!error_msg.isEmpty()) {
+						error_msg = error_msg.concat(",");
+					}
+					error_msg = error_msg.concat("\n" + resourceName + ": Failed to disable dependency after subsystemTest failure due to: " + ex.getMessage());
+				}				
+			}
 			
 
 			// Check the sanity of dependents for lead subcomponents
@@ -906,8 +934,10 @@ public class IntegrityMonitor {
 
 				}//end for (String group : dep_groups)
 				
+
 				/*
-				 * We have checked all the dependency groups.  If all are ok, dependencyFailure == false
+				 * We have checked all the dependency groups.  If all are ok and subsystemTest passed,
+				 * dependencyFailure == false
 				 */
 				if(!dependencyFailure){
 					try {
@@ -927,7 +957,7 @@ public class IntegrityMonitor {
 						error_msg = error_msg.concat(resourceName + ": Failed to enable no dependency");
 					}
 				}
-			}else{
+			}else if(!dependencyFailure){
 				/*
 				 * This is put here to clean up when no dependency group should exist, but one was erroneously
 				 * added which caused the state to be disabled/dependency/coldstandby and later removed. We saw
@@ -951,35 +981,7 @@ public class IntegrityMonitor {
 				}
 			}
 
-			/*
-			 * We have checked dependency groups and if there were none, we set enableNoDependency. If there were some
-			 * but they are all ok, we set enableNoDependency.  So, the recovery from a disabled dependency state
-			 * is handled above.  We only need to set disableDependency if the subsystemTest fails.
-			 */
-			try {
-				//Test any subsystems that are not covered under the dependency relationship
-				subsystemTest();
-			}catch (Exception e){
-				logger.error("IntegrityMonitor threw exception", e);
-				//This indicates a subsystemTest failure
-				try {
-					if(logger.isDebugEnabled()){
-						logger.debug("{}: There has been a subsystemTest failure with error:{} Updating this resource's state to disableDependency", resourceName, e.getMessage());
-					}
-					//Capture the subsystemTest failure info
-					if(!error_msg.isEmpty()){
-						error_msg = error_msg.concat(",");
-					}
-					error_msg = error_msg.concat(resourceName + ": " + e.getMessage());
-					this.stateManager.disableDependency();
-				} catch (Exception ex) {
-					logger.error("IntegrityMonitor threw exception.", ex);
-					if (!error_msg.isEmpty()) {
-						error_msg = error_msg.concat(",");
-					}
-					error_msg = error_msg.concat("\n" + resourceName + ": Failed to disable dependency after subsystemTest failure due to: " + ex.getMessage());
-				}				
-			}
+
 
 			if (!error_msg.isEmpty()) {
 				logger.error("Sanity failure detected in a dependent resource: {}", error_msg);
@@ -1311,8 +1313,6 @@ public class IntegrityMonitor {
 
 			elapsedTime = 0;  // reset elapsed time
 
-			// TODO: check if alarm exists
-
 			try {
 				if (fpCounter == lastFpCounter) {
 					// no forward progress
@@ -1325,7 +1325,6 @@ public class IntegrityMonitor {
 							// Note: The refreshStateAudit will make redundant calls
 							stateManager.disableFailed();
 						}// The refreshStateAudit will catch the case where opStat = disabled and availState ! failed/dependency.failed
-						// TODO: raise alarm or Nagios alert
 						alarmExists = true;
 					}
 				} else {
@@ -1340,8 +1339,6 @@ public class IntegrityMonitor {
 						// Note: The refreshStateAudit will make redundant calls
 						stateManager.enableNotFailed();	
 					}// The refreshStateAudit will catch the case where opState=enabled and availStatus != null
-
-					// TODO: clear alarm or Nagios alert
 					alarmExists = false;
 				}
 			} catch (Exception e) {
