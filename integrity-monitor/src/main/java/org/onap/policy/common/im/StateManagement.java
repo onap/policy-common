@@ -129,11 +129,15 @@ public class StateManagement extends Observable {
         	}
           em.persist(sm);
           synchronized(FLUSHLOCK){
-       		  et.commit(); 
+        	  if(et.isActive()){
+        		  et.commit(); 
+        	  }
           }
         } else {
         	synchronized(FLUSHLOCK){
-       			et.commit(); 
+          	  if(et.isActive()){
+        		  et.commit(); 
+        	  }
         	}
         }
         
@@ -188,7 +192,9 @@ public class StateManagement extends Observable {
 
 			  em.persist(sm);
 			  synchronized(FLUSHLOCK){
-				  et.commit(); 
+	        	  if(et.isActive()){
+	        		  et.commit(); 
+	        	  }
 			  }
 			  setChanged();
 			  notifyObservers(ADMIN_STATE);
@@ -243,7 +249,9 @@ public class StateManagement extends Observable {
 
 			  em.persist(sm);
 			  synchronized(FLUSHLOCK){
-				  et.commit(); 
+	        	  if(et.isActive()){
+	        		  et.commit(); 
+	        	  }
 			  }
 			  setChanged();
 			  notifyObservers(ADMIN_STATE);
@@ -297,7 +305,9 @@ public class StateManagement extends Observable {
 
 			  em.persist(sm);
 			  synchronized(FLUSHLOCK){
-				  et.commit(); 
+	        	  if(et.isActive()){
+	        		  et.commit(); 
+	        	  } 
 			  }
 			  setChanged();
 			  notifyObservers(ADMIN_STATE);
@@ -352,7 +362,9 @@ public class StateManagement extends Observable {
 
 			  em.persist(sm);
 			  synchronized(FLUSHLOCK){
-				  et.commit(); 
+	        	  if(et.isActive()){
+	        		  et.commit(); 
+	        	  }
 			  }
 			  setChanged();
 			  notifyObservers(OPERATION_STATE);
@@ -405,7 +417,9 @@ public class StateManagement extends Observable {
 
 			  em.persist(sm);
 			  synchronized(FLUSHLOCK){
-				  et.commit(); 
+	        	  if(et.isActive()){
+	        		  et.commit(); 
+	        	  } 
 			  }
 			  setChanged();
 			  notifyObservers(OPERATION_STATE);
@@ -464,7 +478,9 @@ public class StateManagement extends Observable {
 
 			  em.persist(sm);
 			  synchronized(FLUSHLOCK){
-				  et.commit(); 
+	        	  if(et.isActive()){
+	        		  et.commit(); 
+	        	  } 
 			  }
 			  setChanged();
 			  notifyObservers(OPERATION_STATE);
@@ -519,7 +535,9 @@ public class StateManagement extends Observable {
 
 			  em.persist(sm);
 			  synchronized(FLUSHLOCK){
-				  et.commit(); 
+	        	  if(et.isActive()){
+	        		  et.commit(); 
+	        	  } 
 			  }
 			  setChanged();
 			  notifyObservers(OPERATION_STATE);
@@ -574,7 +592,9 @@ public class StateManagement extends Observable {
 
 			  em.persist(sm);
 			  synchronized(FLUSHLOCK){
-				  et.commit(); 
+	        	  if(et.isActive()){
+	        		  et.commit(); 
+	        	  } 
 			  }
 			  setChanged();
 			  notifyObservers(OPERATION_STATE);
@@ -691,7 +711,9 @@ public class StateManagement extends Observable {
 
 			  em.persist(sm);
 			  synchronized(FLUSHLOCK){
-				  et.commit(); 
+	        	  if(et.isActive()){
+	        		  et.commit(); 
+	        	  } 
 			  }
 			  setChanged();
 			  notifyObservers(STANDBY_STATUS); 
@@ -752,7 +774,9 @@ public class StateManagement extends Observable {
 
 			  em.persist(sm);
 			  synchronized(FLUSHLOCK){
-				  et.commit(); 
+	        	  if(et.isActive()){
+	        		  et.commit(); 
+	        	  } 
 			  }
 			  //We don't notify observers because this is assumed to be a remote resource
 
@@ -984,7 +1008,9 @@ public String getOpState()
 				logger.error("getStandbyStatus: resourceName ={} not found in statemanagemententity table", otherResourceName);
 			}
 			synchronized(FLUSHLOCK){
-				et.commit();
+	        	  if(et.isActive()){
+	        		  et.commit(); 
+	        	  }
 			}
 		} catch (Exception e) {
 			logger.error("getStandbyStatus: Caught Exception attempting to get statemanagemententity record, message='{}'", e.getMessage(), e);
@@ -1036,7 +1062,9 @@ public String getOpState()
 			  em.remove(stateManagementEntity);
 		  }
 		  synchronized(FLUSHLOCK){
-			  et.commit();
+        	  if(et.isActive()){
+        		  et.commit(); 
+        	  }
 		  }
 	  }catch(Exception ex){
 		  logger.error("StateManagement.deleteAllStateManagementEntities() caught Exception: ", ex);
