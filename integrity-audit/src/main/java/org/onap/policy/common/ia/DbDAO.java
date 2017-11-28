@@ -56,7 +56,6 @@ public class DbDAO {
 	private String dbDriver;
 	private String dbUrl;
 	private String dbUser;
-	private String dbPwd;
 	private String siteName;
 	private String nodeType;
 	private Properties properties=null;
@@ -106,7 +105,6 @@ public class DbDAO {
 		this.dbDriver = properties.getProperty(IntegrityAuditProperties.DB_DRIVER).trim();
 		this.dbUrl = properties.getProperty(IntegrityAuditProperties.DB_URL).trim();
 		this.dbUser = properties.getProperty(IntegrityAuditProperties.DB_USER).trim();
-		this.dbPwd = properties.getProperty(IntegrityAuditProperties.DB_PWD).trim();
 		this.siteName = properties.getProperty(IntegrityAuditProperties.SITE_NAME).trim();
 		this.nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE).trim();
 		this.properties = properties;
@@ -423,7 +421,7 @@ public class DbDAO {
 			iae.setNodeType(this.nodeType);
 			iae.setLastUpdated(new Date());
 			iae.setJdbcDriver(this.dbDriver);
-			iae.setJdbcPassword(this.dbPwd);
+			iae.setJdbcPassword(properties.getProperty(IntegrityAuditProperties.DB_PWD).trim());
 			iae.setJdbcUrl(dbUrl);
 			iae.setJdbcUser(dbUser);
 
