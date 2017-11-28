@@ -118,52 +118,52 @@ public class IntegrityAudit {
 	 */
 	public static boolean parmsAreBad(String resourceName, String persistenceUnit,
 			Properties properties, String badparams) {
-
+		String localBadParams = badparams;
 		boolean parmsAreBad = false;
 		
 		if(resourceName == null || resourceName.isEmpty()){
-			badparams = badparams.concat("resourceName ");
+			localBadParams = localBadParams.concat("resourceName ");
 			parmsAreBad = true;
 		}
 		
 		if(persistenceUnit == null || persistenceUnit.isEmpty()){
-			badparams = badparams.concat("persistenceUnit ");
+			localBadParams = localBadParams.concat("persistenceUnit ");
 			parmsAreBad = true;
 		}
 		
 		String dbDriver = properties.getProperty(IntegrityAuditProperties.DB_DRIVER).trim();
 		if(dbDriver == null || dbDriver.isEmpty()){
-			badparams = badparams.concat("dbDriver ");
+			localBadParams = localBadParams.concat("dbDriver ");
 			parmsAreBad = true;
 		}
 
 		String dbUrl = properties.getProperty(IntegrityAuditProperties.DB_URL).trim();
 		if(dbUrl == null || dbUrl.isEmpty()){
-			badparams = badparams.concat("dbUrl ");
+			localBadParams = localBadParams.concat("dbUrl ");
 			parmsAreBad = true;
 		}
 		
 		String dbUser = properties.getProperty(IntegrityAuditProperties.DB_USER).trim();
 		if(dbUser == null || dbUser.isEmpty()){
-			badparams = badparams.concat("dbUser ");
+			localBadParams = localBadParams.concat("dbUser ");
 			parmsAreBad = true;
 		}
 		
 		String dbPwd = properties.getProperty(IntegrityAuditProperties.DB_PWD).trim();
 		if(dbPwd == null){ //may be empty
-			badparams = badparams.concat("dbPwd ");
+			localBadParams = localBadParams.concat("dbPwd ");
 			parmsAreBad = true;
 		}
 		
 		String siteName = properties.getProperty(IntegrityAuditProperties.SITE_NAME).trim();
 		if(siteName == null || siteName.isEmpty()){
-			badparams = badparams.concat("siteName ");
+			localBadParams = localBadParams.concat("siteName ");
 			parmsAreBad = true;
 		}
 		
 		String nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE).trim();
 		if(nodeType == null || nodeType.isEmpty()){
-			badparams = badparams.concat("nodeType ");
+			localBadParams = localBadParams.concat("nodeType ");
 			parmsAreBad = true;
 		} else {
 			if (!isNodeTypeEnum(nodeType)) {
@@ -171,7 +171,7 @@ public class IntegrityAudit {
 				for (NodeTypeEnum n : NodeTypeEnum.values()) {
 					nodetypes = nodetypes.concat(n.toString() + " ");
 				}
-				badparams = badparams.concat(nodetypes + "] ");
+				localBadParams = localBadParams.concat(nodetypes + "] ");
 				parmsAreBad = true;
 			}
 		}
@@ -179,7 +179,7 @@ public class IntegrityAudit {
 			try{
 				Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
 			}catch(NumberFormatException nfe){
-				badparams = badparams.concat(", auditPeriodSeconds=" 
+				localBadParams = localBadParams.concat(", auditPeriodSeconds=" 
 						+ properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
 				parmsAreBad = true;
 			}

@@ -132,6 +132,7 @@ public class AuditThread extends Thread {
 
 	}
 
+	@Override
 	public void run() {
 
 		logger.info("AuditThread.run: Entering");
@@ -327,7 +328,7 @@ public class AuditThread extends Thread {
 					+ integrityAuditEntityList.size());
 		}
 
-		IntegrityAuditEntity designationCandidate = null;
+		IntegrityAuditEntity designationCandidate;
 		IntegrityAuditEntity thisEntity = null;
 
 		int designatedEntityIndex = -1;
@@ -552,8 +553,7 @@ public class AuditThread extends Thread {
 		 * Sorted list of entities for a particular nodeType and
 		 * persistenceUnit.
 		 */
-		List<IntegrityAuditEntity> integrityAuditEntityList = new ArrayList<IntegrityAuditEntity>();
-		integrityAuditEntityList = dbDAO.getIntegrityAuditEntities(
+		List<IntegrityAuditEntity> integrityAuditEntityList = dbDAO.getIntegrityAuditEntities(
 				this.persistenceUnit, this.nodeType);
 		int listSize = integrityAuditEntityList.size();
 		if (logger.isDebugEnabled()) {

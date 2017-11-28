@@ -93,6 +93,7 @@ public class IntegrityAuditEntity implements Serializable {
 
 	
 	public IntegrityAuditEntity() {
+		// Empty constructor
 	}
 
 	@PrePersist
