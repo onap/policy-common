@@ -23,6 +23,7 @@ package org.onap.policy.common.ia;
 public class DbAuditException extends Exception{
 	private static final long serialVersionUID = 1L;
 	public DbAuditException() {
+		super();
 	}
 	public DbAuditException(String message) {
 		super(message);
