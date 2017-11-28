@@ -131,7 +131,7 @@ public class IntegrityAudit {
 			parmsAreBad = true;
 		}
 		
-		String dbDriver = properties.getProperty(IntegrityAuditProperties.DB_DRIVER).trim();
+		/*String dbDriver = properties.getProperty(IntegrityAuditProperties.DB_DRIVER).trim();
 		if(dbDriver == null || dbDriver.isEmpty()){
 			badparams = badparams.concat("dbDriver ");
 			parmsAreBad = true;
@@ -187,7 +187,7 @@ public class IntegrityAudit {
 		logger.debug("parmsAreBad: exit:" 
 				+ "\nresourceName: " + resourceName
 				+ "\npersistenceUnit: " + persistenceUnit
-				+ "\nproperties: " + properties);
+				+ "\nproperties: " + properties);*/
 		
 		return parmsAreBad;
 	}	
