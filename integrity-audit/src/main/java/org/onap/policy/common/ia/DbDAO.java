@@ -95,7 +95,7 @@ public class DbDAO {
 	 * @throws IntegrityAuditPropertiesException
 	 */
 	private void validateProperties(String resourceName, String persistenceUnit, Properties properties) throws IntegrityAuditPropertiesException{
-		String badparams="";
+		StringBuilder badparams= new StringBuilder();
 		if(IntegrityAudit.parmsAreBad(resourceName, persistenceUnit, properties, badparams)){
 			String msg = "DbDAO: Bad parameters: badparams" + badparams;
 			throw new IntegrityAuditPropertiesException(msg);
