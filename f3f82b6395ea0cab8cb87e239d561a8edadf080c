@@ -45,6 +45,30 @@
       "revId": "f3f82b6395ea0cab8cb87e239d561a8edadf080c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_b0a099f5",
+        "filename": "integrity-audit/src/main/java/org/onap/policy/common/ia/IntegrityAudit.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-12-04T16:00:35Z",
+      "side": 1,
+      "message": "So Kevin, he is just responding to Sonar major issues. Is it expected that the String badParams be filled out and returned? If so, then we should probably do this via another means. Perhaps by returns a Pair\u003ca,b\u003e of boolean, string",
+      "parentUuid": "5a93c517_553b47eb",
+      "range": {
+        "startLine": 125,
+        "startChar": 3,
+        "endLine": 125,
+        "endChar": 17
+      },
+      "revId": "f3f82b6395ea0cab8cb87e239d561a8edadf080c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
