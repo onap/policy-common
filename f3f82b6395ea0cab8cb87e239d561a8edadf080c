@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_b57e4be3",
+        "filename": "integrity-audit/src/main/java/org/onap/policy/common/ia/IntegrityAudit.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-12-04T13:35:14Z",
+      "side": 1,
+      "message": "I know you are fixing tech debt. But looking at this variable, it doesn\u0027t seem that it is useful for anything after its concatenated issues. Perhaps it should be part of a logger.debug statement?? Maybe ask Kevin it is really needed at all.",
+      "range": {
+        "startLine": 121,
+        "startChar": 0,
+        "endLine": 121,
+        "endChar": 36
+      },
+      "revId": "f3f82b6395ea0cab8cb87e239d561a8edadf080c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
