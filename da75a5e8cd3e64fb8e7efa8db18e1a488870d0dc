@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_eb3070ea",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/FlexLogger.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2017-12-04T21:24:46Z",
+      "side": 1,
+      "message": "System.out will give sonars but I realize that there may not be loggers available as a possibility.",
+      "revId": "da75a5e8cd3e64fb8e7efa8db18e1a488870d0dc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
