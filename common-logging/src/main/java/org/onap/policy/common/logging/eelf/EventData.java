@@ -36,7 +36,8 @@ public class EventData {
     //Default constructor takes no arguments.
     //Is empty because instance variables are assigned
     //their default values upon declaration.
-    public EventData() {
+    public EventData() { 
+        //See above comments for the reason this constructor is empty
     }
 
     public EventData(String requestID, Instant startTime, Instant endTime) {

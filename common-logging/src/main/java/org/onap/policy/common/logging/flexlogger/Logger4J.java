@@ -182,12 +182,8 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 	 * @return boolean
 	 */
 	@Override
-	public boolean isAuditEnabled(){		
-		if(PolicyLogger.getAuditLevel() != null && PolicyLogger.getAuditLevel().toString().equals(Level.OFF.toString())){
-			return false;
-		}else {
-			return true;
-		}
+	public boolean isAuditEnabled(){
+		return !(PolicyLogger.getAuditLevel() != null && PolicyLogger.getAuditLevel().toString().equals(Level.OFF.toString()));
 	}
 	
 	/**
@@ -196,11 +192,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 	 */
 	@Override
 	public boolean isMetricsEnabled(){			
-		if(PolicyLogger.getMetricsLevel() != null && PolicyLogger.getMetricsLevel().toString().equals(Level.OFF.toString())){
-			return false;
-		}else {
-			return true;
-		}
+		return !(PolicyLogger.getMetricsLevel() != null && PolicyLogger.getMetricsLevel().toString().equals(Level.OFF.toString()));
 	}
 
 	/**
@@ -343,12 +335,13 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 	 * @param transId
 	 */	
 	@Override
-	public String postMDCInfoForEvent(String transId) {		
-		if(transId == null || transId.isEmpty()){
-			transId = UUID.randomUUID().toString();
+	public String postMDCInfoForEvent(String transId) {	
+		String transactionId = transId;
+		if(transactionId == null || transactionId.isEmpty()){
+			transactionId = UUID.randomUUID().toString();
 		}
 		
-	    return transId;
+	    return transactionId;
 	}
 	
 	/**

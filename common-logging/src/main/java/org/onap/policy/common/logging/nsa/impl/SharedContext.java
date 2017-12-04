@@ -32,6 +32,8 @@ import org.onap.policy.common.logging.nsa.SharedLoggingContext;
  */
 public class SharedContext extends Slf4jLoggingContext implements SharedLoggingContext
 {
+	private final HashMap<String,String> fMap;
+	
 	public SharedContext ( LoggingContext base )
 	{
 		super ( base );
@@ -53,6 +55,4 @@ public class SharedContext extends Slf4jLoggingContext implements SharedLoggingC
 			lc.put ( e.getKey(), e.getValue() );
 		}
 	}
-
-	private final HashMap<String,String> fMap;
 }

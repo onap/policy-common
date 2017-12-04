@@ -42,7 +42,8 @@ public class FlexLoggerTester {
 		else
 			logger.info("this is from logger.info call");
 
-		if(logger.isMetricsEnabled()) logger.metrics("this is from logger.metrics call");
+		if(logger.isMetricsEnabled()) 
+			logger.metrics("this is from logger.metrics call");
 		
 		logger.error("this is from logger.error call");
 		if(logger.isAuditEnabled()) 

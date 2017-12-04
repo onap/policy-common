@@ -71,11 +71,11 @@ public class EventTrackInfoHandler extends TimerTask {
 
             PolicyLogger.info(className + " duration time : " + ns);
 
-            PolicyLogger.info(className + " PolicyLogger.EXPIRED_TIME : " + PolicyLogger.EXPIRED_TIME);
+            PolicyLogger.info(className + " PolicyLogger.EXPIRED_TIME : " + PolicyLogger.expiredTime);
 
             // if longer than EXPIRED_TIME, remove the object
 
-            if (ns > PolicyLogger.EXPIRED_TIME) {
+            if (ns > PolicyLogger.expiredTime) {
                 if (expiredEvents == null) {
                     expiredEvents = new ArrayList<>();
                 }
@@ -89,7 +89,6 @@ public class EventTrackInfoHandler extends TimerTask {
             if (expiredEvents != null) {
                 for (String expiredKey : expiredEvents) {
                     eventInfo.remove(expiredKey);
-                    System.out.println(className + " removed expired event request ID: " + expiredKey);
                     PolicyLogger.info(className + " removed expired event request ID: " + expiredKey);
                 }
             }

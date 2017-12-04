@@ -32,6 +32,10 @@ public class LoggingContextFactory
 {
 	public static class Builder
 	{
+
+		private LoggingContext fBase = null;
+		private boolean fShared = false;
+		
 		public Builder withBaseContext ( LoggingContext lc )
 		{
 			fBase = lc;
@@ -48,8 +52,5 @@ public class LoggingContextFactory
 		{
 			return fShared ? new SharedContext ( fBase ) : new Slf4jLoggingContext ( fBase );
 		}
-
-		private LoggingContext fBase = null;
-		private boolean fShared = false;
 	}
 }
