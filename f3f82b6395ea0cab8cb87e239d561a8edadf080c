@@ -22,6 +22,29 @@
       "revId": "f3f82b6395ea0cab8cb87e239d561a8edadf080c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_553b47eb",
+        "filename": "integrity-audit/src/main/java/org/onap/policy/common/ia/IntegrityAudit.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-12-04T15:20:00Z",
+      "side": 1,
+      "message": "This breaks the validateProperties method.  It passed in a reference to badparams which is being modified here.  It then uses it when throwing an exception.  \n\nPLEASE investigate the bigger picture before making changes. What would be the purpose of creating a local variable which is never used?",
+      "range": {
+        "startLine": 125,
+        "startChar": 3,
+        "endLine": 125,
+        "endChar": 17
+      },
+      "revId": "f3f82b6395ea0cab8cb87e239d561a8edadf080c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
