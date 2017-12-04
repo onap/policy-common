@@ -32,38 +32,38 @@ public class ErrorCodeMap {
 
     protected static final HashMap<MessageCodes, ErrorCodeInfo> hm = new HashMap<>();
     
-    private static String ERROR_PERMISSIONS = "POLICY-100E";
-	private static String ERROR_PERMISSIONS_DESCRIPTION = "This is a Permissions Error. Please check the error message for detail information";
+    private static final String ERROR_PERMISSIONS = "POLICY-100E";
+	private static final String ERROR_PERMISSIONS_DESCRIPTION = "This is a Permissions Error. Please check the error message for detail information";
     
-	private static String ERROR_SCHEMA_INVALID = "POLICY-400E";
-	private static String ERROR_SCHEMA_INVALID_DESCRIPTION = "This is an Invalid Schema Error. Please check the error message for detail information";
+	private static final String ERROR_SCHEMA_INVALID = "POLICY-400E";
+	private static final String ERROR_SCHEMA_INVALID_DESCRIPTION = "This is an Invalid Schema Error. Please check the error message for detail information";
 	
-    private static String UPDATE_ERROR = "POLICY-502E";
-	private static String UPDATE_ERROR_DESCRIPTION = "This is an updating error. Please check the error message for  detail information";
+    private static final String UPDATE_ERROR = "POLICY-502E";
+	private static final String UPDATE_ERROR_DESCRIPTION = "This is an updating error. Please check the error message for  detail information";
 	
-	private static String EXCEPTION_ERROR_CODE = "POLICY-503E";
-	private static String EXCEPTION_ERROR_DESCRIPTION = "This is an exception error message during the process. Please check the error message for detail information";
+	private static final String EXCEPTION_ERROR_CODE = "POLICY-503E";
+	private static final String EXCEPTION_ERROR_DESCRIPTION = "This is an exception error message during the process. Please check the error message for detail information";
 	
-	private static String MISS_PROPERTY_ERROR = "POLICY-504E";
-	private static String MISS_PROPERTY_ERROR_DESCRIPTION = "This is an error of missing properties. Please check the error message for  detail information";
+	private static final String MISS_PROPERTY_ERROR = "POLICY-504E";
+	private static final String MISS_PROPERTY_ERROR_DESCRIPTION = "This is an error of missing properties. Please check the error message for  detail information";
 	
-    private static String GENERAL_ERROR_CODE = "POLICY-515E";
-    private static String GENERAL_ERROR_DESCRIPTION = "This is a general error message during the process. Please check the error message for detail information";
+    private static final String GENERAL_ERROR_CODE = "POLICY-515E";
+    private static final String GENERAL_ERROR_DESCRIPTION = "This is a general error message during the process. Please check the error message for detail information";
     
-    private static String ERROR_SYSTEM_ERROR = "POLICY-516E";
-	private static String ERROR_SYSTEM_ERROR_DESCRIPTION = "This is a System Error. Please check the error message for detail information";
+    private static final String ERROR_SYSTEM_ERROR = "POLICY-516E";
+	private static final String ERROR_SYSTEM_ERROR_DESCRIPTION = "This is a System Error. Please check the error message for detail information";
 	
-	private static String ERROR_DATA_ISSUE = "POLICY-517E";
-	private static String ERROR_DATA_ISSUE_DESCRIPTION = "This is a Data Issue Error. Please check the error message for detail information";
+	private static final String ERROR_DATA_ISSUE = "POLICY-517E";
+	private static final String ERROR_DATA_ISSUE_DESCRIPTION = "This is a Data Issue Error. Please check the error message for detail information";
 	
-	private static String ERROR_PROCESS_FLOW = "POLICY-518E";
-	private static String ERROR_PROCESS_FLOW_DESCRIPTION = "This is a Process Flow Error. Please check the error message for detail information";
+	private static final String ERROR_PROCESS_FLOW = "POLICY-518E";
+	private static final String ERROR_PROCESS_FLOW_DESCRIPTION = "This is a Process Flow Error. Please check the error message for detail information";
 	
-	private static String ERROR_UNKNOWN = "POLICY-519E";
-	private static String ERROR_UNKNOWN_DESCRIPTION = "This is an Unknown Error. Please check the error message for detail information";
+	private static final String ERROR_UNKNOWN = "POLICY-519E";
+	private static final String ERROR_UNKNOWN_DESCRIPTION = "This is an Unknown Error. Please check the error message for detail information";
 
-	private static String ERROR_AUDIT = "POLICY-520E";
-	private static String ERROR_AUDIT_DESCRIPTION = "This is an audit Error. Please check the error message for detail information";
+	private static final String ERROR_AUDIT = "POLICY-520E";
+	private static final String ERROR_AUDIT_DESCRIPTION = "This is an audit Error. Please check the error message for detail information";
     
     static {
     	hm.put(MessageCodes.EXCEPTION_ERROR, new ErrorCodeInfo(EXCEPTION_ERROR_CODE, EXCEPTION_ERROR_DESCRIPTION));

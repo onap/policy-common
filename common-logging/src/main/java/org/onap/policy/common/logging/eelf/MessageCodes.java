@@ -156,8 +156,8 @@ public enum MessageCodes implements EELFResolvableErrorEnum {
         String id = EELFResourceManager.getIdentifier(RULE_AUDIT_EXEC_INFO);
         String value = EELFResourceManager.getMessage(RULE_AUDIT_EXEC_INFO);
                 
-        System.out.println("*********************** " + id);
-        System.out.println("*********************** " + value);
+        PolicyLogger.info("*********************** Rule audit id: " + id);
+        PolicyLogger.info("*********************** Rule audit value: " + value);
        
     }
 }

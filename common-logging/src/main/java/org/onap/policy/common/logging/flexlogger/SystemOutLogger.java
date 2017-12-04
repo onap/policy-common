@@ -380,11 +380,12 @@ public class SystemOutLogger implements Logger, Serializable {
 	@Override
 	public String postMDCInfoForEvent(String transId) {
 		
-		if(transId == null || transId.isEmpty()){
-			transId = UUID.randomUUID().toString();
+		String transactionId = transId;
+		if(transactionId == null || transactionId.isEmpty()){
+			transactionId = UUID.randomUUID().toString();
 		}
 		
-	    return transId;
+	    return transactionId;
 	}
 	
 	/**

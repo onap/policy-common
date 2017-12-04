@@ -38,6 +38,7 @@ import org.onap.policy.common.logging.flexlogger.PropertyUtil.Listener;
  */
 public class FlexLogger extends SecurityManager{
 
+	private static final String GET_LOGGER_PREFIX = "FlexLogger:getLogger : loggerType = ";
 	private static LoggerType loggerType = LoggerType.EELF;
     private static ConcurrentHashMap<String, Logger4J> logger4JMap = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<String, EelfLogger> eelfLoggerMap = new ConcurrentHashMap<>();
@@ -51,9 +52,9 @@ public class FlexLogger extends SecurityManager{
 	 * Returns an instance of Logger
 	 * @param clazz
 	 */
-	static public Logger getLogger(Class<?> clazz) {
+	public static Logger getLogger(Class<?> clazz) {
 		Logger logger = null;
-		System.out.println("FlexLogger:getLogger : loggerType = " + loggerType);
+		System.out.println(GET_LOGGER_PREFIX + loggerType);
 		switch (loggerType) {
 
 		case EELF:
@@ -75,9 +76,9 @@ public class FlexLogger extends SecurityManager{
 	 * Returns an instance of Logger
 	 * @param s
 	 */
-	static public Logger getLogger(String s) {	
+	public static Logger getLogger(String s) {	
 		Logger logger = null;
-		System.out.println("FlexLogger:getLogger : loggerType = " + loggerType);
+		System.out.println(GET_LOGGER_PREFIX + loggerType);
 		switch (loggerType) {
 
 		case EELF:
@@ -100,9 +101,9 @@ public class FlexLogger extends SecurityManager{
 	 * @param clazz
 	 * @param isNewTransaction
 	 */
-	static public Logger getLogger(Class<?> clazz, boolean isNewTransaction) {
+	public static Logger getLogger(Class<?> clazz, boolean isNewTransaction) {
 		Logger logger = null;
-		System.out.println("FlexLogger:getLogger : loggerType = " + loggerType);
+		System.out.println(GET_LOGGER_PREFIX + loggerType);
 		switch (loggerType) {
 
 		case EELF:
@@ -125,9 +126,9 @@ public class FlexLogger extends SecurityManager{
 	 * @param s
 	 * @param isNewTransaction
 	 */
-	static public Logger getLogger(String s, boolean isNewTransaction) {
+	public static Logger getLogger(String s, boolean isNewTransaction) {
 		Logger logger = null;
-		System.out.println("FlexLogger:getLogger : loggerType = " + loggerType);
+		System.out.println(GET_LOGGER_PREFIX + loggerType);
 		switch (loggerType) {
 
 		case EELF:
@@ -251,7 +252,7 @@ public class FlexLogger extends SecurityManager{
 		    	System.out.println("FlexLogger:overrideLogbackLevel => " + overrideLogbackLevel);
 		    	loggerTypeString = properties.getProperty("logger.type");
 				if (loggerTypeString != null){					
-					if (loggerTypeString.equalsIgnoreCase("EELF")){					
+					if ("EELF".equalsIgnoreCase(loggerTypeString)){					
 						loggerType = LoggerType.EELF;
 						if ("TRUE".equalsIgnoreCase(overrideLogbackLevel)) {
 							 System.out.println("FlexLogger: start listener.");
@@ -259,9 +260,9 @@ public class FlexLogger extends SecurityManager{
 										 ("config/policyLogger.properties", 
 										   new PropertiesCallBack("FlexLogger-CallBack"));							
 						}
-					}else if (loggerTypeString.equalsIgnoreCase("LOG4J")){			
+					}else if ("LOG4J".equalsIgnoreCase(loggerTypeString)){			
 						loggerType = LoggerType.LOG4J;				
-					}else if (loggerTypeString.equalsIgnoreCase("SYSTEMOUT")){
+					}else if ("SYSTEMOUT".equalsIgnoreCase(loggerTypeString)){
 						loggerType = LoggerType.SYSTEMOUT;	
 					}
 					
@@ -281,7 +282,7 @@ public class FlexLogger extends SecurityManager{
 	/**
 	 * PropertiesCallBack is listening any updates on the policyLogger.properties
 	 */
-	static public class PropertiesCallBack implements Listener {
+	public static class PropertiesCallBack implements Listener {
 		String name;
 
 		public PropertiesCallBack(String name) {
