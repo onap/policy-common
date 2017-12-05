@@ -16,6 +16,24 @@
       "revId": "da75a5e8cd3e64fb8e7efa8db18e1a488870d0dc",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_eb1cef6c",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/FlexLogger.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2017-12-05T15:23:13Z",
+      "side": 1,
+      "message": "Ok if that is the case then we can just go into Sonar and mark as \"not gonna fix\"",
+      "parentUuid": "5a93c517_eb3070ea",
+      "revId": "da75a5e8cd3e64fb8e7efa8db18e1a488870d0dc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
