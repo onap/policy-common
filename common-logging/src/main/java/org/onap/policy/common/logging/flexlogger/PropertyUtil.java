@@ -37,6 +37,14 @@ import java.util.TimerTask;
  */
 public class PropertyUtil
 {
+	
+  // timer thread used for polling for property file changes
+  private static Timer timer = null;
+
+  // this table maps canonical file into a 'ListenerRegistration' instance
+  private static HashMap<File, ListenerRegistration> registrations =
+	new HashMap<>();
+
   /**
    * Read in a properties file
    * @param file the properties file
@@ -45,7 +53,7 @@ public class PropertyUtil
    *	does not exist or can't be opened, and 'IOException' if there is
    *	a problem loading the properties file.
    */
-  static public Properties getProperties(File file) throws IOException
+  public static Properties getProperties(File file) throws IOException
   {
 	// create an InputStream (may throw a FileNotFoundException)
 	FileInputStream fis = new FileInputStream(file);
@@ -73,15 +81,12 @@ public class PropertyUtil
    *	does not exist or can't be opened, and 'IOException' if there is
    *	a problem loading the properties file.
    */
-  static public Properties getProperties(String fileName) throws IOException
+  public static Properties getProperties(String fileName) throws IOException
   {
 	return getProperties(new File(fileName));
   }
 
   /* ============================================================ */
-
-  // timer thread used for polling for property file changes
-  private static Timer timer = null;
 
   /**
    * This is the callback interface, used for sending notifications of
@@ -98,10 +103,6 @@ public class PropertyUtil
 	 */
 	void propertiesChanged(Properties properties, Set<String> changedKeys);
   }
-
-  // this table maps canonical file into a 'ListenerRegistration' instance
-  static private HashMap<File, ListenerRegistration> registrations =
-	new HashMap<>();
 
   /**
    * This is an internal class - one instance of this exists for each
@@ -306,7 +307,7 @@ public class PropertyUtil
    *	does not exist or can't be opened, and 'IOException' if there is
    *	a problem loading the properties file.
    */
-  static public Properties getProperties(File file, Listener listener)
+  public static Properties getProperties(File file, Listener listener)
 	throws IOException
   {
 	if (listener == null)
@@ -350,7 +351,7 @@ public class PropertyUtil
    *	does not exist or can't be opened, and 'IOException' if there is
    *	a problem loading the properties file.
    */
-  static public Properties getProperties(String fileName, Listener listener)
+  public static Properties getProperties(String fileName, Listener listener)
 	throws IOException
   {
 	return getProperties(new File(fileName), listener);
@@ -362,7 +363,7 @@ public class PropertyUtil
    * @param notify if not null, this is a callback interface that was used for
    *	notifications of changes
    */
-  static public void stopListening(File file, Listener listener)
+  public static void stopListening(File file, Listener listener)
   {
 	if (listener != null)
 	  {
@@ -380,7 +381,7 @@ public class PropertyUtil
    * @param notify if not null, this is a callback interface that was used for
    *	notifications of changes
    */
-  static public void stopListening(String fileName, Listener listener)
+  public static void stopListening(String fileName, Listener listener)
   {
 	stopListening(new File(fileName), listener);
   }
@@ -388,7 +389,7 @@ public class PropertyUtil
   /* ============================================================ */
 
   // TEMPORARY - used to test callback interface
-  static public class Test implements Listener
+  public static class Test implements Listener
   {
 	String name;
 
