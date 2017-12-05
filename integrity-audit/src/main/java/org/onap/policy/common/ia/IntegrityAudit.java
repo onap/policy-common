@@ -67,7 +67,7 @@ public class IntegrityAudit {
 	public IntegrityAudit(String resourceName, String persistenceUnit, Properties properties) throws IntegrityAuditException {
 		
 		logger.info("Constructor: Entering and checking for nulls");
-		String parmList = "";
+		StringBuilder parmList = new StringBuilder();
 		if (parmsAreBad(resourceName, persistenceUnit, properties, parmList)) {
 			logger.error("Constructor: Parms contain nulls; cannot run audit for resourceName="
 					+ resourceName + ", persistenceUnit=" + persistenceUnit
@@ -117,73 +117,80 @@ public class IntegrityAudit {
 	 * Makes sure we don't try to run the audit with bad parameters.
 	 */
 	public static boolean parmsAreBad(String resourceName, String persistenceUnit,
-			Properties properties, String badparams) {
+			Properties properties, StringBuilder badparams) {
 
 		boolean parmsAreBad = false;
 		
 		if(resourceName == null || resourceName.isEmpty()){
-			badparams = badparams.concat("resourceName ");
+			badparams = badparams.append("resourceName ");
 			parmsAreBad = true;
 		}
 		
 		if(persistenceUnit == null || persistenceUnit.isEmpty()){
-			badparams = badparams.concat("persistenceUnit ");
+			badparams = badparams.append("persistenceUnit ");
 			parmsAreBad = true;
 		}
 		
-		String dbDriver = properties.getProperty(IntegrityAuditProperties.DB_DRIVER).trim();
-		if(dbDriver == null || dbDriver.isEmpty()){
-			badparams = badparams.concat("dbDriver ");
+		if(properties == null || properties.isEmpty()){
+			badparams = badparams.append("properties ");
 			parmsAreBad = true;
 		}
-
-		String dbUrl = properties.getProperty(IntegrityAuditProperties.DB_URL).trim();
-		if(dbUrl == null || dbUrl.isEmpty()){
-			badparams = badparams.concat("dbUrl ");
-			parmsAreBad = true;
-		}
-		
-		String dbUser = properties.getProperty(IntegrityAuditProperties.DB_USER).trim();
-		if(dbUser == null || dbUser.isEmpty()){
-			badparams = badparams.concat("dbUser ");
-			parmsAreBad = true;
-		}
-		
-		String dbPwd = properties.getProperty(IntegrityAuditProperties.DB_PWD).trim();
-		if(dbPwd == null){ //may be empty
-			badparams = badparams.concat("dbPwd ");
-			parmsAreBad = true;
-		}
-		
-		String siteName = properties.getProperty(IntegrityAuditProperties.SITE_NAME).trim();
-		if(siteName == null || siteName.isEmpty()){
-			badparams = badparams.concat("siteName ");
-			parmsAreBad = true;
-		}
-		
-		String nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE).trim();
-		if(nodeType == null || nodeType.isEmpty()){
-			badparams = badparams.concat("nodeType ");
-			parmsAreBad = true;
-		} else {
-			if (!isNodeTypeEnum(nodeType)) {
-				String nodetypes = "nodeType must be one of[";
-				for (NodeTypeEnum n : NodeTypeEnum.values()) {
-					nodetypes = nodetypes.concat(n.toString() + " ");
+		else{
+			String dbDriver = properties.getProperty(IntegrityAuditProperties.DB_DRIVER);
+			if(dbDriver == null || dbDriver.isEmpty()){
+				badparams = badparams.append("dbDriver ");
+				parmsAreBad = true;
+			}
+	
+			String dbUrl = properties.getProperty(IntegrityAuditProperties.DB_URL);
+			if(dbUrl == null || dbUrl.isEmpty()){
+				badparams = badparams.append("dbUrl ");
+				parmsAreBad = true;
+			}
+			
+			String dbUser = properties.getProperty(IntegrityAuditProperties.DB_USER);
+			if(dbUser == null || dbUser.isEmpty()){
+				badparams = badparams.append("dbUser ");
+				parmsAreBad = true;
+			}
+			
+			String dbPwd = properties.getProperty(IntegrityAuditProperties.DB_PWD);
+			if(dbPwd == null){ //may be empty
+				badparams = badparams.append("dbPwd ");
+				parmsAreBad = true;
+			}
+			
+			String siteName = properties.getProperty(IntegrityAuditProperties.SITE_NAME);
+			if(siteName == null || siteName.isEmpty()){
+				badparams = badparams.append("siteName ");
+				parmsAreBad = true;
+			}
+			
+			String nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE);
+			if(nodeType == null || nodeType.isEmpty()){
+				badparams = badparams.append("nodeType ");
+				parmsAreBad = true;
+			} else {
+				nodeType = nodeType.trim();
+				if (!isNodeTypeEnum(nodeType)) {
+					String nodetypes = "nodeType must be one of[";
+					for (NodeTypeEnum n : NodeTypeEnum.values()) {
+						nodetypes = nodetypes.concat(n.toString() + " ");
+					}
+					badparams = badparams.append(nodetypes + "] ");
+					parmsAreBad = true;
 				}
-				badparams = badparams.concat(nodetypes + "] ");
-				parmsAreBad = true;
 			}
-		}
-		if(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS) != null){ //It is allowed to be null
-			try{
-				Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
-			}catch(NumberFormatException nfe){
-				badparams = badparams.concat(", auditPeriodSeconds=" 
-						+ properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
-				parmsAreBad = true;
+			if(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS) != null){ //It is allowed to be null
+				try{
+					Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
+				}catch(NumberFormatException nfe){
+					badparams = badparams.append(", auditPeriodSeconds=" 
+							+ properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
+					parmsAreBad = true;
+				}
 			}
-		}
+		} // End else
 		logger.debug("parmsAreBad: exit:" 
 				+ "\nresourceName: " + resourceName
 				+ "\npersistenceUnit: " + persistenceUnit
