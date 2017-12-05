@@ -84,6 +84,24 @@
       "revId": "3295d0beb81bccac5e04decbd11ff19fe07d50dd",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_abd02754",
+        "filename": "integrity-audit/src/main/java/org/onap/policy/common/ia/jpa/IntegrityAuditEntity.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1759
+      },
+      "writtenOn": "2017-12-05T16:33:37Z",
+      "side": 1,
+      "message": "Yes this empty no-arg constructor is called. I will leave it in",
+      "parentUuid": "5a93c517_f02b8192",
+      "revId": "3295d0beb81bccac5e04decbd11ff19fe07d50dd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
