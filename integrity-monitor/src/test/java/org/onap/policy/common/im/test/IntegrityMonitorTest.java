@@ -38,8 +38,8 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
-
 import org.onap.policy.common.im.IntegrityMonitor;
 import org.onap.policy.common.im.IntegrityMonitorProperties;
 import org.onap.policy.common.im.StateManagement;
@@ -81,13 +81,7 @@ public class IntegrityMonitorTest {
 	public void setUp() throws Exception {
 		IntegrityMonitor.setUnitTesting(true);
 		
-		myProp = new Properties();
-		myProp.put(IntegrityMonitorProperties.DB_DRIVER, IntegrityMonitorTest.DEFAULT_DB_DRIVER);
-		myProp.put(IntegrityMonitorProperties.DB_URL, IntegrityMonitorTest.DEFAULT_DB_URL);
-		myProp.put(IntegrityMonitorProperties.DB_USER, IntegrityMonitorTest.DEFAULT_DB_USER);
-		myProp.put(IntegrityMonitorProperties.DB_PWD, IntegrityMonitorTest.DEFAULT_DB_PWD);
-		myProp.put(IntegrityMonitorProperties.SITE_NAME, "SiteA");
-		myProp.put(IntegrityMonitorProperties.NODE_TYPE, "pap");
+		cleanMyProp();
 		
 		// set JMX remote port in system properties
 		systemProps = System.getProperties();
@@ -110,21 +104,44 @@ public class IntegrityMonitorTest {
 		systemProps.remove("com.sun.management.jmxremote.port");
 	}
 	
+	private void cleanMyProp(){
+		myProp = new Properties();
+		myProp.put(IntegrityMonitorProperties.DB_DRIVER, IntegrityMonitorTest.DEFAULT_DB_DRIVER);
+		myProp.put(IntegrityMonitorProperties.DB_URL, IntegrityMonitorTest.DEFAULT_DB_URL);
+		myProp.put(IntegrityMonitorProperties.DB_USER, IntegrityMonitorTest.DEFAULT_DB_USER);
+		myProp.put(IntegrityMonitorProperties.DB_PWD, IntegrityMonitorTest.DEFAULT_DB_PWD);
+		myProp.put(IntegrityMonitorProperties.SITE_NAME, "SiteA");
+		myProp.put(IntegrityMonitorProperties.NODE_TYPE, "pap");
+	}
+	
+	private void cleanDb(){
+		et = em.getTransaction();
+		
+		et.begin();
+		// Make sure we leave the DB clean
+		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
+		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
+		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
+		em.flush();
+		et.commit();
+	}
+	
+	
 	/*
 	 * The following runs all tests and controls the order of execution. If you allow
 	 * the tests to execute individually, you cannot predict the order and some
-	 * conflicts occur.
+	 * conflicts may occur.
 	 */
 	//@Ignore
 	@Test
 	public void runAllTests() throws Exception{
 		testSanityJmx();
-		testIM();
-		//testSanityState();
-		//testRefreshStateAudit();
+		testIM(); 
+		testSanityState();
+		testRefreshStateAudit();
 		testStateCheck();
-		//testGetAllForwardProgressEntity();
-		testStateAudit();
+		testGetAllForwardProgressEntity();
+		testStateAudit(); 
 	}
 
 	/*
@@ -139,13 +156,29 @@ public class IntegrityMonitorTest {
 	 */
 	public void testSanityJmx() throws Exception {
 		logger.debug("\nIntegrityMonitorTest: Entering testSanityJmx\n\n");
+		cleanDb();
+		cleanMyProp();
+		IntegrityMonitor.deleteInstance();
 		
 		String dependent = "group1_logparser";
 		
 		// parameters are passed via a properties file
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, dependent);
 		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "true");
-		IntegrityMonitor.updateProperties(myProp);
+		// Disable the integrity monitor so it will not interfere
+		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "-1");
+		// Disable the refresh state audit
+		myProp.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, "-1");
+		// Disable the state audit
+		myProp.put(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, "-1");
+		// Disable the test transaction
+		myProp.put(IntegrityMonitorProperties.TEST_TRANS_INTERVAL, "-1");
+		// Disable the write FPC
+		myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "-1");
+		// Speed up the check
+		myProp.put(IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL, "1");
+		// Fail dependencies after three seconds
+		myProp.put(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL, "3");
 		
 		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
 		logger.debug("\n\ntestSanityJmx starting im state \nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
@@ -181,7 +214,7 @@ public class IntegrityMonitorTest {
     	// commit transaction
     	et.commit();
     	
-    	Thread.sleep(15000); //sleep 15 sec so the FPManager has time to call evaluateSanty()
+    	Thread.sleep(5000); //sleep 5 sec so the FPManager has time to check dependency health
 		
 		boolean sanityPass = true;
 		try {
@@ -287,26 +320,26 @@ public class IntegrityMonitorTest {
 
 	public void testIM() throws Exception {
 		logger.debug("\nIntegrityMonitorTest: Entering testIM\n\n");
+		cleanDb();
+		cleanMyProp();
+		IntegrityMonitor.deleteInstance();
 		
-		// parameters are passed via a properties file
+		// Disable the integrity monitor so it will not interfere
+		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "-1");
+		// Disable dependency checking
+		myProp.put(IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL, "-1");
+		// Disable the refresh state audit
+		myProp.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, "-1");
+		// Disable the state audit
+		myProp.put(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, "-1");
+		// Disable the test transaction
+		myProp.put(IntegrityMonitorProperties.TEST_TRANS_INTERVAL, "-1");
+		// Disable writing the FPC
+		myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "-1");
 		
-		/*
-		 * Create an IntegrityMonitor
-		 * NOTE: This uses the database that was created above.  So, this MUST follow the creation
-		 * of the DB
-		 */
 		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
 		
-		logger.debug("\n\nim before sleep\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
-						im.getStateManager().getAdminState(),
-						im.getStateManager().getOpState(),
-						im.getStateManager().getAvailStatus(),
-						im.getStateManager().getStandbyStatus());
-		
-		// wait for test transactions to fire and increment fpc
-		Thread.sleep(20000);
-		
-		logger.debug("\n\nim after sleep\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+		logger.debug("\n\nim initial state: \nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
 						im.getStateManager().getAdminState(),
 						im.getStateManager().getOpState(),
 						im.getStateManager().getAvailStatus(),
@@ -336,6 +369,7 @@ public class IntegrityMonitorTest {
 		StateManagement sm = im.getStateManager();
 		
 		sm.lock();
+		
 		logger.debug("\n\nsm.lock()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
 					sm.getAdminState(),
 					sm.getOpState(),
@@ -573,10 +607,26 @@ public class IntegrityMonitorTest {
 
 	public void testSanityState() throws Exception {
 		logger.debug("\nIntegrityMonitorTest: Entering testSanityState\n\n");
+		cleanDb();
+		cleanMyProp();
+		IntegrityMonitor.deleteInstance();
 		
 		// parameters are passed via a properties file
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "group1_dep1,group1_dep2; group2_dep1");
-		IntegrityMonitor.updateProperties(myProp);
+		// Disable the integrity monitor so it will not interfere
+		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "-1");
+		// Disable the refresh state audit
+		myProp.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, "-1");
+		// Disable dependency checking so it does not interfere
+		myProp.put(IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL, "-1");
+		// Disable the state audit
+		myProp.put(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, "-1");
+		// Disable the test transaction
+		myProp.put(IntegrityMonitorProperties.TEST_TRANS_INTERVAL, "-1");
+		// Disable writing the FPC
+		myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "-1");
+		// Max interval for use in deciding if a FPC entry is stale in seconds
+		myProp.put(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL, "120");
 		
 		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
 		
@@ -604,7 +654,9 @@ public class IntegrityMonitorTest {
 		new StateManagement(emf, "group1_dep2");
 		
 		boolean sanityPass = true;
-		Thread.sleep(15000);
+		// Call the dependency check directly instead of waiting for FPManager to do it.
+		logger.debug("\n\nIntegrityMonitor.testSanityState: calling im.dependencyCheck()\n\n");
+		im.dependencyCheck();
 		try {
 			im.evaluateSanity();
 		} catch (Exception e) {
@@ -613,48 +665,32 @@ public class IntegrityMonitorTest {
 		}
 		assertFalse(sanityPass);  // expect sanity test to fail
 		
-		// undo dependency groups and jmx test properties settings
-		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
-		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
-		IntegrityMonitor.updateProperties(myProp);
-
-		et = em.getTransaction();
-		
-		et.begin();
-		// Make sure we leave the DB clean
-		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
-		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
-		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
-
-		em.flush();
-		et.commit();
-		
 		logger.debug("\n\ntestSanityState: Exit\n\n");
 	}
 	
 	public void testRefreshStateAudit() throws Exception {
 		logger.debug("\nIntegrityMonitorTest: testRefreshStateAudit Enter\n\n");
+		cleanDb();
+		cleanMyProp();
+		IntegrityMonitor.deleteInstance();
 
 		// parameters are passed via a properties file
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
 		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
-		myProp.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, "60000");
-		IntegrityMonitor.updateProperties(myProp);
+		// Disable the integrity monitor so it will not interfere
+		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "-1");
+		// Disable the refresh state audit
+		myProp.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, "-1");
+		// Disable dependency checking so it does not interfere
+		myProp.put(IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL, "-1");
+		// Disable the state audit
+		myProp.put(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, "-1");
+		// Disable the test transaction
+		myProp.put(IntegrityMonitorProperties.TEST_TRANS_INTERVAL, "-1");
+		// Disable writing the FPC
+		myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "-1");
 		
-		et = em.getTransaction();
-		et.begin();
-
-		// Make sure we leave the DB clean
-		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
-		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
-		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
-
-		em.flush();
-		et.commit();
-
-		IntegrityMonitor.deleteInstance();
-
-		IntegrityMonitor.getInstance(resourceName, myProp);
+		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
 
 		//the state here is unlocked, enabled, null, null
 		StateManagementEntity sme = null;
@@ -697,7 +733,8 @@ public class IntegrityMonitorTest {
 		em.flush();
 		et.commit();
 
-		Thread.sleep(65000);
+		// Run the refreshStateAudit
+		im.executeRefreshStateAudit();
 
 		//The refreshStateAudit should run and change the state to unlocked,enabled,null,hotstandby
 		StateManagementEntity sme1 = null;
@@ -706,7 +743,6 @@ public class IntegrityMonitorTest {
 
 		query1.setParameter("resource", resourceName);
 
-		//Just test that we are retrieving the right object
 		@SuppressWarnings("rawtypes")
 		List resourceList1 = query1.getResultList();
 		if (!resourceList1.isEmpty()) {
@@ -731,49 +767,36 @@ public class IntegrityMonitorTest {
 			assertTrue(false);
 		}
 
-		et = em.getTransaction();
-		et.begin();
-
-		// Make sure we leave the DB clean
-		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
-		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
-		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
-
-		em.flush();
-		et.commit();
-
-		IntegrityMonitor.deleteInstance();
-
 		logger.debug("\nIntegrityMonitorTest: testRefreshStateAudit Exit\n\n");
 	}
 	
 	public void testStateCheck() throws Exception {
 		logger.debug("\nIntegrityMonitorTest: Entering testStateCheck\n\n");
+		cleanDb();
+		cleanMyProp();
+		IntegrityMonitor.deleteInstance();
 		
 		// parameters are passed via a properties file
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "group1_dep1");
 		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
 		myProp.put(IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD, "1");
-		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "10");
-		IntegrityMonitor.updateProperties(myProp);
 		/*
-		 *  The default monitorInterval is 30 and the default failedCounterThreshold is 3
-		 *  Since stateCheck() uses the faileCounterThreshold * monitorInterval to determine
-		 *  if an entry is stale, it will be stale after 30 seconds.
+		 *  The monitorInterval is set to 10 and the failedCounterThreshold is 1
+		 *  because stateCheck() uses the faileCounterThreshold * monitorInterval to determine
+		 *  if an entry is stale, it will be stale after 10 seconds.
 		 */
-		
-		et = em.getTransaction();
-		et.begin();
-
-		// Make sure we start with the DB clean
-		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
-		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
-		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
-
-		em.flush();
-		et.commit();
-
-		IntegrityMonitor.deleteInstance();
+		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "5");
+		/* 
+		 * We accelerate the test transaction and write FPC intervals because we don't want
+		 * there to be any chance of a FPC failure because of the short monitor interval
+		 */
+		myProp.put(IntegrityMonitorProperties.TEST_TRANS_INTERVAL, "1");
+		myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "2");
+		// Disable the refresh state audit
+		myProp.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, "-1");
+		// The maximum time in seconds to determine that a FPC entry is stale
+		myProp.put(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL, "5");
+		myProp.put(IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL, "5");
 		
 		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
 		
@@ -792,73 +815,56 @@ public class IntegrityMonitorTest {
 		
 		boolean sanityPass = true;
 		//Thread.sleep(15000);
-		Thread.sleep(5000);
+		//Thread.sleep(5000);
+		try {
+			im.evaluateSanity();
+		} catch (Exception e) {
+			logger.error("testStateCheck: After 5 sec sleep - evaluateSanity exception: ", e);
+			sanityPass = false;
+		}
+		assertTrue(sanityPass);  // expect sanity test to pass
+		
+		//now wait 10 seconds.  The dependency entry  is checked every 10 sec.  So, even in the worst case
+		//it should now be stale and the sanity check should fail
+		
+		sanityPass = true;
+		Thread.sleep(10000);
 		try {
 			im.evaluateSanity();
 		} catch (Exception e) {
 			logger.error("testStateCheck: After 15 sec sleep - evaluateSanity exception: ", e);
 			sanityPass = false;
 		}
-		assertTrue(sanityPass);  // expect sanity test to pass
-		
-		//now wait 30 seconds.  The dependency entry should now be stale and the sanitry check should fail
-		
-		sanityPass = true;
-		//Thread.sleep(30000);
-		Thread.sleep(10000);
-		try {
-			im.evaluateSanity();
-		} catch (Exception e) {
-			logger.error("testStateCheck: After 10 sec sleep - evaluateSanity exception: ", e);
-			sanityPass = false;
-		}
 		assertFalse(sanityPass);  // expect sanity test to fail
-		
-		// undo dependency groups, jmx test properties settings and failed counter threshold
-		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
-		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
-		myProp.put(IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD, Integer.toString(IntegrityMonitorProperties.DEFAULT_FAILED_COUNTER_THRESHOLD));
-		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, Integer.toString(IntegrityMonitorProperties.DEFAULT_MONITOR_INTERVAL));
-		IntegrityMonitor.updateProperties(myProp);
-
-		et = em.getTransaction();
-		
-		et.begin();
-		// Make sure we leave the DB clean
-		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
-		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
-		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
-
-		em.flush();
-		et.commit();
 		
 		logger.debug("\n\ntestStateCheck: Exit\n\n");
 	}
 	
 	public void testGetAllForwardProgressEntity() throws Exception{
 		logger.debug("\nIntegrityMonitorTest: Entering testGetAllForwardProgressEntity\n\n");
-		
+		cleanDb();
+		cleanMyProp();
+		IntegrityMonitor.deleteInstance();
 		// parameters are passed via a properties file
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
-		IntegrityMonitor.updateProperties(myProp);
+		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
+		// Disable the integrity monitor so it will not interfere
+		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "-1");
+		// Disable the refresh state audit
+		myProp.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, "-1");
+		// Disable dependency checking so it does not interfere
+		myProp.put(IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL, "-1");
+		// Disable the state audit
+		myProp.put(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, "-1");
+		// Disable the test transaction
+		myProp.put(IntegrityMonitorProperties.TEST_TRANS_INTERVAL, "-1");
+		// Disable writing the FPC
+		myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "-1");
 		
-		et = em.getTransaction();
-		et.begin();
-
-		// Make sure we start with the DB clean
-		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
-		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
-		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
-
-		em.flush();
-		et.commit();
-
-		
-		IntegrityMonitor.deleteInstance();
 		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
 		
 		logger.debug("\nIntegrityMonitorTest: Creating ForwardProgressEntity entries\n\n");
-		// Add a resources to put an entry in the forward progress table
+		// Add resource entries in the forward progress table
 		ForwardProgressEntity fpe = new ForwardProgressEntity();
 		ForwardProgressEntity fpe2 = new ForwardProgressEntity();
 		ForwardProgressEntity fpe3 = new ForwardProgressEntity();
@@ -881,42 +887,39 @@ public class IntegrityMonitorTest {
 		
 		assertTrue(fpeList.size()==4);
 		
-		et = em.getTransaction();
-		
-		et.begin();
-		// Make sure we leave the DB clean
-		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
-		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
-		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
-
-		em.flush();
-		et.commit();
-		
 		logger.debug("\nIntegrityMonitorTest: Exit testGetAllForwardProgressEntity\n\n");
 	}
 	
 	public void testStateAudit() throws Exception{
 		logger.debug("\nIntegrityMonitorTest: Entering testStateAudit\n\n");
+		cleanDb();
+		cleanMyProp();
+		IntegrityMonitor.deleteInstance();
 		
 		// parameters are passed via a properties file
+
+		// No Dependency Groups
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
-		myProp.put(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, "100");
-		IntegrityMonitor.updateProperties(myProp);
+		// Don't use JMX
+		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
+		// Disable the internal sanity monitoring.
+		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "-1");
+		// Disable the dependency monitoring.
+		myProp.put(IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL, "-1");
+		// Disable the refresh state audit
+		myProp.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, "-1");
+		// Disable the test transaction
+		myProp.put(IntegrityMonitorProperties.TEST_TRANS_INTERVAL, "-1");
+		// Disable the write FPC
+		myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "-1");
+		// Disable the State Audit we will call it directly
+		myProp.put(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, "-1");
+		// Max interval for use in deciding if a FPC entry is stale in seconds
+		myProp.put(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL, "120");
+
 		
-		et = em.getTransaction();
-		et.begin();
-
-		// Make sure we start with the DB clean
-		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
-		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
-		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
-
-		em.flush();
-		et.commit();
-
-		
-		IntegrityMonitor.deleteInstance();
 		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+		StateManagement sm = im.getStateManager();
 		
 		logger.debug("\nIntegrityMonitorTest: Creating ForwardProgressEntity entries\n\n");
 		// Add resources to put an entry in the forward progress table
@@ -1007,9 +1010,12 @@ public class IntegrityMonitorTest {
 		}
 		logger.debug("\n\n");
 		
-		logger.debug("IntegrityMonitorTest:testStateAudit: sleeping 2 sec");
-		Thread.sleep(3000);
-		logger.debug("IntegrityMonitorTest:testStateAudit: Awake!");
+		em.refresh(sme1);
+		assertTrue(sme1.getOpState().equals(StateManagement.ENABLED));
+		
+		logger.debug("IntegrityMonitorTest:testStateAudit: calling stateAudit()");
+		im.executeStateAudit();
+		logger.debug("IntegrityMonitorTest:testStateAudit: call to stateAudit() complete");
 		
 		logger.debug("\nIntegrityMonitorTest:testStateAudit getting list of StateManagementEntity entries\n\n");
 		smeList = query.getResultList();
@@ -1036,176 +1042,6 @@ public class IntegrityMonitorTest {
 		em.refresh(sme1);
 		assertTrue(sme1.getOpState().equals(StateManagement.DISABLED));
 		
-		
-		//Now lock this IM
-		StateManagement sm = im.getStateManager();
-		sm.lock();
-		
-		//Give it time to write the db
-		Thread.sleep(2000);
-
-		//Put things back to their starting condition		
-		et = em.getTransaction();
-		et.begin();
-		sme1.setOpState(StateManagement.ENABLED);
-		sme1.setAvailStatus(StateManagement.NULL_VALUE);
-		em.persist(sme1);
-		et.commit();
-
-		//Now it should not update sme1
-		logger.debug("IntegrityMonitorTest:testStateAudit: 2nd sleeping 2 sec");
-		Thread.sleep(2000);
-		logger.debug("IntegrityMonitorTest:testStateAudit: 2nd Awake!");
-		
-		logger.debug("\nIntegrityMonitorTest:testStateAudit 2nd getting list of StateManagementEntity entries\n\n");
-		smeList = query.getResultList();
-		
-		logger.debug("\n\n");
-		logger.debug("IntegrityMonitorTest:testStateAudit:StateManagementEntity 2nd entries");
-		for(Object mySme : smeList){
-			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
-			em.refresh(tmpSme);
-			logger.debug("\n    2nd ResourceName: {}" + 
-					 "\n        AdminState: {}" + 
-					 "\n        OpState: {}" + 
-					 "\n        AvailStatus: {}" + 
-					 "\n        StandbyStatus: {}",
-					 tmpSme.getResourceName(),
-					 tmpSme.getAdminState(),
-					 tmpSme.getOpState(),
-					 tmpSme.getAvailStatus(),
-					 tmpSme.getStandbyStatus()
-					);
-		}
-		logger.debug("\n\n");
-		
-		em.refresh(sme1);
-		assertTrue(sme1.getOpState().equals(StateManagement.ENABLED));
-		
-		//Now create a reason for this IM to be disabled.  Add a bogus dependency
-		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "Bogus_Node");
-		IntegrityMonitor.updateProperties(myProp);
-
-		//Restart the IM
-		IntegrityMonitor.deleteInstance();
-		im = IntegrityMonitor.getInstance(resourceName, myProp);
-		
-		//Give it time to initialize and check dependencies
-		logger.debug("IntegrityMonitorTest:testStateAudit: (restart) sleeping 10 sec");
-		Thread.sleep(7000);
-		logger.debug("IntegrityMonitorTest:testStateAudit: (restart) Awake!");
-		
-		//Now unlock this IM.  Now it should be unlocked, but disabled due to dependency
-		sm.unlock();
-		
-		//Now check its state
-		logger.debug("\nIntegrityMonitorTest:testStateAudit (restart) getting list of StateManagementEntity entries\n\n");
-		smeList = query.getResultList();
-		
-		logger.debug("\n\n");
-		logger.debug("IntegrityMonitorTest:testStateAudit:StateManagementEntity (restart) entries");
-		for(Object mySme : smeList){
-			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
-			em.refresh(tmpSme);
-
-			logger.debug("\n    (restart) ResourceName: {}" + 
-					 "\n        AdminState: {}" + 
-					 "\n        OpState: {}" + 
-					 "\n        AvailStatus: {}" + 
-					 "\n        StandbyStatus: {}",
-					 tmpSme.getResourceName(),
-					 tmpSme.getAdminState(),
-					 tmpSme.getOpState(),
-					 tmpSme.getAvailStatus(),
-					 tmpSme.getStandbyStatus()
-					);
-			
-		}
-		logger.debug("\n\n");
-		
-		em.refresh(sme1);
-		assertTrue(sme1.getOpState().equals(StateManagement.ENABLED));
-		
-		//Now lock this IM so it will not audit when it comes back up
-		sm.lock();
-		
-		//Remove the bogus dependency and restart it
-		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
-		IntegrityMonitor.updateProperties(myProp);
-
-		//Restart the IM
-		IntegrityMonitor.deleteInstance();
-		im = IntegrityMonitor.getInstance(resourceName, myProp);
-
-		//Give it time to initialize and check dependencies
-		logger.debug("IntegrityMonitorTest:testStateAudit: (restart2) sleeping 10 sec");
-		Thread.sleep(7000);
-		logger.debug("IntegrityMonitorTest:testStateAudit: (restart2) Awake!");
-		
-		//Now check its state
-		logger.debug("\nIntegrityMonitorTest:testStateAudit (restart2) getting list of StateManagementEntity entries\n\n");
-		smeList = query.getResultList();
-		
-		logger.debug("\n\n");
-		logger.debug("IntegrityMonitorTest:testStateAudit:StateManagementEntity (restart2) entries");
-		for(Object mySme : smeList){
-			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
-			em.refresh(tmpSme);
-
-			logger.debug("\n    (restart2) ResourceName: {}" + 
-					 "\n        AdminState: {}" + 
-					 "\n        OpState: {}" + 
-					 "\n        AvailStatus: {}" + 
-					 "\n        StandbyStatus: {}",
-					 tmpSme.getResourceName(),
-					 tmpSme.getAdminState(),
-					 tmpSme.getOpState(),
-					 tmpSme.getAvailStatus(),
-					 tmpSme.getStandbyStatus()
-					);
-		}
-		logger.debug("\n\n");
-		
-		em.refresh(sme1);
-		assertTrue(sme1.getOpState().equals(StateManagement.ENABLED));
-		
-		//Make this IM coldstandby
-		sm.demote();
-		//Give it time to write the DB
-		Thread.sleep(2000);
-		//unlock it
-		sm.unlock();
-		//Give it time to write the DB
-		Thread.sleep(2000);
-		
-		//Now check its state
-		logger.debug("\nIntegrityMonitorTest:testStateAudit (restart3) getting list of StateManagementEntity entries\n\n");
-		smeList = query.getResultList();
-		
-		logger.debug("\n\n");
-		logger.debug("IntegrityMonitorTest:testStateAudit:StateManagementEntity (restart3) entries");
-		for(Object mySme : smeList){
-			StateManagementEntity tmpSme = (StateManagementEntity) mySme;
-			em.refresh(tmpSme);
-
-			logger.debug("\n    (restart3) ResourceName: {}" + 
-					 "\n        AdminState: {}" + 
-					 "\n        OpState: {}" + 
-					 "\n        AvailStatus: {}" + 
-					 "\n        StandbyStatus: {}",
-					 tmpSme.getResourceName(),
-					 tmpSme.getAdminState(),
-					 tmpSme.getOpState(),
-					 tmpSme.getAvailStatus(),
-					 tmpSme.getStandbyStatus()
-					);
-		}
-		logger.debug("\n\n");
-		
-		//sme1 should not be changed because this IM is hotstandby and cannot change its state
-		em.refresh(sme1);
-		assertTrue(sme1.getOpState().equals(StateManagement.ENABLED));
-		
 		//Now let's add sme2 to the mix
 		updateQuery = em.createQuery("UPDATE ForwardProgressEntity f "
 				+ "SET f.lastUpdated = :newDate "
@@ -1218,12 +1054,12 @@ public class IntegrityMonitorTest {
 		updateQuery.executeUpdate();
 		et.commit();
 		
-		//Finally, we want to promote this IM so it will disable sme1
-		sm.promote();
 		//Give it a chance to write the DB and run the audit
-		logger.debug("IntegrityMonitorTest:testStateAudit: (restart4) sleeping 2 sec");
-		Thread.sleep(3000);
-		logger.debug("IntegrityMonitorTest:testStateAudit: (restart4) Awake!");
+		logger.debug("IntegrityMonitorTest:testStateAudit: (restart4) Running State Audit");
+		Thread.sleep(2000);
+		im.executeStateAudit();
+		Thread.sleep(1000);
+		logger.debug("IntegrityMonitorTest:testStateAudit: (restart4) State Audit complete");
 		
 		//Now check its state
 		logger.debug("\nIntegrityMonitorTest:testStateAudit (restart4) getting list of StateManagementEntity entries\n\n");
@@ -1254,16 +1090,6 @@ public class IntegrityMonitorTest {
 		
 		em.refresh(sme2);
 		assertTrue(sme2.getOpState().equals(StateManagement.DISABLED));
-		
-		et = em.getTransaction();
-		et.begin();
-		// Make sure we leave the DB clean
-		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
-		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
-		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
-
-		em.flush();
-		et.commit();
 		
 		logger.debug("\nIntegrityMonitorTest: Exit testStateAudit\n\n");
 		System.out.println("\n\ntestStateAudit: Exit\n\n");

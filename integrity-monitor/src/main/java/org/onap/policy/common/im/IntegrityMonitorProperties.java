@@ -35,11 +35,13 @@ public class IntegrityMonitorProperties {
 	public static final int DEFAULT_TEST_INTERVAL = 10;
 	public static final int DEFAULT_WRITE_FPC_INTERVAL = 5;
 	public static final int DEFAULT_MAX_FPC_UPDATE_INTERVAL = 120;
+	public static final int DEFAULT_CHECK_DEPENDENCY_INTERVAL = 10;
 	
 	public static final String FP_MONITOR_INTERVAL = "fp_monitor_interval";
 	public static final String FAILED_COUNTER_THRESHOLD = "failed_counter_threshold";
 	public static final String TEST_TRANS_INTERVAL = "test_trans_interval";
 	public static final String WRITE_FPC_INTERVAL = "write_fpc_interval";
+	public static final String CHECK_DEPENDENCY_INTERVAL = "check_dependency_interval";
 	
 	public static final String DEPENDENCY_GROUPS = "dependency_groups";
 	public static final String SITE_NAME = "site_name";
@@ -50,5 +52,10 @@ public class IntegrityMonitorProperties {
 	public static final String MAX_FPC_UPDATE_INTERVAL = "max_fpc_update_interval";
 	public static final String STATE_AUDIT_INTERVAL_MS = "state_audit_interval_ms";
 	public static final String REFRESH_STATE_AUDIT_INTERVAL_MS = "refresh_state_audit_interval_ms";
+	
+	// AllSeemsWell types
+	public static final Boolean ALLNOTWELL=Boolean.FALSE;
+	public static final Boolean ALLSEEMSWELL=Boolean.TRUE;
+
 	
 }
