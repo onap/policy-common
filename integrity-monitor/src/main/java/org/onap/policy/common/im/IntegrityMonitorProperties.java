@@ -51,4 +51,9 @@ public class IntegrityMonitorProperties {
 	public static final String STATE_AUDIT_INTERVAL_MS = "state_audit_interval_ms";
 	public static final String REFRESH_STATE_AUDIT_INTERVAL_MS = "refresh_state_audit_interval_ms";
 	
+	// AllSeemsWell types
+	public static final Boolean ALLNOTWELL=Boolean.FALSE;
+	public static final Boolean ALLSEEMSWELL=Boolean.TRUE;
+
+	
 }

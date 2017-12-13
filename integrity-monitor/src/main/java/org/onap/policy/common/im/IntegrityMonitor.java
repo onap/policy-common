@@ -24,7 +24,9 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -37,6 +39,7 @@ import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.validation.constraints.NotNull;
 
 import org.onap.policy.common.im.jpa.ForwardProgressEntity;
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
@@ -164,6 +167,9 @@ public class IntegrityMonitor {
 	private final Object refreshStateAuditLock = new Object();
 	private final Object IMFLUSHLOCK = new Object();
 	
+	private Map<String, String> allSeemsWellMap;
+	private Map<String, String> allNotWellMap;
+
 	/**
 	 * Get an instance of IntegrityMonitor for a given resource name. It creates one if it does not exist.
 	 * Only one instance is allowed to be created per resource name.
@@ -911,8 +917,8 @@ public class IntegrityMonitor {
 						try {
 							if(logger.isDebugEnabled()){
 								logger.debug("All dependents in group {} have failed their health check. Updating this resource's state to disableDependency", group);
-							}
-							if( !( (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY) ||
+							}					
+							if(stateManager.getAvailStatus()== null || !( (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY) ||
 									(stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED) ) ){
 								// Note: redundant calls are made by refreshStateAudit
 								this.stateManager.disableDependency();
@@ -944,8 +950,8 @@ public class IntegrityMonitor {
 						if(logger.isDebugEnabled()){
 							logger.debug("All dependency groups have at least one viable member. Updating this resource's state to enableNoDependency");
 						}
-						if( (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY) ||
-								(stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED) ){
+						if(stateManager.getAvailStatus() != null && ((stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY) ||
+								(stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED)) ){
 							// Note: redundant calls are made by refreshStateAudit
 							this.stateManager.enableNoDependency();	
 						} // The refreshStateAudit will catch the case where it is disabled but availStatus != failed
@@ -967,8 +973,8 @@ public class IntegrityMonitor {
 					if(logger.isDebugEnabled()){
 						logger.debug("There are no dependents. Updating this resource's state to enableNoDependency");
 					}
-					if( (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY) ||
-							(stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED) ){
+					if(stateManager.getAvailStatus() != null && ((stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY) ||
+							(stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED)) ){
 						// Note: redundant calls are made by refreshStateAudit
 						this.stateManager.enableNoDependency();	
 					}// The refreshStateAudit will catch the case where it is disabled but availStatus != failed
@@ -997,13 +1003,33 @@ public class IntegrityMonitor {
 	/**
 	 * Execute a test transaction. It is called when the test transaction timer fires.
 	 * It could be overridden to provide additional test functionality. If overridden,
-	 * the overriding method must invoke startTransaction() and endTransaction()
+	 * the overriding method must invoke startTransaction() and endTransaction() and 
+	 * check if the allNotWellMap is empty.
 	 */
 	public void testTransaction() {
 		synchronized (testTransactionLock){
 			if(logger.isDebugEnabled()){
-				logger.debug("testTransaction called...");
+				logger.debug("testTransaction: entry");
 			}
+			if(getAllNotWellMap() != null){
+				if(!(getAllNotWellMap().isEmpty())){
+					/*
+					 * An entity has reported that it is not well.  We must not
+					 * allow the the forward progress counter to advance.  Thus, 
+					 * we return before endTransaction() is called.
+					 */
+					if(logger.isDebugEnabled()){
+						logger.debug("testTransaction: allNotWellMap is NOT EMPTY.  Not advancing forward"
+								+ "progress counter");
+						for(String key: allNotWellMap.keySet()){
+							logger.debug("allNotWellMap: key = {}  msg = {}", key, allNotWellMap.get(key));							
+						}
+
+					}
+					return;
+				}
+			}
+			
 			
 			//
 			// startTransaction() not required for testTransaction
@@ -1667,5 +1693,91 @@ public class IntegrityMonitor {
 		
 	}
 
+	public void allSeemsWell(@NotNull String key, @NotNull Boolean asw, @NotNull String msg)
+			throws IllegalArgumentException, AllSeemsWellException {
+
+		if(logger.isDebugEnabled()){
+			logger.debug("allSeemsWell entry: key = {}, asw = {}, msg = {}", key, asw, msg);
+		}
+		if(key == null || key.isEmpty()){
+			logger.error("allSeemsWell: 'key' has no visible content");
+			throw new IllegalArgumentException("allSeemsWell: 'key' has no visible content");
+		}
+		if(asw == null){
+			logger.error("allSeemsWell: 'asw' is null");
+			throw new IllegalArgumentException("allSeemsWell: 'asw' is null");
+		}
+		if(msg == null || msg.isEmpty()){
+			logger.error("allSeemsWell: 'msg' has no visible content");
+			throw new IllegalArgumentException("allSeemsWell: 'msg' has no visible content");
+		}
+		
+		if(allSeemsWellMap == null){
+			allSeemsWellMap = new HashMap<String, String>();
+		}
+		
+		if(allNotWellMap == null){
+			allNotWellMap = new HashMap<String, String>();
+		}
+
+		if(asw){
+			logger.info("allSeemsWell: ALL SEEMS WELL: key = {}, msg = {}", key, msg);
+			try{
+				allSeemsWellMap.put(key, msg);
+			}catch(Exception e){
+				String exceptMsg ="allSeemsWell: encountered an exception with allSeemsWellMap.put("
+						+ key + "," + msg + ")";
+				logger.error(exceptMsg);
+				throw new AllSeemsWellException(exceptMsg, e);
+			}
+
+			try{
+				allNotWellMap.remove(key);
+			}catch(Exception e){
+				String exceptMsg ="allSeemsWell: encountered an exception with allNotWellMap.delete("
+						+ key + ")";
+				logger.error(exceptMsg);
+				throw new AllSeemsWellException(exceptMsg, e);
+			}
+
+		}else{
+			logger.error("allSeemsWell: ALL NOT WELL: key = {}, msg = {}", key, msg);
+			try{
+				allSeemsWellMap.remove(key);
+			}catch(Exception e){
+				String exceptMsg ="allSeemsWell: encountered an exception with allSeemsWellMap.remove("
+						+ key + ")";
+				logger.error(exceptMsg);
+				throw new AllSeemsWellException(exceptMsg, e);
+			}
+
+			try{
+				allNotWellMap.put(key, msg);
+			}catch(Exception e){
+				String exceptMsg ="allSeemsWell: encountered an exception with allNotWellMap.put("
+						+ key + msg + ")";
+				logger.error(exceptMsg);
+				throw new AllSeemsWellException(exceptMsg, e);
+			}
+		}
+
+		if(logger.isDebugEnabled()){
+			for(String mykey: allSeemsWellMap.keySet()){
+				logger.debug("allSeemsWellMap: key = {}  msg = {}", mykey, allSeemsWellMap.get(mykey));							
+			}
+			for(String mykey: allNotWellMap.keySet()){
+				logger.debug("allNotWellMap: key = {}  msg = {}", mykey, allNotWellMap.get(mykey));							
+			}
+			logger.debug("allSeemsWell exit");
+		}
+	}
+
+	public Map<String, String> getAllSeemsWellMap(){
+		return allSeemsWellMap;
+	}
+
+	public Map<String, String> getAllNotWellMap(){
+		return allNotWellMap;
+	}
 }
 
