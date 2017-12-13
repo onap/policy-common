@@ -38,8 +38,8 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
-
 import org.onap.policy.common.im.IntegrityMonitor;
 import org.onap.policy.common.im.IntegrityMonitorProperties;
 import org.onap.policy.common.im.StateManagement;
@@ -757,9 +757,9 @@ public class IntegrityMonitorTest {
 		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "10");
 		IntegrityMonitor.updateProperties(myProp);
 		/*
-		 *  The default monitorInterval is 30 and the default failedCounterThreshold is 3
+		 *  The default monitorInterval is 10 and the default failedCounterThreshold is 1
 		 *  Since stateCheck() uses the faileCounterThreshold * monitorInterval to determine
-		 *  if an entry is stale, it will be stale after 30 seconds.
+		 *  if an entry is stale, it will be stale after 10 seconds.
 		 */
 		
 		et = em.getTransaction();
@@ -791,25 +791,29 @@ public class IntegrityMonitorTest {
 		new StateManagement(emf, "group1_dep1");
 		
 		boolean sanityPass = true;
-		//Thread.sleep(15000);
+
+		logger.debug("testStateCheck: going to sleep 5 sec");
 		Thread.sleep(5000);
+		logger.debug("testStateCheck: waking up after 5 sec");
 		try {
 			im.evaluateSanity();
 		} catch (Exception e) {
-			logger.error("testStateCheck: After 15 sec sleep - evaluateSanity exception: ", e);
+			logger.error("testStateCheck: After 5 sec sleep - evaluateSanity exception: ", e);
 			sanityPass = false;
 		}
 		assertTrue(sanityPass);  // expect sanity test to pass
 		
-		//now wait 30 seconds.  The dependency entry should now be stale and the sanitry check should fail
+		//now wait 15 seconds.  The dependency entry should now be stale and the sanitry check should fail
 		
 		sanityPass = true;
-		//Thread.sleep(30000);
-		Thread.sleep(10000);
+
+		logger.debug("testStateCheck: going to sleep 15 sec");
+		Thread.sleep(15000);
+		logger.debug("testStateCheck: waking up after 15 sec");
 		try {
 			im.evaluateSanity();
 		} catch (Exception e) {
-			logger.error("testStateCheck: After 10 sec sleep - evaluateSanity exception: ", e);
+			logger.error("testStateCheck: After 15 sec sleep - evaluateSanity exception: ", e);
 			sanityPass = false;
 		}
 		assertFalse(sanityPass);  // expect sanity test to fail
