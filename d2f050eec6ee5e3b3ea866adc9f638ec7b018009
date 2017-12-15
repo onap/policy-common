@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_a1483a2e",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1716,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-12-15T17:59:07Z",
+      "side": 1,
+      "message": "Yep.  Fixed as HashMap\u003c\u003e().",
+      "parentUuid": "5a93c517_0381f78e",
+      "range": {
+        "startLine": 1716,
+        "startChar": 33,
+        "endLine": 1716,
+        "endChar": 47
+      },
+      "revId": "d2f050eec6ee5e3b3ea866adc9f638ec7b018009",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_237e73af",
         "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2017-12-14T04:01:45Z",
       "side": 1,
       "message": "same",
+      "range": {
+        "startLine": 1720,
+        "startChar": 31,
+        "endLine": 1720,
+        "endChar": 45
+      },
+      "revId": "d2f050eec6ee5e3b3ea866adc9f638ec7b018009",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_4155b6c4",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1720,
+      "author": {
+        "id": 1621
+      },
+      "writtenOn": "2017-12-15T17:59:07Z",
+      "side": 1,
+      "message": "Same",
+      "parentUuid": "5a93c517_237e73af",
       "range": {
         "startLine": 1720,
         "startChar": 31,
