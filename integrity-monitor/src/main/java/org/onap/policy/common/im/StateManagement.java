@@ -75,7 +75,7 @@ public class StateManagement extends Observable {
   private String opState = null; 
   private String availStatus = null; 
   private String standbyStatus = null; 
-  private EntityManager em; 
+  private EntityManagerFactory emf;
   private StateTransition st = null;
     
   /*
@@ -94,16 +94,17 @@ public class StateManagement extends Observable {
 	
   /**
    * StateManagement constructor
-   * @param emf
+   * @param entityManagerFactory
    * @param resourceName
    * @throws Exception
    */
-  public StateManagement(EntityManagerFactory emf, String resourceName) throws StateManagementException
+  public StateManagement(EntityManagerFactory entityManagerFactory, String resourceName) throws StateManagementException
   {
+	  emf = entityManagerFactory;
 	  if(logger.isDebugEnabled()){
 		  logger.debug("StateManagement: constructor, resourceName: {}", resourceName);
 	  }
-	  em = emf.createEntityManager();
+	  EntityManager em = emf.createEntityManager();
       EntityTransaction et = em.getTransaction();
 
       if(!et.isActive()){
@@ -173,6 +174,7 @@ public class StateManagement extends Observable {
 		  if(logger.isDebugEnabled()){
 			  logger.debug("StateManagement: initializeState() operation started, resourceName = {}", this.resourceName);
 		  }
+		  EntityManager em = emf.createEntityManager();  
 		  EntityTransaction et = em.getTransaction();
 
 		  if(!et.isActive()){
@@ -227,6 +229,7 @@ public class StateManagement extends Observable {
 		  if(logger.isDebugEnabled()){
 			  logger.debug("StateManagement: lock() operation started, resourceName = {}", this.resourceName);
 		  }
+		  EntityManager em = emf.createEntityManager();
 		  EntityTransaction et = em.getTransaction();
 
 		  if(!et.isActive()){
@@ -284,6 +287,7 @@ public class StateManagement extends Observable {
 		  if(logger.isDebugEnabled()){
 			  logger.debug("StateManagement: unlock() operation started, resourceName = {}", this.resourceName);
 		  }
+		  EntityManager em = emf.createEntityManager();
 		  EntityTransaction et = em.getTransaction();
 
 		  if(!et.isActive()){
@@ -341,6 +345,7 @@ public class StateManagement extends Observable {
 		  if(logger.isDebugEnabled()){
 			  logger.debug("StateManagement: enableNotFailed() operation started, resourceName = {}", this.resourceName);
 		  }
+		  EntityManager em = emf.createEntityManager();
 		  EntityTransaction et = em.getTransaction();
 
 		  if(!et.isActive()){
@@ -397,6 +402,7 @@ public class StateManagement extends Observable {
 		  if(logger.isDebugEnabled()){
 			  logger.debug("StateManagement: disableFailed() operation started, resourceName = {}", this.resourceName);
 		  }
+		  EntityManager em = emf.createEntityManager();
 		  EntityTransaction et = em.getTransaction();
 		  if(!et.isActive()){
 			  et.begin();
@@ -458,6 +464,7 @@ public class StateManagement extends Observable {
 			  logger.debug("StateManagement: disableFailed(otherResourceName) operation started, resourceName = {}", 
 				   otherResourceName);
 		  }
+		  EntityManager em = emf.createEntityManager();
 		  EntityTransaction et = em.getTransaction();
 		  if(!et.isActive()){
 			  et.begin();
@@ -514,6 +521,7 @@ public class StateManagement extends Observable {
 		  if(logger.isDebugEnabled()){
 			  logger.debug("StateManagement: disableDependency() operation started, resourceName = {}", this.resourceName);
 		  }
+		  EntityManager em = emf.createEntityManager();
 		  EntityTransaction et = em.getTransaction();
 
 		  if(!et.isActive()){
@@ -571,6 +579,7 @@ public class StateManagement extends Observable {
 		  if(logger.isDebugEnabled()){
 			  logger.debug("StateManagement: enableNoDependency() operation started, resourceName = {}", this.resourceName);
 		  }
+		  EntityManager em = emf.createEntityManager();
 		  EntityTransaction et = em.getTransaction();
 
 		  if(!et.isActive()){
@@ -628,6 +637,7 @@ public class StateManagement extends Observable {
 		  if(logger.isDebugEnabled()){
 			  logger.debug("StateManagement: promote() operation started, resourceName = {}", this.resourceName);
 		  }
+		  EntityManager em = emf.createEntityManager();
 		  EntityTransaction et = em.getTransaction();
 
 		  if(!et.isActive()){
@@ -690,6 +700,7 @@ public class StateManagement extends Observable {
 		  if(logger.isDebugEnabled()){
 			  logger.debug("StateManagement: demote() operation started, resourceName = {}", this.resourceName);
 		  }
+		  EntityManager em = emf.createEntityManager();
 		  EntityTransaction et = em.getTransaction();
 
 		  if(!et.isActive()){
@@ -752,7 +763,7 @@ public class StateManagement extends Observable {
 		  if(logger.isDebugEnabled()){
 			  logger.debug("\nStateManagement: SYNCLOCK demote(otherResourceName) operation for resourceName = {}\n", otherResourceName);
 		  }
-
+		  EntityManager em = emf.createEntityManager();
 		  EntityTransaction et = em.getTransaction();
 
 		  if(!et.isActive()){
@@ -804,6 +815,7 @@ public String getAdminState()
 		  logger.debug("StateManagement(6/1/16): getAdminState for resourceName {}", this.resourceName);
 	  }
 	  try {
+		  EntityManager em = emf.createEntityManager();
           Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
        
           query.setParameter("resource", this.resourceName);
@@ -837,6 +849,7 @@ public String getOpState()
 		  logger.debug("StateManagement(6/1/16): getOpState for resourceName {}", this.resourceName);
 	  }
 	  try {
+		  EntityManager em = emf.createEntityManager();
           Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
        
           query.setParameter("resource", this.resourceName);
@@ -870,6 +883,7 @@ public String getOpState()
 		  logger.debug("StateManagement(6/1/16): getAvailStatus for resourceName {}", this.resourceName);
 	  }
 	  try {
+		  EntityManager em = emf.createEntityManager();
           Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
        
           query.setParameter("resource", this.resourceName);
@@ -903,6 +917,7 @@ public String getOpState()
 		  logger.debug("StateManagement(6/1/16): getStandbyStatus for resourceName {}", this.resourceName);
 	  }
 	  try {
+		  EntityManager em = emf.createEntityManager();
           Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
        
           query.setParameter("resource", this.resourceName);
@@ -983,6 +998,7 @@ public String getOpState()
 		String tempStandbyStatus = null;
 		
 		// The transaction is required for the LockModeType
+		EntityManager em = emf.createEntityManager();
 		EntityTransaction et = em.getTransaction();
 		if(!et.isActive()){
 			et.begin();
@@ -1039,6 +1055,7 @@ public String getOpState()
 	  /*
 	   * Start transaction
 	   */
+	  EntityManager em = emf.createEntityManager();
 	  EntityTransaction et = em.getTransaction();
 	  if(!et.isActive()){
 		  et.begin();
