@@ -25,7 +25,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.persistence.Table;
 
@@ -111,7 +114,7 @@ public class DbAudit {
 		}
 		
 		// Obtain all persistence class names for the PU we are auditing
-		HashSet<String> classNameSet = dbDAO.getPersistenceClassNames();
+		Set<String> classNameSet = dbDAO.getPersistenceClassNames();
 		if(classNameSet == null || classNameSet.isEmpty()){
 			
 			String msg = "DbAudit: For node " + resourceName + " Found no persistence class names";
@@ -139,7 +142,7 @@ public class DbAudit {
 		 * This is the map of mismatched entries indexed by className. For
 		 * each class name there is a list of mismatched entries
 		 */
-		HashMap<String,HashSet<Object>> misMatchedMap = new HashMap<>();
+		Map<String,Set<Object>> misMatchedMap = new HashMap<>();
 		
 		// We need to keep track of how long the audit is taking
 		long startTime = System.currentTimeMillis();
@@ -155,7 +158,7 @@ public class DbAudit {
 			}
 	
 			// all instances of the class for myIae
-			HashMap<Object,Object> myEntries = dbDAO.getAllMyEntries(clazzName);
+			Map<Object,Object> myEntries = dbDAO.getAllMyEntries(clazzName);
 			//get a map of the objects indexed by id. Does not necessarily have any entries
 			
 			if (logger.isDebugEnabled()) {
@@ -184,7 +187,7 @@ public class DbAudit {
 				theirProperties.put(IntegrityAuditProperties.NODE_TYPE, iae.getNodeType());
 				
 				//get a map of the instances for their iae indexed by id
-				HashMap<Object,Object> theirEntries = dbDAO.getAllEntries(persistenceUnit, theirProperties, clazzName);
+				Map<Object,Object> theirEntries = dbDAO.getAllEntries(persistenceUnit, theirProperties, clazzName);
 				if (logger.isDebugEnabled()) {
 					logger.debug("dbAudit: For persistenceUnit="
 							+ persistenceUnit + ", clazzName=" + clazzName
@@ -197,9 +200,9 @@ public class DbAudit {
 				 * Collect the IDs for the class where a mismatch occurred.  We will check
 				 * them again for all nodes later.
 				 */
-				HashSet<Object> misMatchedKeySet = compareEntries(myEntries, theirEntries);
+				Set<Object> misMatchedKeySet = compareEntries(myEntries, theirEntries);
 				if(!misMatchedKeySet.isEmpty()){
-					HashSet<Object> misMatchedEntry = misMatchedMap.get(clazzName);
+					Set<Object> misMatchedEntry = misMatchedMap.get(clazzName);
 					if(misMatchedEntry == null){
 						misMatchedMap.put(clazzName, misMatchedKeySet);
 					}else{
@@ -259,8 +262,8 @@ public class DbAudit {
 			}
 	
 			// all instances of the class for myIae
-			HashSet<Object> keySet = misMatchedMap.get(clazzName);
-			HashMap<Object,Object> myEntries = dbDAO.getAllMyEntries(clazzName, keySet);
+			Set<Object> keySet = misMatchedMap.get(clazzName);
+			Map<Object,Object> myEntries = dbDAO.getAllMyEntries(clazzName, keySet);
 			//get a map of the objects indexed by id
 			
 			if (logger.isDebugEnabled()) {
@@ -289,14 +292,14 @@ public class DbAudit {
 				theirProperties.put(IntegrityAuditProperties.NODE_TYPE, iae.getNodeType());
 				
 				//get a map of the instances for their iae indexed by id
-				HashMap<Object,Object> theirEntries = dbDAO.getAllEntries(persistenceUnit, theirProperties, clazzName, keySet);
+				Map<Object,Object> theirEntries = dbDAO.getAllEntries(persistenceUnit, theirProperties, clazzName, keySet);
 				
 				/*
 				 * Compare myEntries with theirEntries and get back a set of mismatched IDs.
 				 * Collect the IDs for the class where a mismatch occurred.  We will now
 				 * write an error log for each.
 				 */
-				HashSet<Object> misMatchedKeySet = compareEntries(myEntries, theirEntries);
+				Set<Object> misMatchedKeySet = compareEntries(myEntries, theirEntries);
 				if(!misMatchedKeySet.isEmpty()){
 					String keysString = "";
 					for(Object key: misMatchedKeySet){
@@ -349,22 +352,29 @@ public class DbAudit {
 	 * @throws InterruptedException
 	 * @throws DbDaoTransactionException
 	 */
-	public void dbAuditSimulate(String resourceName, String persistenceUnit) throws InterruptedException,
-			DbDaoTransactionException {
+	public void dbAuditSimulate(String resourceName, String persistenceUnit) throws DbAuditException {
 
-		logger.info("dbAuditSimulate: Starting audit simulation for resourceName="
-				+ resourceName + ", persistenceUnit=" + persistenceUnit);
+		try {
+			logger.info("dbAuditSimulate: Starting audit simulation for resourceName="
+					+ resourceName + ", persistenceUnit=" + persistenceUnit);
 
-		for (int i = 0; i < AuditThread.AUDIT_SIMULATION_ITERATIONS; i++) {
-			dbDAO.setLastUpdated();
-			logger.info("dbAuditSimulate: i=" + i + ", sleeping "
-					+ AuditThread.AUDIT_SIMULATION_SLEEP_INTERVAL + "ms");
-			Thread.sleep(AuditThread.AUDIT_SIMULATION_SLEEP_INTERVAL);
+			for (int i = 0; i < AuditThread.AUDIT_SIMULATION_ITERATIONS; i++) {
+				dbDAO.setLastUpdated();
+				logger.info("dbAuditSimulate: i=" + i + ", sleeping "
+						+ AuditThread.AUDIT_SIMULATION_SLEEP_INTERVAL + "ms");
+				Thread.sleep(AuditThread.AUDIT_SIMULATION_SLEEP_INTERVAL);
+			}
+
+			logger.info("dbAuditSimulate: Finished audit simulation for resourceName="
+					+ resourceName + ", persistenceUnit=" + persistenceUnit);
+			
+		} catch(DbDaoTransactionException e) {
+			throw new DbAuditException(e);
+			
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new DbAuditException(e);
 		}
-
-		logger.info("dbAuditSimulate: Finished audit simulation for resourceName="
-				+ resourceName + ", persistenceUnit=" + persistenceUnit);
-
 	}
 	
 	/**
@@ -373,7 +383,7 @@ public class DbAudit {
 	 * @param theirEntries
 	 * @return
 	 */
-	public HashSet<Object> compareEntries(HashMap<Object,Object> myEntries, HashMap<Object,Object> theirEntries){
+	public Set<Object> compareEntries(Map<Object,Object> myEntries, Map<Object,Object> theirEntries){
 		/*
 		 * Compare the entries for the same key in each of the hashmaps.  The comparison will be done by serializing the objects 
 		 * (create a byte array) and then do a byte array comparison.  The audit will walk the local repository hash map comparing 
@@ -385,8 +395,9 @@ public class DbAudit {
 		 * 
 		 */
 		HashSet<Object> misMatchedKeySet = new HashSet<>();
-		for(Object key: myEntries.keySet()){
-			byte[] mySerializedEntry = SerializationUtils.serialize((Serializable) myEntries.get(key));
+		for(Entry<Object, Object> ent: myEntries.entrySet()) {
+			Object key = ent.getKey();
+			byte[] mySerializedEntry = SerializationUtils.serialize((Serializable) ent.getValue());
 			byte[] theirSerializedEntry = SerializationUtils.serialize((Serializable) theirEntries.get(key));
 			if(!Arrays.equals(mySerializedEntry, theirSerializedEntry)){
 				logger.debug("compareEntries: For myEntries.key=" + key + ", entries do not match");
@@ -396,9 +407,10 @@ public class DbAudit {
 			}
 		}
 		//now compare it in the other direction to catch entries in their set that is not in my set
-		for(Object key: theirEntries.keySet()){
+		for(Entry<Object, Object> ent: theirEntries.entrySet()) {
+			Object key = ent.getKey();
 			byte[] mySerializedEntry = SerializationUtils.serialize((Serializable) myEntries.get(key));
-			byte[] theirSerializedEntry = SerializationUtils.serialize((Serializable) theirEntries.get(key));
+			byte[] theirSerializedEntry = SerializationUtils.serialize((Serializable) ent.getValue());
 			if(!Arrays.equals(mySerializedEntry, theirSerializedEntry)){
 				logger.debug("compareEntries: For theirEntries.key=" + key + ", entries do not match");
 				misMatchedKeySet.add(key);

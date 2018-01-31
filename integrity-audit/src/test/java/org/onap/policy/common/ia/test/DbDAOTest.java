@@ -20,7 +20,10 @@
 
 package org.onap.policy.common.ia.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /*
  * All JUnits are designed to run in the local development environment
@@ -28,10 +31,11 @@ import static org.junit.Assert.*;
  * tasks.
  */
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -47,7 +51,6 @@ import javax.persistence.criteria.Root;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
 import org.onap.policy.common.ia.DbDAO;
 import org.onap.policy.common.ia.DbDaoTransactionException;
 import org.onap.policy.common.ia.IntegrityAuditProperties;
@@ -487,7 +490,7 @@ public class DbDAOTest {
 		
 		try {
 			// Obtain a hash with the persisted objects
-			HashMap<Object, Object> entries = d.getAllMyEntries("org.onap.policy.common.ia.jpa.IntegrityAuditEntity");
+			Map<Object, Object> entries = d.getAllMyEntries("org.onap.policy.common.ia.jpa.IntegrityAuditEntity");
 			
 			// Assert there were 3 entries for that class
 			assertEquals(3, entries.size());
@@ -543,7 +546,7 @@ public class DbDAOTest {
 			}
 			
 			// Obtain a hash with the persisted objects
-			HashMap<Object, Object> entries = d.getAllMyEntries("org.onap.policy.common.ia.jpa.IntegrityAuditEntity", resultSet);
+			Map<Object, Object> entries = d.getAllMyEntries("org.onap.policy.common.ia.jpa.IntegrityAuditEntity", resultSet);
 			
 			// Assert there were 3 entries for that class
 			assertEquals(3, entries.size());
@@ -591,7 +594,7 @@ public class DbDAOTest {
 		
 		try {
 			// Obtain a hash with the persisted objects
-			HashMap<Object, Object> entries = d.getAllEntries("integrityAuditPU", properties, "org.onap.policy.common.ia.jpa.IntegrityAuditEntity");
+			Map<Object, Object> entries = d.getAllEntries("integrityAuditPU", properties, "org.onap.policy.common.ia.jpa.IntegrityAuditEntity");
 			
 			// Assert there were 3 entries for that class
 			assertEquals(3, entries.size());
@@ -647,7 +650,7 @@ public class DbDAOTest {
 			}
 			
 			// Obtain a hash with the persisted objects
-			HashMap<Object, Object> entries = d.getAllEntries("integrityAuditPU", properties, "org.onap.policy.common.ia.jpa.IntegrityAuditEntity", resultSet);
+			Map<Object, Object> entries = d.getAllEntries("integrityAuditPU", properties, "org.onap.policy.common.ia.jpa.IntegrityAuditEntity", resultSet);
 			
 			// Assert there were 3 entries for that class
 			assertEquals(3, entries.size());
@@ -695,7 +698,7 @@ public class DbDAOTest {
 		
 		try {
 			// Obtain a hash with the persisted objects
-			HashMap<Object, Object> entries = d.getAllEntries(persistenceUnit, properties, "org.onap.policy.common.ia.jpa.IntegrityAuditEntity");
+			Map<Object, Object> entries = d.getAllEntries(persistenceUnit, properties, "org.onap.policy.common.ia.jpa.IntegrityAuditEntity");
 			
 			// Assert there were 3 entries for that class
 			assertEquals(3, entries.size());
@@ -733,7 +736,7 @@ public class DbDAOTest {
 			e.printStackTrace();
 		}
 		// Retrieve persistence class names
-		HashSet<String> result = d.getPersistenceClassNames();
+		Set<String> result = d.getPersistenceClassNames();
 		assertEquals(1, result.size());
 	}
 }

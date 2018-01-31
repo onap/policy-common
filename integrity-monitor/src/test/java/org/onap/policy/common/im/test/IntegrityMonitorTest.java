@@ -20,9 +20,10 @@
 
 package org.onap.policy.common.im.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -38,7 +39,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.onap.policy.common.im.IntegrityMonitor;
 import org.onap.policy.common.im.IntegrityMonitorProperties;
@@ -883,7 +883,7 @@ public class IntegrityMonitorTest {
 		et.commit();
 
 		logger.debug("\nIntegrityMonitorTest:testGetAllForwardProgressEntity Calling im.getAllForwardProgressEntity()\n\n");
-		ArrayList<ForwardProgressEntity> fpeList = im.getAllForwardProgressEntity();
+		List<ForwardProgressEntity> fpeList = im.getAllForwardProgressEntity();
 		
 		assertTrue(fpeList.size()==4);
 		
@@ -919,8 +919,6 @@ public class IntegrityMonitorTest {
 
 		
 		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
-		StateManagement sm = im.getStateManager();
-		
 		logger.debug("\nIntegrityMonitorTest: Creating ForwardProgressEntity entries\n\n");
 		// Add resources to put an entry in the forward progress table
 		Date staleDate = new Date(0);
@@ -975,7 +973,7 @@ public class IntegrityMonitorTest {
 		et.commit();
 		
 		logger.debug("\nIntegrityMonitorTest:testStateAudit Calling im.getAllForwardProgressEntity()\n\n");
-		ArrayList<ForwardProgressEntity> fpeList = im.getAllForwardProgressEntity();
+		List<ForwardProgressEntity> fpeList = im.getAllForwardProgressEntity();
 		
 		logger.debug("\n\n");
 		logger.debug("IntegrityMonitorTest:testStateAudit:ForwardProgressEntity entries");

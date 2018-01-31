@@ -24,7 +24,9 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -119,7 +121,7 @@ public class DbDAO {
 	 * @param className
 	 * @return
 	 */
-	public HashMap<Object, Object> getAllMyEntries(String className) {
+	public Map<Object, Object> getAllMyEntries(String className) {
 		logger.debug("getAllMyEntries: Entering, className="
 				+ className);
 		HashMap<Object, Object> resultMap = new HashMap<>();
@@ -152,7 +154,7 @@ public class DbDAO {
 	 * @param keySet
 	 * @return
 	 */
-	public HashMap<Object, Object> getAllMyEntries(String className, HashSet<Object> keySet){
+	public Map<Object, Object> getAllMyEntries(String className, Set<Object> keySet){
 		logger.debug("getAllMyEntries: Entering, className="
 				+ className + ",\n keySet=" + keySet);
 
@@ -180,7 +182,7 @@ public class DbDAO {
 	 * @param className
 	 * @return
 	 */
-	public HashMap<Object,Object> getAllEntries(String persistenceUnit, Properties properties, String className){
+	public Map<Object,Object> getAllEntries(String persistenceUnit, Properties properties, String className){
 		
 		logger.debug("getAllEntries: Entering, persistenceUnit="
 				+ persistenceUnit + ",\n className=" + className);
@@ -221,7 +223,7 @@ public class DbDAO {
 	 * @return
 	 */
 
-	public HashMap<Object,Object> getAllEntries(String persistenceUnit, Properties properties, String className, HashSet<Object> keySet){
+	public Map<Object,Object> getAllEntries(String persistenceUnit, Properties properties, String className, Set<Object> keySet){
 		logger.debug("getAllEntries: Entering, persistenceUnit="
 				+ persistenceUnit + ",\n properties= " + properties + ",\n className=" + className + ",\n keySet= " + keySet);
 		EntityManagerFactory theEmf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
@@ -364,7 +366,7 @@ public class DbDAO {
 	 * getPersistenceClassNames() gets all the persistence class names.
 	 * @return
 	 */
-	public HashSet<String> getPersistenceClassNames(){
+	public Set<String> getPersistenceClassNames(){
 		logger.debug("DbDAO: getPersistenceClassNames() entry");
 		HashSet<String> returnList = new HashSet<>();
 		final Metamodel mm = emf.getMetamodel();
