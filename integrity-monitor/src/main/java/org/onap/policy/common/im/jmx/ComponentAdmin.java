@@ -42,6 +42,8 @@ import org.onap.policy.common.im.StateManagement;
  * Base class for component MBeans.
  */
 public class ComponentAdmin implements ComponentAdminMBean {
+	private static final String STATE_MANAGER = "stateManager";
+
 	private static final Logger logger = LoggerFactory.getLogger(ComponentAdmin.class.getName());
 
 	private final String name;
@@ -55,12 +57,12 @@ public class ComponentAdmin implements ComponentAdminMBean {
 	 * @param name the MBean name
 	 * @param integrityMonitor
 	 * @param stateManager  
-	 * @throws Exception 
+	 * @throws ComponentAdminException 
 	 */
-	public ComponentAdmin(String name, IntegrityMonitor integrityMonitor, StateManagement stateManager) throws Exception {
+	public ComponentAdmin(String name, IntegrityMonitor integrityMonitor, StateManagement stateManager) throws ComponentAdminException {
 		if ((name == null) || (integrityMonitor == null) || (stateManager == null)) {
 			logger.error("Error: ComponentAdmin constructor called with invalid input");
-			throw new NullPointerException("null input");
+			throw new ComponentAdminException("null input");
 		}
 
 		this.name = "ONAP_POLICY_COMP:name=" + name;
@@ -69,50 +71,41 @@ public class ComponentAdmin implements ComponentAdminMBean {
 		
 		try {
 			register();
-		} catch (Exception e) {
-			if(logger.isDebugEnabled()){
-				logger.debug("Failed to register ComponentAdmin MBean");
-			}
+		} catch (ComponentAdminException e) {
+			logger.debug("Failed to register ComponentAdmin MBean");
 			throw e;
 		}
 	}
 	
 	/**
 	 * Registers with the MBean server.
-	 * @throws MalformedObjectNameException a JMX exception
-	 * @throws InstanceNotFoundException a JMX exception
-	 * @throws MBeanRegistrationException a JMX exception
-	 * @throws NotCompliantMBeanException a JMX exception
-	 * @throws InstanceAlreadyExistsException a JMX exception
+	 * @throws ComponentAdminException a JMX exception
 	 */
-	public synchronized void register() throws MalformedObjectNameException,
-			MBeanRegistrationException, InstanceNotFoundException,
-			InstanceAlreadyExistsException, NotCompliantMBeanException {
+	public synchronized void register() throws ComponentAdminException {
 
-
-		if(logger.isDebugEnabled()){
+		try {
 			logger.debug("Registering {} MBean", name);
-		}
 
+			MBeanServer mbeanServer = findMBeanServer();
 
-		MBeanServer mbeanServer = findMBeanServer();
-
-		if (mbeanServer == null) {
-			return;
-		}
-
-		ObjectName objectName = new ObjectName(name);
-
-		if (mbeanServer.isRegistered(objectName)) {
-			if(logger.isDebugEnabled()){
-				logger.debug("Unregistering a previously registered {} MBean", name);
+			if (mbeanServer == null) {
+				return;
 			}
-			mbeanServer.unregisterMBean(objectName);
-		}
 
-		mbeanServer.registerMBean(this, objectName);
-		registeredMBeanServer = mbeanServer;
-		registeredObjectName = objectName;
+			ObjectName objectName = new ObjectName(name);
+
+			if (mbeanServer.isRegistered(objectName)) {
+				logger.debug("Unregistering a previously registered {} MBean", name);
+				mbeanServer.unregisterMBean(objectName);
+			}
+
+			mbeanServer.registerMBean(this, objectName);
+			registeredMBeanServer = mbeanServer;
+			registeredObjectName = objectName;
+			
+		} catch (MalformedObjectNameException | MBeanRegistrationException | InstanceNotFoundException | InstanceAlreadyExistsException | NotCompliantMBeanException e) {
+			throw new ComponentAdminException(e);
+		}
 	}
 	
 	/**
@@ -125,18 +118,22 @@ public class ComponentAdmin implements ComponentAdminMBean {
 	
 	/**
 	 * Unregisters with the MBean server.
-	 * @throws InstanceNotFoundException a JMX exception
-	 * @throws MBeanRegistrationException a JMX exception
+	 * @throws ComponentAdminException a JMX exception
 	 */
-	public synchronized void unregister() throws MBeanRegistrationException,
-			InstanceNotFoundException {
+	public synchronized void unregister() throws ComponentAdminException {
 
 		if (registeredObjectName == null) {
 			return;
 		}
 
 
-		registeredMBeanServer.unregisterMBean(registeredObjectName);
+		try {
+			registeredMBeanServer.unregisterMBean(registeredObjectName);
+			
+		} catch (MBeanRegistrationException | InstanceNotFoundException e) {
+			throw new ComponentAdminException(e);
+		}
+		
 		registeredMBeanServer = null;
 		registeredObjectName = null;
 	}
@@ -192,44 +189,38 @@ public class ComponentAdmin implements ComponentAdminMBean {
 	@Override
 	public void test() throws Exception {
 		// Call evaluateSanity on IntegrityMonitor to run the test
-		if(logger.isDebugEnabled()){
-			logger.debug("test() called...");
-		}
+		logger.debug("test() called...");
 		if (integrityMonitor != null) {
 			integrityMonitor.evaluateSanity();
 		}
 		else {
 			logger.error("Unable to invoke test() - state manager instance is null");
-			throw new NullPointerException("stateManager");
+			throw new ComponentAdminException(STATE_MANAGER);
 		}
 		
 	}
 
 	@Override
 	public void lock() throws Exception {
-		if(logger.isDebugEnabled()){
-			logger.debug("lock() called...");
-		}
+		logger.debug("lock() called...");
 		if (stateManager != null) {
 			stateManager.lock();
 		}
 		else {
 			logger.error("Unable to invoke lock() - state manager instance is null");
-			throw new NullPointerException("stateManager");
+			throw new ComponentAdminException(STATE_MANAGER);
 		}
 	}
 
 	@Override
 	public void unlock() throws Exception {
-		if(logger.isDebugEnabled()){
-			logger.debug("unlock() called...");
-		}
+		logger.debug("unlock() called...");
 		if (stateManager != null) {
 			stateManager.unlock();
 		}
 		else {
 			logger.error("Unable to invoke unlock() - state manager instance is null");
-			throw new NullPointerException("stateManager");
+			throw new ComponentAdminException(STATE_MANAGER);
 		}
 		
 	}

@@ -26,7 +26,9 @@ import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -129,7 +131,7 @@ public class DbAuditCompareEntriesTest {
 		
 		String className = null;
 		//There is only one entry IntegrityAuditEntity, but we will check anyway
-		HashSet<String> classNameSet = dbDAO.getPersistenceClassNames();
+		Set<String> classNameSet = dbDAO.getPersistenceClassNames();
 		for(String c : classNameSet){
 			if (c.equals("org.onap.policy.common.ia.jpa.IntegrityAuditEntity")){
 				className = c;
@@ -175,7 +177,7 @@ public class DbAuditCompareEntriesTest {
 		myEntries.put("pdp1", entry1);
 		theirEntries.put("pdp1", entry2);
 				
-		HashSet<Object> result = dbAudit.compareEntries(myEntries, theirEntries);
+		Set<Object> result = dbAudit.compareEntries(myEntries, theirEntries);
 		
 		/*
 		 * Assert that there are no mismatches returned
@@ -235,7 +237,7 @@ public class DbAuditCompareEntriesTest {
 		myEntries.put("pdp1", entry1);
 		theirEntries.put("pdp1", entry2);
 		
-		HashSet<Object> result = dbAudit.compareEntries(myEntries, theirEntries);
+		Set<Object> result = dbAudit.compareEntries(myEntries, theirEntries);
 		
 		/*
 		 * Assert that there was one mismatch
@@ -322,7 +324,7 @@ public class DbAuditCompareEntriesTest {
 		theirEntries.put("0", entry2);
 		theirEntries.put("2", entry4);
 		
-		HashSet<Object> mismatchResult = dbAudit.compareEntries(myEntries, theirEntries);
+		Set<Object> mismatchResult = dbAudit.compareEntries(myEntries, theirEntries);
 		
 		/*
 		 * Assert 3 mismatches/missing entries were found
@@ -343,8 +345,8 @@ public class DbAuditCompareEntriesTest {
 		dbDAO = new DbDAO(resourceName, persistenceUnit, properties);
 		DbAudit dbAudit = new DbAudit(dbDAO);
 		
-		HashSet<String> classNameSet = dbDAO.getPersistenceClassNames();
-		HashSet<Object> mismatchResult = new HashSet<Object>();
+		Set<String> classNameSet = dbDAO.getPersistenceClassNames();
+		Set<Object> mismatchResult = new HashSet<Object>();
 		for(String c : classNameSet) {
 			if (c.equals("org.onap.policy.common.ia.jpa.IntegrityAuditEntity")){
 				String resourceName1 = resourceName;
@@ -537,10 +539,10 @@ public class DbAuditCompareEntriesTest {
 		new DbDAO("pdp2", persistenceUnit, properties2);
 		
 		// Pull all entries and compare
-		HashSet<String> classNameSet = dbDAO.getPersistenceClassNames();
-		HashMap<Object, Object> myEntries;
-		HashMap<Object, Object> theirEntries;
-		HashSet<Object> mismatchResult = new HashSet<Object>();
+		Set<String> classNameSet = dbDAO.getPersistenceClassNames();
+		Map<Object, Object> myEntries;
+		Map<Object, Object> theirEntries;
+		Set<Object> mismatchResult = new HashSet<Object>();
 		String className;
 		for(String c : classNameSet) {
 			className = c;
@@ -572,7 +574,7 @@ public class DbAuditCompareEntriesTest {
 		
 		String className = null;
 		//There is only one entry IntegrityAuditEntity, but we will check anyway
-		HashSet<String> classNameSet = dbDAO.getPersistenceClassNames();
+		Set<String> classNameSet = dbDAO.getPersistenceClassNames();
 		for(String c : classNameSet){
 			if (c.equals("org.onap.policy.common.ia.test.jpa.IaTestEntity")){
 				className = c;
@@ -608,7 +610,7 @@ public class DbAuditCompareEntriesTest {
 		myEntries.put("0", iate);
 		theirEntries.put("0", iate2);
 				
-		HashSet<Object> result = dbAudit.compareEntries(myEntries, theirEntries);
+		Set<Object> result = dbAudit.compareEntries(myEntries, theirEntries);
 		
 		/*
 		 * Assert that there are no mismatches returned
