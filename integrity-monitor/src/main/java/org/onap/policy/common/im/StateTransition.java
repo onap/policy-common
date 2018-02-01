@@ -143,7 +143,7 @@ public class StateTransition {
 	      
 	     if (value != null) {
              try {
-        	     String parts[] = value.split(",", 5);
+        	     String[] parts = value.split(",", 5);
         	     stateElement.setEndingAdminState(parts[0].trim());
         	     stateElement.setEndingOpState(parts[1].trim());
         	     stateElement.setEndingAvailStatus(parts[2].trim().replace(".",  ","));

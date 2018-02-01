@@ -23,6 +23,7 @@ package org.onap.policy.common.im;
 public class StateTransitionException extends Exception{
 	private static final long serialVersionUID = 1L;
 	public StateTransitionException() {
+		super();
 	}
 	public StateTransitionException(String message) {
 		super(message);

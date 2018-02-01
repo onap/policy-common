@@ -23,6 +23,7 @@ package org.onap.policy.common.im;
 public class StateManagementException extends Exception{
 	private static final long serialVersionUID = 1L;
 	public StateManagementException() {
+		super();
 	}
 	public StateManagementException(String message) {
 		super(message);

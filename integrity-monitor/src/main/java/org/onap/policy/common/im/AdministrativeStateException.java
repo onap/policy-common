@@ -23,6 +23,7 @@ package org.onap.policy.common.im;
 public class AdministrativeStateException extends Exception{
 	private static final long serialVersionUID = 1L;
 	public AdministrativeStateException() {
+		super();
 	}
 	public AdministrativeStateException(String message) {
 		super(message);

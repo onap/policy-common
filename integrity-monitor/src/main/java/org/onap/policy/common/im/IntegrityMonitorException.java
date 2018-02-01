@@ -23,6 +23,7 @@ package org.onap.policy.common.im;
 public class IntegrityMonitorException extends Exception{
 	private static final long serialVersionUID = 1L;
 	public IntegrityMonitorException() {
+		super();
 	}
 	public IntegrityMonitorException(String message) {
 		super(message);

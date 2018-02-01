@@ -23,6 +23,7 @@ package org.onap.policy.common.im;
 public class ForwardProgressException extends Exception{
 	private static final long serialVersionUID = 1L;
 	public ForwardProgressException() {
+		super();
 	}
 	public ForwardProgressException(String message) {
 		super(message);

@@ -28,6 +28,7 @@ public class StandbyStatusException extends Exception {
 
 	public StandbyStatusException()
 	{
+		super();
 	}
 
 	public StandbyStatusException(String message)

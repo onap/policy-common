@@ -1157,8 +1157,8 @@ public class IntegrityMonitor {
 					 * allow the the forward progress counter to advance.
 					 */
 					String msg = "allNotWellMap:";
-					for(String key: allNotWellMap.keySet()){
-						msg = msg.concat("\nkey = " + key + " msg = " + allNotWellMap.get(key));
+					for(Entry<String, String> entry: allNotWellMap.entrySet()){
+						msg = msg.concat("\nkey = " + entry.getKey() + " msg = " + entry.getValue());
 					}
 					logger.error("endTransaction: allNotWellMap is NOT EMPTY.  Not advancing forward"
 							+ "progress counter. \n{}\n", msg);
@@ -1168,8 +1168,8 @@ public class IntegrityMonitor {
 						if(getAllSeemsWellMap() != null){
 							if(!(getAllSeemsWellMap().isEmpty())){
 								String msg = "allSeemsWellMap:";
-								for(String key: allSeemsWellMap.keySet()){
-									msg = msg.concat("\nkey = " + key + " msg = " + allSeemsWellMap.get(key));
+								for(Entry<String, String> entry: allSeemsWellMap.entrySet()){
+									msg = msg.concat("\nkey = " + entry.getKey() + " msg = " + entry.getValue());
 								}
 								logger.debug("endTransaction: allNotWellMap IS EMPTY and allSeemsWellMap is NOT EMPTY.  Advancing forward"
 										+ "progress counter. \n{}\n", msg);
@@ -1941,11 +1941,11 @@ public class IntegrityMonitor {
 		}
 
 		if(logger.isDebugEnabled()){
-			for(Entry<String, String> ent: allSeemsWellMap.entrySet()) {
-				logger.debug("allSeemsWellMap: key = {}  msg = {}", ent.getKey(), ent.getValue());							
+			for(Entry<String, String> entry: allSeemsWellMap.entrySet()){
+				logger.debug("allSeemsWellMap: key = {}  msg = {}", entry.getKey(), entry.getValue());							
 			}
-			for(Entry<String, String> ent: allNotWellMap.entrySet()) {
-				logger.debug("allNotWellMap: key = {}  msg = {}", ent.getKey(), ent.getValue());							
+			for(Entry<String, String> entry: allNotWellMap.entrySet()){
+				logger.debug("allNotWellMap: key = {}  msg = {}", entry.getKey(), entry.getValue());							
 			}
 			logger.debug("allSeemsWell exit");
 		}

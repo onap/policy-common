@@ -40,6 +40,7 @@ public class StateElement {
 	 
 	public StateElement()
 	{
+		// Empty constructor
 	}
 	
 	public String getAdminState()

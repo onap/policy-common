@@ -79,10 +79,8 @@ public final class JmxAgentConnection {
 	 */
 	private static String jmxAgentUrl(String host, String port) {
 
-		String url = "service:jmx:rmi:///jndi/rmi://" + host + ":" + port
+		return "service:jmx:rmi:///jndi/rmi://" + host + ":" + port
 				+ "/jmxrmi";
-
-		return url;
 	}
 
 	/**
