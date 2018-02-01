@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_e77da56f",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/jmx/ComponentAdminException.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-02-01T15:36:09Z",
+      "side": 1,
+      "message": "Jim, please add a new JUnit test for this. Shouldn\u0027t take too long and I know it seems silly but we don\u0027t want to go backwards for code coverage.",
+      "revId": "fdbb4b3d0510529055e1c7898c5dbbb9169adb77",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_4787b961",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/jmx/ComponentAdminException.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-02-01T15:36:09Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 5,
+        "startChar": 20,
+        "endLine": 5,
+        "endChar": 21
+      },
+      "revId": "fdbb4b3d0510529055e1c7898c5dbbb9169adb77",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
