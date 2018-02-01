@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_a7979d8f",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/jmx/ComponentAdminException.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-02-01T15:52:08Z",
+      "side": 1,
+      "message": "That will be fixed as part of POLICY-582; added a test harness class that automatically tests the methods of exception classes that it\u0027s given.",
+      "parentUuid": "5a93c517_e77da56f",
+      "revId": "fdbb4b3d0510529055e1c7898c5dbbb9169adb77",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_4787b961",
         "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/jmx/ComponentAdminException.java",
         "patchSetId": 2
