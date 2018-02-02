@@ -122,53 +122,53 @@ public class IntegrityAudit {
 		boolean parmsAreBad = false;
 		
 		if(resourceName == null || resourceName.isEmpty()){
-			badparams = badparams.append("resourceName ");
+			badparams.append("resourceName ");
 			parmsAreBad = true;
 		}
 		
 		if(persistenceUnit == null || persistenceUnit.isEmpty()){
-			badparams = badparams.append("persistenceUnit ");
+			badparams.append("persistenceUnit ");
 			parmsAreBad = true;
 		}
 		
 		if(properties == null || properties.isEmpty()){
-			badparams = badparams.append("properties ");
+			badparams.append("properties ");
 			parmsAreBad = true;
 		}
 		else{
 			String dbDriver = properties.getProperty(IntegrityAuditProperties.DB_DRIVER);
 			if(dbDriver == null || dbDriver.isEmpty()){
-				badparams = badparams.append("dbDriver ");
+				badparams.append("dbDriver ");
 				parmsAreBad = true;
 			}
 	
 			String dbUrl = properties.getProperty(IntegrityAuditProperties.DB_URL);
 			if(dbUrl == null || dbUrl.isEmpty()){
-				badparams = badparams.append("dbUrl ");
+				badparams.append("dbUrl ");
 				parmsAreBad = true;
 			}
 			
 			String dbUser = properties.getProperty(IntegrityAuditProperties.DB_USER);
 			if(dbUser == null || dbUser.isEmpty()){
-				badparams = badparams.append("dbUser ");
+				badparams.append("dbUser ");
 				parmsAreBad = true;
 			}
 			
 			String dbPwd = properties.getProperty(IntegrityAuditProperties.DB_PWD);
 			if(dbPwd == null){ //may be empty
-				badparams = badparams.append("dbPwd ");
+				badparams.append("dbPwd ");
 				parmsAreBad = true;
 			}
 			
 			String siteName = properties.getProperty(IntegrityAuditProperties.SITE_NAME);
 			if(siteName == null || siteName.isEmpty()){
-				badparams = badparams.append("siteName ");
+				badparams.append("siteName ");
 				parmsAreBad = true;
 			}
 			
 			String nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE);
 			if(nodeType == null || nodeType.isEmpty()){
-				badparams = badparams.append("nodeType ");
+				badparams.append("nodeType ");
 				parmsAreBad = true;
 			} else {
 				nodeType = nodeType.trim();
@@ -177,7 +177,7 @@ public class IntegrityAudit {
 					for (NodeTypeEnum n : NodeTypeEnum.values()) {
 						nodetypes = nodetypes.concat(n.toString() + " ");
 					}
-					badparams = badparams.append(nodetypes + "] ");
+					badparams.append(nodetypes + "] ");
 					parmsAreBad = true;
 				}
 			}
@@ -185,7 +185,7 @@ public class IntegrityAudit {
 				try{
 					Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
 				}catch(NumberFormatException nfe){
-					badparams = badparams.append(", auditPeriodSeconds=" 
+					badparams.append(", auditPeriodSeconds=" 
 							+ properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
 					parmsAreBad = true;
 				}

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,48 +17,25 @@
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
+package org.onap.policy.common.ia;
 
-package org.onap.policy.common.ia.test.jpa;
+import static org.junit.Assert.*;
 
-import java.io.Serializable;
+import org.junit.Test;
 
-public class PersonTest implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private String firstName;
-	private String lastName;
-	private int age;
-	
-	public PersonTest(String first, String last, int age) {
-		this.firstName = first;
-		this.lastName = last;
-		this.age = age;
+public class DbAuditExceptionTest {
+
+	@Test
+	public void test() {
+		DbAuditException e = new DbAuditException();
+		assertNull(e.getMessage());
+		e = new DbAuditException("");
+		assertNotNull(e.getMessage());
+		e = new DbAuditException(new Throwable());
+		assertNotNull(e.getCause());
+		e = new DbAuditException("", new Throwable());
+		assertNotNull(e.getMessage());
+		assertNotNull(e.getCause());
 	}
-	
-	public String getFirstName() {
-		return this.firstName;
-	}
-	
-	public void setFirstName(String name) {
-		this.firstName = name;
-	}
-	
-	public String getLasttName() {
-		return this.lastName;
-	}
-	
-	public void setLastName(String name) {
-		this.lastName = name;
-	}
-	
-	public int getAge() {
-		return this.age;
-	}
-	
-	public void setAge(int age) {
-		this.age = age;
-	}
-	
+
 }
