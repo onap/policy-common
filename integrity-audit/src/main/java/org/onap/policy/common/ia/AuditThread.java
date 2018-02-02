@@ -20,17 +20,15 @@
 
 package org.onap.policy.common.ia;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
-
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
 import org.onap.policy.common.logging.eelf.MessageCodes;
-import org.onap.policy.common.logging.flexlogger.FlexLogger; 
+import org.onap.policy.common.logging.flexlogger.FlexLogger;
 import org.onap.policy.common.logging.flexlogger.Logger;
 
 /**

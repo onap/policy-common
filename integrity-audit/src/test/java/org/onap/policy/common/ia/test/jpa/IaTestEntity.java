@@ -42,13 +42,11 @@ import javax.persistence.TemporalType;
 	@NamedQuery(name=" IaTestEntity.findAll", query="SELECT e FROM IaTestEntity e "),
 	@NamedQuery(name="IaTestEntity.deleteAll", query="DELETE FROM IaTestEntity WHERE 1=1")
 })
-//@SequenceGenerator(name="seqImTest", initialValue=1, allocationSize=1)
 
 public class IaTestEntity implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seqImTest")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="ImTestId")
 	private long imTestId;
@@ -57,7 +55,7 @@ public class IaTestEntity implements Serializable {
 	private String createdBy = "guest";
 	
 	@Column(name="person", nullable=false, length=255)
-	private PersonTest person;
+	private PersonSample person;
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name="created_date", updatable=false)
@@ -144,14 +142,14 @@ public class IaTestEntity implements Serializable {
 	/**
 	 * @param the person to set
 	 */
-	public void setPersonTest(PersonTest p) {
+	public void setPersonTest(PersonSample p) {
 		this.person = p;
 	}
 	
 	/**
 	 * @return the person
 	 */
-	public PersonTest getPersonTest() {
+	public PersonSample getPersonTest() {
 		return person;
 	}
 }
