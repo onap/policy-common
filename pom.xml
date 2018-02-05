@@ -51,6 +51,7 @@
 
 
 	<modules>
+		<module>utils-test</module>
 		<module>common-logging</module>
 		<module>integrity-audit</module>
 		<module>integrity-monitor</module>
