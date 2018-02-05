@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_4156c0d3",
+        "filename": "utils-test/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-02-05T21:56:53Z",
+      "side": 1,
+      "message": "I think this should be in the parent pom.xml.   I see that the other projects seems to have it at the individual module level, but I think, it shouldn\u0027t.   \n\nWhat do you guys think?   Should it be tackled, perhaps in another review?",
+      "revId": "82bc8f543e578f32201d07a23b42d8539b89a4f1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
