@@ -24,25 +24,25 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class ExceptionsTesterTest {
+public class ErrorsTesterTest {
 
 	@Test
 	public void test() {
-		assertEquals(2, new ExceptionsTester().test(SimpleException.class));
-		assertEquals(8, new ExceptionsTester().test(StaticException.class));
+		assertEquals(2, new ErrorsTester().testError(SimpleError.class));
+		assertEquals(5, new ErrorsTester().testError(StaticError.class));
 	}
 
 	/**
 	 * Used to test a simple success case.
 	 */
-	public static class SimpleException extends Exception {
+	public static class SimpleError extends Error {
 		private static final long serialVersionUID = 1L;
 
-		public SimpleException() {
+		public SimpleError() {
 			super();
 		}
 
-		public SimpleException(String message) {
+		public SimpleError(String message) {
 			super(message);
 		}
 	}
@@ -50,40 +50,26 @@ public class ExceptionsTesterTest {
 	/**
 	 * Used to test the exhaustive success case.
 	 */
-	public static class StaticException extends Exception {
+	public static class StaticError extends Error {
 		private static final long serialVersionUID = 1L;
 
-		public StaticException() {
+		public StaticError() {
 			super();
 		}
 
-		public StaticException(String message) {
+		public StaticError(String message) {
 			super(message);
 		}
 
-		public StaticException(Throwable cause) {
+		public StaticError(Throwable cause) {
 			super(cause);
 		}
 
-		public StaticException(String message, Throwable cause) {
+		public StaticError(String message, Throwable cause) {
 			super(message, cause);
 		}
 
-		public StaticException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-			super(message, cause, enableSuppression, writableStackTrace);
-		}
-
-		// same as above, but with Exceptions substituted for Throwables
-
-		public StaticException(Exception cause) {
-			super(cause);
-		}
-
-		public StaticException(String message, Exception cause) {
-			super(message, cause);
-		}
-
-		public StaticException(String message, Exception cause, boolean enableSuppression, boolean writableStackTrace) {
+		public StaticError(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
 			super(message, cause, enableSuppression, writableStackTrace);
 		}
 	}
