@@ -27,124 +27,26 @@ import org.junit.Test;
 public class ExceptionsTesterTest {
 
 	@Test
-	public void test() throws Exception {
+	public void test() {
 		assertEquals(2, new ExceptionsTester().test(SimpleException.class));
 		assertEquals(8, new ExceptionsTester().test(StaticException.class));
 	}
 
 	@Test(expected = AssertionError.class)
-	public void testIgnoreMessageException() throws Exception {
-		new ExceptionsTester().test(IgnoreMessageException.class);
-	}
-
-	@Test(expected = AssertionError.class)
-	public void testIgnoreCauseException() throws Exception {
-		new ExceptionsTester().test(IgnoreCauseException.class);
-	}
-
-	@Test(expected = AssertionError.class)
-	public void testNonStaticException() throws Exception {
+	public void testNoConstructorsException() {
 		new ExceptionsTester().test(NoConstructorsException.class);
 	}
 
-	@Test(expected = AssertionError.class)
-	public void testAlwaysSuppressException() throws Exception {
-		new ExceptionsTester().test(AlwaysSuppressException.class);
-	}
-
-	@Test(expected = AssertionError.class)
-	public void testNeverSuppressException() throws Exception {
-		new ExceptionsTester().test(NeverSuppressException.class);
-	}
-
-	@Test(expected = AssertionError.class)
-	public void testAlwaysWritableException() throws Exception {
-		new ExceptionsTester().test(AlwaysWritableException.class);
-	}
-
-	@Test(expected = AssertionError.class)
-	public void testNeverWritableException() throws Exception {
-		new ExceptionsTester().test(NeverWritableException.class);
-	}
-
 	/**
-	 * Used to test a failure case - message text is ignored.
-	 */
-	public static class IgnoreMessageException extends Exception {
-		private static final long serialVersionUID = 1L;
-
-		public IgnoreMessageException(String message) {
-			super("bogus");
-		}
-	}
-
-	/**
-	 * Used to test a failure case - cause is ignored.
-	 */
-	public static class IgnoreCauseException extends Exception {
-		private static final long serialVersionUID = 1L;
-
-		public IgnoreCauseException(Throwable cause) {
-			super(new Exception("another cause"));
-		}
-	}
-
-	/**
-	 * Used to test a failure case - this has no standard constructions.
+	 * Used to test a failure case - this has no standard constructors. The only
+	 * constructor it has takes an "int", thus it is not one of the standard
+	 * constructors.
 	 */
 	public static class NoConstructorsException extends Exception {
 		private static final long serialVersionUID = 1L;
 
 		public NoConstructorsException(int value) {
-			super(String.valueOf(value));
-		}
-	}
-
-	/**
-	 * Used to test a failure case - always suppresses.
-	 */
-	public static class AlwaysSuppressException extends Exception {
-		private static final long serialVersionUID = 1L;
-
-		public AlwaysSuppressException(String message, Throwable cause, boolean enableSuppression,
-				boolean writableStackTrace) {
-			super(message, cause, true, writableStackTrace);
-		}
-	}
-
-	/**
-	 * Used to test a failure case - never suppresses.
-	 */
-	public static class NeverSuppressException extends Exception {
-		private static final long serialVersionUID = 1L;
-
-		public NeverSuppressException(String message, Throwable cause, boolean enableSuppression,
-				boolean writableStackTrace) {
-			super(message, cause, false, writableStackTrace);
-		}
-	}
-
-	/**
-	 * Used to test a failure case - always allows stack writes.
-	 */
-	public static class AlwaysWritableException extends Exception {
-		private static final long serialVersionUID = 1L;
-
-		public AlwaysWritableException(String message, Throwable cause, boolean enableSuppression,
-				boolean writableStackTrace) {
-			super(message, cause, enableSuppression, true);
-		}
-	}
-
-	/**
-	 * Used to test a failure case - never allows stack writes.
-	 */
-	public static class NeverWritableException extends Exception {
-		private static final long serialVersionUID = 1L;
-
-		public NeverWritableException(String message, Throwable cause, boolean enableSuppression,
-				boolean writableStackTrace) {
-			super(message, cause, enableSuppression, false);
+			super();
 		}
 	}
 
