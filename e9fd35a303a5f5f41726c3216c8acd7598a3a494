@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_56d0ba1e",
+        "filename": "utils-test/src/test/java/org/onap/policy/common/utils/test/log/logback/ExtractAppenderTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-02-08T22:38:27Z",
+      "side": 1,
+      "message": "Out of curiosity Jim, for my own understanding.   What is this class purpose in the context of policy?   I don\u0027t think we have created any custom logger appenders that need to be tested, or use logback directly (usually through slf4j or flexlogger).",
+      "revId": "e9fd35a303a5f5f41726c3216c8acd7598a3a494",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
