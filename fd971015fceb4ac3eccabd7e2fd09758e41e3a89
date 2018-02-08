@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_30ec16f3",
+        "filename": "utils-test/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-02-08T12:10:09Z",
+      "side": 1,
+      "message": "There is a security issue with this version of logback. If we could use 1.3.0 that would clear it.\nhttps://nvd.nist.gov/vuln/detail/CVE-2017-5929",
+      "range": {
+        "startLine": 36,
+        "startChar": 2,
+        "endLine": 36,
+        "endChar": 42
+      },
+      "revId": "fd971015fceb4ac3eccabd7e2fd09758e41e3a89",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
