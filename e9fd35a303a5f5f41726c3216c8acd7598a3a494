@@ -16,6 +16,24 @@
       "revId": "e9fd35a303a5f5f41726c3216c8acd7598a3a494",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_767b7628",
+        "filename": "utils-test/src/test/java/org/onap/policy/common/utils/test/log/logback/ExtractAppenderTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-02-08T23:12:52Z",
+      "side": 1,
+      "message": "Created ExtractAppender, which is a custom logger that can capture logged events in a list.  It uses patterns to decide what is to be extracted/kept.  Junit tests can use this instead of having to read the log file to see if it contains certain things.",
+      "parentUuid": "5a93c517_56d0ba1e",
+      "revId": "e9fd35a303a5f5f41726c3216c8acd7598a3a494",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
