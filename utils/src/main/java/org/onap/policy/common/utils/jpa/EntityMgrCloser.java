@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * Common Utils-Test
+ * Common Utils
  * ================================================================================
  * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -18,29 +18,42 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.utils.test;
+package org.onap.policy.common.utils.jpa;
+
+import javax.persistence.EntityManager;
 
 /**
- * Used to test various Error subclasses. Uses reflection to identify the
- * constructors that the subclass supports.
+ * Wrapper for an <i>EntityManager</i>, providing auto-close functionality. This
+ * is useful in try-with-resources statements.
  */
-public class ErrorsTester extends ThrowablesTester {
+public class EntityMgrCloser implements AutoCloseable {
 
 	/**
-	 * Runs tests, on an Error subclass, for all of the standard constructors.
-	 * If the Error subclass does not support a given type of constructor, then
-	 * it skips that test. Does <i>not</i> throw an exception if no standard
-	 * constructors are found.
-	 * 
-	 * @param claz
-	 *            subclass to be tested
-	 * @return the number of constructors that were found/tested
-	 * @throws ConstructionError
-	 *             if the Error subclass cannot be constructed
-	 * @throws AssertionError
-	 *             if the constructed objects fail to pass various tests
+	 * The wrapped manager.
 	 */
-	public <T extends Error> int testError(Class<T> claz) {
-		return testThrowable(claz);
+	private final EntityManager em;
+
+	/**
+	 * 
+	 * @param em
+	 *            manager to be auto-closed
+	 */
+	public EntityMgrCloser(EntityManager em) {
+		this.em = em;
 	}
+
+	/**
+	 * Gets the EntityManager wrapped within this object.
+	 * 
+	 * @return the associated EntityManager
+	 */
+	public EntityManager getManager() {
+		return em;
+	}
+
+	@Override
+	public void close() {
+		em.close();
+	}
+
 }
