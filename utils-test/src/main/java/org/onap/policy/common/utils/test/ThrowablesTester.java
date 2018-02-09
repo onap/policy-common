@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * Integrity Monitor
+ * Common Utils-Test
  * ================================================================================
  * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -485,7 +485,7 @@ public class ThrowablesTester {
 
 		} catch (NoSuchMethodException | SecurityException e) {
 			// this constructor is not defined so nothing to test
-			logger.debug("skipped test due to no " + testType + " constructor for: " + claz);
+			logger.debug("skipped test, no constructor for: " + claz + " due to: " + e);
 			return null;
 		}
 	}

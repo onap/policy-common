@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * Common Utils-Test
+ * Common Utils
  * ================================================================================
  * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -18,29 +18,60 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.utils.test;
+package org.onap.policy.common.utils.jpa;
+
+import javax.persistence.EntityTransaction;
 
 /**
- * Used to test various Error subclasses. Uses reflection to identify the
- * constructors that the subclass supports.
+ * Wrapper for an <i>EntityTransaction</i> that is auto-rolled back when closed.
+ * This is useful in try-with-resources statements.
  */
-public class ErrorsTester extends ThrowablesTester {
+public class EntityTransCloser implements AutoCloseable {
 
 	/**
-	 * Runs tests, on an Error subclass, for all of the standard constructors.
-	 * If the Error subclass does not support a given type of constructor, then
-	 * it skips that test. Does <i>not</i> throw an exception if no standard
-	 * constructors are found.
-	 * 
-	 * @param claz
-	 *            subclass to be tested
-	 * @return the number of constructors that were found/tested
-	 * @throws ConstructionError
-	 *             if the Error subclass cannot be constructed
-	 * @throws AssertionError
-	 *             if the constructed objects fail to pass various tests
+	 * Transaction to be rolled back.
 	 */
-	public <T extends Error> int testError(Class<T> claz) {
-		return testThrowable(claz);
+	private final EntityTransaction trans;
+
+	/**
+	 * Begins a transaction.
+	 * 
+	 * @param et
+	 *            transaction to wrap/begin
+	 */
+	public EntityTransCloser(EntityTransaction et) {
+		trans = et;
+		trans.begin();
 	}
+
+	/**
+	 * Gets the wrapped transaction.
+	 * 
+	 * @return the transaction
+	 */
+	public EntityTransaction getTransation() {
+		return trans;
+	}
+
+	/**
+	 * Commits the transaction.
+	 */
+	public void commit() {
+		trans.commit();
+	}
+
+	/**
+	 * Rolls back the transaction.
+	 */
+	public void rollback() {
+		trans.rollback();
+	}
+
+	@Override
+	public void close() {
+		if (trans.isActive()) {
+			trans.rollback();
+		}
+	}
+
 }

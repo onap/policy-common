@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * Common Utils-Test
+ * Common Utils
  * ================================================================================
  * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -18,29 +18,42 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.utils.test;
+package org.onap.policy.common.utils.jpa;
+
+import javax.persistence.EntityManagerFactory;
 
 /**
- * Used to test various Error subclasses. Uses reflection to identify the
- * constructors that the subclass supports.
+ * Wrapper for an <i>EntityManagerFactory</i>, providing auto-close
+ * functionality. This is useful in try-with-resources statements.
  */
-public class ErrorsTester extends ThrowablesTester {
+public class EntityMgrFactoryCloser implements AutoCloseable {
 
 	/**
-	 * Runs tests, on an Error subclass, for all of the standard constructors.
-	 * If the Error subclass does not support a given type of constructor, then
-	 * it skips that test. Does <i>not</i> throw an exception if no standard
-	 * constructors are found.
-	 * 
-	 * @param claz
-	 *            subclass to be tested
-	 * @return the number of constructors that were found/tested
-	 * @throws ConstructionError
-	 *             if the Error subclass cannot be constructed
-	 * @throws AssertionError
-	 *             if the constructed objects fail to pass various tests
+	 * The wrapped factory.
 	 */
-	public <T extends Error> int testError(Class<T> claz) {
-		return testThrowable(claz);
+	private final EntityManagerFactory emf;
+
+	/**
+	 * 
+	 * @param emf
+	 *            manager to be auto-closed
+	 */
+	public EntityMgrFactoryCloser(EntityManagerFactory emf) {
+		this.emf = emf;
 	}
+
+	/**
+	 * Gets the EntityManagerFactory wrapped within this object.
+	 * 
+	 * @return the associated EntityManagerFactory
+	 */
+	public EntityManagerFactory getFactory() {
+		return emf;
+	}
+
+	@Override
+	public void close() {
+		emf.close();
+	}
+
 }
