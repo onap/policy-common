@@ -69,24 +69,46 @@ public class DbDAO {
 	 */
     private static final Object lock = new Object();
 
-	
 	/**
 	 * DbDAO Constructor
-     * @param resourceName
-     * @param persistenceUnit
-     * @param properties
-     * @throws Exception
-     */
+	 * 
+	 * @param resourceName
+	 * @param persistenceUnit
+	 * @param properties
+	 * @throws Exception
+	 */
 	public DbDAO(String resourceName, String persistenceUnit, Properties properties) throws Exception {
+		this(resourceName, persistenceUnit, properties, null);
+	}
+
+	/**
+	 * DbDAO Constructor
+	 * 
+	 * @param resourceName
+	 * @param persistenceUnit
+	 * @param properties
+	 * @param lastUpdateDate	may be {@code null}
+	 * @param altDbUrl			may be {@code null}
+	 * @throws Exception
+	 */
+	protected DbDAO(String resourceName, String persistenceUnit, Properties properties, String altDbUrl)
+			throws Exception {
 		logger.debug("DbDAO contructor: enter");
-		
+
 		validateProperties(resourceName, persistenceUnit, properties);
-		
+
 		emf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
-		
-		register();
-		
+
+		register(altDbUrl == null ? this.dbUrl : altDbUrl);
+
 		logger.debug("DbDAO contructor: exit");
+	}
+	
+	/**
+	 * Release resources (i.e., the EntityManagerFactory).
+	 */
+	public void destroy() {
+		emf.close();
 	}
 	
 	/**
@@ -207,6 +229,7 @@ public class DbDAO {
 			logger.error("getAllEntries encountered exception:", e);
 		}
 		em.close();
+		theEmf.close();
 		
 		logger.debug("getAllEntries: Returning resultMap, size=" + resultMap.size());
 		
@@ -240,6 +263,7 @@ public class DbDAO {
 			logger.error(msg, e);
 		}
 		em.close();
+		theEmf.close();
 		logger.debug("getAllEntries: Exit, resultMap, size=" + resultMap.size());
 		return resultMap;	
 	}
@@ -282,7 +306,7 @@ public class DbDAO {
 		}
 		
 	}
-	
+
 	/**
 	 * getMyIntegrityAuditEntity() gets my IntegrityAuditEntity
 	 * @return
@@ -382,8 +406,9 @@ public class DbDAO {
 	
 	/**
 	 * Register the IntegrityAudit instance
+	 * @param altDbUrl			alternate DB URL to be placed into the record
 	 */
-	private void register() throws DbDaoTransactionException {
+	private void register(String altDbUrl) throws DbDaoTransactionException {
 		try{
 			EntityManager em = emf.createEntityManager();
 
@@ -421,10 +446,9 @@ public class DbDAO {
 			//update/set properties in entry
 			iae.setSite(this.siteName);
 			iae.setNodeType(this.nodeType);
-			iae.setLastUpdated(new Date());
 			iae.setJdbcDriver(this.dbDriver);
 			iae.setJdbcPassword(properties.getProperty(IntegrityAuditProperties.DB_PWD).trim());
-			iae.setJdbcUrl(dbUrl);
+			iae.setJdbcUrl(altDbUrl);
 			iae.setJdbcUser(dbUser);
 
 			em.persist(iae);

@@ -18,7 +18,7 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.ia.test.jpa;
+package org.onap.policy.common.ia.jpa;
 
 import java.io.Serializable;
 import java.util.Date;

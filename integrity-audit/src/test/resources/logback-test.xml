@@ -2,7 +2,7 @@
   ============LICENSE_START=======================================================
   Integrity Audit
   ================================================================================
-  Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+  Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
   ================================================================================
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 
 <!-- Controls the output of logs for JUnit tests -->
 
-<configuration scan="true" scanPeriod="3 seconds" debug="true">
+<configuration scan="false" debug="true">
   <!--<jmxConfigurator /> -->
   <!-- directory path for all other type logs -->
   <property name="logDir" value="testingLogs" />
@@ -72,19 +72,9 @@
     these events as part of the application root log. -->
     
   <appender name="EELFAudit"
-    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    class="ch.qos.logback.core.FileAppender">
     <file>${logDirectory}/${auditLogName}.log</file>
-    <rollingPolicy
-      class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-      <fileNamePattern>${logDirectory}/${auditLogName}.%i.log.zip
-      </fileNamePattern>
-      <minIndex>1</minIndex>
-      <maxIndex>9</maxIndex>
-    </rollingPolicy>
-    <triggeringPolicy
-      class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-      <maxFileSize>5MB</maxFileSize>
-    </triggeringPolicy>
+    <param name="Append" value="false" />
     <encoder>
          <pattern>${defaultPattern}</pattern>
     </encoder>
@@ -95,19 +85,9 @@
   </appender>
 
 <appender name="EELFMetrics"
-    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    class="ch.qos.logback.core.FileAppender">
     <file>${logDirectory}/${metricsLogName}.log</file>
-    <rollingPolicy
-      class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-      <fileNamePattern>${logDirectory}/${metricsLogName}.%i.log.zip
-      </fileNamePattern>
-      <minIndex>1</minIndex>
-      <maxIndex>9</maxIndex>
-    </rollingPolicy>
-    <triggeringPolicy
-      class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-      <maxFileSize>5MB</maxFileSize>
-    </triggeringPolicy>
+    <param name="Append" value="false" />
     <encoder>
       <!-- <pattern>"%d{HH:mm:ss.SSS} [%thread] %-5level %logger{1024} - 
         %msg%n"</pattern> -->
@@ -122,22 +102,12 @@
   </appender>
    
   <appender name="EELFError"
-    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    class="ch.qos.logback.core.FileAppender">
     <file>${logDirectory}/${errorLogName}.log</file>
-    <rollingPolicy
-      class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-      <fileNamePattern>${logDirectory}/${errorLogName}.%i.log.zip
-      </fileNamePattern>
-      <minIndex>1</minIndex>
-      <maxIndex>9</maxIndex>
-    </rollingPolicy>
+    <param name="Append" value="false" />
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
      <level>ERROR</level>
      </filter>
-    <triggeringPolicy
-      class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-      <maxFileSize>5MB</maxFileSize>
-    </triggeringPolicy>
     <encoder>
       <pattern>${defaultPattern}</pattern>
     </encoder>
@@ -149,23 +119,13 @@
   </appender>
   
    <appender name="EELFDebug"
-    class="ch.qos.logback.core.rolling.RollingFileAppender">
+    class="ch.qos.logback.core.FileAppender">
     <file>${debugLogDirectory}/${debugLogName}.log</file>
-    <rollingPolicy
-      class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-      <fileNamePattern>${debugLogDirectory}/${debugLogName}.%i.log.zip
-      </fileNamePattern>
-      <minIndex>1</minIndex>
-      <maxIndex>9</maxIndex>
-    </rollingPolicy>
+    <param name="Append" value="false" />
     <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
      <!-- <level>INFO</level> -->
      <level>DEBUG</level>
      </filter>
-    <triggeringPolicy
-      class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-      <maxFileSize>5MB</maxFileSize>
-    </triggeringPolicy>
     <encoder>
       <pattern>${defaultPattern}</pattern>
     </encoder>

@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- * Test Utils
+ * Integrity Audit
  * ================================================================================
  * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -17,11 +17,48 @@
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
-package org.onap.policy.common.ia.test;
 
-public class TestUtils {
-	public static final String DEFAULT_DB_DRIVER = "org.h2.Driver";
-	public static final String DEFAULT_DB_URL = "jdbc:h2:file:./sql/iaTest";
-	public static final String DEFAULT_DB_USER = "sa";
-	public static final String DEFAULT_DB_PWD = "";
+package org.onap.policy.common.ia.jpa;
+
+import java.io.Serializable;
+
+public class PersonSample implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String firstName;
+	private String lastName;
+	private int age;
+	
+	public PersonSample(String first, String last, int age) {
+		this.firstName = first;
+		this.lastName = last;
+		this.age = age;
+	}
+	
+	public String getFirstName() {
+		return this.firstName;
+	}
+	
+	public void setFirstName(String name) {
+		this.firstName = name;
+	}
+	
+	public String getLasttName() {
+		return this.lastName;
+	}
+	
+	public void setLastName(String name) {
+		this.lastName = name;
+	}
+	
+	public int getAge() {
+		return this.age;
+	}
+	
+	public void setAge(int age) {
+		this.age = age;
+	}
+	
 }
