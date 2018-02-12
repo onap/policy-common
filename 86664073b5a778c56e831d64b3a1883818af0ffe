@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_85435d41",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/jpa/EntityMgrCloserTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-02-12T17:08:42Z",
+      "side": 1,
+      "message": "I think the use of \"_\" gives \"minor\" sonars.  I understand though that you want to distinguish a subtest this way.",
+      "revId": "86664073b5a778c56e831d64b3a1883818af0ffe",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_e55a6129",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/jpa/EntityMgrCloserTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-02-12T17:08:42Z",
+      "side": 1,
+      "message": "The no logging of the exception will give sonars.",
+      "revId": "86664073b5a778c56e831d64b3a1883818af0ffe",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
