@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,9 @@ import org.onap.policy.common.logging.flexlogger.Logger;
 public class DbAudit {
 	
 	private static final Logger logger = FlexLogger.getLogger(DbAudit.class);
+	
+	private static long dbAuditUpdateMillis = 5000l;
+	private static long dbAuditSleepMillis = 2000l;
 	
 	DbDAO dbDAO = null;
 	
@@ -212,7 +215,7 @@ public class DbAudit {
 				}
 			} //end for (IntegrityAuditEntity iae : iaeList)
 			//Time check
-			if((System.currentTimeMillis() - startTime) >= 5000){ //5 seconds
+			if((System.currentTimeMillis() - startTime) >= dbAuditUpdateMillis){
 				//update the timestamp
 				dbDAO.setLastUpdated();
 				//reset the startTime
@@ -220,9 +223,9 @@ public class DbAudit {
 			}else{
 				//sleep a couple seconds to break up the activity
 				if (logger.isDebugEnabled()) {
-					logger.debug("dbAudit: Sleeping 2 seconds");
+					logger.debug("dbAudit: Sleeping " + dbAuditSleepMillis + "ms");
 				}
-				Thread.sleep(2000);
+				Thread.sleep(dbAuditSleepMillis);
 				if (logger.isDebugEnabled()) {
 					logger.debug("dbAudit: Waking from sleep");
 				}
@@ -315,7 +318,7 @@ public class DbAudit {
 				}
 			}
 			//Time check
-			if((System.currentTimeMillis() - startTime) >= 5000){ //5 seconds
+			if((System.currentTimeMillis() - startTime) >= dbAuditUpdateMillis){
 				//update the timestamp
 				dbDAO.setLastUpdated();
 				//reset the startTime
@@ -323,9 +326,9 @@ public class DbAudit {
 			}else{
 				//sleep a couple seconds to break up the activity
 				if (logger.isDebugEnabled()) {
-					logger.debug("dbAudit: Second comparison; sleeping 2 seconds");
+					logger.debug("dbAudit: Second comparison; sleeping " + dbAuditSleepMillis + "ms");
 				}
-				Thread.sleep(2000);
+				Thread.sleep(dbAuditSleepMillis);
 				if (logger.isDebugEnabled()) {
 					logger.debug("dbAudit: Second comparison; waking from sleep");
 				}
@@ -347,22 +350,23 @@ public class DbAudit {
 	/**
 	 * dbAuditSimulate simulates the DB audit
 	 * @param resourceName
-	 * @param persistenceUnit
+	 * @param persistenceUnit 
+	 * @param simulationIterations
+	 * @param simulationIntervalMs 
 	 * @param nodeType
-	 * @throws InterruptedException
-	 * @throws DbDaoTransactionException
+	 * @throws DbAuditException
 	 */
-	public void dbAuditSimulate(String resourceName, String persistenceUnit) throws DbAuditException {
+	public void dbAuditSimulate(String resourceName, String persistenceUnit, long simulationIterations, long simulationIntervalMs) throws DbAuditException {
 
 		try {
 			logger.info("dbAuditSimulate: Starting audit simulation for resourceName="
 					+ resourceName + ", persistenceUnit=" + persistenceUnit);
 
-			for (int i = 0; i < AuditThread.AUDIT_SIMULATION_ITERATIONS; i++) {
+			for (int i = 0; i < simulationIterations; i++) {
 				dbDAO.setLastUpdated();
 				logger.info("dbAuditSimulate: i=" + i + ", sleeping "
-						+ AuditThread.AUDIT_SIMULATION_SLEEP_INTERVAL + "ms");
-				Thread.sleep(AuditThread.AUDIT_SIMULATION_SLEEP_INTERVAL);
+						+ simulationIntervalMs + "ms");
+				Thread.sleep(simulationIntervalMs);
 			}
 
 			logger.info("dbAuditSimulate: Finished audit simulation for resourceName="
@@ -465,8 +469,36 @@ public class DbAudit {
 		logger.info(msg);
 	}
 
+	/**
+	 * Gets the audit-update time.
+	 * @return the audit-update time, in milliseconds
+	 */
+	protected static long getDbAuditUpdateMillis() {
+		return dbAuditUpdateMillis;
+	}
 
+	/**
+	 * Sets the audit-update time.
+	 * @param dbAuditUpdateMillis	the new audit update time, in milliseconds
+	 */
+	protected static void setDbAuditUpdateMillis(long dbAuditUpdateMillis) {
+		DbAudit.dbAuditUpdateMillis = dbAuditUpdateMillis;
+	}
 
-	
+	/**
+	 * Gets the audit-sleep time.
+	 * @return the audit-sleep time, in milliseconds
+	 */
+	protected static long getDbAuditSleepMillis() {
+		return dbAuditSleepMillis;
+	}
+
+	/**
+	 * Sets the audit-sleep time.
+	 * @param dbAuditSleepMillis	the new audit sleep time, in milliseconds
+	 */
+	protected static void setDbAuditSleepMillis(long dbAuditSleepMillis) {
+		DbAudit.dbAuditSleepMillis = dbAuditSleepMillis;
+	}
 
 }
