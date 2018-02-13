@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +18,21 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.im.test;
+package org.onap.policy.common.im;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
 
@@ -40,9 +41,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.onap.policy.common.im.IntegrityMonitor;
-import org.onap.policy.common.im.IntegrityMonitorProperties;
-import org.onap.policy.common.im.StateManagement;
 import org.onap.policy.common.im.jpa.ForwardProgressEntity;
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
@@ -54,94 +52,48 @@ import org.slf4j.LoggerFactory;
  * where they have write privileges and can execute time-sensitive
  * tasks.
  */
-public class IntegrityMonitorTest {
+public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
 	private static Logger logger = LoggerFactory.getLogger(IntegrityMonitorTest.class);
+	
 	private static Properties myProp;
-	private static EntityManagerFactory emf;
-	private static EntityManager em;
 	private static EntityTransaction et;
 	private static String resourceName;
-	private static Properties systemProps;
 	
-	private static final String DEFAULT_DB_DRIVER = "org.h2.Driver";
-	private static final String DEFAULT_DB_URL = "jdbc:h2:file:./sql/imTest";
-	private static final String DEFAULT_DB_USER = "sa";
-	private static final String DEFAULT_DB_PWD = "";
+	private BlockingQueue<CountDownLatch> queue;
 	
 	@BeforeClass
 	public static void setUpClass() throws Exception {
+		IntegrityMonitorTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + IntegrityMonitorTest.class.getSimpleName());
 
+		resourceName = IntegrityMonitorTestBase.siteName + "." + IntegrityMonitorTestBase.nodeType;
 	}
 
 	@AfterClass
 	public static void tearDownClass() throws Exception {
+		IntegrityMonitorTestBase.tearDownAfterClass();
 	}
 
 	@Before
 	public void setUp() throws Exception {
-		IntegrityMonitor.setUnitTesting(true);
+		super.setUpTest();
 		
-		cleanMyProp();
-		
-		// set JMX remote port in system properties
-		systemProps = System.getProperties();
-		systemProps.put("com.sun.management.jmxremote.port", "9797");
-		
-		resourceName = "siteA.pap1";
-		
-		//Create the data schema and entity manager factory
-		emf = Persistence.createEntityManagerFactory("schemaPU", myProp);
-
-		// Create an entity manager to use the DB
-		em = emf.createEntityManager();
-
+		myProp = makeProperties();
+		et = null;
 	}
 	
 
 	@After
 	public void tearDown() throws Exception {
-		// clear jmx remote port setting
-		systemProps.remove("com.sun.management.jmxremote.port");
-	}
-	
-	private void cleanMyProp(){
-		myProp = new Properties();
-		myProp.put(IntegrityMonitorProperties.DB_DRIVER, IntegrityMonitorTest.DEFAULT_DB_DRIVER);
-		myProp.put(IntegrityMonitorProperties.DB_URL, IntegrityMonitorTest.DEFAULT_DB_URL);
-		myProp.put(IntegrityMonitorProperties.DB_USER, IntegrityMonitorTest.DEFAULT_DB_USER);
-		myProp.put(IntegrityMonitorProperties.DB_PWD, IntegrityMonitorTest.DEFAULT_DB_PWD);
-		myProp.put(IntegrityMonitorProperties.SITE_NAME, "SiteA");
-		myProp.put(IntegrityMonitorProperties.NODE_TYPE, "pap");
-	}
-	
-	private void cleanDb(){
-		et = em.getTransaction();
+		if(et != null && et.isActive()) {
+			try {
+				et.rollback();
+				
+			} catch(RuntimeException e) {
+				logger.error("cannot rollback transaction", e);
+			}
+		}
 		
-		et.begin();
-		// Make sure we leave the DB clean
-		em.createQuery("DELETE FROM StateManagementEntity").executeUpdate();
-		em.createQuery("DELETE FROM ResourceRegistrationEntity").executeUpdate();
-		em.createQuery("DELETE FROM ForwardProgressEntity").executeUpdate();
-		em.flush();
-		et.commit();
-	}
-	
-	
-	/*
-	 * The following runs all tests and controls the order of execution. If you allow
-	 * the tests to execute individually, you cannot predict the order and some
-	 * conflicts may occur.
-	 */
-	//@Ignore
-	@Test
-	public void runAllTests() throws Exception{
-		testSanityJmx();
-		testIM(); 
-		testSanityState();
-		testRefreshStateAudit();
-		testStateCheck();
-		testGetAllForwardProgressEntity();
-		testStateAudit(); 
+		super.tearDownTest();
 	}
 
 	/*
@@ -154,11 +106,9 @@ public class IntegrityMonitorTest {
 	 * Unlock
 	 * Unlock restart
 	 */
+	@Test
 	public void testSanityJmx() throws Exception {
 		logger.debug("\nIntegrityMonitorTest: Entering testSanityJmx\n\n");
-		cleanDb();
-		cleanMyProp();
-		IntegrityMonitor.deleteInstance();
 		
 		String dependent = "group1_logparser";
 		
@@ -180,7 +130,7 @@ public class IntegrityMonitorTest {
 		// Fail dependencies after three seconds
 		myProp.put(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL, "3");
 		
-		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+		IntegrityMonitor im = makeMonitor(resourceName, myProp);
 		logger.debug("\n\ntestSanityJmx starting im state \nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
 				im.getStateManager().getAdminState(),
 				im.getStateManager().getOpState(),
@@ -214,16 +164,10 @@ public class IntegrityMonitorTest {
     	// commit transaction
     	et.commit();
     	
-    	Thread.sleep(5000); //sleep 5 sec so the FPManager has time to check dependency health
+    	// wait for the FPManager to check dependency health
+    	waitStep();
 		
-		boolean sanityPass = true;
-		try {
-			im.evaluateSanity();
-		} catch (Exception e) {
-			logger.error("evaluateSanity exception: ", e);
-			sanityPass = false;
-		}
-		assertFalse(sanityPass);  // expect sanity test to fail
+    	expectFail(im, imx -> { imx.evaluateSanity(); });
 
 		// undo dependency groups and jmx test properties settings
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
@@ -243,11 +187,9 @@ public class IntegrityMonitorTest {
 				im.getStateManager().getAvailStatus(),
 				im.getStateManager().getStandbyStatus());
 		
-		//Destroy the instance
 		logger.debug("\ntestSanityJmx restarting the IntegrityMonitor");
-		IntegrityMonitor.deleteInstance();
 		//Create a new instance.  It should recover from the disabled-dependency condition
-		im = IntegrityMonitor.getInstance(resourceName, myProp);
+		im = makeMonitor(resourceName, myProp);
 		
 		logger.debug("\n\ntestSanityJmx state after creating new im\n"+
 					"AdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
@@ -272,14 +214,12 @@ public class IntegrityMonitorTest {
 			sm.getOpState(),
 			sm.getAvailStatus(),
 			sm.getStandbyStatus());
-		assert(sm.getAdminState().equals(StateManagement.LOCKED));
+		assertEquals(sm.getAdminState(), StateManagement.LOCKED);
 		
 		//Verify lock persists across a restart
-		//Destroy the instance
 		logger.debug("\ntestSanityJmx restarting the IntegrityMonitor");
-		IntegrityMonitor.deleteInstance();
 		//Create a new instance.  It should come up with the admin state locked
-		im = IntegrityMonitor.getInstance(resourceName, myProp);
+		im = makeMonitor(resourceName, myProp);
 		sm = im.getStateManager();
 		logger.debug("\n\ntestSanityJmx restart with AdminState=locked"+
 					 "\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
@@ -287,7 +227,7 @@ public class IntegrityMonitorTest {
 					 	sm.getOpState(),
 					 	sm.getAvailStatus(),
 					 	sm.getStandbyStatus());
-		assert(sm.getAdminState().equals(StateManagement.LOCKED));
+		assertEquals(sm.getAdminState(), StateManagement.LOCKED);
 		
 		// Verify unlock
 		sm.unlock();
@@ -296,14 +236,12 @@ public class IntegrityMonitorTest {
 				sm.getOpState(),
 				sm.getAvailStatus(),
 				sm.getStandbyStatus());
-		assert(sm.getAdminState().equals(StateManagement.UNLOCKED));		
+		assertEquals(sm.getAdminState(), StateManagement.UNLOCKED);		
 		
 		// Verify unlock restart
-		//Destroy the instance
 		logger.debug("\ntestSanityJmx restarting the IntegrityMonitor");
-		IntegrityMonitor.deleteInstance();
 		//Create a new instance.  It should come up with the admin state locked
-		im = IntegrityMonitor.getInstance(resourceName, myProp);
+		im = makeMonitor(resourceName, myProp);
 		sm = im.getStateManager();
 		logger.debug("\n\ntestSanityJmx restart with AdminState=unlocked\n" + 
 					"AdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
@@ -312,17 +250,15 @@ public class IntegrityMonitorTest {
 						sm.getAvailStatus(),
 						sm.getStandbyStatus());
 		
-		assert(sm.getAdminState().equals(StateManagement.UNLOCKED));
+		assertEquals(sm.getAdminState(), StateManagement.UNLOCKED);
 		
 		logger.debug("\n\ntestSanityJmx: Exit\n\n");
 	}
 	
 
+	@Test
 	public void testIM() throws Exception {
 		logger.debug("\nIntegrityMonitorTest: Entering testIM\n\n");
-		cleanDb();
-		cleanMyProp();
-		IntegrityMonitor.deleteInstance();
 		
 		// Disable the integrity monitor so it will not interfere
 		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "-1");
@@ -337,7 +273,7 @@ public class IntegrityMonitorTest {
 		// Disable writing the FPC
 		myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "-1");
 		
-		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+		IntegrityMonitor im = makeMonitor(resourceName, myProp);
 		
 		logger.debug("\n\nim initial state: \nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
 						im.getStateManager().getAdminState(),
@@ -345,25 +281,13 @@ public class IntegrityMonitorTest {
 						im.getStateManager().getAvailStatus(),
 						im.getStateManager().getStandbyStatus());
 		
-		// test evaluate sanity
-		boolean sanityPass = true;
-		try {
-			im.evaluateSanity();
-		} catch (Exception e) {
-			logger.error("evaluateSanity exception: ", e);
-			sanityPass = false;
-		}
-		assertTrue(sanityPass);  // expect sanity test to pass
+		waitStep();
 		
-		//Test startTransaction - should works since it is unlocked
-		boolean transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			logger.error("startTransaction exception: ", e);
-			transPass = false;
-		}
-		assertTrue(transPass);
+		// test evaluate sanity
+    	expectSuccess(im, imx -> { imx.evaluateSanity(); });
+		
+		//Test startTransaction - should work since it is unlocked
+    	expectSuccess(im, imx -> { imx.startTransaction(); });
 		
 		//Test state manager via the IntegrityMonitor
 		StateManagement sm = im.getStateManager();
@@ -376,17 +300,10 @@ public class IntegrityMonitorTest {
 					sm.getAvailStatus(),
 					sm.getStandbyStatus());
 		
-		assert(sm.getAdminState().equals(StateManagement.LOCKED));
+		assertEquals(sm.getAdminState(), StateManagement.LOCKED);
 		
 		//test startTransaction.  It should fail since it is locked
-		transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			logger.error("startTransaction exception: ", e);
-			transPass = false;
-		}
-		assertTrue(!transPass); //expect it to fail
+    	expectFail(im, imx -> { imx.startTransaction(); });
 		
 		sm.unlock();
 		logger.debug("\n\nsm.unlock()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
@@ -394,17 +311,10 @@ public class IntegrityMonitorTest {
 						sm.getOpState(),
 						sm.getAvailStatus(),
 						sm.getStandbyStatus());
-		assert(sm.getAdminState().equals(StateManagement.UNLOCKED));
+		assertEquals(sm.getAdminState(), StateManagement.UNLOCKED);
 		
 		//test startTransaction.  It should succeed
-		transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			logger.error("startTransaction exception: ", e);
-			transPass = false;
-		}
-		assertTrue(transPass); //expect it to succeed
+    	expectSuccess(im, imx -> { imx.startTransaction(); });
 		
 		sm.disableDependency();
 		logger.debug("\n\nsm.disableDependency()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
@@ -413,18 +323,11 @@ public class IntegrityMonitorTest {
 				sm.getAvailStatus(),
 				sm.getStandbyStatus());
 		
-		assert(sm.getOpState().equals(StateManagement.DISABLED));
-		assert(sm.getAvailStatus().equals(StateManagement.DEPENDENCY));
+		assertEquals(sm.getOpState(), StateManagement.DISABLED);
+		assertEquals(sm.getAvailStatus(), StateManagement.DEPENDENCY);
 		
 		//test startTransaction.  It should succeed since standby status is null and unlocked
-		transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			logger.error("startTransaction exception: ", e);
-			transPass = false;
-		}
-		assertTrue(transPass); //expect it to succeed
+    	expectSuccess(im, imx -> { imx.startTransaction(); });
 	
 		sm.enableNoDependency();
 
@@ -433,16 +336,9 @@ public class IntegrityMonitorTest {
 				sm.getOpState(),
 				sm.getAvailStatus(),
 				sm.getStandbyStatus());
-		assert(sm.getOpState().equals(StateManagement.ENABLED));
+		assertEquals(sm.getOpState(), StateManagement.ENABLED);
 		//test startTransaction.  It should succeed since standby status is null and unlocked
-		transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
-			transPass = false;
-		}
-		assertTrue(transPass); //expect it to succeed
+    	expectSuccess(im, imx -> { imx.startTransaction(); });
 	
 		
 		sm.disableFailed();
@@ -452,17 +348,10 @@ public class IntegrityMonitorTest {
 				sm.getAvailStatus(),
 				sm.getStandbyStatus());
 
-		assert(sm.getOpState().equals(StateManagement.DISABLED));
-		assert(sm.getAvailStatus().equals(StateManagement.FAILED));
+		assertEquals(sm.getOpState(), StateManagement.DISABLED);
+		assertEquals(sm.getAvailStatus(), StateManagement.FAILED);
 		//test startTransaction.  It should succeed since standby status is null and unlocked
-		transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			System.out.println("startTransaction exception: " + e);
-			transPass = false;
-		}
-		assertTrue(transPass); //expect it to succeed
+    	expectSuccess(im, imx -> { imx.startTransaction(); });
 	
 		sm.enableNotFailed();
 		
@@ -472,16 +361,9 @@ public class IntegrityMonitorTest {
 				sm.getAvailStatus(),
 				sm.getStandbyStatus());
 		
-		assert(sm.getOpState().equals(StateManagement.ENABLED));
+		assertEquals(sm.getOpState(), StateManagement.ENABLED);
 		//test startTransaction.  It should succeed since standby status is null and unlocked
-		transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			logger.error("startTransaction exception: ", e);
-			transPass = false;
-		}
-		assertTrue(transPass); //expect it to succeed
+    	expectSuccess(im, imx -> { imx.startTransaction(); });
 	
 		sm.demote();
 
@@ -491,17 +373,10 @@ public class IntegrityMonitorTest {
 				sm.getAvailStatus(),
 				sm.getStandbyStatus());
 		
-		assert(sm.getStandbyStatus().equals(StateManagement.HOT_STANDBY));
+		assertEquals(sm.getStandbyStatus(), StateManagement.HOT_STANDBY);
 
 		//test startTransaction.  It should fail since it is standby
-		transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			logger.error("startTransaction exception: ", e);
-			transPass = false;
-		}
-		assertTrue(!transPass); //expect it to fail
+    	expectFail(im, imx -> { imx.startTransaction(); });
 		
 		sm.promote();
 
@@ -511,17 +386,10 @@ public class IntegrityMonitorTest {
 				sm.getAvailStatus(),
 				sm.getStandbyStatus());
 		
-		assert(sm.getStandbyStatus().equals(StateManagement.PROVIDING_SERVICE));
+		assertEquals(sm.getStandbyStatus(), StateManagement.PROVIDING_SERVICE);
 
 		//test startTransaction.  It should succeed since it is providing service
-		transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			logger.error("startTransaction exception: ", e);
-			transPass = false;
-		}
-		assertTrue(transPass); //expect it to succeed
+    	expectSuccess(im, imx -> { imx.startTransaction(); });
 		
 		
 		//Test the multi-valued availability status
@@ -534,17 +402,10 @@ public class IntegrityMonitorTest {
 				sm.getAvailStatus(),
 				sm.getStandbyStatus());
 		
-		assert(sm.getAvailStatus().equals(StateManagement.DEPENDENCY_FAILED));
+		assertEquals(sm.getAvailStatus(), StateManagement.DEPENDENCY_FAILED);
 		
 		//Test startTransaction.  Should fail since standby status is cold standby
-		transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			logger.error("startTransaction exception: ", e);
-			transPass = false;
-		}
-		assertTrue(!transPass); //expect it to fail
+    	expectFail(im, imx -> { imx.startTransaction(); });
 		
 		sm.enableNoDependency();
 
@@ -553,16 +414,9 @@ public class IntegrityMonitorTest {
 				sm.getOpState(),
 				sm.getAvailStatus(),
 				sm.getStandbyStatus());
-		assert(sm.getAvailStatus().equals(StateManagement.FAILED));
+		assertEquals(sm.getAvailStatus(), StateManagement.FAILED);
 		//Test startTransaction.  Should fail since standby status is cold standby
-		transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			logger.error("startTransaction exception: ", e);
-			transPass = false;
-		}
-		assertTrue(!transPass); //expect it to fail
+    	expectFail(im, imx -> { imx.startTransaction(); });
 	
 		sm.disableDependency();
 		sm.enableNotFailed();
@@ -573,16 +427,9 @@ public class IntegrityMonitorTest {
 				sm.getAvailStatus(),
 				sm.getStandbyStatus());		
 
-		assert(sm.getAvailStatus().equals(StateManagement.DEPENDENCY));
+		assertEquals(sm.getAvailStatus(), StateManagement.DEPENDENCY);
 		//Test startTransaction.  Should fail since standby status is cold standby
-		transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			logger.error("startTransaction exception: ", e);
-			transPass = false;
-		}
-		assertTrue(!transPass); //expect it to fail
+    	expectFail(im, imx -> { imx.startTransaction(); });
 	
 		sm.enableNoDependency();
 		logger.debug("\n\nsm.enableNoDependency()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
@@ -590,26 +437,17 @@ public class IntegrityMonitorTest {
 				sm.getOpState(),
 				sm.getAvailStatus(),
 				sm.getStandbyStatus());
-		assert(sm.getOpState().equals(StateManagement.ENABLED));
+		assertEquals(sm.getOpState(), StateManagement.ENABLED);
 		//test startTransaction.  It should fail since standby status is hot standby
-		transPass = true;
-		try{
-			im.startTransaction();
-		} catch (Exception e){
-			logger.error("startTransaction exception: ", e);
-			transPass = false;
-		}
-		assertTrue(!transPass); //expect it to fail
+    	expectFail(im, imx -> { imx.startTransaction(); });
 	
 		logger.debug("\n\ntestIM: Exit\n\n");
 	}
 	
 
+	@Test
 	public void testSanityState() throws Exception {
 		logger.debug("\nIntegrityMonitorTest: Entering testSanityState\n\n");
-		cleanDb();
-		cleanMyProp();
-		IntegrityMonitor.deleteInstance();
 		
 		// parameters are passed via a properties file
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "group1_dep1,group1_dep2; group2_dep1");
@@ -628,7 +466,9 @@ public class IntegrityMonitorTest {
 		// Max interval for use in deciding if a FPC entry is stale in seconds
 		myProp.put(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL, "120");
 		
-		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+		IntegrityMonitor im = makeMonitor(resourceName, myProp);
+		
+		waitStep();
 		
 		// Add a group1 dependent resources to put an entry in the forward progress table
 		ForwardProgressEntity fpe = new ForwardProgressEntity();
@@ -653,26 +493,17 @@ public class IntegrityMonitorTest {
 		new StateManagement(emf, "group1_dep1");
 		new StateManagement(emf, "group1_dep2");
 		
-		boolean sanityPass = true;
 		// Call the dependency check directly instead of waiting for FPManager to do it.
 		logger.debug("\n\nIntegrityMonitor.testSanityState: calling im.dependencyCheck()\n\n");
 		im.dependencyCheck();
-		try {
-			im.evaluateSanity();
-		} catch (Exception e) {
-			logger.error("evaluateSanity exception: ", e);
-			sanityPass = false;
-		}
-		assertFalse(sanityPass);  // expect sanity test to fail
+    	expectFail(im, imx -> { imx.evaluateSanity(); });
 		
 		logger.debug("\n\ntestSanityState: Exit\n\n");
 	}
-	
+
+	@Test
 	public void testRefreshStateAudit() throws Exception {
 		logger.debug("\nIntegrityMonitorTest: testRefreshStateAudit Enter\n\n");
-		cleanDb();
-		cleanMyProp();
-		IntegrityMonitor.deleteInstance();
 
 		// parameters are passed via a properties file
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
@@ -690,7 +521,9 @@ public class IntegrityMonitorTest {
 		// Disable writing the FPC
 		myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "-1");
 		
-		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+		IntegrityMonitor im = makeMonitor(resourceName, myProp);
+		
+		waitStep();
 
 		//the state here is unlocked, enabled, null, null
 		StateManagementEntity sme = null;
@@ -715,14 +548,14 @@ public class IntegrityMonitorTest {
 							sme.getAvailStatus(),
 							sme.getStandbyStatus());
 
-			assertTrue(sme.getAdminState().equals(StateManagement.UNLOCKED)); 
-			assertTrue(sme.getOpState().equals(StateManagement.ENABLED)); 
-			assertTrue(sme.getAvailStatus().equals(StateManagement.NULL_VALUE)); 
-			assertTrue(sme.getStandbyStatus().equals(StateManagement.NULL_VALUE));
+			assertEquals(sme.getAdminState(), StateManagement.UNLOCKED); 
+			assertEquals(sme.getOpState(), StateManagement.ENABLED); 
+			assertEquals(sme.getAvailStatus(), StateManagement.NULL_VALUE); 
+			assertEquals(sme.getStandbyStatus(), StateManagement.NULL_VALUE);
 			logger.debug("--");
 		} else {
 			logger.debug("Record not found, resourceName: " + resourceName);
-			assertTrue(false);
+			fail("missing record");
 		}
 
 		et = em.getTransaction();
@@ -757,24 +590,22 @@ public class IntegrityMonitorTest {
 							sme1.getAvailStatus(),
 							sme1.getStandbyStatus());
 
-			assertTrue(sme1.getAdminState().equals(StateManagement.UNLOCKED)); 
-			assertTrue(sme1.getOpState().equals(StateManagement.ENABLED)); 
-			assertTrue(sme1.getAvailStatus().equals(StateManagement.NULL_VALUE)); 
-			assertTrue(sme1.getStandbyStatus().equals(StateManagement.HOT_STANDBY)); 
+			assertEquals(sme1.getAdminState(), StateManagement.UNLOCKED); 
+			assertEquals(sme1.getOpState(), StateManagement.ENABLED); 
+			assertEquals(sme1.getAvailStatus(), StateManagement.NULL_VALUE); 
+			assertEquals(sme1.getStandbyStatus(), StateManagement.HOT_STANDBY); 
 			logger.debug("--");
 		} else {
 			logger.debug("Record not found, resourceName: " + resourceName);
-			assertTrue(false);
+			fail("record not found");
 		}
 
 		logger.debug("\nIntegrityMonitorTest: testRefreshStateAudit Exit\n\n");
 	}
-	
+
+	@Test
 	public void testStateCheck() throws Exception {
 		logger.debug("\nIntegrityMonitorTest: Entering testStateCheck\n\n");
-		cleanDb();
-		cleanMyProp();
-		IntegrityMonitor.deleteInstance();
 		
 		// parameters are passed via a properties file
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "group1_dep1");
@@ -798,7 +629,9 @@ public class IntegrityMonitorTest {
 		myProp.put(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL, "5");
 		myProp.put(IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL, "5");
 		
-		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+		IntegrityMonitor im = makeMonitor(resourceName, myProp);
+		
+		// Note: do ***NOT*** do waitStep() here
 		
 		// Add a group1 dependent resources to put an entry in the forward progress table
 		// This sets lastUpdated to the current time
@@ -812,39 +645,21 @@ public class IntegrityMonitorTest {
 		et.commit();
 
 		new StateManagement(emf, "group1_dep1");
+
+    	expectSuccess(im, imx -> { imx.evaluateSanity(); });
 		
-		boolean sanityPass = true;
-		//Thread.sleep(15000);
-		//Thread.sleep(5000);
-		try {
-			im.evaluateSanity();
-		} catch (Exception e) {
-			logger.error("testStateCheck: After 5 sec sleep - evaluateSanity exception: ", e);
-			sanityPass = false;
-		}
-		assertTrue(sanityPass);  // expect sanity test to pass
-		
-		//now wait 10 seconds.  The dependency entry  is checked every 10 sec.  So, even in the worst case
+    	// wait for FPManager to perform dependency health check.  Once that's done,
 		//it should now be stale and the sanity check should fail
+		waitStep();
 		
-		sanityPass = true;
-		Thread.sleep(10000);
-		try {
-			im.evaluateSanity();
-		} catch (Exception e) {
-			logger.error("testStateCheck: After 15 sec sleep - evaluateSanity exception: ", e);
-			sanityPass = false;
-		}
-		assertFalse(sanityPass);  // expect sanity test to fail
+    	expectFail(im, imx -> { imx.evaluateSanity(); });
 		
 		logger.debug("\n\ntestStateCheck: Exit\n\n");
 	}
-	
+
+	@Test
 	public void testGetAllForwardProgressEntity() throws Exception{
 		logger.debug("\nIntegrityMonitorTest: Entering testGetAllForwardProgressEntity\n\n");
-		cleanDb();
-		cleanMyProp();
-		IntegrityMonitor.deleteInstance();
 		// parameters are passed via a properties file
 		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
 		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
@@ -861,7 +676,8 @@ public class IntegrityMonitorTest {
 		// Disable writing the FPC
 		myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "-1");
 		
-		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+		IntegrityMonitor im = makeMonitor(resourceName, myProp);
+		waitStep();
 		
 		logger.debug("\nIntegrityMonitorTest: Creating ForwardProgressEntity entries\n\n");
 		// Add resource entries in the forward progress table
@@ -885,16 +701,14 @@ public class IntegrityMonitorTest {
 		logger.debug("\nIntegrityMonitorTest:testGetAllForwardProgressEntity Calling im.getAllForwardProgressEntity()\n\n");
 		List<ForwardProgressEntity> fpeList = im.getAllForwardProgressEntity();
 		
-		assertTrue(fpeList.size()==4);
+		assertEquals(4, fpeList.size());
 		
 		logger.debug("\nIntegrityMonitorTest: Exit testGetAllForwardProgressEntity\n\n");
 	}
-	
+
+	@Test
 	public void testStateAudit() throws Exception{
 		logger.debug("\nIntegrityMonitorTest: Entering testStateAudit\n\n");
-		cleanDb();
-		cleanMyProp();
-		IntegrityMonitor.deleteInstance();
 		
 		// parameters are passed via a properties file
 
@@ -918,7 +732,9 @@ public class IntegrityMonitorTest {
 		myProp.put(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL, "120");
 
 		
-		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+		IntegrityMonitor im = makeMonitor(resourceName, myProp);
+		waitStep();
+		
 		logger.debug("\nIntegrityMonitorTest: Creating ForwardProgressEntity entries\n\n");
 		// Add resources to put an entry in the forward progress table
 		Date staleDate = new Date(0);
@@ -1009,7 +825,7 @@ public class IntegrityMonitorTest {
 		logger.debug("\n\n");
 		
 		em.refresh(sme1);
-		assertTrue(sme1.getOpState().equals(StateManagement.ENABLED));
+		assertEquals(sme1.getOpState(), StateManagement.ENABLED);
 		
 		logger.debug("IntegrityMonitorTest:testStateAudit: calling stateAudit()");
 		im.executeStateAudit();
@@ -1038,7 +854,7 @@ public class IntegrityMonitorTest {
 		logger.debug("\n\n");
 		
 		em.refresh(sme1);
-		assertTrue(sme1.getOpState().equals(StateManagement.DISABLED));
+		assertEquals(sme1.getOpState(), StateManagement.DISABLED);
 		
 		//Now let's add sme2 to the mix
 		updateQuery = em.createQuery("UPDATE ForwardProgressEntity f "
@@ -1054,9 +870,9 @@ public class IntegrityMonitorTest {
 		
 		//Give it a chance to write the DB and run the audit
 		logger.debug("IntegrityMonitorTest:testStateAudit: (restart4) Running State Audit");
-		Thread.sleep(2000);
+		waitStep();
 		im.executeStateAudit();
-		Thread.sleep(1000);
+		waitStep();
 		logger.debug("IntegrityMonitorTest:testStateAudit: (restart4) State Audit complete");
 		
 		//Now check its state
@@ -1084,12 +900,68 @@ public class IntegrityMonitorTest {
 		logger.debug("\n\n");
 		
 		em.refresh(sme1);
-		assertTrue(sme1.getOpState().equals(StateManagement.DISABLED));
+		assertEquals(sme1.getOpState(), StateManagement.DISABLED);
 		
 		em.refresh(sme2);
-		assertTrue(sme2.getOpState().equals(StateManagement.DISABLED));
+		assertEquals(sme2.getOpState(), StateManagement.DISABLED);
 		
 		logger.debug("\nIntegrityMonitorTest: Exit testStateAudit\n\n");
 		System.out.println("\n\ntestStateAudit: Exit\n\n");
+	}
+	
+	private IntegrityMonitor makeMonitor(String resourceName, Properties myProp) throws Exception {
+		IntegrityMonitor.deleteInstance();
+		
+		queue = new LinkedBlockingQueue<>();
+		
+		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp, queue);
+		
+		// wait for the monitor thread to start
+		waitStep();
+		
+		return im;
+	}
+	
+	private void waitStep() throws InterruptedException {
+		CountDownLatch latch = new CountDownLatch(1);
+		queue.offer(latch);
+		
+		assertTrue(latch.await(WAIT_MS, TimeUnit.MILLISECONDS));
+	}
+
+	/**
+	 * Applies a function on a monitor, expecting it to succeed.
+	 * @param im
+	 * @param func
+	 * @throws AssertionError
+	 */
+	private void expectSuccess(IntegrityMonitor im, VoidFunc func) {
+		try{
+			func.apply(im);
+			
+		} catch (Exception e){
+			System.out.println("startTransaction exception: " + e);
+			fail("action failed");
+		}
+	}
+
+	/**
+	 * Applies a function on a monitor, expecting it to fail.
+	 * @param im
+	 * @param func
+	 * @throws AssertionError
+	 */
+	private void expectFail(IntegrityMonitor im, VoidFunc func) {
+		try{
+			func.apply(im);
+			fail("missing exception");
+		} catch (Exception e){
+			System.out.println("action found expected exception: " + e);
+		}
+	}
+	
+	@FunctionalInterface
+	private static interface VoidFunc {
+		public void apply(IntegrityMonitor im) throws Exception;
 	}
 }
