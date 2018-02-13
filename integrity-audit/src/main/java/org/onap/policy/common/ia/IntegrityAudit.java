@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,11 @@
 package org.onap.policy.common.ia;
 
 import java.util.Properties;
-
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
 
 import org.onap.policy.common.ia.IntegrityAuditProperties.NodeTypeEnum;
-import org.onap.policy.common.logging.flexlogger.FlexLogger; 
+import org.onap.policy.common.logging.flexlogger.FlexLogger;
 import org.onap.policy.common.logging.flexlogger.Logger; 
 
 /**
@@ -46,16 +47,16 @@ public class IntegrityAudit {
 	
 	
 	/*
-	 * This is the audit period in seconds. For example, if it had a value of 3600, the audit
-	 * can only run once per hour.  If it has a value of 60, it can run once per minute.
+	 * This is the audit period in milliseconds. For example, if it had a value of 3600000, the audit
+	 * can only run once per hour.  If it has a value of 6000, it can run once per minute.
 	 * 
 	 * Values: 
-	 *    integrityAuditPeriodSeconds < 0 (negative number) indicates the audit is off
-	 *    integrityAuditPeriodSecconds == 0 indicates the audit is to run continuously
-	 *    integrityAuditPeriodSeconds > 0 indicates the audit is to run at most once during the indicated period
+	 *    integrityAuditPeriodMillis < 0 (negative number) indicates the audit is off
+	 *    integrityAuditPeriodMillis == 0 indicates the audit is to run continuously
+	 *    integrityAuditPeriodMillis > 0 indicates the audit is to run at most once during the indicated period
 	 * 
 	 */
-	private int integrityAuditPeriodSeconds;
+	private int integrityAuditPeriodMillis;
 	
 	/**
 	 * IntegrityAudit constructor
@@ -84,10 +85,12 @@ public class IntegrityAudit {
 		this.resourceName = resourceName;
 		
 		if(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS) != null){ //It is allowed to be null
-			this.integrityAuditPeriodSeconds= Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
+			this.integrityAuditPeriodMillis= 1000 * Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
+		} else if(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS) != null){ //It is allowed to be null
+				this.integrityAuditPeriodMillis= Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS).trim());
 		} else{
 			//If it is null, set it to the default value
-			this.integrityAuditPeriodSeconds = IntegrityAuditProperties.DEFAULT_AUDIT_PERIOD_SECONDS;
+			this.integrityAuditPeriodMillis = 1000 * IntegrityAuditProperties.DEFAULT_AUDIT_PERIOD_SECONDS;
 		}
 		logger.info("Constructor: Exiting");
 		
@@ -97,7 +100,7 @@ public class IntegrityAudit {
 	 * Used during JUnit testing by AuditPeriodTest.java
 	 */
 	public int getIntegrityAuditPeriodSeconds() {
-		return integrityAuditPeriodSeconds;
+		return (integrityAuditPeriodMillis / 1000);
 	}
 
 	/**
@@ -190,6 +193,15 @@ public class IntegrityAudit {
 					parmsAreBad = true;
 				}
 			}
+			else if(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS) != null){ //It is allowed to be null
+				try{
+					Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS).trim());
+				}catch(NumberFormatException nfe){
+					badparams.append(", auditPeriodMilliSeconds=" 
+							+ properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS).trim());
+					parmsAreBad = true;
+				}
+			}
 		} // End else
 		logger.debug("parmsAreBad: exit:" 
 				+ "\nresourceName: " + resourceName
@@ -203,22 +215,36 @@ public class IntegrityAudit {
 	 * @throws Exception
 	 */
 	public void startAuditThread() throws Exception {
+		startAuditThread(null);
+	}
+	/**
+	 * Starts the audit thread
+	 * @param queue 
+	 * @return {@code true} if the thread was started, {@code false} otherwise
+	 * @throws Exception
+	 */
+	protected boolean startAuditThread(BlockingQueue<CountDownLatch> queue) throws Exception {
 
 		logger.info("startAuditThread: Entering");
 		
-		if (integrityAuditPeriodSeconds >= 0) {
+		boolean success = false;
+		
+		if (integrityAuditPeriodMillis >= 0) {
 			this.auditThread = new AuditThread(this.resourceName,
 					this.persistenceUnit, this.properties,
-					integrityAuditPeriodSeconds, this);
+					integrityAuditPeriodMillis, this, queue);
 			logger.info("startAuditThread: Audit started and will run every "
-					+ integrityAuditPeriodSeconds + " seconds");
+					+ integrityAuditPeriodMillis/1000 + " seconds");
 			this.auditThread.start();
+			success = true;
 		} else {
 			logger.info("startAuditThread: Suppressing integrity audit, integrityAuditPeriodSeconds="
-					+ integrityAuditPeriodSeconds);
+					+ integrityAuditPeriodMillis/1000);
 		}
 
 		logger.info("startAuditThread: Exiting");
+		
+		return success;
 	}
 	/**
 	 * Stops the audit thread
@@ -251,5 +277,24 @@ public class IntegrityAudit {
 
 	public static void setUnitTesting(boolean isUnitTesting) {
 		IntegrityAudit.isUnitTesting = isUnitTesting;
+	}
+
+	/**
+	 * Waits a bit for the AuditThread to complete. Used by JUnit tests.
+	 * 
+	 * @param twaitms
+	 *            wait time, in milliseconds
+	 * @return {@code true} if the thread stopped within the given time,
+	 *         {@code false} otherwise
+	 * @throws InterruptedException
+	 */
+	protected boolean joinAuditThread(long twaitms) throws InterruptedException {
+		if(this.auditThread == null) {
+			return true;
+			
+		} else {
+			this.auditThread.join(twaitms);
+			return ! this.auditThread.isAlive();
+		}
 	}
 }

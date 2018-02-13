@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@
 
 package org.onap.policy.common.ia.jpa;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -105,9 +107,7 @@ public class IntegrityAuditEntity implements Serializable {
 	
 	@PreUpdate
 	public void preUpdate() {
-		if (!isUnitTesting()) {
-			this.lastUpdated = new Date();
-		}
+		this.lastUpdated = new Date();
 	}
 
 	public long getId() {
@@ -208,5 +208,18 @@ public class IntegrityAuditEntity implements Serializable {
 
 	public static void setUnitTesting(boolean isUnitTesting) {
 		IntegrityAuditEntity.isUnitTesting = isUnitTesting;
+	}
+
+	private void writeObject(ObjectOutputStream out) throws IOException {
+		if(isUnitTesting()) {
+			/*
+			 * Note: other fields may be added here, as long as the
+			 * created-date and last-updated date are not included.
+			 */
+			out.writeObject(jdbcUrl);
+			
+		} else {
+			out.defaultWriteObject();
+		}
 	}
 }

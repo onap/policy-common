@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,12 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.ia.test;
+package org.onap.policy.common.ia;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
-import java.io.FileOutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,22 +31,15 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
-import org.onap.policy.common.ia.DbAudit;
-import org.onap.policy.common.ia.DbDAO;
-import org.onap.policy.common.ia.IntegrityAudit;
-import org.onap.policy.common.ia.IntegrityAuditProperties;
+import org.onap.policy.common.ia.jpa.IaTestEntity;
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
-import org.onap.policy.common.ia.test.jpa.IaTestEntity;
-import org.onap.policy.common.ia.test.jpa.PersonSample;
+import org.onap.policy.common.ia.jpa.PersonSample;
 import org.onap.policy.common.logging.flexlogger.FlexLogger;
 import org.onap.policy.common.logging.flexlogger.Logger;
 
@@ -53,53 +47,34 @@ import org.onap.policy.common.logging.flexlogger.Logger;
  * All JUnits are designed to run in the local development environment
  * where they have write privileges and can execute time-sensitive
  * tasks.
- * 
- * If any have been ignored (@Ignore) they will not run at the same time
- * as others. You should run them as JUnits by themselves.
  */
-public class DbAuditCompareEntriesTest {
+public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
 
 	private static Logger logger = FlexLogger.getLogger(DbAuditCompareEntriesTest.class);
+
 	private DbDAO dbDAO;
-	private static String persistenceUnit;
-	private static Properties properties;
-	private static String resourceName;
-	private String dbDriver;
-	private String dbUrl;
-	private String dbUser;
-	private String dbPwd;
-	private String siteName;
-	private String nodeType;
-	private static final String TEST_LOG = "./testingLogs/common-modules/integrity-audit/debug.log";
-	
+	private static String resourceName = "pdp1";
+
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
+		IntegrityAuditTestBase
+				.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + DbAuditCompareEntriesTest.class.getSimpleName());
+	}
+
+	@AfterClass
+	public static void tearDownAfterClass() {
+		IntegrityAuditTestBase.tearDownAfterClass();
+	}
+
 	@Before
-	public void setUp() throws Exception {
-		System.out.println("setUp: Clearing IntegrityAudit.log");
-		//FileOutputStream fstream = new FileOutputStream("IntegrityAudit.log");
-		FileOutputStream fstream = new FileOutputStream(TEST_LOG);
-		fstream.close();
+	public void setUp() {
 
 		logger.info("setUp: Entering");
 
-		IntegrityAudit.setUnitTesting(true);
-		
-		properties = new Properties();
-		properties.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
-		properties.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
-		properties.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
-		properties.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
-		properties.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
-		properties.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
+		super.setUp();
 
-		dbDriver = TestUtils.DEFAULT_DB_DRIVER;
-		dbUrl = TestUtils.DEFAULT_DB_URL;
-		dbUser = TestUtils.DEFAULT_DB_USER;
-		dbPwd = TestUtils.DEFAULT_DB_PWD;
-		siteName = "SiteA";
-		nodeType = "pdp_xacml";
-		persistenceUnit = "testPU";
-		resourceName = "pdp1";
-				
+		truncateTables(makeProperties());
+
 		logger.info("setUp: Exiting");
 	}
 
@@ -107,39 +82,44 @@ public class DbAuditCompareEntriesTest {
 	 * Clean up DB after each test.
 	 */
 	@After
-	public void tearDown() throws Exception {
+	public void tearDown() {
 		logger.info("tearDown: Entering");
-	
+		
+		dbDAO.destroy();
+
+		super.tearDown();
+
 		logger.info("tearDown: Exiting");
 	}
 
 	/*
-	 * Tests that a comparison between hashsets is successful if
-	 * the entries match
+	 * Tests that a comparison between hashsets is successful if the entries
+	 * match
 	 */
-	//@Ignore
+	// @Ignore
 	@Test
 	public void testSuccessfulComparison() throws Exception {
 		logger.info("testSuccessfulComparison: Entering");
-		
-		dbDAO = new DbDAO(resourceName, persistenceUnit, properties);
+
+		dbDAO = new DbDAO(resourceName, A_SEQ_PU, makeProperties());
 		DbAudit dbAudit = new DbAudit(dbDAO);
-		
+
 		String className = null;
-		//There is only one entry IntegrityAuditEntity, but we will check anyway
+		// There is only one entry IntegrityAuditEntity, but we will check
+		// anyway
 		Set<String> classNameSet = dbDAO.getPersistenceClassNames();
-		for(String c : classNameSet){
-			if (c.equals("org.onap.policy.common.ia.jpa.IntegrityAuditEntity")){
+		for (String c : classNameSet) {
+			if (c.equals("org.onap.policy.common.ia.jpa.IntegrityAuditEntity")) {
 				className = c;
 			}
 		}
 		String resourceName1 = resourceName;
 		String resourceName2 = resourceName;
-		
+
 		IntegrityAuditEntity entry1 = new IntegrityAuditEntity();
 		IntegrityAuditEntity entry2 = new IntegrityAuditEntity();
 		Date date = new Date();
-		
+
 		/*
 		 * Two entries with the same field values
 		 */
@@ -150,10 +130,10 @@ public class DbAuditCompareEntriesTest {
 		entry1.setJdbcUser(dbUser);
 		entry1.setLastUpdated(date);
 		entry1.setNodeType(nodeType);
-		entry1.setPersistenceUnit(persistenceUnit);
+		entry1.setPersistenceUnit(A_SEQ_PU);
 		entry1.setResourceName(resourceName1);
 		entry1.setSite(siteName);
-		
+
 		entry2.setDesignated(false);
 		entry2.setJdbcDriver(dbDriver);
 		entry2.setJdbcPassword(dbPwd);
@@ -161,47 +141,47 @@ public class DbAuditCompareEntriesTest {
 		entry2.setJdbcUser(dbUser);
 		entry2.setLastUpdated(date);
 		entry2.setNodeType(nodeType);
-		entry2.setPersistenceUnit(persistenceUnit);
+		entry2.setPersistenceUnit(A_SEQ_PU);
 		entry2.setResourceName(resourceName2);
 		entry2.setSite(siteName);
-		
+
 		dbAudit.writeAuditDebugLog(className, resourceName1, resourceName2, entry1, entry2);
-		
+
 		HashMap<Object, Object> myEntries = new HashMap<Object, Object>();
 		HashMap<Object, Object> theirEntries = new HashMap<Object, Object>();
-		
+
 		myEntries.put("pdp1", entry1);
 		theirEntries.put("pdp1", entry2);
-				
+
 		Set<Object> result = dbAudit.compareEntries(myEntries, theirEntries);
-		
+
 		/*
 		 * Assert that there are no mismatches returned
 		 */
 		assertTrue(result.isEmpty());
-		
+
 		logger.info("testSuccessfulComparison: Exit");
 	}
 
 	/*
-	 * Tests that an error is detected if an entry in one hashset doesn't
-	 * match the other
+	 * Tests that an error is detected if an entry in one hashset doesn't match
+	 * the other
 	 */
-	//@Ignore
+	// @Ignore
 	@Test
 	public void testComparisonError() throws Exception {
 		logger.info("testComparisonError: Entering");
-		
-		dbDAO = new DbDAO(resourceName, persistenceUnit, properties);
+
+		dbDAO = new DbDAO(resourceName, A_SEQ_PU, makeProperties());
 		DbAudit dbAudit = new DbAudit(dbDAO);
-		
+
 		String resourceName1 = resourceName;
 		String resourceName2 = resourceName;
-		
+
 		IntegrityAuditEntity entry1 = new IntegrityAuditEntity();
 		IntegrityAuditEntity entry2 = new IntegrityAuditEntity();
 		Date date = new Date();
-		
+
 		/*
 		 * Create two entries with different designated values
 		 */
@@ -212,10 +192,10 @@ public class DbAuditCompareEntriesTest {
 		entry1.setJdbcUser(dbUser);
 		entry1.setLastUpdated(date);
 		entry1.setNodeType(nodeType);
-		entry1.setPersistenceUnit(persistenceUnit);
+		entry1.setPersistenceUnit(A_SEQ_PU);
 		entry1.setResourceName(resourceName1);
 		entry1.setSite(siteName);
-		
+
 		entry2.setDesignated(true);
 		entry2.setJdbcDriver(dbDriver);
 		entry2.setJdbcPassword(dbPwd);
@@ -223,48 +203,48 @@ public class DbAuditCompareEntriesTest {
 		entry2.setJdbcUser(dbUser);
 		entry2.setLastUpdated(date);
 		entry2.setNodeType(nodeType);
-		entry2.setPersistenceUnit(persistenceUnit);
+		entry2.setPersistenceUnit(A_SEQ_PU);
 		entry2.setResourceName(resourceName2);
 		entry2.setSite(siteName);
-				
+
 		HashMap<Object, Object> myEntries = new HashMap<Object, Object>();
 		HashMap<Object, Object> theirEntries = new HashMap<Object, Object>();
-		
+
 		myEntries.put("pdp1", entry1);
 		theirEntries.put("pdp1", entry2);
-		
+
 		Set<Object> result = dbAudit.compareEntries(myEntries, theirEntries);
-		
+
 		/*
 		 * Assert that there was one mismatch
 		 */
 		assertEquals(1, result.size());
-		
+
 		logger.info("testComparisonError: Exit");
 	}
-	
+
 	/*
-	 * Tests that a mismatch/miss entry is detected if there are missing entries in 
-	 * one or both of the hashsets
+	 * Tests that a mismatch/miss entry is detected if there are missing entries
+	 * in one or both of the hashsets
 	 */
-	//@Ignore
+	// @Ignore
 	@Test
 	public void testCompareMissingEntries() throws Exception {
 		logger.info("testCompareMissingEntries: Entering");
-	
-		dbDAO = new DbDAO(resourceName, persistenceUnit, properties);
+
+		dbDAO = new DbDAO(resourceName, A_SEQ_PU, makeProperties());
 		DbAudit dbAudit = new DbAudit(dbDAO);
-		
+
 		String resourceName1 = resourceName;
 		String resourceName2 = resourceName;
-		
+
 		IntegrityAuditEntity entry1 = new IntegrityAuditEntity();
 		IntegrityAuditEntity entry2 = new IntegrityAuditEntity();
 		IntegrityAuditEntity entry3 = new IntegrityAuditEntity();
 		IntegrityAuditEntity entry4 = new IntegrityAuditEntity();
-		
+
 		Date date = new Date();
-		
+
 		/*
 		 * 4 entries, one mismatch, two miss entries
 		 */
@@ -275,10 +255,10 @@ public class DbAuditCompareEntriesTest {
 		entry1.setJdbcUser(dbUser);
 		entry1.setLastUpdated(date);
 		entry1.setNodeType(nodeType);
-		entry1.setPersistenceUnit(persistenceUnit);
+		entry1.setPersistenceUnit(A_SEQ_PU);
 		entry1.setResourceName(resourceName1);
 		entry1.setSite(siteName);
-		
+
 		entry2.setDesignated(true);
 		entry2.setJdbcDriver(dbDriver);
 		entry2.setJdbcPassword(dbPwd);
@@ -286,10 +266,10 @@ public class DbAuditCompareEntriesTest {
 		entry2.setJdbcUser(dbUser);
 		entry2.setLastUpdated(date);
 		entry2.setNodeType(nodeType);
-		entry2.setPersistenceUnit(persistenceUnit);
+		entry2.setPersistenceUnit(A_SEQ_PU);
 		entry2.setResourceName(resourceName2);
 		entry2.setSite(siteName);
-		
+
 		entry3.setDesignated(false);
 		entry3.setJdbcDriver(dbDriver);
 		entry3.setJdbcPassword(dbPwd);
@@ -297,10 +277,10 @@ public class DbAuditCompareEntriesTest {
 		entry3.setJdbcUser(dbUser);
 		entry3.setLastUpdated(date);
 		entry3.setNodeType(nodeType);
-		entry3.setPersistenceUnit(persistenceUnit);
+		entry3.setPersistenceUnit(A_SEQ_PU);
 		entry3.setResourceName(resourceName2);
 		entry3.setSite("SiteB");
-		
+
 		entry4.setDesignated(false);
 		entry4.setJdbcDriver(dbDriver);
 		entry4.setJdbcPassword(dbPwd);
@@ -308,50 +288,50 @@ public class DbAuditCompareEntriesTest {
 		entry4.setJdbcUser(dbUser);
 		entry4.setLastUpdated(date);
 		entry4.setNodeType(nodeType);
-		entry4.setPersistenceUnit(persistenceUnit);
+		entry4.setPersistenceUnit(A_SEQ_PU);
 		entry4.setResourceName(resourceName2);
 		entry4.setSite("SiteB");
 
 		HashMap<Object, Object> myEntries = new HashMap<Object, Object>();
 		HashMap<Object, Object> theirEntries = new HashMap<Object, Object>();
-		
+
 		myEntries.put("0", entry1);
 		myEntries.put("1", entry3);
 		theirEntries.put("0", entry2);
 		theirEntries.put("2", entry4);
-		
+
 		Set<Object> mismatchResult = dbAudit.compareEntries(myEntries, theirEntries);
-		
+
 		/*
 		 * Assert 3 mismatches/missing entries were found
 		 */
 		assertEquals(3, mismatchResult.size());
-		
+
 		logger.info("testCompareMissingEntries: Exit");
 	}
-	
+
 	/*
-	 * Tests that comparison algorithm works for each entity in the hashsets 
+	 * Tests that comparison algorithm works for each entity in the hashsets
 	 */
-	//@Ignore
+	// @Ignore
 	@Test
 	public void testCompareAllHashEntities() throws Exception {
 		logger.info("testCompareAllHashEntities: Entering");
-		
-		dbDAO = new DbDAO(resourceName, persistenceUnit, properties);
+
+		dbDAO = new DbDAO(resourceName, A_SEQ_PU, makeProperties());
 		DbAudit dbAudit = new DbAudit(dbDAO);
-		
+
 		Set<String> classNameSet = dbDAO.getPersistenceClassNames();
 		Set<Object> mismatchResult = new HashSet<Object>();
-		for(String c : classNameSet) {
-			if (c.equals("org.onap.policy.common.ia.jpa.IntegrityAuditEntity")){
+		for (String c : classNameSet) {
+			if (c.equals("org.onap.policy.common.ia.jpa.IntegrityAuditEntity")) {
 				String resourceName1 = resourceName;
 				String resourceName2 = resourceName;
-				
+
 				IntegrityAuditEntity entry1 = new IntegrityAuditEntity();
 				IntegrityAuditEntity entry2 = new IntegrityAuditEntity();
 				Date date = new Date();
-				
+
 				/*
 				 * Two entries with the same field values
 				 */
@@ -362,10 +342,10 @@ public class DbAuditCompareEntriesTest {
 				entry1.setJdbcUser(dbUser);
 				entry1.setLastUpdated(date);
 				entry1.setNodeType(nodeType);
-				entry1.setPersistenceUnit(persistenceUnit);
+				entry1.setPersistenceUnit(A_SEQ_PU);
 				entry1.setResourceName(resourceName1);
 				entry1.setSite(siteName);
-				
+
 				entry2.setDesignated(false);
 				entry2.setJdbcDriver(dbDriver);
 				entry2.setJdbcPassword(dbPwd);
@@ -373,72 +353,71 @@ public class DbAuditCompareEntriesTest {
 				entry2.setJdbcUser(dbUser);
 				entry2.setLastUpdated(date);
 				entry2.setNodeType(nodeType);
-				entry2.setPersistenceUnit(persistenceUnit);
+				entry2.setPersistenceUnit(A_SEQ_PU);
 				entry2.setResourceName(resourceName2);
 				entry2.setSite(siteName);
-				
+
 				HashMap<Object, Object> myEntries = new HashMap<Object, Object>();
 				HashMap<Object, Object> theirEntries = new HashMap<Object, Object>();
-				
+
 				myEntries.put("pdp1", entry1);
 				theirEntries.put("pdp1", entry2);
-						
+
 				mismatchResult = dbAudit.compareEntries(myEntries, theirEntries);
-				
+
 				/*
 				 * Assert there was no mismatches
 				 */
 				assertTrue(mismatchResult.isEmpty());
-			}
-			else if (c.equals("org.onap.policy.common.ia.test.jpa.IaTestEntity")) {
+			} else if (c.equals("org.onap.policy.common.ia.jpa.IaTestEntity")) {
 				IaTestEntity iate = new IaTestEntity();
 				IaTestEntity iate2 = new IaTestEntity();
 				IaTestEntity iate3 = new IaTestEntity();
 				IaTestEntity iate4 = new IaTestEntity();
-				
+
 				Date date = new Date();
-				
+
 				/*
 				 * Four entries, 2 mismatches
 				 */
 				iate.setCreatedBy("Ford");
 				iate.setModifiedBy("Ford");
 				iate.setModifiedDate(date);
-				
+
 				iate2.setCreatedBy("Ford");
 				iate2.setModifiedBy("Zaphod");
 				iate2.setModifiedDate(date);
-				
+
 				iate3.setCreatedBy("Zaphod");
 				iate3.setModifiedBy("Ford");
 				iate3.setModifiedDate(date);
-				
+
 				iate4.setCreatedBy("Ford");
 				iate4.setModifiedBy("Ford");
 				iate4.setModifiedDate(date);
-				
+
 				HashMap<Object, Object> myEntries = new HashMap<Object, Object>();
 				HashMap<Object, Object> theirEntries = new HashMap<Object, Object>();
-				
+
 				myEntries.put("0", iate);
 				myEntries.put("1", iate2);
 				theirEntries.put("0", iate3);
 				theirEntries.put("1", iate4);
-				
+
 				mismatchResult = dbAudit.compareEntries(myEntries, theirEntries);
-				
+
 				/*
 				 * Assert that there is 2 mismatches
 				 */
 				assertEquals(2, mismatchResult.size());
 			}
 		}
-		
+
 		logger.info("testCompareAllHashEntities: Exit");
 	}
-	
+
 	/*
-	 * Tests that comparison algorithm works for each entity in the database 
+	 * Tests that comparison algorithm works for each entity in the database
 	 */
 	@Ignore
 	@Test
@@ -448,147 +427,92 @@ public class DbAuditCompareEntriesTest {
 		logger.info("Setting up DB");
 
 		IntegrityAudit.setUnitTesting(true);
-		
-		properties = new Properties();
-		properties.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
-		properties.put(IntegrityAuditProperties.DB_URL, TestUtils.DEFAULT_DB_URL);
-		properties.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
-		properties.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
-		properties.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
-		properties.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
 
-		Properties properties2 = new Properties();
-		properties2.put(IntegrityAuditProperties.DB_DRIVER, TestUtils.DEFAULT_DB_DRIVER);
-		properties2.put(IntegrityAuditProperties.DB_URL, "jdbc:h2:file:./sql/iaTest2");
-		properties2.put(IntegrityAuditProperties.DB_USER, TestUtils.DEFAULT_DB_USER);
-		properties2.put(IntegrityAuditProperties.DB_PWD, TestUtils.DEFAULT_DB_PWD);
-		properties2.put(IntegrityAuditProperties.SITE_NAME, "SiteA");
-		properties2.put(IntegrityAuditProperties.NODE_TYPE, "pdp_xacml");
-		
-		dbDriver = TestUtils.DEFAULT_DB_DRIVER;
-		dbUrl = TestUtils.DEFAULT_DB_URL;
-		dbUser = TestUtils.DEFAULT_DB_USER;
-		dbPwd = TestUtils.DEFAULT_DB_PWD;
-		siteName = "SiteA";
-		nodeType = "pdp_xacml";
-		persistenceUnit = "testPU";
-		resourceName = "pdp1";
-		
-		//Clean up the two DBs
-		EntityManagerFactory emf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
-		EntityManagerFactory emf2 = Persistence.createEntityManagerFactory(persistenceUnit, properties2);
-		
-		EntityManager em = emf.createEntityManager();
-		EntityManager em2 = emf2.createEntityManager();
-		// Start a transaction
-		EntityTransaction et = em.getTransaction();
-		EntityTransaction et2 = em2.getTransaction();
+		Properties properties = makeProperties();
 
-		/*
-		 * Delete entries in first DB
-		 */
-		et.begin();
+		Properties properties2 = makeProperties();
+		properties2.put(IntegrityAuditProperties.DB_URL,
+				"jdbc:h2:mem:" + DbAuditCompareEntriesTest.class.getSimpleName() + "2");
 
-		// Clean the IntegrityAuditEntity table
-		em.createQuery("Delete from IntegrityAuditEntity").executeUpdate();
+		// Clean up the two DBs
+		truncateTables(properties);
+		truncateTables(properties2);
 
-		// commit transaction
-		et.commit();
-		
-		et.begin();
-
-		// Clean the IaTestEntity table
-		em.createQuery("Delete from IaTestEntity").executeUpdate();
-
-		// commit transaction
-		et.commit();
-		em.close();
-		
-		/*
-		 * Delete entries in second DB
-		 */
-		et2.begin();
-
-		// Clean the IntegrityAuditEntity table
-		em2.createQuery("Delete from IntegrityAuditEntity").executeUpdate();
-
-		// commit transaction
-		et2.commit();
-		
-		et2.begin();
-
-		// Clean the IaTestEntity table
-		em2.createQuery("Delete from IaTestEntity").executeUpdate();
-
-		// commit transaction
-		et2.commit();
-		em2.close();
-		logger.info("Exiting set up");
-		
 		// Add entries into DB1
-		dbDAO = new DbDAO(resourceName, persistenceUnit, properties);
-		new DbDAO("pdp2", persistenceUnit, properties);
+		dbDAO = new DbDAO(resourceName, A_SEQ_PU, properties);
+		new DbDAO("pdp2", A_SEQ_PU, properties).destroy();
 		DbAudit dbAudit = new DbAudit(dbDAO);
-		
+
 		// Add entries into DB2
-		DbDAO dbDAO3 = new DbDAO(resourceName, persistenceUnit, properties2);
-		new DbDAO("pdp2", persistenceUnit, properties2);
-		
+		DbDAO dbDAO3 = new DbDAO(resourceName, A_SEQ_PU, properties2);
+		new DbDAO("pdp2", A_SEQ_PU, properties2).destroy();
+
 		// Pull all entries and compare
 		Set<String> classNameSet = dbDAO.getPersistenceClassNames();
 		Map<Object, Object> myEntries;
 		Map<Object, Object> theirEntries;
 		Set<Object> mismatchResult = new HashSet<Object>();
 		String className;
-		for(String c : classNameSet) {
+		for (String c : classNameSet) {
 			className = c;
 			logger.info("classNameSet entry = " + c);
-			myEntries = dbDAO.getAllEntries(persistenceUnit, properties, className);
-			theirEntries = dbDAO3.getAllEntries(persistenceUnit, properties2, className);
+			myEntries = dbDAO.getAllEntries(A_SEQ_PU, properties, className);
+			theirEntries = dbDAO3.getAllEntries(A_SEQ_PU, properties2, className);
 			mismatchResult = dbAudit.compareEntries(myEntries, theirEntries);
-			if(className.contains("IntegrityAuditEntity")){
+			if (className.contains("IntegrityAuditEntity")) {
 				break;
 			}
 		}
 		
+		dbDAO3.destroy();
+
 		// Assert that there is 2 mismatches between IntegrityAuditEntity tables
 		assertEquals(2, mismatchResult.size());
-		
+
 		logger.info("testCompareAllDbEntities: Exit");
 	}
-	
-	/*
-	 * Tests that differences in embedded classes are still caught  
+
+	/**
+	 * @param properties
 	 */
-	//@Ignore
+	private void truncateTables(Properties properties) {
+		truncateTable(properties, A_SEQ_PU, "IntegrityAuditEntity");
+		truncateTable(properties, A_SEQ_PU, "IaTestEntity");
+	}
+
+	/*
+	 * Tests that differences in embedded classes are still caught
+	 */
+	// @Ignore
 	@Test
 	public void testEmbeddedClass() throws Exception {
 		logger.info("testEmbeddedClasses: Entering");
-		
-		dbDAO = new DbDAO(resourceName, persistenceUnit, properties);
+
+		dbDAO = new DbDAO(resourceName, A_SEQ_PU, properties);
 		DbAudit dbAudit = new DbAudit(dbDAO);
-		
+
 		String className = null;
-		//There is only one entry IntegrityAuditEntity, but we will check anyway
+		// There is only one entry IntegrityAuditEntity, but we will check
+		// anyway
 		Set<String> classNameSet = dbDAO.getPersistenceClassNames();
-		for(String c : classNameSet){
-			if (c.equals("org.onap.policy.common.ia.test.jpa.IaTestEntity")){
+		for (String c : classNameSet) {
+			if (c.equals("org.onap.policy.common.ia.jpa.IaTestEntity")) {
 				className = c;
 			}
 		}
-		
+
 		IaTestEntity iate = new IaTestEntity();
 		IaTestEntity iate2 = new IaTestEntity();
-		
+
 		Date date = new Date();
-		
+
 		PersonSample person = new PersonSample("Ford", "Prefect", 21);
 		PersonSample person2 = new PersonSample("Zaphod", "Beeblebrox", 25);
-		
+
 		/*
-		 * Silly tests to bump coverage stats, not sure why
-		 * they are counting PersonSample to begin with. Will have to
-		 * look into that at some point.
+		 * Silly tests to bump coverage stats, not sure why they are counting
+		 * PersonSample to begin with. Will have to look into that at some
+		 * point.
 		 */
 		assertNotEquals(person.getAge(), person2.getAge());
 		assertNotEquals(person.getFirstName(), person2.getFirstName());
@@ -604,27 +528,27 @@ public class DbAuditCompareEntriesTest {
 		iate.setModifiedBy("Zaphod");
 		iate.setModifiedDate(date);
 		iate.setPersonTest(person);
-		
+
 		iate2.setCreatedBy("Ford");
 		iate2.setModifiedBy("Zaphod");
 		iate2.setModifiedDate(date);
 		iate2.setPersonTest(person2);
-		
+
 		dbAudit.writeAuditDebugLog(className, "resource1", "resource2", iate, iate2);
-		
+
 		HashMap<Object, Object> myEntries = new HashMap<Object, Object>();
 		HashMap<Object, Object> theirEntries = new HashMap<Object, Object>();
-		
+
 		myEntries.put("0", iate);
 		theirEntries.put("0", iate2);
-				
+
 		Set<Object> result = dbAudit.compareEntries(myEntries, theirEntries);
-		
+
 		/*
 		 * Assert that there are no mismatches returned
 		 */
 		assertTrue(!result.isEmpty());
-		
+
 		logger.info("testEmbeddedClasses: Exit");
 	}
 }
