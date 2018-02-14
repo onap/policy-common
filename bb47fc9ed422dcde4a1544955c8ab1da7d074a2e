@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_a179a8c9",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 605,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-02-14T12:56:23Z",
+      "side": 1,
+      "message": "Does it complain about this one also?",
+      "range": {
+        "startLine": 605,
+        "startChar": 1,
+        "endLine": 605,
+        "endChar": 18
+      },
+      "revId": "bb47fc9ed422dcde4a1544955c8ab1da7d074a2e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
