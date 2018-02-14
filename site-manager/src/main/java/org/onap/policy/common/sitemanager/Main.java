@@ -52,6 +52,8 @@ import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.onap.policy.common.im.jmx.ComponentAdminMBean;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -64,6 +66,8 @@ import org.apache.commons.cli.ParseException;
  */
 public class Main
 {
+	private static final Logger logger = LoggerFactory.getLogger(Main.class.getName());
+	
   // table mapping 'resourceName' to 'StateManagmentEntity'
   static HashMap<String, StateManagementEntity> stateManagementTable =
 	new HashMap<String, StateManagementEntity>();
@@ -597,7 +601,7 @@ public class Main
 	String formatString = sb.toString();
 
 	// display column headers
-	System.out.printf(formatString, (Object[])labels);
+	logger.info(formatString, (Object[])labels);
 	System.out.printf(formatString, (Object[])underlines);
 
 	// display all of the rows
