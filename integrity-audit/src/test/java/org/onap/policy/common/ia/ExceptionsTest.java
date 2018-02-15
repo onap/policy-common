@@ -18,7 +18,7 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.ia.test;
+package org.onap.policy.common.ia;
 
 import static org.junit.Assert.assertEquals;
 
