@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,9 +75,9 @@ public class DbDAO {
 	 * @param resourceName
 	 * @param persistenceUnit
 	 * @param properties
-	 * @throws Exception
+	 * @throws IntegrityAuditException
 	 */
-	public DbDAO(String resourceName, String persistenceUnit, Properties properties) throws Exception {
+	public DbDAO(String resourceName, String persistenceUnit, Properties properties) throws IntegrityAuditException {
 		this(resourceName, persistenceUnit, properties, null);
 	}
 
@@ -89,10 +89,10 @@ public class DbDAO {
 	 * @param properties
 	 * @param lastUpdateDate	may be {@code null}
 	 * @param altDbUrl			may be {@code null}
-	 * @throws Exception
+	 * @throws IntegrityAuditException
 	 */
 	protected DbDAO(String resourceName, String persistenceUnit, Properties properties, String altDbUrl)
-			throws Exception {
+			throws IntegrityAuditException {
 		logger.debug("DbDAO contructor: enter");
 
 		validateProperties(resourceName, persistenceUnit, properties);

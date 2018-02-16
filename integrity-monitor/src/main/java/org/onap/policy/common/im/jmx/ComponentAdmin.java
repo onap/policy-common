@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.onap.policy.common.im.IntegrityMonitor;
+import org.onap.policy.common.im.IntegrityMonitorException;
 import org.onap.policy.common.im.StateManagement;
 
 /**
@@ -187,7 +188,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 	}
 
 	@Override
-	public void test() throws Exception {
+	public void test() throws IntegrityMonitorException {
 		// Call evaluateSanity on IntegrityMonitor to run the test
 		logger.debug("test() called...");
 		if (integrityMonitor != null) {
@@ -201,7 +202,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 	}
 
 	@Override
-	public void lock() throws Exception {
+	public void lock() throws IntegrityMonitorException {
 		logger.debug("lock() called...");
 		if (stateManager != null) {
 			stateManager.lock();
@@ -213,7 +214,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 	}
 
 	@Override
-	public void unlock() throws Exception {
+	public void unlock() throws IntegrityMonitorException {
 		logger.debug("unlock() called...");
 		if (stateManager != null) {
 			stateManager.unlock();

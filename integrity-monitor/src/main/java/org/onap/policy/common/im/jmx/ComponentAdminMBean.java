@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@
 
 package org.onap.policy.common.im.jmx;
 
+import org.onap.policy.common.im.IntegrityMonitorException;
+
 /**
  * Provides operations to test health, lock and unlock components.
  */
@@ -27,24 +29,24 @@ public interface ComponentAdminMBean {
 	/**
 	 * Test health of component.
 	 * 
-	 * @throws Exception
+	 * @throws IntegrityMonitorException
 	 *            if the component fails the health check
 	 */
-	void test() throws Exception;
+	void test() throws IntegrityMonitorException;
 
 	/**
 	 * Administratively lock component.
 	 * 
-	 * @throws Exception
+	 * @throws IntegrityMonitorException
 	 *            if the component lock fails
 	 */
-	void lock() throws Exception;
+	void lock() throws IntegrityMonitorException;
 	
 	/**
 	 * Administratively unlock component.
 	 * 
-	 * @throws Exception
+	 * @throws IntegrityMonitorException
 	 *            if the component unlock fails
 	 */
-	void unlock() throws Exception;
+	void unlock() throws IntegrityMonitorException;
 }

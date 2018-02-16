@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
 
+import org.onap.policy.common.im.IntegrityMonitorException;
 import org.onap.policy.common.logging.flexlogger.FlexLogger;
 import org.onap.policy.common.logging.flexlogger.Logger;
 
@@ -86,35 +87,41 @@ public final class JmxAgentConnection {
 	/**
 	 * Get a connection to the jmxAgent MBeanServer.
 	 * @return the connection
-	 * @throws Exception on error
+	 * @throws IntegrityMonitorException on error
 	 */
-	public MBeanServerConnection getMBeanConnection() throws Exception {
-		JMXServiceURL url;
-		if (jmxUrl == null) {
-			url = new JMXServiceURL(jmxAgentUrl(host, port));
-		}
-		else {
-			url = new JMXServiceURL(jmxUrl);
-		}
-		Map<String, Object> env = new HashMap<>();
-		
-		connector = JMXConnectorFactory.newJMXConnector(url, env);
-		connector.connect();
-		connector.addConnectionNotificationListener(
-				new NotificationListener() {
+	public MBeanServerConnection getMBeanConnection() throws IntegrityMonitorException {
 
-					@Override
-					public void handleNotification(
-							Notification notification, Object handback) {
-						if (notification.getType().equals(
-								JMXConnectionNotification.FAILED)) {
-							// handle disconnect
-							disconnect();
+		try {
+			JMXServiceURL url;
+			if (jmxUrl == null) {
+				url = new JMXServiceURL(jmxAgentUrl(host, port));
+			}
+			else {
+				url = new JMXServiceURL(jmxUrl);
+			}
+			Map<String, Object> env = new HashMap<>();
+			
+			connector = JMXConnectorFactory.newJMXConnector(url, env);
+			connector.connect();
+			connector.addConnectionNotificationListener(
+					new NotificationListener() {
+
+						@Override
+						public void handleNotification(
+								Notification notification, Object handback) {
+							if (notification.getType().equals(
+									JMXConnectionNotification.FAILED)) {
+								// handle disconnect
+								disconnect();
+							}
 						}
-					}
-				}, null, null);
-
-		return connector.getMBeanServerConnection();
+					}, null, null);
+			
+			return connector.getMBeanServerConnection();
+			
+		} catch (IOException e) {
+			throw new IntegrityMonitorException(e);
+		}
 	}
 	
 	/**

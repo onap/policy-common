@@ -589,7 +589,7 @@ public class IntegrityAuditTestBase {
 		 * with the thread.
 		 */
 		@Override
-		public final void startAuditThread() throws Exception {
+		public final void startAuditThread() throws IntegrityAuditException {
 			if (queue != null) {
 				// queue up a bogus latch, in case a thread is still running
 				queue.add(new CountDownLatch(1) {
@@ -606,7 +606,14 @@ public class IntegrityAuditTestBase {
 				// wait for the thread to start
 				CountDownLatch latch = new CountDownLatch(1);
 				queue.add(latch);
-				waitLatch(latch);
+				
+				try {
+					waitLatch(latch);
+					
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+					throw new IntegrityAuditException(e);
+				}
 			}
 		}
 

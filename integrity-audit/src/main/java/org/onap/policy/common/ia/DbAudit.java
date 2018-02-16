@@ -79,7 +79,7 @@ public class DbAudit {
 	 * @param nodeType
 	 * @throws Exception
 	 */
-	public void dbAudit(String resourceName, String persistenceUnit, String nodeType) throws Exception {
+	public void dbAudit(String resourceName, String persistenceUnit, String nodeType) throws IntegrityAuditException {
 		
 		if (logger.isDebugEnabled()) {
 			logger.debug("dbAudit: Entering, resourceName=" + resourceName
@@ -225,7 +225,7 @@ public class DbAudit {
 				if (logger.isDebugEnabled()) {
 					logger.debug("dbAudit: Sleeping " + dbAuditSleepMillis + "ms");
 				}
-				Thread.sleep(dbAuditSleepMillis);
+				sleep();
 				if (logger.isDebugEnabled()) {
 					logger.debug("dbAudit: Waking from sleep");
 				}
@@ -328,7 +328,7 @@ public class DbAudit {
 				if (logger.isDebugEnabled()) {
 					logger.debug("dbAudit: Second comparison; sleeping " + dbAuditSleepMillis + "ms");
 				}
-				Thread.sleep(dbAuditSleepMillis);
+				sleep();
 				if (logger.isDebugEnabled()) {
 					logger.debug("dbAudit: Second comparison; waking from sleep");
 				}
@@ -345,6 +345,20 @@ public class DbAudit {
 		}
 	
 		return; //all done
+	}
+
+	/**
+	 * Sleeps a bit.
+	 * @throws IntegrityAuditException
+	 */
+	private void sleep() throws IntegrityAuditException {
+		try {
+			Thread.sleep(dbAuditSleepMillis);
+			
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new IntegrityAuditException(e);
+		}
 	}
 
 	/**
@@ -435,19 +449,24 @@ public class DbAudit {
 	 * @param resourceName2
 	 * @param entry1
 	 * @param entry2
-	 * @throws ClassNotFoundException
+	 * @throws IntegrityAuditException
 	 */
 	public void writeAuditDebugLog(String clazzName, String resourceName1,
-			String resourceName2, Object entry1, Object entry2) throws ClassNotFoundException{
-		Class<?> entityClass = Class.forName(clazzName);
-		String tableName = entityClass.getAnnotation(Table.class).name();
-		String msg = "\nDB Audit Error: "
-				+ "\n    Table Name: " + tableName
-				+ "\n    Entry 1 (short prefix style): " + resourceName1 + ": " + new ReflectionToStringBuilder(entry1,ToStringStyle.SHORT_PREFIX_STYLE).toString()
-				+ "\n    Entry 2 (short prefix style): " + resourceName2 + ": " + new ReflectionToStringBuilder(entry2,ToStringStyle.SHORT_PREFIX_STYLE).toString()
-				+ "\n    Entry 1 (recursive style): " + resourceName1 + ": " + new ReflectionToStringBuilder(entry1, new RecursiveToStringStyle()).toString()
-				+ "\n    Entry 2 (recursive style): " + resourceName2 + ": " + new ReflectionToStringBuilder(entry2, new RecursiveToStringStyle()).toString();
-		logger.debug(msg);
+			String resourceName2, Object entry1, Object entry2) throws IntegrityAuditException{
+		try {
+			Class<?> entityClass = Class.forName(clazzName);
+			String tableName = entityClass.getAnnotation(Table.class).name();
+			String msg = "\nDB Audit Error: "
+					+ "\n    Table Name: " + tableName
+					+ "\n    Entry 1 (short prefix style): " + resourceName1 + ": " + new ReflectionToStringBuilder(entry1,ToStringStyle.SHORT_PREFIX_STYLE).toString()
+					+ "\n    Entry 2 (short prefix style): " + resourceName2 + ": " + new ReflectionToStringBuilder(entry2,ToStringStyle.SHORT_PREFIX_STYLE).toString()
+					+ "\n    Entry 1 (recursive style): " + resourceName1 + ": " + new ReflectionToStringBuilder(entry1, new RecursiveToStringStyle()).toString()
+					+ "\n    Entry 2 (recursive style): " + resourceName2 + ": " + new ReflectionToStringBuilder(entry2, new RecursiveToStringStyle()).toString();
+			logger.debug(msg);
+			
+		} catch (ClassNotFoundException e) {
+			throw new IntegrityAuditException(e);
+		}
 		
 	}
 	
@@ -457,16 +476,20 @@ public class DbAudit {
 	 * @param resourceName1
 	 * @param resourceName2
 	 * @param keys
-	 * @throws ClassNotFoundException
+	 * @throws IntegrityAuditException
 	 */
 	public void writeAuditSummaryLog(String clazzName, String resourceName1, 
-			String resourceName2, String keys) throws ClassNotFoundException{
-		Class<?> entityClass = Class.forName(clazzName);
-		String tableName = entityClass.getAnnotation(Table.class).name();
-		String msg = " DB Audit Error: Table Name: " + tableName
-				+ ";  Mismatch between nodes: " + resourceName1 +" and " + resourceName2
-				+ ";  Mismatched entries (keys): " + keys;
-		logger.info(msg);
+			String resourceName2, String keys) throws IntegrityAuditException{
+		try {
+			Class<?> entityClass = Class.forName(clazzName);
+			String tableName = entityClass.getAnnotation(Table.class).name();
+			String msg = " DB Audit Error: Table Name: " + tableName
+					+ ";  Mismatch between nodes: " + resourceName1 +" and " + resourceName2
+					+ ";  Mismatched entries (keys): " + keys;
+			logger.info(msg);
+		} catch (ClassNotFoundException e) {
+			throw new IntegrityAuditException(e);
+		}
 	}
 
 	/**

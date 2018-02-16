@@ -63,7 +63,7 @@ public class IntegrityAudit {
 	 * @param resourceName
 	 * @param persistenceUnit
 	 * @param properties
-	 * @throws Exception
+	 * @throws IntegrityAuditException
 	 */
 	public IntegrityAudit(String resourceName, String persistenceUnit, Properties properties) throws IntegrityAuditException {
 		
@@ -212,18 +212,18 @@ public class IntegrityAudit {
 	}	
 	/**
 	 * Starts the audit thread
-	 * @throws Exception
+	 * @throws IntegrityAuditException
 	 */
-	public void startAuditThread() throws Exception {
+	public void startAuditThread() throws IntegrityAuditException {
 		startAuditThread(null);
 	}
 	/**
 	 * Starts the audit thread
 	 * @param queue 
 	 * @return {@code true} if the thread was started, {@code false} otherwise
-	 * @throws Exception
+	 * @throws IntegrityAuditException
 	 */
-	protected boolean startAuditThread(BlockingQueue<CountDownLatch> queue) throws Exception {
+	protected boolean startAuditThread(BlockingQueue<CountDownLatch> queue) throws IntegrityAuditException {
 
 		logger.info("startAuditThread: Entering");
 		
