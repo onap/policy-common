@@ -36,4 +36,10 @@ public class IntegrityMonitorException extends Exception{
 		super(message, cause);
 	}
 
+	public IntegrityMonitorException(String message, Throwable cause, 
+                                       boolean enableSuppression, boolean writableStackTrace)
+	{
+		super(message, cause, enableSuppression, writableStackTrace);
+	}
+
 }

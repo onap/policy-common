@@ -197,10 +197,10 @@ public class IntegrityMonitor {
 	 *            The resource name of the resource
 	 * @param properties
 	 *            a set of properties passed in from the resource
-	 * @throws Exception
+	 * @throws IntegrityMonitorException
 	 *             if any errors are encountered in the constructor
 	 */
-	protected IntegrityMonitor(String resourceName, Properties properties) throws Exception {
+	protected IntegrityMonitor(String resourceName, Properties properties) throws IntegrityMonitorException {
 
 		this(resourceName, properties, null);
 	}
@@ -218,11 +218,11 @@ public class IntegrityMonitor {
 	 *            a set of properties passed in from the resource
 	 * @param queue
 	 *            queue to use to control the FPManager thread, or {@code null}
-	 * @throws Exception
+	 * @throws IntegrityMonitorException
 	 *             if any errors are encountered in the constructor
 	 */
 	protected IntegrityMonitor(String resourceName, Properties properties, BlockingQueue<CountDownLatch> queue)
-			throws Exception {
+			throws IntegrityMonitorException {
 
 		// singleton check since this constructor can be called from a child or
 		// sub-class
@@ -344,18 +344,23 @@ public class IntegrityMonitor {
 			throw e;
 		}
 
-		// create instance of StateMangement class and pass emf to it
-		stateManager = new StateManagement(emf, resourceName);
+		try {
+			// create instance of StateMangement class and pass emf to it
+			stateManager = new StateManagement(emf, resourceName);
 
-		/**
-		 * Initialize the state and status attributes. This will maintain any
-		 * Administrative state value but will set the operational state =
-		 * enabled, availability status = null, standby status = null. The
-		 * integrity monitor will set the operational state via the FPManager
-		 * and the owning application must set the standby status by calling
-		 * promote/demote on the StateManager.
-		 */
-		stateManager.initializeState();
+			/**
+			 * Initialize the state and status attributes. This will maintain any
+			 * Administrative state value but will set the operational state =
+			 * enabled, availability status = null, standby status = null. The
+			 * integrity monitor will set the operational state via the FPManager
+			 * and the owning application must set the standby status by calling
+			 * promote/demote on the StateManager.
+			 */
+			stateManager.initializeState();
+			
+		} catch(StateManagementException e) {
+			throw new IntegrityMonitorException(e);
+		}
 
 		// create management bean
 		try {
@@ -378,11 +383,11 @@ public class IntegrityMonitor {
 	 * @param properties
 	 *            a set of properties passed in from the resource
 	 * @return The new instance of IntegrityMonitor
-	 * @throws Exception
+	 * @throws IntegrityMonitorException
 	 *             if unable to create jmx url or the constructor returns an
 	 *             exception
 	 */
-	public static IntegrityMonitor getInstance(String resourceName, Properties properties) throws Exception {
+	public static IntegrityMonitor getInstance(String resourceName, Properties properties) throws IntegrityMonitorException {
 		return getInstance(resourceName, properties, null);
 	}
 
@@ -398,12 +403,12 @@ public class IntegrityMonitor {
 	 * @param queue
 	 *            queue to use to control the FPManager thread, or {@code null}
 	 * @return The new instance of IntegrityMonitor
-	 * @throws Exception
+	 * @throws IntegrityMonitorException
 	 *             if unable to create jmx url or the constructor returns an
 	 *             exception
 	 */
 	protected static IntegrityMonitor getInstance(String resourceName, Properties properties,
-			BlockingQueue<CountDownLatch> queue) throws Exception {
+			BlockingQueue<CountDownLatch> queue) throws IntegrityMonitorException {
 
 		synchronized (getInstanceLock) {
 			logger.debug("getInstance() called - resourceName= {}", resourceName);
@@ -420,7 +425,7 @@ public class IntegrityMonitor {
 		}
 	}
 
-	public static IntegrityMonitor getInstance() throws Exception {
+	public static IntegrityMonitor getInstance() throws IntegrityMonitorException {
 		logger.debug("getInstance() called");
 		if (instance == null) {
 			String msg = "No IntegrityMonitor instance exists."
@@ -524,7 +529,7 @@ public class IntegrityMonitor {
 	 * disabled, it will include the dependencyCheckErrorMsg which includes
 	 * information about any dependency (node) which has failed.
 	 */
-	public void evaluateSanity() throws Exception {
+	public void evaluateSanity() throws IntegrityMonitorException {
 		logger.debug("evaluateSanity called ....");
 		synchronized (evaluateSanityLock) {
 
@@ -1099,7 +1104,7 @@ public class IntegrityMonitor {
 	 *             throws admin state exception if resource is locked
 	 * @throws StandbyStatusException
 	 */
-	public void startTransaction() throws AdministrativeStateException, StandbyStatusException {
+	public void startTransaction() throws IntegrityMonitorException {
 
 		synchronized (startTransactionLock) {
 			// check admin state and throw exception if locked
@@ -1225,7 +1230,7 @@ public class IntegrityMonitor {
 	/**
 	 * Read and validate properties
 	 * 
-	 * @throws Exception
+	 * @throws IntegrityMonitorPropertiesException
 	 */
 	private static void validateProperties(Properties prop) throws IntegrityMonitorPropertiesException {
 

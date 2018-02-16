@@ -44,7 +44,7 @@ public class StateTransition {
     
   /**
    * StateTransition constructor
-   * @throws Exception
+   * @throws StateTransitionException
    */
   public StateTransition() throws StateTransitionException
   {
@@ -72,7 +72,7 @@ public class StateTransition {
    * @param standbyStatus
    * @param actionName
    * @return
-   * @throws Exception
+   * @throws StateTransitionException
    */
   public StateElement getEndingState(String adminState, String opState, String availStatus, 
 		  String standbyStatus, String actionName) throws StateTransitionException

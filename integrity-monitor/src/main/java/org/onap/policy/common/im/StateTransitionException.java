@@ -20,7 +20,7 @@
 
 package org.onap.policy.common.im;
 
-public class StateTransitionException extends Exception{
+public class StateTransitionException extends IntegrityMonitorException {
 	private static final long serialVersionUID = 1L;
 	public StateTransitionException() {
 		super();

@@ -20,7 +20,9 @@
 
 package org.onap.policy.common.im.jmx;
 
-public class ComponentAdminException extends Exception {
+import org.onap.policy.common.im.IntegrityMonitorException;
+
+public class ComponentAdminException extends IntegrityMonitorException {
 	private static final long serialVersionUID = 1L;
 
 	public ComponentAdminException() {

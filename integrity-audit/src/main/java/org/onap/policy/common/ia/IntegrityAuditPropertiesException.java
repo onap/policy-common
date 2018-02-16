@@ -20,7 +20,7 @@
 
 package org.onap.policy.common.ia;
 
-public class IntegrityAuditPropertiesException extends Exception{
+public class IntegrityAuditPropertiesException extends IntegrityAuditException {
 	private static final long serialVersionUID = 1L;
 	public IntegrityAuditPropertiesException() {
 		super();

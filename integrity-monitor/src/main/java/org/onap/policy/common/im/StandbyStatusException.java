@@ -20,7 +20,7 @@
 
 package org.onap.policy.common.im;
 
-public class StandbyStatusException extends Exception {
+public class StandbyStatusException extends IntegrityMonitorException {
 	/**
 	 * 
 	 */

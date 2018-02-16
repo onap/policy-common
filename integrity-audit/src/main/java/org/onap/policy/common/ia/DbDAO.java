@@ -75,9 +75,9 @@ public class DbDAO {
 	 * @param resourceName
 	 * @param persistenceUnit
 	 * @param properties
-	 * @throws Exception
+	 * @throws IntegrityAuditException
 	 */
-	public DbDAO(String resourceName, String persistenceUnit, Properties properties) throws Exception {
+	public DbDAO(String resourceName, String persistenceUnit, Properties properties) throws IntegrityAuditException {
 		this(resourceName, persistenceUnit, properties, null);
 	}
 
@@ -89,10 +89,10 @@ public class DbDAO {
 	 * @param properties
 	 * @param lastUpdateDate	may be {@code null}
 	 * @param altDbUrl			may be {@code null}
-	 * @throws Exception
+	 * @throws IntegrityAuditException
 	 */
 	protected DbDAO(String resourceName, String persistenceUnit, Properties properties, String altDbUrl)
-			throws Exception {
+			throws IntegrityAuditException {
 		logger.debug("DbDAO contructor: enter");
 
 		validateProperties(resourceName, persistenceUnit, properties);

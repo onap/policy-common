@@ -20,7 +20,7 @@
 
 package org.onap.policy.common.im;
 
-public class StateManagementException extends Exception{
+public class StateManagementException extends IntegrityMonitorException {
 	private static final long serialVersionUID = 1L;
 	public StateManagementException() {
 		super();

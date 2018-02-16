@@ -20,7 +20,7 @@
 
 package org.onap.policy.common.im;
 
-public class AllSeemsWellException extends Exception {
+public class AllSeemsWellException extends IntegrityMonitorException {
 	
 	/**
 	 * 

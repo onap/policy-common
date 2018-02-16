@@ -61,7 +61,7 @@ public class ExceptionsTest extends ExceptionsTester {
 
 	@Test
 	public void testIntegrityMonitorException() throws Exception {
-		assertEquals(4, test(IntegrityMonitorException.class));
+		assertEquals(5, test(IntegrityMonitorException.class));
 	}
 
 	@Test

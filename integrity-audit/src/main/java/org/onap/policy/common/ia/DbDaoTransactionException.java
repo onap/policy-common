@@ -20,7 +20,7 @@
 
 package org.onap.policy.common.ia;
 
-public class DbDaoTransactionException extends Exception{
+public class DbDaoTransactionException extends IntegrityAuditException {
 	private static final long serialVersionUID = 1L;
 	public DbDaoTransactionException() {
 		super();

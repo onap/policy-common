@@ -126,11 +126,11 @@ public class AuditThread extends Thread {
 	 * @param properties
 	 * @param integrityAuditPeriodSeconds
 	 * @param integrityAudit
-	 * @throws Exception
+	 * @throws IntegrityAuditException
 	 */
 	public AuditThread(String resourceName, String persistenceUnit,
 			Properties properties, int integrityAuditPeriodSeconds, IntegrityAudit integrityAudit)
-			throws Exception {
+			throws IntegrityAuditException {
 
 		this(resourceName, persistenceUnit, properties, TimeUnit.SECONDS.toMillis(integrityAuditPeriodSeconds),
 				integrityAudit, null);
@@ -144,12 +144,12 @@ public class AuditThread extends Thread {
 	 * @param integrityAuditMillis
 	 * @param integrityAudit
 	 * @param queue 
-	 * @throws Exception
+	 * @throws IntegrityAuditException
 	 */
 	public AuditThread(String resourceName, String persistenceUnit,
 			Properties properties, long integrityAuditMillis, IntegrityAudit integrityAudit,
 			BlockingQueue<CountDownLatch> queue)
-			throws Exception {
+			throws IntegrityAuditException {
 		this.resourceName = resourceName;
 		this.persistenceUnit = persistenceUnit;
 		this.properties = properties;
@@ -833,7 +833,7 @@ public class AuditThread extends Thread {
 		return auditCompleted;
 	}
 
-	private void runAudit(DbAudit dbAudit) throws Exception {
+	private void runAudit(DbAudit dbAudit) throws IntegrityAuditException {
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("runAudit: Entering, dbAudit=" + dbAudit
