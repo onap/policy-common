@@ -607,7 +607,7 @@ public class Main
 	// display all of the rows
 	for (String[] values : treeset)
 	  {
-		System.out.printf(formatString, (Object[])values);
+		logger.info(formatString, (Object[])values);
 	  }
   }
 }
