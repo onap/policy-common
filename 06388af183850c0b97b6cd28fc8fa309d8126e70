@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_d395a187",
+        "filename": "integrity-monitor/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-02-19T17:39:29Z",
+      "side": 1,
+      "message": "existing issue, but h2 probably this should be test scope, no need to do it right now, in case it breaks something underneath ..",
+      "revId": "06388af183850c0b97b6cd28fc8fa309d8126e70",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_33ec052a",
+        "filename": "pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-02-19T17:39:29Z",
+      "side": 1,
+      "message": "existing not sure why this is a range, it is used for test purposes, it can break stuff with newer versions, safer to fix it to 1.4.186 and remove the range.   Existing issue, not necessary to change.",
+      "revId": "06388af183850c0b97b6cd28fc8fa309d8126e70",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_3385e559",
+        "filename": "site-manager/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-02-19T17:39:29Z",
+      "side": 1,
+      "message": "do you want to move this version to dependency-management in parent pom?",
+      "revId": "06388af183850c0b97b6cd28fc8fa309d8126e70",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_538af16a",
+        "filename": "utils/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-02-19T17:39:29Z",
+      "side": 1,
+      "message": "move to dependency management in parent pom ?",
+      "revId": "06388af183850c0b97b6cd28fc8fa309d8126e70",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
