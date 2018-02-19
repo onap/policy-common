@@ -66,14 +66,14 @@ public class ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Throwable> int testThrowable(Class<T> claz) {
+	public final <T extends Throwable> int testAllThrowable(Class<T> claz) {
 		int ncons = 0;
 
-		ncons += testThrowable_Default(claz);
-		ncons += testThrowable_StringConstuctor(claz);
-		ncons += testThrowable_Throwable(claz);
-		ncons += testThrowable_StringThrowable(claz);
-		ncons += testThrowable_StringThrowableBooleanBoolean(claz);
+		ncons += testDefault(claz);
+		ncons += testString(claz);
+		ncons += testThrowable(claz);
+		ncons += testStringThrowable(claz);
+		ncons += testStringThrowableBooleanBoolean(claz);
 
 		return ncons;
 	}
@@ -99,7 +99,7 @@ public class ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Throwable> int testThrowable_Default(Class<T> claz) {
+	public final <T extends Throwable> int testDefault(Class<T> claz) {
 		Constructor<T> cons = getConstructor(claz, "default");
 		if (cons == null) {
 			return 0;
@@ -136,7 +136,7 @@ public class ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Throwable> int testThrowable_StringConstuctor(Class<T> claz) {
+	public final <T extends Throwable> int testString(Class<T> claz) {
 		Constructor<T> cons = getConstructor(claz, "string", String.class);
 		if (cons == null) {
 			return 0;
@@ -173,7 +173,7 @@ public class ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Throwable> int testThrowable_Throwable(Class<T> claz) {
+	public final <T extends Throwable> int testThrowable(Class<T> claz) {
 		Constructor<T> cons = getConstructor(claz, "throwable", Throwable.class);
 		if (cons == null) {
 			return 0;
@@ -211,7 +211,7 @@ public class ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Throwable> int testThrowable_StringThrowable(Class<T> claz) {
+	public final <T extends Throwable> int testStringThrowable(Class<T> claz) {
 		Constructor<T> cons = getConstructor(claz, "string-throwable", String.class, Throwable.class);
 		if (cons == null) {
 			return 0;
@@ -251,7 +251,7 @@ public class ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Throwable> int testThrowable_StringThrowableBooleanBoolean(Class<T> claz) {
+	public final <T extends Throwable> int testStringThrowableBooleanBoolean(Class<T> claz) {
 		Constructor<T> cons = getConstructor(claz, "string-throwable-flags", String.class, Throwable.class,
 				Boolean.TYPE, Boolean.TYPE);
 		if (cons == null) {
@@ -259,13 +259,13 @@ public class ThrowablesTester {
 		}
 
 		// test each combination of "message" and "cause"
-		testThrowable_MessageCauseCombos(cons);
+		testMessageCauseCombos(cons);
 
 		// test each combination of the boolean flags
-		testThrowable_SuppressStack(cons);
-		testThrowable_SuppressNoStack(cons);
-		testThrowable_NoSuppressStack(cons);
-		testThrowable_NoSuppressNoStack(cons);
+		testSuppressStack(cons);
+		testSuppressNoStack(cons);
+		testNoSuppressStack(cons);
+		testNoSuppressNoStack(cons);
 
 		return 1;
 	}
@@ -284,7 +284,7 @@ public class ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Throwable> void testThrowable_MessageCauseCombos(Constructor<T> cons) {
+	public final <T extends Throwable> void testMessageCauseCombos(Constructor<T> cons) {
 		T ex;
 
 		ex = newInstance(cons, null, null, true, true);
@@ -322,11 +322,11 @@ public class ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Throwable> void testThrowable_FlagCombos(Constructor<T> cons) {
-		testThrowable_SuppressStack(cons);
-		testThrowable_SuppressNoStack(cons);
-		testThrowable_NoSuppressStack(cons);
-		testThrowable_NoSuppressNoStack(cons);
+	public final <T extends Throwable> void testFlagCombos(Constructor<T> cons) {
+		testSuppressStack(cons);
+		testSuppressNoStack(cons);
+		testNoSuppressStack(cons);
+		testNoSuppressNoStack(cons);
 	}
 
 	/**
@@ -349,7 +349,7 @@ public class ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Throwable> void testThrowable_SuppressStack(Constructor<T> cons) {
+	public final <T extends Throwable> void testSuppressStack(Constructor<T> cons) {
 		T ex = newInstance(cons, "yes,yes", CAUSE, true, true);
 
 		ex.addSuppressed(SUPPRESSED);
@@ -384,7 +384,7 @@ public class ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Throwable> void testThrowable_SuppressNoStack(Constructor<T> cons) {
+	public final <T extends Throwable> void testSuppressNoStack(Constructor<T> cons) {
 		T ex = newInstance(cons, "yes,no", CAUSE, true, false);
 
 		ex.addSuppressed(SUPPRESSED);
@@ -419,7 +419,7 @@ public class ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Throwable> void testThrowable_NoSuppressStack(Constructor<T> cons) {
+	public final <T extends Throwable> void testNoSuppressStack(Constructor<T> cons) {
 		T ex = newInstance(cons, "no,yes", CAUSE, false, true);
 
 		ex.addSuppressed(SUPPRESSED);
@@ -452,7 +452,7 @@ public class ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Throwable> void testThrowable_NoSuppressNoStack(Constructor<T> cons) {
+	public final <T extends Throwable> void testNoSuppressNoStack(Constructor<T> cons) {
 		T ex = newInstance(cons, "no,no", CAUSE, false, false);
 
 		ex.addSuppressed(SUPPRESSED);

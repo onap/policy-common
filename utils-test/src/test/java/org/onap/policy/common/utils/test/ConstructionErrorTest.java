@@ -31,7 +31,7 @@ public class ConstructionErrorTest extends ErrorsTester {
 
 	@Test
 	public void test() throws Exception {
-		assertEquals(4, testError(ConstructionError.class));
+		assertEquals(4, testAllError(ConstructionError.class));
 	}
 
 }

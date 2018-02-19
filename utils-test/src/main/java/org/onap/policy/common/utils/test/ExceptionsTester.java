@@ -46,7 +46,7 @@ public class ExceptionsTester extends ThrowablesTester {
 	 *             if the constructed objects fail to pass various tests
 	 */
 	public <T extends Exception> int test(Class<T> claz) {
-		int ncons = testException(claz);
+		int ncons = testAllException(claz);
 
 		assertTrue(ncons > 0);
 
@@ -67,13 +67,13 @@ public class ExceptionsTester extends ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Exception> int testException(Class<T> claz) {
+	public <T extends Exception> int testAllException(Class<T> claz) {
 		int ncons = 0;
 
-		ncons += testThrowable(claz);
-		ncons += testException_Exception(claz);
-		ncons += testException_StringException(claz);
-		ncons += testException_StringExceptionBooleanBoolean(claz);
+		ncons += testAllThrowable(claz);
+		ncons += testException(claz);
+		ncons += testStringException(claz);
+		ncons += testStringExceptionBooleanBoolean(claz);
 
 		return ncons;
 	}
@@ -100,7 +100,7 @@ public class ExceptionsTester extends ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Exception> int testException_Exception(Class<T> claz) {
+	public <T extends Exception> int testException(Class<T> claz) {
 		Constructor<T> cons = getConstructor(claz, "exception", Exception.class);
 		if (cons == null) {
 			return 0;
@@ -137,7 +137,7 @@ public class ExceptionsTester extends ThrowablesTester {
 	 * @throws ConstructionError
 	 *             if the Exception subclass cannot be constructed
 	 */
-	public <T extends Exception> int testException_StringException(Class<T> claz) {
+	public <T extends Exception> int testStringException(Class<T> claz) {
 		Constructor<T> cons = getConstructor(claz, "string-exception", String.class, Exception.class);
 		if (cons == null) {
 			return 0;
@@ -176,7 +176,7 @@ public class ExceptionsTester extends ThrowablesTester {
 	 * @throws ConstructionError
 	 *             if the Exception subclass cannot be constructed
 	 */
-	public <T extends Exception> int testException_StringExceptionBooleanBoolean(Class<T> claz) {
+	public <T extends Exception> int testStringExceptionBooleanBoolean(Class<T> claz) {
 		Constructor<T> cons = getConstructor(claz, "string-exception-flags", String.class, Exception.class,
 				Boolean.TYPE, Boolean.TYPE);
 		if (cons == null) {
@@ -184,10 +184,10 @@ public class ExceptionsTester extends ThrowablesTester {
 		}
 
 		// test each combination of "message" and "cause"
-		testThrowable_MessageCauseCombos(cons);
+		testMessageCauseCombos(cons);
 
 		// test each combination of the boolean flags
-		testThrowable_FlagCombos(cons);
+		testFlagCombos(cons);
 
 		return 1;
 	}

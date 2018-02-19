@@ -28,50 +28,50 @@ public class ThrowablesTesterTest {
 
 	@Test
 	public void test() {
-		assertEquals(2, new ThrowablesTester().testThrowable(SimpleThrowable.class));
-		assertEquals(5, new ThrowablesTester().testThrowable(StaticThrowable.class));
+		assertEquals(2, new ThrowablesTester().testAllThrowable(SimpleThrowable.class));
+		assertEquals(5, new ThrowablesTester().testAllThrowable(StaticThrowable.class));
 	}
 
 	@Test
 	public void testNoConstructorsThrowable() {
 		// this will not throw an error, but it should return 0, as there are
 		// no matching constructors
-		assertEquals(0, new ThrowablesTester().testThrowable(NoConstructorsThrowable.class));
+		assertEquals(0, new ThrowablesTester().testAllThrowable(NoConstructorsThrowable.class));
 	}
 
 	@Test(expected = AssertionError.class)
 	public void testIgnoreMessageThrowable() {
-		new ThrowablesTester().testThrowable(IgnoreMessageThrowable.class);
+		new ThrowablesTester().testAllThrowable(IgnoreMessageThrowable.class);
 	}
 
 	@Test(expected = AssertionError.class)
 	public void testIgnoreCauseThrowable() {
-		new ThrowablesTester().testThrowable(IgnoreCauseThrowable.class);
+		new ThrowablesTester().testAllThrowable(IgnoreCauseThrowable.class);
 	}
 
 	@Test(expected = AssertionError.class)
 	public void testAlwaysSuppressThrowable() {
-		new ThrowablesTester().testThrowable(AlwaysSuppressThrowable.class);
+		new ThrowablesTester().testAllThrowable(AlwaysSuppressThrowable.class);
 	}
 
 	@Test(expected = AssertionError.class)
 	public void testNeverSuppressThrowable() {
-		new ThrowablesTester().testThrowable(NeverSuppressThrowable.class);
+		new ThrowablesTester().testAllThrowable(NeverSuppressThrowable.class);
 	}
 
 	@Test(expected = AssertionError.class)
 	public void testAlwaysWritableThrowable() {
-		new ThrowablesTester().testThrowable(AlwaysWritableThrowable.class);
+		new ThrowablesTester().testAllThrowable(AlwaysWritableThrowable.class);
 	}
 
 	@Test(expected = AssertionError.class)
 	public void testNeverWritableThrowable() {
-		new ThrowablesTester().testThrowable(NeverWritableThrowable.class);
+		new ThrowablesTester().testAllThrowable(NeverWritableThrowable.class);
 	}
 
 	@Test(expected = ConstructionError.class)
 	public void testThrowInstantiationException() {
-		new ThrowablesTester().testThrowable(ThrowInstantiationException.class);
+		new ThrowablesTester().testAllThrowable(ThrowInstantiationException.class);
 	}
 
 	/**

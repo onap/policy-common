@@ -28,8 +28,8 @@ public class ErrorsTesterTest {
 
 	@Test
 	public void test() {
-		assertEquals(2, new ErrorsTester().testError(SimpleError.class));
-		assertEquals(5, new ErrorsTester().testError(StaticError.class));
+		assertEquals(2, new ErrorsTester().testAllError(SimpleError.class));
+		assertEquals(5, new ErrorsTester().testAllError(StaticError.class));
 	}
 
 	/**
