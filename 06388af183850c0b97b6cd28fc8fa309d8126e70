@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a93c517_538191c2",
+        "filename": "integrity-monitor/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-02-19T22:15:34Z",
+      "side": 1,
+      "message": "You could use ONAP-logging (currently below with test scope), it might be better to have one log4j dependency rahter than referencing it in more than one POM.",
+      "range": {
+        "startLine": 44,
+        "startChar": 3,
+        "endLine": 47,
+        "endChar": 15
+      },
+      "revId": "06388af183850c0b97b6cd28fc8fa309d8126e70",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_d395a187",
         "filename": "integrity-monitor/pom.xml",
         "patchSetId": 2
@@ -30,6 +53,29 @@
       "writtenOn": "2018-02-19T17:39:29Z",
       "side": 1,
       "message": "existing not sure why this is a range, it is used for test purposes, it can break stuff with newer versions, safer to fix it to 1.4.186 and remove the range.   Existing issue, not necessary to change.",
+      "revId": "06388af183850c0b97b6cd28fc8fa309d8126e70",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_f381bdc3",
+        "filename": "pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-02-19T22:15:34Z",
+      "side": 1,
+      "message": "We could use these dependencies and remove them in all POMs that are children of this POM. Might be something to think about in the future as it is disruptive to meddle with POMs when we have tight deadlines.",
+      "range": {
+        "startLine": 123,
+        "startChar": 1,
+        "endLine": 155,
+        "endChar": 17
+      },
       "revId": "06388af183850c0b97b6cd28fc8fa309d8126e70",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
