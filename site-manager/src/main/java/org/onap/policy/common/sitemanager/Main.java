@@ -602,7 +602,7 @@ public class Main
 
 	// display column headers
 	logger.info(formatString, (Object[])labels);
-	System.out.printf(formatString, (Object[])underlines);
+	logger.info(formatString, (Object[])underlines);
 
 	// display all of the rows
 	for (String[] values : treeset)
