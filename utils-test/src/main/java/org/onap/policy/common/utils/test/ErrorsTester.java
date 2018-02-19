@@ -40,7 +40,7 @@ public class ErrorsTester extends ThrowablesTester {
 	 * @throws AssertionError
 	 *             if the constructed objects fail to pass various tests
 	 */
-	public <T extends Error> int testError(Class<T> claz) {
-		return testThrowable(claz);
+	public <T extends Error> int testAllError(Class<T> claz) {
+		return testAllThrowable(claz);
 	}
 }
