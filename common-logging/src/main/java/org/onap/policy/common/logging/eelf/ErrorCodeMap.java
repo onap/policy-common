@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 
 /**
  * 
@@ -30,7 +30,7 @@ import java.util.HashMap;
 public class ErrorCodeMap {
 	
 
-    protected static final HashMap<MessageCodes, ErrorCodeInfo> hm = new HashMap<>();
+    protected static final EnumMap<MessageCodes, ErrorCodeInfo> hm = new EnumMap<>(MessageCodes.class);
     
     private static final String ERROR_PERMISSIONS = "POLICY-100E";
 	private static final String ERROR_PERMISSIONS_DESCRIPTION = "This is a Permissions Error. Please check the error message for detail information";

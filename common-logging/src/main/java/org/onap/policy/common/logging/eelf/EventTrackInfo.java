@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,14 @@
 package org.onap.policy.common.logging.eelf;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * EventTrackInfo contains a ConcurrentHashMap of EventData.
  */
 public class EventTrackInfo {
 
-    private ConcurrentHashMap<String, EventData> eventInfo = null;
+    private final ConcurrentMap<String, EventData> eventInfo;
 
     public EventTrackInfo() {
         /*
@@ -78,7 +79,7 @@ public class EventTrackInfo {
     /**
      * Returns a ConcurrentHashMap of EventData
      */
-    public ConcurrentHashMap<String, EventData> getEventInfo() {
+    public ConcurrentMap<String, EventData> getEventInfo() {
         return eventInfo;
     }
 }
