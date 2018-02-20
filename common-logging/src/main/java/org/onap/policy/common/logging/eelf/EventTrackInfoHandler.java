@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  *
@@ -54,7 +55,7 @@ public class EventTrackInfoHandler extends TimerTask {
         if (eventTrackInfo == null) {
             return;
         }
-        ConcurrentHashMap<String, EventData> eventInfo = eventTrackInfo.getEventInfo();
+        ConcurrentMap<String, EventData> eventInfo = eventTrackInfo.getEventInfo();
         if (eventInfo == null || eventInfo.isEmpty()) {
             return;
         }

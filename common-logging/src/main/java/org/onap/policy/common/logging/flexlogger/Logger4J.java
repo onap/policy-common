@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -183,7 +183,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 	 */
 	@Override
 	public boolean isAuditEnabled(){
-		return !(PolicyLogger.getAuditLevel() != null && PolicyLogger.getAuditLevel().toString().equals(Level.OFF.toString()));
+		return(PolicyLogger.getAuditLevel() != Level.OFF);
 	}
 	
 	/**
@@ -191,8 +191,8 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 	 * @return boolean
 	 */
 	@Override
-	public boolean isMetricsEnabled(){			
-		return !(PolicyLogger.getMetricsLevel() != null && PolicyLogger.getMetricsLevel().toString().equals(Level.OFF.toString()));
+	public boolean isMetricsEnabled(){
+		return(PolicyLogger.getMetricsLevel() != Level.OFF);
 	}
 
 	/**

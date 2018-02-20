@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 package org.onap.policy.common.logging.eelf;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class DroolsPDPMDCInfo implements MDCInfo {
 
@@ -43,7 +44,7 @@ public class DroolsPDPMDCInfo implements MDCInfo {
      * @return the instance of ConcurrentHashMap
      */
     @Override
-    public ConcurrentHashMap<String, String> getMDCInfo() {
+    public ConcurrentMap<String, String> getMDCInfo() {
         return mdcMap;
     }
 }

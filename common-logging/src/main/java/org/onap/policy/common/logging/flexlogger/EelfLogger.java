@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -226,12 +226,8 @@ public class EelfLogger implements Logger, Serializable {
 	 * @return boolean
 	 */
 	@Override
-	public boolean isAuditEnabled(){		
-		if(PolicyLogger.getAuditLevel() != null && PolicyLogger.getAuditLevel().toString().equals(Level.OFF.toString())){
-			return false;
-		}else {
-			return true;
-		}
+	public boolean isAuditEnabled(){
+		return(PolicyLogger.getAuditLevel() != Level.OFF);
 	}
 	
 	/**
@@ -239,12 +235,8 @@ public class EelfLogger implements Logger, Serializable {
 	 * @return boolean
 	 */
 	@Override
-	public boolean isMetricsEnabled(){			
-		if(PolicyLogger.getMetricsLevel() != null && PolicyLogger.getMetricsLevel().toString().equals(Level.OFF.toString())){
-			return false;
-		}else {
-			return true;
-		}
+	public boolean isMetricsEnabled(){
+		return(PolicyLogger.getMetricsLevel() != Level.OFF);
 	}
 	
 	/**
