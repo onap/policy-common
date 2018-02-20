@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_29bfb262",
+        "filename": "integrity-monitor/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-02-20T15:14:40Z",
+      "side": 1,
+      "message": "Yes I saw that also",
+      "parentUuid": "5a93c517_d395a187",
+      "revId": "06388af183850c0b97b6cd28fc8fa309d8126e70",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_33ec052a",
         "filename": "pom.xml",
         "patchSetId": 2
@@ -82,6 +100,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_09baf66d",
+        "filename": "pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-02-20T15:14:40Z",
+      "side": 1,
+      "message": "The problem is not all the children use them - I only put them here is 2+ of the sub-modules used them. I guess its a tradeoff.\nAlso - I need some organization done now with the license issues that I am dealing with. If we were 2 weeks to go I wouldn\u0027t. But we have 5 weeks right now.",
+      "parentUuid": "5a93c517_f381bdc3",
+      "range": {
+        "startLine": 123,
+        "startChar": 1,
+        "endLine": 155,
+        "endChar": 17
+      },
+      "revId": "06388af183850c0b97b6cd28fc8fa309d8126e70",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_3385e559",
         "filename": "site-manager/pom.xml",
         "patchSetId": 2
@@ -93,6 +135,24 @@
       "writtenOn": "2018-02-19T17:39:29Z",
       "side": 1,
       "message": "do you want to move this version to dependency-management in parent pom?",
+      "revId": "06388af183850c0b97b6cd28fc8fa309d8126e70",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_c9af2e29",
+        "filename": "site-manager/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-02-20T15:14:40Z",
+      "side": 1,
+      "message": "I think that will happen over the next few commits. Right now I am sorting mostly. I will take another sweep through everything when I get a clearer picture. Policy/engine is a chore.",
+      "parentUuid": "5a93c517_3385e559",
       "revId": "06388af183850c0b97b6cd28fc8fa309d8126e70",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
