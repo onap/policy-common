@@ -20,15 +20,27 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import org.slf4j.MDC;
-
-import static org.onap.policy.common.logging.eelf.Configuration.*;
-
-import org.onap.policy.common.logging.flexlogger.LoggerType;
-import org.onap.policy.common.logging.eelf.PolicyLogger;
-import com.att.eelf.configuration.EELFLogger;
-import com.att.eelf.configuration.EELFLogger.Level;
-import com.att.eelf.configuration.EELFManager;
+import static com.att.eelf.configuration.Configuration.MDC_ALERT_SEVERITY;
+import static com.att.eelf.configuration.Configuration.MDC_INSTANCE_UUID;
+import static com.att.eelf.configuration.Configuration.MDC_KEY_REQUEST_ID;
+import static com.att.eelf.configuration.Configuration.MDC_REMOTE_HOST;
+import static com.att.eelf.configuration.Configuration.MDC_SERVER_FQDN;
+import static com.att.eelf.configuration.Configuration.MDC_SERVER_IP_ADDRESS;
+import static com.att.eelf.configuration.Configuration.MDC_SERVICE_INSTANCE_ID;
+import static com.att.eelf.configuration.Configuration.MDC_SERVICE_NAME;
+import static org.onap.policy.common.logging.eelf.Configuration.BEGIN_TIME_STAMP;
+import static org.onap.policy.common.logging.eelf.Configuration.ELAPSED_TIME;
+import static org.onap.policy.common.logging.eelf.Configuration.END_TIME_STAMP;
+import static org.onap.policy.common.logging.eelf.Configuration.ERROR_CATEGORY;
+import static org.onap.policy.common.logging.eelf.Configuration.ERROR_CODE;
+import static org.onap.policy.common.logging.eelf.Configuration.ERROR_DESCRIPTION;
+import static org.onap.policy.common.logging.eelf.Configuration.PARTNER_NAME;
+import static org.onap.policy.common.logging.eelf.Configuration.RESPONSE_CODE;
+import static org.onap.policy.common.logging.eelf.Configuration.RESPONSE_DESCRIPTION;
+import static org.onap.policy.common.logging.eelf.Configuration.SERVER_NAME;
+import static org.onap.policy.common.logging.eelf.Configuration.STATUS_CODE;
+import static org.onap.policy.common.logging.eelf.Configuration.TARGET_ENTITY;
+import static org.onap.policy.common.logging.eelf.Configuration.TARGET_SERVICE_NAME;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -43,7 +55,14 @@ import java.util.Properties;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
+import org.onap.policy.common.logging.flexlogger.LoggerType;
+import org.slf4j.MDC;
+
+import com.att.eelf.configuration.EELFLogger;
+import com.att.eelf.configuration.EELFLogger.Level;
+import com.att.eelf.configuration.EELFManager;
 
 /**
  * 
@@ -63,6 +82,8 @@ public class PolicyLogger {
 
 	private static EELFLogger debugLogger = EELFManager.getInstance()
 			.getDebugLogger();
+
+	private static final String POLICY_LOGGER = "PolicyLogger";
 	
 	private static EventTrackInfo eventTracker = new EventTrackInfo();
 	
@@ -95,7 +116,7 @@ public class PolicyLogger {
 	private static Level auditLevel = Level.INFO;
 	private static Level metricsLevel = Level.INFO;
 	private static Level errorLevel = Level.ERROR;
-	private static String CLASS_NAME = "ClassName";
+	private static String classNameProp = "ClassName";
 	
 	private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS+00:00";
 	private static final String COMPLETE_STATUS = "COMPLETE";
@@ -107,7 +128,7 @@ public class PolicyLogger {
 				hostName = InetAddress.getLocalHost().getHostName();
 				hostAddress = InetAddress.getLocalHost().getHostAddress();
 			} catch (UnknownHostException e) {
-				PolicyLogger.error(MessageCodes.EXCEPTION_ERROR, e, "PolicyLogger", "UnknownHostException");
+				PolicyLogger.error(MessageCodes.EXCEPTION_ERROR, e, POLICY_LOGGER, "UnknownHostException");
 			}
 		}
 	}
@@ -145,11 +166,11 @@ public class PolicyLogger {
 	}
 	
 	public static String getClassname() {
-		return CLASS_NAME;
+		return classNameProp;
 	}
 	
 	public static synchronized void setClassname(String name) {
-		CLASS_NAME = name;
+		classNameProp = name;
 	}
 	
 	/**
@@ -184,7 +205,7 @@ public class PolicyLogger {
 			MDC.put(MDC_SERVER_FQDN, hostName);
 			MDC.put(MDC_SERVER_IP_ADDRESS, hostAddress);
 		} catch (Exception e) {
-			errorLogger.error(MessageCodes.EXCEPTION_ERROR, e, "PolicyLogger");
+			errorLogger.error(MessageCodes.EXCEPTION_ERROR, e, POLICY_LOGGER);
 		}
 		Instant startTime = Instant.now();
 		Instant endTime = Instant.now();
@@ -225,7 +246,7 @@ public class PolicyLogger {
 		MDC.put(MDC_KEY_REQUEST_ID, transId);
 		if(mdcInfo != null && mdcInfo.getMDCInfo() != null && !mdcInfo.getMDCInfo().isEmpty()){
 			
-			ConcurrentHashMap<String, String> mdcMap = mdcInfo.getMDCInfo();
+			ConcurrentMap<String, String> mdcMap = mdcInfo.getMDCInfo();
 		    Iterator<String> keyIterator = mdcMap.keySet().iterator();
 		    String key;
 		    
@@ -239,7 +260,7 @@ public class PolicyLogger {
 			MDC.put(MDC_SERVER_FQDN, hostName);
 			MDC.put(MDC_SERVER_IP_ADDRESS, hostAddress);
 		} catch (Exception e) {
-			errorLogger.error(MessageCodes.EXCEPTION_ERROR, e, "PolicyLogger");
+			errorLogger.error(MessageCodes.EXCEPTION_ERROR, e, POLICY_LOGGER);
 		}
 		Instant startTime = Instant.now();
 		Instant endTime = Instant.now();
@@ -336,7 +357,7 @@ public class PolicyLogger {
 			MDC.put(MDC_SERVER_FQDN, hostName);
 			MDC.put(MDC_SERVER_IP_ADDRESS, hostAddress);
 		} catch (Exception e) {
-			errorLogger.error(MessageCodes.EXCEPTION_ERROR, e, "PolicyLogger");
+			errorLogger.error(MessageCodes.EXCEPTION_ERROR, e, POLICY_LOGGER);
 		}
 		MDC.put(MDC_INSTANCE_UUID, "");
 		MDC.put(MDC_ALERT_SEVERITY, "");
@@ -363,7 +384,7 @@ public class PolicyLogger {
 	 * @param arguments
 	 */
 	public static void info(MessageCodes msg, String... arguments) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		debugLogger.info(msg, arguments);
 	}
 	
@@ -374,7 +395,7 @@ public class PolicyLogger {
 	 * @param arguments
 	 */
 	public static void info(MessageCodes msg, String className, String... arguments) {
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 		debugLogger.info(msg, arguments);
 	}
 	
@@ -384,7 +405,7 @@ public class PolicyLogger {
 	 * @param arg0
 	 */
 	public static void info( String className, String arg0) {
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 		debugLogger.info(MessageCodes.GENERAL_INFO, arg0);
 	}
 
@@ -394,7 +415,7 @@ public class PolicyLogger {
 	 * @param arg0
 	 */
 	public static void info(Object arg0) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		debugLogger.info(MessageCodes.GENERAL_INFO, String.valueOf(arg0));
 	}
 
@@ -406,7 +427,7 @@ public class PolicyLogger {
 	 */
 	public static void info(MessageCodes msg, Throwable arg0,
 			String... arguments) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 	    String arguments2 = getNormalizedStackTrace(arg0, arguments);
 	    debugLogger.info(msg, arguments2);
 	}
@@ -420,7 +441,7 @@ public class PolicyLogger {
 	 */
 	public static void info(MessageCodes msg, String className, Throwable arg0,
 			String... arguments) {
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 	    String arguments2 = getNormalizedStackTrace(arg0, arguments);
 	    debugLogger.info(msg, arguments2);
 	}
@@ -431,7 +452,7 @@ public class PolicyLogger {
 	 * @param className class name
 	 */
 	public static void warn( String className, String arg0) {
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 		debugLogger.warn(MessageCodes.GENERAL_INFO, arg0);
 	}
 
@@ -440,7 +461,7 @@ public class PolicyLogger {
 	 * @param arg0
 	 */
 	public static void warn(Object arg0) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		debugLogger.warn(MessageCodes.GENERAL_WARNING, "" + arg0);
 	}
 	
@@ -449,7 +470,7 @@ public class PolicyLogger {
 	 * @param arg0
 	 */
 	public static void warn(String arg0) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		debugLogger.warn(MessageCodes.GENERAL_WARNING, arg0);
 	}
 
@@ -459,7 +480,7 @@ public class PolicyLogger {
 	 * @param arguments
 	 */
 	public static void warn(MessageCodes msg, String... arguments) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		debugLogger.warn(msg, arguments);
 	}
 	
@@ -470,7 +491,7 @@ public class PolicyLogger {
 	 * @param arguments
 	 */	
 	public static void warn(MessageCodes msg, String className, String... arguments) {
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 		debugLogger.warn(msg, arguments);
 	}
 
@@ -482,7 +503,7 @@ public class PolicyLogger {
 	 */
 	public static void warn(MessageCodes msg, Throwable arg0,
 			String... arguments) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 	    String arguments2 = getNormalizedStackTrace(arg0, arguments);
 	    debugLogger.warn(msg, arguments2);
 	}
@@ -496,7 +517,7 @@ public class PolicyLogger {
 	 */
 	public static void warn(MessageCodes msg, String className, Throwable arg0,
 			String... arguments) {
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 	    String arguments2 = getNormalizedStackTrace(arg0, arguments);
 	    debugLogger.warn(msg, arguments2);
 	}
@@ -507,7 +528,7 @@ public class PolicyLogger {
 	 * @param arg0 log message
 	 */
 	public static void error( String className, String arg0) {
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 		if(ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR) != null){
 		    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorCode());
 			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorDesc());
@@ -521,7 +542,7 @@ public class PolicyLogger {
 	 * @param arg0
 	 */
 	public static void error(String arg0) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
 		
 		if(ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR) != null){
@@ -537,7 +558,7 @@ public class PolicyLogger {
 	 * @param arg0
 	 */
 	public static void error(Object arg0) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
 		
 		if(ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR) != null){
@@ -556,7 +577,7 @@ public class PolicyLogger {
 	 */
 	public static void error(MessageCodes msg, Throwable arg0,
 			String... arguments) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
 		
 		if(ErrorCodeMap.hm.get(msg) != null){
@@ -577,7 +598,7 @@ public class PolicyLogger {
 	 */
 	public static void error(MessageCodes msg, String className, Throwable arg0,
 			String... arguments) {
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 		MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
 		
 		if(ErrorCodeMap.hm.get(msg) != null){
@@ -595,7 +616,7 @@ public class PolicyLogger {
 	 * @param arguments
 	 */
 	public static void error(MessageCodes msg, String... arguments) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
 		
 		if(ErrorCodeMap.hm.get(msg) != null){
@@ -612,7 +633,7 @@ public class PolicyLogger {
 	 * @param arguments
 	 */
 	public static void debug(MessageCodes msg, String... arguments) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		debugLogger.debug(msg, arguments);
 	}
 	
@@ -622,7 +643,7 @@ public class PolicyLogger {
 	 * @param arg0
 	 */
 	public static void debug( String className, String arg0) {
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 		debugLogger.debug(MessageCodes.GENERAL_INFO, arg0);
 	}
 
@@ -631,7 +652,7 @@ public class PolicyLogger {
 	 * @param arg0
 	 */
 	public static void debug(String arg0) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		debugLogger.debug(arg0);
 	}
 	
@@ -641,7 +662,7 @@ public class PolicyLogger {
 	 */
 	public static void debug(Object arg0) {
 
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		debugLogger.debug("" + arg0);
 	}
 	
@@ -652,7 +673,7 @@ public class PolicyLogger {
 	 */
 	public static void audit(String className, Object arg0) {
 		MDC.put(STATUS_CODE, COMPLETE_STATUS);
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 		auditLogger.info("" + arg0);
 	}
 
@@ -662,7 +683,7 @@ public class PolicyLogger {
 	 */
 	public static void audit(Object arg0) {
 		MDC.put(STATUS_CODE, COMPLETE_STATUS);
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		auditLogger.info("" + arg0);
 	}
 	
@@ -674,7 +695,7 @@ public class PolicyLogger {
 	 */
 	public static void debug(MessageCodes msg, Throwable arg0,
 			String... arguments) {
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 	    String arguments2 = getNormalizedStackTrace(arg0, arguments);
 		errorLogger.error(msg, arguments2);
 	}
@@ -688,7 +709,7 @@ public class PolicyLogger {
 	 */
 	public static void debug(MessageCodes msg, String className, Throwable arg0,
 			String... arguments) {
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 	    String arguments2 = getNormalizedStackTrace(arg0, arguments);
 		errorLogger.error(msg, arguments2);
 	}
@@ -746,7 +767,7 @@ public class PolicyLogger {
 	 * @param arg0
 	 */
 	public static void trace( String className, String arg0) {
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 		errorLogger.info(MessageCodes.GENERAL_INFO, arg0);
 	}
 		
@@ -756,7 +777,7 @@ public class PolicyLogger {
 	 */
 	public static void trace(Object arg0){
 		
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		 debugLogger.trace(""+arg0);
 	}	
 	/**
@@ -1012,7 +1033,7 @@ public class PolicyLogger {
 		
 		seTimeStamps();
 		
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 		String serviceName = MDC.get(MDC_SERVICE_NAME);
 		MDC.put(MDC_KEY_REQUEST_ID, eventId);
 		metricsLogger.info(MessageCodes.RULE_AUDIT_END_INFO,
@@ -1063,7 +1084,7 @@ public class PolicyLogger {
 	 */
 	public static void metrics(String className, Object arg0) {
 		seTimeStamps();
-		MDC.put(CLASS_NAME, className);
+		MDC.put(classNameProp, className);
 		String serviceName = MDC.get(MDC_SERVICE_NAME);
 		metricsLogger.info(MessageCodes.RULE_METRICS_INFO,
 				serviceName, ""+arg0);
@@ -1075,7 +1096,7 @@ public class PolicyLogger {
 	 */
 	public static void metrics(Object arg0) {
 		seTimeStamps();
-		MDC.put(CLASS_NAME, "");
+		MDC.put(classNameProp, "");
 		String serviceName = MDC.get(MDC_SERVICE_NAME);
 		metricsLogger.info(MessageCodes.RULE_METRICS_INFO,
 				serviceName, ""+arg0);
@@ -1101,7 +1122,7 @@ public class PolicyLogger {
         t.printStackTrace(pw);
         String newStValue = sw.toString().replace ('|', '!').replace ("\n", " - ");
         int curSize = arguments == null ? 0 : arguments.length;
-        StringBuffer newArgument = new StringBuffer();
+        StringBuilder newArgument = new StringBuilder();
         for(int i=0; i<curSize; i++) {
         	newArgument.append(arguments[i]);
         	newArgument.append(":");

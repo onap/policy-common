@@ -21,6 +21,7 @@
 package org.onap.policy.common.logging.eelf;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class DroolsPDPMDCInfo implements MDCInfo {
 
@@ -43,7 +44,7 @@ public class DroolsPDPMDCInfo implements MDCInfo {
      * @return the instance of ConcurrentHashMap
      */
     @Override
-    public ConcurrentHashMap<String, String> getMDCInfo() {
+    public ConcurrentMap<String, String> getMDCInfo() {
         return mdcMap;
     }
 }

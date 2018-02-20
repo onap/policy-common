@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
- * ONAP-Logging
+ * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,19 +20,24 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import java.util.concurrent.ConcurrentMap;
+import static org.junit.Assert.*;
+
+import org.junit.Test;
 
 /**
- *
- * Interface needs to be implemented by DroolsPDPMDCInfo
- *
+ * 
  */
-@FunctionalInterface
-public interface MDCInfo {
+public class DroolsPDPMDCInfoTest {
 
-    /**
-     * Returns MDC info.
-     * @return MDC info
-     */
-    ConcurrentMap<String, String> getMDCInfo();
+	/**
+	 * Test method for {@link org.onap.policy.common.logging.eelf.DroolsPDPMDCInfo#getMDCInfo()}.
+	 */
+	@Test
+	public void testGetMDCInfo() {
+		DroolsPDPMDCInfo di = new DroolsPDPMDCInfo();
+		
+		assertNotNull(di.getMDCInfo());
+		assertEquals("Policy.droolsPdp", di.getMDCInfo().get(Configuration.MDC_SERVICE_NAME));
+	}
+
 }

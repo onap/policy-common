@@ -21,13 +21,14 @@
 package org.onap.policy.common.logging.eelf;
 
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 /**
  * EventTrackInfo contains a ConcurrentHashMap of EventData.
  */
 public class EventTrackInfo {
 
-    private ConcurrentHashMap<String, EventData> eventInfo = null;
+    private final ConcurrentHashMap<String, EventData> eventInfo;
 
     public EventTrackInfo() {
         /*
@@ -78,7 +79,7 @@ public class EventTrackInfo {
     /**
      * Returns a ConcurrentHashMap of EventData
      */
-    public ConcurrentHashMap<String, EventData> getEventInfo() {
+    public ConcurrentMap<String, EventData> getEventInfo() {
         return eventInfo;
     }
 }

@@ -20,7 +20,7 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 
 /**
  * 
@@ -30,7 +30,7 @@ import java.util.HashMap;
 public class ErrorCodeMap {
 	
 
-    protected static final HashMap<MessageCodes, ErrorCodeInfo> hm = new HashMap<>();
+    protected static final EnumMap<MessageCodes, ErrorCodeInfo> hm = new EnumMap<>(MessageCodes.class);
     
     private static final String ERROR_PERMISSIONS = "POLICY-100E";
 	private static final String ERROR_PERMISSIONS_DESCRIPTION = "This is a Permissions Error. Please check the error message for detail information";
