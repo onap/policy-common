@@ -28,9 +28,8 @@ import java.util.EnumMap;
  *
  */
 public class ErrorCodeMap {
-	
 
-    protected static final EnumMap<MessageCodes, ErrorCodeInfo> hm = new EnumMap<>(MessageCodes.class);
+    private static final EnumMap<MessageCodes, ErrorCodeInfo> hm = new EnumMap<>(MessageCodes.class);
     
     private static final String ERROR_PERMISSIONS = "POLICY-100E";
 	private static final String ERROR_PERMISSIONS_DESCRIPTION = "This is a Permissions Error. Please check the error message for detail information";
@@ -79,7 +78,12 @@ public class ErrorCodeMap {
     	hm.put(MessageCodes.ERROR_UNKNOWN, new ErrorCodeInfo(ERROR_UNKNOWN, ERROR_UNKNOWN_DESCRIPTION));
     	hm.put(MessageCodes.ERROR_AUDIT, new ErrorCodeInfo(ERROR_AUDIT, ERROR_AUDIT_DESCRIPTION));
     }
-    private ErrorCodeMap() {};
+    private ErrorCodeMap() {}
+    
+    public static ErrorCodeInfo getErrorCodeInfo(MessageCodes messageCode) {
+        return hm.get(messageCode);
+    }
+    
     static class ErrorCodeInfo {
     	
     	private String errorCode;
@@ -94,16 +98,8 @@ public class ErrorCodeMap {
 			return errorCode;
 		}
 
-		public void setErrorCode(String errorCode) {
-			this.errorCode = errorCode;
-		}
-
 		public String getErrorDesc() {
 			return errorDesc;
-		}
-
-		public void setErrorDesc(String errorDesc) {
-			this.errorDesc = errorDesc;
 		}
     	
     }  
