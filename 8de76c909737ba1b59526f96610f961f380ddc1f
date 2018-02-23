@@ -16,6 +16,24 @@
       "revId": "8de76c909737ba1b59526f96610f961f380ddc1f",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_8e659eb6",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 1581
+      },
+      "writtenOn": "2018-02-23T20:35:05Z",
+      "side": 0,
+      "message": "Hi Jorge, are you sure it is used in policy/engine?\n\nIf one or more String arguments are provided then this method is ambiguous with the following method, and I would expect a compiler error in the calling code\n\nIf no String arguments are provided, then I would expect info(Object arg0) to be invoked instead, based on the compiler first checking for a matching method which does not include var-args",
+      "parentUuid": "5a93c517_4e2316a7",
+      "revId": "8de76c909737ba1b59526f96610f961f380ddc1f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
