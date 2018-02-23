@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_4e2316a7",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-02-23T19:42:03Z",
+      "side": 0,
+      "message": "thanks Michael, are we sure this method is not called in another repo.   policy/engine uses it .. just making sure?",
+      "revId": "8de76c909737ba1b59526f96610f961f380ddc1f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
