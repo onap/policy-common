@@ -34,6 +34,24 @@
       "revId": "8de76c909737ba1b59526f96610f961f380ddc1f",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_0ee66e15",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 365,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-02-23T20:59:37Z",
+      "side": 0,
+      "message": "Thanks Michael, I didn\u0027t know for sure, just checklist question when removing method.   I see the other methods how.  Thanks for the explanation.",
+      "parentUuid": "5a93c517_8e659eb6",
+      "revId": "8de76c909737ba1b59526f96610f961f380ddc1f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
