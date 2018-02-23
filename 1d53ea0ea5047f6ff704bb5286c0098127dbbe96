@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_73bd9fb6",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/eelf/ErrorCodeMapTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-02-23T15:52:10Z",
+      "side": 1,
+      "message": "I think the module name goes at the top of the copyright message. Have a look at one of the existing classes.",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 4,
+        "endChar": 2
+      },
+      "revId": "1d53ea0ea5047f6ff704bb5286c0098127dbbe96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_13ae9b81",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/eelf/PolicyLoggerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-02-23T15:52:10Z",
+      "side": 1,
+      "message": "I think the module name goes on the copyright notice up here. Have a look at one of the other classes.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 83
+      },
+      "revId": "1d53ea0ea5047f6ff704bb5286c0098127dbbe96",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
