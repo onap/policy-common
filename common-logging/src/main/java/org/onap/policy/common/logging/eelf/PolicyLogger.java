@@ -361,16 +361,6 @@ public class PolicyLogger {
 	/**
 	 * Records the Info event with String [] arguments
 	 * @param msg
-	 * @param arguments
-	 */
-	public static void info(MessageCodes msg, String... arguments) {
-		MDC.put(classNameProp, "");
-		debugLogger.info(msg, arguments);
-	}
-	
-	/**
-	 * Records the Info event with String [] arguments
-	 * @param msg
 	 * @param className
 	 * @param arguments
 	 */
@@ -453,16 +443,6 @@ public class PolicyLogger {
 		MDC.put(classNameProp, "");
 		debugLogger.warn(MessageCodes.GENERAL_WARNING, arg0);
 	}
-
-	/**
-	 * Records a message with passed in message code and a list of string values
-	 * @param msg
-	 * @param arguments
-	 */
-	public static void warn(MessageCodes msg, String... arguments) {
-		MDC.put(classNameProp, "");
-		debugLogger.warn(msg, arguments);
-	}
 	
 	/**
 	 * Records a message with passed in message code, class name and a list of string values
@@ -509,9 +489,9 @@ public class PolicyLogger {
 	 */
 	public static void error( String className, String arg0) {
 		MDC.put(classNameProp, className);
-		if(ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR) != null){
-		    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorCode());
-			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorDesc());
+		if(ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null){
+		    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
+			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
 		}
 		errorLogger.error(MessageCodes.GENERAL_ERROR, arg0);
@@ -525,9 +505,9 @@ public class PolicyLogger {
 		MDC.put(classNameProp, "");
 		MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
 		
-		if(ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR) != null){
-		    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorCode());
-			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorDesc());
+		if(ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null){
+		    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
+			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
 		}
 		errorLogger.error(MessageCodes.GENERAL_ERROR, arg0);
@@ -541,9 +521,9 @@ public class PolicyLogger {
 		MDC.put(classNameProp, "");
 		MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
 		
-		if(ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR) != null){
-		    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorCode());
-			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorDesc());
+		if(ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null){
+		    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
+			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
 		}
 		errorLogger.error(MessageCodes.GENERAL_ERROR, "" + arg0);
@@ -560,9 +540,9 @@ public class PolicyLogger {
 		MDC.put(classNameProp, "");
 		MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
 		
-		if(ErrorCodeMap.hm.get(msg) != null){
-		    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(msg).getErrorCode());
-			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(msg).getErrorDesc());
+		if(ErrorCodeMap.getErrorCodeInfo(msg) != null){
+		    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(msg).getErrorCode());
+			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(msg).getErrorDesc());
 
 		}
 	    String arguments2 = getNormalizedStackTrace(arg0, arguments);
@@ -581,9 +561,9 @@ public class PolicyLogger {
 		MDC.put(classNameProp, className);
 		MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
 		
-		if(ErrorCodeMap.hm.get(msg) != null){
-		    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(msg).getErrorCode());
-			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(msg).getErrorDesc());
+		if(ErrorCodeMap.getErrorCodeInfo(msg) != null){
+		    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(msg).getErrorCode());
+			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(msg).getErrorDesc());
 
 		}
 	    String arguments2 = getNormalizedStackTrace(arg0, arguments);
@@ -599,9 +579,9 @@ public class PolicyLogger {
 		MDC.put(classNameProp, "");
 		MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
 		
-		if(ErrorCodeMap.hm.get(msg) != null){
-		    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(msg).getErrorCode());
-			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(msg).getErrorDesc());
+		if(ErrorCodeMap.getErrorCodeInfo(msg) != null){
+		    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(msg).getErrorCode());
+			MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(msg).getErrorDesc());
 
 		}
 		errorLogger.error(msg, arguments);
@@ -677,7 +657,7 @@ public class PolicyLogger {
 			String... arguments) {
 		MDC.put(classNameProp, "");
 	    String arguments2 = getNormalizedStackTrace(arg0, arguments);
-		errorLogger.error(msg, arguments2);
+		debugLogger.debug(msg, arguments2);
 	}
 	
 	/**
@@ -691,7 +671,7 @@ public class PolicyLogger {
 			String... arguments) {
 		MDC.put(classNameProp, className);
 	    String arguments2 = getNormalizedStackTrace(arg0, arguments);
-		errorLogger.error(msg, arguments2);
+	    debugLogger.debug(msg, arguments2);
 	}
 	/**
 	 * returns true for enabled, false for not enabled
@@ -748,7 +728,7 @@ public class PolicyLogger {
 	 */
 	public static void trace( String className, String arg0) {
 		MDC.put(classNameProp, className);
-		errorLogger.info(MessageCodes.GENERAL_INFO, arg0);
+		debugLogger.trace(MessageCodes.GENERAL_INFO, arg0);
 	}
 		
 	/**
@@ -1172,8 +1152,8 @@ public class PolicyLogger {
 		    
 		    String debugLevelProp = loggerProperties.getProperty("debugLogger.level","INFO");
 		    String metricsLevelProp = loggerProperties.getProperty("metricsLogger.level","ON");
-		    String auditLevelProp = loggerProperties.getProperty("error.level","ON");
-		    String errorLevelProp = loggerProperties.getProperty("audit.level","ON");
+		    String auditLevelProp = loggerProperties.getProperty("audit.level","ON");
+		    String errorLevelProp = loggerProperties.getProperty("error.level","ON");
 		    component = loggerProperties.getProperty("policy.component","DROOLS");	
 		    String overrideLogbackLevel = loggerProperties.getProperty("override.logback.level.setup");
 
@@ -1240,9 +1220,9 @@ public class PolicyLogger {
 				
 			}else {
 				MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
-				if(ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR) != null){
-				    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorCode());
-					MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorDesc());
+				if(ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null){
+				    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
+					MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
 				}
 				errorLogger.error("failed to get the timer.delay.time, so use its default value: " + timerDelayTime);
@@ -1254,9 +1234,9 @@ public class PolicyLogger {
 				
 			}else {
 				MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
-				if(ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR) != null){
-				    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorCode());
-					MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorDesc());
+				if(ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null){
+				    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
+					MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
 				}
 				errorLogger.error("failed to get the check.interval, so use its default value: " + checkInterval);
@@ -1269,9 +1249,9 @@ public class PolicyLogger {
 			}else {
 				MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
 				
-				if(ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR) != null){
-				    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorCode());
-					MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorDesc());
+				if(ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null){
+				    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
+					MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
 				}
 				errorLogger.error("failed to get the event.expired.time, so use its default value: " + expiredTime);
@@ -1283,9 +1263,9 @@ public class PolicyLogger {
 				
 			}else {
 				MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
-				if(ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR) != null){
-				    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorCode());
-					MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorDesc());
+				if(ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null){
+				    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
+					MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
 				}
 				errorLogger.error("failed to get the concurrentHashMap.limit, so use its default value: " + concurrentHashMapLimit);
@@ -1297,9 +1277,9 @@ public class PolicyLogger {
 				
 			}else {
 				MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
-				if(ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR) != null){
-				    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorCode());
-					MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorDesc());
+				if(ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null){
+				    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
+					MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
 				}
 				errorLogger.error("failed to get the stop.check.point, so use its default value: " + stopCheckPoint);
@@ -1350,9 +1330,9 @@ public class PolicyLogger {
 		}catch(Exception e){
 			MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
 			
-			if(ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR) != null){
-			    MDC.put(ERROR_CODE, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorCode());
-				MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.hm.get(MessageCodes.GENERAL_ERROR).getErrorDesc());
+			if(ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null){
+			    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
+				MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
 			}
 			errorLogger.error("failed to get the policyLogger.properties, so use their default values",e);
