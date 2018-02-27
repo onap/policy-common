@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_0eb42533",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/EelfLoggerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-02-27T16:01:56Z",
+      "side": 1,
+      "message": "Should there be at least an assert* in each of these tests?",
+      "revId": "bdbedf0ffe8eb062d0cc9d7ca503c6e0fee8d15d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
