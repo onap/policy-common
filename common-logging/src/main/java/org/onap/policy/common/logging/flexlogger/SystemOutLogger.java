@@ -21,6 +21,7 @@
 package org.onap.policy.common.logging.flexlogger;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.onap.policy.common.logging.eelf.MessageCodes;
@@ -324,7 +325,7 @@ public class SystemOutLogger implements Logger, Serializable {
 	@Override
 	public void recordMetricEvent(String eventId, String arg1) {
 		
-		System.out.println(className+" : "+"eventId:" + ":" + eventId + "message:" + arg1);	
+		System.out.println(className+" : "+"eventId:" + eventId + "message:" + arg1);	
 		
 	}
 
@@ -358,7 +359,7 @@ public class SystemOutLogger implements Logger, Serializable {
 	@Override
 	public void error(MessageCodes msg, Throwable arg0, String... arguments){
 
-		System.out.println(className+" : "+"MessageCodes :" + msg + arguments);
+		System.out.println(className+" : "+"MessageCodes :" + msg + Arrays.asList(arguments));
 
 	}
 	
@@ -370,7 +371,7 @@ public class SystemOutLogger implements Logger, Serializable {
 	@Override
 	public void error(MessageCodes msg, String... arguments){
 		
-		System.out.println(transId + "|" + className+" : "+"MessageCode:" + msg + arguments);
+		System.out.println(transId + "|" + className+" : "+"MessageCode:" + msg + Arrays.asList(arguments));
 	}
 	
 	/**
@@ -396,7 +397,7 @@ public class SystemOutLogger implements Logger, Serializable {
     @Override
 	public void warn(MessageCodes msg, String... arguments){
     	
-    	System.out.println(transId + "|" + className+" : "+"MessageCodes:" + msg + arguments);
+    	System.out.println(transId + "|" + className+" : "+"MessageCodes:" + msg + Arrays.asList(arguments));
     }
 
 	/**
@@ -408,7 +409,7 @@ public class SystemOutLogger implements Logger, Serializable {
     @Override
 	public void warn(MessageCodes msg, Throwable arg0, String... arguments){
 	
-    	System.out.println(transId + "|" + className+" : "+"MessageCodes:" + msg + arguments);
+    	System.out.println(transId + "|" + className+" : "+"MessageCodes:" + msg + Arrays.asList(arguments));
     	
     }
 

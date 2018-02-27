@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
@@ -316,7 +317,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 	 */		
 	@Override
 	public void error(MessageCodes msg, Throwable arg0, String... arguments){
-		log.error(transId + "|" + className +"|" + "MessageCodes :" + msg + arguments);
+		log.error(transId + "|" + className +"|" + "MessageCodes :" + msg + Arrays.asList(arguments));
 
 	}
 	
@@ -327,7 +328,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 	 */		
 	@Override
 	public void error(MessageCodes msg, String... arguments){		
-		log.error(transId + "|" + className +"|" + "MessageCode:" + msg + arguments);
+		log.error(transId + "|" + className +"|" + "MessageCode:" + msg + Arrays.asList(arguments));
 	}
 	
 	/**
@@ -351,7 +352,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 	 */
     @Override
 	public void warn(MessageCodes msg, String... arguments){    	
-    	log.warn(className +"|" +"MessageCodes:" + msg + arguments);
+    	log.warn(className +"|" +"MessageCodes:" + msg + Arrays.asList(arguments));
     }
 
 	/**
@@ -362,7 +363,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 	 */
     @Override
 	public void warn(MessageCodes msg, Throwable arg0, String... arguments){
-    	log.warn(className +"|" +"MessageCodes:" + msg + arguments);    	
+    	log.warn(className +"|" +"MessageCodes:" + msg + Arrays.asList(arguments));    	
     }
 
 	/**
