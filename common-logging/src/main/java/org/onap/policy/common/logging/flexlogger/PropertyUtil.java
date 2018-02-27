@@ -362,12 +362,13 @@ public class PropertyUtil
    * @param file the properties file
    * @param notify if not null, this is a callback interface that was used for
    *	notifications of changes
+ * @throws IOException 
    */
-  public static void stopListening(File file, Listener listener)
+  public static void stopListening(File file, Listener listener) throws IOException
   {
 	if (listener != null)
 	  {
-		ListenerRegistration reg = registrations.get(file);
+		ListenerRegistration reg = registrations.get(file.getCanonicalFile());
 		if (reg != null)
 		  {
 			reg.removeListener(listener);
@@ -380,29 +381,11 @@ public class PropertyUtil
    * @param fileName the properties file
    * @param notify if not null, this is a callback interface that was used for
    *	notifications of changes
+ * @throws IOException 
    */
-  public static void stopListening(String fileName, Listener listener)
+  public static void stopListening(String fileName, Listener listener) throws IOException
   {
 	stopListening(new File(fileName), listener);
   }
-
-  /* ============================================================ */
-
-  // TEMPORARY - used to test callback interface
-  public static class Test implements Listener
-  {
-	String name;
-
-	public Test(String name)
-	  {
-		this.name = name;
-	  }
-
-	@Override
-	public void propertiesChanged(Properties properties, Set<String> changedKeys)
-	  {
-		System.out.println("Test(" + name + ")\nproperties = " + properties
-						   + "\nchangedKeys = " + changedKeys);
-	  }
-  }
+  
 } 

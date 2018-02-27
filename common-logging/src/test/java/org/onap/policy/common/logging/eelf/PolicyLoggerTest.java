@@ -33,8 +33,7 @@ import static org.onap.policy.common.logging.eelf.Configuration.RESPONSE_CODE;
 import static org.onap.policy.common.logging.eelf.Configuration.RESPONSE_DESCRIPTION;
 import static org.onap.policy.common.logging.eelf.Configuration.SERVER_NAME;
 import static org.onap.policy.common.logging.eelf.Configuration.STATUS_CODE;
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
+import static org.onap.policy.common.logging.util.TestUtils.*;
 import java.time.Instant;
 import java.util.Properties;
 import java.util.UUID;
@@ -663,21 +662,6 @@ public class PolicyLoggerTest {
     public void testSetServerInfo() {
         PolicyLogger.setServerInfo("serverHost", "serverPort");
         assertEquals("serverHost:serverPort", MDC.get(SERVER_NAME));
-    }
-    
-    private static void overrideStaticField(@SuppressWarnings("rawtypes") final Class clazz, final String fieldName, final Object newValue) {
-        try {
-            final Field field = clazz.getDeclaredField(fieldName);
-            field.setAccessible(true);
-
-            final Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(field, field.getModifiers() & ~Modifier.FINAL);
-
-            field.set(null, newValue);
-        } catch (final Exception e) {
-            fail(e.toString());
-        }
     }
 
 }

@@ -107,6 +107,7 @@ public class EelfLogger implements Logger, Serializable {
 		   className = clazz.getName();
 		}
 		PolicyLogger.postMDCInfoForEvent(transId);
+		this.transId = transId;
 	}
 	
 	/**
@@ -119,6 +120,7 @@ public class EelfLogger implements Logger, Serializable {
 		   className = s;
 		}
 		PolicyLogger.postMDCInfoForEvent(transId);
+		this.transId = transId;
 	}
 	
 	/**
