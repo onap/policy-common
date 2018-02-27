@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_191b11cb",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/FlexLoggerTester.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-02-27T21:59:30Z",
+      "side": 0,
+      "message": "do we need some sort of asserts?",
+      "revId": "cfb9b5f1cfe7d5c319312d8d067ae4c2a8d8d93c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
