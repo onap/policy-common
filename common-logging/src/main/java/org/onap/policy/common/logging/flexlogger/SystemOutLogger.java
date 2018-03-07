@@ -34,7 +34,7 @@ import com.att.eelf.configuration.EELFLogger.Level;
  *
  */
 public class SystemOutLogger implements Logger, Serializable {
-	
+	private static final Logger logger = FlexLogger.getLogger(SystemOutLogger.class);
 	/**
 	 * 
 	 */
@@ -325,7 +325,7 @@ public class SystemOutLogger implements Logger, Serializable {
 	@Override
 	public void recordMetricEvent(String eventId, String arg1) {
 		
-		System.out.println(className+" : "+"eventId:" + eventId + "message:" + arg1);	
+		logger.info(className+" : "+"eventId:" + eventId + "message:" + arg1);	
 		
 	}
 
