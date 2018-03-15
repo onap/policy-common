@@ -26,84 +26,83 @@ import org.junit.Test;
 
 public class ExceptionsTesterTest {
 
-	@Test
-	public void test() {
-		assertEquals(2, new ExceptionsTester().test(SimpleException.class));
-		assertEquals(8, new ExceptionsTester().test(StaticException.class));
-	}
+    @Test
+    public void test() {
+        assertEquals(2, new ExceptionsTester().test(SimpleException.class));
+        assertEquals(8, new ExceptionsTester().test(StaticException.class));
+    }
 
-	@Test(expected = AssertionError.class)
-	public void testNoConstructorsException() {
-		new ExceptionsTester().test(NoConstructorsException.class);
-	}
+    @Test(expected = AssertionError.class)
+    public void testNoConstructorsException() {
+        new ExceptionsTester().test(NoConstructorsException.class);
+    }
 
-	/**
-	 * Used to test a failure case - this has no standard constructors. The only
-	 * constructor it has takes an "int", thus it is not one of the standard
-	 * constructors.
-	 */
-	public static class NoConstructorsException extends Exception {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test a failure case - this has no standard constructors. The only constructor it has
+     * takes an "int", thus it is not one of the standard constructors.
+     */
+    public static class NoConstructorsException extends Exception {
+        private static final long serialVersionUID = 1L;
 
-		public NoConstructorsException(int value) {
-			super();
-		}
-	}
+        public NoConstructorsException(int value) {
+            super();
+        }
+    }
 
-	/**
-	 * Used to test a simple success case.
-	 */
-	public static class SimpleException extends Exception {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test a simple success case.
+     */
+    public static class SimpleException extends Exception {
+        private static final long serialVersionUID = 1L;
 
-		public SimpleException() {
-			super();
-		}
+        public SimpleException() {
+            super();
+        }
 
-		public SimpleException(String message) {
-			super(message);
-		}
-	}
+        public SimpleException(String message) {
+            super(message);
+        }
+    }
 
-	/**
-	 * Used to test the exhaustive success case.
-	 */
-	public static class StaticException extends Exception {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test the exhaustive success case.
+     */
+    public static class StaticException extends Exception {
+        private static final long serialVersionUID = 1L;
 
-		public StaticException() {
-			super();
-		}
+        public StaticException() {
+            super();
+        }
 
-		public StaticException(String message) {
-			super(message);
-		}
+        public StaticException(String message) {
+            super(message);
+        }
 
-		public StaticException(Throwable cause) {
-			super(cause);
-		}
+        public StaticException(Throwable cause) {
+            super(cause);
+        }
 
-		public StaticException(String message, Throwable cause) {
-			super(message, cause);
-		}
+        public StaticException(String message, Throwable cause) {
+            super(message, cause);
+        }
 
-		public StaticException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-			super(message, cause, enableSuppression, writableStackTrace);
-		}
+        public StaticException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+            super(message, cause, enableSuppression, writableStackTrace);
+        }
 
-		// same as above, but with Exceptions substituted for Throwables
+        // same as above, but with Exceptions substituted for Throwables
 
-		public StaticException(Exception cause) {
-			super(cause);
-		}
+        public StaticException(Exception cause) {
+            super(cause);
+        }
 
-		public StaticException(String message, Exception cause) {
-			super(message, cause);
-		}
+        public StaticException(String message, Exception cause) {
+            super(message, cause);
+        }
 
-		public StaticException(String message, Exception cause, boolean enableSuppression, boolean writableStackTrace) {
-			super(message, cause, enableSuppression, writableStackTrace);
-		}
-	}
+        public StaticException(String message, Exception cause, boolean enableSuppression, boolean writableStackTrace) {
+            super(message, cause, enableSuppression, writableStackTrace);
+        }
+    }
 
 }

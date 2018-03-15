@@ -26,191 +26,189 @@ import org.junit.Test;
 
 public class ThrowablesTesterTest {
 
-	@Test
-	public void test() {
-		assertEquals(2, new ThrowablesTester().testAllThrowable(SimpleThrowable.class));
-		assertEquals(5, new ThrowablesTester().testAllThrowable(StaticThrowable.class));
-	}
+    @Test
+    public void test() {
+        assertEquals(2, new ThrowablesTester().testAllThrowable(SimpleThrowable.class));
+        assertEquals(5, new ThrowablesTester().testAllThrowable(StaticThrowable.class));
+    }
 
-	@Test
-	public void testNoConstructorsThrowable() {
-		// this will not throw an error, but it should return 0, as there are
-		// no matching constructors
-		assertEquals(0, new ThrowablesTester().testAllThrowable(NoConstructorsThrowable.class));
-	}
+    @Test
+    public void testNoConstructorsThrowable() {
+        // this will not throw an error, but it should return 0, as there are
+        // no matching constructors
+        assertEquals(0, new ThrowablesTester().testAllThrowable(NoConstructorsThrowable.class));
+    }
 
-	@Test(expected = AssertionError.class)
-	public void testIgnoreMessageThrowable() {
-		new ThrowablesTester().testAllThrowable(IgnoreMessageThrowable.class);
-	}
+    @Test(expected = AssertionError.class)
+    public void testIgnoreMessageThrowable() {
+        new ThrowablesTester().testAllThrowable(IgnoreMessageThrowable.class);
+    }
 
-	@Test(expected = AssertionError.class)
-	public void testIgnoreCauseThrowable() {
-		new ThrowablesTester().testAllThrowable(IgnoreCauseThrowable.class);
-	}
+    @Test(expected = AssertionError.class)
+    public void testIgnoreCauseThrowable() {
+        new ThrowablesTester().testAllThrowable(IgnoreCauseThrowable.class);
+    }
 
-	@Test(expected = AssertionError.class)
-	public void testAlwaysSuppressThrowable() {
-		new ThrowablesTester().testAllThrowable(AlwaysSuppressThrowable.class);
-	}
+    @Test(expected = AssertionError.class)
+    public void testAlwaysSuppressThrowable() {
+        new ThrowablesTester().testAllThrowable(AlwaysSuppressThrowable.class);
+    }
 
-	@Test(expected = AssertionError.class)
-	public void testNeverSuppressThrowable() {
-		new ThrowablesTester().testAllThrowable(NeverSuppressThrowable.class);
-	}
+    @Test(expected = AssertionError.class)
+    public void testNeverSuppressThrowable() {
+        new ThrowablesTester().testAllThrowable(NeverSuppressThrowable.class);
+    }
 
-	@Test(expected = AssertionError.class)
-	public void testAlwaysWritableThrowable() {
-		new ThrowablesTester().testAllThrowable(AlwaysWritableThrowable.class);
-	}
+    @Test(expected = AssertionError.class)
+    public void testAlwaysWritableThrowable() {
+        new ThrowablesTester().testAllThrowable(AlwaysWritableThrowable.class);
+    }
 
-	@Test(expected = AssertionError.class)
-	public void testNeverWritableThrowable() {
-		new ThrowablesTester().testAllThrowable(NeverWritableThrowable.class);
-	}
+    @Test(expected = AssertionError.class)
+    public void testNeverWritableThrowable() {
+        new ThrowablesTester().testAllThrowable(NeverWritableThrowable.class);
+    }
 
-	@Test(expected = ConstructionError.class)
-	public void testThrowInstantiationException() {
-		new ThrowablesTester().testAllThrowable(ThrowInstantiationException.class);
-	}
+    @Test(expected = ConstructionError.class)
+    public void testThrowInstantiationException() {
+        new ThrowablesTester().testAllThrowable(ThrowInstantiationException.class);
+    }
 
-	/**
-	 * Used to test a failure case - message text is ignored.
-	 */
-	public static class IgnoreMessageThrowable extends Throwable {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test a failure case - message text is ignored.
+     */
+    public static class IgnoreMessageThrowable extends Throwable {
+        private static final long serialVersionUID = 1L;
 
-		public IgnoreMessageThrowable(String message) {
-			super("bogus");
-		}
-	}
+        public IgnoreMessageThrowable(String message) {
+            super("bogus");
+        }
+    }
 
-	/**
-	 * Used to test a failure case - cause is ignored.
-	 */
-	public static class IgnoreCauseThrowable extends Throwable {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test a failure case - cause is ignored.
+     */
+    public static class IgnoreCauseThrowable extends Throwable {
+        private static final long serialVersionUID = 1L;
 
-		public IgnoreCauseThrowable(Throwable cause) {
-			super(new Throwable("another cause"));
-		}
-	}
+        public IgnoreCauseThrowable(Throwable cause) {
+            super(new Throwable("another cause"));
+        }
+    }
 
-	/**
-	 * Used to test a failure case - this has no standard constructors. The only
-	 * constructor it has takes an "int", thus it is not one of the standard
-	 * constructors.
-	 */
-	public static class NoConstructorsThrowable extends Throwable {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test a failure case - this has no standard constructors. The only constructor it has
+     * takes an "int", thus it is not one of the standard constructors.
+     */
+    public static class NoConstructorsThrowable extends Throwable {
+        private static final long serialVersionUID = 1L;
 
-		public NoConstructorsThrowable(int value) {
-			super();
-		}
-	}
+        public NoConstructorsThrowable(int value) {
+            super();
+        }
+    }
 
-	/**
-	 * Used to test a failure case - always suppresses.
-	 */
-	public static class AlwaysSuppressThrowable extends Throwable {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test a failure case - always suppresses.
+     */
+    public static class AlwaysSuppressThrowable extends Throwable {
+        private static final long serialVersionUID = 1L;
 
-		public AlwaysSuppressThrowable(String message, Throwable cause, boolean enableSuppression,
-				boolean writableStackTrace) {
-			super(message, cause, true, writableStackTrace);
-		}
-	}
+        public AlwaysSuppressThrowable(String message, Throwable cause, boolean enableSuppression,
+                boolean writableStackTrace) {
+            super(message, cause, true, writableStackTrace);
+        }
+    }
 
-	/**
-	 * Used to test a failure case - never suppresses.
-	 */
-	public static class NeverSuppressThrowable extends Throwable {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test a failure case - never suppresses.
+     */
+    public static class NeverSuppressThrowable extends Throwable {
+        private static final long serialVersionUID = 1L;
 
-		public NeverSuppressThrowable(String message, Throwable cause, boolean enableSuppression,
-				boolean writableStackTrace) {
-			super(message, cause, false, writableStackTrace);
-		}
-	}
+        public NeverSuppressThrowable(String message, Throwable cause, boolean enableSuppression,
+                boolean writableStackTrace) {
+            super(message, cause, false, writableStackTrace);
+        }
+    }
 
-	/**
-	 * Used to test a failure case - always allows stack writes.
-	 */
-	public static class AlwaysWritableThrowable extends Throwable {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test a failure case - always allows stack writes.
+     */
+    public static class AlwaysWritableThrowable extends Throwable {
+        private static final long serialVersionUID = 1L;
 
-		public AlwaysWritableThrowable(String message, Throwable cause, boolean enableSuppression,
-				boolean writableStackTrace) {
-			super(message, cause, enableSuppression, true);
-		}
-	}
+        public AlwaysWritableThrowable(String message, Throwable cause, boolean enableSuppression,
+                boolean writableStackTrace) {
+            super(message, cause, enableSuppression, true);
+        }
+    }
 
-	/**
-	 * Used to test a failure case - never allows stack writes.
-	 */
-	public static class NeverWritableThrowable extends Throwable {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test a failure case - never allows stack writes.
+     */
+    public static class NeverWritableThrowable extends Throwable {
+        private static final long serialVersionUID = 1L;
 
-		public NeverWritableThrowable(String message, Throwable cause, boolean enableSuppression,
-				boolean writableStackTrace) {
-			super(message, cause, enableSuppression, false);
-		}
-	}
+        public NeverWritableThrowable(String message, Throwable cause, boolean enableSuppression,
+                boolean writableStackTrace) {
+            super(message, cause, enableSuppression, false);
+        }
+    }
 
-	/**
-	 * Used to test a failure case - throws InstantiationException when
-	 * constructed.
-	 */
-	public static class ThrowInstantiationException extends Throwable {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test a failure case - throws InstantiationException when constructed.
+     */
+    public static class ThrowInstantiationException extends Throwable {
+        private static final long serialVersionUID = 1L;
 
-		public ThrowInstantiationException(String message, Throwable cause, boolean enableSuppression,
-				boolean writableStackTrace) throws InstantiationException {
+        public ThrowInstantiationException(String message, Throwable cause, boolean enableSuppression,
+                boolean writableStackTrace) throws InstantiationException {
 
-			throw new InstantiationException(ThrowablesTester.EXPECTED_EXCEPTION_MSG);
-		}
-	}
+            throw new InstantiationException(ThrowablesTester.EXPECTED_EXCEPTION_MSG);
+        }
+    }
 
-	/**
-	 * Used to test a simple success case.
-	 */
-	public static class SimpleThrowable extends Throwable {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test a simple success case.
+     */
+    public static class SimpleThrowable extends Throwable {
+        private static final long serialVersionUID = 1L;
 
-		public SimpleThrowable() {
-			super();
-		}
+        public SimpleThrowable() {
+            super();
+        }
 
-		public SimpleThrowable(String message) {
-			super(message);
-		}
-	}
+        public SimpleThrowable(String message) {
+            super(message);
+        }
+    }
 
-	/**
-	 * Used to test the exhaustive success case.
-	 */
-	public static class StaticThrowable extends Throwable {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test the exhaustive success case.
+     */
+    public static class StaticThrowable extends Throwable {
+        private static final long serialVersionUID = 1L;
 
-		public StaticThrowable() {
-			super();
-		}
+        public StaticThrowable() {
+            super();
+        }
 
-		public StaticThrowable(String message) {
-			super(message);
-		}
+        public StaticThrowable(String message) {
+            super(message);
+        }
 
-		public StaticThrowable(Throwable cause) {
-			super(cause);
-		}
+        public StaticThrowable(Throwable cause) {
+            super(cause);
+        }
 
-		public StaticThrowable(String message, Throwable cause) {
-			super(message, cause);
-		}
+        public StaticThrowable(String message, Throwable cause) {
+            super(message, cause);
+        }
 
-		public StaticThrowable(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-			super(message, cause, enableSuppression, writableStackTrace);
-		}
-	}
+        public StaticThrowable(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+            super(message, cause, enableSuppression, writableStackTrace);
+        }
+    }
 
 }

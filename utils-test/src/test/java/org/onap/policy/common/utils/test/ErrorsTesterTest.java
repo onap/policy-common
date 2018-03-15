@@ -26,52 +26,52 @@ import org.junit.Test;
 
 public class ErrorsTesterTest {
 
-	@Test
-	public void test() {
-		assertEquals(2, new ErrorsTester().testAllError(SimpleError.class));
-		assertEquals(5, new ErrorsTester().testAllError(StaticError.class));
-	}
+    @Test
+    public void test() {
+        assertEquals(2, new ErrorsTester().testAllError(SimpleError.class));
+        assertEquals(5, new ErrorsTester().testAllError(StaticError.class));
+    }
 
-	/**
-	 * Used to test a simple success case.
-	 */
-	public static class SimpleError extends Error {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test a simple success case.
+     */
+    public static class SimpleError extends Error {
+        private static final long serialVersionUID = 1L;
 
-		public SimpleError() {
-			super();
-		}
+        public SimpleError() {
+            super();
+        }
 
-		public SimpleError(String message) {
-			super(message);
-		}
-	}
+        public SimpleError(String message) {
+            super(message);
+        }
+    }
 
-	/**
-	 * Used to test the exhaustive success case.
-	 */
-	public static class StaticError extends Error {
-		private static final long serialVersionUID = 1L;
+    /**
+     * Used to test the exhaustive success case.
+     */
+    public static class StaticError extends Error {
+        private static final long serialVersionUID = 1L;
 
-		public StaticError() {
-			super();
-		}
+        public StaticError() {
+            super();
+        }
 
-		public StaticError(String message) {
-			super(message);
-		}
+        public StaticError(String message) {
+            super(message);
+        }
 
-		public StaticError(Throwable cause) {
-			super(cause);
-		}
+        public StaticError(Throwable cause) {
+            super(cause);
+        }
 
-		public StaticError(String message, Throwable cause) {
-			super(message, cause);
-		}
+        public StaticError(String message, Throwable cause) {
+            super(message, cause);
+        }
 
-		public StaticError(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-			super(message, cause, enableSuppression, writableStackTrace);
-		}
-	}
+        public StaticError(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+            super(message, cause, enableSuppression, writableStackTrace);
+        }
+    }
 
 }
