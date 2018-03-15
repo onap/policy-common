@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018 Ericsson. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,24 +18,13 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.im;
+package org.onap.policy.common.im.exceptions;
 
-public class StateManagementException extends IntegrityMonitorException {
-    private static final long serialVersionUID = 1L;
+public class EntityRetrievalException extends RuntimeException {
 
-    public StateManagementException() {
-        super();
-    }
+    private static final long serialVersionUID = 8761143697306009072L;
 
-    public StateManagementException(final String message) {
-        super(message);
-    }
-
-    public StateManagementException(final Throwable cause) {
-        super(cause);
-    }
-
-    public StateManagementException(final String message, final Throwable cause) {
+    public EntityRetrievalException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
