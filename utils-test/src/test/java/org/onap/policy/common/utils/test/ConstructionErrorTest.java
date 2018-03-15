@@ -20,18 +20,15 @@
 
 package org.onap.policy.common.utils.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-/**
- * 
- */
 public class ConstructionErrorTest extends ErrorsTester {
 
-	@Test
-	public void test() throws Exception {
-		assertEquals(4, testAllError(ConstructionError.class));
-	}
+    @Test
+    public void test() throws Exception {
+        assertEquals(4, testAllError(ConstructionError.class));
+    }
 
 }
