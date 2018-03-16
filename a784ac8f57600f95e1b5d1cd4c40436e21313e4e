@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_c3fc93b7",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/StateManagement.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 901,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-16T12:46:39Z",
+      "side": 1,
+      "message": "use a TypedQuery here, too",
+      "revId": "a784ac8f57600f95e1b5d1cd4c40436e21313e4e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
