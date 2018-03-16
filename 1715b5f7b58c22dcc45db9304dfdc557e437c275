@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_f6acefee",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/Configuration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-03-16T15:57:37Z",
+      "side": 1,
+      "message": "The comments here look like they were generated with the JAutoDoc Eclipse Plugin. I\u0027D delete the ones that merely repeat the variable name.",
+      "range": {
+        "startLine": 26,
+        "startChar": 1,
+        "endLine": 99,
+        "endChar": 38
+      },
+      "revId": "1715b5f7b58c22dcc45db9304dfdc557e437c275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
