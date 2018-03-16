@@ -17,9 +17,12 @@
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
+
 package org.onap.policy.common.logging.eelf;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
 import org.junit.Test;
 import org.onap.policy.common.logging.eelf.ErrorCodeMap.ErrorCodeInfo;
 
@@ -40,17 +43,18 @@ public class ErrorCodeMapTest {
         assertNotNull(ErrorCodeMap.getErrorCodeInfo(MessageCodes.ERROR_UNKNOWN));
         assertNotNull(ErrorCodeMap.getErrorCodeInfo(MessageCodes.ERROR_AUDIT));
     }
-    
+
     @Test
     public void testErrorCodeInfoGetErrorCode() {
         ErrorCodeInfo errorCodeInfo = ErrorCodeMap.getErrorCodeInfo(MessageCodes.EXCEPTION_ERROR);
         assertEquals("POLICY-503E", errorCodeInfo.getErrorCode());
     }
-    
+
     @Test
     public void testErrorCodeInfoGetErrorDesc() {
         ErrorCodeInfo errorCodeInfo = ErrorCodeMap.getErrorCodeInfo(MessageCodes.EXCEPTION_ERROR);
-        assertEquals("This is an exception error message during the process. Please check the error message for detail information", errorCodeInfo.getErrorDesc());
+        assertEquals("This is an exception error message during the process. Please check the error message for detail "
+                + "information", errorCodeInfo.getErrorDesc());
     }
 
 }

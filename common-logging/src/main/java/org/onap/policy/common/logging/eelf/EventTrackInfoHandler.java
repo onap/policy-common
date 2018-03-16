@@ -28,9 +28,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- *
- * EventTrackInfoHandler is the handler of clean up all expired event objects
- *
+ * EventTrackInfoHandler is the handler of clean up all expired event objects.
  */
 public class EventTrackInfoHandler extends TimerTask {
 
@@ -47,7 +45,7 @@ public class EventTrackInfoHandler extends TimerTask {
     }
 
     /**
-     * Removes all expired event objects from the ConcurrentHashMap of EventData
+     * Removes all expired event objects from the ConcurrentHashMap of EventData.
      */
     private void cleanUp() {
 

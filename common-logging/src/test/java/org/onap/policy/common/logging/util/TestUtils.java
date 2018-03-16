@@ -17,15 +17,27 @@
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
+
+
 package org.onap.policy.common.logging.util;
 
 import static org.junit.Assert.fail;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
 public class TestUtils {
-    
-    public static void overrideField(@SuppressWarnings("rawtypes") final Class clazz, final Object object, final String fieldName, final Object newValue) {
+
+    /**
+     * Override a field.
+     * 
+     * @param clazz the class the field belongs to
+     * @param object the instance of the class
+     * @param fieldName the name of the field
+     * @param newValue the value to set the field to
+     */
+    public static void overrideField(@SuppressWarnings("rawtypes") final Class clazz, final Object object,
+            final String fieldName, final Object newValue) {
         try {
             final Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
@@ -38,8 +50,16 @@ public class TestUtils {
             fail(e.toString());
         }
     }
-    
-    public static void overrideStaticField(@SuppressWarnings("rawtypes") final Class clazz, final String fieldName, final Object newValue) {
+
+    /**
+     * Override a static field.
+     * 
+     * @param clazz the class the field belongs to
+     * @param fieldName the name of the field
+     * @param newValue the value to set the field to
+     */
+    public static void overrideStaticField(@SuppressWarnings("rawtypes") final Class clazz, final String fieldName,
+            final Object newValue) {
         try {
             final Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);

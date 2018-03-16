@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,54 +20,42 @@
 
 package org.onap.policy.common.logging.nsa.impl;
 
+import org.onap.policy.common.logging.nsa.LoggingContext;
 import org.slf4j.MDC;
 
-import org.onap.policy.common.logging.nsa.LoggingContext;
-
 /**
- * A logging context for SLF4J
+ * A logging context for SLF4J.
  *
  */
-public class Slf4jLoggingContext implements LoggingContext
-{
-	public Slf4jLoggingContext ( LoggingContext base )
-	{
-	}
+public class Slf4jLoggingContext implements LoggingContext {
+    public Slf4jLoggingContext(LoggingContext base) {}
 
-	@Override
-	public void put ( String key, String value )
-	{
-		MDC.put ( key, value );
-	}
+    @Override
+    public void put(String key, String value) {
+        MDC.put(key, value);
+    }
 
-	@Override
-	public void put ( String key, long value )
-	{
-		put ( key, Long.toString(value));
-	}
+    @Override
+    public void put(String key, long value) {
+        put(key, Long.toString(value));
+    }
 
-	@Override
-	public String get ( String key, String defaultValue )
-	{
-		String result = MDC.get ( key );
-		if ( result == null )
-		{
-			result = defaultValue;
-		}
-		return result;
-	}
+    @Override
+    public String get(String key, String defaultValue) {
+        String result = MDC.get(key);
+        if (result == null) {
+            result = defaultValue;
+        }
+        return result;
+    }
 
-	@Override
-	public long get ( String key, long defaultValue )
-	{
-		final String str = get ( key, Long.toString(defaultValue));
-		try
-		{
-			return Long.parseLong ( str );
-		}
-		catch ( NumberFormatException x )
-		{
-			return defaultValue;
-		}
-	}
+    @Override
+    public long get(String key, long defaultValue) {
+        final String str = get(key, Long.toString(defaultValue));
+        try {
+            return Long.parseLong(str);
+        } catch (NumberFormatException x) {
+            return defaultValue;
+        }
+    }
 }

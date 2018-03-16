@@ -17,19 +17,25 @@
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
+
 package org.onap.policy.common.logging.flexlogger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import com.att.eelf.configuration.EELFLogger.Level;
+
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.UUID;
+
 import org.junit.Test;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.eelf.PolicyLogger;
-import com.att.eelf.configuration.EELFLogger.Level;
 
 public class SystemOutLoggerTest {
-    
+
     SystemOutLogger systemOutLogger = new SystemOutLogger("SystemOutLoggerTest");
 
     @Test
@@ -48,7 +54,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             systemOutLogger.setTransId("transactionId");
             System.setOut(ps);
             systemOutLogger.debug("message");
@@ -64,7 +70,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             systemOutLogger.setTransId("transactionId");
             System.setOut(ps);
             systemOutLogger.error("message");
@@ -80,7 +86,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             systemOutLogger.setTransId("transactionId");
             System.setOut(ps);
             systemOutLogger.info("message");
@@ -96,7 +102,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             systemOutLogger.setTransId("transactionId");
             System.setOut(ps);
             systemOutLogger.warn("message");
@@ -112,7 +118,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             systemOutLogger.setTransId("transactionId");
             System.setOut(ps);
             systemOutLogger.trace("message");
@@ -188,7 +194,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             systemOutLogger.setTransId("transactionId");
             System.setOut(ps);
             systemOutLogger.audit("message");
@@ -204,7 +210,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             systemOutLogger.setTransId("transactionId");
             System.setOut(ps);
             systemOutLogger.recordAuditEventStart("eventId");
@@ -220,7 +226,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             UUID uuid = UUID.randomUUID();
             System.setOut(ps);
             systemOutLogger.recordAuditEventStart(uuid);
@@ -236,7 +242,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.recordAuditEventEnd("eventId", "rule", "policyVersion");
             assertTrue(baos.toString().contains("SystemOutLoggerTest : eventId:rule:policyVersion"));
@@ -251,7 +257,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             UUID uuid = UUID.randomUUID();
             System.setOut(ps);
             systemOutLogger.recordAuditEventEnd(uuid, "rule", "policyVersion");
@@ -267,7 +273,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.recordAuditEventEnd("eventId", "rule");
             assertTrue(baos.toString().contains("SystemOutLoggerTest : eventId:rule"));
@@ -282,7 +288,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             UUID uuid = UUID.randomUUID();
             System.setOut(ps);
             systemOutLogger.recordAuditEventEnd(uuid, "rule");
@@ -298,7 +304,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.recordMetricEvent("eventId", "rule");
             assertTrue(baos.toString(), baos.toString().contains("SystemOutLoggerTest : eventId:eventIdmessage:rule"));
@@ -313,7 +319,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             UUID uuid = UUID.randomUUID();
             System.setOut(ps);
             systemOutLogger.recordMetricEvent(uuid, "str1");
@@ -329,7 +335,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.metrics("message");
             assertTrue(baos.toString().contains("SystemOutLoggerTest : message"));
@@ -344,10 +350,11 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.error(MessageCodes.ERROR_DATA_ISSUE, new NullPointerException(), "str1", "str2");
-            assertTrue(baos.toString().contains("SystemOutLoggerTest : MessageCodes :" + MessageCodes.ERROR_DATA_ISSUE + "[str1, str2]"));
+            assertTrue(baos.toString()
+                    .contains("SystemOutLoggerTest : MessageCodes :" + MessageCodes.ERROR_DATA_ISSUE + "[str1, str2]"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -359,11 +366,12 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.error(MessageCodes.ERROR_DATA_ISSUE, "str1", "str2");
-            assertTrue(baos.toString().contains("transactionId|SystemOutLoggerTest : MessageCode:" + MessageCodes.ERROR_DATA_ISSUE + "[str1, str2]"));
+            assertTrue(baos.toString().contains("transactionId|SystemOutLoggerTest : MessageCode:"
+                    + MessageCodes.ERROR_DATA_ISSUE + "[str1, str2]"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -380,11 +388,12 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.warn(MessageCodes.ERROR_DATA_ISSUE, "str1", "str2");
-            assertTrue(baos.toString().contains("transactionId|SystemOutLoggerTest : MessageCodes:" + MessageCodes.ERROR_DATA_ISSUE + "[str1, str2]"));
+            assertTrue(baos.toString().contains("transactionId|SystemOutLoggerTest : MessageCodes:"
+                    + MessageCodes.ERROR_DATA_ISSUE + "[str1, str2]"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -396,11 +405,12 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.warn(MessageCodes.ERROR_DATA_ISSUE, new NullPointerException(), "str1", "str2");
-            assertTrue(baos.toString().contains("transactionId|SystemOutLoggerTest : MessageCodes:" + MessageCodes.ERROR_DATA_ISSUE + "[str1, str2]"));
+            assertTrue(baos.toString().contains("transactionId|SystemOutLoggerTest : MessageCodes:"
+                    + MessageCodes.ERROR_DATA_ISSUE + "[str1, str2]"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -412,15 +422,16 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.debug(1, new NullPointerException());
-            assertTrue(baos.toString(), baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
+            assertTrue(baos.toString(),
+                    baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
             System.out.flush();
             System.setOut(old);
-        } 
+        }
     }
 
     @Test
@@ -428,11 +439,12 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.error(1, new NullPointerException());
-            assertTrue(baos.toString(), baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
+            assertTrue(baos.toString(),
+                    baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -444,11 +456,12 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.info(1, new NullPointerException());
-            assertTrue(baos.toString(), baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
+            assertTrue(baos.toString(),
+                    baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -460,11 +473,12 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.warn(1, new NullPointerException());
-            assertTrue(baos.toString(), baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
+            assertTrue(baos.toString(),
+                    baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -476,11 +490,12 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.trace(1, new NullPointerException());
-            assertTrue(baos.toString(), baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
+            assertTrue(baos.toString(),
+                    baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -492,11 +507,12 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.audit(1, new NullPointerException());
-            assertTrue(baos.toString(), baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
+            assertTrue(baos.toString(),
+                    baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -513,7 +529,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.postMDCInfoForTriggeredRule("transactionId");
             assertTrue(baos.toString(), baos.toString().contains("transactionId"));
@@ -528,7 +544,7 @@ public class SystemOutLoggerTest {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;
-        try{
+        try {
             System.setOut(ps);
             systemOutLogger.postMDCInfoForEvent(1);
             assertTrue(baos.toString(), baos.toString().contains("1"));

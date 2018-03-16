@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,37 +20,31 @@
 
 package org.onap.policy.common.logging.nsa;
 
-
 import org.onap.policy.common.logging.nsa.impl.SharedContext;
 import org.onap.policy.common.logging.nsa.impl.Slf4jLoggingContext;
 
 /**
- * A factory for setting up a LoggingContext
+ * A factory for setting up a LoggingContext.
  * 
  */
-public class LoggingContextFactory
-{
-	public static class Builder
-	{
+public class LoggingContextFactory {
+    public static class Builder {
 
-		private LoggingContext fBase = null;
-		private boolean fShared = false;
-		
-		public Builder withBaseContext ( LoggingContext lc )
-		{
-			fBase = lc;
-			return this;
-		}
+        private LoggingContext baseContext = null;
+        private boolean forShared = false;
 
-		public Builder forSharing ()
-		{
-			fShared = true;
-			return this;
-		}
+        public Builder withBaseContext(LoggingContext lc) {
+            baseContext = lc;
+            return this;
+        }
 
-		public LoggingContext build ()
-		{
-			return fShared ? new SharedContext ( fBase ) : new Slf4jLoggingContext ( fBase );
-		}
-	}
+        public Builder forSharing() {
+            forShared = true;
+            return this;
+        }
+
+        public LoggingContext build() {
+            return forShared ? new SharedContext(baseContext) : new Slf4jLoggingContext(baseContext);
+        }
+    }
 }

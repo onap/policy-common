@@ -30,17 +30,22 @@ public class EventTrackInfo {
 
     private final ConcurrentMap<String, EventData> eventInfo;
 
+    /**
+     * Construct an instance.
+     */
     public EventTrackInfo() {
         /*
-         * An initial capacity of 16 ensures the number of elements before resizing happens
-         * Load factor of 0,9 ensures a dense packaging inside ConcurrentHashMap which will optimize memory use
-         * Concurrency Level set to 1 will ensure that only one shard is created and maintained
+         * An initial capacity of 16 ensures the number of elements before resizing happens Load
+         * factor of 0,9 ensures a dense packaging inside ConcurrentHashMap which will optimize
+         * memory use Concurrency Level set to 1 will ensure that only one shard is created and
+         * maintained
          */
         eventInfo = new ConcurrentHashMap<>(16, 0.9f, 1);
     }
 
     /**
-     * Returns an instance of EventData associated to this requestID
+     * Returns an instance of EventData associated to this requestID.
+     * 
      * @param requestID request id
      * @return EventData
      */
@@ -50,6 +55,7 @@ public class EventTrackInfo {
 
     /**
      * Stores an EventData object in a ConcurrentHashMap using its requestID as key.
+     * 
      * @param event event data
      */
     public void storeEventData(EventData event) {
@@ -59,7 +65,7 @@ public class EventTrackInfo {
             if (id == null || id.isEmpty()) {
                 return;
             }
-            //in case override the start time, check the original event was already stored or not
+            // in case override the start time, check the original event was already stored or not
             if (!eventInfo.containsKey(id)) {
                 eventInfo.put(id, event);
             }
@@ -68,6 +74,7 @@ public class EventTrackInfo {
 
     /**
      * Removes an EventData object from a ConcurrentHashMap using the eventId as key.
+     * 
      * @param eventId event id
      */
     public void remove(String eventId) {
@@ -77,7 +84,7 @@ public class EventTrackInfo {
     }
 
     /**
-     * Returns a ConcurrentHashMap of EventData
+     * Returns a ConcurrentHashMap of EventData.
      */
     public ConcurrentMap<String, EventData> getEventInfo() {
         return eventInfo;

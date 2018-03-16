@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,77 +24,59 @@ package org.onap.policy.common.logging.eelf;
 public interface Configuration extends com.att.eelf.configuration.Configuration {
 
     /**
-     * The Date-time of the start of a transaction
+     * The Date-time of the start of a transaction.
      */
     String BEGIN_TIME_STAMP = "BeginTimestamp";
 
     /**
-     * The Date-time of the end of transaction
+     * The Date-time of the end of transaction.
      */
     String END_TIME_STAMP = "EndTimestamp";
 
     /**
-     * Externally advertised API invoked by clients of this component
+     * Externally advertised API invoked by clients of this component.
      */
     String SERVICE_NAME = "ServiceName";
 
     /**
-     * Client or user invoking the API
+     * Client or user invoking the API.
      */
     String PARTNER_NAME = "PartnerName";
 
-    /**
-     * Target Entity
-     */
     String TARGET_ENTITY = "TargetEntity";
 
-    /**
-     * Target service name
-     */
     String TARGET_SERVICE_NAME = "TargetServiceName";
 
     /**
-     * High level success or failure (COMPLETE or ERROR)
+     * High level success or failure (COMPLETE or ERROR).
      */
     String STATUS_CODE = "StatusCode";
 
     /**
-     * Application specific response code
+     * Application specific response code.
      */
     String RESPONSE_CODE = "ResponseCode";
 
     /**
-     * Human readable description of the application specific response code
+     * Human readable description of the application specific response code.
      */
     String RESPONSE_DESCRIPTION = "ResponseDescription";
 
     /**
-     * Externally advertised API invoked by clients of this component
+     * Externally advertised API invoked by clients of this component.
      */
     String ELAPSED_TIME = "ElapsedTime";
 
     /**
-     * High level failure (ERROR)
+     * High level failure (ERROR).
      */
     String ERROR_CATEGORY = "ErrorCategory";
 
-    /**
-     * Error Code
-     */
     String ERROR_CODE = "ErrorCode";
 
-    /**
-     * Error Description
-     */
     String ERROR_DESCRIPTION = "ErrorDescription";
 
-    /**
-     * Class name
-     */
     String CLASS_NAME = "ClassName";
 
-    /**
-     * Server name
-     */
     String SERVER_NAME = "ServerName";
 }
