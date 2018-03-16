@@ -17,13 +17,17 @@
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
+
 package org.onap.policy.common.logging.flexlogger;
 
-import static org.junit.Assert.*;
-import static org.onap.policy.common.logging.util.TestUtils.*;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertSame;
+import static org.onap.policy.common.logging.util.TestUtils.overrideStaticField;
+
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+
 import org.junit.Test;
 import org.onap.policy.common.logging.flexlogger.FlexLogger.PropertiesCallBack;
 
@@ -32,81 +36,81 @@ public class FlexLoggerTest {
     @Test
     public void testGetLoggerClassOfQEelf() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.EELF);
-        Logger logger = FlexLogger.getLogger((Class)null);
-        assertSame(logger, FlexLogger.getLogger((Class)null));
-        assertNotEquals(logger, FlexLogger.getLogger(String.class));        
+        Logger logger = FlexLogger.getLogger((Class) null);
+        assertSame(logger, FlexLogger.getLogger((Class) null));
+        assertNotEquals(logger, FlexLogger.getLogger(String.class));
     }
-    
+
     @Test
     public void testGetLoggerClassOfQLog4j() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.LOG4J);
         Logger logger = FlexLogger.getLogger(this.getClass());
         assertSame(logger, FlexLogger.getLogger(this.getClass()));
     }
-    
+
     @Test
     public void testGetLoggerClassOfQSystemOut() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.SYSTEMOUT);
         Logger logger = FlexLogger.getLogger(this.getClass());
         assertSame(logger, FlexLogger.getLogger(this.getClass()));
     }
-    
+
     @Test
     public void testGetLoggerStringEelf() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.EELF);
         Logger logger = FlexLogger.getLogger("str1");
         assertSame(logger, FlexLogger.getLogger("str1"));
     }
-    
+
     @Test
     public void testGetLoggerStringLog4j() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.LOG4J);
         Logger logger = FlexLogger.getLogger("str1");
         assertSame(logger, FlexLogger.getLogger("str1"));
     }
-    
+
     @Test
     public void testGetLoggerStringSystemOut() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.SYSTEMOUT);
         Logger logger = FlexLogger.getLogger("str1");
         assertSame(logger, FlexLogger.getLogger("str1"));
     }
-    
+
     @Test
     public void testGetLoggerClassOfQBooleanEelf() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.EELF);
         Logger logger = FlexLogger.getLogger(this.getClass(), true);
         assertSame(logger, FlexLogger.getLogger(this.getClass(), true));
     }
-    
+
     @Test
     public void testGetLoggerClassOfQBooleanLog4j() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.LOG4J);
         Logger logger = FlexLogger.getLogger(this.getClass(), true);
         assertSame(logger, FlexLogger.getLogger(this.getClass(), true));
     }
-    
+
     @Test
     public void testGetLoggerClassOfQBooleanSystemOut() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.SYSTEMOUT);
         Logger logger = FlexLogger.getLogger(this.getClass(), true);
         assertSame(logger, FlexLogger.getLogger(this.getClass(), true));
     }
-    
+
     @Test
     public void testGetLoggerStringBooleanEelf() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.EELF);
         Logger logger = FlexLogger.getLogger("str1", true);
         assertSame(logger, FlexLogger.getLogger("str1", true));
     }
-    
+
     @Test
     public void testGetLoggerStringBooleanLog4j() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.LOG4J);
         Logger logger = FlexLogger.getLogger("str1", true);
         assertSame(logger, FlexLogger.getLogger("str1", true));
     }
-    
+
     @Test
     public void testGetLoggerStringBooleanSystemOut() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.SYSTEMOUT);
@@ -118,15 +122,15 @@ public class FlexLoggerTest {
     public void testGetClassName() {
         assertNotEquals("FlexLogger", new FlexLogger().getClassName());
     }
-    
+
     @Test
-    public void testPropertiesCallBack() throws IOException{
-        PropertiesCallBack propertiesCallBack = new PropertiesCallBack("name");
+    public void testPropertiesCallBack() throws IOException {
         Set<String> changedKeys = new HashSet<>();
         changedKeys.add("debugLogger.level");
         changedKeys.add("metricsLogger.level");
         changedKeys.add("error.level");
         changedKeys.add("audit.level");
+        PropertiesCallBack propertiesCallBack = new PropertiesCallBack("name");
         propertiesCallBack.propertiesChanged(PropertyUtil.getProperties("config/policyLogger.properties"), changedKeys);
     }
 

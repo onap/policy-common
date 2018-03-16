@@ -24,33 +24,39 @@ import javax.servlet.http.HttpServletRequest;
 
 public class ONAPLoggingUtils {
 
-	private ONAPLoggingUtils() {};
-	
-	public static ONAPLoggingContext getLoggingContextForRequest(HttpServletRequest request,
-			ONAPLoggingContext baseContext)
-	{
-		ONAPLoggingContext requestContext = new ONAPLoggingContext(baseContext);
-		if (request.getLocalAddr() != null) { // may be null in junit tests
-			requestContext.setServerIPAddress(request.getLocalAddr());
-		}
-		// get client IP address as leftmost address in X-Forwarded-For header if present,
-		// otherwise from remote address in the request
-		String forwarded = request.getHeader("X-Forwarded-For");
-		if (forwarded != null && forwarded.trim().length() > 0) {
-			forwarded = forwarded.trim().split(",")[0];
-			requestContext.setClientIPAddress(forwarded);
-		} else if (request.getRemoteAddr() != null) { // may be null in junit tests
-			requestContext.setClientIPAddress(request.getRemoteAddr());
-		}
-		// RequestID 
-		// This needs to be renamed to ONAP when the other components in ONAP 
-		// rename to this.
-		String requestId = request.getHeader("X-ECOMP-RequestID");
-		if (requestId != null && requestId.trim().length() > 0) {
-			requestContext.setRequestID(requestId);
-		}
-		return requestContext;
-	}
+    private ONAPLoggingUtils() {}
+
+    /**
+     * Get the ONAPLoggingContext for a request.
+     * 
+     * @param request the request
+     * @param baseContext the context to supply to the ONAPLoggingContext
+     * @return the ONAPLoggingContext
+     */
+    public static ONAPLoggingContext getLoggingContextForRequest(HttpServletRequest request,
+            ONAPLoggingContext baseContext) {
+        ONAPLoggingContext requestContext = new ONAPLoggingContext(baseContext);
+        if (request.getLocalAddr() != null) { // may be null in junit tests
+            requestContext.setServerIPAddress(request.getLocalAddr());
+        }
+        // get client IP address as leftmost address in X-Forwarded-For header if present,
+        // otherwise from remote address in the request
+        String forwarded = request.getHeader("X-Forwarded-For");
+        if (forwarded != null && forwarded.trim().length() > 0) {
+            forwarded = forwarded.trim().split(",")[0];
+            requestContext.setClientIPAddress(forwarded);
+        } else if (request.getRemoteAddr() != null) { // may be null in junit tests
+            requestContext.setClientIPAddress(request.getRemoteAddr());
+        }
+        // RequestID
+        // This needs to be renamed to ONAP when the other components in ONAP
+        // rename to this.
+        String requestId = request.getHeader("X-ECOMP-RequestID");
+        if (requestId != null && requestId.trim().length() > 0) {
+            requestContext.setRequestID(requestId);
+        }
+        return requestContext;
+    }
 
 
 }

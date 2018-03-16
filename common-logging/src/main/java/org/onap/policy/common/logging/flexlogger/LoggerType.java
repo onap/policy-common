@@ -21,10 +21,8 @@
 package org.onap.policy.common.logging.flexlogger;
 
 /**
- * 
- * Logger types
- *
+ * Logger types.
  */
 public enum LoggerType {
-	EELF, LOG4J, SYSTEMOUT
+    EELF, LOG4J, SYSTEMOUT
 }

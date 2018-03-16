@@ -23,35 +23,40 @@ package org.onap.policy.common.logging.eelf;
 import java.time.Instant;
 
 /**
- *
  * EventData can be used for logging a rule event.
- *
  */
 public class EventData {
 
-    private String requestID = null;
+    private String requestId = null;
     private Instant startTime = null;
     private Instant endTime = null;
 
-    //Default constructor takes no arguments.
-    //Is empty because instance variables are assigned
-    //their default values upon declaration.
-    public EventData() { 
-        //See above comments for the reason this constructor is empty
+    // Default constructor takes no arguments.
+    // Is empty because instance variables are assigned
+    // their default values upon declaration.
+    public EventData() {
+        // See above comments for the reason this constructor is empty
     }
 
-    public EventData(String requestID, Instant startTime, Instant endTime) {
-        this.requestID = requestID;
+    /**
+     * Create an instance.
+     * 
+     * @param requestId the request ID
+     * @param startTime the start time
+     * @param endTime the end time
+     */
+    public EventData(String requestId, Instant startTime, Instant endTime) {
+        this.requestId = requestId;
         this.startTime = startTime;
         this.endTime = endTime;
     }
 
     public String getRequestID() {
-        return requestID;
+        return requestId;
     }
 
-    public void setRequestID(String requestID) {
-        this.requestID = requestID;
+    public void setRequestID(String requestId) {
+        this.requestId = requestId;
     }
 
     public Instant getStartTime() {
@@ -72,14 +77,14 @@ public class EventData {
 
     @Override
     public String toString() {
-        return requestID + " Starting Time : " + this.startTime + " Ending Time : " + this.endTime;
+        return requestId + " Starting Time : " + this.startTime + " Ending Time : " + this.endTime;
     }
 
     @Override
     public int hashCode() {
         final int prime = 31;
         int result = 1;
-        result = prime * result + ((requestID == null) ? 0 : requestID.hashCode());
+        result = prime * result + ((requestId == null) ? 0 : requestId.hashCode());
         return result;
     }
 
@@ -92,18 +97,18 @@ public class EventData {
             return false;
         }
         if (obj instanceof String) {
-            String requestId = (String) obj;
-            return requestID != null && requestID.equals(requestId);
+            String otherRequestId = (String) obj;
+            return requestId != null && requestId.equals(otherRequestId);
         }
         if (getClass() != obj.getClass()) {
             return false;
         }
         EventData other = (EventData) obj;
-        if (requestID == null) {
-            if (other.requestID != null) {
+        if (requestId == null) {
+            if (other.requestId != null) {
                 return false;
             }
-        } else if (!requestID.equals(other.requestID)) {
+        } else if (!requestId.equals(other.requestId)) {
             return false;
         }
         return true;

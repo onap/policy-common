@@ -41,7 +41,9 @@ public class DroolsPDPMDCInfo implements MDCInfo {
     }
 
     /**
-     * @return the instance of ConcurrentHashMap
+     * Get the MMDC Info
+     * 
+     * @return the instance of ConcurrentHashMap.
      */
     @Override
     public ConcurrentMap<String, String> getMDCInfo() {

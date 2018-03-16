@@ -20,155 +20,154 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.time.Instant;
 
 import org.junit.Test;
 
-/**
- * 
- */
 public class EventDataTest {
-	private static final Instant istart = Instant.ofEpochMilli(100000l);
-	private static final Instant iend = Instant.ofEpochMilli(200000l);
+    private static final Instant istart = Instant.ofEpochMilli(100000L);
+    private static final Instant iend = Instant.ofEpochMilli(200000L);
 
-	/**
-	 * Test method for {@link EventData#EventData()}.
-	 */
-	@Test
-	public void testEventData() {
-		EventData d = new EventData();
+    /**
+     * Test method for {@link EventData#EventData()}.
+     */
+    @Test
+    public void testEventData() {
+        EventData eventData = new EventData();
 
-		assertNull(d.getEndTime());
-		assertNull(d.getRequestID());
-		assertNull(d.getStartTime());
-	}
+        assertNull(eventData.getEndTime());
+        assertNull(eventData.getRequestID());
+        assertNull(eventData.getStartTime());
+    }
 
-	/**
-	 * Test method for {@link EventData#EventData(String, Instant, Instant)}.
-	 */
-	@Test
-	public void testEventDataStringInstantInstant() {
-		EventData d = new EventData("myreq", istart, iend);
+    /**
+     * Test method for {@link EventData#EventData(String, Instant, Instant)}.
+     */
+    @Test
+    public void testEventDataStringInstantInstant() {
+        EventData eventData = new EventData("myreq", istart, iend);
 
-		assertEquals("myreq", d.getRequestID());
-		assertEquals(istart, d.getStartTime());
-		assertEquals(iend, d.getEndTime());
-	}
+        assertEquals("myreq", eventData.getRequestID());
+        assertEquals(istart, eventData.getStartTime());
+        assertEquals(iend, eventData.getEndTime());
+    }
 
-	/**
-	 * Test method for {@link EventData#getRequestID()} and
-	 * {@link EventData#setRequestID(String)}.
-	 */
-	@Test
-	public void testGetSetRequestID() {
-		EventData d = new EventData();
-		assertNull(d.getRequestID());
+    /**
+     * Test method for {@link EventData#getRequestID()} and {@link EventData#setRequestID(String)}.
+     */
+    @Test
+    public void testGetSetRequestId() {
+        EventData eventData = new EventData();
+        assertNull(eventData.getRequestID());
 
-		d.setRequestID("abc");
-		assertEquals("abc", d.getRequestID());
+        eventData.setRequestID("abc");
+        assertEquals("abc", eventData.getRequestID());
 
-		d.setRequestID("def");
-		assertEquals("def", d.getRequestID());
-	}
+        eventData.setRequestID("def");
+        assertEquals("def", eventData.getRequestID());
+    }
 
-	/**
-	 * Test method for {@link EventData#getStartTime()} and
-	 * {@link EventData#setStartTime(Instant)}.
-	 */
-	@Test
-	public void testGetSetStartTime() {
-		EventData d = new EventData();
-		assertNull(d.getStartTime());
+    /**
+     * Test method for {@link EventData#getStartTime()} and {@link EventData#setStartTime(Instant)}.
+     */
+    @Test
+    public void testGetSetStartTime() {
+        EventData eventData = new EventData();
+        assertNull(eventData.getStartTime());
 
-		d.setStartTime(istart);
-		assertEquals(istart, d.getStartTime());
+        eventData.setStartTime(istart);
+        assertEquals(istart, eventData.getStartTime());
 
-		d.setStartTime(iend);
-		assertEquals(iend, d.getStartTime());
+        eventData.setStartTime(iend);
+        assertEquals(iend, eventData.getStartTime());
 
-		// setting end-time should not effect start-time
-		d.setEndTime(istart);
-		assertEquals(iend, d.getStartTime());
-	}
+        // setting end-time should not effect start-time
+        eventData.setEndTime(istart);
+        assertEquals(iend, eventData.getStartTime());
+    }
 
-	/**
-	 * Test method for {@link EventData#getEndTime()} and
-	 * {@link EventData#setEndTime(Instant)}.
-	 */
-	@Test
-	public void testGetSetEndTime() {
-		EventData d = new EventData();
-		assertNull(d.getEndTime());
+    /**
+     * Test method for {@link EventData#getEndTime()} and {@link EventData#setEndTime(Instant)}.
+     */
+    @Test
+    public void testGetSetEndTime() {
+        EventData eventData = new EventData();
+        assertNull(eventData.getEndTime());
 
-		d.setEndTime(iend);
-		assertEquals(iend, d.getEndTime());
+        eventData.setEndTime(iend);
+        assertEquals(iend, eventData.getEndTime());
 
-		d.setEndTime(istart);
-		assertEquals(istart, d.getEndTime());
+        eventData.setEndTime(istart);
+        assertEquals(istart, eventData.getEndTime());
 
-		// setting start-time should not effect end-time
-		d.setStartTime(iend);
-		assertEquals(istart, d.getEndTime());
-	}
+        // setting start-time should not effect end-time
+        eventData.setStartTime(iend);
+        assertEquals(istart, eventData.getEndTime());
+    }
 
-	/**
-	 * Test method for {@link EventData#toString()}.
-	 */
-	@Test
-	public void testToString() {
-		EventData d = new EventData("myreq", istart, iend);
-		assertEquals("myreq Starting Time : 1970-01-01T00:01:40Z Ending Time : 1970-01-01T00:03:20Z", d.toString());
-	}
+    /**
+     * Test method for {@link EventData#toString()}.
+     */
+    @Test
+    public void testToString() {
+        EventData eventData = new EventData("myreq", istart, iend);
+        assertEquals("myreq Starting Time : 1970-01-01T00:01:40Z Ending Time : 1970-01-01T00:03:20Z",
+                eventData.toString());
+    }
 
-	/**
-	 * Test method for {@link EventData#hashCode()}.
-	 */
-	@Test
-	public void testHashCode() {
-		int hc1 = new EventData("abc", istart, iend).hashCode();
-		
-		assertNotEquals(hc1, new EventData("abd", istart, iend).hashCode());
-		assertEquals(hc1, new EventData("abc", iend, istart).hashCode());
-	}
+    /**
+     * Test method for {@link EventData#hashCode()}.
+     */
+    @Test
+    public void testHashCode() {
+        int hc1 = new EventData("abc", istart, iend).hashCode();
 
-	/**
-	 * Test method for {@link EventData#equals(Object)}.
-	 */
-	@Test
-	public void testEqualsObject() {
-		EventData d1 = new EventData("abc", istart, iend);
-		EventData d2 = new EventData("abd", istart, iend);
-		EventData d3 = new EventData("abc", iend, istart);
+        assertNotEquals(hc1, new EventData("abd", istart, iend).hashCode());
+        assertEquals(hc1, new EventData("abc", iend, istart).hashCode());
+    }
 
-		// same object
-		assertTrue(d1.equals(d1));
-		
-		// compare with null
-		assertFalse(d1.equals(null));
-		
-		// compare with request id
-		assertTrue(d1.equals("abc"));
-		assertFalse(d1.equals("abd"));
+    /**
+     * Test method for {@link EventData#equals(Object)}.
+     */
+    @Test
+    public void testEqualsObject() {
+        final EventData d1 = new EventData("abc", istart, iend);
+        final EventData d2 = new EventData("abd", istart, iend);
+        final EventData d3 = new EventData("abc", iend, istart);
 
-		// compare with int - different class type
-		assertFalse(d1.equals(10));
-		
-		// "this" has null request id
-		assertFalse(new EventData().equals(d1));
+        // same object
+        assertTrue(d1.equals(d1));
 
-		// both null
-		assertTrue(new EventData().equals(new EventData()));
-		
-		// this request id is not null, other is null
-		assertFalse(d1.equals(new EventData()));
-		
-		// neither null, same
-		assertTrue(d1.equals(d3));
-		
-		// neither null, diff
-		assertFalse(d1.equals(d2));
-	}
+        // compare with null
+        assertFalse(d1.equals(null));
+
+        // compare with request id
+        assertTrue(d1.equals("abc"));
+        assertFalse(d1.equals("abd"));
+
+        // compare with int - different class type
+        assertFalse(d1.equals(10));
+
+        // "this" has null request id
+        assertFalse(new EventData().equals(d1));
+
+        // both null
+        assertTrue(new EventData().equals(new EventData()));
+
+        // this request id is not null, other is null
+        assertFalse(d1.equals(new EventData()));
+
+        // neither null, same
+        assertTrue(d1.equals(d3));
+
+        // neither null, diff
+        assertFalse(d1.equals(d2));
+    }
 
 }

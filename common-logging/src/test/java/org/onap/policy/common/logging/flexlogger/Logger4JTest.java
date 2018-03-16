@@ -17,10 +17,17 @@
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
+
 package org.onap.policy.common.logging.flexlogger;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+
 import java.util.UUID;
+
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
 import org.junit.Test;
@@ -29,7 +36,7 @@ import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.util.TestUtils;
 
 public class Logger4JTest {
-    
+
     private Logger4J logger4J = new Logger4J("str1", "Logger4JTest");
 
     @Test
@@ -215,7 +222,8 @@ public class Logger4JTest {
         TestUtils.overrideField(Logger4J.class, logger4J, "log", logger);
         logger4J.setTransId("transactionId");
         logger4J.error(MessageCodes.GENERAL_ERROR, new NullPointerException(), "str1", "str2");
-        Mockito.verify(logger).error("transactionId|Logger4JTest|MessageCodes :" + MessageCodes.GENERAL_ERROR + "[str1, str2]");
+        Mockito.verify(logger)
+                .error("transactionId|Logger4JTest|MessageCodes :" + MessageCodes.GENERAL_ERROR + "[str1, str2]");
     }
 
     @Test
@@ -224,7 +232,8 @@ public class Logger4JTest {
         TestUtils.overrideField(Logger4J.class, logger4J, "log", logger);
         logger4J.setTransId("transactionId");
         logger4J.error(MessageCodes.GENERAL_ERROR, "str1", "str2");
-        Mockito.verify(logger).error("transactionId|Logger4JTest|MessageCode:" + MessageCodes.GENERAL_ERROR + "[str1, str2]");
+        Mockito.verify(logger)
+                .error("transactionId|Logger4JTest|MessageCode:" + MessageCodes.GENERAL_ERROR + "[str1, str2]");
     }
 
     @Test
@@ -232,7 +241,7 @@ public class Logger4JTest {
         String returnedTransactionId = logger4J.postMDCInfoForEvent("transactionId");
         assertEquals("transactionId", returnedTransactionId);
     }
-    
+
     @Test
     public void testPostMDCInfoForEventEmptyString() {
         String returnedTransactionId = logger4J.postMDCInfoForEvent("");

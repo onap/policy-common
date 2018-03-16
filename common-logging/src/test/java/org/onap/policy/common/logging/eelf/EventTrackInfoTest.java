@@ -20,111 +20,111 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.time.Instant;
 
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * 
- */
 public class EventTrackInfoTest {
-	
-	private static final Instant istart = Instant.ofEpochMilli(100000l);
-	private static final Instant iend = Instant.ofEpochMilli(200000l);
-	
-	private static final EventData data1 = new EventData("abc", istart, iend);
-	private static final EventData data2 = new EventData("def", iend, istart);
-	
-	private EventTrackInfo info;
-	
-	@Before
-	public void setUp() {
-		info = new EventTrackInfo();
-		
-	}
 
-	/**
-	 * Test method for {@link EventTrackInfo#EventTrackInfo()}.
-	 */
-	@Test
-	public void testEventTrackInfo() {
-		assertNotNull(info.getEventInfo());
-	}
+    private static final Instant istart = Instant.ofEpochMilli(100000L);
+    private static final Instant iend = Instant.ofEpochMilli(200000L);
 
-	/**
-	 * Test method for {@link EventTrackInfo#getEventDataByRequestID(String)}.
-	 */
-	@Test
-	public void testGetEventDataByRequestID() {
-		info.storeEventData(data1);
-		info.storeEventData(data2);
+    private static final EventData data1 = new EventData("abc", istart, iend);
+    private static final EventData data2 = new EventData("def", iend, istart);
 
-		assertTrue(data1 == info.getEventDataByRequestID("abc"));
-		assertTrue(data2 == info.getEventDataByRequestID("def"));
-		assertNull(info.getEventDataByRequestID("hello"));
-	}
+    private EventTrackInfo info;
 
-	/**
-	 * Test method for {@link EventTrackInfo#storeEventData(EventData)}.
-	 */
-	@Test
-	public void testStoreEventData() {
-		// should ignore null
-		info.storeEventData(null);
-		assertTrue(info.getEventInfo().isEmpty());
-		
-		// should ignore if request id is null or empty
-		info.storeEventData(new EventData());
-		info.storeEventData(new EventData("", istart, iend));
-		assertTrue(info.getEventInfo().isEmpty());
-		
-		info.storeEventData(data1);
-		info.storeEventData(data2);
-		assertEquals(2, info.getEventInfo().size());
+    @Before
+    public void setUp() {
+        info = new EventTrackInfo();
 
-		// look-up by request id
-		assertTrue(data1 == info.getEventDataByRequestID("abc"));
-		assertTrue(data2 == info.getEventDataByRequestID("def"));
-		
-		// doesn't replace existing value
-		info.storeEventData(new EventData("abc", iend, istart));
-		assertEquals(2, info.getEventInfo().size());
-		assertTrue(data1 == info.getEventDataByRequestID("abc"));
-		assertTrue(data2 == info.getEventDataByRequestID("def"));
-	}
+    }
 
-	/**
-	 * Test method for {@link EventTrackInfo#remove(String)}.
-	 */
-	@Test
-	public void testRemove() {
-		info.storeEventData(data1);
-		info.storeEventData(data2);
-		
-		info.remove("abc");
-		
-		// ensure only that item was removed
-		assertEquals(1, info.getEventInfo().size());
+    /**
+     * Test method for {@link EventTrackInfo#EventTrackInfo()}.
+     */
+    @Test
+    public void testEventTrackInfo() {
+        assertNotNull(info.getEventInfo());
+    }
 
-		// look-up by request id
-		assertNull(info.getEventDataByRequestID("abc"));
-		assertTrue(data2 == info.getEventDataByRequestID("def"));
-	}
+    /**
+     * Test method for {@link EventTrackInfo#getEventDataByRequestID(String)}.
+     */
+    @Test
+    public void testGetEventDataByRequestID() {
+        info.storeEventData(data1);
+        info.storeEventData(data2);
 
-	/**
-	 * Test method for {@link EventTrackInfo#getEventInfo()}.
-	 */
-	@Test
-	public void testGetEventInfo() {		
-		info.storeEventData(data1);
-		info.storeEventData(data2);
-		
-		assertEquals(2, info.getEventInfo().size());
-		assertTrue(data1 == info.getEventInfo().get("abc"));
-		assertTrue(data2 == info.getEventInfo().get("def"));
-	}
+        assertTrue(data1 == info.getEventDataByRequestID("abc"));
+        assertTrue(data2 == info.getEventDataByRequestID("def"));
+        assertNull(info.getEventDataByRequestID("hello"));
+    }
+
+    /**
+     * Test method for {@link EventTrackInfo#storeEventData(EventData)}.
+     */
+    @Test
+    public void testStoreEventData() {
+        // should ignore null
+        info.storeEventData(null);
+        assertTrue(info.getEventInfo().isEmpty());
+
+        // should ignore if request id is null or empty
+        info.storeEventData(new EventData());
+        info.storeEventData(new EventData("", istart, iend));
+        assertTrue(info.getEventInfo().isEmpty());
+
+        info.storeEventData(data1);
+        info.storeEventData(data2);
+        assertEquals(2, info.getEventInfo().size());
+
+        // look-up by request id
+        assertTrue(data1 == info.getEventDataByRequestID("abc"));
+        assertTrue(data2 == info.getEventDataByRequestID("def"));
+
+        // doesn't replace existing value
+        info.storeEventData(new EventData("abc", iend, istart));
+        assertEquals(2, info.getEventInfo().size());
+        assertTrue(data1 == info.getEventDataByRequestID("abc"));
+        assertTrue(data2 == info.getEventDataByRequestID("def"));
+    }
+
+    /**
+     * Test method for {@link EventTrackInfo#remove(String)}.
+     */
+    @Test
+    public void testRemove() {
+        info.storeEventData(data1);
+        info.storeEventData(data2);
+
+        info.remove("abc");
+
+        // ensure only that item was removed
+        assertEquals(1, info.getEventInfo().size());
+
+        // look-up by request id
+        assertNull(info.getEventDataByRequestID("abc"));
+        assertTrue(data2 == info.getEventDataByRequestID("def"));
+    }
+
+    /**
+     * Test method for {@link EventTrackInfo#getEventInfo()}.
+     */
+    @Test
+    public void testGetEventInfo() {
+        info.storeEventData(data1);
+        info.storeEventData(data2);
+
+        assertEquals(2, info.getEventInfo().size());
+        assertTrue(data1 == info.getEventInfo().get("abc"));
+        assertTrue(data2 == info.getEventInfo().get("def"));
+    }
 
 }
