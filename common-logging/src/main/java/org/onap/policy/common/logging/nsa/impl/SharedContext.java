@@ -27,32 +27,27 @@ import org.onap.policy.common.logging.nsa.LoggingContext;
 import org.onap.policy.common.logging.nsa.SharedLoggingContext;
 
 /**
- * A shared logging context for SLF4J
+ * A shared logging context for SLF4J.
  *
  */
-public class SharedContext extends Slf4jLoggingContext implements SharedLoggingContext
-{
-	private final HashMap<String,String> fMap;
-	
-	public SharedContext ( LoggingContext base )
-	{
-		super ( base );
-		fMap = new HashMap<> ();
-	}
+public class SharedContext extends Slf4jLoggingContext implements SharedLoggingContext {
+    private final HashMap<String, String> contextMap;
 
-	@Override
-	public void put ( String key, String value )
-	{
-		super.put ( key, value );
-		fMap.put ( key, value );
-	}
+    public SharedContext(LoggingContext base) {
+        super(base);
+        contextMap = new HashMap<>();
+    }
 
-	@Override
-	public void transferTo ( SharedLoggingContext lc )
-	{
-		for ( Entry<String,String> e : fMap.entrySet () )
-		{
-			lc.put ( e.getKey(), e.getValue() );
-		}
-	}
+    @Override
+    public void put(String key, String value) {
+        super.put(key, value);
+        contextMap.put(key, value);
+    }
+
+    @Override
+    public void transferTo(SharedLoggingContext lc) {
+        for (Entry<String, String> e : contextMap.entrySet()) {
+            lc.put(e.getKey(), e.getValue());
+        }
+    }
 }

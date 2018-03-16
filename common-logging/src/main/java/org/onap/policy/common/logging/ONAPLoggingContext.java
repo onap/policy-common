@@ -24,35 +24,37 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
+
 import org.onap.policy.common.logging.nsa.LoggingContextFactory;
 import org.onap.policy.common.logging.nsa.SharedLoggingContext;
 import org.slf4j.MDC;
 
 /**
- * A facade over the org.onap.policy.common.logging.nsa.SharedLoggingContext interface/implementation that makes it
- * more convenient to use. SharedLoggingContext builds on the SLF4J/log4j Mapped Diagnostic Context (MDC)
- * feature, which provides a hashmap-based context for data items that need to be logged, where the
- * hashmap is kept in ThreadLocal storage. The data items can be referenced in the log4j configuration
- * using the EnhancedPatternLayout appender layout class, and the notation "%X{key}" in the ConversionPattern
- * string, where "key" is one of the keys in the MDC hashmap (which is determined by what hashmap entries the
- * application code creates). Example:
- *   log4j.appender.auditAppender.layout=org.apache.log4j.EnhancedPatternLayout
- *   log4j.appender.auditAppender.layout.ConversionPattern=%d|%X{requestId}|%X{serviceInstanceId}|...|%m%n
+ * A facade over the org.onap.policy.common.logging.nsa.SharedLoggingContext
+ * interface/implementation that makes it more convenient to use. SharedLoggingContext builds on the
+ * SLF4J/log4j Mapped Diagnostic Context (MDC) feature, which provides a hashmap-based context for
+ * data items that need to be logged, where the hashmap is kept in ThreadLocal storage. The data
+ * items can be referenced in the log4j configuration using the EnhancedPatternLayout appender
+ * layout class, and the notation "%X{key}" in the ConversionPattern string, where "key" is one of
+ * the keys in the MDC hashmap (which is determined by what hashmap entries the application code
+ * creates). Example: log4j.appender.auditAppender.layout=org.apache.log4j.EnhancedPatternLayout
+ * log4j.appender.auditAppender.layout.ConversionPattern=%d|%X{requestId}|%X{serviceInstanceId}|...|%m%n
  * where "requestId" and "serviceInstanceId" are entries in the MDC hashmap.
- *
- * The notable functionality the SharedLoggingContext adds over MDC is that it maintains its own copy
- * of the MDC data items in a hashmap (not in ThreadLocal storage), which allows more control of the data.
- * The ONAPLoggingContext constructor that takes another ONAPLoggingContext object as a parameter makes
- * use of this feature. For example if there is a thread pulling requests from a queue for processing, it
- * can keep a base logging context with data that is common to all requests, and for each request, create a
- * new logging context with that base context as a parameter; this will create a new logging context with
- * those initial values and none of the request-specific values from the previous request such as a request ID.
-
- * The setter methods in this class set corresponding items in the SharedLoggingContext/MDC hashmaps.
- * These items correspond to the fields defined in the "ONAP platform application logging guidelines"
- * document.  In addition, there is a pair of convenience functions, transactionStarted() and
- * transactionEnded(), that can be called at the beginning and end of transaction processing to calculate
- * the duration of the transaction and record that value in the "timer" item.
+ * 
+ * <p>The notable functionality the SharedLoggingContext adds over MDC is that it maintains its own
+ * copy of the MDC data items in a hashmap (not in ThreadLocal storage), which allows more control
+ * of the data. The ONAPLoggingContext constructor that takes another ONAPLoggingContext object as a
+ * parameter makes use of this feature. For example if there is a thread pulling requests from a
+ * queue for processing, it can keep a base logging context with data that is common to all
+ * requests, and for each request, create a new logging context with that base context as a
+ * parameter; this will create a new logging context with those initial values and none of the
+ * request-specific values from the previous request such as a request ID.
+ * 
+ * <p>The setter methods in this class set corresponding items in the SharedLoggingContext/MDC
+ * hashmaps. These items correspond to the fields defined in the "ONAP platform application logging
+ * guidelines" document. In addition, there is a pair of convenience functions, transactionStarted()
+ * and transactionEnded(), that can be called at the beginning and end of transaction processing to
+ * calculate the duration of the transaction and record that value in the "timer" item.
  *
  */
 public class ONAPLoggingContext {
@@ -101,13 +103,13 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Create a new ONAPLoggingContext initially populated with the values
-     * in the given base context.  This can be used for example in a servlet
-     * where each incoming request may be processed by a separate thread, but
-     * there may be some logging data items that will be unchanging and common
-     * to all the threads.  That constant data can be populated in a base
-     * context, and then each request handler creates new context passing that
-     * base context to populate the common data in the new one.
+     * Create a new ONAPLoggingContext initially populated with the values in the given base
+     * context. This can be used for example in a servlet where each incoming request may be
+     * processed by a separate thread, but there may be some logging data items that will be
+     * unchanging and common to all the threads. That constant data can be populated in a base
+     * context, and then each request handler creates new context passing that base context to
+     * populate the common data in the new one.
+     * 
      * @param baseContext onap logging context
      */
     public ONAPLoggingContext(ONAPLoggingContext baseContext) {
@@ -128,9 +130,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Indicate the start of transaction processing.  The current system time
-     * will be recorded for use by <code>transactionEnded()</code> to calculate
-     * the duration of the transaction.
+     * Indicate the start of transaction processing. The current system time will be recorded for
+     * use by <code>transactionEnded()</code> to calculate the duration of the transaction.
      */
     public void transactionStarted() {
         transactionStartTime = Instant.now();
@@ -138,9 +139,9 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Indicate the end of transaction processing.  The difference between the
-     * current system time and the time recorded by <code>transactionStarted()</code>
-     * will be recorded in the data item with key "TransactionElapsedTime".
+     * Indicate the end of transaction processing. The difference between the current system time
+     * and the time recorded by <code>transactionStarted()</code> will be recorded in the data item
+     * with key "TransactionElapsedTime".
      */
     public void transactionEnded() {
         Instant transactionEndTime = Instant.now();
@@ -149,9 +150,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Indicate the start of metric processing.  The current system time
-     * will be recorded for use by <code>metricEnded()</code> to calculate
-     * the duration of the metric.
+     * Indicate the start of metric processing. The current system time will be recorded for use by
+     * <code>metricEnded()</code> to calculate the duration of the metric.
      */
     public void metricStarted() {
         metricStartTime = Instant.now();
@@ -159,9 +159,9 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Indicate the end of metric processing.  The difference between the
-     * current system time and the time recorded by <code>metricStarted()</code>
-     * will be recorded in the data item with key "MetricElapsedTime".
+     * Indicate the end of metric processing. The difference between the current system time and the
+     * time recorded by <code>metricStarted()</code> will be recorded in the data item with key
+     * "MetricElapsedTime".
      */
     public void metricEnded() {
         Instant metricEndTime = Instant.now();
@@ -170,7 +170,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "requestId"
+     * Set the value for the data item with key "requestId".
      *
      * @param id request identifier
      */
@@ -179,7 +179,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "requestId"
+     * Get the value for the data item with key "requestId".
+     * 
      * @return current value, or empty string if not set
      */
     public String getRequestID() {
@@ -187,7 +188,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "serviceInstanceId"
+     * Set the value for the data item with key "serviceInstanceId".
      *
      * @param id service identifier
      */
@@ -196,7 +197,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "serviceInstanceId"
+     * Get the value for the data item with key "serviceInstanceId".
+     * 
      * @return current value, or empty string if not set
      */
     public String getServiceInstanceID() {
@@ -204,9 +206,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "threadId".
-     * An alternative to using this item is to use the
-     * %t conversion character in the appender's conversion string.
+     * Set the value for the data item with key "threadId". An alternative to using this item is to
+     * use the %t conversion character in the appender's conversion string.
      *
      * @param id thread identifier
      */
@@ -215,7 +216,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "threadId"
+     * Get the value for the data item with key "threadId".
+     * 
      * @return current value, or empty string if not set
      */
     public String getThreadID() {
@@ -223,7 +225,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "serverName"
+     * Set the value for the data item with key "serverName".
      *
      * @param name server name
      */
@@ -232,7 +234,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "serverName"
+     * Get the value for the data item with key "serverName".
+     * 
      * @return current value, or empty string if not set
      */
     public String getServerName() {
@@ -240,7 +243,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "serviceName"
+     * Set the value for the data item with key "serviceName".
      *
      * @param name service name
      */
@@ -249,7 +252,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "serviceName"
+     * Get the value for the data item with key "serviceName".
+     * 
      * @return current value, or empty string if not set
      */
     public String getServiceName() {
@@ -257,7 +261,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "partnerName"
+     * Set the value for the data item with key "partnerName".
      *
      * @param name partner name
      */
@@ -266,7 +270,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "partnerName"
+     * Get the value for the data item with key "partnerName".
+     * 
      * @return current value, or empty string if not set
      */
     public String getPartnerName() {
@@ -274,7 +279,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "statusCode"
+     * Set the value for the data item with key "statusCode".
      *
      * @param name status code
      */
@@ -283,7 +288,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "statusCode"
+     * Get the value for the data item with key "statusCode".
+     * 
      * @return current value, or empty string if not set
      */
     public String getStatusCode() {
@@ -291,7 +297,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "targetEntity"
+     * Set the value for the data item with key "targetEntity".
      *
      * @param name target entity
      */
@@ -300,7 +306,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "targetEntity"
+     * Get the value for the data item with key "targetEntity".
+     * 
      * @return current value, or empty string if not set
      */
     public String getTargetEntity() {
@@ -308,7 +315,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "targetServiceName"
+     * Set the value for the data item with key "targetServiceName".
      *
      * @param name target service name
      */
@@ -317,7 +324,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "targetServiceName"
+     * Get the value for the data item with key "targetServiceName".
+     * 
      * @return current value, or empty string if not set
      */
     public String getTargetServiceName() {
@@ -325,7 +333,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "instanceUuid"
+     * Set the value for the data item with key "instanceUuid".
      *
      * @param uuid instance uuid
      */
@@ -334,7 +342,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "instanceUuid"
+     * Get the value for the data item with key "instanceUuid".
+     * 
      * @return current value, or empty string if not set
      */
     public String getInstanceUUID() {
@@ -342,7 +351,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "severity"
+     * Set the value for the data item with key "severity".
      *
      * @param severity severity
      */
@@ -351,7 +360,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "severity"
+     * Get the value for the data item with key "severity".
+     * 
      * @return current value, or empty string if not set
      */
     public String getSeverity() {
@@ -359,7 +369,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "serverIp"
+     * Set the value for the data item with key "serverIp".
      *
      * @param serverIP server ip address
      */
@@ -368,7 +378,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "serverIp"
+     * Get the value for the data item with key "serverIp".
+     * 
      * @return current value, or empty string if not set
      */
     public String getServerIPAddress() {
@@ -376,7 +387,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "server"
+     * Set the value for the data item with key "server".
      *
      * @param server server
      */
@@ -385,7 +396,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "server"
+     * Get the value for the data item with key "server".
+     * 
      * @return current value, or empty string if not set
      */
     public String getServer() {
@@ -393,7 +405,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "clientIp"
+     * Set the value for the data item with key "clientIp".
      *
      * @param clientIP client ip address
      */
@@ -402,7 +414,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "clientIp"
+     * Get the value for the data item with key "clientIp".
+     * 
      * @return current value, or empty string if not set
      */
     public String getClientIPAddress() {
@@ -410,13 +423,11 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "classname".
-     * Use of this item is not recommended (unless it is used to
-     * indicate something other than the Java classname) since
-     * it would be unwieldy to maintain a correct value across
-     * calls to/returns from methods in other classes.
-     * Use of the PatternLayout %c conversion character in the
-     * conversion string will give a more reliable value.
+     * Set the value for the data item with key "classname". Use of this item is not recommended
+     * (unless it is used to indicate something other than the Java classname) since it would be
+     * unwieldy to maintain a correct value across calls to/returns from methods in other classes.
+     * Use of the PatternLayout %c conversion character in the conversion string will give a more
+     * reliable value.
      *
      * @param classname class name
      */
@@ -425,7 +436,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "classname"
+     * Get the value for the data item with key "classname".
+     * 
      * @return current value, or empty string if not set
      */
     public String getClassname() {
@@ -433,7 +445,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "TransactionBeginTimestamp"
+     * Set the value for the data item with key "TransactionBeginTimestamp".
      *
      * @param transactionStartTime transaction start time
      */
@@ -443,7 +455,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "TransactionBeginTimestamp"
+     * Get the value for the data item with key "TransactionBeginTimestamp".
+     * 
      * @return current value, or 0 if not set
      */
     public long getTransactionBeginTimestamp() {
@@ -451,7 +464,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "TransactionEndTimestamp"
+     * Set the value for the data item with key "TransactionEndTimestamp".
      *
      * @param transactionEndTime transaction end time
      */
@@ -461,7 +474,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "TransactionEndTimestamp"
+     * Get the value for the data item with key "TransactionEndTimestamp".
+     * 
      * @return current value, or 0 if not set
      */
     public long getTransactionEndTimestamp() {
@@ -469,12 +483,10 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "TransactionElapsedTime".
-     * An alternative to calling this method directly is to call
-     * <code>transactionStarted()</code> at the start of transaction
-     * processing and <code>transactionEnded()</code> at the end,
-     * which will compute the time difference in milliseconds
-     * and store the result as the "ns" value.
+     * Set the value for the data item with key "TransactionElapsedTime". An alternative to calling
+     * this method directly is to call <code>transactionStarted()</code> at the start of transaction
+     * processing and <code>transactionEnded()</code> at the end, which will compute the time
+     * difference in milliseconds and store the result as the "ns" value.
      *
      * @param transactionEndTime transaction end time
      */
@@ -485,7 +497,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "TransactionElapsedTime"
+     * Get the value for the data item with key "TransactionElapsedTime".
+     * 
      * @return current value, or 0 if not set
      */
     public long getTransactionElapsedTime() {
@@ -493,7 +506,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "MetricBeginTimestamp"
+     * Set the value for the data item with key "MetricBeginTimestamp".
      *
      * @param metricStartTime metric start time
      */
@@ -503,7 +516,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "MetricBeginTimestamp"
+     * Get the value for the data item with key "MetricBeginTimestamp".
+     * 
      * @return current value, or 0 if not set
      */
     public long getMetricBeginTimestamp() {
@@ -511,7 +525,7 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "MetricEndTimestamp"
+     * Set the value for the data item with key "MetricEndTimestamp".
      *
      * @param metricEndTime metric end time
      */
@@ -521,7 +535,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "MetricEndTimestamp"
+     * Get the value for the data item with key "MetricEndTimestamp".
+     * 
      * @return current value, or 0 if not set
      */
     public long getMetricEndTimestamp() {
@@ -529,11 +544,9 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Set the value for the data item with key "MetricElapsedTime".
-     * An alternative to calling this method directly is to call
-     * <code>metricStarted()</code> at the start of metric
-     * processing and <code>metricEnded()</code> at the end,
-     * which will compute the time difference in milliseconds
+     * Set the value for the data item with key "MetricElapsedTime". An alternative to calling this
+     * method directly is to call <code>metricStarted()</code> at the start of metric processing and
+     * <code>metricEnded()</code> at the end, which will compute the time difference in milliseconds
      * and store the result as the "ns" value.
      *
      * @param metricEndTime metric end time
@@ -545,7 +558,8 @@ public class ONAPLoggingContext {
     }
 
     /**
-     * Get the value for the data item with key "MetricElapsedTime"
+     * Get the value for the data item with key "MetricElapsedTime".
+     * 
      * @return current value, or 0 if not set
      */
     public long getMetricElapsedTime() {

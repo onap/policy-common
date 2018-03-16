@@ -19,9 +19,10 @@
  */
 
 /**
- * This package provides a logging context infrastructure and a corresponding
- * implementation based on the SLF4J/Log4j "MDC" (Mapped Diagnostic Context) feature.
+ * This package provides a logging context infrastructure and a corresponding implementation based
+ * on the SLF4J/Log4j "MDC" (Mapped Diagnostic Context) feature.
  * 
  */
+
 package org.onap.policy.common.logging.nsa;
 
