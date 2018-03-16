@@ -20,6 +20,8 @@
 
 package org.onap.policy.common.sitemanager;
 
+import java.io.BufferedReader;
+
 /*
  * Site Manager argument list:
  *
@@ -34,32 +36,34 @@ package org.onap.policy.common.sitemanager;
  */
 
 import java.io.File;
-import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.TreeSet;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-import javax.persistence.Persistence;
 import javax.management.JMX;
 import javax.management.ObjectName;
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
-import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
-import org.onap.policy.common.im.jpa.StateManagementEntity;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.onap.policy.common.im.jmx.ComponentAdminMBean;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.onap.policy.common.im.jmx.ComponentAdminMBean;
+import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
+import org.onap.policy.common.im.jpa.StateManagementEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class contains the main entry point for Site Manager.
@@ -69,12 +73,10 @@ public class Main
 	private static final Logger logger = LoggerFactory.getLogger(Main.class.getName());
 	
   // table mapping 'resourceName' to 'StateManagmentEntity'
-  static HashMap<String, StateManagementEntity> stateManagementTable =
-	new HashMap<String, StateManagementEntity>();
+  static Map<String, StateManagementEntity> stateManagementTable = new HashMap<>();
 
   // table mapping 'resourceName' to 'StateManagmentEntity'
-  static HashMap<String, ResourceRegistrationEntity> resourceRegistrationTable =
-	new HashMap<String, ResourceRegistrationEntity>();
+  static Map<String, ResourceRegistrationEntity> resourceRegistrationTable = new HashMap<>();
 
   /**
    * Print out help information regarding command arguments.
@@ -99,7 +101,7 @@ public class Main
    *
    * @param propertiesFileName the path to the properties file
    */
-  private static void helpProperties(String propertiesFileName)
+  private static void helpProperties(final String propertiesFileName)
   {
 	if (propertiesFileName == null)
 	  {
@@ -111,7 +113,7 @@ public class Main
 	  }
 	else
 	  {
-		File file = new File(propertiesFileName);
+		final File file = new File(propertiesFileName);
 		if (!file.exists())
 		  {
 			// file name specified, but does not exist
@@ -148,50 +150,25 @@ public class Main
    *
    * @param args these are command-line arguments to 'siteManager'
    */
-  public static void main(String... args)
+  public static void main(final String[] args)
   {
-	Options options = new Options();
-	options.addOption("s", true, "specify site");
-	options.addOption("r", true, "specify resource name");
-	options.addOption("h", false, "display help");
-	options.addOption("?", false, "display help");
-
-	// parse options
-	CommandLineParser parser = new DefaultParser();
-	CommandLine cmd = null;
-
-	try
-	  {
-		cmd = parser.parse(options, args);
-	  }
-	catch (ParseException e)
-	  {
-		System.out.println(e.getMessage());
-		help();
-		System.exit(1);
-	  }
-
-	if (cmd == null || cmd.getOptionValue('h') != null || cmd.getOptionValue('?') != null)
-	  {
-		help();
-		System.exit(0);
-	  }
+	CommandLine cmd = getCommandLine(args);
 
 	// fetch options, and remaining arguments
-	String sOption = cmd.getOptionValue('s');
-	String rOption = cmd.getOptionValue('r');
-	List<String> argList = cmd.getArgList();
+	final String sOption = cmd.getOptionValue('s');
+	final String rOption = cmd.getOptionValue('r');
+	final List<String> argList = cmd.getArgList();
 
 	// a number of commands require either the '-r' option or '-s' option
-	boolean optionLetterSpecified = (rOption != null || sOption != null);
+	final boolean optionLetterSpecified = (rOption != null || sOption != null);
 
 	// used to accumulate any error messages that are generated
-	StringBuilder error = new StringBuilder();
+	final StringBuilder error = new StringBuilder();
 
 	// first non-option argument
 	String arg0 = null;
 
-	if (argList.size() == 0)
+	if (argList.isEmpty())
 	  {
 		error.append("No command specified\n");
 	  }
@@ -272,55 +249,13 @@ public class Main
 	  }
 
 	// read in properties used to access the database
-	String propertiesFileName = System.getProperty("siteManager.properties");
-	File propertiesFile = null;
-
-	if (propertiesFileName == null
-		|| !(propertiesFile = new File(propertiesFileName)).exists())
-	  {
-		helpProperties(propertiesFileName);
-		System.exit(3);
-	  }
-	FileInputStream fis = null;
-	Properties properties = new Properties();
-	try
-	  {
-		fis = new FileInputStream(propertiesFile);
-		properties.load(fis);
-	  }
-	catch (Exception e)
-	  {
-		System.out.println("Exception loading properties: " + e);
-		helpProperties(propertiesFileName);
-		System.exit(3);
-	  }
-	finally
-	  {
-		try
-		  {
-			fis.close();
-		  }
-		catch (Exception e)
-		  {
-			System.err.println(e);
-		  }
-	  }
-
-	// verify that we have all of the properties needed
-	if (properties.getProperty("javax.persistence.jdbc.driver") == null
-		|| properties.getProperty("javax.persistence.jdbc.url") == null
-		|| properties.getProperty("javax.persistence.jdbc.user") == null
-		|| properties.getProperty("javax.persistence.jdbc.password") == null)
-	  {
-		// one or more missing properties
-		helpProperties(propertiesFileName);
-		System.exit(3);
-	  }
+	final String propertiesFileName = System.getProperty("siteManager.properties");
+	final Properties properties= getProperties(propertiesFileName);
 
 	// access database through 'EntityManager'
-	EntityManagerFactory emf =
+	final EntityManagerFactory emf =
 	  Persistence.createEntityManagerFactory("operationalPU", properties);
-	EntityManager em = emf.createEntityManager();
+	final EntityManager em = emf.createEntityManager();
 
 	// sQuery - used for StateManagementEntity table
 	// rQuery - used for ResourceRegistrationEntity table
@@ -355,11 +290,11 @@ public class Main
 
 	// perform 'StateManagementEntity' query, and place matching entries
 	// in 'stateManagementTable'
-	for (Object o : sQuery.getResultList())
+	for (final Object o : sQuery.getResultList())
 	  {
 		if (o instanceof StateManagementEntity)
 		  {
-			StateManagementEntity s = (StateManagementEntity) o;
+			final StateManagementEntity s = (StateManagementEntity) o;
 			stateManagementTable.put(s.getResourceName(), s);
 		  }
 	  }
@@ -367,12 +302,12 @@ public class Main
 	// perform 'ResourceRegistrationQuery', and place matching entries
 	// in 'resourceRegistrationTable' ONLY if there is also an associated
 	// 'stateManagementTable' entry
-	for (Object o : rQuery.getResultList())
+	for (final Object o : rQuery.getResultList())
 	  {
 		if (o instanceof ResourceRegistrationEntity)
 		  {
-			ResourceRegistrationEntity r = (ResourceRegistrationEntity) o;
-			String resourceName = r.getResourceName();
+			final ResourceRegistrationEntity r = (ResourceRegistrationEntity) o;
+			final String resourceName = r.getResourceName();
 			if (stateManagementTable.get(resourceName) != null)
 			  {
 				// only include entries that have a corresponding
@@ -391,19 +326,19 @@ public class Main
 	if ("setAdminState".equalsIgnoreCase(arg0))
 	  {
 		// update admin state on all of the nodes
-		String adminState = argList.get(1);
-		EntityTransaction et = em.getTransaction();
+		final String adminState = argList.get(1);
+		final EntityTransaction et = em.getTransaction();
 		et.begin();
 		try
 		  {
 			// iterate over all matching 'ResourceRegistrationEntity' instances
-			for (ResourceRegistrationEntity r :
+			for (final ResourceRegistrationEntity r :
 				   resourceRegistrationTable.values())
 			  {
 				// we know the corresponding 'StateManagementEntity' exists --
 				// 'ResourceRegistrationEntity' entries without a matching
 				// 'StateManagementEntity' entry were not placed in the table
-				StateManagementEntity s =
+				final StateManagementEntity s =
 				  stateManagementTable.get(r.getResourceName());
 
 				// update the admin state, and save the changes
@@ -421,7 +356,7 @@ public class Main
 	else if ("lock".equalsIgnoreCase(arg0) || "unlock".equalsIgnoreCase(arg0))
 	  {
 		// these use the JMX interface
-		for (ResourceRegistrationEntity r :
+		for (final ResourceRegistrationEntity r :
 			   resourceRegistrationTable.values())
 		  {
 			// lock or unlock the entity
@@ -446,10 +381,10 @@ public class Main
    * @param arg0 this is the string "lock" or "unlock"
    * @param r this is the ResourceRegistrationEntity to lock or unlock
    */
-  static void jmxOp(String arg0, ResourceRegistrationEntity r)
+  static void jmxOp(final String arg0, final ResourceRegistrationEntity r)
   {
-	String resourceName = r.getResourceName();
-	String jmxUrl = r.getResourceUrl();
+	final String resourceName = r.getResourceName();
+	final String jmxUrl = r.getResourceUrl();
 	if (jmxUrl == null)
 	  {
 		System.out.println(arg0 + ": no resource URL for '"
@@ -461,7 +396,7 @@ public class Main
 	try
 	  {
 		connector = JMXConnectorFactory.connect(new JMXServiceURL(jmxUrl));
-		ComponentAdminMBean admin = JMX.newMXBeanProxy
+		final ComponentAdminMBean admin = JMX.newMXBeanProxy
 		  (connector.getMBeanServerConnection(),
 		   new ObjectName("ONAP_POLICY_COMP:name=" + resourceName),
 		   ComponentAdminMBean.class);
@@ -475,7 +410,7 @@ public class Main
 			admin.unlock();
 		  }
 	  }
-	catch (Exception e)
+	catch (final Exception e)
 	  {
 		// e.printStackTrace();
 		System.out.println(arg0 + " failed for '" + resourceName + "': " + e);
@@ -488,7 +423,7 @@ public class Main
 			  {
 				connector.close();
 			  }
-			catch (Exception e)
+			catch (final Exception e)
 			  {
 				System.err.println(e);
 			  }
@@ -504,7 +439,7 @@ public class Main
    * @return a negative value if s1<s2, 0 if they are equal,
    *	and positive if s1>s2
    */
-  static private int stringCompare(String s1, String s2)
+  private static int stringCompare(final String s1, final String s2)
   {
 	return ((s1 == null) ?
 			(s2 == null ? 0 : -1) :
@@ -521,12 +456,12 @@ public class Main
    * @param s this is an array of length 7, containing the current String
    *	entry for each column
    */
-  static private void updateLengths(int[] current, String[] s)
+  private static void updateLengths(final int[] current, final String[] s)
   {
 	for (int i = 0 ; i < 7 ; i += 1)
 	  {
-		String str = s[i];
-		int newLength = (str == null ? 4 : str.length());
+		final String str = s[i];
+		final int newLength = (str == null ? 4 : str.length());
 		if (current[i] < newLength)
 		  {
 			// this column needs to be expanded
@@ -540,10 +475,10 @@ public class Main
    */
   static void display()
   {
-	TreeSet<String[]> treeset = new TreeSet<String[]>
+	final TreeSet<String[]> treeset = new TreeSet<String[]>
 	  (new Comparator<String[]>()
 	  {
-		public int compare(String[] r1, String[] r2)
+		public int compare(final String[] r1, final String[] r2)
 		  {
 			int rval = 0;
 
@@ -558,28 +493,28 @@ public class Main
 		  }
 	  });
 
-	String[] labels = new String[]
+	final String[] labels = new String[]
 	  {"Site", "NodeType", "ResourceName",
 	   "AdminState", "OpState", "AvailStatus", "StandbyStatus"};
-	String[] underlines = new String[]
+	final String[] underlines = new String[]
 	  {"----", "--------", "------------",
 	   "----------", "-------", "-----------", "-------------"};
 
 	// each column needs to be at least wide enough to fit the column label
-	int lengths[] = new int[7];
+	final int lengths[] = new int[7];
 	updateLengths(lengths, labels);
 
 	// Go through the 'resourceRegistrationTable', and generate the
 	// associated table row. Maximum column widths are updated, and the
 	// entry is inserted into tree, which has the effect of sorting the
 	// entries.
-	for (ResourceRegistrationEntity r : resourceRegistrationTable.values())
+	for (final ResourceRegistrationEntity r : resourceRegistrationTable.values())
 	  {
-		StateManagementEntity s =
+		final StateManagementEntity s =
 		  stateManagementTable.get(r.getResourceName());
 
 		// these are the entries to be displayed for this row
-		String[] values = new String[]
+		final String[] values = new String[]
 		  {
 			r.getSite(), r.getNodeType(), r.getResourceName(),
 			s.getAdminState(), s.getOpState(),
@@ -591,23 +526,82 @@ public class Main
 	  }
 
 	// generate format string
-	StringBuilder sb = new StringBuilder();
+	final StringBuilder sb = new StringBuilder();
 	for (int i = 0 ; i < 7 ; i += 1)
 	  {
 		sb.append('%').append(i+1).append("$-")
 		  .append(lengths[i]).append("s ");
 	  }
 	sb.setCharAt(sb.length()-1, '\n');
-	String formatString = sb.toString();
+	final String formatString = sb.toString();
 
 	// display column headers
 	logger.info(formatString, (Object[])labels);
 	logger.info(formatString, (Object[])underlines);
 
 	// display all of the rows
-	for (String[] values : treeset)
+	for (final String[] values : treeset)
 	  {
 		logger.info(formatString, (Object[])values);
 	  }
+  }
+  
+  private static Properties getProperties(final String propertiesFileName) {
+      final File propertiesFile = new File(propertiesFileName);
+
+      if (propertiesFileName == null || !propertiesFile.exists()) {
+          helpProperties(propertiesFileName);
+          System.exit(3);
+      }
+      final Properties properties = getProperties(propertiesFile.toPath());
+
+      // verify that we have all of the properties needed
+      if (properties.getProperty("javax.persistence.jdbc.driver") == null
+              || properties.getProperty("javax.persistence.jdbc.url") == null
+              || properties.getProperty("javax.persistence.jdbc.user") == null
+              || properties.getProperty("javax.persistence.jdbc.password") == null) {
+          // one or more missing properties
+          helpProperties(propertiesFileName);
+          System.exit(3);
+      }
+      return properties;
+  }
+
+  private static Properties getProperties(final Path filePath) {
+      final Properties properties = new Properties();
+      try (final BufferedReader bufferedReader = Files.newBufferedReader(filePath);) {
+          properties.load(bufferedReader);
+      } catch (final Exception e) {
+          System.out.println("Exception loading properties: " + e);
+          helpProperties(filePath.getFileName().toString());
+          System.exit(3);
+      }
+      return properties;
+  }
+
+  private static CommandLine getCommandLine(final String[] args) {
+      final Options options = new Options();
+      options.addOption("s", true, "specify site");
+      options.addOption("r", true, "specify resource name");
+      options.addOption("h", false, "display help");
+      options.addOption("?", false, "display help");
+
+      // parse options
+      final CommandLineParser parser = new DefaultParser();
+      CommandLine cmd = null;
+
+      try {
+          cmd = parser.parse(options, args);
+      } catch (final ParseException e) {
+          System.out.println(e.getMessage());
+          help();
+          System.exit(1);
+      }
+
+      if (cmd == null || cmd.getOptionValue('h') != null || cmd.getOptionValue('?') != null) {
+          help();
+          System.exit(0);
+      }
+      return cmd;
   }
 }
