@@ -29,84 +29,82 @@ import javax.persistence.EntityManager;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.utils.jpa.EntityMgrCloser;
 
 public class EntityMgrCloserTest {
-	
-	private EntityManager mgr;
-	
 
-	@Before
-	public void setUp() throws Exception {
-		mgr = mock(EntityManager.class);
-	}
+    private EntityManager mgr;
 
 
-	/**
-	 * Verifies that the constructor does not do anything extra before
-	 * being closed.
-	 */
-	@Test
-	public void testEntityMgrCloser() {
-		EntityMgrCloser c = new EntityMgrCloser(mgr);
-		
-		assertEquals(mgr, c.getManager());
+    @Before
+    public void setUp() throws Exception {
+        mgr = mock(EntityManager.class);
+    }
 
-		// verify not closed yet
-		verify(mgr, never()).close();
-		
-		c.close();
 
-		verify(mgr).close();
-	}
+    /**
+     * Verifies that the constructor does not do anything extra before being closed.
+     */
+    @Test
+    public void testEntityMgrCloser() {
+        EntityMgrCloser entityMgrCloser = new EntityMgrCloser(mgr);
 
-	@Test
-	public void testGetManager() {
-		try(EntityMgrCloser c = new EntityMgrCloser(mgr)) {
-			assertEquals(mgr, c.getManager());
-		}
-	}
-	
-	/**
-	 * Verifies that the manager gets closed when close() is invoked.
-	 */
-	@Test
-	public void testClose() {
-		EntityMgrCloser c = new EntityMgrCloser(mgr);
-		
-		c.close();
-		
-		// should be closed
-		verify(mgr).close();
-	}
+        assertEquals(mgr, entityMgrCloser.getManager());
 
-	/**
-	 * Ensures that the manager gets closed when "try" block exits normally.
-	 */
-	@Test
-	public void testClose_TryWithoutExcept() {
-		try(EntityMgrCloser c = new EntityMgrCloser(mgr)) {
-			
-		}
-		
-		verify(mgr).close();
-	}
+        // verify not closed yet
+        verify(mgr, never()).close();
 
-	/**
-	 * Ensures that the manager gets closed when "try" block throws an
-	 * exception.
-	 */
-	@Test
-	public void testClose_TryWithExcept() {
-		try {
-			try(EntityMgrCloser c = new EntityMgrCloser(mgr)) {
-				throw new Exception("expected exception");
-			}
-			
-		} catch (Exception e) {
-		}
-		
-		verify(mgr).close();
-	}
+        entityMgrCloser.close();
+
+        verify(mgr).close();
+    }
+
+    @Test
+    public void testGetManager() {
+        try (EntityMgrCloser c = new EntityMgrCloser(mgr)) {
+            assertEquals(mgr, c.getManager());
+        }
+    }
+
+    /**
+     * Verifies that the manager gets closed when close() is invoked.
+     */
+    @Test
+    public void testClose() {
+        EntityMgrCloser entityMgrCloser = new EntityMgrCloser(mgr);
+
+        entityMgrCloser.close();
+
+        // should be closed
+        verify(mgr).close();
+    }
+
+    /**
+     * Ensures that the manager gets closed when "try" block exits normally.
+     */
+    @Test
+    public void testClose_TryWithoutExcept() {
+        try (EntityMgrCloser entityMgrCloser = new EntityMgrCloser(mgr)) {
+            // No need to do anything in the try block
+        }
+
+        verify(mgr).close();
+    }
+
+    /**
+     * Ensures that the manager gets closed when "try" block throws an exception.
+     */
+    @Test
+    public void testClose_TryWithExcept() {
+        try {
+            try (EntityMgrCloser c = new EntityMgrCloser(mgr)) {
+                throw new Exception("expected exception");
+            }
+
+        } catch (Exception exception) {
+            // Ignore the exception
+        }
+
+        verify(mgr).close();
+    }
 
 }

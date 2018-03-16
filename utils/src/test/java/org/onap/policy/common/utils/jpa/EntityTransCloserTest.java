@@ -31,201 +31,202 @@ import javax.persistence.EntityTransaction;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.utils.jpa.EntityTransCloser;
 
 public class EntityTransCloserTest {
-	
-	private EntityTransaction trans;
 
-	@Before
-	public void setUp() throws Exception {
-		trans = mock(EntityTransaction.class);
-		
-		when(trans.isActive()).thenReturn(true);
-	}
+    private EntityTransaction trans;
+
+    /**
+     * Set up EntityTransaction mock.
+     */
+    @Before
+    public void setUp() throws Exception {
+        trans = mock(EntityTransaction.class);
+
+        when(trans.isActive()).thenReturn(true);
+    }
 
 
 
-	/**
-	 * Verifies that the constructor starts a transaction, but does not do
-	 * anything extra before being closed.
-	 */
-	@Test
-	public void testEntityTransCloser() {
-		EntityTransCloser t = new EntityTransCloser(trans);
-		
-		assertEquals(trans, t.getTransation());
-		
-		// verify that transaction was started
-		verify(trans).begin();
+    /**
+     * Verifies that the constructor starts a transaction, but does not do anything extra before
+     * being closed.
+     */
+    @Test
+    public void testEntityTransCloser() {
+        EntityTransCloser entityTransCloser = new EntityTransCloser(trans);
 
-		// verify not closed, committed, or rolled back yet
-		verify(trans, never()).commit();
-		verify(trans, never()).rollback();
-		
-		t.close();
+        assertEquals(trans, entityTransCloser.getTransation());
 
-		verify(trans).rollback();
-	}
-	
-	@Test
-	public void testGetTransation() {
-		try(EntityTransCloser t = new EntityTransCloser(trans)) {
-			assertEquals(trans, t.getTransation());
-		}
-	}
+        // verify that transaction was started
+        verify(trans).begin();
 
-	/**
-	 * Verifies that the transaction is rolled back and the manager is
-	 * closed when and a transaction is active.
-	 */
-	@Test
-	public void testClose_Active() {
-		EntityTransCloser t = new EntityTransCloser(trans);
+        // verify not closed, committed, or rolled back yet
+        verify(trans, never()).commit();
+        verify(trans, never()).rollback();
 
-		when(trans.isActive()).thenReturn(true);
-		
-		t.close();
+        entityTransCloser.close();
 
-		// closed and rolled back, but not committed
-		verify(trans, never()).commit();
-		verify(trans).rollback();
-	}
+        verify(trans).rollback();
+    }
 
-	/**
-	 * Verifies that the manager is closed, but that the transaction is
-	 * <i>not</i> rolled back and when and no transaction is active.
-	 */
-	@Test
-	public void testClose_Inactive() {
-		EntityTransCloser t = new EntityTransCloser(trans);
+    @Test
+    public void testGetTransation() {
+        try (EntityTransCloser t = new EntityTransCloser(trans)) {
+            assertEquals(trans, t.getTransation());
+        }
+    }
 
-		when(trans.isActive()).thenReturn(false);
-		
-		t.close();
+    /**
+     * Verifies that the transaction is rolled back and the manager is closed when and a transaction
+     * is active.
+     */
+    @Test
+    public void testClose_Active() {
+        EntityTransCloser entityTransCloser = new EntityTransCloser(trans);
 
-		// closed, but not committed or rolled back
-		verify(trans, never()).commit();
-		verify(trans, never()).rollback();
-	}
+        when(trans.isActive()).thenReturn(true);
 
-	/**
-	 * Verifies that the manager is closed and the transaction rolled back
-	 * when "try" block exits normally and a transaction is active.
-	 */
-	@Test
-	public void testClose_TryWithoutExcept_Active() {
-		when(trans.isActive()).thenReturn(true);
-		
-		try(EntityTransCloser t = new EntityTransCloser(trans)) {
-			
-		}
+        entityTransCloser.close();
 
-		// closed and rolled back, but not committed
-		verify(trans, never()).commit();
-		verify(trans).rollback();
-	}
+        // closed and rolled back, but not committed
+        verify(trans, never()).commit();
+        verify(trans).rollback();
+    }
 
-	/**
-	 * Verifies that the manager is closed, but that the transaction is
-	 * <i>not</i> rolled back when "try" block exits normally and no
-	 * transaction is active.
-	 */
-	@Test
-	public void testClose_TryWithoutExcept_Inactive() {
-		when(trans.isActive()).thenReturn(false);
-		
-		try(EntityTransCloser t = new EntityTransCloser(trans)) {
-			
-		}
+    /**
+     * Verifies that the manager is closed, but that the transaction is <i>not</i> rolled back and
+     * when and no transaction is active.
+     */
+    @Test
+    public void testClose_Inactive() {
+        EntityTransCloser entityTransCloser = new EntityTransCloser(trans);
 
-		// closed, but not rolled back or committed
-		verify(trans, never()).commit();
-		verify(trans, never()).rollback();
-	}
+        when(trans.isActive()).thenReturn(false);
 
-	/**
-	 * Verifies that the manager is closed and the transaction rolled back
-	 * when "try" block throws an exception and a transaction is active.
-	 */
-	@Test
-	public void testClose_TryWithExcept_Active() {
-		when(trans.isActive()).thenReturn(true);
-		
-		try {
-			try(EntityTransCloser t = new EntityTransCloser(trans)) {
-				throw new Exception("expected exception");
-			}
-			
-		} catch (Exception e) {
-		}
+        entityTransCloser.close();
 
-		// closed and rolled back, but not committed
-		verify(trans, never()).commit();
-		verify(trans).rollback();
-	}
+        // closed, but not committed or rolled back
+        verify(trans, never()).commit();
+        verify(trans, never()).rollback();
+    }
 
-	/**
-	 * Verifies that the manager is closed, but that the transaction is
-	 * <i>not</i> rolled back when "try" block throws an exception and no
-	 * transaction is active.
-	 */
-	@Test
-	public void testClose_TryWithExcept_Inactive() {
-		when(trans.isActive()).thenReturn(false);
-		
-		try {
-			try(EntityTransCloser t = new EntityTransCloser(trans)) {
-				throw new Exception("expected exception");
-			}
-			
-		} catch (Exception e) {
-		}
+    /**
+     * Verifies that the manager is closed and the transaction rolled back when "try" block exits
+     * normally and a transaction is active.
+     */
+    @Test
+    public void testClose_TryWithoutExcept_Active() {
+        when(trans.isActive()).thenReturn(true);
 
-		// closed, but not rolled back or committed
-		verify(trans, never()).commit();
-		verify(trans, never()).rollback();
-	}
+        try (EntityTransCloser entityTransCloser = new EntityTransCloser(trans)) {
+            // No need to do anything in the try block
+        }
 
-	/**
-	 * Verifies that commit() only commits, and that the subsequent close()
-	 * does not re-commit.
-	 */
-	@Test
-	public void testCommit() {
-		EntityTransCloser t = new EntityTransCloser(trans);
-		
-		t.commit();
-		
-		// committed, but not closed or rolled back
-		verify(trans).commit();
-		verify(trans, never()).rollback();
-		
-		// closed, but not re-committed
-		t.close();
+        // closed and rolled back, but not committed
+        verify(trans, never()).commit();
+        verify(trans).rollback();
+    }
 
-		verify(trans, times(1)).commit();
-	}
+    /**
+     * Verifies that the manager is closed, but that the transaction is <i>not</i> rolled back when
+     * "try" block exits normally and no transaction is active.
+     */
+    @Test
+    public void testClose_TryWithoutExcept_Inactive() {
+        when(trans.isActive()).thenReturn(false);
 
-	/**
-	 * Verifies that rollback() only rolls back, and that the subsequent
-	 * close() does not re-roll back.
-	 */
-	@Test
-	public void testRollback() {
-		EntityTransCloser t = new EntityTransCloser(trans);
-		
-		t.rollback();
-		
-		// rolled back, but not closed or committed
-		verify(trans, never()).commit();
-		verify(trans).rollback();
-		
-		// closed, but not re-rolled back
-		when(trans.isActive()).thenReturn(false);
-		t.close();
+        try (EntityTransCloser entityTransCloser = new EntityTransCloser(trans)) {
+            // No need to do anything in the try block
+        }
 
-		verify(trans, times(1)).rollback();
-	}
+        // closed, but not rolled back or committed
+        verify(trans, never()).commit();
+        verify(trans, never()).rollback();
+    }
+
+    /**
+     * Verifies that the manager is closed and the transaction rolled back when "try" block throws
+     * an exception and a transaction is active.
+     */
+    @Test
+    public void testClose_TryWithExcept_Active() {
+        when(trans.isActive()).thenReturn(true);
+
+        try {
+            try (EntityTransCloser t = new EntityTransCloser(trans)) {
+                throw new Exception("expected exception");
+            }
+
+        } catch (Exception e) {
+            // Ignore the exception
+        }
+
+        // closed and rolled back, but not committed
+        verify(trans, never()).commit();
+        verify(trans).rollback();
+    }
+
+    /**
+     * Verifies that the manager is closed, but that the transaction is <i>not</i> rolled back when
+     * "try" block throws an exception and no transaction is active.
+     */
+    @Test
+    public void testClose_TryWithExcept_Inactive() {
+        when(trans.isActive()).thenReturn(false);
+
+        try {
+            try (EntityTransCloser t = new EntityTransCloser(trans)) {
+                throw new Exception("expected exception");
+            }
+
+        } catch (Exception e) {
+            // Ignore the exception
+        }
+
+        // closed, but not rolled back or committed
+        verify(trans, never()).commit();
+        verify(trans, never()).rollback();
+    }
+
+    /**
+     * Verifies that commit() only commits, and that the subsequent close() does not re-commit.
+     */
+    @Test
+    public void testCommit() {
+        EntityTransCloser entityTransCloser = new EntityTransCloser(trans);
+
+        entityTransCloser.commit();
+
+        // committed, but not closed or rolled back
+        verify(trans).commit();
+        verify(trans, never()).rollback();
+
+        // closed, but not re-committed
+        entityTransCloser.close();
+
+        verify(trans, times(1)).commit();
+    }
+
+    /**
+     * Verifies that rollback() only rolls back, and that the subsequent close() does not re-roll
+     * back.
+     */
+    @Test
+    public void testRollback() {
+        EntityTransCloser entityTransCloser = new EntityTransCloser(trans);
+
+        entityTransCloser.rollback();
+
+        // rolled back, but not closed or committed
+        verify(trans, never()).commit();
+        verify(trans).rollback();
+
+        // closed, but not re-rolled back
+        when(trans.isActive()).thenReturn(false);
+        entityTransCloser.close();
+
+        verify(trans, times(1)).rollback();
+    }
 
 }

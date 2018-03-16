@@ -23,37 +23,37 @@ package org.onap.policy.common.utils.jpa;
 import javax.persistence.EntityManager;
 
 /**
- * Wrapper for an <i>EntityManager</i>, providing auto-close functionality. This
- * is useful in try-with-resources statements.
+ * Wrapper for an <i>EntityManager</i>, providing auto-close functionality. This is useful in
+ * try-with-resources statements.
  */
 public class EntityMgrCloser implements AutoCloseable {
 
-	/**
-	 * The wrapped manager.
-	 */
-	private final EntityManager em;
+    /**
+     * The wrapped manager.
+     */
+    private final EntityManager em;
 
-	/**
-	 * 
-	 * @param em
-	 *            manager to be auto-closed
-	 */
-	public EntityMgrCloser(EntityManager em) {
-		this.em = em;
-	}
+    /**
+     * Construct an instance with the EntityManager.
+     * 
+     * @param em manager to be auto-closed
+     */
+    public EntityMgrCloser(EntityManager em) {
+        this.em = em;
+    }
 
-	/**
-	 * Gets the EntityManager wrapped within this object.
-	 * 
-	 * @return the associated EntityManager
-	 */
-	public EntityManager getManager() {
-		return em;
-	}
+    /**
+     * Gets the EntityManager wrapped within this object.
+     * 
+     * @return the associated EntityManager
+     */
+    public EntityManager getManager() {
+        return em;
+    }
 
-	@Override
-	public void close() {
-		em.close();
-	}
+    @Override
+    public void close() {
+        em.close();
+    }
 
 }

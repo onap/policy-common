@@ -23,55 +23,54 @@ package org.onap.policy.common.utils.jpa;
 import javax.persistence.EntityTransaction;
 
 /**
- * Wrapper for an <i>EntityTransaction</i> that is auto-rolled back when closed.
- * This is useful in try-with-resources statements.
+ * Wrapper for an <i>EntityTransaction</i> that is auto-rolled back when closed. This is useful in
+ * try-with-resources statements.
  */
 public class EntityTransCloser implements AutoCloseable {
 
-	/**
-	 * Transaction to be rolled back.
-	 */
-	private final EntityTransaction trans;
+    /**
+     * Transaction to be rolled back.
+     */
+    private final EntityTransaction trans;
 
-	/**
-	 * Begins a transaction.
-	 * 
-	 * @param et
-	 *            transaction to wrap/begin
-	 */
-	public EntityTransCloser(EntityTransaction et) {
-		trans = et;
-		trans.begin();
-	}
+    /**
+     * Begins a transaction.
+     * 
+     * @param et transaction to wrap/begin
+     */
+    public EntityTransCloser(EntityTransaction et) {
+        trans = et;
+        trans.begin();
+    }
 
-	/**
-	 * Gets the wrapped transaction.
-	 * 
-	 * @return the transaction
-	 */
-	public EntityTransaction getTransation() {
-		return trans;
-	}
+    /**
+     * Gets the wrapped transaction.
+     * 
+     * @return the transaction
+     */
+    public EntityTransaction getTransation() {
+        return trans;
+    }
 
-	/**
-	 * Commits the transaction.
-	 */
-	public void commit() {
-		trans.commit();
-	}
+    /**
+     * Commits the transaction.
+     */
+    public void commit() {
+        trans.commit();
+    }
 
-	/**
-	 * Rolls back the transaction.
-	 */
-	public void rollback() {
-		trans.rollback();
-	}
+    /**
+     * Rolls back the transaction.
+     */
+    public void rollback() {
+        trans.rollback();
+    }
 
-	@Override
-	public void close() {
-		if (trans.isActive()) {
-			trans.rollback();
-		}
-	}
+    @Override
+    public void close() {
+        if (trans.isActive()) {
+            trans.rollback();
+        }
+    }
 
 }

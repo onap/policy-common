@@ -29,84 +29,82 @@ import javax.persistence.EntityManagerFactory;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.utils.jpa.EntityMgrFactoryCloser;
 
 public class EntityMgrFactoryCloserTest {
-	
-	private EntityManagerFactory factory;
-	
 
-	@Before
-	public void setUp() throws Exception {
-		factory = mock(EntityManagerFactory.class);
-	}
+    private EntityManagerFactory factory;
 
 
-	/**
-	 * Verifies that the constructor does not do anything extra before
-	 * being closed.
-	 */
-	@Test
-	public void testEntityMgrFactoryCloser() {
-		EntityMgrFactoryCloser c = new EntityMgrFactoryCloser(factory);
-		
-		assertEquals(factory, c.getFactory());
+    @Before
+    public void setUp() throws Exception {
+        factory = mock(EntityManagerFactory.class);
+    }
 
-		// verify not closed yet
-		verify(factory, never()).close();
-		
-		c.close();
 
-		verify(factory).close();
-	}
+    /**
+     * Verifies that the constructor does not do anything extra before being closed.
+     */
+    @Test
+    public void testEntityMgrFactoryCloser() {
+        EntityMgrFactoryCloser entityMgrFactoryCloser = new EntityMgrFactoryCloser(factory);
 
-	@Test
-	public void testgetFactory() {
-		try(EntityMgrFactoryCloser c = new EntityMgrFactoryCloser(factory)) {
-			assertEquals(factory, c.getFactory());
-		}
-	}
-	
-	/**
-	 * Verifies that the manager gets closed when close() is invoked.
-	 */
-	@Test
-	public void testClose() {
-		EntityMgrFactoryCloser c = new EntityMgrFactoryCloser(factory);
-		
-		c.close();
-		
-		// should be closed
-		verify(factory).close();
-	}
+        assertEquals(factory, entityMgrFactoryCloser.getFactory());
 
-	/**
-	 * Ensures that the manager gets closed when "try" block exits normally.
-	 */
-	@Test
-	public void testClose_TryWithoutExcept() {
-		try(EntityMgrFactoryCloser c = new EntityMgrFactoryCloser(factory)) {
-			
-		}
-		
-		verify(factory).close();
-	}
+        // verify not closed yet
+        verify(factory, never()).close();
 
-	/**
-	 * Ensures that the manager gets closed when "try" block throws an
-	 * exception.
-	 */
-	@Test
-	public void testClose_TryWithExcept() {
-		try {
-			try(EntityMgrFactoryCloser c = new EntityMgrFactoryCloser(factory)) {
-				throw new Exception("expected exception");
-			}
-			
-		} catch (Exception e) {
-		}
-		
-		verify(factory).close();
-	}
+        entityMgrFactoryCloser.close();
+
+        verify(factory).close();
+    }
+
+    @Test
+    public void testgetFactory() {
+        try (EntityMgrFactoryCloser c = new EntityMgrFactoryCloser(factory)) {
+            assertEquals(factory, c.getFactory());
+        }
+    }
+
+    /**
+     * Verifies that the manager gets closed when close() is invoked.
+     */
+    @Test
+    public void testClose() {
+        EntityMgrFactoryCloser entityMgrFactoryCloser = new EntityMgrFactoryCloser(factory);
+
+        entityMgrFactoryCloser.close();
+
+        // should be closed
+        verify(factory).close();
+    }
+
+    /**
+     * Ensures that the manager gets closed when "try" block exits normally.
+     */
+    @Test
+    public void testClose_TryWithoutExcept() {
+        try (EntityMgrFactoryCloser entityMgrFactoryCloser = new EntityMgrFactoryCloser(factory)) {
+            // No need to do anything in the try block
+        }
+
+        verify(factory).close();
+    }
+
+    /**
+     * Ensures that the manager gets closed when "try" block throws an exception.
+     */
+    @Test
+    public void testClose_TryWithExcept() {
+        try {
+            try (EntityMgrFactoryCloser c = new EntityMgrFactoryCloser(factory)) {
+                throw new Exception("expected exception");
+            }
+
+        } catch (Exception exception) {
+            // Ignore the exception
+        }
+
+        verify(factory).close();
+    }
 
 }
