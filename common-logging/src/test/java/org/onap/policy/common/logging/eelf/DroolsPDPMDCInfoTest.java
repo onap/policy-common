@@ -20,24 +20,22 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import org.junit.Test;
 
-/**
- * 
- */
 public class DroolsPDPMDCInfoTest {
 
-	/**
-	 * Test method for {@link org.onap.policy.common.logging.eelf.DroolsPDPMDCInfo#getMDCInfo()}.
-	 */
-	@Test
-	public void testGetMDCInfo() {
-		DroolsPDPMDCInfo di = new DroolsPDPMDCInfo();
-		
-		assertNotNull(di.getMDCInfo());
-		assertEquals("Policy.droolsPdp", di.getMDCInfo().get(Configuration.MDC_SERVICE_NAME));
-	}
+    /**
+     * Test method for {@link org.onap.policy.common.logging.eelf.DroolsPDPMDCInfo#getMDCInfo()}.
+     */
+    @Test
+    public void testGetMDCInfo() {
+        DroolsPDPMDCInfo di = new DroolsPDPMDCInfo();
+
+        assertNotNull(di.getMDCInfo());
+        assertEquals("Policy.droolsPdp", di.getMDCInfo().get(Configuration.MDC_SERVICE_NAME));
+    }
 
 }

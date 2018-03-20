@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,17 +21,17 @@
 package org.onap.policy.common.logging.nsa;
 
 /**
- * A logging context must be thread-specific. Contexts that implement SharedLoggingContext
- * are expected to be shared across threads, and they have to be able to populate another
- * logging context with their data.
+ * A logging context must be thread-specific. Contexts that implement SharedLoggingContext are
+ * expected to be shared across threads, and they have to be able to populate another logging
+ * context with their data.
  * 
  */
-public interface SharedLoggingContext extends LoggingContext
-{
-	/**
-	 * Copy this context's data to the given context. This must work across threads so that
-	 * a base context can be shared in another thread.
-	 * @param lc
-	 */
-	void transferTo ( SharedLoggingContext lc );
+public interface SharedLoggingContext extends LoggingContext {
+    /**
+     * Copy this context's data to the given context. This must work across threads so that a base
+     * context can be shared in another thread.
+     * 
+     * @param lc the shared logging context
+     */
+    void transferTo(SharedLoggingContext lc);
 }
