@@ -23,42 +23,47 @@ package org.onap.policy.common.ia.jpa;
 import java.io.Serializable;
 
 public class PersonSample implements Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private String firstName;
-	private String lastName;
-	private int age;
-	
-	public PersonSample(String first, String last, int age) {
-		this.firstName = first;
-		this.lastName = last;
-		this.age = age;
-	}
-	
-	public String getFirstName() {
-		return this.firstName;
-	}
-	
-	public void setFirstName(String name) {
-		this.firstName = name;
-	}
-	
-	public String getLasttName() {
-		return this.lastName;
-	}
-	
-	public void setLastName(String name) {
-		this.lastName = name;
-	}
-	
-	public int getAge() {
-		return this.age;
-	}
-	
-	public void setAge(int age) {
-		this.age = age;
-	}
-	
+
+    private static final long serialVersionUID = 1L;
+    private String firstName;
+    private String lastName;
+    private int age;
+
+    /**
+     * Create an instance.
+     * 
+     * @param first first name
+     * @param last last name
+     * @param age age
+     */
+    public PersonSample(String first, String last, int age) {
+        this.firstName = first;
+        this.lastName = last;
+        this.age = age;
+    }
+
+    public String getFirstName() {
+        return this.firstName;
+    }
+
+    public void setFirstName(String name) {
+        this.firstName = name;
+    }
+
+    public String getLasttName() {
+        return this.lastName;
+    }
+
+    public void setLastName(String name) {
+        this.lastName = name;
+    }
+
+    public int getAge() {
+        return this.age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
 }

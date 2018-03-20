@@ -53,230 +53,236 @@ import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
  */
 public class DbAuditTest extends IntegrityAuditTestBase {
 
-	private static Logger logger = FlexLogger.getLogger(DbAuditTest.class);
+    private static Logger logger = FlexLogger.getLogger(DbAuditTest.class);
 
-	private static final String resourceName = "pdp1";
+    private static final String resourceName = "pdp1";
 
-	private EntityManagerFactory emf2;
-	private EntityManager em2;
-	private DbDAO dbDAO;
+    private EntityManagerFactory emf2;
+    private EntityManager em2;
+    private DbDAO dbDao;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		IntegrityAuditTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + DbAuditTest.class.getSimpleName());
-		IntegrityAuditEntity.setUnitTesting(true);
-	}
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        IntegrityAuditTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + DbAuditTest.class.getSimpleName());
+        IntegrityAuditEntity.setUnitTesting(true);
+    }
 
-	@AfterClass
-	public static void tearDownAfterClass() {
-		IntegrityAuditTestBase.tearDownAfterClass();
-		IntegrityAuditEntity.setUnitTesting(false);
-	}
+    @AfterClass
+    public static void tearDownAfterClass() {
+        IntegrityAuditTestBase.tearDownAfterClass();
+        IntegrityAuditEntity.setUnitTesting(false);
+    }
 
-	@Before
-	public void setUp() {
-		logger.info("setUp: Entering");
+    /**
+     * Set up for test cases.
+     */
+    @Override
+    @Before
+    public void setUp() {
+        logger.info("setUp: Entering");
 
-		super.setUp();
+        super.setUp();
 
-		dbDAO = null;
-		emf2 = null;
-		em2 = null;
+        dbDao = null;
+        emf2 = null;
+        em2 = null;
 
-		logger.info("setUp: Exiting");
-	}
+        logger.info("setUp: Exiting");
+    }
 
-	@After
-	public void tearDown() {
-		logger.info("tearDown: Entering");
+    /**
+     * Tear down after test cases.
+     */
+    @Override
+    @After
+    public void tearDown() {
+        logger.info("tearDown: Entering");
 
-		if (dbDAO != null) {
-			dbDAO.destroy();
-		}
+        if (dbDao != null) {
+            dbDao.destroy();
+        }
 
-		if (em2 != null) {
-			em2.close();
-		}
+        if (em2 != null) {
+            em2.close();
+        }
 
-		if (emf2 != null) {
-			emf2.close();
-		}
+        if (emf2 != null) {
+            emf2.close();
+        }
 
-		super.tearDown();
+        super.tearDown();
 
-		logger.info("tearDown: Exiting");
-	}
+        logger.info("tearDown: Exiting");
+    }
 
-	private void createDb(Properties properties) {
-		if (emf2 != null) {
-			throw new IllegalStateException("DB2 has already been created");
-		}
+    private void createDb(Properties properties) {
+        if (emf2 != null) {
+            throw new IllegalStateException("DB2 has already been created");
+        }
 
-		// open the DB and ensure it stays open until the test completes
-		emf2 = Persistence.createEntityManagerFactory(A_SEQ_PU, properties);
-		em2 = emf2.createEntityManager();
+        // open the DB and ensure it stays open until the test completes
+        emf2 = Persistence.createEntityManagerFactory(A_SEQ_PU, properties);
+        em2 = emf2.createEntityManager();
 
-		truncateTable(properties, A_SEQ_PU, "IntegrityAuditEntity");
-	}
+        truncateTable(properties, A_SEQ_PU, "IntegrityAuditEntity");
+    }
 
-	/*
-	 * Tests printing an error to the log in the event where there are no
-	 * entities saved in the database
-	 */
-	@Test
-	public void noEntitiesTest() throws Exception {
-		Properties properties = makeProperties();
+    /*
+     * Tests printing an error to the log in the event where there are no entities saved in the
+     * database
+     */
+    @Test
+    public void noEntitiesTest() throws Exception {
+        Properties properties = makeProperties();
 
-		logger.info("noEntitiesTest: Entering");
+        logger.info("noEntitiesTest: Entering");
 
-		dbDAO = new DbDAO(resourceName, A_SEQ_PU, properties);
-		dbDAO.deleteAllIntegrityAuditEntities();
-		try {
-			DbAudit dbAudit = new DbAudit(dbDAO);
-			dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
-			fail("found unexpected entities");
+        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+        dbDao.deleteAllIntegrityAuditEntities();
+        try {
+            DbAudit dbAudit = new DbAudit(dbDao);
+            dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
+            fail("found unexpected entities");
 
-		} catch (DbAuditException e) {
+        } catch (DbAuditException e) {
+            // Ignore expected exception
+        }
 
-		}
+        logger.info("noEntitiesTest: Exit");
+    }
 
-		logger.info("noEntitiesTest: Exit");
-	}
+    /*
+     * Tests the detection of only one entry in the database
+     */
+    @Test
+    public void oneEntityTest() throws Exception {
+        Properties properties = makeProperties();
 
-	/*
-	 * Tests the detection of only one entry in the database
-	 */
-	@Test
-	public void oneEntityTest() throws Exception {
-		Properties properties = makeProperties();
+        logger.info("oneEntityTest: Entering");
 
-		logger.info("oneEntityTest: Entering");
+        final ExtractAppender log = watch(debugLogger, "DbAudit: Found only (one) IntegrityAuditEntity entry:");
 
-		ExtractAppender log = watch(debugLogger, "DbAudit: Found only (one) IntegrityAuditEntity entry:");
+        // Add one entry in the database
+        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+        DbAudit dbAudit = new DbAudit(dbDao);
+        dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
 
-		// Add one entry in the database
-		dbDAO = new DbDAO(resourceName, A_SEQ_PU, properties);
-		DbAudit dbAudit = new DbAudit(dbDAO);
-		dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
+        List<IntegrityAuditEntity> iaeList = dbDao.getIntegrityAuditEntities(A_SEQ_PU, nodeType);
+        logger.info("List size: " + iaeList.size());
 
-		List<IntegrityAuditEntity> iaeList = dbDAO.getIntegrityAuditEntities(A_SEQ_PU, nodeType);
-		logger.info("List size: " + iaeList.size());
+        verifyItemsInLog(log, "one");
 
-		verifyItemsInLog(log, "one");
+        logger.info("oneEntityTest: Exit");
+    }
 
-		logger.info("oneEntityTest: Exit");
-	}
+    /*
+     * Tests reporting mismatches and missing entries using the error log
+     */
+    @Test
+    public void mismatchTest() throws Exception {
+        logger.info("mismatchTest: Entering");
 
-	/*
-	 * Tests reporting mismatches and missing entries using the error log
-	 */
-	@Test
-	public void mismatchTest() throws Exception {
-		logger.info("mismatchTest: Entering");
-		
-		// use new URLs so we get a completely new DB
-		String dbUrl = DbAuditTest.dbUrl + "_mismatchTest";
-		String dbUrl2 = dbUrl + "2";
+        // use new URLs so we get a completely new DB
+        String dbUrl = DbAuditTest.dbUrl + "_mismatchTest";
+        String dbUrl2 = dbUrl + "2";
 
-		Properties properties = makeProperties();
-		properties.put(IntegrityAuditProperties.DB_URL, dbUrl);
+        Properties properties = makeProperties();
+        properties.put(IntegrityAuditProperties.DB_URL, dbUrl);
 
-		// Properties for DB2
-		Properties properties2 = makeProperties();
-		properties2.put(IntegrityAuditProperties.DB_URL, dbUrl2);
+        // Properties for DB2
+        Properties properties2 = makeProperties();
+        properties2.put(IntegrityAuditProperties.DB_URL, dbUrl2);
 
-		/*
-		 * We must drop and re-create DB1 so that it's sequence generator is in
-		 * step with the sequence generator for DB2.
-		 */		
-		recreateDb1(properties);
+        /*
+         * We must drop and re-create DB1 so that it's sequence generator is in step with the
+         * sequence generator for DB2.
+         */
+        recreateDb1(properties);
 
-		// create/open DB2
-		createDb(properties2);
+        // create/open DB2
+        createDb(properties2);
 
-		ExtractAppender dbglog = watch(debugLogger, "Mismatched entries [(]keys[)]:(.*)");
-		ExtractAppender errlog = watch(errorLogger, "DB Audit: ([0-9])");
+        final ExtractAppender dbglog = watch(debugLogger, "Mismatched entries [(]keys[)]:(.*)");
+        final ExtractAppender errlog = watch(errorLogger, "DB Audit: ([0-9])");
 
-		/*
-		 * Create entries in DB1 & DB2 for the resource of interest
-		 */
-		dbDAO = new DbDAO(resourceName, A_SEQ_PU, properties);
+        /*
+         * Create entries in DB1 & DB2 for the resource of interest
+         */
+        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
 
-		new DbDAO(resourceName, A_SEQ_PU, properties2).destroy();
+        new DbDAO(resourceName, A_SEQ_PU, properties2).destroy();
 
-		/*
-		 * Entries in DB1, pointing to DB2, except for pdp3
-		 */
-		new DbDAO("pdp2", A_SEQ_PU, properties, dbUrl2).destroy();
-		new DbDAO("pdp1", A_SEQ_PU, properties, dbUrl2).destroy();
-		new DbDAO("pdp3", A_SEQ_PU, properties).destroy(); // mismatched URL
-		new DbDAO("pdp4", A_SEQ_PU, properties, dbUrl2).destroy();
+        /*
+         * Entries in DB1, pointing to DB2, except for pdp3
+         */
+        new DbDAO("pdp2", A_SEQ_PU, properties, dbUrl2).destroy();
+        new DbDAO("pdp1", A_SEQ_PU, properties, dbUrl2).destroy();
+        new DbDAO("pdp3", A_SEQ_PU, properties).destroy(); // mismatched URL
+        new DbDAO("pdp4", A_SEQ_PU, properties, dbUrl2).destroy();
 
-		/*
-		 * Identical entries in DB2, all pointing to DB2, including pdp3, but
-		 * leaving out pdp4
-		 */
-		new DbDAO("pdp2", A_SEQ_PU, properties2).destroy();
-		new DbDAO("pdp1", A_SEQ_PU, properties2).destroy();
-		new DbDAO("pdp3", A_SEQ_PU, properties2).destroy();
+        /*
+         * Identical entries in DB2, all pointing to DB2, including pdp3, but leaving out pdp4
+         */
+        new DbDAO("pdp2", A_SEQ_PU, properties2).destroy();
+        new DbDAO("pdp1", A_SEQ_PU, properties2).destroy();
+        new DbDAO("pdp3", A_SEQ_PU, properties2).destroy();
 
-		/*
-		 * Run the DB Audit, once it finds a mismatch and sleeps, update DB1 to
-		 * have the same entry as DB2 it can be confirmed that the mismatch is
-		 * resolved
-		 */
-		DbAudit dbAudit = new DbAudit(dbDAO);
-		dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
+        /*
+         * Run the DB Audit, once it finds a mismatch and sleeps, update DB1 to have the same entry
+         * as DB2 it can be confirmed that the mismatch is resolved
+         */
+        DbAudit dbAudit = new DbAudit(dbDao);
+        dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
 
-		// update pdp3 entry in DB1 to point to DB2
-		new DbDAO("pdp3", A_SEQ_PU, properties, dbUrl2).destroy();
+        // update pdp3 entry in DB1 to point to DB2
+        new DbDAO("pdp3", A_SEQ_PU, properties, dbUrl2).destroy();
 
-		/*
-		 * Run the audit again and correct the mismatch, the result should be
-		 * one entry in the mismatchKeySet because of the missing entry from the
-		 * beginning of the test
-		 */
-		dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
+        /*
+         * Run the audit again and correct the mismatch, the result should be one entry in the
+         * mismatchKeySet because of the missing entry from the beginning of the test
+         */
+        dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
 
-		assertFalse(dbglog.getExtracted().isEmpty());
+        assertFalse(dbglog.getExtracted().isEmpty());
 
-		String mismatchIndex = dbglog.getExtracted().get(dbglog.getExtracted().size() - 1);
-		int mismatchEntries = mismatchIndex.trim().split(",").length;
-		logger.info("mismatchTest: mismatchIndex found: '" + mismatchIndex + "'" + " mismatachEntries = "
-				+ mismatchEntries);
+        String mismatchIndex = dbglog.getExtracted().get(dbglog.getExtracted().size() - 1);
+        int mismatchEntries = mismatchIndex.trim().split(",").length;
+        logger.info("mismatchTest: mismatchIndex found: '" + mismatchIndex + "'" + " mismatachEntries = "
+                + mismatchEntries);
 
-		// Assert there is only one entry index
-		assertEquals(1, mismatchEntries);
+        // Assert there is only one entry index
+        assertEquals(1, mismatchEntries);
 
-		// Now check the entry in the error.log
-		assertFalse(errlog.getExtracted().isEmpty());
+        // Now check the entry in the error.log
+        assertFalse(errlog.getExtracted().isEmpty());
 
-		String mismatchNum = errlog.getExtracted().get(errlog.getExtracted().size() - 1);
+        String mismatchNum = errlog.getExtracted().get(errlog.getExtracted().size() - 1);
 
-		logger.info("mismatchTest: mismatchNum found: '" + mismatchNum + "'");
+        logger.info("mismatchTest: mismatchNum found: '" + mismatchNum + "'");
 
-		// Assert that there are a total of 3 mismatches - 1 between each
-		// comparison node.
-		assertEquals("3", mismatchNum);
+        // Assert that there are a total of 3 mismatches - 1 between each
+        // comparison node.
+        assertEquals("3", mismatchNum);
 
-		logger.info("mismatchTest: Exit");
-	}
+        logger.info("mismatchTest: Exit");
+    }
 
-	/**
-	 * Re-creates DB1, using the specified properties.
-	 * @param properties
-	 */
-	private void recreateDb1(Properties properties) {
-		em.close();
-		emf.close();
-		
-		createDb(properties);
-		
-		em = em2;
-		emf = emf2;
-		
-		em2 = null;
-		emf2 = null;
-	}
+    /**
+     * Re-creates DB1, using the specified properties.
+     * 
+     * @param properties the properties
+     */
+    private void recreateDb1(Properties properties) {
+        em.close();
+        emf.close();
+
+        createDb(properties);
+
+        em = em2;
+        emf = emf2;
+
+        em2 = null;
+        emf2 = null;
+    }
 
 }

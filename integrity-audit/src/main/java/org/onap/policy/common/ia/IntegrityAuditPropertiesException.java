@@ -21,18 +21,21 @@
 package org.onap.policy.common.ia;
 
 public class IntegrityAuditPropertiesException extends IntegrityAuditException {
-	private static final long serialVersionUID = 1L;
-	public IntegrityAuditPropertiesException() {
-		super();
-	}
-	public IntegrityAuditPropertiesException(String message) {
-		super(message);
-	}
+    private static final long serialVersionUID = 1L;
 
-	public IntegrityAuditPropertiesException(Throwable cause) {
-		super(cause);
-	}
-	public IntegrityAuditPropertiesException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public IntegrityAuditPropertiesException() {
+        super();
+    }
+
+    public IntegrityAuditPropertiesException(String message) {
+        super(message);
+    }
+
+    public IntegrityAuditPropertiesException(Throwable cause) {
+        super(cause);
+    }
+
+    public IntegrityAuditPropertiesException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
