@@ -19,9 +19,10 @@
  */
 
 package org.onap.policy.common.im;
- 
-import java.util.Observable; 
-import java.util.Observer; 
+
+import java.util.Observable;
+import java.util.Observer;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /* 
@@ -39,41 +40,42 @@ import org.slf4j.LoggerFactory;
 
 
 
-
 /**
- * 
- * StateChangeNotifier class implements the Observer pattern and is used to distribute
- * state change notifications to any entity that registers a derived class with an 
- * instance of the StateManagement class. 
+ * StateChangeNotifier class implements the Observer pattern and is used to distribute state change
+ * notifications to any entity that registers a derived class with an instance of the
+ * StateManagement class.
  *
  */
-public class StateChangeNotifier implements Observer { 
-	private static final Logger logger = LoggerFactory.getLogger(StateChangeNotifier.class);
-	//The observable class 
-	StateManagement stateManagement; 
- 
-	// A string argument passed by the observable class when 
-	// Observable:notifyObservers(Object arg) is called 
-	String message; 
- 
-	@Override 
-	public void update(Observable o, Object arg) { 
-		this.stateManagement = (StateManagement) o; 
-		this.message = (String) arg; 
-		handleStateChange(); 
-	} 
- 
-	public void handleStateChange() {
-		if(logger.isDebugEnabled()){
-			logger.debug("handleStateChange, message: {}", this.message);
-		}
-	}
+public class StateChangeNotifier implements Observer {
+    private static final Logger logger = LoggerFactory.getLogger(StateChangeNotifier.class);
+    // The observable class
+    StateManagement stateManagement;
 
-	public StateManagement getStateManagement() {
-		return stateManagement;
-	}
+    // A string argument passed by the observable class when
+    // Observable:notifyObservers(Object arg) is called
+    String message;
 
-	public String getMessage() {
-		return message;
-	}
-} 
+    @Override
+    public void update(Observable observable, Object arg) {
+        this.stateManagement = (StateManagement) observable;
+        this.message = (String) arg;
+        handleStateChange();
+    }
+
+    /**
+     * Handle state change.
+     */
+    public void handleStateChange() {
+        if (logger.isDebugEnabled()) {
+            logger.debug("handleStateChange, message: {}", this.message);
+        }
+    }
+
+    public StateManagement getStateManagement() {
+        return stateManagement;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+}

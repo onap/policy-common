@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,105 +37,122 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="ImTestEntity")
-@NamedQueries({
-	@NamedQuery(name=" ImTestEntity.findAll", query="SELECT e FROM ImTestEntity e "),
-	@NamedQuery(name="ImTestEntity.deleteAll", query="DELETE FROM ImTestEntity WHERE 1=1")
-})
-//@SequenceGenerator(name="seqImTest", initialValue=1, allocationSize=1)
+@Table(name = "ImTestEntity")
+@NamedQueries({@NamedQuery(name = " ImTestEntity.findAll", query = "SELECT e FROM ImTestEntity e "),
+        @NamedQuery(name = "ImTestEntity.deleteAll", query = "DELETE FROM ImTestEntity WHERE 1=1")})
+// @SequenceGenerator(name="seqImTest", initialValue=1, allocationSize=1)
 
 public class ImTestEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	//@GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seqImTest")
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="ImTestId")
-	private long imTestId;
-	
-	@Column(name="created_by", nullable=false, length=255)
-	private String createdBy = "guest";
+    @Id
+    // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seqImTest")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ImTestId")
+    private long imTestId;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_date", updatable=false)
-	private Date createdDate;
+    @Column(name = "created_by", nullable = false, length = 255)
+    private String createdBy = "guest";
 
-	@Column(name="modified_by", nullable=false, length=255)
-	private String modifiedBy = "guest";
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date", updatable = false)
+    private Date createdDate;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="modified_date", nullable=false)
-	private Date modifiedDate;
+    @Column(name = "modified_by", nullable = false, length = 255)
+    private String modifiedBy = "guest";
 
-	public ImTestEntity() {
-		//default constructor
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modified_date", nullable = false)
+    private Date modifiedDate;
 
-	@PrePersist
-	public void	prePersist() {
-		Date date = new Date();
-		this.createdDate = date;
-		this.modifiedDate = date;
-	}
+    public ImTestEntity() {
+        // default constructor
+    }
 
-	@PreUpdate
-	public void preUpdate() {
-		this.modifiedDate = new Date();
-	}
-	
-	/**
-	 * @return the Id
-	 */
-	public long getImTestId() {
-		return imTestId;
-	}
-	
-	/**
-	 * @return the createdBy
-	 */
-	public String getCreatedBy() {
-		return createdBy;
-	}
+    /**
+     * PrePersist callback method.
+     */
+    @PrePersist
+    public void prePersist() {
+        Date date = new Date();
+        this.createdDate = date;
+        this.modifiedDate = date;
+    }
 
-	/**
-	 * @param createdBy the createdBy to set
-	 */
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-	
-	/**
-	 * @return the modifiedBy
-	 */
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
-	
-	/**
-	 * @param modifiedBy the modifiedBy to set
-	 */
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
-	
-	/**
-	 * @return the modifiedDate
-	 */
-	public Date getModifiedDate() {
-		return modifiedDate;
-	}
+    @PreUpdate
+    public void preUpdate() {
+        this.modifiedDate = new Date();
+    }
 
-	/**
-	 * @param modifiedDate the modifiedDate to set
-	 */
-	public void setModifiedDate(Date modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
+    /**
+     * Get the Im test Id.
+     * 
+     * @return the Id
+     */
+    public long getImTestId() {
+        return imTestId;
+    }
 
-	/**
-	 * @return the createdDate
-	 */
-	public Date getCreatedDate() {
-		return createdDate;
-	}
+    /**
+     * Get the createdBy.
+     * 
+     * @return the createdBy
+     */
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    /**
+     * Set the createdBy.
+     * 
+     * @param createdBy the createdBy to set
+     */
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    /**
+     * Get the modifiedBy.
+     * 
+     * @return the modifiedBy
+     */
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    /**
+     * Set the ModifiedBy.
+     * 
+     * @param modifiedBy the modifiedBy to set
+     */
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    /**
+     * Get the modifiedDate.
+     * 
+     * @return the modifiedDate
+     */
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    /**
+     * Set the modifiedDate.
+     * 
+     * @param modifiedDate the modifiedDate to set
+     */
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    /**
+     * Get the createdDate.
+     * 
+     * @return the createdDate
+     */
+    public Date getCreatedDate() {
+        return createdDate;
+    }
 }

@@ -23,22 +23,22 @@ package org.onap.policy.common.im.jmx;
 import org.onap.policy.common.im.IntegrityMonitorException;
 
 public class ComponentAdminException extends IntegrityMonitorException {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	public ComponentAdminException() {
-		super();
-	}
+    public ComponentAdminException() {
+        super();
+    }
 
-	public ComponentAdminException(String message) {
-		super(message);
-	}
+    public ComponentAdminException(String message) {
+        super(message);
+    }
 
-	public ComponentAdminException(Throwable cause) {
-		super(cause);
-	}
+    public ComponentAdminException(Throwable cause) {
+        super(cause);
+    }
 
-	public ComponentAdminException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public ComponentAdminException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

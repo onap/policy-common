@@ -21,18 +21,21 @@
 package org.onap.policy.common.im;
 
 public class IntegrityMonitorPropertiesException extends IntegrityMonitorException {
-	private static final long serialVersionUID = 1L;
-	public IntegrityMonitorPropertiesException() {
-		super();
-	}
-	public IntegrityMonitorPropertiesException(String message) {
-		super(message);
-	}
+    private static final long serialVersionUID = 1L;
 
-	public IntegrityMonitorPropertiesException(Throwable cause) {
-		super(cause);
-	}
-	public IntegrityMonitorPropertiesException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public IntegrityMonitorPropertiesException() {
+        super();
+    }
+
+    public IntegrityMonitorPropertiesException(String message) {
+        super(message);
+    }
+
+    public IntegrityMonitorPropertiesException(Throwable cause) {
+        super(cause);
+    }
+
+    public IntegrityMonitorPropertiesException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

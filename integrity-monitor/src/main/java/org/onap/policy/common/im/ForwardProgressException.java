@@ -21,18 +21,21 @@
 package org.onap.policy.common.im;
 
 public class ForwardProgressException extends IntegrityMonitorException {
-	private static final long serialVersionUID = 1L;
-	public ForwardProgressException() {
-		super();
-	}
-	public ForwardProgressException(String message) {
-		super(message);
-	}
+    private static final long serialVersionUID = 1L;
 
-	public ForwardProgressException(Throwable cause) {
-		super(cause);
-	}
-	public ForwardProgressException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public ForwardProgressException() {
+        super();
+    }
+
+    public ForwardProgressException(String message) {
+        super(message);
+    }
+
+    public ForwardProgressException(Throwable cause) {
+        super(cause);
+    }
+
+    public ForwardProgressException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

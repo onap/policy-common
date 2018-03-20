@@ -21,18 +21,21 @@
 package org.onap.policy.common.im;
 
 public class AdministrativeStateException extends IntegrityMonitorException {
-	private static final long serialVersionUID = 1L;
-	public AdministrativeStateException() {
-		super();
-	}
-	public AdministrativeStateException(String message) {
-		super(message);
-	}
+    private static final long serialVersionUID = 1L;
 
-	public AdministrativeStateException(Throwable cause) {
-		super(cause);
-	}
-	public AdministrativeStateException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public AdministrativeStateException() {
+        super();
+    }
+
+    public AdministrativeStateException(String message) {
+        super(message);
+    }
+
+    public AdministrativeStateException(Throwable cause) {
+        super(cause);
+    }
+
+    public AdministrativeStateException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

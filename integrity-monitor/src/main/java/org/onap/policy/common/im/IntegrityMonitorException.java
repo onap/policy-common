@@ -20,26 +20,28 @@
 
 package org.onap.policy.common.im;
 
-public class IntegrityMonitorException extends Exception{
-	private static final long serialVersionUID = 1L;
-	public IntegrityMonitorException() {
-		super();
-	}
-	public IntegrityMonitorException(String message) {
-		super(message);
-	}
+public class IntegrityMonitorException extends Exception {
+    private static final long serialVersionUID = 1L;
 
-	public IntegrityMonitorException(Throwable cause) {
-		super(cause);
-	}
-	public IntegrityMonitorException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public IntegrityMonitorException() {
+        super();
+    }
 
-	public IntegrityMonitorException(String message, Throwable cause, 
-                                       boolean enableSuppression, boolean writableStackTrace)
-	{
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
+    public IntegrityMonitorException(String message) {
+        super(message);
+    }
+
+    public IntegrityMonitorException(Throwable cause) {
+        super(cause);
+    }
+
+    public IntegrityMonitorException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public IntegrityMonitorException(String message, Throwable cause, boolean enableSuppression,
+            boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 
 }

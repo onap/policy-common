@@ -21,34 +21,27 @@
 package org.onap.policy.common.im;
 
 public class StandbyStatusException extends IntegrityMonitorException {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -5262512285108747134L;
 
-	public StandbyStatusException()
-	{
-		super();
-	}
+    private static final long serialVersionUID = -5262512285108747134L;
 
-	public StandbyStatusException(String message)
-	{
-		super(message);
-	}
+    public StandbyStatusException() {
+        super();
+    }
 
-	public StandbyStatusException(Throwable cause)
-	{
-		super(cause);
-	}
+    public StandbyStatusException(String message) {
+        super(message);
+    }
 
-	public StandbyStatusException(String message, Throwable cause)
-	{
-		super(message, cause);
-	}
+    public StandbyStatusException(Throwable cause) {
+        super(cause);
+    }
 
-	public StandbyStatusException(String message, Throwable cause, 
-                                       boolean enableSuppression, boolean writableStackTrace)
-	{
-		super(message, cause, enableSuppression, writableStackTrace);
-	}
+    public StandbyStatusException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public StandbyStatusException(String message, Throwable cause, boolean enableSuppression,
+            boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

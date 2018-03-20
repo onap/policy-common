@@ -22,40 +22,40 @@ package org.onap.policy.common.im;
 
 public class IntegrityMonitorProperties {
 
-	private IntegrityMonitorProperties() {}
-	
-	public static final String DB_DRIVER = "javax.persistence.jdbc.driver";
-	public static final String DB_URL = "javax.persistence.jdbc.url";
-	public static final String DB_USER = "javax.persistence.jdbc.user";
-	public static final String DB_PWD = "javax.persistence.jdbc.password";
-	
-	// intervals specified are in seconds
-	public static final int DEFAULT_MONITOR_INTERVAL = 30;
-	public static final int DEFAULT_FAILED_COUNTER_THRESHOLD = 3;
-	public static final int DEFAULT_TEST_INTERVAL = 10;
-	public static final int DEFAULT_WRITE_FPC_INTERVAL = 5;
-	public static final int DEFAULT_MAX_FPC_UPDATE_INTERVAL = 120;
-	public static final int DEFAULT_CHECK_DEPENDENCY_INTERVAL = 10;
-	
-	public static final String FP_MONITOR_INTERVAL = "fp_monitor_interval";
-	public static final String FAILED_COUNTER_THRESHOLD = "failed_counter_threshold";
-	public static final String TEST_TRANS_INTERVAL = "test_trans_interval";
-	public static final String WRITE_FPC_INTERVAL = "write_fpc_interval";
-	public static final String CHECK_DEPENDENCY_INTERVAL = "check_dependency_interval";
-	
-	public static final String DEPENDENCY_GROUPS = "dependency_groups";
-	public static final String SITE_NAME = "site_name";
-	public static final String NODE_TYPE = "node_type";
-	
-	public static final String TEST_VIA_JMX = "test_via_jmx";
-	public static final String JMX_FQDN = "jmx_fqdn";
-	public static final String MAX_FPC_UPDATE_INTERVAL = "max_fpc_update_interval";
-	public static final String STATE_AUDIT_INTERVAL_MS = "state_audit_interval_ms";
-	public static final String REFRESH_STATE_AUDIT_INTERVAL_MS = "refresh_state_audit_interval_ms";
-	
-	// AllSeemsWell types
-	public static final Boolean ALLNOTWELL=Boolean.FALSE;
-	public static final Boolean ALLSEEMSWELL=Boolean.TRUE;
+    private IntegrityMonitorProperties() {}
 
-	
+    public static final String DB_DRIVER = "javax.persistence.jdbc.driver";
+    public static final String DB_URL = "javax.persistence.jdbc.url";
+    public static final String DB_USER = "javax.persistence.jdbc.user";
+    public static final String DB_PWD = "javax.persistence.jdbc.password";
+
+    // intervals specified are in seconds
+    public static final int DEFAULT_MONITOR_INTERVAL = 30;
+    public static final int DEFAULT_FAILED_COUNTER_THRESHOLD = 3;
+    public static final int DEFAULT_TEST_INTERVAL = 10;
+    public static final int DEFAULT_WRITE_FPC_INTERVAL = 5;
+    public static final int DEFAULT_MAX_FPC_UPDATE_INTERVAL = 120;
+    public static final int DEFAULT_CHECK_DEPENDENCY_INTERVAL = 10;
+
+    public static final String FP_MONITOR_INTERVAL = "fp_monitor_interval";
+    public static final String FAILED_COUNTER_THRESHOLD = "failed_counter_threshold";
+    public static final String TEST_TRANS_INTERVAL = "test_trans_interval";
+    public static final String WRITE_FPC_INTERVAL = "write_fpc_interval";
+    public static final String CHECK_DEPENDENCY_INTERVAL = "check_dependency_interval";
+
+    public static final String DEPENDENCY_GROUPS = "dependency_groups";
+    public static final String SITE_NAME = "site_name";
+    public static final String NODE_TYPE = "node_type";
+
+    public static final String TEST_VIA_JMX = "test_via_jmx";
+    public static final String JMX_FQDN = "jmx_fqdn";
+    public static final String MAX_FPC_UPDATE_INTERVAL = "max_fpc_update_interval";
+    public static final String STATE_AUDIT_INTERVAL_MS = "state_audit_interval_ms";
+    public static final String REFRESH_STATE_AUDIT_INTERVAL_MS = "refresh_state_audit_interval_ms";
+
+    // AllSeemsWell types
+    public static final Boolean ALLNOTWELL = Boolean.FALSE;
+    public static final Boolean ALLSEEMSWELL = Boolean.TRUE;
+
+
 }

@@ -23,14 +23,6 @@ package org.onap.policy.common.im;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.onap.policy.common.im.AdministrativeStateException;
-import org.onap.policy.common.im.AllSeemsWellException;
-import org.onap.policy.common.im.ForwardProgressException;
-import org.onap.policy.common.im.IntegrityMonitorException;
-import org.onap.policy.common.im.IntegrityMonitorPropertiesException;
-import org.onap.policy.common.im.StandbyStatusException;
-import org.onap.policy.common.im.StateManagementException;
-import org.onap.policy.common.im.StateTransitionException;
 import org.onap.policy.common.im.jmx.ComponentAdminException;
 import org.onap.policy.common.utils.test.ExceptionsTester;
 
@@ -39,48 +31,48 @@ import org.onap.policy.common.utils.test.ExceptionsTester;
  */
 public class ExceptionsTest extends ExceptionsTester {
 
-	@Test
-	public void testStateTransitionException() throws Exception {
-		assertEquals(4, test(StateTransitionException.class));
-	}
+    @Test
+    public void testStateTransitionException() throws Exception {
+        assertEquals(4, test(StateTransitionException.class));
+    }
 
-	@Test
-	public void testStateManagementException() throws Exception {
-		assertEquals(4, test(StateManagementException.class));
-	}
+    @Test
+    public void testStateManagementException() throws Exception {
+        assertEquals(4, test(StateManagementException.class));
+    }
 
-	@Test
-	public void testStandbyStatusException() throws Exception {
-		assertEquals(5, test(StandbyStatusException.class));
-	}
+    @Test
+    public void testStandbyStatusException() throws Exception {
+        assertEquals(5, test(StandbyStatusException.class));
+    }
 
-	@Test
-	public void testIntegrityMonitorPropertiesException() throws Exception {
-		assertEquals(4, test(IntegrityMonitorPropertiesException.class));
-	}
+    @Test
+    public void testIntegrityMonitorPropertiesException() throws Exception {
+        assertEquals(4, test(IntegrityMonitorPropertiesException.class));
+    }
 
-	@Test
-	public void testIntegrityMonitorException() throws Exception {
-		assertEquals(5, test(IntegrityMonitorException.class));
-	}
+    @Test
+    public void testIntegrityMonitorException() throws Exception {
+        assertEquals(5, test(IntegrityMonitorException.class));
+    }
 
-	@Test
-	public void testForwardProgressException() throws Exception {
-		assertEquals(4, test(ForwardProgressException.class));
-	}
+    @Test
+    public void testForwardProgressException() throws Exception {
+        assertEquals(4, test(ForwardProgressException.class));
+    }
 
-	@Test
-	public void testAllSeemsWellException() throws Exception {
-		assertEquals(4, test(AllSeemsWellException.class));
-	}
+    @Test
+    public void testAllSeemsWellException() throws Exception {
+        assertEquals(4, test(AllSeemsWellException.class));
+    }
 
-	@Test
-	public void testAdministrativeStateException() throws Exception {
-		assertEquals(4, test(AdministrativeStateException.class));
-	}
+    @Test
+    public void testAdministrativeStateException() throws Exception {
+        assertEquals(4, test(AdministrativeStateException.class));
+    }
 
-	@Test
-	public void testComponentAdminException() throws Exception {
-		assertEquals(4, test(ComponentAdminException.class));
-	}
+    @Test
+    public void testComponentAdminException() throws Exception {
+        assertEquals(4, test(ComponentAdminException.class));
+    }
 }

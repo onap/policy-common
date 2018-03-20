@@ -26,12 +26,14 @@ import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 import javax.persistence.QueryTimeoutException;
 import javax.persistence.TypedQuery;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -226,7 +228,7 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
 
     @Test(expected = StateManagementException.class)
     @SuppressWarnings("unchecked")
-    public void test_StateManagementInitialization_ThrowStateManagementException_ifEntityManagerCreateQuerythrowsAnyException()
+    public void test_StateManagementInitialization_ThrowException_ifEntityManagerCreateQuerythrowsAnyException()
             throws Exception {
         final EntityManager mockedEm = getMockedEntityManager();
         final EntityManagerFactory mockedEmf = getMockedEntityManagerFactory(mockedEm);

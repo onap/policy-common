@@ -37,94 +37,107 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class StateManagementEntityTest extends IntegrityMonitorTestBase {
-	private static Logger logger = LoggerFactory.getLogger(StateManagementEntityTest.class);
-	  
-	@BeforeClass
-	public static void setUpClass() throws Exception {
-		IntegrityMonitorTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + StateManagementEntityTest.class.getSimpleName());
+    private static Logger logger = LoggerFactory.getLogger(StateManagementEntityTest.class);
 
-	}
+    /**
+     * Set up for the test class.
+     */
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        IntegrityMonitorTestBase
+                .setUpBeforeClass(DEFAULT_DB_URL_PREFIX + StateManagementEntityTest.class.getSimpleName());
 
-	@AfterClass
-	public static void tearDownClass() throws Exception {
-		IntegrityMonitorTestBase.tearDownAfterClass();
-	}
+    }
 
-	@Before
-	public void setUp() {
-		super.setUpTest();
-	}
+    /**
+     * Tear down after the test class.
+     */
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        IntegrityMonitorTestBase.tearDownAfterClass();
+    }
 
-	@After
-	public void tearDown() {
-		super.tearDownTest();
-	}
+    /**
+     * Set up for the test cases.
+     */
+    @Before
+    public void setUp() {
+        super.setUpTest();
+    }
 
-	@Test
-	public void testJPA() throws Exception {
-		logger.debug("\n??? logger.infor StateManagementEntityTest: Entering\n\n");
-		
-		//Define the resourceName for the StateManagement constructor
-		String resourceName = "test_resource1";
-		
-		//
-		logger.debug("Create StateManagementEntity, resourceName: {}", resourceName);
-		logger.debug("??? instantiate StateManagementEntity object");
-		StateManagementEntity sme = new StateManagementEntity(); 
-		
-		logger.debug("??? setResourceName : {}", resourceName);
-		sme.setResourceName(resourceName);
-		logger.debug("??? getResourceName : {}", sme.getResourceName());
+    /**
+     * Tear down after the test cases.
+     */
+    @After
+    public void tearDown() {
+        super.tearDownTest();
+    }
 
-		sme.setAdminState(StateManagement.UNLOCKED);
-		assertEquals(StateManagement.UNLOCKED, sme.getAdminState());
-		
-		sme.setOpState(StateManagement.ENABLED);
-		assertEquals(StateManagement.ENABLED, sme.getOpState());
-		
-		sme.setAvailStatus(StateManagement.NULL_VALUE);
-		assertEquals(StateManagement.NULL_VALUE, sme.getAvailStatus());
-		
-		sme.setStandbyStatus(StateManagement.COLD_STANDBY);
-		assertEquals(StateManagement.COLD_STANDBY, sme.getStandbyStatus());
+    @Test
+    public void testJpa() throws Exception {
+        logger.debug("\n??? logger.infor StateManagementEntityTest: Entering\n\n");
 
-		try(EntityTransCloser et = new EntityTransCloser(em.getTransaction())) {
-			logger.debug("??? before persist");
-			em.persist(sme); 
-			logger.debug("??? after  persist");
-			
-			em.flush(); 
-			logger.debug("??? after flush");
+        // Define the resourceName for the StateManagement constructor
+        String resourceName = "test_resource1";
 
-			et.commit(); 
-			logger.debug("??? after commit");
-		}
-		
-		try {
-	        Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
-	       
-	        query.setParameter("resource", resourceName);
-	       
-	        //Just test that we are retrieving the right object
-	        @SuppressWarnings("rawtypes")
-	        List resourceList = query.getResultList();
-	        if (!resourceList.isEmpty()) {
-	           // exist 
-	           StateManagementEntity sme2 = (StateManagementEntity) resourceList.get(0);	       	   		
-	       	   
-	       	   assertEquals(sme.getResourceName(), sme2.getResourceName()); 
-	       	   assertEquals(sme.getAdminState(), sme2.getAdminState()); 
-	       	   assertEquals(sme.getOpState(), sme2.getOpState()); 
-	       	   assertEquals(sme.getAvailStatus(), sme2.getAvailStatus()); 
-	       	   assertEquals(sme.getStandbyStatus(), sme2.getStandbyStatus()); 
-			   logger.debug("--");
-	        } else {
-	           logger.debug("Record not found, resourceName: {}", resourceName);
-	        }
-		  } catch(Exception ex) {
-			logger.error("Exception on select query: " + ex.toString());
-	    }
-		
-		logger.debug("\n\nJpaTest: Exit\n\n");
-	}
+        //
+        logger.debug("Create StateManagementEntity, resourceName: {}", resourceName);
+        logger.debug("??? instantiate StateManagementEntity object");
+        StateManagementEntity sme = new StateManagementEntity();
+
+        logger.debug("??? setResourceName : {}", resourceName);
+        sme.setResourceName(resourceName);
+        logger.debug("??? getResourceName : {}", sme.getResourceName());
+
+        sme.setAdminState(StateManagement.UNLOCKED);
+        assertEquals(StateManagement.UNLOCKED, sme.getAdminState());
+
+        sme.setOpState(StateManagement.ENABLED);
+        assertEquals(StateManagement.ENABLED, sme.getOpState());
+
+        sme.setAvailStatus(StateManagement.NULL_VALUE);
+        assertEquals(StateManagement.NULL_VALUE, sme.getAvailStatus());
+
+        sme.setStandbyStatus(StateManagement.COLD_STANDBY);
+        assertEquals(StateManagement.COLD_STANDBY, sme.getStandbyStatus());
+
+        try (EntityTransCloser et = new EntityTransCloser(em.getTransaction())) {
+            logger.debug("??? before persist");
+            em.persist(sme);
+            logger.debug("??? after  persist");
+
+            em.flush();
+            logger.debug("??? after flush");
+
+            et.commit();
+            logger.debug("??? after commit");
+        }
+
+        try {
+            Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
+
+            query.setParameter("resource", resourceName);
+
+            // Just test that we are retrieving the right object
+            @SuppressWarnings("rawtypes")
+            List resourceList = query.getResultList();
+            if (!resourceList.isEmpty()) {
+                // exist
+                StateManagementEntity sme2 = (StateManagementEntity) resourceList.get(0);
+
+                assertEquals(sme.getResourceName(), sme2.getResourceName());
+                assertEquals(sme.getAdminState(), sme2.getAdminState());
+                assertEquals(sme.getOpState(), sme2.getOpState());
+                assertEquals(sme.getAvailStatus(), sme2.getAvailStatus());
+                assertEquals(sme.getStandbyStatus(), sme2.getStandbyStatus());
+                logger.debug("--");
+            } else {
+                logger.debug("Record not found, resourceName: {}", resourceName);
+            }
+        } catch (Exception ex) {
+            logger.error("Exception on select query: " + ex.toString());
+        }
+
+        logger.debug("\n\nJpaTest: Exit\n\n");
+    }
 }

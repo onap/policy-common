@@ -26,27 +26,24 @@ import org.onap.policy.common.im.IntegrityMonitorException;
  * Provides operations to test health, lock and unlock components.
  */
 public interface ComponentAdminMBean {
-	/**
-	 * Test health of component.
-	 * 
-	 * @throws IntegrityMonitorException
-	 *            if the component fails the health check
-	 */
-	void test() throws IntegrityMonitorException;
+    /**
+     * Test health of component.
+     * 
+     * @throws IntegrityMonitorException if the component fails the health check
+     */
+    void test() throws IntegrityMonitorException;
 
-	/**
-	 * Administratively lock component.
-	 * 
-	 * @throws IntegrityMonitorException
-	 *            if the component lock fails
-	 */
-	void lock() throws IntegrityMonitorException;
-	
-	/**
-	 * Administratively unlock component.
-	 * 
-	 * @throws IntegrityMonitorException
-	 *            if the component unlock fails
-	 */
-	void unlock() throws IntegrityMonitorException;
+    /**
+     * Administratively lock component.
+     * 
+     * @throws IntegrityMonitorException if the component lock fails
+     */
+    void lock() throws IntegrityMonitorException;
+
+    /**
+     * Administratively unlock component.
+     * 
+     * @throws IntegrityMonitorException if the component unlock fails
+     */
+    void unlock() throws IntegrityMonitorException;
 }

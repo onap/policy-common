@@ -21,25 +21,22 @@
 package org.onap.policy.common.im;
 
 public class AllSeemsWellException extends IntegrityMonitorException {
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 
-	public AllSeemsWellException(){
-		super();
-	}
+    private static final long serialVersionUID = 1L;
 
-	public AllSeemsWellException(String msg) {
-		super(msg);
-	}
-	
-	public AllSeemsWellException(String msg, Exception cause) {
-		super(msg, cause);
-	}
+    public AllSeemsWellException() {
+        super();
+    }
 
-	public AllSeemsWellException(Exception cause) {
-		super(cause);
-	}
+    public AllSeemsWellException(String msg) {
+        super(msg);
+    }
+
+    public AllSeemsWellException(String msg, Exception cause) {
+        super(msg, cause);
+    }
+
+    public AllSeemsWellException(Exception cause) {
+        super(cause);
+    }
 }

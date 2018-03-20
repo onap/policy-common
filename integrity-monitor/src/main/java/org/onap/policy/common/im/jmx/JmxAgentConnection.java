@@ -18,9 +18,6 @@
  * ============LICENSE_END=========================================================
  */
 
-/**
- * 
- */
 package org.onap.policy.common.im.jmx;
 
 import java.io.IOException;
@@ -43,93 +40,89 @@ import org.onap.policy.common.logging.flexlogger.Logger;
  * Class to create a JMX RMI connection to the JmxAgent.
  */
 public final class JmxAgentConnection {
-	
+
     private static final Logger logger = FlexLogger.getLogger(JmxAgentConnection.class);
 
 
-	private static final String DEFAULT_HOST = "localhost";
-	private static final String DEFAULT_PORT = "9996";
+    private static final String DEFAULT_HOST = "localhost";
+    private static final String DEFAULT_PORT = "9996";
 
-	private String host;
-	private String port;
-	private JMXConnector connector;
-	private String jmxUrl = null;
-	
-	/**
-	 * Set up the host/port from the properties.   Use defaults if missing from the properties.
-	 * @param properties the properties used to look for host and port
-	 */
-	public JmxAgentConnection() {
-		host = DEFAULT_HOST;
-		port = DEFAULT_PORT;
-	}
-	
-	public JmxAgentConnection(String url) {
-		jmxUrl = url;
-	}
+    private String host;
+    private String port;
+    private JMXConnector connector;
+    private String jmxUrl = null;
 
-	/**
-	 * Generate jmxAgent url.
-	 * service:jmx:rmi:///jndi/rmi://host.domain:9999/jmxAgent
-	 * 
-	 * @param host
-	 *            host.domain
-	 * @param port
-	 *            9999
-	 * @return jmxAgent url.
-	 */
-	private static String jmxAgentUrl(String host, String port) {
+    /**
+     * Set up the host/port from the properties. Use defaults if missing from the properties.
+     */
+    public JmxAgentConnection() {
+        host = DEFAULT_HOST;
+        port = DEFAULT_PORT;
+    }
 
-		return "service:jmx:rmi:///jndi/rmi://" + host + ":" + port
-				+ "/jmxrmi";
-	}
+    public JmxAgentConnection(String url) {
+        jmxUrl = url;
+    }
 
-	/**
-	 * Get a connection to the jmxAgent MBeanServer.
-	 * @return the connection
-	 * @throws IntegrityMonitorException on error
-	 */
-	public MBeanServerConnection getMBeanConnection() throws IntegrityMonitorException {
+    /**
+     * Generate jmxAgent url. service:jmx:rmi:///jndi/rmi://host.domain:9999/jmxAgent
+     * 
+     * @param host host.domain
+     * @param port 9999
+     * @return jmxAgent url.
+     */
+    private static String jmxAgentUrl(String host, String port) {
 
-		try {
-			JMXServiceURL url;
-			if (jmxUrl == null) {
-				url = new JMXServiceURL(jmxAgentUrl(host, port));
-			}
-			else {
-				url = new JMXServiceURL(jmxUrl);
-			}
-			Map<String, Object> env = new HashMap<>();
-			
-			connector = JMXConnectorFactory.newJMXConnector(url, env);
-			connector.connect();
-			connector.addConnectionNotificationListener(
-					new NotificationListener() {
+        return "service:jmx:rmi:///jndi/rmi://" + host + ":" + port + "/jmxrmi";
+    }
 
-						@Override
-						public void handleNotification(
-								Notification notification, Object handback) {
-							if (notification.getType().equals(
-									JMXConnectionNotification.FAILED)) {
-								// handle disconnect
-								disconnect();
-							}
-						}
-					}, null, null);
-			
-			return connector.getMBeanServerConnection();
-			
-		} catch (IOException e) {
-			throw new IntegrityMonitorException(e);
-		}
-	}
-	
-	/**
-	 * Disconnect.
-	 */
-	public void disconnect() {
-		if (connector != null) {
-			try { connector.close(); } catch (IOException e) { logger.debug(e); }
-		}
-	}
+    /**
+     * Get a connection to the jmxAgent MBeanServer.
+     * 
+     * @return the connection
+     * @throws IntegrityMonitorException on error
+     */
+    public MBeanServerConnection getMBeanConnection() throws IntegrityMonitorException {
+
+        try {
+            JMXServiceURL url;
+            if (jmxUrl == null) {
+                url = new JMXServiceURL(jmxAgentUrl(host, port));
+            } else {
+                url = new JMXServiceURL(jmxUrl);
+            }
+            Map<String, Object> env = new HashMap<>();
+
+            connector = JMXConnectorFactory.newJMXConnector(url, env);
+            connector.connect();
+            connector.addConnectionNotificationListener(new NotificationListener() {
+
+                @Override
+                public void handleNotification(Notification notification, Object handback) {
+                    if (notification.getType().equals(JMXConnectionNotification.FAILED)) {
+                        // handle disconnect
+                        disconnect();
+                    }
+                }
+            }, null, null);
+
+            return connector.getMBeanServerConnection();
+
+        } catch (IOException e) {
+            throw new IntegrityMonitorException(e);
+        }
+    }
+
+    /**
+     * Disconnect.
+     */
+    public void disconnect() {
+        if (connector != null) {
+            try {
+                connector.close();
+            } catch (IOException e) {
+                logger.debug(e);
+            }
+        }
+    }
 }

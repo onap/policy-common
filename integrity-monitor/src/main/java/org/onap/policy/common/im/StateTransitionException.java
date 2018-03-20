@@ -21,19 +21,22 @@
 package org.onap.policy.common.im;
 
 public class StateTransitionException extends IntegrityMonitorException {
-	private static final long serialVersionUID = 1L;
-	public StateTransitionException() {
-		super();
-	}
-	public StateTransitionException(String message) {
-		super(message);
-	}
+    private static final long serialVersionUID = 1L;
 
-	public StateTransitionException(Throwable cause) {
-		super(cause);
-	}
-	public StateTransitionException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public StateTransitionException() {
+        super();
+    }
+
+    public StateTransitionException(String message) {
+        super(message);
+    }
+
+    public StateTransitionException(Throwable cause) {
+        super(cause);
+    }
+
+    public StateTransitionException(String message, Throwable cause) {
+        super(message, cause);
+    }
 
 }

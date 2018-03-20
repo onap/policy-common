@@ -35,139 +35,148 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AllSeemsWellTest extends IntegrityMonitorTestBase {
-	private static Logger logger = LoggerFactory.getLogger(AllSeemsWellTest.class);
+    private static Logger logger = LoggerFactory.getLogger(AllSeemsWellTest.class);
 
-	private static final long STATE_CYCLE_MS = 3 * CYCLE_INTERVAL_MS;
+    private static final long STATE_CYCLE_MS = 3 * CYCLE_INTERVAL_MS;
 
-	private static Properties myProp;
-	private static String resourceName;
+    private static Properties myProp;
+    private static String resourceName;
 
-	@BeforeClass
-	public static void setUpClass() throws Exception {
-		IntegrityMonitorTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + AllSeemsWellTest.class.getSimpleName());
+    /**
+     * Set up for test class.
+     */
+    @BeforeClass
+    public static void setUpClass() throws Exception {
+        IntegrityMonitorTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + AllSeemsWellTest.class.getSimpleName());
 
-		resourceName = IntegrityMonitorTestBase.siteName + "." + IntegrityMonitorTestBase.nodeType;
-	}
+        resourceName = IntegrityMonitorTestBase.siteName + "." + IntegrityMonitorTestBase.nodeType;
+    }
 
-	@AfterClass
-	public static void tearDownClass() throws Exception {
-		IntegrityMonitorTestBase.tearDownAfterClass();
-	}
+    @AfterClass
+    public static void tearDownClass() throws Exception {
+        IntegrityMonitorTestBase.tearDownAfterClass();
+    }
 
-	@Before
-	public void setUp() {
-		super.setUpTest();
+    /**
+     * Set up for test cases.
+     */
+    @Before
+    public void setUp() {
+        super.setUpTest();
 
-		myProp = makeProperties();
+        myProp = makeProperties();
 
-	}
+    }
 
-	@After
-	public void tearDown() {
-		super.tearDownTest();
-	}
+    @After
+    public void tearDown() {
+        super.tearDownTest();
+    }
 
-	// Ignore
-	@Test
-	public void testAllSeemsWell() throws Exception {
-		logger.debug("\nIntegrityMonitorTest: Entering testAllSeemsWell\n\n");
+    // Ignore
+    @Test
+    public void testAllSeemsWell() throws Exception {
+        logger.debug("\nIntegrityMonitorTest: Entering testAllSeemsWell\n\n");
 
-		// parameters are passed via a properties file
-		myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
-		myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
-		myProp.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, "-1");
-		myProp.put(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, "-1");
-		myProp.put(IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD, "1");
-		myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "5");
-		myProp.put(IntegrityMonitorProperties.TEST_TRANS_INTERVAL, "1");
-		myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "1");
+        // parameters are passed via a properties file
+        myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
+        myProp.put(IntegrityMonitorProperties.TEST_VIA_JMX, "false");
+        myProp.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, "-1");
+        myProp.put(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, "-1");
+        myProp.put(IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD, "1");
+        myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "5");
+        myProp.put(IntegrityMonitorProperties.TEST_TRANS_INTERVAL, "1");
+        myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "1");
 
-		IntegrityMonitor.updateProperties(myProp);
-		/*
-		 * The monitorInterval is 5 and the failedCounterThreshold is 1 A
-		 * forward progress will be stale after 5 seconds.
-		 */
+        IntegrityMonitor.updateProperties(myProp);
+        /*
+         * The monitorInterval is 5 and the failedCounterThreshold is 1 A forward progress will be
+         * stale after 5 seconds.
+         */
 
-		IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+        IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
 
-		StateManagement sm = im.getStateManager();
+        StateManagement sm = im.getStateManager();
 
-		// Give it time to set the states in the DB
-		Thread.sleep(STATE_CYCLE_MS);
+        // Give it time to set the states in the DB
+        Thread.sleep(STATE_CYCLE_MS);
 
-		// Check the state
-		logger.debug(
-				"\n\ntestAllSeemsWell starting im state \nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
-				sm.getAdminState(), sm.getOpState(), sm.getAvailStatus(), sm.getStandbyStatus());
+        // Check the state
+        logger.debug(
+                "\n\ntestAllSeemsWell starting im state \nAdminState = {}\nOpState() = {}\nAvailStatus = {}\n"
+                        + "StandbyStatus = {}\n",
+                sm.getAdminState(), sm.getOpState(), sm.getAvailStatus(), sm.getStandbyStatus());
 
-		assertEquals(StateManagement.ENABLED, sm.getOpState());
+        assertEquals(StateManagement.ENABLED, sm.getOpState());
 
-		// Indicate a failure
-		im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLNOTWELL,
-				"'AllSeemsWellTest - ALLNOTWELL'");
+        // Indicate a failure
+        im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLNOTWELL,
+                "'AllSeemsWellTest - ALLNOTWELL'");
 
-		// Wait for the state to change due to ALLNOTWELL
-		Thread.sleep(STATE_CYCLE_MS);
-		// Check the state
-		logger.debug(
-				"\n\ntestAllSeemsWell after ALLNOTWELL: im state \nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
-				sm.getAdminState(), sm.getOpState(), sm.getAvailStatus(), sm.getStandbyStatus());
+        // Wait for the state to change due to ALLNOTWELL
+        Thread.sleep(STATE_CYCLE_MS);
+        // Check the state
+        logger.debug(
+                "\n\ntestAllSeemsWell after ALLNOTWELL: im state \nAdminState = {}\nOpState() = {}\nAvailStatus = "
+                        + "{}\nStandbyStatus = {}\n",
+                sm.getAdminState(), sm.getOpState(), sm.getAvailStatus(), sm.getStandbyStatus());
 
-		// assertEquals(StateManagement.DISABLED, sm.getOpState());
+        // assertEquals(StateManagement.DISABLED, sm.getOpState());
 
-		Map<String, String> allNotWellMap = im.getAllNotWellMap();
-		for (String key : allNotWellMap.keySet()) {
-			logger.debug("AllSeemsWellTest: allNotWellMap: key = {}  msg = {}", key, allNotWellMap.get(key));
-		}
-		// assertEquals(1, allNotWellMap.size());
+        Map<String, String> allNotWellMap = im.getAllNotWellMap();
+        for (String key : allNotWellMap.keySet()) {
+            logger.debug("AllSeemsWellTest: allNotWellMap: key = {}  msg = {}", key, allNotWellMap.get(key));
+        }
+        // assertEquals(1, allNotWellMap.size());
 
-		Map<String, String> allSeemsWellMap = im.getAllSeemsWellMap();
-		// assertTrue(allSeemsWellMap.isEmpty());
+        im.getAllSeemsWellMap();
+        // assertTrue(allSeemsWellMap.isEmpty());
 
-		// Return to normal
-		im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLSEEMSWELL,
-				"'AllSeemsWellTest - ALLSEEMSWELL'");
+        // Return to normal
+        im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLSEEMSWELL,
+                "'AllSeemsWellTest - ALLSEEMSWELL'");
 
-		// Wait for the state to change due to ALLNOTWELL
-		Thread.sleep(STATE_CYCLE_MS);
-		// Check the state
-		logger.debug(
-				"\n\ntestAllSeemsWell after ALLSEEMSWELL: im state \nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
-				sm.getAdminState(), sm.getOpState(), sm.getAvailStatus(), sm.getStandbyStatus());
+        // Wait for the state to change due to ALLNOTWELL
+        Thread.sleep(STATE_CYCLE_MS);
+        // Check the state
+        logger.debug(
+                "\n\ntestAllSeemsWell after ALLSEEMSWELL: im state \nAdminState = {}\nOpState() = {}\nAvailStatus = "
+                        + "{}\nStandbyStatus = {}\n",
+                sm.getAdminState(), sm.getOpState(), sm.getAvailStatus(), sm.getStandbyStatus());
 
-		// assertEquals(StateManagement.ENABLED, sm.getOpState());
+        // assertEquals(StateManagement.ENABLED, sm.getOpState());
 
-		allNotWellMap = im.getAllNotWellMap();
-		assertTrue(allNotWellMap.isEmpty());
+        allNotWellMap = im.getAllNotWellMap();
+        assertTrue(allNotWellMap.isEmpty());
 
-		allSeemsWellMap = im.getAllSeemsWellMap();
-		assertEquals(1, allSeemsWellMap.size());
-		for (String key : allSeemsWellMap.keySet()) {
-			logger.debug("AllSeemsWellTest: allSeemsWellMap: key = {}  msg = {}", key, allSeemsWellMap.get(key));
-		}
+        Map<String, String> allSeemsWellMap = im.getAllSeemsWellMap();
+        assertEquals(1, allSeemsWellMap.size());
+        for (String key : allSeemsWellMap.keySet()) {
+            logger.debug("AllSeemsWellTest: allSeemsWellMap: key = {}  msg = {}", key, allSeemsWellMap.get(key));
+        }
 
-		// Check for null parameters
-		assertException(im, imx -> {
-			imx.allSeemsWell(null, IntegrityMonitorProperties.ALLSEEMSWELL, "'AllSeemsWellTest - ALLSEEMSWELL'");
-		});
+        // Check for null parameters
+        assertException(im, imx -> {
+            imx.allSeemsWell(null, IntegrityMonitorProperties.ALLSEEMSWELL, "'AllSeemsWellTest - ALLSEEMSWELL'");
+        });
 
-		assertException(im, imx -> {
-			im.allSeemsWell("", IntegrityMonitorProperties.ALLSEEMSWELL, "'AllSeemsWellTest - ALLSEEMSWELL'");
-		});
+        assertException(im, imx -> {
+            im.allSeemsWell("", IntegrityMonitorProperties.ALLSEEMSWELL, "'AllSeemsWellTest - ALLSEEMSWELL'");
+        });
 
-		assertException(im, imx -> {
-			im.allSeemsWell(this.getClass().getName(), null, "'AllSeemsWellTest - ALLSEEMSWELL'");
-		});
+        assertException(im, imx -> {
+            im.allSeemsWell(this.getClass().getName(), null, "'AllSeemsWellTest - ALLSEEMSWELL'");
+        });
 
-		assertException(im, imx -> {
-			im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLSEEMSWELL, null);
-		});
+        assertException(im, imx -> {
+            im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLSEEMSWELL, null);
+        });
 
-		assertException(im, imx -> {
-			im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLSEEMSWELL, "");
-		});
+        assertException(im, imx -> {
+            im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLSEEMSWELL, "");
+        });
 
-		logger.debug("\n\ntestAllSeemsWell: Exit\n\n");
-	}
+        logger.debug("\n\ntestAllSeemsWell: Exit\n\n");
+    }
 
 }
