@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_8b252cb0",
+        "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/DbAuditCompareEntriesTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1581
+      },
+      "writtenOn": "2018-03-20T23:35:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_f5edb3b8",
+      "revId": "5afbb255eadbc24bb8fc4734069485f028f7bce5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_b52f2bf6",
         "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/DbAuditCompareEntriesTest.java",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_ab2a687c",
+        "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/DbAuditCompareEntriesTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 459,
+      "author": {
+        "id": 1581
+      },
+      "writtenOn": "2018-03-20T23:35:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_b52f2bf6",
+      "revId": "5afbb255eadbc24bb8fc4734069485f028f7bce5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_5534a749",
         "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/DbAuditCompareEntriesTest.java",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2018-03-20T17:59:50Z",
       "side": 1,
       "message": "rename \"c\" to something more meaningful",
+      "revId": "5afbb255eadbc24bb8fc4734069485f028f7bce5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_4b1f245c",
+        "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/DbAuditCompareEntriesTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 503,
+      "author": {
+        "id": 1581
+      },
+      "writtenOn": "2018-03-20T23:35:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_5534a749",
       "revId": "5afbb255eadbc24bb8fc4734069485f028f7bce5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
