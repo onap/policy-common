@@ -44,217 +44,222 @@ import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
  */
 public class AuditPeriodTest extends IntegrityAuditTestBase {
 
-	private static Logger logger = FlexLogger.getLogger(AuditPeriodTest.class);
+    private static Logger logger = FlexLogger.getLogger(AuditPeriodTest.class);
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
-		IntegrityAuditTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + AuditPeriodTest.class.getSimpleName());
-	}
+    @BeforeClass
+    public static void setUpBeforeClass() throws Exception {
+        IntegrityAuditTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + AuditPeriodTest.class.getSimpleName());
+    }
 
-	@AfterClass
-	public static void tearDownAfterClass() {
-		IntegrityAuditTestBase.tearDownAfterClass();
-	}
+    @AfterClass
+    public static void tearDownAfterClass() {
+        IntegrityAuditTestBase.tearDownAfterClass();
+    }
 
-	@Before
-	public void setUp() {
-		logger.info("setUp: Entering");
+    /**
+     * Set up for test case.
+     */
+    @Override
+    @Before
+    public void setUp() {
+        logger.info("setUp: Entering");
 
-		super.setUp();
+        super.setUp();
 
-		logger.info("setUp: Exiting");
+        logger.info("setUp: Exiting");
 
-	}
+    }
 
-	@After
-	public void tearDown() {
-		logger.info("tearDown: Entering");
+    /**
+     * Tear down after test cases.
+     */
+    @Override
+    @After
+    public void tearDown() {
+        logger.info("tearDown: Entering");
 
-		super.tearDown();
+        super.tearDown();
 
-		logger.info("tearDown: Exiting");
-	}
+        logger.info("tearDown: Exiting");
+    }
 
-	/*
-	 * Verifies (via log parsing) that when a negative audit period is
-	 * specified, the audit is suppressed.
-	 */
-	@Test
-	public void testNegativeAuditPeriod() throws Exception {
+    /*
+     * Verifies (via log parsing) that when a negative audit period is specified, the audit is
+     * suppressed.
+     */
+    @Test
+    public void testNegativeAuditPeriod() throws Exception {
 
-		logger.info("testNegativeAuditPeriod: Entering");
+        logger.info("testNegativeAuditPeriod: Entering");
 
-		properties.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "-1");
+        properties.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "-1");
 
-		ExtractAppender logA = watch(debugLogger, "Suppressing integrity audit, integrityAuditPeriodSeconds=([^,]*)");
+        ExtractAppender logA = watch(debugLogger, "Suppressing integrity audit, integrityAuditPeriodSeconds=([^,]*)");
 
-		MyIntegrityAudit integrityAudit = makeAuditor("pdp1", A_SEQ_PU);
+        MyIntegrityAudit integrityAudit = makeAuditor("pdp1", A_SEQ_PU);
 
-		/*
-		 * Sleep long enough to allow
-		 * 
-		 * 1) audit to immediately terminate.
-		 */
-		waitThread(integrityAudit);
+        /*
+         * Sleep long enough to allow
+         * 
+         * 1) audit to immediately terminate.
+         */
+        waitThread(integrityAudit);
 
-		verifyItemsInLog(logA, "-1");
+        verifyItemsInLog(logA, "-1");
 
-		logger.info("testNegativeAuditPeriod: Exiting");
+        logger.info("testNegativeAuditPeriod: Exiting");
 
-	}
+    }
 
-	/*
-	 * Verifies (via log parsing) that when an audit period of zero is
-	 * specified, the audit runs continuously, generating a number of sleep/wake
-	 * sequences in a short period of time (e.g. 100ms).
-	 */
-	@Test
-	public void testZeroAuditPeriod() throws Exception {
+    /*
+     * Verifies (via log parsing) that when an audit period of zero is specified, the audit runs
+     * continuously, generating a number of sleep/wake sequences in a short period of time (e.g.
+     * 100ms).
+     */
+    @Test
+    public void testZeroAuditPeriod() throws Exception {
 
-		logger.info("testZeroAuditPeriod: Entering");
+        logger.info("testZeroAuditPeriod: Entering");
 
-		properties.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "0");
+        properties.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "0");
 
-		ExtractAppender logA = watch(debugLogger, "[Aa]waking from (0ms) sleep");
+        final ExtractAppender logA = watch(debugLogger, "[Aa]waking from (0ms) sleep");
 
-		MyIntegrityAudit integrityAudit = makeAuditor("pdp1", A_SEQ_PU);
+        MyIntegrityAudit integrityAudit = makeAuditor("pdp1", A_SEQ_PU);
 
-		/*
-		 * Wait for
-		 * 
-		 * 1) audit to generate a bunch of sleep wake sequences.
-		 */
-		String[] awakings = new String[10];
-		for (int x = 0; x < awakings.length; ++x) {
-			awakings[x] = "0ms";
-			runAudit(integrityAudit);
-		}
+        /*
+         * Wait for
+         * 
+         * 1) audit to generate a bunch of sleep wake sequences.
+         */
+        String[] awakings = new String[10];
+        for (int x = 0; x < awakings.length; ++x) {
+            awakings[x] = "0ms";
+            runAudit(integrityAudit);
+        }
 
-		// run a couple more audits
-		runAudit(integrityAudit);
-		runAudit(integrityAudit);
+        // run a couple more audits
+        runAudit(integrityAudit);
+        runAudit(integrityAudit);
 
-		/*
-		 * We should get at least 10 sleep/wake sequences.
-		 */
+        /*
+         * We should get at least 10 sleep/wake sequences.
+         */
 
-		verifyItemsInLog(logA, awakings);
+        verifyItemsInLog(logA, awakings);
 
-		logger.info("testZeroAuditPeriod: Exiting");
+        logger.info("testZeroAuditPeriod: Exiting");
 
-	}
+    }
 
-	/**
-	 * Verifies that when different audit periods are specified, there is an
-	 * appropriate interval between the audits.
-	 */
-	@Test
-	public void testLongAuditPeriod() throws Exception {
+    /**
+     * Verifies that when different audit periods are specified, there is an appropriate interval
+     * between the audits.
+     */
+    @Test
+    public void testLongAuditPeriod() throws Exception {
 
-		logger.info("testLongAuditPeriod: Entering");
+        logger.info("testLongAuditPeriod: Entering");
 
-		testAuditPeriod(100);
-		testAuditPeriod(200);
+        testAuditPeriod(100);
+        testAuditPeriod(200);
 
-		logger.info("testLongAuditPeriod: Exiting");
-	}
+        logger.info("testLongAuditPeriod: Exiting");
+    }
 
-	/**
-	 * Verifies that audits actually take as long as expected, even with
-	 * multiple auditors running simultaneously.
-	 * 
-	 * @param periodms
-	 *            audit period, in milliseconds
-	 * @throws Exception
-	 * @throws InterruptedException
-	 */
-	private void testAuditPeriod(long periodms) throws Exception, InterruptedException {
+    /**
+     * Verifies that audits actually take as long as expected, even with multiple auditors running
+     * simultaneously.
+     * 
+     * @param periodms audit period, in milliseconds
+     * @throws Exception if an error occurs
+     * @throws InterruptedException if the thread is interrupted
+     */
+    private void testAuditPeriod(long periodms) throws Exception, InterruptedException {
 
-		properties.put(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS, String.valueOf(periodms));
+        properties.put(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS, String.valueOf(periodms));
 
-		/*
-		 * Start several auditors.
-		 */
-		MyIntegrityAudit[] ia = new MyIntegrityAudit[3];
-		for (int x = 0; x < ia.length; ++x) {
-			ia[x] = makeAuditor("pdp" + x, A_SEQ_PU);
-		}
+        /*
+         * Start several auditors.
+         */
+        MyIntegrityAudit[] ia = new MyIntegrityAudit[3];
+        for (int x = 0; x < ia.length; ++x) {
+            ia[x] = makeAuditor("pdp" + x, A_SEQ_PU);
+        }
 
-		/*
-		 * Run an audit on all of them.
-		 */
-		runAudit(ia);
+        /*
+         * Run an audit on all of them.
+         */
+        runAudit(ia);
 
-		/*
-		 * Now run again and ensure it waited long enough between runs.
-		 */
-		long tmin = minAuditTime(ia);
-		assertTrue(tmin >= periodms + AUDIT_SIMULATION_MS);
+        /*
+         * Now run again and ensure it waited long enough between runs.
+         */
+        long tmin = minAuditTime(ia);
+        assertTrue(tmin >= periodms + AUDIT_SIMULATION_MS);
 
-		/*
-		 * Now run again and ensure it waited long enough between runs.
-		 */
-		tmin = minAuditTime(ia);
-		assertTrue(tmin >= periodms + AUDIT_SIMULATION_MS);
-	}
+        /*
+         * Now run again and ensure it waited long enough between runs.
+         */
+        tmin = minAuditTime(ia);
+        assertTrue(tmin >= periodms + AUDIT_SIMULATION_MS);
+    }
 
-	/**
-	 * Runs simultaneous audits on several auditors.
-	 * 
-	 * @param auditors
-	 * @return the minimum time, in milliseconds, elapsed for any given auditor
-	 * @throws InterruptedException
-	 */
-	private long minAuditTime(MyIntegrityAudit... auditors) throws InterruptedException {
-		List<Thread> threads = new ArrayList<>(auditors.length);
-		AtomicLong tfirst = new AtomicLong(Long.MAX_VALUE);
-		long tbeg = System.currentTimeMillis();
+    /**
+     * Runs simultaneous audits on several auditors.
+     * 
+     * @param auditors the auditors
+     * @return the minimum time, in milliseconds, elapsed for any given auditor
+     * @throws InterruptedException if the thread is interrupted
+     */
+    private long minAuditTime(MyIntegrityAudit... auditors) throws InterruptedException {
+        List<Thread> threads = new ArrayList<>(auditors.length);
+        AtomicLong tfirst = new AtomicLong(Long.MAX_VALUE);
+        final long tbeg = System.currentTimeMillis();
 
-		// create the threads
-		for (MyIntegrityAudit p : auditors) {
-			Thread t = new Thread() {
+        // create the threads
+        for (MyIntegrityAudit p : auditors) {
+            Thread auditThread = new Thread() {
 
-				@Override
-				public void run() {
-					try {
-						runAudit(p);
-						setMinTime(tfirst);
+                @Override
+                public void run() {
+                    try {
+                        runAudit(p);
+                        setMinTime(tfirst);
 
-					} catch (InterruptedException e) {
-						;
-					}
-				}
-			};
+                    } catch (InterruptedException e) {
+                        ;
+                    }
+                }
+            };
 
-			t.setDaemon(true);
-			threads.add(t);
-		}
+            auditThread.setDaemon(true);
+            threads.add(auditThread);
+        }
 
-		// start the threads
-		for (Thread t : threads) {
-			t.start();
-		}
+        // start the threads
+        for (Thread t : threads) {
+            t.start();
+        }
 
-		// wait for them to complete
-		for (Thread t : threads) {
-			t.join();
-		}
+        // wait for them to complete
+        for (Thread t : threads) {
+            t.join();
+        }
 
-		return (tfirst.get() - tbeg);
-	}
+        return (tfirst.get() - tbeg);
+    }
 
-	/**
-	 * Sets a value to the minimum between the current value and the current
-	 * time.
-	 * 
-	 * @param tmin
-	 *            current minimum value/value to be set
-	 */
-	private static void setMinTime(AtomicLong tmin) {
-		long tcur = System.currentTimeMillis();
-		long t;
-		while ((t = tmin.get()) > tcur) {
-			tmin.compareAndSet(t, tcur);
-		}
-	}
+    /**
+     * Sets a value to the minimum between the current value and the current time.
+     * 
+     * @param tmin current minimum value/value to be set
+     */
+    private static void setMinTime(AtomicLong tmin) {
+        long tcur = System.currentTimeMillis();
+        long time;
+        while ((time = tmin.get()) > tcur) {
+            tmin.compareAndSet(time, tcur);
+        }
+    }
 }
