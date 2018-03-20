@@ -23,10 +23,6 @@ package org.onap.policy.common.ia;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.onap.policy.common.ia.DbAuditException;
-import org.onap.policy.common.ia.DbDaoTransactionException;
-import org.onap.policy.common.ia.IntegrityAuditException;
-import org.onap.policy.common.ia.IntegrityAuditPropertiesException;
 import org.onap.policy.common.utils.test.ExceptionsTester;
 
 /**
@@ -34,23 +30,23 @@ import org.onap.policy.common.utils.test.ExceptionsTester;
  */
 public class ExceptionsTest extends ExceptionsTester {
 
-	@Test
-	public void testDbAuditException() throws Exception {
-		assertEquals(4, test(DbAuditException.class));
-	}
+    @Test
+    public void testDbAuditException() throws Exception {
+        assertEquals(4, test(DbAuditException.class));
+    }
 
-	@Test
-	public void testDbDaoTransactionException() throws Exception {
-		assertEquals(4, test(DbDaoTransactionException.class));
-	}
+    @Test
+    public void testDbDaoTransactionException() throws Exception {
+        assertEquals(4, test(DbDaoTransactionException.class));
+    }
 
-	@Test
-	public void testIntegrityAuditException() throws Exception {
-		assertEquals(4, test(IntegrityAuditException.class));
-	}
+    @Test
+    public void testIntegrityAuditException() throws Exception {
+        assertEquals(4, test(IntegrityAuditException.class));
+    }
 
-	@Test
-	public void testIntegrityAuditPropertiesException() throws Exception {
-		assertEquals(4, test(IntegrityAuditPropertiesException.class));
-	}
+    @Test
+    public void testIntegrityAuditPropertiesException() throws Exception {
+        assertEquals(4, test(IntegrityAuditPropertiesException.class));
+    }
 }

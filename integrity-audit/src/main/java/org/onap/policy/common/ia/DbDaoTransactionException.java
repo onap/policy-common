@@ -21,18 +21,21 @@
 package org.onap.policy.common.ia;
 
 public class DbDaoTransactionException extends IntegrityAuditException {
-	private static final long serialVersionUID = 1L;
-	public DbDaoTransactionException() {
-		super();
-	}
-	public DbDaoTransactionException(String message) {
-		super(message);
-	}
+    private static final long serialVersionUID = 1L;
 
-	public DbDaoTransactionException(Throwable cause) {
-		super(cause);
-	}
-	public DbDaoTransactionException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public DbDaoTransactionException() {
+        super();
+    }
+
+    public DbDaoTransactionException(String message) {
+        super(message);
+    }
+
+    public DbDaoTransactionException(Throwable cause) {
+        super(cause);
+    }
+
+    public DbDaoTransactionException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

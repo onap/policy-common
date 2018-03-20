@@ -37,119 +37,139 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="IaTestEntity")
-@NamedQueries({
-	@NamedQuery(name=" IaTestEntity.findAll", query="SELECT e FROM IaTestEntity e "),
-	@NamedQuery(name="IaTestEntity.deleteAll", query="DELETE FROM IaTestEntity WHERE 1=1")
-})
+@Table(name = "IaTestEntity")
+@NamedQueries({@NamedQuery(name = " IaTestEntity.findAll", query = "SELECT e FROM IaTestEntity e "),
+        @NamedQuery(name = "IaTestEntity.deleteAll", query = "DELETE FROM IaTestEntity WHERE 1=1")})
 
 public class IaTestEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="ImTestId")
-	private long imTestId;
-	
-	@Column(name="created_by", nullable=false, length=255)
-	private String createdBy = "guest";
-	
-	@Column(name="person", nullable=false, length=255)
-	private PersonSample person;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "ImTestId")
+    private long imTestId;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="created_date", updatable=false)
-	private Date createdDate;
+    @Column(name = "created_by", nullable = false, length = 255)
+    private String createdBy = "guest";
 
-	@Column(name="modified_by", nullable=false, length=255)
-	private String modifiedBy = "guest";
+    @Column(name = "person", nullable = false, length = 255)
+    private PersonSample person;
 
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="modified_date", nullable=false)
-	private Date modifiedDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date", updatable = false)
+    private Date createdDate;
 
-	public IaTestEntity() {
-	}
+    @Column(name = "modified_by", nullable = false, length = 255)
+    private String modifiedBy = "guest";
 
-	@PrePersist
-	public void	prePersist() {
-		Date date = new Date();
-		this.createdDate = date;
-		this.modifiedDate = date;
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "modified_date", nullable = false)
+    private Date modifiedDate;
 
-	@PreUpdate
-	public void preUpdate() {
-		this.modifiedDate = new Date();
-	}
-	
-	/**
-	 * @return the Id
-	 */
-	public long getImTestId() {
-		return imTestId;
-	}
-	
-	/**
-	 * @return the createdBy
-	 */
-	public String getCreatedBy() {
-		return createdBy;
-	}
+    public IaTestEntity() {}
 
-	/**
-	 * @param createdBy the createdBy to set
-	 */
-	public void setCreatedBy(String createdBy) {
-		this.createdBy = createdBy;
-	}
-	
-	/**
-	 * @return the modifiedBy
-	 */
-	public String getModifiedBy() {
-		return modifiedBy;
-	}
-	
-	/**
-	 * @param modifiedBy the modifiedBy to set
-	 */
-	public void setModifiedBy(String modifiedBy) {
-		this.modifiedBy = modifiedBy;
-	}
-	
-	/**
-	 * @return the modifiedDate
-	 */
-	public Date getModifiedDate() {
-		return modifiedDate;
-	}
+    /**
+     * PrePersist call back method.
+     */
+    @PrePersist
+    public void prePersist() {
+        Date date = new Date();
+        this.createdDate = date;
+        this.modifiedDate = date;
+    }
 
-	/**
-	 * @param modifiedDate the modifiedDate to set
-	 */
-	public void setModifiedDate(Date modifiedDate) {
-		this.modifiedDate = modifiedDate;
-	}
+    @PreUpdate
+    public void preUpdate() {
+        this.modifiedDate = new Date();
+    }
 
-	/**
-	 * @return the createdDate
-	 */
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-	
-	/**
-	 * @param the person to set
-	 */
-	public void setPersonTest(PersonSample p) {
-		this.person = p;
-	}
-	
-	/**
-	 * @return the person
-	 */
-	public PersonSample getPersonTest() {
-		return person;
-	}
+    /**
+     * The the Im test Id.
+     * 
+     * @return the Id
+     */
+    public long getImTestId() {
+        return imTestId;
+    }
+
+    /**
+     * Get the createdBy.
+     * 
+     * @return the createdBy
+     */
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    /**
+     * Set the createdBy.
+     * 
+     * @param createdBy the createdBy to set
+     */
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    /**
+     * Get the modifiedBy.
+     * 
+     * @return the modifiedBy
+     */
+    public String getModifiedBy() {
+        return modifiedBy;
+    }
+
+    /**
+     * Set the ModifiedBy.
+     * 
+     * @param modifiedBy the modifiedBy to set
+     */
+    public void setModifiedBy(String modifiedBy) {
+        this.modifiedBy = modifiedBy;
+    }
+
+    /**
+     * Get the ModifiedDate.
+     * 
+     * @return the modifiedDate
+     */
+    public Date getModifiedDate() {
+        return modifiedDate;
+    }
+
+    /**
+     * Set the ModifiedDate.
+     * 
+     * @param modifiedDate the modifiedDate to set
+     */
+    public void setModifiedDate(Date modifiedDate) {
+        this.modifiedDate = modifiedDate;
+    }
+
+    /**
+     * Get the CreatedDate.
+     * 
+     * @return the createdDate
+     */
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    /**
+     * Set the person.
+     * 
+     * @param person the person to set
+     */
+    public void setPersonTest(PersonSample person) {
+        this.person = person;
+    }
+
+    /**
+     * Get the person.
+     * 
+     * @return the person
+     */
+    public PersonSample getPersonTest() {
+        return person;
+    }
 }
