@@ -21,18 +21,21 @@
 package org.onap.policy.common.ia;
 
 public class DbAuditException extends IntegrityAuditException {
-	private static final long serialVersionUID = 1L;
-	public DbAuditException() {
-		super();
-	}
-	public DbAuditException(String message) {
-		super(message);
-	}
+    private static final long serialVersionUID = 1L;
 
-	public DbAuditException(Throwable cause) {
-		super(cause);
-	}
-	public DbAuditException(String message, Throwable cause) {
-		super(message, cause);
-	}
+    public DbAuditException() {
+        super();
+    }
+
+    public DbAuditException(String message) {
+        super(message);
+    }
+
+    public DbAuditException(Throwable cause) {
+        super(cause);
+    }
+
+    public DbAuditException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

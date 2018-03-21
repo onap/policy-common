@@ -42,184 +42,185 @@ import javax.persistence.TemporalType;
  */
 
 @Entity
-@Table(name="IntegrityAuditEntity")
-@NamedQueries({
-	@NamedQuery(name=" IntegrityAuditEntity.findAll", query="SELECT e FROM IntegrityAuditEntity e "),
-	@NamedQuery(name="IntegrityAuditEntity.deleteAll", query="DELETE FROM IntegrityAuditEntity WHERE 1=1")
-})
+@Table(name = "IntegrityAuditEntity")
+@NamedQueries({@NamedQuery(name = " IntegrityAuditEntity.findAll", query = "SELECT e FROM IntegrityAuditEntity e "),
+        @NamedQuery(name = "IntegrityAuditEntity.deleteAll", query = "DELETE FROM IntegrityAuditEntity WHERE 1=1")})
 
 public class IntegrityAuditEntity implements Serializable {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static boolean isUnitTesting;
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="id")
-	private long id;
-	
-	@Column(name="persistenceUnit", nullable=false)
-	private String persistenceUnit;
-	
-	@Column(name="site", nullable=true)
-	private String site;
-	
-	@Column(name="nodeType", nullable=true)
-	private String nodeType;
-	
-	@Column(name="resourceName", nullable=false, unique=true)
-	private String resourceName;
-	
-	@Column(name="designated", nullable=true)
-	private boolean designated = false;
+    private static boolean isUnitTesting;
 
-	@Column(name="jdbcDriver", nullable=false)
-	private String jdbcDriver;
-	
-	@Column(name="jdbcUrl", nullable=false)
-	private String jdbcUrl;
-	
-	@Column(name="jdbcUser", nullable=false)
-	private String jdbcUser;
-	
-	@Column(name="jdbcPassword", nullable=false)
-	private String jdbcPassword;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="createdDate", updatable=true)
-	private Date createdDate;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name="lastUpdated")
-	private Date lastUpdated;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
+    private long id;
 
-	
-	public IntegrityAuditEntity() {
-		// Empty constructor
-	}
+    @Column(name = "persistenceUnit", nullable = false)
+    private String persistenceUnit;
 
-	@PrePersist
-	public void	prePersist() {
-		Date date = new Date();
-		this.createdDate = date;
-		this.lastUpdated = date;
-	}
-	
-	@PreUpdate
-	public void preUpdate() {
-		this.lastUpdated = new Date();
-	}
+    @Column(name = "site", nullable = true)
+    private String site;
 
-	public long getId() {
-		return id;
-	}
+    @Column(name = "nodeType", nullable = true)
+    private String nodeType;
 
-	public String getPersistenceUnit() {
-		return persistenceUnit;
-	}
+    @Column(name = "resourceName", nullable = false, unique = true)
+    private String resourceName;
 
-	public void setPersistenceUnit(String persistenceUnit) {
-		this.persistenceUnit = persistenceUnit;
-	}
+    @Column(name = "designated", nullable = true)
+    private boolean designated = false;
 
-	public String getSite() {
-		return site;
-	}
+    @Column(name = "jdbcDriver", nullable = false)
+    private String jdbcDriver;
 
-	public void setSite(String site) {
-		this.site = site;
-	}
+    @Column(name = "jdbcUrl", nullable = false)
+    private String jdbcUrl;
 
-	public String getNodeType() {
-		return nodeType;
-	}
+    @Column(name = "jdbcUser", nullable = false)
+    private String jdbcUser;
 
-	public void setNodeType(String nodeType) {
-		this.nodeType = nodeType;
-	}
+    @Column(name = "jdbcPassword", nullable = false)
+    private String jdbcPassword;
 
-	public String getResourceName() {
-		return resourceName;
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "createdDate", updatable = true)
+    private Date createdDate;
 
-	public void setResourceName(String resourceName) {
-		this.resourceName = resourceName;
-	}
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "lastUpdated")
+    private Date lastUpdated;
 
-	public boolean isDesignated() {
-		return designated;
-	}
 
-	public void setDesignated(boolean designated) {
-		this.designated = designated;
-	}
+    public IntegrityAuditEntity() {
+        // Empty constructor
+    }
 
-	public String getJdbcDriver() {
-		return jdbcDriver;
-	}
+    /**
+     * Pre persist.
+     */
+    @PrePersist
+    public void prePersist() {
+        Date date = new Date();
+        this.createdDate = date;
+        this.lastUpdated = date;
+    }
 
-	public void setJdbcDriver(String jdbcDriver) {
-		this.jdbcDriver = jdbcDriver;
-	}
+    @PreUpdate
+    public void preUpdate() {
+        this.lastUpdated = new Date();
+    }
 
-	public String getJdbcUrl() {
-		return jdbcUrl;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setJdbcUrl(String jdbcUrl) {
-		this.jdbcUrl = jdbcUrl;
-	}
+    public String getPersistenceUnit() {
+        return persistenceUnit;
+    }
 
-	public String getJdbcUser() {
-		return jdbcUser;
-	}
+    public void setPersistenceUnit(String persistenceUnit) {
+        this.persistenceUnit = persistenceUnit;
+    }
 
-	public void setJdbcUser(String jdbcUser) {
-		this.jdbcUser = jdbcUser;
-	}
+    public String getSite() {
+        return site;
+    }
 
-	public String getJdbcPassword() {
-		return jdbcPassword;
-	}
+    public void setSite(String site) {
+        this.site = site;
+    }
 
-	public void setJdbcPassword(String jdbcPassword) {
-		this.jdbcPassword = jdbcPassword;
-	}
+    public String getNodeType() {
+        return nodeType;
+    }
 
-	public Date getLastUpdated() {
-		return lastUpdated;
-	}
+    public void setNodeType(String nodeType) {
+        this.nodeType = nodeType;
+    }
 
-	public void setLastUpdated(Date lastUpdated) {
-		this.lastUpdated = lastUpdated;
-	}
+    public String getResourceName() {
+        return resourceName;
+    }
 
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-	
-	public void setCreatedDate(Date created) {
-		this.createdDate = created;
-	}
+    public void setResourceName(String resourceName) {
+        this.resourceName = resourceName;
+    }
 
-	public static boolean isUnitTesting() {
-		return isUnitTesting;
-	}
+    public boolean isDesignated() {
+        return designated;
+    }
 
-	public static void setUnitTesting(boolean isUnitTesting) {
-		IntegrityAuditEntity.isUnitTesting = isUnitTesting;
-	}
+    public void setDesignated(boolean designated) {
+        this.designated = designated;
+    }
 
-	private void writeObject(ObjectOutputStream out) throws IOException {
-		if(isUnitTesting()) {
-			/*
-			 * Note: other fields may be added here, as long as the
-			 * created-date and last-updated date are not included.
-			 */
-			out.writeObject(jdbcUrl);
-			
-		} else {
-			out.defaultWriteObject();
-		}
-	}
+    public String getJdbcDriver() {
+        return jdbcDriver;
+    }
+
+    public void setJdbcDriver(String jdbcDriver) {
+        this.jdbcDriver = jdbcDriver;
+    }
+
+    public String getJdbcUrl() {
+        return jdbcUrl;
+    }
+
+    public void setJdbcUrl(String jdbcUrl) {
+        this.jdbcUrl = jdbcUrl;
+    }
+
+    public String getJdbcUser() {
+        return jdbcUser;
+    }
+
+    public void setJdbcUser(String jdbcUser) {
+        this.jdbcUser = jdbcUser;
+    }
+
+    public String getJdbcPassword() {
+        return jdbcPassword;
+    }
+
+    public void setJdbcPassword(String jdbcPassword) {
+        this.jdbcPassword = jdbcPassword;
+    }
+
+    public Date getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(Date lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(Date created) {
+        this.createdDate = created;
+    }
+
+    public static boolean isUnitTesting() {
+        return isUnitTesting;
+    }
+
+    public static void setUnitTesting(boolean isUnitTesting) {
+        IntegrityAuditEntity.isUnitTesting = isUnitTesting;
+    }
+
+    private void writeObject(ObjectOutputStream out) throws IOException {
+        if (isUnitTesting()) {
+            /*
+             * Note: other fields may be added here, as long as the created-date and last-updated
+             * date are not included.
+             */
+            out.writeObject(jdbcUrl);
+
+        } else {
+            out.defaultWriteObject();
+        }
+    }
 }
