@@ -1,0 +1,257 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_7a72e7ae",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/Main.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-03-21T18:32:50Z",
+      "side": 1,
+      "message": "oops need the 2018",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 22
+      },
+      "revId": "7015ad085db3af926809855fddf307074e3c9fc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_9a9a53c4",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/ErrorMessages.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-03-21T18:32:50Z",
+      "side": 1,
+      "message": "Just add super() in here to avoid sonar flat why its empty",
+      "range": {
+        "startLine": 72,
+        "startChar": 4,
+        "endLine": 72,
+        "endChar": 30
+      },
+      "revId": "7015ad085db3af926809855fddf307074e3c9fc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_7aa987de",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/JmxOpProcessor.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-03-21T18:32:50Z",
+      "side": 1,
+      "message": "add super()",
+      "range": {
+        "startLine": 32,
+        "startChar": 4,
+        "endLine": 32,
+        "endChar": 31
+      },
+      "revId": "7015ad085db3af926809855fddf307074e3c9fc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_fab4b736",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/MainTestRunner.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-03-21T18:32:50Z",
+      "side": 1,
+      "message": "2018 Ericsson",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 26
+      },
+      "revId": "7015ad085db3af926809855fddf307074e3c9fc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ba862f64",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/exception/IllegalCommandLineArgumentExceptionTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-03-21T18:32:50Z",
+      "side": 1,
+      "message": "2018 Ericsson",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 26
+      },
+      "revId": "7015ad085db3af926809855fddf307074e3c9fc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_7a80a746",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/exception/MissingPropertyExceptionTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-03-21T18:32:50Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 26
+      },
+      "revId": "7015ad085db3af926809855fddf307074e3c9fc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_1a95e387",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/exception/NoMatchingEntryFoundExceptionTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-03-21T18:32:50Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 26
+      },
+      "revId": "7015ad085db3af926809855fddf307074e3c9fc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_3a921fa0",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/exception/PropertyFileProcessingExceptionTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-03-21T18:32:50Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 26
+      },
+      "revId": "7015ad085db3af926809855fddf307074e3c9fc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_fa8b5766",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/utils/CommandLineHelperTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-03-21T18:32:50Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 27
+      },
+      "revId": "7015ad085db3af926809855fddf307074e3c9fc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_9ae81318",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/utils/ExtraCommandLineArgumentTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-03-21T18:32:50Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 26
+      },
+      "revId": "7015ad085db3af926809855fddf307074e3c9fc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_baedcf27",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/utils/PrintableImpl.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-03-21T18:32:50Z",
+      "side": 1,
+      "message": "same",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 26
+      },
+      "revId": "7015ad085db3af926809855fddf307074e3c9fc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
