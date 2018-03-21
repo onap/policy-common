@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_ff726910",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/Main.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-03-21T18:05:04Z",
+      "side": 0,
+      "message": "Why did you delete this comment? Just wondering...",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 36,
+        "endChar": 3
+      },
+      "revId": "64627f345bfe5e5bd62524783594655dd8456ace",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
