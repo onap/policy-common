@@ -20,50 +20,38 @@
 
 package org.onap.policy.common.sitemanager;
 
-import java.io.BufferedReader;
-
 /*
  * Site Manager argument list:
  *
- * none - dump help information
- * show - dump information about all nodes
- *      ([site, nodetype, resourceName],
- *          adminState, opState, availStatus, standbyStatus)
- *          The first 3 determine the sort order.
- * setAdminState [ -s <site> | -r <resourceName> ] <new-state>
- * lock [ -s <site> | -r <resourceName> ]
- * unlock [ -s <site> | -r <resourceName> ]
+ * none - dump help information show - dump information about all nodes ([site, nodetype,
+ * resourceName], adminState, opState, availStatus, standbyStatus) The first 3 determine the sort
+ * order. setAdminState [ -s <site> | -r <resourceName> ] <new-state> lock [ -s <site> | -r
+ * <resourceName> ] unlock [ -s <site> | -r <resourceName> ]
  */
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Comparator;
+import static org.onap.policy.common.sitemanager.utils.Constants.OPERATIONAL_PERSISTENCE_UNIT;
+import static org.onap.policy.common.sitemanager.utils.Constants.SITE_MANAGER_PROPERTIES_PROPERTY_NAME;
+import static org.onap.policy.common.sitemanager.utils.ErrorMessages.HELP_STRING;
+import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.LOCK;
+import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.SET_ADMIN_STATE;
+import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.UNLOCK;
+import static org.onap.policy.common.sitemanager.utils.JmxOpProcessor.jmxOp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.TreeSet;
-
-import javax.management.JMX;
-import javax.management.ObjectName;
-import javax.management.remote.JMXConnector;
-import javax.management.remote.JMXConnectorFactory;
-import javax.management.remote.JMXServiceURL;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
-
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
-import org.onap.policy.common.im.jmx.ComponentAdminMBean;
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
+import org.onap.policy.common.sitemanager.data.service.DatabaseAccessService;
+import org.onap.policy.common.sitemanager.data.service.DatabaseAccessServiceImpl;
+import org.onap.policy.common.sitemanager.exception.IllegalCommandLineArgumentException;
+import org.onap.policy.common.sitemanager.exception.MissingPropertyException;
+import org.onap.policy.common.sitemanager.exception.NoMatchingEntryFoundException;
+import org.onap.policy.common.sitemanager.exception.PropertyFileProcessingException;
+import org.onap.policy.common.sitemanager.utils.CommandLineHelper;
+import org.onap.policy.common.sitemanager.utils.PersistenceUnitPropertiesProvider;
+import org.onap.policy.common.sitemanager.utils.Printable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,19 +59,6 @@ import org.slf4j.LoggerFactory;
  * This class contains the main entry point for Site Manager.
  */
 public class Main {
-    private static final String SITE_NAME = "site";
-
-    private static final String WHERE_R_SITE_SITE = " WHERE r.site = :" + SITE_NAME;
-
-    private static final String WHERE_R_RESOURCE_NAME = " WHERE r.resourceName = :";
-
-    private static final String RESOURCE_NAME = "resourceName";
-
-    private static final String WHERE_S_RESOURCE_NAME = " WHERE s.resourceName = :";
-
-    private static final String RESOURCE_REGISTRATION_QUERY = "SELECT r FROM ResourceRegistrationEntity r";
-
-    private static final String STATE_MANAGEMENT_QUERY = "SELECT s FROM StateManagementEntity s";
 
     private static final Logger logger = LoggerFactory.getLogger(Main.class.getName());
 
@@ -96,189 +71,92 @@ public class Main {
     /**
      * Print out help information regarding command arguments.
      */
-    private static void help() {
-        System.out.print("Usage:\n" + "    siteManager show [ -s <site> | -r <resourceName> ] :\n"
-                + "        display node information\n"
-                + "    siteManager setAdminState { -s <site> | -r <resourceName> }" + " <new-state> :\n"
-                + "        update admin state on selected nodes\n"
-                + "    siteManager lock { -s <site> | -r <resourceName> } :\n" + "        lock selected nodes\n"
-                + "    siteManager unlock { -s <site> | -r <resourceName> } :\n" + "        unlock selected nodes\n");
+    private static String getHelpString() {
+        return HELP_STRING;
     }
 
     /**
-     * Print out help information regarding the properties file.
-     *
-     * @param propertiesFileName the path to the properties file
-     */
-    private static void helpProperties(final String propertiesFileName) {
-        if (propertiesFileName == null) {
-            // file name not specified (missing system property)
-            System.out.print("'siteManager' needs to be passed the system property\n"
-                    + "'siteManager.properties', which is the file name of a\n"
-                    + "properties file containing database access information\n\n");
-        } else {
-            final File file = new File(propertiesFileName);
-            if (!file.exists()) {
-                // file name specified, but does not exist
-                System.out.print("Properties file '" + file.getAbsolutePath() + "' does not exist.\n\n");
-            } else {
-                // file name specified and does exist -- presumably, the
-                // problem is with one or more properties
-                System.out.print("One or more missing properties in\n'" + file.getAbsolutePath() + "'.\n\n");
-            }
-        }
-
-        System.out.print("The following properties need to be specified:\n\n" + "    javax.persistence.jdbc.driver -"
-                + " typically 'org.mariadb.jdbc.Driver'\n"
-                + "    javax.persistence.jdbc.url - URL referring to the database,\n"
-                + "        which typically has the form:" + " 'jdbc:mariadb://<host>:<port>/<db>'\n"
-                + "        ('<db>' is probably 'xacml' in this case)\n"
-                + "    javax.persistence.jdbc.user - the user id for accessing the" + " database\n"
-                + "    javax.persistence.jdbc.password - password for accessing the" + " database\n");
-    }
-
-    /**
-     * This is the main entry point.
+     * This is the main entry point
      *
      * @param args these are command-line arguments to 'siteManager'
      */
     public static void main(final String[] args) {
-        CommandLine cmd = getCommandLine(args);
+        final Printable printable = new PrintableImpl();
+        new Main().process(args, printable);
+    }
 
-        // fetch options, and remaining arguments
-        final String sOption = cmd.getOptionValue('s');
-        final String rOption = cmd.getOptionValue('r');
-        final List<String> argList = cmd.getArgList();
+    public void process(final String[] args, final Printable printable) {
+        try {
+            final CommandLineHelper commandLineHelper = new CommandLineHelper(args, printable);
 
-        // a number of commands require either the '-r' option or '-s' option
-        final boolean optionLetterSpecified = (rOption != null || sOption != null);
-
-        // used to accumulate any error messages that are generated
-        final StringBuilder error = new StringBuilder();
-
-        // first non-option argument
-        String arg0 = null;
-
-        if (argList.isEmpty()) {
-            error.append("No command specified\n");
-        } else {
-            arg0 = argList.get(0);
-            if ("show".equalsIgnoreCase(arg0)) {
-                // show [ -s <site> | -r <resourceName> ]
-                if (argList.size() != 1) {
-                    error.append("show: Extra arguments\n");
-                }
-            } else if ("setAdminState".equalsIgnoreCase(arg0)) {
-                // setAdminState { -s <site> | -r <resourceName> } <new-state>
-                switch (argList.size()) {
-                    case 1:
-                        error.append("setAdminState: Missing <new-state> value\n");
-                        break;
-                    case 2:
-                        // this is expected
-                        break;
-                    default:
-                        error.append("setAdminState: Extra arguments\n");
-                        break;
-                }
-                if (!optionLetterSpecified) {
-                    error.append("setAdminState: Either '-s' or '-r' option is needed\n");
-                }
-            } else if ("lock".equalsIgnoreCase(arg0)) {
-                // lock { -s <site> | -r <resourceName> }
-                if (argList.size() != 1) {
-                    error.append("lock: Extra arguments\n");
-                }
-                if (!optionLetterSpecified) {
-                    error.append("lock: Either '-s' or '-r' option is needed\n");
-                }
-            } else if ("unlock".equalsIgnoreCase(arg0)) {
-                // unlock { -s <site> | -r <resourceName> }
-                if (argList.size() != 1) {
-                    error.append("unlock: Extra arguments\n");
-                }
-                if (!optionLetterSpecified) {
-                    error.append("unlock: Either '-s' or '-r' option is needed\n");
-                }
-            } else {
-                error.append(arg0).append(": Unknown command\n");
+            if (commandLineHelper.isHelpArgumentSet()) {
+                printable.println(getHelpString());
+                System.exit(0);
             }
-        }
-        if (sOption != null && rOption != null) {
-            error.append(arg0).append(":  'r' and 's' options are mutually exclusive\n");
-        }
-        if (error.length() != 0) {
-            // if any errors have occurred, dump out the error string,
-            // help information, and exit
-            System.out.println(error.toString());
-            help();
-            System.exit(2);
-        }
 
-        // read in properties used to access the database
-        final String propertiesFileName = System.getProperty("siteManager.properties");
-        final Properties properties = getProperties(propertiesFileName);
-
-        // access database through 'EntityManager'
-        final EntityManagerFactory emf = Persistence.createEntityManagerFactory("operationalPU", properties);
-        final EntityManager em = emf.createEntityManager();
-
-        TypedQuery<StateManagementEntity> stateManagementEntityTableQuery;
-        TypedQuery<ResourceRegistrationEntity> resourceRegistryEntityTableQuery;
-
-        if (rOption != null) {
-            // 'resourceName' specified -- both queries are limited to this
-            // resource
-            stateManagementEntityTableQuery =
-                    em.createQuery(STATE_MANAGEMENT_QUERY + WHERE_S_RESOURCE_NAME + RESOURCE_NAME,
-                            StateManagementEntity.class).setParameter(RESOURCE_NAME, rOption);
-            resourceRegistryEntityTableQuery =
-                    em.createQuery(RESOURCE_REGISTRATION_QUERY + WHERE_R_RESOURCE_NAME + RESOURCE_NAME,
-                            ResourceRegistrationEntity.class).setParameter(RESOURCE_NAME, rOption);
-        } else if (sOption != null) {
-            // 'site' is specified -- 'ResourceRegistrationEntity' has a 'site'
-            // field, but 'StateManagementEntity' does not
-            stateManagementEntityTableQuery = em.createQuery(STATE_MANAGEMENT_QUERY, StateManagementEntity.class);
-            resourceRegistryEntityTableQuery =
-                    em.createQuery(RESOURCE_REGISTRATION_QUERY + WHERE_R_SITE_SITE, ResourceRegistrationEntity.class)
-                            .setParameter(SITE_NAME, sOption);
-        } else {
-            // query all entries
-            stateManagementEntityTableQuery = em.createQuery(STATE_MANAGEMENT_QUERY, StateManagementEntity.class);
-            resourceRegistryEntityTableQuery =
-                    em.createQuery(RESOURCE_REGISTRATION_QUERY, ResourceRegistrationEntity.class);
-        }
-
-        // perform 'StateManagementEntity' query, and place matching entries
-        // in 'stateManagementTable'
-        for (final StateManagementEntity stateManagementEntity : stateManagementEntityTableQuery.getResultList()) {
-            stateManagementTable.put(stateManagementEntity.getResourceName(), stateManagementEntity);
-        }
-
-        // perform 'ResourceRegistrationQuery', and place matching entries
-        // in 'resourceRegistrationTable' ONLY if there is also an associated
-        // 'stateManagementTable' entry
-        for (final ResourceRegistrationEntity resourceRegistrationEntity : resourceRegistryEntityTableQuery
-                .getResultList()) {
-            final String resourceName = resourceRegistrationEntity.getResourceName();
-            if (stateManagementTable.get(resourceName) != null) {
-                // only include entries that have a corresponding
-                // state table entry -- silently ignore the rest
-                resourceRegistrationTable.put(resourceName, resourceRegistrationEntity);
+            if (!commandLineHelper.isValid()) {
+                printable.println(getHelpString());
+                System.exit(2);
             }
-        }
-
-        if (resourceRegistrationTable.size() == 0) {
-            System.out.println(arg0 + ": No matching entries");
+            process(commandLineHelper, printable);
+        } catch (final IllegalCommandLineArgumentException illegalCommandLineArgumentException) {
+            printable.println(illegalCommandLineArgumentException.getMessage());
+            printable.println(getHelpString());
+            System.exit(1);
+        } catch (final PropertyFileProcessingException | MissingPropertyException exception) {
+            System.exit(3);
+        } catch (final NoMatchingEntryFoundException exception) {
             System.exit(4);
         }
+    }
 
-        if ("setAdminState".equalsIgnoreCase(arg0)) {
-            // update admin state on all of the nodes
-            final String adminState = argList.get(1);
-            final EntityTransaction et = em.getTransaction();
-            et.begin();
-            try {
+    private void process(final CommandLineHelper cmd, final Printable printable) {
+        // fetch options, and remaining arguments
+        final String sOption = cmd.getSite();
+        final String rOption = cmd.getResourceName();
+        final List<String> argList = cmd.getArgList();
+
+        final String arg0 = argList.get(0);
+
+        // read in properties used to access the database
+        final String propertiesFileName = System.getProperty(SITE_MANAGER_PROPERTIES_PROPERTY_NAME);
+        final Properties properties = PersistenceUnitPropertiesProvider.getProperties(propertiesFileName, printable);
+
+        try (final DatabaseAccessService accessService =
+                getDatabaseAccessService(OPERATIONAL_PERSISTENCE_UNIT, properties)) {
+
+            final List<StateManagementEntity> stateManagementResultList =
+                    accessService.getStateManagementEntities(rOption, sOption);
+            final List<ResourceRegistrationEntity> resourceRegistrationResultList =
+                    accessService.getResourceRegistrationEntities(rOption, sOption);
+
+            // perform 'StateManagementEntity' query, and place matching entries
+            // in 'stateManagementTable'
+            for (final StateManagementEntity stateManagementEntity : stateManagementResultList) {
+                stateManagementTable.put(stateManagementEntity.getResourceName(), stateManagementEntity);
+            }
+
+            // perform 'ResourceRegistrationQuery', and place matching entries
+            // in 'resourceRegistrationTable' ONLY if there is also an associated
+            // 'stateManagementTable' entry
+            for (final ResourceRegistrationEntity resourceRegistrationEntity : resourceRegistrationResultList) {
+                final String resourceName = resourceRegistrationEntity.getResourceName();
+                if (stateManagementTable.get(resourceName) != null) {
+                    // only include entries that have a corresponding
+                    // state table entry -- silently ignore the rest
+                    resourceRegistrationTable.put(resourceName, resourceRegistrationEntity);
+                }
+            }
+
+            if (resourceRegistrationTable.size() == 0) {
+                final String message = arg0 + ": No matching entries";
+                printable.println(message);
+                throw new NoMatchingEntryFoundException(message);
+            }
+
+            if (SET_ADMIN_STATE.getValue().equalsIgnoreCase(arg0)) {
+                // update admin state on all of the nodes
+                final String adminState = argList.get(1);
                 // iterate over all matching 'ResourceRegistrationEntity' instances
                 for (final ResourceRegistrationEntity r : resourceRegistrationTable.values()) {
                     // we know the corresponding 'StateManagementEntity' exists --
@@ -288,79 +166,44 @@ public class Main {
 
                     // update the admin state, and save the changes
                     s.setAdminState(adminState);
-                    em.persist(s);
                 }
-            } finally {
-                // do the commit
-                em.flush();
-                et.commit();
-            }
-        } else if ("lock".equalsIgnoreCase(arg0) || "unlock".equalsIgnoreCase(arg0)) {
-            // these use the JMX interface
-            for (final ResourceRegistrationEntity r : resourceRegistrationTable.values()) {
-                // lock or unlock the entity
-                jmxOp(arg0, r);
+                accessService.persist(stateManagementTable.values());
 
-                // change should be reflected in 'adminState'
-                em.refresh(stateManagementTable.get(r.getResourceName()));
+            } else if (LOCK.getValue().equalsIgnoreCase(arg0) || UNLOCK.getValue().equalsIgnoreCase(arg0)) {
+                // these use the JMX interface
+                for (final ResourceRegistrationEntity r : resourceRegistrationTable.values()) {
+                    // lock or unlock the entity
+                    jmxOp(arg0, r, printable);
+
+                    // change should be reflected in 'adminState'
+                    accessService.refreshEntity(stateManagementTable.get(r.getResourceName()));
+                }
             }
+        } catch (final Exception exception) {
+            printable.println(exception.getMessage());
         }
-
-        // free connection to the database
-        em.close();
 
         // display all entries
         display();
     }
 
     /**
-     * Process a 'lock' or 'unlock' operation on a single 'ResourceRegistrationEntity'.
+     * Compare two strings, either of which may be null
      *
-     * @param arg0 this is the string "lock" or "unlock"
-     * @param resourceRegistrationEntity this is the ResourceRegistrationEntity to lock or unlock
+     * @param first the first string
+     * @param second the second string
+     * @return a negative value if s1<s2, 0 if they are equal, and positive if s1>s2
      */
-    static void jmxOp(final String arg0, final ResourceRegistrationEntity resourceRegistrationEntity) {
-        final String resourceName = resourceRegistrationEntity.getResourceName();
-        final String jmxUrl = resourceRegistrationEntity.getResourceUrl();
-        if (jmxUrl == null) {
-            System.out.println(arg0 + ": no resource URL for '" + resourceName + "'");
-            return;
+    private static int stringCompare(final String first, final String second) {
+        if (first == null ^ second == null) {
+            return (first == null) ? -1 : 1;
         }
 
-        JMXConnector connector = null;
-        try {
-            connector = JMXConnectorFactory.connect(new JMXServiceURL(jmxUrl));
-            final ComponentAdminMBean admin = JMX.newMXBeanProxy(connector.getMBeanServerConnection(),
-                    new ObjectName("ONAP_POLICY_COMP:name=" + resourceName), ComponentAdminMBean.class);
-
-            if ("lock".equals(arg0)) {
-                admin.lock();
-            } else {
-                admin.unlock();
-            }
-        } catch (final Exception e) {
-            // e.printStackTrace();
-            System.out.println(arg0 + " failed for '" + resourceName + "': " + e);
-        } finally {
-            if (connector != null) {
-                try {
-                    connector.close();
-                } catch (final Exception e) {
-                    System.err.println(e);
-                }
-            }
+        if (first == null && second == null) {
+            return 0;
         }
-    }
 
-    /**
-     * Compare two strings, either of which may be null.
-     *
-     * @param s1 the first string
-     * @param s2 the second string
-     * @return a negative value if s1 < s2, 0 if they are equal, and positive if s1 > s2
-     */
-    private static int stringCompare(final String s1, final String s2) {
-        return ((s1 == null) ? (s2 == null ? 0 : -1) : (s2 == null ? 1 : s1.compareTo(s2)));
+        return first.compareTo(second);
     }
 
     /**
@@ -369,12 +212,11 @@ public class Main {
      *
      * @param current this is an array of length 7, containing the current maximum lengths of each
      *        column in the tabular dump
-     * @param strings this is an array of length 7, containing the current String entry for each
-     *        column
+     * @param s this is an array of length 7, containing the current String entry for each column
      */
-    private static void updateLengths(final int[] current, final String[] strings) {
+    private static void updateLengths(final int[] current, final String[] s) {
         for (int i = 0; i < 7; i += 1) {
-            final String str = strings[i];
+            final String str = s[i];
             final int newLength = (str == null ? 4 : str.length());
             if (current[i] < newLength) {
                 // this column needs to be expanded
@@ -384,29 +226,25 @@ public class Main {
     }
 
     /**
-     * Ordered display -- dump out all of the entries.
+     * Ordered display -- dump out all of the entries, in
      */
     static void display() {
-        final TreeSet<String[]> treeset = new TreeSet<String[]>(new Comparator<String[]>() {
-            @Override
-            public int compare(final String[] r1, final String[] r2) {
-                int rval = 0;
+        final TreeSet<String[]> treeset = new TreeSet<>((final String[] r1, final String[] r2) -> {
+            int rval = 0;
 
-                // the first 3 columns are 'Site', 'NodeType', and 'ResourceName',
-                // and are used to sort the entries
-                for (int i = 0; i < 3; i += 1) {
-                    if ((rval = stringCompare(r1[i], r2[i])) != 0) {
-                        break;
-                    }
-                }
-                return (rval);
+            // the first 3 columns are 'Site', 'NodeType', and 'ResourceName',
+            // and are used to sort the entries
+            for (int i = 0; i < 3; i += 1) {
+                if ((rval = stringCompare(r1[i], r2[i])) != 0)
+                    break;
             }
+            return (rval);
         });
 
         final String[] labels = new String[] {"Site", "NodeType", "ResourceName", "AdminState", "OpState",
-            "AvailStatus", "StandbyStatus"};
+                "AvailStatus", "StandbyStatus"};
         final String[] underlines = new String[] {"----", "--------", "------------", "----------", "-------",
-            "-----------", "-------------"};
+                "-----------", "-------------"};
 
         // each column needs to be at least wide enough to fit the column label
         final int[] lengths = new int[7];
@@ -445,62 +283,15 @@ public class Main {
         }
     }
 
-    private static Properties getProperties(final String propertiesFileName) {
-        final File propertiesFile = new File(propertiesFileName);
-
-        if (propertiesFileName == null || !propertiesFile.exists()) {
-            helpProperties(propertiesFileName);
-            System.exit(3);
-        }
-        final Properties properties = getProperties(propertiesFile.toPath());
-
-        // verify that we have all of the properties needed
-        if (properties.getProperty("javax.persistence.jdbc.driver") == null
-                || properties.getProperty("javax.persistence.jdbc.url") == null
-                || properties.getProperty("javax.persistence.jdbc.user") == null
-                || properties.getProperty("javax.persistence.jdbc.password") == null) {
-            // one or more missing properties
-            helpProperties(propertiesFileName);
-            System.exit(3);
-        }
-        return properties;
+    DatabaseAccessService getDatabaseAccessService(final String persistenceUnitName, final Properties properties) {
+        return new DatabaseAccessServiceImpl(persistenceUnitName, properties);
     }
 
-    private static Properties getProperties(final Path filePath) {
-        final Properties properties = new Properties();
-        try (final BufferedReader bufferedReader = Files.newBufferedReader(filePath);) {
-            properties.load(bufferedReader);
-        } catch (final Exception e) {
-            System.out.println("Exception loading properties: " + e);
-            helpProperties(filePath.getFileName().toString());
-            System.exit(3);
+    private static class PrintableImpl implements Printable {
+
+        @Override
+        public void println(final String value) {
+            System.out.println(value);
         }
-        return properties;
-    }
-
-    private static CommandLine getCommandLine(final String[] args) {
-        final Options options = new Options();
-        options.addOption("s", true, "specify site");
-        options.addOption("r", true, "specify resource name");
-        options.addOption("h", false, "display help");
-        options.addOption("?", false, "display help");
-
-        // parse options
-        final CommandLineParser parser = new DefaultParser();
-        CommandLine cmd = null;
-
-        try {
-            cmd = parser.parse(options, args);
-        } catch (final ParseException e) {
-            System.out.println(e.getMessage());
-            help();
-            System.exit(1);
-        }
-
-        if (cmd == null || cmd.getOptionValue('h') != null || cmd.getOptionValue('?') != null) {
-            help();
-            System.exit(0);
-        }
-        return cmd;
     }
 }
