@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_df53ede0",
+        "filename": "site-manager/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-03-21T17:48:38Z",
+      "side": 1,
+      "message": "This should go back to the way it was before. SOmehow it has got de-formatted.",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 151
+      },
+      "revId": "a58c6fef925b405497e808b5a8a0f182aaf89d53",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
