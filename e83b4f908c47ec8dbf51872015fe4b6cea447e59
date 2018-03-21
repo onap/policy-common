@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_1f8875c5",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/data/service/DatabaseAccessServiceImpl.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-03-21T18:05:04Z",
+      "side": 1,
+      "message": "Two Licenses!",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 39,
+        "endChar": 3
+      },
+      "revId": "e83b4f908c47ec8dbf51872015fe4b6cea447e59",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}

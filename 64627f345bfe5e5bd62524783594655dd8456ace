@@ -22,6 +22,29 @@
       "revId": "64627f345bfe5e5bd62524783594655dd8456ace",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_3ffe9139",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/Main.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-03-21T18:05:04Z",
+      "side": 0,
+      "message": "Why did you delete this comment? Just wondering.....",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 43
+      },
+      "revId": "64627f345bfe5e5bd62524783594655dd8456ace",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
