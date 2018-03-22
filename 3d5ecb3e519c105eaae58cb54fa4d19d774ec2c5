@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_8ae75cac",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/Main.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-03-22T14:12:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_8a6d1ccf",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_6a9210a1",
         "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/data/service/DatabaseAccessServiceImpl.java",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2018-03-22T12:42:57Z",
       "side": 1,
       "message": "Maybe add a comment that site name is not needed, so that maintainers don\u0027t wonder if a parameter was inadvertently left off of the query",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ed2aba7d",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/data/service/DatabaseAccessServiceImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-03-22T14:12:37Z",
+      "side": 1,
+      "message": "added java doc to DatabaseAccessService interface",
+      "parentUuid": "5a93c517_6a9210a1",
       "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_4a015438",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/data/service/DatabaseAccessServiceImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-03-22T14:12:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_0a8fcc76",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_2a8c087f",
         "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/CommandLineHelper.java",
         "patchSetId": 6
@@ -64,6 +118,24 @@
       "writtenOn": "2018-03-22T12:42:57Z",
       "side": 1,
       "message": "Add \"final\"",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_0afb4c48",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/CommandLineHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-03-22T14:12:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_2a8c087f",
       "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_eac060e2",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/ExtraCommandLineArgument.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-03-22T14:12:37Z",
+      "side": 1,
+      "message": "making it final, but can\u0027t move it before SHOW() because of compilation error",
+      "parentUuid": "5a93c517_aaf7b8f4",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_6ac0d07c",
         "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/JmxOpProcessor.java",
         "patchSetId": 6
@@ -98,6 +188,24 @@
       "writtenOn": "2018-03-22T12:42:57Z",
       "side": 1,
       "message": "Rename arg0.  Ex: action, operation",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_aaba586c",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/JmxOpProcessor.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-03-22T14:12:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_6ac0d07c",
       "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -155,6 +263,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_2a7de8b1",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/PersistenceUnitPropertiesProvider.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-03-22T14:12:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_aa457818",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_2a5168d8",
         "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/Printable.java",
         "patchSetId": 6
@@ -166,6 +292,24 @@
       "writtenOn": "2018-03-22T12:42:57Z",
       "side": 1,
       "message": "Add @FunctionalInterface",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ea4e2096",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/Printable.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-03-22T14:12:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_2a5168d8",
       "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -189,6 +333,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_ca30040a",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/MainTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-03-22T14:12:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a93c517_ca0484c8",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_ea3060a0",
         "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/MainTest.java",
         "patchSetId": 6
@@ -206,6 +368,24 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_8a3afce5",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/MainTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-03-22T14:12:37Z",
+      "side": 1,
+      "message": "Good catch Thanks ...",
+      "parentUuid": "5a93c517_ea3060a0",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_8adc3c48",
         "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/MainTest.java",
         "patchSetId": 6
@@ -217,6 +397,24 @@
       "writtenOn": "2018-03-22T12:42:57Z",
       "side": 1,
       "message": "Just a suggestion: swap the parameters and then declare String... expectedErrorMessages",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_4a0b942b",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/MainTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-03-22T14:12:37Z",
+      "side": 1,
+      "message": "May not be able to do it because expectedErrorMessages is List\u003c\u003e",
+      "parentUuid": "5a93c517_8adc3c48",
       "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
