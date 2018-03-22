@@ -472,6 +472,24 @@
       "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ede15ad1",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/MainTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-03-22T15:07:49Z",
+      "side": 1,
+      "message": "Done ...",
+      "parentUuid": "5a93c517_8ddc5648",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
