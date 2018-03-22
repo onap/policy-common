@@ -1,0 +1,225 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_8a6d1ccf",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/Main.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "Use isEmpty()",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_6a9210a1",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/data/service/DatabaseAccessServiceImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "Maybe add a comment that site name is not needed, so that maintainers don\u0027t wonder if a parameter was inadvertently left off of the query",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_0a8fcc76",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/data/service/DatabaseAccessServiceImpl.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "Seems odd that we have to append RESOURCE_NAME here, but not SITE_NAME in the sOption case.  Perhaps adjust the two WHERE_XXX constants so they\u0027re similar",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_2a8c087f",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/CommandLineHelper.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "Add \"final\"",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_aaf7b8f4",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/ExtraCommandLineArgument.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "Add \"final\".  Maybe move this before the SHOW() item",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_6ac0d07c",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/JmxOpProcessor.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "Rename arg0.  Ex: action, operation",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ca36c4b4",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/JmxOpProcessor.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "add explicit check for \"unlock\"",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_8a40bc08",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/JmxOpProcessor.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "Catch specific exception types",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_aa457818",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/PersistenceUnitPropertiesProvider.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "Catch specific exception types",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_2a5168d8",
+        "filename": "site-manager/src/main/java/org/onap/policy/common/sitemanager/utils/Printable.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "Add @FunctionalInterface",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ca0484c8",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/MainTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "Add fail(\"missing exception\") or comment that it\u0027s ok to have no exception.  Do this in the other test cases, too.",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_ea3060a0",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/MainTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "Is this the correct test?  The other cases check exitCodeTestException.exitCode.  If it is correct, maybe add a comment",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_8adc3c48",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/MainTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T12:42:57Z",
+      "side": 1,
+      "message": "Just a suggestion: swap the parameters and then declare String... expectedErrorMessages",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
