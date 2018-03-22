@@ -454,6 +454,24 @@
       "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_8ddc5648",
+        "filename": "site-manager/src/test/java/org/onap/policy/common/sitemanager/MainTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-03-22T14:45:05Z",
+      "side": 1,
+      "message": "That\u0027s the point.\nChange it to runAndAssertErrorMessage(args, String...expected)\nThen get rid of all of the lists and simply invoke:\nrunAndAssertMessages(args, ErrorMessages.AAA, ErrorMessages.BBB, ...)",
+      "parentUuid": "5a93c517_4a0b942b",
+      "revId": "3d5ecb3e519c105eaae58cb54fa4d19d774ec2c5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
