@@ -21,6 +21,7 @@
 package org.onap.policy.common.sitemanager.utils;
 
 import java.util.List;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -76,6 +77,11 @@ public class CommandLineHelper {
         }
     }
 
+    /**
+     * validate given command line arguments.
+     * 
+     * @return true if valid
+     */
     public boolean isValid() {
         // fetch options, and remaining arguments
         final String sOption = commandLine.getOptionValue(SITE_ARGUMENT_NAME);

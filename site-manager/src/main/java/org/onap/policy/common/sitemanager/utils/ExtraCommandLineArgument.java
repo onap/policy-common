@@ -119,6 +119,12 @@ public enum ExtraCommandLineArgument {
         return value;
     }
 
+    /**
+     * Get {@link ExtraCommandLineArgument} for given command line argument.
+     * 
+     * @param value the input command line argument
+     * @return {@link ExtraCommandLineArgument}
+     */
     public static ExtraCommandLineArgument getExtraCommandLineArgument(final String value) {
         for (final ExtraCommandLineArgument argument : ExtraCommandLineArgument.values()) {
             if (argument.getValue().equals(value)) {

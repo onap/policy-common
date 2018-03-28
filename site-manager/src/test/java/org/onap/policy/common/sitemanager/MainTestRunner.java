@@ -25,9 +25,12 @@ import java.security.Permission;
 public class MainTestRunner {
 
     private SecurityManager savedSecurityManager;
-    private final ExitCodeSecurityManager exitCodeSecurityManager = new ExitCodeSecurityManager();;
+    private final ExitCodeSecurityManager exitCodeSecurityManager = new ExitCodeSecurityManager();
     private boolean isSetUp = false;
 
+    /**
+     * Set {@link SecurityManager} to {@link ExitCodeTestException}.
+     */
     public void setUp() {
         if (!isSetUp) {
             savedSecurityManager = System.getSecurityManager();
@@ -36,6 +39,9 @@ public class MainTestRunner {
         }
     }
 
+    /**
+     * Restore save {@link SecurityManager}.
+     */
     public void destroy() {
         if (isSetUp) {
             System.setSecurityManager(savedSecurityManager);
@@ -56,12 +62,10 @@ public class MainTestRunner {
     private class ExitCodeSecurityManager extends SecurityManager {
 
         @Override
-        public void checkPermission(final Permission perm) {
-        }
+        public void checkPermission(final Permission perm) {}
 
         @Override
-        public void checkPermission(final Permission perm, final Object context) {
-        }
+        public void checkPermission(final Permission perm, final Object context) {}
 
         @Override
         public void checkExit(final int status) {

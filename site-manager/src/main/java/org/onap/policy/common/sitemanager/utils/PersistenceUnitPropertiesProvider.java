@@ -26,12 +26,14 @@ import static org.onap.policy.common.sitemanager.utils.Constants.JDBC_URL_PROPER
 import static org.onap.policy.common.sitemanager.utils.Constants.JDBC_USER_PROPERTY_NAME;
 import static org.onap.policy.common.sitemanager.utils.ErrorMessages.SITE_MANAGER_PROPERY_FILE_MISSING_PROPERTY;
 import static org.onap.policy.common.sitemanager.utils.ErrorMessages.SITE_MANAGER_PROPERY_FILE_NOT_DEFINED_MESSAGE;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
+
 import org.onap.policy.common.sitemanager.exception.MissingPropertyException;
 import org.onap.policy.common.sitemanager.exception.PropertyFileProcessingException;
 
@@ -41,6 +43,21 @@ public class PersistenceUnitPropertiesProvider {
         super();
     }
 
+    /**
+     * Parser and validate properties in give property file. <br>
+     * valid and mandatory property name
+     * 
+     * <ul>
+     * <li>javax.persistence.jdbc.driver</li>
+     * <li>javax.persistence.jdbc.url</li>
+     * <li>javax.persistence.jdbc.user</li>
+     * <li>javax.persistence.jdbc.password</li>
+     * </ul>
+     * 
+     * @param propertiesFileName the properties filename
+     * @param printable {@link Printable}
+     * @return {@link Properties}
+     */
     public static Properties getProperties(final String propertiesFileName, final Printable printable) {
         if (propertiesFileName == null) {
             printable.println(SITE_MANAGER_PROPERY_FILE_NOT_DEFINED_MESSAGE);
@@ -61,18 +78,6 @@ public class PersistenceUnitPropertiesProvider {
         return properties;
     }
 
-    private static boolean isNotValid(final Properties properties, final String... values) {
-        if (values == null || values.length == 0) {
-            return true;
-        }
-        for (final String val : values) {
-            if (properties.get(val) == null) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     private static Properties getProperties(final Path filePath, final Printable printable) {
         if (!filePath.toFile().exists()) {
             printable.println(SITE_MANAGER_PROPERY_FILE_NOT_DEFINED_MESSAGE);
@@ -90,5 +95,17 @@ public class PersistenceUnitPropertiesProvider {
             printable.println(ErrorMessages.SITE_MANAGER_PROPERY_FILE_MISSING_PROPERTY);
             throw new PropertyFileProcessingException("Exception loading properties: ", exception);
         }
+    }
+
+    private static boolean isNotValid(final Properties properties, final String... values) {
+        if (values == null || values.length == 0) {
+            return true;
+        }
+        for (final String val : values) {
+            if (properties.get(val) == null) {
+                return true;
+            }
+        }
+        return false;
     }
 }

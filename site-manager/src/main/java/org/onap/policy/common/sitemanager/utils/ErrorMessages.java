@@ -49,6 +49,8 @@ public class ErrorMessages {
 
     public static final String NO_COMMAND_SPECIFIED = "No command specified";
 
+    public static final String NO_MATCHING_ENTRIES = ": No matching entries";
+
     public static final String HELP_STRING = "Usage:\n" + "    siteManager show [ -s <site> | -r <resourceName> ] :\n"
             + "        display node information\n" + "    siteManager setAdminState { -s <site> | -r <resourceName> }"
             + " <new-state> :\n" + "        update admin state on selected nodes\n"

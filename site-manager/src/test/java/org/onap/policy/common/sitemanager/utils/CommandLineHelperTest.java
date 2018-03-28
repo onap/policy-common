@@ -27,9 +27,11 @@ import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.
 import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.SET_ADMIN_STATE;
 import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.SHOW;
 import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.UNLOCK;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+
 import org.junit.Test;
 import org.onap.policy.common.sitemanager.exception.IllegalCommandLineArgumentException;
 

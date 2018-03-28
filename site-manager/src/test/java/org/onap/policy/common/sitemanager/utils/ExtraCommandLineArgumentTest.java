@@ -26,8 +26,10 @@ import static org.junit.Assert.assertTrue;
 import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.LOCK;
 import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.SET_ADMIN_STATE;
 import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.SHOW;
+
 import java.io.IOException;
 import java.util.Arrays;
+
 import org.junit.Test;
 
 public class ExtraCommandLineArgumentTest {
