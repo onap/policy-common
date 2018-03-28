@@ -17,12 +17,14 @@
  * limitations under the License.
  * ============LICENSE_END=========================================================
  */
+
 package org.onap.policy.common.sitemanager;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
@@ -31,11 +33,13 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -56,6 +60,9 @@ import org.onap.policy.common.utils.jpa.EntityTransCloser;
  * This class contains the main entry point for Site Manager.
  */
 public class MainTest {
+
+    private static final String EXIT_CODE_TEST_EXCEPTION = "ExitCodeTestException must be thrown in MainTestRunner"
+            + " class when System.exit() is called in Main class";
 
     private static final String SITE_NAME = "SITE";
 
@@ -100,6 +107,12 @@ public class MainTest {
 
     private final MainTestRunner testRunner = new MainTestRunner();
 
+    /**
+     * Before Test.
+     * 
+     * @throws Exception throws exception if unable to create property file or
+     *         {@link EntityManagerFactory}
+     */
     @Before
     public void setUp() throws Exception {
 
@@ -120,6 +133,9 @@ public class MainTest {
         testRunner.setUp();
     }
 
+    /**
+     * Destroy.
+     */
     @After
     public void destroy() {
         Main.stateManagementTable.clear();
@@ -188,6 +204,23 @@ public class MainTest {
     }
 
     @Test
+    public void test_process_setlockWithStateArgument() throws IOException {
+        persist(managerFactory.createEntityManager(), getStateManagementEntity());
+        persist(managerFactory.createEntityManager(), getResourceRegistrationEntity());
+
+        final String[] args = new String[] {"lock", "-s", SITE_NAME};
+        final PrintableImpl printable = new PrintableImpl();
+        final Main objUnderTest = getMain();
+        objUnderTest.process(args, printable);
+
+        assertEquals(1, Main.resourceRegistrationTable.size());
+        assertEquals(1, Main.stateManagementTable.size());
+        final List<String> result = printable.getResult();
+        assertFalse(result.isEmpty());
+
+    }
+
+    @Test
     public void test_process_propertyFileNotAvailable() throws IOException {
 
         final File file = temporaryFolder.newFile("New" + PROPERTY_FILE_NAME);
@@ -198,7 +231,7 @@ public class MainTest {
         try {
             final Main objUnderTest = getMain();
             objUnderTest.process(args, printable);
-            fail("ExitCodeTestException must be thrown in MainTestRunner class when System.exit() is called in Main class");
+            fail(EXIT_CODE_TEST_EXCEPTION);
         } catch (final ExitCodeTestException exitCodeTestException) {
             assertEquals(3, exitCodeTestException.exitCode);
 
@@ -220,7 +253,7 @@ public class MainTest {
         try {
             final Main objUnderTest = getMain();
             objUnderTest.process(args, printable);
-            fail("ExitCodeTestException must be thrown in MainTestRunner class when System.exit() is called in Main class");
+            fail(EXIT_CODE_TEST_EXCEPTION);
         } catch (final ExitCodeTestException exitCodeTestException) {
             assertEquals(3, exitCodeTestException.exitCode);
 
@@ -244,7 +277,7 @@ public class MainTest {
         try {
             final Main objUnderTest = getMain();
             objUnderTest.process(args, printable);
-            fail("ExitCodeTestException must be thrown in MainTestRunner class when System.exit() is called in Main class");
+            fail(EXIT_CODE_TEST_EXCEPTION);
         } catch (final ExitCodeTestException exitCodeTestException) {
             assertEquals(3, exitCodeTestException.exitCode);
 
@@ -270,7 +303,7 @@ public class MainTest {
         try {
             final Main objUnderTest = getMain();
             objUnderTest.process(args, printable);
-            fail("ExitCodeTestException must be thrown in MainTestRunner class when System.exit() is called in Main class");
+            fail(EXIT_CODE_TEST_EXCEPTION);
         } catch (final ExitCodeTestException exitCodeTestException) {
             assertEquals(3, exitCodeTestException.exitCode);
 
@@ -289,7 +322,7 @@ public class MainTest {
             final String[] args = new String[] {};
             final Main objUnderTest = getMain();
             objUnderTest.process(args, printable);
-            fail("ExitCodeTestException must be thrown in MainTestRunner class when System.exit() is called in Main class");
+            fail(EXIT_CODE_TEST_EXCEPTION);
         } catch (final ExitCodeTestException exitCodeTestException) {
             assertEquals(2, exitCodeTestException.exitCode);
 
@@ -312,7 +345,7 @@ public class MainTest {
             final String[] args = new String[] {"---", ""};
             final Main objUnderTest = getMain();
             objUnderTest.process(args, printable);
-            fail("ExitCodeTestException must be thrown in MainTestRunner class when System.exit() is called in Main class");
+            fail(EXIT_CODE_TEST_EXCEPTION);
         } catch (final ExitCodeTestException exitCodeTestException) {
             assertEquals(1, exitCodeTestException.exitCode);
 
@@ -333,7 +366,7 @@ public class MainTest {
             final String[] args = new String[] {"-h"};
             final Main objUnderTest = getMain();
             objUnderTest.process(args, printable);
-            fail("ExitCodeTestException must be thrown in MainTestRunner class when System.exit() is called in Main class");
+            fail(EXIT_CODE_TEST_EXCEPTION);
         } catch (final ExitCodeTestException exitCodeTestException) {
             assertEquals(0, exitCodeTestException.exitCode);
 
@@ -354,7 +387,7 @@ public class MainTest {
             final String[] args = new String[] {"setAdminState", "-s", RESOURCE_NAME};
             final Main objUnderTest = getMain();
             objUnderTest.process(args, printable);
-            fail("ExitCodeTestException must be thrown in MainTestRunner class when System.exit() is called in Main class");
+            fail(EXIT_CODE_TEST_EXCEPTION);
         } catch (final ExitCodeTestException exitCodeTestException) {
             assertEquals(2, exitCodeTestException.exitCode);
 
@@ -365,6 +398,27 @@ public class MainTest {
         assertFalse(actualMessages.isEmpty());
         assertEquals(Arrays.asList(ErrorMessages.SET_ADMIN_STATE_MISSING_NEW_STATE_VALUE, ErrorMessages.HELP_STRING),
                 actualMessages);
+
+    }
+
+    @Test
+    public void test_process_setAdmnStateWithValidArgs_printHelpAndErrorMessage() {
+
+        final PrintableImpl printable = new PrintableImpl();
+        try {
+            final String[] args = new String[] {"setAdminState", "-s", RESOURCE_NAME, RESOURCE_NAME};
+            final Main objUnderTest = getMain();
+            objUnderTest.process(args, printable);
+            fail(EXIT_CODE_TEST_EXCEPTION);
+        } catch (final ExitCodeTestException exitCodeTestException) {
+            assertEquals(4, exitCodeTestException.exitCode);
+
+        }
+        assertTrue(Main.stateManagementTable.isEmpty());
+        assertTrue(Main.resourceRegistrationTable.isEmpty());
+        final List<String> actualMessages = printable.getResult();
+        assertFalse(actualMessages.isEmpty());
+        assertEquals(Arrays.asList("setAdminState" + ErrorMessages.NO_MATCHING_ENTRIES), actualMessages);
 
     }
 
@@ -427,7 +481,7 @@ public class MainTest {
         try {
             final Main objUnderTest = getMain();
             objUnderTest.process(args, printable);
-            fail("ExitCodeTestException must be thrown in MainTestRunner class when System.exit() is called in Main class");
+            fail(EXIT_CODE_TEST_EXCEPTION);
         } catch (final ExitCodeTestException exitCodeTestException) {
             assertEquals(2, exitCodeTestException.exitCode);
 
@@ -448,6 +502,14 @@ public class MainTest {
         }
     }
 
+    /**
+     * execute given query.
+     * 
+     * @param entityManager the {@link EntityManager}
+     * @param clazz the entity class
+     * @param query the query
+     * @return a list of the results
+     */
     public <T> List<T> execute(final EntityManager entityManager, final Class<T> clazz, final String query) {
         try (final EntityMgrCloser entityMgrCloser = new EntityMgrCloser(entityManager);) {
             final TypedQuery<T> typedQuery = entityManager.createQuery(query, clazz);
@@ -461,7 +523,7 @@ public class MainTest {
             DatabaseAccessService getDatabaseAccessService(final String persistenceUnitName,
                     final Properties properties) {
                 return new DatabaseAccessServiceImpl(managerFactory);
-            };
+            }
         };
         return objUnderTest;
     }

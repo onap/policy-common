@@ -38,10 +38,11 @@ public class JmxOpProcessor {
     }
 
     /**
-     * Process a 'lock' or 'unlock' operation on a single 'ResourceRegistrationEntity'
+     * Process a 'lock' or 'unlock' operation on a single {@link ResourceRegistrationEntity}.
      *
      * @param action this is the string "lock" or "unlock"
-     * @param resourceRegistrationEntity this is the ResourceRegistrationEntity to lock or unlock
+     * @param resourceRegistrationEntity this is the {@link ResourceRegistrationEntity} to lock or
+     *        unlock
      */
     public static void jmxOp(final String action, final ResourceRegistrationEntity resourceRegistrationEntity,
             final Printable printable) {

@@ -27,13 +27,16 @@ import static org.onap.policy.common.sitemanager.utils.Constants.STATE_MANAGEMEN
 import static org.onap.policy.common.sitemanager.utils.Constants.WHERE_R_RESOURCE_NAME;
 import static org.onap.policy.common.sitemanager.utils.Constants.WHERE_R_SITE_NAME;
 import static org.onap.policy.common.sitemanager.utils.Constants.WHERE_S_RESOURCE_NAME;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
 import org.onap.policy.common.utils.jpa.EntityTransCloser;
@@ -47,7 +50,7 @@ public class DatabaseAccessServiceImpl implements DatabaseAccessService {
         this.entityManagerFactory = Persistence.createEntityManagerFactory(persistenceUnitName, properties);
         this.entityManager = entityManagerFactory.createEntityManager();
     }
-    
+
     public DatabaseAccessServiceImpl(final EntityManagerFactory entityManagerFactory) {
         this.entityManagerFactory = entityManagerFactory;
         this.entityManager = entityManagerFactory.createEntityManager();
@@ -69,11 +72,12 @@ public class DatabaseAccessServiceImpl implements DatabaseAccessService {
     }
 
     @Override
-    public List<StateManagementEntity> getStateManagementEntities(final String rOption, final String sOption) {
-        if (rOption != null) {
+    public List<StateManagementEntity> getStateManagementEntities(final String resourceOption,
+            final String stateOption) {
+        if (resourceOption != null) {
             final String query = STATE_MANAGEMENT_QUERY + WHERE_S_RESOURCE_NAME + RESOURCE_NAME;
-            return execute(StateManagementEntity.class, query, RESOURCE_NAME, rOption);
-        } else if (sOption != null) {
+            return execute(StateManagementEntity.class, query, RESOURCE_NAME, resourceOption);
+        } else if (stateOption != null) {
             return execute(StateManagementEntity.class, STATE_MANAGEMENT_QUERY);
         }
         return execute(StateManagementEntity.class, STATE_MANAGEMENT_QUERY);
@@ -81,14 +85,14 @@ public class DatabaseAccessServiceImpl implements DatabaseAccessService {
     }
 
     @Override
-    public List<ResourceRegistrationEntity> getResourceRegistrationEntities(final String rOption,
-            final String sOption) {
-        if (rOption != null) {
+    public List<ResourceRegistrationEntity> getResourceRegistrationEntities(final String resourceOption,
+            final String stateOption) {
+        if (resourceOption != null) {
             final String query = RESOURCE_REGISTRATION_QUERY + WHERE_R_RESOURCE_NAME + RESOURCE_NAME;
-            return execute(ResourceRegistrationEntity.class, query, RESOURCE_NAME, rOption);
-        } else if (sOption != null) {
+            return execute(ResourceRegistrationEntity.class, query, RESOURCE_NAME, resourceOption);
+        } else if (stateOption != null) {
             final String query = RESOURCE_REGISTRATION_QUERY + WHERE_R_SITE_NAME + SITE_NAME;
-            return execute(ResourceRegistrationEntity.class, query, SITE_NAME, sOption);
+            return execute(ResourceRegistrationEntity.class, query, SITE_NAME, stateOption);
         }
         return execute(ResourceRegistrationEntity.class, RESOURCE_REGISTRATION_QUERY);
     }

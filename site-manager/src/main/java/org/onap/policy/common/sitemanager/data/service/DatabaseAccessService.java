@@ -32,22 +32,23 @@ public interface DatabaseAccessService extends AutoCloseable {
     <T> List<T> execute(final Class<T> clazz, final String query);
 
     /**
-     * Get {@link StateManagementEntity} entities from database
+     * Get {@link StateManagementEntity} entities from database.
      * 
-     * @param rOption resource name (optional)
-     * @param sOption site name (optional)
+     * @param resourceOption resource name (optional)
+     * @param stateOption site name (optional)
      * @return list of {@link StateManagementEntity} entities found
      */
-    List<StateManagementEntity> getStateManagementEntities(final String rOption, final String sOption);
+    List<StateManagementEntity> getStateManagementEntities(final String resourceOption, final String stateOption);
 
     /**
-     * Get {@link ResourceRegistrationEntity} entities from database
+     * Get {@link ResourceRegistrationEntity} entities from database.
      * 
-     * @param rOption resource name (optional)
-     * @param sOption site name (optional)
+     * @param resourceOption resource name (optional)
+     * @param stateOption site name (optional)
      * @return list of {@link ResourceRegistrationEntity} entities found
      */
-    List<ResourceRegistrationEntity> getResourceRegistrationEntities(final String rOption, final String sOption);
+    List<ResourceRegistrationEntity> getResourceRegistrationEntities(final String resourceOption,
+            final String stateOption);
 
     <T> void persist(final Collection<T> entities);
 

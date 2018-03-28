@@ -32,15 +32,19 @@ package org.onap.policy.common.sitemanager;
 import static org.onap.policy.common.sitemanager.utils.Constants.OPERATIONAL_PERSISTENCE_UNIT;
 import static org.onap.policy.common.sitemanager.utils.Constants.SITE_MANAGER_PROPERTIES_PROPERTY_NAME;
 import static org.onap.policy.common.sitemanager.utils.ErrorMessages.HELP_STRING;
+import static org.onap.policy.common.sitemanager.utils.ErrorMessages.NO_MATCHING_ENTRIES;
 import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.LOCK;
 import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.SET_ADMIN_STATE;
 import static org.onap.policy.common.sitemanager.utils.ExtraCommandLineArgument.UNLOCK;
 import static org.onap.policy.common.sitemanager.utils.JmxOpProcessor.jmxOp;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.TreeSet;
+
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
 import org.onap.policy.common.sitemanager.data.service.DatabaseAccessService;
@@ -76,7 +80,7 @@ public class Main {
     }
 
     /**
-     * This is the main entry point
+     * This is the main entry point.
      *
      * @param args these are command-line arguments to 'siteManager'
      */
@@ -85,6 +89,12 @@ public class Main {
         new Main().process(args, printable);
     }
 
+    /**
+     * Process command-line arguments.
+     * 
+     * @param args args these are command-line arguments to 'siteManager'
+     * @param printable {@link Printable} callback to print statement
+     */
     public void process(final String[] args, final Printable printable) {
         try {
             final CommandLineHelper commandLineHelper = new CommandLineHelper(args, printable);
@@ -149,7 +159,7 @@ public class Main {
             }
 
             if (resourceRegistrationTable.isEmpty()) {
-                final String message = arg0 + ": No matching entries";
+                final String message = arg0 + NO_MATCHING_ENTRIES;
                 printable.println(message);
                 throw new NoMatchingEntryFoundException(message);
             }
@@ -179,6 +189,8 @@ public class Main {
                     accessService.refreshEntity(stateManagementTable.get(r.getResourceName()));
                 }
             }
+        } catch (final NoMatchingEntryFoundException exception) {
+            throw exception;
         } catch (final Exception exception) {
             printable.println(exception.getMessage());
         }
@@ -188,11 +200,13 @@ public class Main {
     }
 
     /**
-     * Compare two strings, either of which may be null
+     * Compare two strings, either of which may be null.
      *
      * @param first the first string
      * @param second the second string
-     * @return a negative value if s1<s2, 0 if they are equal, and positive if s1>s2
+     * 
+     * @return a negative value if s1 is less then s2, 0 if they are equal, and positive if s1 is
+     *         greater then s2
      */
     private static int stringCompare(final String first, final String second) {
         if (first == null ^ second == null) {
@@ -212,11 +226,12 @@ public class Main {
      *
      * @param current this is an array of length 7, containing the current maximum lengths of each
      *        column in the tabular dump
-     * @param s this is an array of length 7, containing the current String entry for each column
+     * @param values this is an array of length 7, containing the current String entry for each
+     *        column
      */
-    private static void updateLengths(final int[] current, final String[] s) {
-        for (int i = 0; i < 7; i += 1) {
-            final String str = s[i];
+    private static void updateLengths(final int[] current, final String[] values) {
+        for (int i = 0; i < 7; i++) {
+            final String str = values[i];
             final int newLength = (str == null ? 4 : str.length());
             if (current[i] < newLength) {
                 // this column needs to be expanded
@@ -226,28 +241,29 @@ public class Main {
     }
 
     /**
-     * Ordered display -- dump out all of the entries, in
+     * Ordered display -- dump out all of the entries in log.
      */
     static void display() {
-        final TreeSet<String[]> treeset = new TreeSet<>((final String[] r1, final String[] r2) -> {
+        final Set<String[]> treeset = new TreeSet<>((final String[] r1, final String[] r2) -> {
             int rval = 0;
 
             // the first 3 columns are 'Site', 'NodeType', and 'ResourceName',
             // and are used to sort the entries
             for (int i = 0; i < 3; i += 1) {
-                if ((rval = stringCompare(r1[i], r2[i])) != 0)
+                if ((rval = stringCompare(r1[i], r2[i])) != 0) {
                     break;
+                }
             }
             return (rval);
         });
 
         final String[] labels = new String[] {"Site", "NodeType", "ResourceName", "AdminState", "OpState",
-                "AvailStatus", "StandbyStatus"};
+            "AvailStatus", "StandbyStatus"};
         final String[] underlines = new String[] {"----", "--------", "------------", "----------", "-------",
-                "-----------", "-------------"};
+            "-----------", "-------------"};
 
         // each column needs to be at least wide enough to fit the column label
-        final int[] lengths = new int[7];
+        final int[] lengths = new int[labels.length];
         updateLengths(lengths, labels);
 
         // Go through the 'resourceRegistrationTable', and generate the
@@ -259,7 +275,7 @@ public class Main {
 
             // these are the entries to be displayed for this row
             final String[] values = new String[] {r.getSite(), r.getNodeType(), r.getResourceName(), s.getAdminState(),
-                    s.getOpState(), s.getAvailStatus(), s.getStandbyStatus()};
+                s.getOpState(), s.getAvailStatus(), s.getStandbyStatus()};
 
             treeset.add(values);
             updateLengths(lengths, values);

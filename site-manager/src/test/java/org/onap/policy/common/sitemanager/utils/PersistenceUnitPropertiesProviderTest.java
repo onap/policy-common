@@ -21,11 +21,13 @@
 package org.onap.policy.common.sitemanager.utils;
 
 import static org.junit.Assert.assertEquals;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Properties;
+
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
@@ -73,7 +75,7 @@ public class PersistenceUnitPropertiesProviderTest {
     }
 
     @Test
-    public void test_getProperties_PropertyFileValidProperties_throwException() throws IOException {
+    public void test_getProperties_PropertyFileValidProperties() throws IOException {
         final Printable printable = new PrintableImpl();
         final File file = temporaryFolder.newFile(PROPERTIES_FILE_NAME);
 
