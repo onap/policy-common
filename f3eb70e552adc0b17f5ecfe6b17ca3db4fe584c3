@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_1c49a35f",
+        "filename": "integrity-audit/src/main/resources/log4j.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-05-03T14:37:58Z",
+      "side": 1,
+      "message": "The path will be variable, per installer decision, it should go by POLICY_LOGS.   This path is not applicable to the PDP-D for example.  Nor that it makes sense to have integrity-monitor to have its own directory.\n\nAnother question is why it needs log4j, all loggers use logback.",
+      "revId": "f3eb70e552adc0b17f5ecfe6b17ca3db4fe584c3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_dc76dba3",
+        "filename": "integrity-monitor/src/main/resources/log4j.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-05-03T14:37:58Z",
+      "side": 1,
+      "message": "this name is not applicable to pdp-d, nor integrity-monitor should have its own directory.   The path name is variable at installation per POLICY_LOGS.\n\nIt is unclear too why a log4j is needed.",
+      "revId": "f3eb70e552adc0b17f5ecfe6b17ca3db4fe584c3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
