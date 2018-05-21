@@ -2,7 +2,7 @@
   ============LICENSE_START=======================================================
   Integrity Audit
   ================================================================================
-  Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+  Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
   ================================================================================
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@
 <configuration scan="true" scanPeriod="3 seconds" debug="true">
   <!--<jmxConfigurator /> -->
   <!-- directory path for all other type logs -->
-  <property name="logDir" value="logs" />
+  <property name="logDir" value="${POLICY_LOGS}" />
   
   <!-- directory path for debugging type logs -->
-  <property name="debugDir" value="logs" />
+  <property name="debugDir" value="${POLICY_LOGS}" />
   
   <!--  specify the component name 
     <ONAP-component-name>::= "MSO" | "DCAE" | "ASDC " | "AAI" |"Policy" | "SDNC" | "AC"  -->
