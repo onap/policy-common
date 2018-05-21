@@ -21,10 +21,10 @@
 <configuration scan="true" scanPeriod="3 seconds" debug="true">
   <!--<jmxConfigurator /> -->
   <!-- directory path for all other type logs -->
-  <property name="logDir" value="logs" />
+  <property name="logDir" value="${POLICY_LOGS}" />
   
   <!-- directory path for debugging type logs -->
-  <property name="debugDir" value="logs" />
+  <property name="debugDir" value="${POLICY_LOGS}" />
   
   <!--  specify the component name 
     <ONAP-component-name>::= "MSO" | "DCAE" | "ASDC " | "AAI" |"Policy" | "SDNC" | "AC"  -->
