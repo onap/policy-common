@@ -21,9 +21,6 @@
 package org.onap.policy.common.ia;
 
 import java.util.Properties;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
-
 import org.onap.policy.common.ia.IntegrityAuditProperties.NodeTypeEnum;
 import org.onap.policy.common.logging.flexlogger.FlexLogger;
 import org.onap.policy.common.logging.flexlogger.Logger;
@@ -217,37 +214,20 @@ public class IntegrityAudit {
      * @throws IntegrityAuditException if an error occurs
      */
     public void startAuditThread() throws IntegrityAuditException {
-        startAuditThread(null);
-    }
-
-    /**
-     * Starts the audit thread.
-     * 
-     * @param queue the queue
-     * @return {@code true} if the thread was started, {@code false} otherwise
-     * @throws IntegrityAuditException if an error occurs
-     */
-    protected boolean startAuditThread(BlockingQueue<CountDownLatch> queue) throws IntegrityAuditException {
-
         logger.info("startAuditThread: Entering");
 
-        boolean success = false;
-
         if (integrityAuditPeriodMillis >= 0) {
-            this.auditThread = new AuditThread(this.resourceName, this.persistenceUnit, this.properties,
-                    integrityAuditPeriodMillis, this, queue);
+            this.auditThread = makeAuditThread(this.resourceName, this.persistenceUnit, this.properties, integrityAuditPeriodMillis);
             logger.info("startAuditThread: Audit started and will run every " + integrityAuditPeriodMillis / 1000
                     + " seconds");
             this.auditThread.start();
-            success = true;
+            
         } else {
             logger.info("startAuditThread: Suppressing integrity audit, integrityAuditPeriodSeconds="
                     + integrityAuditPeriodMillis / 1000);
         }
 
         logger.info("startAuditThread: Exiting");
-
-        return success;
     }
 
     /**
@@ -298,5 +278,30 @@ public class IntegrityAudit {
             this.auditThread.join(twaitms);
             return !this.auditThread.isAlive();
         }
+    }
+
+    /**
+     * 
+     * @return {@code true} if an audit thread exists, {@code false} otherwise
+     */
+    protected boolean haveAuditThread() {
+        return (this.auditThread != null);
+    }
+
+    /**
+     * Creates an audit thread. May be overridden by junit tests.
+     * 
+     * @param resourceName2
+     * @param persistenceUnit2
+     * @param properties2
+     * @param integrityAuditPeriodMillis2
+     * 
+     * @return a new audit thread
+     * @throws IntegrityAuditException
+     */
+    protected AuditThread makeAuditThread(String resourceName2, String persistenceUnit2, Properties properties2,
+                    long integrityAuditPeriodMillis2) throws IntegrityAuditException {
+        
+        return new AuditThread(resourceName2, persistenceUnit2, properties2, integrityAuditPeriodMillis2, this);
     }
 }
