@@ -22,17 +22,14 @@ package org.onap.policy.common.im;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
 import org.onap.policy.common.utils.jpa.EntityTransCloser;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
 import org.slf4j.Logger;
@@ -243,14 +240,14 @@ public class IntegrityMonitorTestBase {
     }
 
     /**
-     * Waits for a latch to reach zero.
+     * Waits for a semaphore to be acquired
      * 
-     * @param latch the latch
+     * @param sem the latch
      * @throws InterruptedException if the thread is interrupted
      * @throws AssertionError if the latch did not reach zero in the allotted time
      */
-    protected void waitLatch(CountDownLatch latch) throws InterruptedException {
-        assertTrue(latch.await(WAIT_MS, TimeUnit.SECONDS));
+    protected void waitSem(Semaphore sem) throws InterruptedException {
+        assertTrue(sem.tryAcquire(WAIT_MS, TimeUnit.MILLISECONDS));
     }
 
     /**

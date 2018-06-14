@@ -22,23 +22,19 @@ package org.onap.policy.common.im;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
-
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingQueue;
-
+import java.util.concurrent.Semaphore;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.onap.policy.common.im.IntegrityMonitor.Factory;
 import org.onap.policy.common.im.jpa.ForwardProgressEntity;
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
@@ -57,7 +53,8 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     private static EntityTransaction et;
     private static String resourceName;
 
-    private BlockingQueue<CountDownLatch> queue;
+    private Semaphore monitorSem;
+    private Semaphore junitSem;
 
     /**
      * Set up for test class.
@@ -900,9 +897,36 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     private IntegrityMonitor makeMonitor(String resourceName, Properties myProp) throws Exception {
         IntegrityMonitor.deleteInstance();
 
-        queue = new LinkedBlockingQueue<>();
+        monitorSem = new Semaphore(0);
+        junitSem = new Semaphore(0);
+        
+        Factory factory = new IntegrityMonitor.Factory() {
 
-        IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp, queue);
+            @Override
+            public void doSleep(long sleepMs) throws InterruptedException {
+                /*
+                 * No need to sleep, as the thread won't progress until the
+                 * semaphore is released.
+                 */
+            }
+
+            @Override
+            public void runStarted() throws InterruptedException {
+                monitorSem.acquire();
+                
+                junitSem.release();
+                monitorSem.acquire();
+            }
+
+            @Override
+            public void monitorCompleted() throws InterruptedException {
+                junitSem.release();
+                monitorSem.acquire();
+            }
+            
+        };
+
+        IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp, factory);
 
         // wait for the monitor thread to start
         waitStep();
@@ -916,8 +940,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
      * @throws InterruptedException if the thread is interrupted
      */
     private void waitStep() throws InterruptedException {
-        CountDownLatch latch = new CountDownLatch(1);
-        queue.offer(latch);
-        waitLatch(latch);
+        monitorSem.release();
+        waitSem(junitSem);
     }
 }
