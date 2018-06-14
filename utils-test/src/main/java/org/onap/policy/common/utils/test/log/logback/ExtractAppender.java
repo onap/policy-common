@@ -1,21 +1,21 @@
 /*
- * ============LICENSE_START=======================================================
+ * ============LICENSE_START====================================================
  * Common Utils-Test
- * ================================================================================
+ * =============================================================================
  * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
- * ================================================================================
+ * =============================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ============LICENSE_END=========================================================
+ * ============LICENSE_END======================================================
  */
 
 package org.onap.policy.common.utils.test.log.logback;
@@ -65,26 +65,27 @@ public class ExtractAppender extends AppenderBase<ILoggingEvent> {
 	}
 
 	/**
-	 * Records portions of messages that match one of the regular expressions.
-	 * 
+	 * Records portions of messages that match one of the regular
+	 * expressions.
+	 *
 	 * @param regex
 	 *            regular expression (i.e., {@link Pattern}) to match
 	 */
-	public ExtractAppender(String... regex) {
+	public ExtractAppender(final String... regex) {
 		this(new LinkedList<>(), regex);
 	}
 
 	/**
 	 * Rather than allocating an internal queue to store matched messages,
 	 * messages are recorded in the specified target queue using the
-	 * {@link Queue#offer(Object)} method. Note: whenever the queue is used, it
-	 * will be synchronized to prevent simultaneous accesses.
-	 * 
-	 * @param target
-	 * @param regex
-	 *            regular expression (i.e., {@link Pattern}) to match
+	 * {@link Queue#offer(Object)} method. Note: whenever the queue is used,
+	 * it will be synchronized to prevent simultaneous accesses.
+	 *
+	 * @param target - this needs to be defined
+	 * @param regex regular expression (i.e., {@link Pattern}) to match
 	 */
-	public ExtractAppender(Queue<String> target, String... regex) {
+	public ExtractAppender(final Queue<String> target,
+							final String... regex) {
 		extracted = target;
 		patterns = new LinkedHashMap<>(regex.length);
 
@@ -95,11 +96,11 @@ public class ExtractAppender extends AppenderBase<ILoggingEvent> {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see ch.qos.logback.core.AppenderBase#append(Object)
 	 */
 	@Override
-	protected void append(ILoggingEvent event) {
+	protected void append(final ILoggingEvent event) {
 
 		String msg = event.getMessage();
 
@@ -122,12 +123,11 @@ public class ExtractAppender extends AppenderBase<ILoggingEvent> {
 
 	/**
 	 * Adds the first match group to {@link #extracted}.
-	 * 
-	 * @param mat
-	 *            the matcher containing the groups
-	 * @return {@code true} if a group was found, {@code false} otherwise
+	 *
+	 * @param mat the matcher containing the groups
+	 *
 	 */
-	private void addGroupMatch(Matcher mat) {
+	private void addGroupMatch(final Matcher mat) {
 		int ngroups = mat.groupCount();
 
 		for (int x = 1; x <= ngroups; ++x) {
@@ -143,14 +143,15 @@ public class ExtractAppender extends AppenderBase<ILoggingEvent> {
 	}
 
 	/**
-	 * Adds an item to {@link #extracted}, in a thread-safe manner. It uses the
-	 * queue's <i>offer()</i> method so that the queue can discard the item if
-	 * it so chooses, without generating an exception.
-	 * 
+	 * Adds an item to {@link #extracted}, in a thread-safe manner.
+	 * It uses the queue's <i>offer()</i> method so that the queue
+	 * can discard the item if it so chooses, without generating
+	 * an exception.
+	 *
 	 * @param txt
 	 *            text to be added
 	 */
-	private void addExtraction(String txt) {
+	private void addExtraction(final String txt) {
 		synchronized (extracted) {
 			extracted.offer(txt);
 		}
@@ -158,7 +159,7 @@ public class ExtractAppender extends AppenderBase<ILoggingEvent> {
 
 	/**
 	 * Gets the text that has been extracted.
-	 * 
+	 *
 	 * @return a copy of the text that has been extracted
 	 */
 	public List<String> getExtracted() {
@@ -178,11 +179,11 @@ public class ExtractAppender extends AppenderBase<ILoggingEvent> {
 
 	/**
 	 * Adds a pattern to be matched by this appender.
-	 * 
+	 *
 	 * @param regex
 	 *            regular expression (i.e., {@link Pattern}) to match
 	 */
-	public void setPattern(String regex) {
+	public void setPattern(final String regex) {
 		synchronized (patterns) {
 			patterns.put(regex, Pattern.compile(regex));
 		}
