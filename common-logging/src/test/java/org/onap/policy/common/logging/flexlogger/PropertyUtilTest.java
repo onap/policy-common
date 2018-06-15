@@ -2,6 +2,8 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
+ * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * ================================================================================
  * Copyright (C) 2018 Ericsson. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,29 +23,70 @@
 package org.onap.policy.common.logging.flexlogger;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.doAnswer;
+import static org.mockito.Mockito.mock;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 import java.util.Set;
-
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import org.junit.After;
+import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.policy.common.logging.flexlogger.PropertyUtil.Listener;
+import org.powermock.reflect.Whitebox;
 
 public class PropertyUtilTest {
 
+    /**
+     * 
+     */
+    private static final String TIMER_FIELD = "timer";
     private static final File FILE = new File("target/test.properties");
-    private TestListener testListener = new TestListener();
+    private static Timer saveTimer;
+    
+    private TimerTask task;
+    private Timer timer;
+    private TestListener testListener;
+    
+    @BeforeClass
+    public static void setUpBeforeClass() {
+        saveTimer = Whitebox.getInternalState(PropertyUtil.LazyHolder.class, TIMER_FIELD);
+        
+    }
+    
+    @AfterClass
+    public static void tearDownAfterClass() {
+        Whitebox.setInternalState(PropertyUtil.LazyHolder.class, TIMER_FIELD, saveTimer);
+        
+    }
 
     /**
      * Perform test case set up.
      */
     @Before
     public void setUp() throws IOException {
+        task = null;
+        timer = mock(Timer.class);
+        Whitebox.setInternalState(PropertyUtil.LazyHolder.class, TIMER_FIELD, timer);
+        
+        doAnswer(args -> {
+            task = args.getArgumentAt(0, TimerTask.class);
+            return null;
+        }).when(timer).schedule(any(TimerTask.class), anyLong(), anyLong());
+        
+        testListener = new TestListener();
+        
         FileOutputStream fileOutputStream = new FileOutputStream(FILE);
         Properties properties = new Properties();
         properties.put("testProperty", "testValue");
@@ -55,6 +98,11 @@ public class PropertyUtilTest {
     public void tearDown() throws IOException {
         PropertyUtil.stopListening(FILE, testListener);
         FILE.delete();
+    }
+    
+    @Test
+    public void testTimer() {
+        assertNotNull(saveTimer);
     }
 
     @Test
@@ -78,6 +126,8 @@ public class PropertyUtilTest {
         newProperties.put("testProperty", "testValueNew");
         newProperties.store(fileOutputStream, "");
 
+        // fire task and verify that it notifies the listener
+        task.run();
         assertTrue(testListener.isPropertiesChangedInvoked());
 
     }
@@ -104,23 +154,21 @@ public class PropertyUtilTest {
         assertEquals("testValueNew", readProperties.getProperty("testProperty"));
     }
 
+    /**
+     * The {@link #propertiesChanged(Properties, Set)} method is invoked via a background
+     * thread, thus we have to use a latch to wait for it to be invoked.
+     */
     private class TestListener implements Listener {
 
-        boolean propertiesChangedInvoked = false;
+        private CountDownLatch latch = new CountDownLatch(1);
 
         @Override
         public void propertiesChanged(Properties properties, Set<String> changedKeys) {
-            propertiesChangedInvoked = true;
+            latch.countDown();
         }
 
         public boolean isPropertiesChangedInvoked() throws InterruptedException {
-            for (int i = 0; i < 20; i++) {
-                if (propertiesChangedInvoked) {
-                    return true;
-                }
-                Thread.sleep(1000);
-            }
-            return false;
+            return latch.await(5, TimeUnit.SECONDS);
         }
     }
 
