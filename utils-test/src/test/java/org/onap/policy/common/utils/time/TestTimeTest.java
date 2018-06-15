@@ -1,0 +1,66 @@
+/*
+ * ============LICENSE_START=======================================================
+ * Common Utils-Test
+ * ================================================================================
+ * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ============LICENSE_END=========================================================
+ */
+
+package org.onap.policy.common.utils.time;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+public class TestTimeTest {
+
+    @Test
+    public void test() throws Exception {
+        TestTime tm = new TestTime();
+        TestTime tm2 = new TestTime();
+
+        long treal = System.currentTimeMillis();
+
+        long tcur = tm.getMillis();
+        assertEquals(tcur, tm.getDate().getTime());
+
+        long tsleep = 10000L;
+        long tcur2 = tcur;
+
+        // sleep a bit and then check values
+        tcur2 += tsleep;
+        tm2.sleep(tsleep);
+        assertEquals(tcur2, tm2.getMillis());
+        assertEquals(tcur2, tm2.getDate().getTime());
+
+        // sleep some more and then check values
+        tcur2 += tsleep;
+        tm2.sleep(tsleep);
+        assertEquals(tcur2, tm2.getMillis());
+        assertEquals(tcur2, tm2.getDate().getTime());
+
+        // check again - to ensure unchanged
+        assertEquals(tcur2, tm2.getMillis());
+        assertEquals(tcur2, tm2.getDate().getTime());
+
+        // original should also be unchanged
+        assertEquals(tcur, tm.getMillis());
+        assertEquals(tcur, tm.getDate().getTime());
+
+        // ensure that no real time has elapsed
+        assertTrue(System.currentTimeMillis() < treal + tsleep / 2);
+    }
+
+}
