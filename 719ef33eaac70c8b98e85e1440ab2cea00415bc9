@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_5781c64b",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/SpecPropertiesTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-06-18T23:11:28Z",
+      "side": 1,
+      "message": "This statement overwrites the value of props set up in the @Before setUp method. If that\u0027s what you intend to do then its fine.\n\nFor clarity it might be better to create a new Properties local variable so it\u0027s clear what you intend.",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 55
+      },
+      "revId": "719ef33eaac70c8b98e85e1440ab2cea00415bc9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_7784025d",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/SpecPropertiesTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-06-18T23:11:28Z",
+      "side": 1,
+      "message": "Same as last comment",
+      "range": {
+        "startLine": 114,
+        "startChar": 0,
+        "endLine": 114,
+        "endChar": 72
+      },
+      "revId": "719ef33eaac70c8b98e85e1440ab2cea00415bc9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_177b3e7c",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/SpecPropertiesTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-06-18T23:11:28Z",
+      "side": 1,
+      "message": "Same comment, there are a few more cases below, you get the idea.",
+      "range": {
+        "startLine": 127,
+        "startChar": 0,
+        "endLine": 127,
+        "endChar": 43
+      },
+      "revId": "719ef33eaac70c8b98e85e1440ab2cea00415bc9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
