@@ -68,15 +68,9 @@ public class PropertyConfigurationTest {
 
     @Test
     public void testPropertyConfiguration() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private String value;
-        };
-
         props.setProperty(THE_VALUE, STRING_VALUE);
 
-        Config cfg = new Config();
+        PlainStringConfig cfg = new PlainStringConfig();
         assertEquals(null, cfg.value);
 
         cfg.setAllFields(props);
@@ -85,18 +79,8 @@ public class PropertyConfigurationTest {
 
     @Test
     public void testPropertyConfigurationProperties() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private String value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, STRING_VALUE);
-        Config cfg = new Config(props);
+        PlainStringConfig cfg = new PlainStringConfig(props);
 
         assertEquals(STRING_VALUE, cfg.value);
     }
@@ -111,6 +95,11 @@ public class PropertyConfigurationTest {
 
             @Property(name = "grandparent.value")
             protected boolean grandparentValue;
+
+            @SuppressWarnings("unused")
+            public void setGrandparentValue(boolean grandparentValue) {
+                this.grandparentValue = grandparentValue;
+            }
         };
 
         /*
@@ -120,12 +109,22 @@ public class PropertyConfigurationTest {
 
             @Property(name = "parent.value")
             protected long parentValue;
+
+            @SuppressWarnings("unused")
+            public void setParentValue(long parentValue) {
+                this.parentValue = parentValue;
+            }
         };
 
         class Config extends ParentConfig {
 
             @Property(name = THE_VALUE)
             private String value;
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
+            }
         };
 
 
@@ -158,6 +157,11 @@ public class PropertyConfigurationTest {
         class Config extends PropertyConfiguration {
 
             private String value;
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
+            }
         };
 
 
@@ -171,18 +175,8 @@ public class PropertyConfigurationTest {
 
     @Test
     public void testSetValueFieldProperties_FieldSet() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private String value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, STRING_VALUE);
-        Config cfg = new Config(props);
+        PlainStringConfig cfg = new PlainStringConfig(props);
 
         assertEquals(STRING_VALUE, cfg.value);
     }
@@ -195,6 +189,11 @@ public class PropertyConfigurationTest {
 
             public Config(Properties props) throws PropertyException {
                 super(props);
+            }
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
             }
         };
 
@@ -215,6 +214,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(Exception value) {
+                this.value = value;
+            }
         };
 
         props.setProperty(THE_VALUE, STRING_VALUE);
@@ -223,25 +227,12 @@ public class PropertyConfigurationTest {
 
     @Test(expected = PropertyMissingException.class)
     public void testSetValueFieldPropertyProperties_NoProperty_NoDefault() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private String value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
-        new Config(props);
+        new PlainStringConfig(props);
     }
 
     @Test(expected = PropertyInvalidException.class)
     public void testSetValueFieldPropertyProperties_InvalidValue() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private int value;
+        class Config extends PlainPrimIntConfig {
 
             public Config(Properties props) throws PropertyException {
                 super(props);
@@ -295,6 +286,96 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public String getStringValue() {
+                return stringValue;
+            }
+
+            @SuppressWarnings("unused")
+            public void setStringValue(String stringValue) {
+                this.stringValue = stringValue;
+            }
+
+            @SuppressWarnings("unused")
+            public Boolean getBoolTrueValue() {
+                return boolTrueValue;
+            }
+
+            @SuppressWarnings("unused")
+            public void setBoolTrueValue(Boolean boolTrueValue) {
+                this.boolTrueValue = boolTrueValue;
+            }
+
+            @SuppressWarnings("unused")
+            public Boolean getBoolFalseValue() {
+                return boolFalseValue;
+            }
+
+            @SuppressWarnings("unused")
+            public void setBoolFalseValue(Boolean boolFalseValue) {
+                this.boolFalseValue = boolFalseValue;
+            }
+
+            @SuppressWarnings("unused")
+            public boolean isPrimBoolTrueValue() {
+                return primBoolTrueValue;
+            }
+
+            @SuppressWarnings("unused")
+            public void setPrimBoolTrueValue(boolean primBoolTrueValue) {
+                this.primBoolTrueValue = primBoolTrueValue;
+            }
+
+            @SuppressWarnings("unused")
+            public boolean isPrimBoolFalseValue() {
+                return primBoolFalseValue;
+            }
+
+            @SuppressWarnings("unused")
+            public void setPrimBoolFalseValue(boolean primBoolFalseValue) {
+                this.primBoolFalseValue = primBoolFalseValue;
+            }
+
+            @SuppressWarnings("unused")
+            public Integer getIntValue() {
+                return intValue;
+            }
+
+            @SuppressWarnings("unused")
+            public void setIntValue(Integer intValue) {
+                this.intValue = intValue;
+            }
+
+            @SuppressWarnings("unused")
+            public int getPrimIntValue() {
+                return primIntValue;
+            }
+
+            @SuppressWarnings("unused")
+            public void setPrimIntValue(int primIntValue) {
+                this.primIntValue = primIntValue;
+            }
+
+            @SuppressWarnings("unused")
+            public Long getLongValue() {
+                return longValue;
+            }
+
+            @SuppressWarnings("unused")
+            public void setLongValue(Long longValue) {
+                this.longValue = longValue;
+            }
+
+            @SuppressWarnings("unused")
+            public long getPrimLongValue() {
+                return primLongValue;
+            }
+
+            @SuppressWarnings("unused")
+            public void setPrimLongValue(long primLongValue) {
+                this.primLongValue = primLongValue;
+            }
         };
 
         props.setProperty("string", "a string");
@@ -331,6 +412,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(Exception value) {
+                this.value = value;
+            }
         };
 
         props.setProperty(THE_VALUE, STRING_VALUE);
@@ -353,6 +439,21 @@ public class PropertyConfigurationTest {
 
             public Config(Properties props) throws PropertyException {
                 super(props);
+            }
+
+            @SuppressWarnings("unused")
+            public void setPublicString(String publicString) {
+                this.publicString = publicString;
+            }
+
+            @SuppressWarnings("unused")
+            public void setPrivateString(String privateString) {
+                this.privateString = privateString;
+            }
+
+            @SuppressWarnings("unused")
+            public void setProtectedString(String protectedString) {
+                this.protectedString = protectedString;
             }
         };
 
@@ -392,36 +493,16 @@ public class PropertyConfigurationTest {
 
     @Test
     public void testGetStringValue() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private String value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, STRING_VALUE);
-        Config cfg = new Config(props);
+        PlainStringConfig cfg = new PlainStringConfig(props);
 
         assertEquals(STRING_VALUE, cfg.value);
     }
 
     @Test
     public void testGetBooleanValue_NoDefault() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private Boolean value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, "true");
-        Config cfg = new Config(props);
+        PlainBooleanConfig cfg = new PlainBooleanConfig(props);
 
         assertEquals(true, cfg.value);
     }
@@ -435,6 +516,11 @@ public class PropertyConfigurationTest {
 
             public Config(Properties props) throws PropertyException {
                 super(props);
+            }
+
+            @SuppressWarnings("unused")
+            public void setValue(Boolean value) {
+                this.value = value;
             }
         };
 
@@ -451,6 +537,11 @@ public class PropertyConfigurationTest {
 
             public Config(Properties props) throws PropertyException {
                 super(props);
+            }
+
+            @SuppressWarnings("unused")
+            public void setValue(Boolean value) {
+                this.value = value;
             }
         };
 
@@ -479,6 +570,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(Boolean value) {
+                this.value = value;
+            }
         };
 
         // property not defined
@@ -506,6 +602,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(Integer value) {
+                this.value = value;
+            }
         };
 
         props.setProperty(THE_VALUE, "200");
@@ -524,6 +625,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(Integer value) {
+                this.value = value;
+            }
         };
 
         props.setProperty(THE_VALUE, "200");
@@ -539,6 +645,11 @@ public class PropertyConfigurationTest {
 
             public Config(Properties props) throws PropertyException {
                 super(props);
+            }
+
+            @SuppressWarnings("unused")
+            public void setValue(Integer value) {
+                this.value = value;
             }
         };
 
@@ -562,6 +673,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(Long value) {
+                this.value = value;
+            }
         };
 
         props.setProperty(THE_VALUE, "20000");
@@ -580,6 +696,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(Long value) {
+                this.value = value;
+            }
         };
 
         props.setProperty(THE_VALUE, "20000");
@@ -596,6 +717,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(Long value) {
+                this.value = value;
+            }
         };
 
         // property not defined
@@ -610,18 +736,8 @@ public class PropertyConfigurationTest {
 
     @Test
     public void testGetPropValue_Prop_NoDefault() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private String value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, STRING_VALUE);
-        Config cfg = new Config(props);
+        PlainStringConfig cfg = new PlainStringConfig(props);
 
         assertEquals(STRING_VALUE, cfg.value);
     }
@@ -635,6 +751,11 @@ public class PropertyConfigurationTest {
 
             public Config(Properties props) throws PropertyException {
                 super(props);
+            }
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
             }
         };
 
@@ -654,6 +775,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
+            }
         };
 
         props.setProperty(THE_VALUE, "");
@@ -672,6 +798,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
+            }
         };
 
         Config cfg = new Config(props);
@@ -688,6 +819,11 @@ public class PropertyConfigurationTest {
 
             public Config(Properties props) throws PropertyException {
                 super(props);
+            }
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
             }
         };
 
@@ -706,6 +842,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
+            }
         };
 
         new Config(props);
@@ -721,6 +862,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
+            }
         };
 
         Config cfg = new Config(props);
@@ -730,10 +876,7 @@ public class PropertyConfigurationTest {
 
     @Test
     public void testGetRawPropertyValue() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private String value;
+        class Config extends PlainStringConfig {
 
             public Config(Properties props) throws PropertyException {
                 super(props);
@@ -747,144 +890,64 @@ public class PropertyConfigurationTest {
 
         Config cfg = new Config(props);
 
-        assertEquals(STRING_VALUE, cfg.value);
+        assertEquals(STRING_VALUE, cfg.getValue());
 
     }
 
     @Test
     public void testMakeBoolean_True() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private Boolean value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, "true");
-        Config cfg = new Config(props);
+        PlainBooleanConfig cfg = new PlainBooleanConfig(props);
 
         assertEquals(true, cfg.value);
     }
 
     @Test
     public void testMakeBoolean_False() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private Boolean value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, "false");
-        Config cfg = new Config(props);
+        PlainBooleanConfig cfg = new PlainBooleanConfig(props);
 
         assertEquals(false, cfg.value);
     }
 
     @Test(expected = PropertyInvalidException.class)
     public void testMakeBoolean_Invalid() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private Boolean value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, INVALID_VALUE);
-        new Config(props);
+        new PlainBooleanConfig(props);
     }
 
     @Test
     public void testMakeInteger_Valid() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private int value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, "300");
-        Config cfg = new Config(props);
+        PlainPrimIntConfig cfg = new PlainPrimIntConfig(props);
 
         assertEquals(300, cfg.value);
     }
 
     @Test(expected = PropertyInvalidException.class)
     public void testMakeInteger_Invalid() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private int value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, INVALID_VALUE);
-        new Config(props);
+        new PlainPrimIntConfig(props);
     }
 
     @Test(expected = PropertyInvalidException.class)
     public void testMakeInteger_TooBig() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private int value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, String.valueOf(Integer.MAX_VALUE + 10L));
-        new Config(props);
+        new PlainPrimIntConfig(props);
     }
 
     @Test
     public void testMakeLong_Valid() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private long value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, "30000");
-        Config cfg = new Config(props);
+        PlainPrimLongConfig cfg = new PlainPrimLongConfig(props);
 
         assertEquals(30000L, cfg.value);
     }
 
     @Test(expected = PropertyInvalidException.class)
     public void testMakeLong_Invalid() throws PropertyException {
-        class Config extends PropertyConfiguration {
-
-            @Property(name = THE_VALUE)
-            private long value;
-
-            public Config(Properties props) throws PropertyException {
-                super(props);
-            }
-        };
-
         props.setProperty(THE_VALUE, INVALID_VALUE);
-        new Config(props);
+        new PlainPrimLongConfig(props);
     }
 
     @Test
@@ -896,6 +959,11 @@ public class PropertyConfigurationTest {
 
             public Config(Properties props) throws PropertyException {
                 super(props);
+            }
+
+            @SuppressWarnings("unused")
+            public void setValue(long value) {
+                this.value = value;
             }
         };
 
@@ -914,6 +982,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(long value) {
+                this.value = value;
+            }
         };
 
         new Config(props);
@@ -929,6 +1002,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(long value) {
+                this.value = value;
+            }
         };
 
         new Config(props);
@@ -943,6 +1021,11 @@ public class PropertyConfigurationTest {
 
             public Config(Properties props) throws PropertyException {
                 super(props);
+            }
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
             }
         };
 
@@ -971,6 +1054,11 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(long value) {
+                this.value = value;
+            }
         };
 
         new Config(props);
@@ -985,6 +1073,11 @@ public class PropertyConfigurationTest {
 
             public Config(Properties props) throws PropertyException {
                 super(props);
+            }
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
             }
         };
 
@@ -1003,10 +1096,91 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(long value) {
+                this.value = value;
+            }
         };
 
         new Config(props);
     }
+
+    /**
+     * Config with a String value having no qualifiers.
+     */
+    public class PlainStringConfig extends PropertyConfiguration {
+
+        @Property(name = THE_VALUE)
+        private String value;
+        
+        public PlainStringConfig() {
+            
+        }
+        
+        public PlainStringConfig(Properties props) throws PropertyException {
+            super(props);
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public void setValue(String value) {
+            this.value = value;
+        }
+    };
+
+    /**
+     * Config with a Boolean value having no qualifiers.
+     */
+    public class PlainBooleanConfig extends PropertyConfiguration {
+
+        @Property(name = THE_VALUE)
+        private Boolean value;
+        
+        public PlainBooleanConfig(Properties props) throws PropertyException {
+            super(props);
+        }
+
+        public void setValue(Boolean value) {
+            this.value = value;
+        }
+    };
+
+    /**
+     * Config with an int value having no qualifiers.
+     */
+    public class PlainPrimIntConfig extends PropertyConfiguration {
+
+        @Property(name = THE_VALUE)
+        private int value;
+
+        public PlainPrimIntConfig(Properties props) throws PropertyException {
+            super(props);
+        }
+
+        public void setValue(int value) {
+            this.value = value;
+        }
+    };
+
+    /**
+     * Config with a long value having no qualifiers.
+     */
+    public class PlainPrimLongConfig extends PropertyConfiguration {
+
+        @Property(name = THE_VALUE)
+        private long value;
+
+        public PlainPrimLongConfig(Properties props) throws PropertyException {
+            super(props);
+        }
+
+        public void setValue(long value) {
+            this.value = value;
+        }
+    };
 
     /**
      * A config whose annotated property is "static".
@@ -1019,6 +1193,10 @@ public class PropertyConfigurationTest {
 
         public StaticConfig(Properties props) throws PropertyException {
             super(props);
+        }
+
+        public static void setValue(String value) {
+            StaticConfig.value = value;
         }
     };
 
