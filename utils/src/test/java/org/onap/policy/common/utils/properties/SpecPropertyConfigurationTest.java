@@ -110,6 +110,66 @@ public class SpecPropertyConfigurationTest {
             public Config(String specialization, Properties props) throws PropertyException {
                 super(specialization, props);
             }
+
+            @SuppressWarnings("unused")
+            public void setNoSpec(String noSpec) {
+                this.noSpec = noSpec;
+            }
+
+            @SuppressWarnings("unused")
+            public void setNoSpecBool(boolean noSpecBool) {
+                this.noSpecBool = noSpecBool;
+            }
+
+            @SuppressWarnings("unused")
+            public void setType1NoPrefix(String type1NoPrefix) {
+                this.type1NoPrefix = type1NoPrefix;
+            }
+
+            @SuppressWarnings("unused")
+            public void setType1NoSuffix(String type1NoSuffix) {
+                this.type1NoSuffix = type1NoSuffix;
+            }
+
+            @SuppressWarnings("unused")
+            public void setType1Both(String type1Both) {
+                this.type1Both = type1Both;
+            }
+
+            @SuppressWarnings("unused")
+            public void setType1Int(int type1Int) {
+                this.type1Int = type1Int;
+            }
+
+            @SuppressWarnings("unused")
+            public void setType2NoPrefix(String type2NoPrefix) {
+                this.type2NoPrefix = type2NoPrefix;
+            }
+
+            @SuppressWarnings("unused")
+            public void setType2NoSuffix(String type2NoSuffix) {
+                this.type2NoSuffix = type2NoSuffix;
+            }
+
+            @SuppressWarnings("unused")
+            public void setType2NoSpecPrefix(String type2NoSpecPrefix) {
+                this.type2NoSpecPrefix = type2NoSpecPrefix;
+            }
+
+            @SuppressWarnings("unused")
+            public void setType2NoSpecSuffix(String type2NoSpecSuffix) {
+                this.type2NoSpecSuffix = type2NoSpecSuffix;
+            }
+
+            @SuppressWarnings("unused")
+            public void setType2Both(String type2Both) {
+                this.type2Both = type2Both;
+            }
+
+            @SuppressWarnings("unused")
+            public void setType2Long(long type2Long) {
+                this.type2Long = type2Long;
+            }
         };
 
         props.setProperty("prefix.suffix", "no.spec");
@@ -151,6 +211,11 @@ public class SpecPropertyConfigurationTest {
             public Config(String specialization, Properties props) throws PropertyException {
                 super(specialization, props);
             }
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
+            }
         };
 
         props.setProperty("prefix.suffix", "no.spec");
@@ -174,6 +239,11 @@ public class SpecPropertyConfigurationTest {
             public Config(String specialization, Properties props) throws PropertyException {
                 super(specialization, props);
             }
+
+            @SuppressWarnings("unused")
+            public void setNotFound(String notFound) {
+                this.notFound = notFound;
+            }
         };
         
         new Config("not found", props);
@@ -195,6 +265,11 @@ public class SpecPropertyConfigurationTest {
 
             public Config(String specialization) {
                 super(specialization);
+            }
+
+            @SuppressWarnings("unused")
+            public void setValue(String value) {
+                this.value = value;
             }
         };
 
@@ -223,6 +298,11 @@ public class SpecPropertyConfigurationTest {
             
             public Config(String specialization, Properties props) throws PropertyException {
                 super(specialization, props);
+            }
+
+            @SuppressWarnings("unused")
+            public void setValue(int value) {
+                this.value = value;
             }
         };
 

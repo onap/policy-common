@@ -25,8 +25,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Properties;
+import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.utils.properties.exception.PropertyAccessException;
 import org.onap.policy.common.utils.properties.exception.PropertyException;
 import org.onap.policy.common.utils.properties.exception.PropertyInvalidException;
@@ -35,7 +38,9 @@ import org.onap.policy.common.utils.properties.exception.PropertyMissingExceptio
 /**
  * Configuration whose fields are initialized by reading from a set of {@link Properties},
  * as directed by the {@link Property} annotations that appear on fields within the
- * subclass.
+ * subclass. The values of the fields are set via <i>setXxx()</i> methods. As a result, if
+ * a field is annotated and there is no corresponding <i>setXxx()</i> method, then an
+ * exception will be thrown.
  * <p>
  * It is possible that an invalid <i>defaultValue</i> is specified via the
  * {@link Property} annotation. This could remain undetected until an optional property is
@@ -104,7 +109,10 @@ public class PropertyConfiguration {
 
         checkModifiable(field, prop);
 
-        if (setValue(field, props, prop)) {
+        Method setter = getSetter(field, prop);
+        checkSetter(setter, prop);
+
+        if (setValue(setter, field, props, prop)) {
             return true;
         }
 
@@ -112,15 +120,33 @@ public class PropertyConfiguration {
     }
 
     /**
+     * @param field field whose value is to be set
+     * @param prop property of interest
+     * @return the method to be used to set the field's value
+     * @throws PropertyAccessException if a "set" method cannot be identified
+     */
+    private Method getSetter(Field field, Property prop) throws PropertyAccessException {
+        String nm = "set" + StringUtils.capitalize(field.getName());
+
+        try {
+            return this.getClass().getMethod(nm, field.getType());
+
+        } catch (NoSuchMethodException | SecurityException e) {
+            throw new PropertyAccessException(prop.name(), nm, e);
+        }
+    }
+
+    /**
      * Sets a field's value from a particular property.
      * 
+     * @param setter method to be used to set the field's value
      * @param field field whose value is to be set
      * @param props properties from which to get the value
      * @param prop property of interest
      * @return {@code true} if the property's value was set, {@code false} otherwise
      * @throws PropertyException if an error occurs
      */
-    protected boolean setValue(Field field, Properties props, Property prop) throws PropertyException {
+    protected boolean setValue(Method setter, Field field, Properties props, Property prop) throws PropertyException {
 
         try {
             Object val = getValue(field, props, prop);
@@ -128,23 +154,15 @@ public class PropertyConfiguration {
                 return false;
 
             } else {
-
-                /*
-                 * According to java docs & blogs, "field" is our own copy, so we're free
-                 * to change the flags without impacting the real permissions of the field
-                 * within the real class.
-                 */
-                field.setAccessible(true);
-
-                field.set(this, val);
+                setter.invoke(this, val);
                 return true;
             }
 
         } catch (IllegalArgumentException e) {
             throw new PropertyInvalidException(prop.name(), field.getName(), e);
 
-        } catch (IllegalAccessException e) {
-            throw new PropertyAccessException(prop.name(), field.getName(), e);
+        } catch (IllegalAccessException | InvocationTargetException e) {
+            throw new PropertyAccessException(prop.name(), setter.getName(), e);
         }
     }
 
@@ -199,6 +217,21 @@ public class PropertyConfiguration {
 
         if (Modifier.isFinal(mod)) {
             throw new PropertyAccessException(prop.name(), field.getName(), "'final' variable cannot be modified");
+        }
+    }
+
+    /**
+     * Verifies that the setter method is not <i>static</i>.
+     * 
+     * @param setter method to be checked
+     * @param prop property of interest
+     * @throws PropertyAccessException if the method is static
+     */
+    private void checkSetter(Method setter, Property prop) throws PropertyAccessException {
+        int mod = setter.getModifiers();
+
+        if (Modifier.isStatic(mod)) {
+            throw new PropertyAccessException(prop.name(), setter.getName(), "method is 'static'");
         }
     }
 
