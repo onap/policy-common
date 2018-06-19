@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5a93c517_f71fb2b6",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/SpecPropertiesTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-06-19T12:30:40Z",
+      "side": 1,
+      "message": "This follows an approach you\u0027ll see through-out most junit tests that I write.  In them, the @Before initializes default values that are used normally, but may be overridden by individual test cases.  The values are placed in fields rather than local variables, because in a number of cases, the value must be accessible by other sub-methods though not always easily passed as parameters to them.  In this case, local variables would have worked, but chose to follow the norm anyway.\nI also started taking this approach, because most test cases create an instance of the class under test and adding all of the local variables with their initializers just cluttered up the test cases; it made the code more legible to just do that in a @Before method, and override the value within inidividual tests when needed.",
+      "parentUuid": "5a93c517_5781c64b",
+      "range": {
+        "startLine": 98,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 55
+      },
+      "revId": "719ef33eaac70c8b98e85e1440ab2cea00415bc9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a93c517_7784025d",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/SpecPropertiesTest.java",
         "patchSetId": 1
