@@ -25,10 +25,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.flexlogger.FlexLogger;
@@ -108,18 +105,6 @@ public class AuditThread extends Thread {
     private IntegrityAudit integrityAudit;
 
     /**
-     * A latch is taken from this queue before starting an audit. May be {@code null}. Used by JUnit
-     * tests.
-     */
-    private BlockingQueue<CountDownLatch> auditLatchQueue;
-
-    /**
-     * Latch to be decremented when the next audit completes. May be {@code null}. Used by JUnit
-     * tests to wait for an audit to complete.
-     */
-    private CountDownLatch auditCompletionLatch = null;
-
-    /**
      * AuditThread constructor.
      * 
      * @param resourceName the resource name
@@ -133,7 +118,7 @@ public class AuditThread extends Thread {
             int integrityAuditPeriodSeconds, IntegrityAudit integrityAudit) throws IntegrityAuditException {
 
         this(resourceName, persistenceUnit, properties, TimeUnit.SECONDS.toMillis(integrityAuditPeriodSeconds),
-                integrityAudit, null);
+                integrityAudit);
     }
 
     /**
@@ -148,13 +133,12 @@ public class AuditThread extends Thread {
      * @throws IntegrityAuditException if an error occurs
      */
     public AuditThread(String resourceName, String persistenceUnit, Properties properties, long integrityAuditMillis,
-            IntegrityAudit integrityAudit, BlockingQueue<CountDownLatch> queue) throws IntegrityAuditException {
+            IntegrityAudit integrityAudit) throws IntegrityAuditException {
         this.resourceName = resourceName;
         this.persistenceUnit = persistenceUnit;
         this.properties = properties;
         this.integrityAuditPeriodMillis = integrityAuditMillis;
         this.integrityAudit = integrityAudit;
-        this.auditLatchQueue = queue;
 
         /*
          * The DbDAO Constructor registers this node in the IntegrityAuditEntity table. Each
@@ -174,14 +158,8 @@ public class AuditThread extends Thread {
         logger.info("AuditThread.run: Entering");
 
         try {
-            /*
-             * For JUnit testing: wait for the first latch, decrement it to indicate that the thread
-             * has started, and then wait for the next latch, before we actually start doing
-             * anything. These simply return if there is no latch queue defined.
-             */
-            getNextLatch();
-            decrementLatch();
-            getNextLatch();
+            // for junit testing
+            runStarted();
 
             /*
              * Triggers change in designation, unless no other viable candidate.
@@ -284,11 +262,8 @@ public class AuditThread extends Thread {
                      * property, otherwise just sleep the normal interval.
                      */
                     if (auditCompleted) {
-                        // indicate that an audit has completed
-                        decrementLatch();
-
-                        // don't start the next audit cycle until a latch has been provided
-                        getNextLatch();
+                        // for junit testing: indicate that an audit has completed
+                        auditCompleted();
 
                         if (logger.isDebugEnabled()) {
                             logger.debug("AuditThread.run: Audit completed; resourceName=" + this.resourceName
@@ -339,29 +314,6 @@ public class AuditThread extends Thread {
         dbDao.destroy();
 
         logger.info("AuditThread.run: Exiting");
-    }
-
-    /**
-     * Gets the next audit-completion latch from the queue. Blocks, if the queue is empty.
-     * 
-     * @throws InterruptedException if interrupted while waiting
-     */
-    private void getNextLatch() throws InterruptedException {
-        BlockingQueue<CountDownLatch> queue = this.auditLatchQueue;
-        if (queue != null) {
-            this.auditCompletionLatch = queue.take();
-        }
-    }
-
-    /**
-     * Decrements the current audit-completion latch, if any.
-     */
-    private void decrementLatch() {
-        CountDownLatch latch = this.auditCompletionLatch;
-        if (latch != null) {
-            this.auditCompletionLatch = null;
-            latch.countDown();
-        }
     }
 
     /**
@@ -785,6 +737,26 @@ public class AuditThread extends Thread {
             logger.debug("runAudit: Exiting");
         }
 
+    }
+
+    /**
+     * Indicates that the {@link #run()} method has started. This method simply returns,
+     * and may overridden by junit tests.
+     * 
+     * @throws InterruptedException
+     */
+    public void runStarted() throws InterruptedException {
+        // does nothing
+    }
+
+    /**
+     * Indicates that an audit has completed. This method simply returns, and may
+     * overridden by junit tests.
+     * 
+     * @throws InterruptedException
+     */
+    public void auditCompleted() throws InterruptedException {
+        // does nothing
     }
 
     /**

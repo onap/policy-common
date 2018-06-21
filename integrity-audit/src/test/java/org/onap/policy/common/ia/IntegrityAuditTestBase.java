@@ -22,10 +22,6 @@ package org.onap.policy.common.ia;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -34,21 +30,19 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-
 import org.onap.policy.common.utils.jpa.EntityMgrCloser;
 import org.onap.policy.common.utils.jpa.EntityMgrFactoryCloser;
 import org.onap.policy.common.utils.jpa.EntityTransCloser;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
 import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 
 /**
  * All JUnits are designed to run in the local development environment where they have write
@@ -464,26 +458,26 @@ public class IntegrityAuditTestBase {
     protected void runAudit(MyIntegrityAudit... auditors) throws InterruptedException {
 
         // start an audit cycle on each auditor
-        List<CountDownLatch> latches = new ArrayList<>(auditors.length);
+        List<Semaphore> semaphores = new ArrayList<>(auditors.length);
         for (MyIntegrityAudit p : auditors) {
-            latches.add(p.startAudit());
+            semaphores.add(p.startAudit());
         }
 
         // wait for each auditor to complete its cycle
-        for (CountDownLatch latch : latches) {
-            waitLatch(latch);
+        for (Semaphore sem : semaphores) {
+            waitSem(sem);
         }
     }
 
     /**
-     * Waits for a latch to reach zero.
+     * Waits for a semaphore to be released.
      * 
-     * @param latch the latch to wait for
+     * @param sem the semaphore for which to wait
      * @throws InterruptedException if the thread is interrupted
      * @throws AssertionError if the latch did not reach zero in the allotted time
      */
-    protected void waitLatch(CountDownLatch latch) throws InterruptedException {
-        assertTrue(latch.await(WAIT_MS, TimeUnit.SECONDS));
+    protected void waitSem(Semaphore sem) throws InterruptedException {
+        assertTrue(sem.tryAcquire(WAIT_MS, TimeUnit.SECONDS));
     }
 
     /**
@@ -520,11 +514,16 @@ public class IntegrityAuditTestBase {
      * Manages audits by inserting latches into a queue for the AuditThread to count.
      */
     protected class MyIntegrityAudit extends IntegrityAudit {
-
+        
         /**
-         * Queue from which the AuditThread will take latches.
+         * Semaphore on which the audit thread should wait.
          */
-        private BlockingQueue<CountDownLatch> queue = null;
+        private Semaphore auditSem = null;
+        
+        /**
+         * Semaphore on which the junit management thread should wait.
+         */
+        private Semaphore junitSem = null;
 
         /**
          * Constructs an auditor and starts the AuditThread.
@@ -550,16 +549,14 @@ public class IntegrityAuditTestBase {
         }
 
         /**
-         * Triggers an audit by adding a latch to the queue.
+         * Triggers an audit by releasing the audit thread's semaphore.
          * 
-         * @return the latch that was added
+         * @return the semaphore on which to wait
          * @throws InterruptedException if the thread is interrupted
          */
-        public CountDownLatch startAudit() throws InterruptedException {
-            CountDownLatch latch = new CountDownLatch(1);
-            queue.add(latch);
-
-            return latch;
+        public Semaphore startAudit() throws InterruptedException {
+            auditSem.release();
+            return junitSem;
         }
 
         /**
@@ -567,25 +564,23 @@ public class IntegrityAuditTestBase {
          */
         @Override
         public final void startAuditThread() throws IntegrityAuditException {
-            if (queue != null) {
-                // queue up a bogus latch, in case a thread is still running
-                queue.add(new CountDownLatch(1) {
-                    @Override
-                    public void countDown() {
-                        throw new RuntimeException("auditor has multiple threads");
-                    }
-                });
+            if (auditSem != null) {
+                // release a bunch of semaphores, in case a thread is still running
+                auditSem.release(1000);
             }
+            
+            auditSem = new Semaphore(0);
+            junitSem = new Semaphore(0);
+            
+            super.startAuditThread();
 
-            queue = new LinkedBlockingQueue<>();
+            if (haveAuditThread()) {
+                // tell the thread it can run
+                auditSem.release();
 
-            if (super.startAuditThread(queue)) {
                 // wait for the thread to start
-                CountDownLatch latch = new CountDownLatch(1);
-                queue.add(latch);
-
                 try {
-                    waitLatch(latch);
+                    waitSem(junitSem);
 
                 } catch (InterruptedException e) {
                     Thread.currentThread().interrupt();
@@ -604,6 +599,32 @@ public class IntegrityAuditTestBase {
             super.stopAuditThread();
 
             assertTrue(waitThread(this));
+        }
+
+        @Override
+        protected AuditThread makeAuditThread(String resourceName2, String persistenceUnit2, Properties properties2,
+                        long integrityAuditPeriodMillis2) throws IntegrityAuditException {
+
+            return new AuditThread(resourceName2, persistenceUnit2, properties2, integrityAuditPeriodMillis2, this) {
+
+                private Semaphore auditSem = MyIntegrityAudit.this.auditSem;
+                private Semaphore junitSem = MyIntegrityAudit.this.junitSem;
+
+                @Override
+                public void runStarted() throws InterruptedException {
+                    auditSem.acquire();
+                    
+                    junitSem.release();
+                    auditSem.acquire();
+                }
+
+                @Override
+                public void auditCompleted() throws InterruptedException {
+                    junitSem.release();
+                    auditSem.acquire();
+                }
+                
+            };
         }
     }
 }
