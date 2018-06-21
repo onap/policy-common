@@ -38,6 +38,7 @@ import javax.persistence.TemporalType;
 /*
  * The Entity class to persist a policy object ForwardProgress
  */
+import org.onap.policy.common.im.MonitorTime;
 
 @Entity
 @Table(name = "ForwardProgressEntity")
@@ -77,7 +78,7 @@ public class ForwardProgressEntity implements Serializable {
      */
     @PrePersist
     public void prePersist() {
-        Date date = new Date();
+        Date date = MonitorTime.getInstance().getDate();
         this.createdDate = date;
         this.lastUpdated = date;
         this.fpcCount = 0;
@@ -85,7 +86,7 @@ public class ForwardProgressEntity implements Serializable {
 
     @PreUpdate
     public void preUpdate() {
-        this.lastUpdated = new Date();
+        this.lastUpdated = MonitorTime.getInstance().getDate();
     }
 
     /**

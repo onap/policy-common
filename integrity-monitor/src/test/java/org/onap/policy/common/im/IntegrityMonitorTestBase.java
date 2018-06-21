@@ -30,8 +30,12 @@ import java.util.concurrent.TimeUnit;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import org.onap.policy.common.im.IntegrityMonitor.Factory;
 import org.onap.policy.common.utils.jpa.EntityTransCloser;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
+import org.onap.policy.common.utils.time.CurrentTime;
+import org.onap.policy.common.utils.time.TestTime;
+import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,6 +50,16 @@ import org.slf4j.LoggerFactory;
  */
 public class IntegrityMonitorTestBase {
     private static Logger logger = LoggerFactory.getLogger(IntegrityMonitorTestBase.class);
+    
+    /**
+     * Name of the factory field within the IntegrityMonitor class.
+     */
+    public static final String FACTORY_FIELD = "factory";
+    
+    /**
+     * Name of the instance field within the MonitorTime class.
+     */
+    public static final String TIME_INSTANCE_FIELD = "instance";
 
     /**
      * Directory containing the slf4j log files.
@@ -60,9 +74,9 @@ public class IntegrityMonitorTestBase {
     protected static final long WAIT_MS = 5000L;
 
     /**
-     * Milliseconds that monitor should sleep between cycles.
+     * Milliseconds between state refreshes.
      */
-    protected static final long CYCLE_INTERVAL_MS = 2L;
+    protected static final long REFRESH_INTERVAL_MS = 3L * IntegrityMonitor.CYCLE_INTERVAL_MILLIS;
 
     public static final String DEFAULT_DB_URL_PREFIX = "jdbc:h2:mem:";
 
@@ -94,6 +108,11 @@ public class IntegrityMonitorTestBase {
      * Entity manager factory pointing to the in-memory DB associated with emf.
      */
     protected static EntityManager em;
+    
+    /**
+     * Test time used by tests in lieu of CurrentTime.
+     */
+    private static TestTime testTime;
 
     /**
      * Saved JMX port from system properties, to be restored once all tests complete.
@@ -101,19 +120,15 @@ public class IntegrityMonitorTestBase {
     private static Object savedJmxPort;
 
     /**
-     * Saved IM persistence unit, to be restored once all tests complete.
-     */
-    private static String savedPU;
-
-    /**
-     * Saved monitor cycle interval, to be restored once all tests complete.
-     */
-    private static long savedCycleIntervalMillis;
-
-    /**
      * Saved property time units, to be restored once all tests complete.
      */
-    private static TimeUnit savedPropertyUnits;
+    private static Factory savedFactory;
+
+    /**
+     * Saved time accessor, to be restored once all tests complete.
+     */
+    private static CurrentTime savedTime;
+
 
     /**
      * Saves current configuration information and then sets new values.
@@ -136,19 +151,19 @@ public class IntegrityMonitorTestBase {
         IntegrityMonitorTestBase.dbUrl = dbUrl;
 
         // save data that we have to restore at the end of the test
+        savedFactory = Whitebox.getInternalState(IntegrityMonitor.class, FACTORY_FIELD);
         savedJmxPort = systemProps.get(JMX_PORT_PROP);
-        savedPU = IntegrityMonitor.getPersistenceUnit();
-        savedCycleIntervalMillis = IntegrityMonitor.getCycleIntervalMillis();
-        savedPropertyUnits = IntegrityMonitor.getPropertyUnits();
+        savedTime = MonitorTime.getInstance();
 
         systemProps.put(JMX_PORT_PROP, "9797");
 
-        IntegrityMonitor.setPersistenceUnit(PERSISTENCE_UNIT);
-        IntegrityMonitor.setCycleIntervalMillis(CYCLE_INTERVAL_MS);
-        IntegrityMonitor.setPropertyUnits(TimeUnit.MILLISECONDS);
+        Whitebox.setInternalState(IntegrityMonitor.class, FACTORY_FIELD, new TestFactory());
 
         IntegrityMonitor.setUnitTesting(true);
-
+        
+        testTime = new TestTime();
+        Whitebox.setInternalState(MonitorTime.class, TIME_INSTANCE_FIELD, testTime);
+        
         properties = new Properties();
         properties.put(IntegrityMonitorProperties.DB_DRIVER, dbDriver);
         properties.put(IntegrityMonitorProperties.DB_URL, dbUrl);
@@ -157,7 +172,7 @@ public class IntegrityMonitorTestBase {
         properties.put(IntegrityMonitorProperties.SITE_NAME, siteName);
         properties.put(IntegrityMonitorProperties.NODE_TYPE, nodeType);
         properties.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS,
-                String.valueOf(100L * CYCLE_INTERVAL_MS));
+                String.valueOf(REFRESH_INTERVAL_MS));
 
         emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT, makeProperties());
 
@@ -180,11 +195,12 @@ public class IntegrityMonitorTestBase {
             systemProps.put(JMX_PORT_PROP, savedJmxPort);
         }
 
-        IntegrityMonitor.setPersistenceUnit(savedPU);
-        IntegrityMonitor.setCycleIntervalMillis(savedCycleIntervalMillis);
-        IntegrityMonitor.setPropertyUnits(savedPropertyUnits);
+        Whitebox.setInternalState(MonitorTime.class, TIME_INSTANCE_FIELD, savedTime);
+        Whitebox.setInternalState(IntegrityMonitor.class, FACTORY_FIELD, savedFactory);
 
         IntegrityMonitor.setUnitTesting(false);
+
+        stopMonitor();
 
         // this should result in the in-memory DB being deleted
         em.close();
@@ -217,6 +233,13 @@ public class IntegrityMonitorTestBase {
     }
 
     /**
+     * @return the original integrity monitor factory
+     */
+    static Factory getSavedFactory() {
+        return savedFactory;
+    }
+
+    /**
      * Stops the IntegrityMonitor instance.
      */
     private static void stopMonitor() {
@@ -226,6 +249,13 @@ public class IntegrityMonitorTestBase {
         } catch (IntegrityMonitorException e) {
             // no need to log, as exception was already logged
         }
+    }
+    
+    /**
+     * @return the "current" time, in milliseconds
+     */
+    protected static long getCurrentTestTime() {
+        return testTime.getMillis();
     }
 
     /**
@@ -240,14 +270,14 @@ public class IntegrityMonitorTestBase {
     }
 
     /**
-     * Waits for a semaphore to be acquired
+     * Waits for a semaphore to be acquired.
      * 
-     * @param sem the latch
+     * @param sem
      * @throws InterruptedException if the thread is interrupted
-     * @throws AssertionError if the latch did not reach zero in the allotted time
+     * @throws AssertionError if the semaphore was not acquired within the allotted time
      */
     protected void waitSem(Semaphore sem) throws InterruptedException {
-        assertTrue(sem.tryAcquire(WAIT_MS, TimeUnit.MILLISECONDS));
+        assertTrue(sem.tryAcquire(WAIT_MS, TimeUnit.DAYS));
     }
 
     /**
@@ -282,6 +312,16 @@ public class IntegrityMonitorTestBase {
             fail("missing exception");
         } catch (Exception e) {
             System.out.println("action found expected exception: " + e);
+        }
+    }
+    
+    /**
+     * Factory with overrides for junit testing.
+     */
+    public static class TestFactory extends Factory {
+        @Override
+        public String getPersistenceUnit() {
+            return PERSISTENCE_UNIT;
         }
     }
 

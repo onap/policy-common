@@ -29,7 +29,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 import javax.management.JMX;
 import javax.management.MBeanServerConnection;
 import javax.persistence.EntityManager;
@@ -58,6 +57,9 @@ public class IntegrityMonitor {
 
     // only allow one instance of IntegrityMonitor
     private static IntegrityMonitor instance = null;
+    
+    // may be changed by junit tests
+    private static Factory factory = new Factory();
 
     private static String resourceName = null;
     boolean alarmExists = false;
@@ -75,16 +77,7 @@ public class IntegrityMonitor {
     // Persistence Unit for JPA
     public static final String PERSISTENCE_UNIT = "operationalPU";
 
-    private static String persistenceUnit = PERSISTENCE_UNIT;
-
-    private static final long CYCLE_INTERVAL_MILLIS = 1000L;
-
-    private static long cycleIntervalMillis = CYCLE_INTERVAL_MILLIS;
-
-    /**
-     * Units used for intervals extracted from the properties, which are typically given in seconds.
-     */
-    private static TimeUnit propertyUnits = TimeUnit.SECONDS;
+    public static final long CYCLE_INTERVAL_MILLIS = 1000L;
 
     private StateManagement stateManager = null;
 
@@ -107,11 +100,11 @@ public class IntegrityMonitor {
     // last dependency health check time. Initialize so that the periodic check
     // starts after 60 seconds.
     // This allows time for dependents to come up.
-    private long lastDependencyCheckTime = System.currentTimeMillis();
+    private long lastDependencyCheckTime = MonitorTime.getInstance().getMillis();
 
     // Time of the last state audit. It is initialized at the time of the IM
     // construction
-    private Date lastStateAuditTime = new Date();
+    private Date lastStateAuditTime = MonitorTime.getInstance().getDate();
 
     // Interval between state audits in ms. We leave it turned off by default so
     // that it will only
@@ -124,17 +117,17 @@ public class IntegrityMonitor {
     private int missedCycles = 0;
 
     // forward progress monitoring interval
-    private static long monitorIntervalMs = 1000L * IntegrityMonitorProperties.DEFAULT_MONITOR_INTERVAL;
+    private static long monitorIntervalMs = toMillis(IntegrityMonitorProperties.DEFAULT_MONITOR_INTERVAL);
     // The number of periods the counter fails to increment before an alarm is
     // raised.
     private static int failedCounterThreshold = IntegrityMonitorProperties.DEFAULT_FAILED_COUNTER_THRESHOLD;
     // test transaction interval
-    private static long testTransIntervalMs = 1000L * IntegrityMonitorProperties.DEFAULT_TEST_INTERVAL;
+    private static long testTransIntervalMs = toMillis(IntegrityMonitorProperties.DEFAULT_TEST_INTERVAL);
     // write Fpc to DB interval
-    private static long writeFpcIntervalMs = 1000L * IntegrityMonitorProperties.DEFAULT_WRITE_FPC_INTERVAL;
+    private static long writeFpcIntervalMs = toMillis(IntegrityMonitorProperties.DEFAULT_WRITE_FPC_INTERVAL);
     // check the health of dependencies
     private static long checkDependencyIntervalMs =
-            1000L * IntegrityMonitorProperties.DEFAULT_CHECK_DEPENDENCY_INTERVAL;
+                    toMillis(IntegrityMonitorProperties.DEFAULT_CHECK_DEPENDENCY_INTERVAL);
 
     // A lead subsystem will have dependency groups with resource names in the
     // properties file.
@@ -151,7 +144,7 @@ public class IntegrityMonitor {
 
     // this is the max interval allowed without any forward progress
     // counter updates
-    private static long maxFpcUpdateIntervalMs = 1000L * IntegrityMonitorProperties.DEFAULT_MAX_FPC_UPDATE_INTERVAL;
+    private static long maxFpcUpdateIntervalMs = toMillis(IntegrityMonitorProperties.DEFAULT_MAX_FPC_UPDATE_INTERVAL);
 
     // Node types
     private enum NodeType {
@@ -192,23 +185,6 @@ public class IntegrityMonitor {
      */
     protected IntegrityMonitor(String resourceName, Properties properties) throws IntegrityMonitorException {
 
-        this(resourceName, properties, new Factory());
-    }
-
-    /**
-     * IntegrityMonitor constructor. It is invoked from the getInstance() method in this class or
-     * from the constructor of a child or sub-class. A class can extend the IntegrityMonitor class
-     * if there is a need to override any of the base methods (ex. subsystemTest()). Only one
-     * instance is allowed to be created per resource name.
-     * 
-     * @param resourceName The resource name of the resource
-     * @param properties a set of properties passed in from the resource
-     * @param factory Factory to use to control the FPManager thread
-     * @throws IntegrityMonitorException if any errors are encountered in the constructor
-     */
-    protected IntegrityMonitor(String resourceName, Properties properties, Factory factory)
-            throws IntegrityMonitorException {
-
         // singleton check since this constructor can be called from a child or
         // sub-class
         if (instance != null) {
@@ -232,12 +208,12 @@ public class IntegrityMonitor {
         //
         // Create the entity manager factory
         //
-        emf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
+        emf = Persistence.createEntityManagerFactory(factory.getPersistenceUnit(), properties);
         //
         // Did it get created?
         //
         if (emf == null) {
-            logger.error("Error creating IM entity manager factory with persistence unit: {}", persistenceUnit);
+            logger.error("Error creating IM entity manager factory with persistence unit: {}", factory.getPersistenceUnit());
             throw new IntegrityMonitorException("Unable to create IM Entity Manager Factory");
         }
 
@@ -298,7 +274,7 @@ public class IntegrityMonitor {
                     logger.debug("Resource {} exists and will be updated - old url= {}, createdDate={}", resourceName,
                             rrx.getResourceUrl(), rrx.getCreatedDate());
                 }
-                rrx.setLastUpdated(new Date());
+                rrx.setLastUpdated(MonitorTime.getInstance().getDate());
             } else {
                 // register resource by adding entry to table in DB
                 logger.debug("Adding resource {} to ResourceRegistration table", resourceName);
@@ -353,8 +329,7 @@ public class IntegrityMonitor {
             logger.error("ComponentAdmin constructor exception: {}", e.toString(), e);
         }
 
-        fpManager = new FpManager(factory);
-        fpManager.start();
+        fpManager = new FpManager();
 
     }
 
@@ -370,22 +345,6 @@ public class IntegrityMonitor {
      */
     public static IntegrityMonitor getInstance(String resourceName, Properties properties)
             throws IntegrityMonitorException {
-        return getInstance(resourceName, properties, new Factory());
-    }
-
-    /**
-     * Get an instance of IntegrityMonitor for a given resource name. It creates one if it does not
-     * exist. Only one instance is allowed to be created per resource name.
-     * 
-     * @param resourceName The resource name of the resource
-     * @param properties a set of properties passed in from the resource
-     * @param factory Factory to use to control the FPManager thread
-     * @return The new instance of IntegrityMonitor
-     * @throws IntegrityMonitorException if unable to create jmx url or the constructor returns an
-     *         exception
-     */
-    protected static IntegrityMonitor getInstance(String resourceName, Properties properties,
-                    Factory factory) throws IntegrityMonitorException {
 
         synchronized (getInstanceLock) {
             logger.debug("getInstance() called - resourceName= {}", resourceName);
@@ -396,7 +355,7 @@ public class IntegrityMonitor {
 
             if (instance == null) {
                 logger.debug("Creating new instance of IntegrityMonitor");
-                instance = new IntegrityMonitor(resourceName, properties, factory);
+                instance = new IntegrityMonitor(resourceName, properties);
             }
             return instance;
         }
@@ -628,7 +587,7 @@ public class IntegrityMonitor {
         // verify that the ForwardProgress is current (check last_updated)
         if (errorMsg == null) {
             if (forwardProgressEntity != null && stateManagementEntity != null) {
-                Date date = new Date();
+                Date date = MonitorTime.getInstance().getDate();
                 long diffMs = date.getTime() - forwardProgressEntity.getLastUpdated().getTime();
                 logger.debug("IntegrityMonitor.stateCheck(): diffMs = {}", diffMs);
 
@@ -719,7 +678,7 @@ public class IntegrityMonitor {
                     logger.debug("Dependent resource {} - fpc= {}, lastUpdated={}", dep, fpx.getFpcCount(),
                             fpx.getLastUpdated());
                 }
-                long currTime = System.currentTimeMillis();
+                long currTime = MonitorTime.getInstance().getMillis();
                 // if dependent resource FPC has not been updated, consider it
                 // an error
                 if ((currTime - fpx.getLastUpdated().getTime()) > maxFpcUpdateIntervalMs) {
@@ -1049,7 +1008,7 @@ public class IntegrityMonitor {
             }
 
             dependencyCheckErrorMsg = errorMsg;
-            lastDependencyCheckTime = System.currentTimeMillis();
+            lastDependencyCheckTime = MonitorTime.getInstance().getMillis();
             logger.debug("dependencyCheck: exit");
             return errorMsg;
         }
@@ -1413,7 +1372,7 @@ public class IntegrityMonitor {
                 return; // monitoring is disabled
             }
 
-            elapsedTime = elapsedTime + cycleIntervalMillis;
+            elapsedTime = elapsedTime + CYCLE_INTERVAL_MILLIS;
             if (elapsedTime < monitorIntervalMs) {
                 return; // monitoring interval not reached
             }
@@ -1487,7 +1446,7 @@ public class IntegrityMonitor {
             }
         }
 
-        Date date = new Date();
+        Date date = MonitorTime.getInstance().getDate();
         long timeSinceLastStateAudit = date.getTime() - lastStateAuditTime.getTime();
         if (timeSinceLastStateAudit < stateAuditIntervalMs) {
             logger.debug("IntegrityMonitor.stateAudit(): Not time to run. returning");
@@ -1506,7 +1465,7 @@ public class IntegrityMonitor {
      */
     public void executeStateAudit() {
         logger.debug("IntegrityMonitor.executeStateAudit(): entry");
-        Date date = new Date();
+        Date date = MonitorTime.getInstance().getDate();
 
         // Get all entries in the forwardprogressentity table
         List<ForwardProgressEntity> fpList = getAllForwardProgressEntity();
@@ -1610,7 +1569,7 @@ public class IntegrityMonitor {
                 return; // test transaction is disabled
             }
 
-            elapsedTestTransTime = elapsedTestTransTime + cycleIntervalMillis;
+            elapsedTestTransTime = elapsedTestTransTime + CYCLE_INTERVAL_MILLIS;
             if (elapsedTestTransTime < testTransIntervalMs) {
                 return; // test transaction interval not reached
             }
@@ -1637,7 +1596,7 @@ public class IntegrityMonitor {
                 return; // write Fpc is disabled
             }
 
-            elapsedWriteFpcTime = elapsedWriteFpcTime + cycleIntervalMillis;
+            elapsedWriteFpcTime = elapsedWriteFpcTime + CYCLE_INTERVAL_MILLIS;
             if (elapsedWriteFpcTime < writeFpcIntervalMs) {
                 return; // write Fpc interval not reached
             }
@@ -1664,7 +1623,7 @@ public class IntegrityMonitor {
             return; // dependency monitoring is disabled
         }
 
-        long currTime = System.currentTimeMillis();
+        long currTime = MonitorTime.getInstance().getMillis();
         logger.debug("checkDependentHealth currTime - lastDependencyCheckTime = {}",
                 currTime - lastDependencyCheckTime);
         if ((currTime - lastDependencyCheckTime) > checkDependencyIntervalMs) {
@@ -1702,7 +1661,7 @@ public class IntegrityMonitor {
         logger.debug("executeRefreshStateAudit(): entry");
         synchronized (refreshStateAuditLock) {
             logger.debug("refreshStateAudit: entry");
-            Date now = new Date();
+            Date now = MonitorTime.getInstance().getDate();
             long nowMs = now.getTime();
             long lastTimeMs = refreshStateAuditLastRunDate.getTime();
             logger.debug("refreshStateAudit: ms since last run = {}", nowMs - lastTimeMs);
@@ -1725,7 +1684,7 @@ public class IntegrityMonitor {
                         logger.error("refreshStateAudit: caught unexpected exception from stateManager.unlock(): ", e);
                     }
                 }
-                refreshStateAuditLastRunDate = new Date();
+                refreshStateAuditLastRunDate = MonitorTime.getInstance().getDate();
                 logger.debug("refreshStateAudit: exit");
             }
         }
@@ -1737,15 +1696,15 @@ public class IntegrityMonitor {
      * dependencies, does a refresh state audit and runs the stateAudit.
      */
     class FpManager extends Thread {
-        private boolean stopRequested = false;
-
-        private final Factory factory;
+        
+        private volatile boolean stopRequested = false;
 
         // Constructor - start FP manager thread
-        FpManager(Factory factory) {
-            this.factory = factory;
+        FpManager() {
             // set now as the last time the refreshStateAudit ran
-            IntegrityMonitor.this.refreshStateAuditLastRunDate = new Date();
+            IntegrityMonitor.this.refreshStateAuditLastRunDate = MonitorTime.getInstance().getDate();
+
+            this.start();
         }
 
         @Override
@@ -1756,7 +1715,7 @@ public class IntegrityMonitor {
                 factory.runStarted();
 
                 while(!stopRequested) {
-                    factory.doSleep(cycleIntervalMillis);
+                    MonitorTime.getInstance().sleep(CYCLE_INTERVAL_MILLIS);
                     
                     IntegrityMonitor.this.runOnce();
                     factory.monitorCompleted();
@@ -1887,7 +1846,7 @@ public class IntegrityMonitor {
             logger.debug("allSeemsWell exit");
         }
     }
-
+    
     /**
      * Converts the given value to milliseconds using the current {@link #propertyUnits}.
      * 
@@ -1895,7 +1854,7 @@ public class IntegrityMonitor {
      * @return the value, in milliseconds, or -1
      */
     private static long toMillis(long value) {
-        return (value < 0 ? -1 : propertyUnits.toMillis(value));
+        return (value * 1000L);
     }
 
     public Map<String, String> getAllSeemsWellMap() {
@@ -1907,7 +1866,7 @@ public class IntegrityMonitor {
     }
 
     /**
-     * Used to access various objects. Overridden by junit tests.
+     * Wrapper used to access various objects. Overridden by junit tests.
      */
     public static class Factory {
 
@@ -1922,21 +1881,19 @@ public class IntegrityMonitor {
         }
 
         /**
-         * Sleeps for a period of time.
-         * @param sleepMs   amount of time to sleep, in milliseconds
-         * @throws InterruptedException 
-         */
-        public void doSleep(long sleepMs) throws InterruptedException {
-            Thread.sleep(sleepMs);
-        }
-
-        /**
          * Indicates that a monitor activity has completed. This method simply returns.
          * 
          * @throws InterruptedException
          */
         public void monitorCompleted() throws InterruptedException {
             // does nothing
+        }
+
+        /**
+         * @return the persistence unit to be used
+         */
+        public String getPersistenceUnit() {
+            return PERSISTENCE_UNIT;
         }
     }
 
@@ -1950,29 +1907,5 @@ public class IntegrityMonitor {
 
     public static void setUnitTesting(boolean isUnitTesting) {
         IntegrityMonitor.isUnitTesting = isUnitTesting;
-    }
-
-    protected static TimeUnit getPropertyUnits() {
-        return propertyUnits;
-    }
-
-    protected static void setPropertyUnits(TimeUnit propertyUnits) {
-        IntegrityMonitor.propertyUnits = propertyUnits;
-    }
-
-    protected static long getCycleIntervalMillis() {
-        return cycleIntervalMillis;
-    }
-
-    protected static void setCycleIntervalMillis(long cycleIntervalMillis) {
-        IntegrityMonitor.cycleIntervalMillis = cycleIntervalMillis;
-    }
-
-    protected static String getPersistenceUnit() {
-        return persistenceUnit;
-    }
-
-    protected static void setPersistenceUnit(String persistenceUnit) {
-        IntegrityMonitor.persistenceUnit = persistenceUnit;
     }
 }

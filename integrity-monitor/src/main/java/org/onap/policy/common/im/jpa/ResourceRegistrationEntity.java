@@ -35,6 +35,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.onap.policy.common.im.MonitorTime;
 /*
  * The Entity class to persist a policy object ResourceRegistration
  */
@@ -86,14 +87,14 @@ public class ResourceRegistrationEntity implements Serializable {
      */
     @PrePersist
     public void prePersist() {
-        Date date = new Date();
+        Date date = MonitorTime.getInstance().getDate();
         this.createdDate = date;
         this.lastUpdated = date;
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.lastUpdated = new Date();
+        this.lastUpdated = MonitorTime.getInstance().getDate();
     }
 
     /**
