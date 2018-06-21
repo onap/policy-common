@@ -35,6 +35,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.onap.policy.common.im.MonitorTime;
 
 @Entity
 @Table(name = "ImTestEntity")
@@ -74,14 +75,14 @@ public class ImTestEntity implements Serializable {
      */
     @PrePersist
     public void prePersist() {
-        Date date = new Date();
+        Date date = MonitorTime.getInstance().getDate();
         this.createdDate = date;
         this.modifiedDate = date;
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.modifiedDate = new Date();
+        this.modifiedDate = MonitorTime.getInstance().getDate();
     }
 
     /**

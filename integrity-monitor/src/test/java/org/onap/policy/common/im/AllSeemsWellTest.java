@@ -22,25 +22,27 @@ package org.onap.policy.common.im;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 import java.util.Map;
 import java.util.Properties;
-
+import java.util.concurrent.Semaphore;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.onap.policy.common.im.IntegrityMonitor.Factory;
+import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AllSeemsWellTest extends IntegrityMonitorTestBase {
     private static Logger logger = LoggerFactory.getLogger(AllSeemsWellTest.class);
 
-    private static final long STATE_CYCLE_MS = 3 * CYCLE_INTERVAL_MS;
-
     private static Properties myProp;
     private static String resourceName;
+
+    private Semaphore monitorSem;
+    private Semaphore junitSem;
 
     /**
      * Set up for test class.
@@ -66,6 +68,26 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
 
         myProp = makeProperties();
 
+        monitorSem = new Semaphore(0);
+        junitSem = new Semaphore(0);
+        
+        Factory factory = new TestFactory() {
+            @Override
+            public void runStarted() throws InterruptedException {
+                monitorSem.acquire();
+                
+                junitSem.release();
+                monitorSem.acquire();
+            }
+
+            @Override
+            public void monitorCompleted() throws InterruptedException {
+                junitSem.release();
+                monitorSem.acquire();
+            }
+        };
+
+        Whitebox.setInternalState(IntegrityMonitor.class, FACTORY_FIELD, factory);
     }
 
     @After
@@ -73,7 +95,6 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
         super.tearDownTest();
     }
 
-    // Ignore
     @Test
     public void testAllSeemsWell() throws Exception {
         logger.debug("\nIntegrityMonitorTest: Entering testAllSeemsWell\n\n");
@@ -84,22 +105,15 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
         myProp.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS, "-1");
         myProp.put(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, "-1");
         myProp.put(IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD, "1");
-        myProp.put(IntegrityMonitorProperties.FP_MONITOR_INTERVAL, "5");
-        myProp.put(IntegrityMonitorProperties.TEST_TRANS_INTERVAL, "1");
-        myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "1");
 
         IntegrityMonitor.updateProperties(myProp);
-        /*
-         * The monitorInterval is 5 and the failedCounterThreshold is 1 A forward progress will be
-         * stale after 5 seconds.
-         */
 
         IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
 
         StateManagement sm = im.getStateManager();
 
         // Give it time to set the states in the DB
-        Thread.sleep(STATE_CYCLE_MS);
+        waitStateChange();
 
         // Check the state
         logger.debug(
@@ -114,7 +128,7 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
                 "'AllSeemsWellTest - ALLNOTWELL'");
 
         // Wait for the state to change due to ALLNOTWELL
-        Thread.sleep(STATE_CYCLE_MS);
+        waitStateChange();
         // Check the state
         logger.debug(
                 "\n\ntestAllSeemsWell after ALLNOTWELL: im state \nAdminState = {}\nOpState() = {}\nAvailStatus = "
@@ -137,7 +151,7 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
                 "'AllSeemsWellTest - ALLSEEMSWELL'");
 
         // Wait for the state to change due to ALLNOTWELL
-        Thread.sleep(STATE_CYCLE_MS);
+        waitStateChange();
         // Check the state
         logger.debug(
                 "\n\ntestAllSeemsWell after ALLSEEMSWELL: im state \nAdminState = {}\nOpState() = {}\nAvailStatus = "
@@ -177,6 +191,16 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
         });
 
         logger.debug("\n\ntestAllSeemsWell: Exit\n\n");
+    }
+
+    /**
+     * Waits for the state to change.
+     * 
+     * @throws InterruptedException if the thread is interrupted
+     */
+    private void waitStateChange() throws InterruptedException {
+        monitorSem.release();
+        waitSem(junitSem);
     }
 
 }
