@@ -1,4 +1,4 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
@@ -23,14 +23,11 @@ package org.onap.policy.common.ia;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
-
 import java.util.List;
 import java.util.Properties;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-
 //import org.apache.commons.logging.Log;
 //import org.apache.commons.logging.LogFactory;
 import org.junit.After;

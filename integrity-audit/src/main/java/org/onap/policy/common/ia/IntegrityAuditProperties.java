@@ -29,7 +29,6 @@ public class IntegrityAuditProperties {
     public static final String DB_USER = "javax.persistence.jdbc.user";
     public static final String DB_PWD = "javax.persistence.jdbc.password";
     public static final String AUDIT_PERIOD_SECONDS = "integrity_audit_period_seconds";
-    public static final String AUDIT_PERIOD_MILLISECONDS = "integrity_audit_period_milliseconds";
 
 
     public static final String SITE_NAME = "site_name";

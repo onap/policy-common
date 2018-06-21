@@ -52,6 +52,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
 import org.onap.policy.common.utils.jpa.EntityTransCloser;
+import org.onap.policy.common.utils.time.TestTime;
 
 /*
  * All JUnits are designed to run in the local development environment
@@ -273,6 +274,8 @@ public class DbDAOTest extends IntegrityAuditTestBase {
         Properties properties = makeProperties();
 
         try (EntityTransCloser et = new EntityTransCloser(em.getTransaction())) {
+            TestTime testTime = new TestTime();
+            
             // Create an entry
             dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
 
@@ -296,10 +299,10 @@ public class DbDAOTest extends IntegrityAuditTestBase {
                 final Date oldDate = iae.getLastUpdated();
 
                 // ensure dates are different by sleeping for a bit
-                Thread.sleep(1);
+                testTime.sleep(1);
 
                 iae.setSite("SiteB");
-                iae.setLastUpdated(new Date());
+                iae.setLastUpdated(testTime.getDate());
                 final Date newDate = iae.getLastUpdated();
 
                 em.persist(iae);

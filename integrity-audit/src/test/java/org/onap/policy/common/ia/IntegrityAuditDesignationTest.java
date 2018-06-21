@@ -53,7 +53,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * </code>
      * </pre>
      */
-    private static final String START_AUDIT_RE_PREFIX = "Starting audit simulation for resourceName=(";
+    private static final String START_AUDIT_RE_PREFIX = "Running audit for persistenceUnit=\\w+ on resourceName=(";
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -152,17 +152,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * Tests designation logic when two functioning resources are in play. Designation should
      * alternate between resources.
      * 
-     * Note: console.log must be examined to ascertain whether or not this test was successful. A
-     * quick way of examining the log is to search for the string "audit simulation":
-     * 
-     * As you can see from the "dbAuditSimulate" method, when it executes, it logs the
-     * "Starting audit simulation..." message and when it finishes, it logs the
-     * "Finished audit simulation..." message. By looking for these messages, you can verify that
-     * the audits are run by the proper resource. For example, when testFourResourcesOneDead is run,
-     * you should see a Starting.../Finished... sequence for "pdp1", followed by a
-     * Starting.../Finished... sequence for pdp2, followed by a Starting.../Finished... sequence for
-     * pdp4 (pdp3 is skipped as it's dead/hung), followed by a Starting.../Finished... sequence for
-     * "pdp1", etc.
+     * Note: console.log must be examined to ascertain whether or not this test was successful.
      */
     @Test
     public void testTwoResources() throws Exception {

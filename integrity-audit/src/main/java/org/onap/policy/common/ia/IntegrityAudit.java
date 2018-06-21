@@ -47,13 +47,13 @@ public class IntegrityAudit {
      * This is the audit period in milliseconds. For example, if it had a value of 3600000, the
      * audit can only run once per hour. If it has a value of 6000, it can run once per minute.
      * 
-     * Values: integrityAuditPeriodMillis < 0 (negative number) indicates the audit is off
-     * integrityAuditPeriodMillis == 0 indicates the audit is to run continuously
-     * integrityAuditPeriodMillis > 0 indicates the audit is to run at most once during the
+     * Values: integrityAuditPeriodSeconds < 0 (negative number) indicates the audit is off
+     * integrityAuditPeriodSeconds == 0 indicates the audit is to run continuously
+     * integrityAuditPeriodSeconds > 0 indicates the audit is to run at most once during the
      * indicated period
      * 
      */
-    private int integrityAuditPeriodMillis;
+    private int integrityAuditPeriodSeconds;
 
     /**
      * IntegrityAudit constructor.
@@ -82,14 +82,11 @@ public class IntegrityAudit {
         // IntegrityAuditProperties.AUDIT_PERIOD_SECONDS and
         // IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS are allowed to be null
         if (properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS) != null) {
-            this.integrityAuditPeriodMillis = 1000
-                    * Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
-        } else if (properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS) != null) {
-            this.integrityAuditPeriodMillis =
-                    Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS).trim());
+            this.integrityAuditPeriodSeconds =
+                    Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
         } else {
             // If it is null, set it to the default value
-            this.integrityAuditPeriodMillis = 1000 * IntegrityAuditProperties.DEFAULT_AUDIT_PERIOD_SECONDS;
+            this.integrityAuditPeriodSeconds = IntegrityAuditProperties.DEFAULT_AUDIT_PERIOD_SECONDS;
         }
         logger.info("Constructor: Exiting");
 
@@ -99,7 +96,7 @@ public class IntegrityAudit {
      * Used during JUnit testing by AuditPeriodTest.java
      */
     public int getIntegrityAuditPeriodSeconds() {
-        return (integrityAuditPeriodMillis / 1000);
+        return integrityAuditPeriodSeconds;
     }
 
     /**
@@ -192,14 +189,6 @@ public class IntegrityAudit {
                             + properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS).trim());
                     parmsAreBad = true;
                 }
-            } else if (properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS) != null) {
-                try {
-                    Integer.parseInt(properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS).trim());
-                } catch (NumberFormatException nfe) {
-                    badparams.append(", auditPeriodMilliSeconds="
-                            + properties.getProperty(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS).trim());
-                    parmsAreBad = true;
-                }
             }
         } // End else
         logger.debug("parmsAreBad: exit:" + "\nresourceName: " + resourceName + "\npersistenceUnit: " + persistenceUnit
@@ -216,15 +205,14 @@ public class IntegrityAudit {
     public void startAuditThread() throws IntegrityAuditException {
         logger.info("startAuditThread: Entering");
 
-        if (integrityAuditPeriodMillis >= 0) {
-            this.auditThread = makeAuditThread(this.resourceName, this.persistenceUnit, this.properties, integrityAuditPeriodMillis);
-            logger.info("startAuditThread: Audit started and will run every " + integrityAuditPeriodMillis / 1000
-                    + " seconds");
+        if (integrityAuditPeriodSeconds >= 0) {
+            this.auditThread = makeAuditThread(this.resourceName, this.persistenceUnit, this.properties, integrityAuditPeriodSeconds);
+            logger.info("startAuditThread: Audit started and will run every " + integrityAuditPeriodSeconds + " seconds");
             this.auditThread.start();
             
         } else {
             logger.info("startAuditThread: Suppressing integrity audit, integrityAuditPeriodSeconds="
-                    + integrityAuditPeriodMillis / 1000);
+                    + integrityAuditPeriodSeconds);
         }
 
         logger.info("startAuditThread: Exiting");
@@ -294,14 +282,14 @@ public class IntegrityAudit {
      * @param resourceName2
      * @param persistenceUnit2
      * @param properties2
-     * @param integrityAuditPeriodMillis2
+     * @param integrityAuditPeriodSeconds2
      * 
      * @return a new audit thread
      * @throws IntegrityAuditException
      */
     protected AuditThread makeAuditThread(String resourceName2, String persistenceUnit2, Properties properties2,
-                    long integrityAuditPeriodMillis2) throws IntegrityAuditException {
-        
-        return new AuditThread(resourceName2, persistenceUnit2, properties2, integrityAuditPeriodMillis2, this);
+                    int integrityAuditPeriodSeconds2) throws IntegrityAuditException {
+
+        return new AuditThread(resourceName2, persistenceUnit2, properties2, integrityAuditPeriodSeconds2, this);
     }
 }

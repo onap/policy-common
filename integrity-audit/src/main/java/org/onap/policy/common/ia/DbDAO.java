@@ -1,4 +1,4 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
@@ -20,14 +20,12 @@
 
 package org.onap.policy.common.ia;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -41,7 +39,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.ManagedType;
 import javax.persistence.metamodel.Metamodel;
-
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
 import org.onap.policy.common.logging.flexlogger.FlexLogger;
 import org.onap.policy.common.logging.flexlogger.Logger;
@@ -52,6 +49,7 @@ import org.onap.policy.common.logging.flexlogger.Logger;
  */
 public class DbDAO {
     private static final Logger logger = FlexLogger.getLogger(DbDAO.class.getName());
+    
     private String resourceName;
     private String persistenceUnit;
     private String dbDriver;
@@ -579,7 +577,7 @@ public class DbDAO {
                 em.refresh(iae);
                 logger.info("Resource: " + this.resourceName + " with PersistenceUnit: " + this.persistenceUnit
                         + " exists and lastUpdated be updated");
-                iae.setLastUpdated(new Date());
+                iae.setLastUpdated(AuditorTime.getInstance().getDate());
 
                 em.persist(iae);
                 // flush to the DB
@@ -672,7 +670,7 @@ public class DbDAO {
                     + persistenceUnit + ", nodeType=" + nodeType);
         }
 
-        long startTime = System.currentTimeMillis();
+        long startTime = AuditorTime.getInstance().getMillis();
 
         synchronized (lock) {
 
@@ -759,10 +757,10 @@ public class DbDAO {
         } // end synchronized block
 
         if (logger.isDebugEnabled()) {
-            logger.debug("changeDesignated: Exiting; time expended=" + (System.currentTimeMillis() - startTime) + "ms");
+            logger.debug("changeDesignated: Exiting; time expended="
+                            + (AuditorTime.getInstance().getMillis() - startTime) + "ms");
         }
 
     }
-
 
 }
