@@ -40,6 +40,7 @@ import javax.persistence.TemporalType;
 /*
  * The Entity class to for management of IntegrityAudits
  */
+import org.onap.policy.common.ia.AuditorTime;
 
 @Entity
 @Table(name = "IntegrityAuditEntity")
@@ -101,14 +102,14 @@ public class IntegrityAuditEntity implements Serializable {
      */
     @PrePersist
     public void prePersist() {
-        Date date = new Date();
+        Date date = AuditorTime.getInstance().getDate();
         this.createdDate = date;
         this.lastUpdated = date;
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.lastUpdated = new Date();
+        this.lastUpdated = AuditorTime.getInstance().getDate();
     }
 
     public long getId() {

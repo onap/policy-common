@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,27 +20,21 @@
 
 package org.onap.policy.common.ia;
 
-public class IntegrityAuditProperties {
+import static org.junit.Assert.*;
+import org.junit.Test;
+import org.onap.policy.common.utils.time.CurrentTime;
 
-    public static final int DEFAULT_AUDIT_PERIOD_SECONDS = -1; // Audit does not run
+/**
+ * 
+ */
+public class AuditorTimeTest {
 
-    public static final String DB_DRIVER = "javax.persistence.jdbc.driver";
-    public static final String DB_URL = "javax.persistence.jdbc.url";
-    public static final String DB_USER = "javax.persistence.jdbc.user";
-    public static final String DB_PWD = "javax.persistence.jdbc.password";
-    public static final String AUDIT_PERIOD_SECONDS = "integrity_audit_period_seconds";
-
-
-    public static final String SITE_NAME = "site_name";
-    public static final String NODE_TYPE = "node_type";
-
-    public enum NodeTypeEnum {
-        pdp_xacml, pdp_drools, pap, pap_admin, logparser, brms_gateway, astra_gateway, elk_server, pypdp
-
-    }
-
-    private IntegrityAuditProperties() {
-
+    @Test
+    public void testGetInstance() {
+        CurrentTime inst = AuditorTime.getInstance();
+        assertNotNull(inst);
+        
+        assertEquals(inst, AuditorTime.getInstance());
     }
 
 }

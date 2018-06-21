@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -40,6 +41,9 @@ import org.onap.policy.common.utils.jpa.EntityMgrCloser;
 import org.onap.policy.common.utils.jpa.EntityMgrFactoryCloser;
 import org.onap.policy.common.utils.jpa.EntityTransCloser;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
+import org.onap.policy.common.utils.time.CurrentTime;
+import org.onap.policy.common.utils.time.TestTime;
+import org.powermock.reflect.Whitebox;
 import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -72,41 +76,22 @@ public class IntegrityAuditTestBase {
      */
     private static final String LOG_DIR = "testingLogs/common-modules/integrity-audit";
 
+    
     /**
-     * Max time, in milliseconds, to wait for a latch to be triggered.
+     * Name of the field within the AuditorTime class that supplies the time.
+     */
+    public static final String TIME_SUPPLY_FIELD = "supplier";
+
+
+    /**
+     * Max time, in milliseconds, to wait for a semaphore.
      */
     protected static final long WAIT_MS = 5000L;
-
+    
     /**
-     * Milliseconds that auditor should sleep between audit steps.
+     * Number of seconds in an audit period.
      */
-    protected static final long SLEEP_INTERVAL_MS = 2L;
-
-    /**
-     * Milliseconds that auditor should sleep when an audit completes.
-     */
-    protected static final long COMPLETION_INTERVAL_MS = 5L;
-
-    /**
-     * Milliseconds that an entire audit-simulation cycles takes.
-     */
-    protected static final long AUDIT_SIMULATION_MS = SLEEP_INTERVAL_MS * AuditThread.AUDIT_SIMULATION_ITERATIONS;
-
-    /**
-     * Milliseconds that it takes for an auditor's last update to become stale. Includes a 1ms fudge
-     * factor.
-     */
-    protected static final long STALE_MS = 1 + 2 * Math.max(COMPLETION_INTERVAL_MS, AUDIT_SIMULATION_MS);
-
-    /**
-     * Milliseconds that the db-audit should wait between makings updates.
-     */
-    private static final long DB_AUDIT_UPDATE_MS = 10L;
-
-    /**
-     * Milliseconds that the db-audit should sleep between cycles.
-     */
-    private static final long DB_AUDIT_SLEEP_MS = 3L;
+    public static final int AUDIT_PERIOD_SEC = 5;
 
     public static final String DEFAULT_DB_URL_PREFIX = "jdbc:h2:mem:";
 
@@ -132,7 +117,7 @@ public class IntegrityAuditTestBase {
     /**
      * Matches the start of an audit for arbitrary PDPs in the debug log.
      */
-    protected static final String START_AUDIT_RE = "Starting audit simulation for resourceName=([^,]*)";
+    protected static final String START_AUDIT_RE = "Running audit for persistenceUnit=\\w+ on resourceName=([^,]*)";
 
     /**
      * Properties to be used in all tests.
@@ -150,6 +135,17 @@ public class IntegrityAuditTestBase {
     protected static EntityManager em;
 
     /**
+     * Current time used by given test.
+     */
+    private static ThreadLocal<TestTime> testTime = ThreadLocal.withInitial(() -> null);
+
+    /**
+     * Supplies the test time so that each thread maintains its own notion of "current"
+     * time.
+     */
+    private static Supplier<TestTime> timeSupplier = () -> testTime.get();
+
+    /**
      * Saved debug logger level, to be restored once all tests complete.
      */
     private static Level savedDebugLevel;
@@ -160,24 +156,9 @@ public class IntegrityAuditTestBase {
     private static Level savedErrorLevel;
 
     /**
-     * Saved audit sleep interval, to be restored once all tests complete.
+     * Saved time, to be restored once all tests complete.
      */
-    private static long savedSleepIntervalMs;
-
-    /**
-     * Saved audit completion interval, to be restored once all tests complete.
-     */
-    private static long savedCompletionIntervalMs;
-
-    /**
-     * Saved db audit update time, to be restored once all tests complete.
-     */
-    private static long savedDbAuditUpdateMs;
-
-    /**
-     * Saved db audit sleep time, to be restored once all tests complete.
-     */
-    private static long savedDbAuditSleepMs;
+    private static Supplier<CurrentTime> savedTime;
 
     /**
      * List of auditors whose threads must be stopped when a given test case ends.
@@ -207,18 +188,9 @@ public class IntegrityAuditTestBase {
         IntegrityAuditTestBase.dbUrl = dbUrl;
 
         // save data that we have to restore at the end of the test
+        savedTime = Whitebox.getInternalState(AuditorTime.class, TIME_SUPPLY_FIELD);
         savedDebugLevel = debugLogger.getLevel();
         savedErrorLevel = errorLogger.getLevel();
-        savedSleepIntervalMs = AuditThread.getAuditThreadSleepIntervalMillis();
-        savedCompletionIntervalMs = AuditThread.getAuditCompletionIntervalMillis();
-        savedDbAuditUpdateMs = DbAudit.getDbAuditUpdateMillis();
-        savedDbAuditSleepMs = DbAudit.getDbAuditSleepMillis();
-
-        AuditThread.setAuditThreadSleepIntervalMillis(SLEEP_INTERVAL_MS);
-        AuditThread.setAuditCompletionIntervalMillis(COMPLETION_INTERVAL_MS);
-
-        DbAudit.setDbAuditUpdateMillis(DB_AUDIT_UPDATE_MS);
-        DbAudit.setDbAuditSleepMillis(DB_AUDIT_SLEEP_MS);
 
         IntegrityAudit.setUnitTesting(true);
 
@@ -236,6 +208,7 @@ public class IntegrityAuditTestBase {
         // done
         em = emf.createEntityManager();
 
+        Whitebox.setInternalState(AuditorTime.class, TIME_SUPPLY_FIELD, timeSupplier);
         debugLogger.setLevel(Level.DEBUG);
         errorLogger.setLevel(Level.ERROR);
     }
@@ -244,14 +217,10 @@ public class IntegrityAuditTestBase {
      * Restores the configuration to what it was before the test.
      */
     protected static void tearDownAfterClass() {
-        AuditThread.setAuditThreadSleepIntervalMillis(savedSleepIntervalMs);
-        AuditThread.setAuditCompletionIntervalMillis(savedCompletionIntervalMs);
-
-        DbAudit.setDbAuditUpdateMillis(savedDbAuditUpdateMs);
-        DbAudit.setDbAuditSleepMillis(savedDbAuditSleepMs);
-
+        
         IntegrityAudit.setUnitTesting(false);
 
+        Whitebox.setInternalState(AuditorTime.class, TIME_SUPPLY_FIELD, savedTime);
         debugLogger.setLevel(savedDebugLevel);
         errorLogger.setLevel(savedErrorLevel);
 
@@ -267,7 +236,10 @@ public class IntegrityAuditTestBase {
         auditors = new LinkedList<>();
         appenders = new LinkedList<>();
 
-        properties.put(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS, String.valueOf(SLEEP_INTERVAL_MS));
+        properties.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, String.valueOf(AUDIT_PERIOD_SEC));
+        
+        TestTime time = new TestTime();
+        testTime.set(time);
 
         // Clean up the DB
         try (EntityTransCloser etc = new EntityTransCloser(em.getTransaction())) {
@@ -292,6 +264,13 @@ public class IntegrityAuditTestBase {
         for (MyIntegrityAudit p : auditors) {
             p.stopAuditThread();
         }
+    }
+
+    /**
+     * @return the {@link TestTime} in use by this thread
+     */
+    public static TestTime getTestTime() {
+        return testTime.get();
     }
 
     /**
@@ -410,7 +389,13 @@ public class IntegrityAuditTestBase {
      * @throws Exception if an error occurs
      */
     protected MyIntegrityAudit makeAuditor(String resourceName2, String persistenceUnit2) throws Exception {
-        return new MyIntegrityAudit(resourceName2, persistenceUnit2, makeProperties());
+        // each auditor gets its own notion of time
+        TestTime time = new TestTime();
+        
+        // use the auditor-specific time while this thread constructs things
+        testTime.set(time);
+        
+        return new MyIntegrityAudit(resourceName2, persistenceUnit2, makeProperties(), time);
     }
 
     /**
@@ -474,19 +459,22 @@ public class IntegrityAuditTestBase {
      * 
      * @param sem the semaphore for which to wait
      * @throws InterruptedException if the thread is interrupted
-     * @throws AssertionError if the latch did not reach zero in the allotted time
+     * @throws AssertionError if the semaphore did not reach zero in the allotted time
      */
     protected void waitSem(Semaphore sem) throws InterruptedException {
-        assertTrue(sem.tryAcquire(WAIT_MS, TimeUnit.SECONDS));
+        assertTrue(sem.tryAcquire(WAIT_MS, TimeUnit.MILLISECONDS));
     }
-
+    
     /**
      * Sleep a bit so that the currently designated pdp becomes stale.
      * 
      * @throws InterruptedException if the thread is interrupted
      */
     protected void waitStale() throws InterruptedException {
-        Thread.sleep(STALE_MS);
+        // waits for ALL auditors to become stale, as each has its own timer
+        for (MyIntegrityAudit auditor : auditors) {
+            auditor.sleep(AuditThread.AUDIT_COMPLETION_INTERVAL * AuditThread.AUDIT_RESET_CYCLES + 1);
+        }
     }
 
     /**
@@ -511,9 +499,11 @@ public class IntegrityAuditTestBase {
     }
 
     /**
-     * Manages audits by inserting latches into a queue for the AuditThread to count.
+     * Manages audits by inserting semaphores into a queue for the AuditThread to count.
      */
     protected class MyIntegrityAudit extends IntegrityAudit {
+        
+        private final TestTime myTime;
         
         /**
          * Semaphore on which the audit thread should wait.
@@ -531,14 +521,35 @@ public class IntegrityAuditTestBase {
          * @param resourceName the resource name
          * @param persistenceUnit the persistence unit
          * @param properties the properties
+         * @param time 
          * @throws Exception if an error occurs
          */
-        public MyIntegrityAudit(String resourceName, String persistenceUnit, Properties properties) throws Exception {
+        public MyIntegrityAudit(String resourceName, String persistenceUnit, Properties properties, TestTime time) throws Exception {
             super(resourceName, persistenceUnit, properties);
+            
+            myTime = time;
+            testTime.set(myTime);
 
             auditors.add(this);
 
             startAuditThread();
+        }
+        
+        /**
+         * @return the "current" time for the auditor
+         */
+        public long getTimeInMillis() {
+            return myTime.getMillis();
+        }
+
+        /**
+         * Sleeps for a period of time.
+         * 
+         * @param sleepMs
+         * @throws InterruptedException
+         */
+        public void sleep(long sleepMs) throws InterruptedException {
+            myTime.sleep(sleepMs);
         }
 
         /**
@@ -560,7 +571,8 @@ public class IntegrityAuditTestBase {
         }
 
         /**
-         * Starts a new AuditThread. Creates a new latch queue and associates it with the thread.
+         * Starts a new AuditThread. Creates a new pair of semaphores and associates them
+         * with the thread.
          */
         @Override
         public final void startAuditThread() throws IntegrityAuditException {
@@ -603,12 +615,22 @@ public class IntegrityAuditTestBase {
 
         @Override
         protected AuditThread makeAuditThread(String resourceName2, String persistenceUnit2, Properties properties2,
-                        long integrityAuditPeriodMillis2) throws IntegrityAuditException {
+                        int integrityAuditPeriodSeconds2) throws IntegrityAuditException {
 
-            return new AuditThread(resourceName2, persistenceUnit2, properties2, integrityAuditPeriodMillis2, this) {
+            // make sure we're still using the auditor's time while we construct things
+            testTime.set(myTime);
+
+            return new AuditThread(resourceName2, persistenceUnit2, properties2, integrityAuditPeriodSeconds2, this) {
 
                 private Semaphore auditSem = MyIntegrityAudit.this.auditSem;
                 private Semaphore junitSem = MyIntegrityAudit.this.junitSem;
+
+                @Override
+                public void run() {
+                    // make sure our thread uses this auditor's time
+                    testTime.set(myTime);
+                    super.run();
+                }
 
                 @Override
                 public void runStarted() throws InterruptedException {

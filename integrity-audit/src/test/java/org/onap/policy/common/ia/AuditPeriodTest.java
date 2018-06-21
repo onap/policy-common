@@ -123,7 +123,7 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
 
         properties.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, "0");
 
-        final ExtractAppender logA = watch(debugLogger, "[Aa]waking from (0ms) sleep");
+        final ExtractAppender logA = watch(debugLogger, "[Aa]waking from (0s) sleep");
 
         MyIntegrityAudit integrityAudit = makeAuditor("pdp1", A_SEQ_PU);
 
@@ -134,7 +134,7 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
          */
         String[] awakings = new String[10];
         for (int x = 0; x < awakings.length; ++x) {
-            awakings[x] = "0ms";
+            awakings[x] = "0s";
             runAudit(integrityAudit);
         }
 
@@ -171,13 +171,13 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
      * Verifies that audits actually take as long as expected, even with multiple auditors running
      * simultaneously.
      * 
-     * @param periodms audit period, in milliseconds
+     * @param periodSec audit period, in seconds
      * @throws Exception if an error occurs
      * @throws InterruptedException if the thread is interrupted
      */
-    private void testAuditPeriod(long periodms) throws Exception, InterruptedException {
+    private void testAuditPeriod(long periodSec) throws Exception, InterruptedException {
 
-        properties.put(IntegrityAuditProperties.AUDIT_PERIOD_MILLISECONDS, String.valueOf(periodms));
+        properties.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, String.valueOf(periodSec));
 
         /*
          * Start several auditors.
@@ -196,13 +196,13 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
          * Now run again and ensure it waited long enough between runs.
          */
         long tmin = minAuditTime(ia);
-        assertTrue(tmin >= periodms + AUDIT_SIMULATION_MS);
+        assertTrue(tmin >= periodSec + AuditThread.AUDIT_COMPLETION_INTERVAL * AuditThread.AUDIT_RESET_CYCLES);
 
         /*
          * Now run again and ensure it waited long enough between runs.
          */
         tmin = minAuditTime(ia);
-        assertTrue(tmin >= periodms + AUDIT_SIMULATION_MS);
+        assertTrue(tmin >= periodSec + AuditThread.AUDIT_COMPLETION_INTERVAL * AuditThread.AUDIT_RESET_CYCLES);
     }
 
     /**
@@ -214,8 +214,7 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
      */
     private long minAuditTime(MyIntegrityAudit... auditors) throws InterruptedException {
         List<Thread> threads = new ArrayList<>(auditors.length);
-        AtomicLong tfirst = new AtomicLong(Long.MAX_VALUE);
-        final long tbeg = System.currentTimeMillis();
+        AtomicLong tmin = new AtomicLong(Long.MAX_VALUE);
 
         // create the threads
         for (MyIntegrityAudit p : auditors) {
@@ -224,8 +223,13 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
                 @Override
                 public void run() {
                     try {
+                        long tbegin = p.getTimeInMillis();
                         runAudit(p);
-                        setMinTime(tfirst);
+                        long elapsed = p.getTimeInMillis() - tbegin;
+                        
+                        synchronized(tmin) {
+                            tmin.set(Math.min(tmin.get(), elapsed));
+                        }
 
                     } catch (InterruptedException e) {
                         ;
@@ -247,19 +251,6 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
             t.join();
         }
 
-        return (tfirst.get() - tbeg);
-    }
-
-    /**
-     * Sets a value to the minimum between the current value and the current time.
-     * 
-     * @param tmin current minimum value/value to be set
-     */
-    private static void setMinTime(AtomicLong tmin) {
-        long tcur = System.currentTimeMillis();
-        long time;
-        while ((time = tmin.get()) > tcur) {
-            tmin.compareAndSet(time, tcur);
-        }
+        return tmin.get();
     }
 }

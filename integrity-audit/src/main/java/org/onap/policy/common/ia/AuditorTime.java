@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,27 +20,37 @@
 
 package org.onap.policy.common.ia;
 
-public class IntegrityAuditProperties {
+import java.util.function.Supplier;
+import org.onap.policy.common.utils.time.CurrentTime;
 
-    public static final int DEFAULT_AUDIT_PERIOD_SECONDS = -1; // Audit does not run
+/**
+ * "Current" time used by IntegrityMonitor classes.
+ */
+public class AuditorTime {
 
-    public static final String DB_DRIVER = "javax.persistence.jdbc.driver";
-    public static final String DB_URL = "javax.persistence.jdbc.url";
-    public static final String DB_USER = "javax.persistence.jdbc.user";
-    public static final String DB_PWD = "javax.persistence.jdbc.password";
-    public static final String AUDIT_PERIOD_SECONDS = "integrity_audit_period_seconds";
+    /**
+     * Instance to be used.
+     */
+    private final static CurrentTime currentTime = new CurrentTime();
 
+    /**
+     * Supplies the instance to be used for accessing the current time. This may be
+     * overridden by junit tests to provide a different time instance for each thread when
+     * multiple threads are run in parallel.
+     */
+    private static Supplier<CurrentTime> supplier = () -> currentTime;
 
-    public static final String SITE_NAME = "site_name";
-    public static final String NODE_TYPE = "node_type";
-
-    public enum NodeTypeEnum {
-        pdp_xacml, pdp_drools, pap, pap_admin, logparser, brms_gateway, astra_gateway, elk_server, pypdp
-
+    /**
+     * 
+     */
+    private AuditorTime() {
+        super();
     }
 
-    private IntegrityAuditProperties() {
-
+    /**
+     * @return the CurrentTime singleton
+     */
+    public static CurrentTime getInstance() {
+        return supplier.get();
     }
-
 }
