@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_cf49b661",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/PropertyUtilTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-06-21T19:37:13Z",
+      "side": 1,
+      "message": "Only 1 Copyright line. Just append AT\u0026T after Ericsson.",
+      "range": {
+        "startLine": 5,
+        "startChar": 3,
+        "endLine": 7,
+        "endChar": 52
+      },
+      "revId": "e572e6d01ff0cef98b78f3964e7842c9fe3f43a7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
