@@ -36,9 +36,14 @@ import java.util.TimerTask;
  * notifications of future changes.
  */
 public class PropertyUtil {
-
-    // timer thread used for polling for property file changes
-    private static Timer timer = null;
+    
+    protected static class LazyHolder {
+        /**
+         * Timer thread.  Will not be allocated by the JVM until it is first referenced.
+         * This may be overridden by junit tests.
+         */
+        private static Timer timer = new Timer("PropertyUtil-Timer", true);
+    }
 
     // this table maps canonical file into a 'ListenerRegistration' instance
     private static HashMap<File, ListenerRegistration> registrations = new HashMap<>();
@@ -138,17 +143,6 @@ public class PropertyUtil {
             // add to static table, so this instance can be shared
             registrations.put(file, this);
 
-            if (timer == null) {
-                // still need to create a timer thread
-                synchronized (PropertyUtil.class) {
-                    // an additional check is added inside the 'synchronized' block,
-                    // just in case someone beat us to it
-                    if (timer == null) {
-                        timer = new Timer("PropertyUtil-Timer", true);
-                    }
-                }
-            }
-
             // create and schedule the timer task, so this is periodically polled
             timerTask = new TimerTask() {
                 @Override
@@ -160,7 +154,7 @@ public class PropertyUtil {
                     }
                 }
             };
-            timer.schedule(timerTask, 10000L, 10000L);
+            LazyHolder.timer.schedule(timerTask, 10000L, 10000L);
         }
 
         /**
