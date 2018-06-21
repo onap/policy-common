@@ -25,7 +25,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.flexlogger.FlexLogger;
@@ -43,31 +42,19 @@ public class AuditThread extends Thread {
      * Number of milliseconds that must elapse for audit to be considered complete. It's public for
      * access by JUnit test logic.
      */
-    public static final long AUDIT_COMPLETION_INTERVAL = 30000;
+    public static final long AUDIT_COMPLETION_INTERVAL = 30000L;
 
-    /*
-     * Number of iterations for audit simulation.
+    /**
+     * Number of audit cycles before the completion flag is reset.
      */
-    public static final long AUDIT_SIMULATION_ITERATIONS = 3;
-
-    /*
-     * Number of milliseconds to sleep between audit simulation iterations. It's public for access
-     * by JUnit test logic.
-     */
-    public static final long AUDIT_SIMULATION_SLEEP_INTERVAL = 5000;
+    public static final int AUDIT_RESET_CYCLES = 2;
 
     /*
      * Unless audit has already been run on this entity, number of milliseconds to sleep between
      * audit thread iterations. If audit has already been run, we sleep integrityAuditPeriodMillis.
      * May be modified by JUnit tests.
      */
-    private static long auditThreadSleepIntervalMillis = 5000;
-
-    /*
-     * Number of milliseconds that must elapse for audit to be considered complete. May be modified
-     * by JUnit tests.
-     */
-    private static long auditCompletionIntervalMillis = AUDIT_COMPLETION_INTERVAL;
+    private static final long AUDIT_THREAD_SLEEP_INTERVAL_MS = 5000L;
 
     /*
      * DB access class.
@@ -97,7 +84,7 @@ public class AuditThread extends Thread {
     /*
      * See IntegrityAudit class for usage.
      */
-    private long integrityAuditPeriodMillis;
+    private int integrityAuditPeriodSeconds;
 
     /*
      * The containing IntegrityAudit instance
@@ -116,28 +103,11 @@ public class AuditThread extends Thread {
      */
     public AuditThread(String resourceName, String persistenceUnit, Properties properties,
             int integrityAuditPeriodSeconds, IntegrityAudit integrityAudit) throws IntegrityAuditException {
-
-        this(resourceName, persistenceUnit, properties, TimeUnit.SECONDS.toMillis(integrityAuditPeriodSeconds),
-                integrityAudit);
-    }
-
-    /**
-     * AuditThread constructor.
-     * 
-     * @param resourceName the resource name
-     * @param persistenceUnit the persistence unit
-     * @param properties the properties
-     * @param integrityAuditMillis the integrity audit period in milliseconds
-     * @param integrityAudit the integrity audit
-     * @param queue the queue
-     * @throws IntegrityAuditException if an error occurs
-     */
-    public AuditThread(String resourceName, String persistenceUnit, Properties properties, long integrityAuditMillis,
-            IntegrityAudit integrityAudit) throws IntegrityAuditException {
+        
         this.resourceName = resourceName;
         this.persistenceUnit = persistenceUnit;
         this.properties = properties;
-        this.integrityAuditPeriodMillis = integrityAuditMillis;
+        this.integrityAuditPeriodSeconds = integrityAuditPeriodSeconds;
         this.integrityAudit = integrityAudit;
 
         /*
@@ -267,24 +237,24 @@ public class AuditThread extends Thread {
 
                         if (logger.isDebugEnabled()) {
                             logger.debug("AuditThread.run: Audit completed; resourceName=" + this.resourceName
-                                    + " sleeping " + integrityAuditPeriodMillis + "ms");
+                                    + " sleeping " + integrityAuditPeriodSeconds + "s");
                         }
-                        Thread.sleep(integrityAuditPeriodMillis);
+                        AuditorTime.getInstance().sleep(integrityAuditPeriodSeconds * 1000L);
                         if (logger.isDebugEnabled()) {
                             logger.debug("AuditThread.run: resourceName=" + this.resourceName + " awaking from "
-                                    + integrityAuditPeriodMillis + "ms sleep");
+                                    + integrityAuditPeriodSeconds + "s sleep");
                         }
 
                     } else {
 
                         if (logger.isDebugEnabled()) {
                             logger.debug("AuditThread.run: resourceName=" + this.resourceName + ": Sleeping "
-                                    + AuditThread.auditThreadSleepIntervalMillis + "ms");
+                                    + AuditThread.AUDIT_THREAD_SLEEP_INTERVAL_MS + "ms");
                         }
-                        Thread.sleep(AuditThread.auditThreadSleepIntervalMillis);
+                        AuditorTime.getInstance().sleep(AuditThread.AUDIT_THREAD_SLEEP_INTERVAL_MS);
                         if (logger.isDebugEnabled()) {
                             logger.debug("AuditThread.run: resourceName=" + this.resourceName + ": Awaking from "
-                                    + AuditThread.auditThreadSleepIntervalMillis + "ms sleep");
+                                    + AuditThread.AUDIT_THREAD_SLEEP_INTERVAL_MS + "ms sleep");
                         }
 
                     }
@@ -297,10 +267,10 @@ public class AuditThread extends Thread {
                     }
 
                     String msg = "AuditThread.run loop - Exception thrown: " + e.getMessage()
-                            + "; Will try audit again in " + (integrityAuditPeriodMillis / 1000) + " seconds";
+                            + "; Will try audit again in " + integrityAuditPeriodSeconds + " seconds";
                     logger.error(MessageCodes.EXCEPTION_ERROR, e, msg);
                     // Sleep and try again later
-                    Thread.sleep(integrityAuditPeriodMillis);
+                    AuditorTime.getInstance().sleep(integrityAuditPeriodSeconds * 1000L);
                 }
 
             }
@@ -630,7 +600,7 @@ public class AuditThread extends Thread {
 
         boolean stale = false;
 
-        Date currentTime = new Date();
+        Date currentTime = AuditorTime.getInstance().getDate();
         Date lastUpdated = integrityAuditEntity.getLastUpdated();
 
         /*
@@ -641,7 +611,7 @@ public class AuditThread extends Thread {
             lastUpdatedTime = lastUpdated.getTime();
         }
         long timeDifference = currentTime.getTime() - lastUpdatedTime;
-        if (timeDifference > auditCompletionIntervalMillis) {
+        if (timeDifference > AUDIT_COMPLETION_INTERVAL) {
             stale = true;
         }
 
@@ -684,13 +654,13 @@ public class AuditThread extends Thread {
 
         long timeDifference;
 
-        Date currentTime = new Date();
+        Date currentTime = AuditorTime.getInstance().getDate();
         Date lastUpdated = thisEntity.getLastUpdated();
 
         long lastUpdatedTime = lastUpdated.getTime();
         timeDifference = currentTime.getTime() - lastUpdatedTime;
 
-        if (timeDifference > (auditCompletionIntervalMillis * 2)) {
+        if (timeDifference > (AUDIT_COMPLETION_INTERVAL * AUDIT_RESET_CYCLES)) {
             if (logger.isDebugEnabled()) {
                 logger.debug("resetAuditCompleted: Resetting auditCompleted for resourceName=" + this.resourceName);
             }
@@ -726,12 +696,8 @@ public class AuditThread extends Thread {
             logger.debug("runAudit: Running audit for persistenceUnit=" + this.persistenceUnit + " on resourceName="
                     + this.resourceName);
         }
-        if (IntegrityAudit.isUnitTesting()) {
-            dbAudit.dbAuditSimulate(this.resourceName, this.persistenceUnit, AuditThread.AUDIT_SIMULATION_ITERATIONS,
-                    AuditThread.auditThreadSleepIntervalMillis);
-        } else {
-            dbAudit.dbAudit(this.resourceName, this.persistenceUnit, this.nodeType);
-        }
+
+        dbAudit.dbAudit(this.resourceName, this.persistenceUnit, this.nodeType);
 
         if (logger.isDebugEnabled()) {
             logger.debug("runAudit: Exiting");
@@ -758,43 +724,4 @@ public class AuditThread extends Thread {
     public void auditCompleted() throws InterruptedException {
         // does nothing
     }
-
-    /**
-     * Adjusts the thread-sleep-interval to be used when an audit has <i>not</i> been completed.
-     * Used by JUnit tests.
-     * 
-     * @param auditThreadSleepIntervalMillis the interval to use in milliseconds
-     */
-    protected static void setAuditThreadSleepIntervalMillis(long auditThreadSleepIntervalMillis) {
-        AuditThread.auditThreadSleepIntervalMillis = auditThreadSleepIntervalMillis;
-    }
-
-    /**
-     * Gets the current thread-sleep-interval to be used when an audit has <i>not</i> been
-     * completed. Used by JUnit tests.
-     * 
-     * @return the current sleep interval, in milli-seconds
-     */
-    protected static long getAuditThreadSleepIntervalMillis() {
-        return auditThreadSleepIntervalMillis;
-    }
-
-    /**
-     * Adjusts the audit-completion-interval. Used by JUnit tests.
-     * 
-     * @param auditThreadSleepIntervalMillis the interval to use in milliseconds
-     */
-    protected static void setAuditCompletionIntervalMillis(long auditThreadSleepIntervalMillis) {
-        AuditThread.auditCompletionIntervalMillis = auditThreadSleepIntervalMillis;
-    }
-
-    /**
-     * Gets the audit-completion-interval. Used by JUnit tests.
-     * 
-     * @return the current audit-completion interval, in milli-seconds
-     */
-    protected static long getAuditCompletionIntervalMillis() {
-        return auditCompletionIntervalMillis;
-    }
-
 }
