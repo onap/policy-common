@@ -21,11 +21,13 @@
 package org.onap.policy.common.im;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.TimeUnit;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Query;
 import javax.persistence.TemporalType;
@@ -38,6 +40,7 @@ import org.onap.policy.common.im.IntegrityMonitor.Factory;
 import org.onap.policy.common.im.jpa.ForwardProgressEntity;
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
+import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,6 +51,11 @@ import org.slf4j.LoggerFactory;
  */
 public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     private static Logger logger = LoggerFactory.getLogger(IntegrityMonitorTest.class);
+    
+    /**
+     * Number of monitor cycles it takes between dependency health checks.
+     */
+    private static final int DEPENDENCY_CHECK_CYCLES = 6;
 
     private static Properties myProp;
     private static EntityTransaction et;
@@ -100,6 +108,11 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         }
 
         super.tearDownTest();
+    }
+    
+    @Test
+    public void testFactory() {
+        assertNotNull(getSavedFactory());
     }
 
     /*
@@ -164,8 +177,11 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         // commit transaction
         et.commit();
 
-        // wait for the FPManager to check dependency health
-        waitStep();
+        /*
+         * wait for FPManager to perform dependency health check. Once that's done, it
+         * should now be stale and the sanity check should fail
+         */
+        waitCycles(DEPENDENCY_CHECK_CYCLES);
 
         assertException(im, imx -> {
             imx.evaluateSanity();
@@ -271,7 +287,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
                 im.getStateManager().getAdminState(), im.getStateManager().getOpState(),
                 im.getStateManager().getAvailStatus(), im.getStateManager().getStandbyStatus());
 
-        waitStep();
+        waitCycles(1);
 
         // test evaluate sanity
         assertNoException(im, imx -> {
@@ -465,7 +481,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
 
         final IntegrityMonitor im = makeMonitor(resourceName, myProp);
 
-        waitStep();
+        waitCycles(1);
 
         // Add a group1 dependent resources to put an entry in the forward
         // progress table
@@ -524,7 +540,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
 
         final IntegrityMonitor im = makeMonitor(resourceName, myProp);
 
-        waitStep();
+        waitCycles(1);
 
         // the state here is unlocked, enabled, null, null
         StateManagementEntity sme = null;
@@ -651,10 +667,11 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
             imx.evaluateSanity();
         });
 
-        // wait for FPManager to perform dependency health check. Once that's
-        // done,
-        // it should now be stale and the sanity check should fail
-        waitStep();
+        /*
+         * wait for FPManager to perform dependency health check. Once that's done, it
+         * should now be stale and the sanity check should fail
+         */
+        waitCycles(DEPENDENCY_CHECK_CYCLES);
 
         assertException(im, imx -> {
             imx.evaluateSanity();
@@ -683,7 +700,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         myProp.put(IntegrityMonitorProperties.WRITE_FPC_INTERVAL, "-1");
 
         final IntegrityMonitor im = makeMonitor(resourceName, myProp);
-        waitStep();
+        waitCycles(1);
 
         logger.debug("\nIntegrityMonitorTest: Creating ForwardProgressEntity entries\n\n");
         // Add resource entries in the forward progress table
@@ -739,7 +756,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         myProp.put(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL, "120");
 
         final IntegrityMonitor im = makeMonitor(resourceName, myProp);
-        waitStep();
+        waitCycles(1);
 
         logger.debug("\nIntegrityMonitorTest: Creating ForwardProgressEntity entries\n\n");
         // Add resources to put an entry in the forward progress table
@@ -860,9 +877,9 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
 
         // Give it a chance to write the DB and run the audit
         logger.debug("IntegrityMonitorTest:testStateAudit: (restart4) Running State Audit");
-        waitStep();
+        waitCycles(1);
         im.executeStateAudit();
-        waitStep();
+        waitCycles(1);
         logger.debug("IntegrityMonitorTest:testStateAudit: (restart4) State Audit complete");
 
         // Now check its state
@@ -900,16 +917,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         monitorSem = new Semaphore(0);
         junitSem = new Semaphore(0);
         
-        Factory factory = new IntegrityMonitor.Factory() {
-
-            @Override
-            public void doSleep(long sleepMs) throws InterruptedException {
-                /*
-                 * No need to sleep, as the thread won't progress until the
-                 * semaphore is released.
-                 */
-            }
-
+        Factory factory = new TestFactory() {
             @Override
             public void runStarted() throws InterruptedException {
                 monitorSem.acquire();
@@ -922,25 +930,27 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
             public void monitorCompleted() throws InterruptedException {
                 junitSem.release();
                 monitorSem.acquire();
-            }
-            
+            }            
         };
+        
+        Whitebox.setInternalState(IntegrityMonitor.class, FACTORY_FIELD, factory);
 
-        IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp, factory);
+        IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
 
         // wait for the monitor thread to start
-        waitStep();
+        waitCycles(1);
 
         return im;
     }
 
     /**
-     * Waits for the FPManager to complete another cycle.
+     * Waits for several monitor cycles to complete.
+     * @param ncycles number of cycles to wait
      * 
      * @throws InterruptedException if the thread is interrupted
      */
-    private void waitStep() throws InterruptedException {
-        monitorSem.release();
-        waitSem(junitSem);
+    private void waitCycles(int ncycles) throws InterruptedException {
+        monitorSem.release(ncycles);
+        junitSem.tryAcquire(ncycles, WAIT_MS, TimeUnit.MILLISECONDS);
     }
 }

@@ -20,16 +20,13 @@
 
 package org.onap.policy.common.im;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Observable;
-
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
 import javax.persistence.TypedQuery;
-
 import org.onap.policy.common.im.exceptions.EntityRetrievalException;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
 import org.onap.policy.common.utils.jpa.EntityMgrCloser;
@@ -879,7 +876,7 @@ public class StateManagement extends Observable {
                 final StateManagementEntity stateManagementEntity = resourceList.get(0);
                 // refresh the object from DB in case cached data was returned
                 em.refresh(stateManagementEntity);
-                stateManagementEntity.setModifiedDate(new Date());
+                stateManagementEntity.setModifiedDate(MonitorTime.getInstance().getDate());
                 return stateManagementEntity;
             } else {
                 // not exist - create one

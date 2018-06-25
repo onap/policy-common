@@ -34,6 +34,7 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.onap.policy.common.im.MonitorTime;
 
 @Entity
 @Table(name = "StateManagementEntity")
@@ -74,13 +75,13 @@ public class StateManagementEntity implements Serializable {
 
     @PrePersist
     public void prePersist() {
-        this.createdDate = new Date();
-        this.modifiedDate = new Date();
+        this.createdDate = MonitorTime.getInstance().getDate();
+        this.modifiedDate = MonitorTime.getInstance().getDate();
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.modifiedDate = new Date();
+        this.modifiedDate = MonitorTime.getInstance().getDate();
     }
 
     public StateManagementEntity() {
