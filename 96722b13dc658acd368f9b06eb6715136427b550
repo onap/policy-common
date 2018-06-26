@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5a93c517_7b7864f8",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/test/log/logback/ExtractAppender.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-06-26T15:56:20Z",
+      "side": 1,
+      "message": "Please provide a more helpful message than this for this argument.",
+      "range": {
+        "startLine": 84,
+        "startChar": 20,
+        "endLine": 84,
+        "endChar": 44
+      },
+      "revId": "96722b13dc658acd368f9b06eb6715136427b550",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
