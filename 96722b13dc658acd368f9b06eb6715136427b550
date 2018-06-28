@@ -46,6 +46,30 @@
       "revId": "96722b13dc658acd368f9b06eb6715136427b550",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5a93c517_d1163949",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/test/log/logback/ExtractAppender.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-06-28T15:23:24Z",
+      "side": 1,
+      "message": "Let me bring in Jim Hahn, not sure if Vamshi would know this.",
+      "parentUuid": "5a93c517_7b7864f8",
+      "range": {
+        "startLine": 84,
+        "startChar": 20,
+        "endLine": 84,
+        "endChar": 44
+      },
+      "revId": "96722b13dc658acd368f9b06eb6715136427b550",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
