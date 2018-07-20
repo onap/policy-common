@@ -34,6 +34,7 @@
 	
 	<properties>
 		<powermock.version>1.6.6</powermock.version>
+		<slf4j.version>1.7.25</slf4j.version>
 	</properties>
   
 	<dependencies>
@@ -51,6 +52,12 @@
 			<groupId>javax.persistence</groupId>
 			<artifactId>persistence-api</artifactId>
 			<version>${javax.persistence.api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
