@@ -85,7 +85,6 @@
 		<module>common-logging</module>
 		<module>integrity-audit</module>
 		<module>integrity-monitor</module>
-		<module>site-manager</module>
 	</modules>
 
 	<distributionManagement>
