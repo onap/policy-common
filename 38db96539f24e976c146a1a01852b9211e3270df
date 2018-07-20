@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7095c5_93e254d4",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-07-20T20:43:43Z",
+      "side": 1,
+      "message": "At least the maven.compiler ones could be moved to the parent.",
+      "revId": "38db96539f24e976c146a1a01852b9211e3270df",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_b3daf815",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-07-20T20:43:43Z",
+      "side": 1,
+      "message": "Better to move contents of properties under utils and remove properties",
+      "revId": "38db96539f24e976c146a1a01852b9211e3270df",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_13ce445b",
+        "filename": "properties/properties/Lockable.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-07-20T20:43:43Z",
+      "side": 1,
+      "message": "A few general comments:\n\n1. package name does not match directory.\n2. the package name contains endpoints, doesn\u0027t sound right.\n3. there are duplicate copies of Lockable, Startable files.",
+      "revId": "38db96539f24e976c146a1a01852b9211e3270df",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
