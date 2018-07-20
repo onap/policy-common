@@ -80,11 +80,13 @@
 
 
 	<modules>
+		<module>properties</module>
 		<module>utils-test</module>
 		<module>utils</module>
 		<module>common-logging</module>
 		<module>integrity-audit</module>
 		<module>integrity-monitor</module>
+		<module>policy-endpoints</module>
 	</modules>
 
 	<distributionManagement>
