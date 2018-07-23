@@ -1,0 +1,473 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7095c5_423b83eb",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "We probably should replace these tabs with spaces.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 1
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_2209af31",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/BusTopicSource.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_45094d2b",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/DmaapTopicSinkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "I\u0027m not sure if all these properties are mandatory. What\u0027s here is fine but it might be nicer if we used the builder pattern rather than having constructors wit a lot of arguments. Sonar will probably compain about the number of arguments as well.",
+      "range": {
+        "startLine": 40,
+        "startChar": 4,
+        "endLine": 103,
+        "endChar": 68
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_2510d94d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/DmaapTopicSourceFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "Builder pattern comment again.",
+      "range": {
+        "startLine": 70,
+        "startChar": 11,
+        "endLine": 70,
+        "endChar": 27
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_e519817a",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/impl/IndexedDmaapTopicSinkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "And again.",
+      "range": {
+        "startLine": 66,
+        "startChar": 11,
+        "endLine": 66,
+        "endChar": 25
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_852685b9",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/impl/IndexedDmaapTopicSourceFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "And again.",
+      "range": {
+        "startLine": 71,
+        "startChar": 11,
+        "endLine": 71,
+        "endChar": 27
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_053a75cd",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "I would prefer to have FiterableBusConsumer and CambriaConsumerWrapper in their own files, maybe I\u0027m just old fashioned.",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 80,
+        "endChar": 81
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_c5331df5",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 370,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "I would prefer this in its own source file.",
+      "range": {
+        "startLine": 370,
+        "startChar": 0,
+        "endLine": 370,
+        "endChar": 78
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_854d2575",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 431,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "I would prefer this in its own source file.",
+      "range": {
+        "startLine": 431,
+        "startChar": 0,
+        "endLine": 431,
+        "endChar": 78
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_a552a911",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "I would prefer this in its own source file.",
+      "range": {
+        "startLine": 64,
+        "startChar": 0,
+        "endLine": 64,
+        "endChar": 73
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_45570d03",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "I would prefer this in its own source file.",
+      "range": {
+        "startLine": 152,
+        "startChar": 0,
+        "endLine": 152,
+        "endChar": 73
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_655c9126",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 295,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "I would prefer these in their own source file.",
+      "range": {
+        "startLine": 283,
+        "startChar": 0,
+        "endLine": 295,
+        "endChar": 1
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_05411539",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusTopicBase.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_253e99b9",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineBusTopicSink.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_8574459d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineDmaapTopicSink.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_a5794995",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineUebTopicSink.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_657331b2",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedDmaapTopicSource.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_056835b9",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedDmaapTopicSource.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "Again, a lot of parameters on this one.",
+      "range": {
+        "startLine": 75,
+        "startChar": 8,
+        "endLine": 75,
+        "endChar": 38
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_256539e1",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/TopicBase.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_45a5cd02",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/client/impl/IndexedHttpClientFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "Maybe builder pattern here too?",
+      "range": {
+        "startLine": 64,
+        "startChar": 24,
+        "endLine": 64,
+        "endChar": 34
+      },
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_c5b8fd2c",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/client/internal/JerseyClient.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_a5870961",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyServletServer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_457ced72",
+        "filename": "properties/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-23T14:19:54Z",
+      "side": 1,
+      "message": "tabs",
+      "revId": "66bfc90c7cb9c8eeeb7c7ae4ba2c895f66e6c625",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
