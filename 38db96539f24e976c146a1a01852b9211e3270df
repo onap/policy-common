@@ -72,6 +72,24 @@
     },
     {
       "key": {
+        "uuid": "da7095c5_02b02b8a",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-07-23T13:39:54Z",
+      "side": 1,
+      "message": "Yes, the utils/ placing argument I can understand.  I am not convince though, about the naming of the module as \"properties\" though, as these files don\u0027t have to do much with java properties, if understood as such, and the 3 files are very different in nature.   PolicyProperties are just plain string literal constants for naming of property names in drools, which could also be considered as helpers for naming construction (and therefore could still be argued as utils) and the other ones are for marking interfaces with some behavioral attribute (can lock and can start/stop).   I guess these classes could be thought in some way as properties of a class, but I think it is a stretch.\n\nI\u0027m thinking per previous reasoning about PolicyProperties, may be it can be moved to utils.   The class markers Startable and Lockable, not sure if they could go under a \"core\" project or something of that sort.\n\nSo, in summary, I am ok separating those classes from \"utils/\", my issue is that the new project name, I don\u0027t find it that reflective of what it contains.\n\nWhat do you think?  Do you have some other ideas for naming?",
+      "parentUuid": "da7095c5_2e12fb62",
+      "revId": "38db96539f24e976c146a1a01852b9211e3270df",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7095c5_13ce445b",
         "filename": "properties/properties/Lockable.java",
         "patchSetId": 1
