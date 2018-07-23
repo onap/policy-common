@@ -90,6 +90,24 @@
     },
     {
       "key": {
+        "uuid": "da7095c5_020cab41",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1581
+      },
+      "writtenOn": "2018-07-23T13:55:10Z",
+      "side": 1,
+      "message": "How about \"capabilities\" for Lockable and Startable instead of properties?",
+      "parentUuid": "da7095c5_02b02b8a",
+      "revId": "38db96539f24e976c146a1a01852b9211e3270df",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7095c5_13ce445b",
         "filename": "properties/properties/Lockable.java",
         "patchSetId": 1
