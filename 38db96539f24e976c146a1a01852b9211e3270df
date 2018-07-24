@@ -108,6 +108,24 @@
     },
     {
       "key": {
+        "uuid": "da7095c5_652571aa",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-07-24T13:50:21Z",
+      "side": 1,
+      "message": "sounds good Michael, thank you",
+      "parentUuid": "da7095c5_020cab41",
+      "revId": "38db96539f24e976c146a1a01852b9211e3270df",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7095c5_13ce445b",
         "filename": "properties/properties/Lockable.java",
         "patchSetId": 1
