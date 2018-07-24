@@ -4,6 +4,7 @@
 .classpath
 .jupiter
 .pydevproject
+.checkstyle
 target
 bin
 .metadata/
