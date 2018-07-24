@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7095c5_715f7373",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/AbstractParameters.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-07-24T16:43:29Z",
+      "side": 1,
+      "message": "now that I\u0027ve seen the test code a second time, I\u0027m wondering, is this always used in a context like the following:\n\nclass XXX extends AbstractParameters {\n  XXX() { super(XXX.class); }\n}\n\nIf so, then why pass an argument to the constructor at all?  Don\u0027t even need to save parameterClass, as getClass() can be used to determine the type of subclass.  In fact, it seems like this whole class could simply be turned into an empty \"interface\".",
+      "revId": "0a819b45101646a80d04e4df7a2e4f03ee2cfcd5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_31d81bef",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestParameterService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-07-24T16:43:29Z",
+      "side": 1,
+      "message": "sure that this ParameterService won\u0027t inadvertently be loaded up with parameters from other feature tests?",
+      "revId": "0a819b45101646a80d04e4df7a2e4f03ee2cfcd5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
