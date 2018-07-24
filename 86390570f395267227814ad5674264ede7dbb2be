@@ -33,6 +33,24 @@
       "revId": "86390570f395267227814ad5674264ede7dbb2be",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_510caf94",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/client/internal/JerseyClient.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1581
+      },
+      "writtenOn": "2018-07-24T16:12:38Z",
+      "side": 1,
+      "message": "JIRA created: https://jira.onap.org/browse/POLICY-1007",
+      "parentUuid": "da7095c5_91b6c7db",
+      "revId": "86390570f395267227814ad5674264ede7dbb2be",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
