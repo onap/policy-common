@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7095c5_71877310",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/client/internal/JerseyClient.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-07-24T15:56:08Z",
+      "side": 1,
+      "message": "I think imports coming from this library should be avoided.  I hope we could get rid of it in POLICY-1006.",
+      "revId": "86390570f395267227814ad5674264ede7dbb2be",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_91b6c7db",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/client/internal/JerseyClient.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-07-24T15:56:08Z",
+      "side": 1,
+      "message": "The fix is incomplete, it should change the underlying jersey libraries in the pom that use Jackson to something equivalent that encodes gson.   There is also may other occurrences all over the code that uses JsonIgnore and should all be changed once those underlying library changes.   It will also require regression testing of all the APIs.   I don\u0027t think is a small task.  It is probably better to open a different JIRA for it, rather than tackling here.",
+      "revId": "86390570f395267227814ad5674264ede7dbb2be",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
