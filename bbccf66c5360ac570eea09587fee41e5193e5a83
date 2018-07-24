@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7095c5_f15e2312",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/client/internal/JerseyClient.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-24T14:52:00Z",
+      "side": 1,
+      "message": "Any chance of keeping Jackson out. It\u0027s a red flag for security vulnerabilities.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 51
+      },
+      "revId": "bbccf66c5360ac570eea09587fee41e5193e5a83",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_919b27c9",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyServletServer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-24T14:52:00Z",
+      "side": 1,
+      "message": "Jackson again.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 51
+      },
+      "revId": "bbccf66c5360ac570eea09587fee41e5193e5a83",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
