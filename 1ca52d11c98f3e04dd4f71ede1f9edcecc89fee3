@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7095c5_76d689c7",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/AbstractParameters.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-07-24T14:05:55Z",
+      "side": 1,
+      "message": "is there a reason to pass the class name instead of just passing the class?",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_d6e435ae",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/AbstractParameters.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-07-24T14:05:55Z",
+      "side": 1,
+      "message": "why do this again?  Perhaps just save the value during the constructor call?",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_56e8257c",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/ParameterService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-07-24T14:05:55Z",
+      "side": 1,
+      "message": "is it necessary to pass the class?  why not use parameters.getClass() instead?",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_36ffb136",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestAbstractParameters.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-07-24T14:05:55Z",
+      "side": 1,
+      "message": "assertNotNull is not needed - parameters can\u0027t be null here",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_d6fbd545",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestAbstractParameters.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-07-24T14:05:55Z",
+      "side": 1,
+      "message": "perhaps use assertThrown instead? (I just recently learned about it, myself)",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_96955de6",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestParameterService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-07-24T14:05:55Z",
+      "side": 1,
+      "message": "use assertThrown, or add fail().  This comment applies to all of the try/catch blocks",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_b69ae112",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestParameterService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-07-24T14:05:55Z",
+      "side": 1,
+      "message": "I don\u0027t think this can ever be null.  Maybe change to assertFalse(...IsEmpty())?",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
