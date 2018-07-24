@@ -83,6 +83,7 @@
 		<module>utils-test</module>
 		<module>utils</module>
 		<module>common-logging</module>
+                <module>common-parameters</module>
 		<module>integrity-audit</module>
 		<module>integrity-monitor</module>
 	</modules>
