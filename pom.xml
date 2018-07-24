@@ -71,15 +71,14 @@
         <!-- Project common dependency versions -->
         <javax.persistence.api.version>1.0.2</javax.persistence.api.version>
         <h2.version>1.4.186</h2.version>
-
     </properties>
-
 
     <modules>
         <module>capabilities</module>
         <module>utils-test</module>
         <module>utils</module>
         <module>common-logging</module>
+        <module>common-parameters</module>
         <module>integrity-audit</module>
         <module>integrity-monitor</module>
         <module>policy-endpoints</module>
