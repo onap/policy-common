@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "da7095c5_b18d0b34",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/AbstractParameters.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-24T15:53:51Z",
+      "side": 1,
+      "message": "It\u0027s better to pass the class name, have Java do the type checking!",
+      "parentUuid": "da7095c5_76d689c7",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7095c5_d6e435ae",
         "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/AbstractParameters.java",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2018-07-24T14:05:55Z",
       "side": 1,
       "message": "why do this again?  Perhaps just save the value during the constructor call?",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_51826f01",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/AbstractParameters.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-24T15:53:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7095c5_d6e435ae",
       "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "da7095c5_3179fb2f",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/ParameterService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-24T15:53:51Z",
+      "side": 1,
+      "message": "Nice, fixed!",
+      "parentUuid": "da7095c5_56e8257c",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7095c5_36ffb136",
         "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestAbstractParameters.java",
         "patchSetId": 3
@@ -64,6 +118,24 @@
       "writtenOn": "2018-07-24T14:05:55Z",
       "side": 1,
       "message": "assertNotNull is not needed - parameters can\u0027t be null here",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_d1751f33",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestAbstractParameters.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-24T15:53:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7095c5_36ffb136",
       "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "da7095c5_d1c75f63",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestAbstractParameters.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-24T15:53:51Z",
+      "side": 1,
+      "message": "assertThrown is only in JUnit 5, maybe we should move to that?",
+      "parentUuid": "da7095c5_d6fbd545",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7095c5_96955de6",
         "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestParameterService.java",
         "patchSetId": 3
@@ -104,6 +194,24 @@
     },
     {
       "key": {
+        "uuid": "da7095c5_f172a348",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestParameterService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-24T15:53:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7095c5_96955de6",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "da7095c5_b69ae112",
         "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestParameterService.java",
         "patchSetId": 3
@@ -115,6 +223,24 @@
       "writtenOn": "2018-07-24T14:05:55Z",
       "side": 1,
       "message": "I don\u0027t think this can ever be null.  Maybe change to assertFalse(...IsEmpty())?",
+      "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_918fa723",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestParameterService.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-24T15:53:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7095c5_b69ae112",
       "revId": "1ca52d11c98f3e04dd4f71ede1f9edcecc89fee3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
