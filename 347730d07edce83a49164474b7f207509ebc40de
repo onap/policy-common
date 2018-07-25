@@ -1,0 +1,293 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da7095c5_6ad1b5cc",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/impl/IndexedDmaapTopicSinkFactory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027DmaapTopicSinkFactory.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_8ad689c4",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/impl/IndexedDmaapTopicSourceFactory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027DmaapTopicSourceFactory.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_2adbbdee",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/impl/IndexedNoopTopicSinkFactory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027NoopTopicSinkFactory.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_aaeeed89",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/impl/IndexedUebTopicSinkFactory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027UebTopicSinkFactory.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_caf32172",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/impl/IndexedUebTopicSourceFactory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027UebTopicSourceFactory.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_6ae8d57c",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/FilterableBusConsumer.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027BusConsumer.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_8aed298e",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/impl/CambriaConsumerWrapper.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027BusConsumer.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_ca9a4114",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/impl/CambriaPublisherWrapper.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027BusPublisher.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_0af9194d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/impl/DmaapAafConsumerWrapper.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027BusConsumer.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_4a8631bb",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/impl/DmaapAafPublisherWrapper.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027BusPublisher.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_4aff1135",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/impl/DmaapConsumerWrapper.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027BusConsumer.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_aa958de5",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/impl/DmaapDmeConsumerWrapper.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027BusConsumer.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_ea92a5f5",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/impl/DmaapDmePublisherWrapper.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027BusPublisher.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_8aa44958",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/impl/DmaapPublisherWrapper.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027BusPublisher.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_8a5f6972",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/impl/ProxyTopicEndpointManager.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027TopicEndpoint.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_0aa7d950",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/client/impl/IndexedHttpClientFactory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027HttpClientFactory.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_2a773dd6",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/impl/IndexedHttpServletServerFactory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 743
+      },
+      "writtenOn": "2018-07-25T11:49:57Z",
+      "side": 1,
+      "message": "The contents of this file were extracted from \u0027HttpServletServerFactory.java\u0027 -- shouldn\u0027t the AT\u0026T copyright be preserved?",
+      "revId": "347730d07edce83a49164474b7f207509ebc40de",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
