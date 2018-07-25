@@ -33,6 +33,24 @@
       "revId": "0a819b45101646a80d04e4df7a2e4f03ee2cfcd5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "da7095c5_0da7f350",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestParameterService.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-25T15:02:11Z",
+      "side": 1,
+      "message": "There\u0027s a ParameterService.clear() statement at the top of the test so it should be fine.",
+      "parentUuid": "da7095c5_31d81bef",
+      "revId": "0a819b45101646a80d04e4df7a2e4f03ee2cfcd5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
