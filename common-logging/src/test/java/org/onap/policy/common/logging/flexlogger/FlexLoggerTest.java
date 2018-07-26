@@ -36,8 +36,8 @@ public class FlexLoggerTest {
     @Test
     public void testGetLoggerClassOfQEelf() {
         overrideStaticField(FlexLogger.class, "loggerType", LoggerType.EELF);
-        Logger logger = FlexLogger.getLogger((Class) null);
-        assertSame(logger, FlexLogger.getLogger((Class) null));
+        Logger logger = FlexLogger.getLogger((Class<?>) null);
+        assertSame(logger, FlexLogger.getLogger((Class<?>) null));
         assertNotEquals(logger, FlexLogger.getLogger(String.class));
     }
 

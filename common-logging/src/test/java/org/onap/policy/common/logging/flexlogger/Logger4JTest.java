@@ -28,8 +28,8 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.UUID;
 
+import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 import org.junit.Test;
 import org.mockito.Mockito;
 import org.onap.policy.common.logging.eelf.MessageCodes;
@@ -109,7 +109,7 @@ public class Logger4JTest {
     public void testIsErrorEnabled() {
         Logger logger = Mockito.mock(Logger.class);
         TestUtils.overrideField(Logger4J.class, logger4J, "log", logger);
-        Mockito.when(logger.isEnabledFor(Priority.ERROR)).thenReturn(true).thenReturn(false);
+        Mockito.when(logger.isEnabledFor(Level.ERROR)).thenReturn(true).thenReturn(false);
         assertTrue(logger4J.isErrorEnabled());
         assertFalse(logger4J.isErrorEnabled());
     }
@@ -127,7 +127,7 @@ public class Logger4JTest {
     public void testIsWarnEnabled() {
         Logger logger = Mockito.mock(Logger.class);
         TestUtils.overrideField(Logger4J.class, logger4J, "log", logger);
-        Mockito.when(logger.isEnabledFor(Priority.WARN)).thenReturn(true).thenReturn(false);
+        Mockito.when(logger.isEnabledFor(Level.WARN)).thenReturn(true).thenReturn(false);
         assertTrue(logger4J.isWarnEnabled());
         assertFalse(logger4J.isWarnEnabled());
     }
