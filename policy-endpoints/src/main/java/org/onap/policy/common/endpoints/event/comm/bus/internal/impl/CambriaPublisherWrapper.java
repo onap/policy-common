@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal.impl;
 
+import com.att.nsa.apiClient.http.HttpClient.ConnectionType;
 import com.att.nsa.cambria.client.CambriaBatchingPublisher;
 import com.att.nsa.cambria.client.CambriaClientBuilders;
 import com.att.nsa.cambria.client.CambriaClientBuilders.PublisherBuilder;
@@ -48,11 +49,11 @@ public class CambriaPublisherWrapper implements BusPublisher {
 
     public CambriaPublisherWrapper(List<String> servers, String topic, String apiKey, String apiSecret,
             boolean useHttps) {
-        this(servers, topic, apiKey, apiSecret, null, null, useHttps);
+        this(servers, topic, apiKey, apiSecret, null, null, useHttps, false);
     }
 
     public CambriaPublisherWrapper(List<String> servers, String topic, String apiKey, String apiSecret, String username,
-            String password, boolean useHttps) {
+            String password, boolean useHttps, boolean selfSignedCerts) {
 
         PublisherBuilder builder = new CambriaClientBuilders.PublisherBuilder();
 
@@ -62,7 +63,11 @@ public class CambriaPublisherWrapper implements BusPublisher {
         builder.withSocketTimeout(30000);
 
         if (useHttps) {
-            builder.usingHttps();
+            if (selfSignedCerts) {
+                builder.withConnectionType(ConnectionType.HTTPS_NO_VALIDATION);
+            } else {
+                builder.withConnectionType(ConnectionType.HTTPS);
+            }
         }
 
 

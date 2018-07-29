@@ -64,7 +64,8 @@ public class InlineUebTopicSink extends InlineBusTopicSink implements UebTopicSi
     public void init() {
 
         this.publisher =
-                new CambriaPublisherWrapper(this.servers, this.topic, this.apiKey, this.apiSecret, this.useHttps);
+                new CambriaPublisherWrapper(this.servers, this.topic, this.apiKey, this.apiSecret,
+                    null, null, this.useHttps, this.allowSelfSignedCerts);
         logger.info("{}: UEB SINK created", this);
     }
 

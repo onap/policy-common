@@ -104,7 +104,7 @@ public class InlineDmaapTopicSink extends InlineBusTopicSink implements DmaapTop
     public void init() {
         if (allNullOrEmpty(this.environment, this.aftEnvironment, this.latitude, this.longitude, this.partner)) {
             this.publisher = new CambriaPublisherWrapper(this.servers, this.topic, this.apiKey, this.apiSecret,
-                    this.userName, this.password, this.useHttps);
+                    this.userName, this.password, this.useHttps, this.allowSelfSignedCerts);
         } else {
             this.publisher = new DmaapDmePublisherWrapper(this.servers, this.topic, this.userName, this.password,
                     this.environment, this.aftEnvironment, this.partner, this.latitude, this.longitude,
