@@ -20,12 +20,17 @@
 
 package org.onap.policy.common.parameters;
 
-import org.onap.policy.common.parameters.AbstractParameters;
-
-/**
- * @author Liam Fallon (liam.fallon@ericsson.com)
- */
-public class LegalParameters implements AbstractParameters {
-    public LegalParameters() {
+public enum ValidationStatus {
+    CLEAN,
+    OBSERVATION,
+    WARNING,
+    INVALID;
+    
+    /**
+     * The result of a validation is valid unless the status is INVALID.
+     * @return true if the validation has passed
+     */
+    public boolean isValid() {
+        return !this.equals(INVALID);
     }
 }

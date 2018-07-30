@@ -1,4 +1,4 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  * ================================================================================
@@ -18,19 +18,25 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.parameters;
+package org.onap.policy.common.parameters.testclasses;
 
-/**
- * This interface is implemented by ONAP PF parameter classes so that they can be validated.
- *
- * @author Liam Fallon (liam.fallon@ericsson.com)
- */
-public interface ParameterValidator {
-    /**
-     * Validate a parameter java bean, if the parameter bean is valid, an empty string is returned,
-     * otherwise the string gives details of the invalid parameters.
-     *
-     * @return the string with validation errors
-     */
-    String validate();
+import org.onap.policy.common.parameters.AbstractParameterGroup;
+import org.onap.policy.common.parameters.GroupValidationResult;
+
+public class EmptyParameterGroup implements AbstractParameterGroup {
+    private String name;
+
+    public EmptyParameterGroup(final String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public GroupValidationResult validate() {
+        return new GroupValidationResult(this);
+    }
 }

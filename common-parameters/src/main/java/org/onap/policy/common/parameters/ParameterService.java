@@ -1,4 +1,3 @@
-package org.onap.policy.common.parameters;
 /*
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
@@ -19,25 +18,27 @@ package org.onap.policy.common.parameters;
  * ============LICENSE_END=========================================================
  */
 
+package org.onap.policy.common.parameters;
+
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * The parameter service makes ONAP PF parameters available to all classes in a JVM.
- *
- * The reason for having a parameter service is to avoid having to pass parameters down long call chains in modules such
- * as PDPs and editors. The parameter service makes correct and verified parameters available statically.
- *
- * The parameter service must be used with care because changing a parameter set anywhere in a JVM will affect all users
- * of those parameters anywhere in the JVM.
+ * The parameter service makes ONAP PF parameter groups available to all classes in a JVM.
+ * 
+ * <p>The reason for having a parameter service is to avoid having to pass parameters down long call chains in modules
+ * such as PDPs and editors. The parameter service makes correct and verified parameters available statically.
+ * 
+ * <p>The parameter service must be used with care because changing a parameter set anywhere in a JVM will affect all
+ * users of those parameters anywhere in the JVM.
  *
  * @author Liam Fallon (liam.fallon@ericsson.com)
  */
 public abstract class ParameterService {
     // The map holding the parameters
-    private static Map<Class<? extends AbstractParameters>, AbstractParameters> parameterMap = new ConcurrentHashMap<>();
+    private static Map<String, AbstractParameterGroup> parameterGroupMap = new ConcurrentHashMap<>();
 
     /**
      * This class is an abstract static class that cannot be extended.
@@ -46,69 +47,71 @@ public abstract class ParameterService {
     }
 
     /**
-     * Register parameters with the parameter service.
+     * Register a parameter group with the parameter service.
      *
-     * @param <P> the generic type
-     * @param parametersClass the class of the parameter, used to index the parameter
-     * @param parameters the parameters
+     * @param parameterGroup the parameter group
      */
-    public static <P extends AbstractParameters> void registerParameters(final P parameters) {
-        parameterMap.put(parameters.getClass(), parameters);
-    }
-
-    /**
-     * Remove parameters from the parameter service.
-     *
-     * @param <P> the generic type
-     * @param parametersClass the class of the parameter, used to index the parameter
-     */
-    public static <P extends AbstractParameters> void deregisterParameters(final Class<P> parametersClass) {
-        parameterMap.remove(parametersClass);
-    }
-
-    /**
-     * Get parameters from the parameter service.
-     *
-     * @param <P> the generic type
-     * @param parametersClass the class of the parameter, used to index the parameter
-     * @return The parameter
-     */
-    @SuppressWarnings("unchecked")
-    public static <P extends AbstractParameters> P getParameters(final Class<P> parametersClass) {
-        final P parameter = (P) parameterMap.get(parametersClass);
-
-        if (parameter == null) {
+    public static void register(final AbstractParameterGroup parameterGroup) {
+        if (!parameterGroupMap.containsKey(parameterGroup.getName())) {
+            parameterGroupMap.put(parameterGroup.getName(), parameterGroup);
+        } else {
             throw new ParameterRuntimeException(
-                            "Parameters for " + parametersClass.getCanonicalName() + " not found in parameter service");
+                            "\"" + parameterGroup.getName() + "\" already registered in parameter service");
+        }
+    }
+
+    /**
+     * Remove a parameter group from the parameter service.
+     *
+     * @param parameterGroupName the name of the parameter group
+     */
+    public static void deregister(final String parameterGroupName) {
+        if (parameterGroupMap.containsKey(parameterGroupName)) {
+            parameterGroupMap.remove(parameterGroupName);
+        } else {
+            throw new ParameterRuntimeException("\"" + parameterGroupName + "\" not registered in parameter service");
+        }
+    }
+
+    /**
+     * Get a parameter group from the parameter service.
+     *
+     * @param parameterGroupName the name of the parameter group
+     * @return The parameter group
+     */
+    public static AbstractParameterGroup get(final String parameterGroupName) {
+        final AbstractParameterGroup parameterGroup = parameterGroupMap.get(parameterGroupName);
+
+        if (parameterGroup == null) {
+            throw new ParameterRuntimeException("\"" + parameterGroupName + "\" not found in parameter service");
         }
 
-        return parameter;
+        return parameterGroup;
     }
 
     /**
-     * Check if parameters is defined on the parameter service.
+     * Check if a parameter group is defined on the parameter service.
      *
-     * @param <P> the generic type
-     * @param parametersClass the class of the parameter, used to index the parameter
+     * @param parameterGroupName the name of the parameter group
      * @return true if the parameter is defined
      */
-    public static <P extends AbstractParameters> boolean existsParameters(final Class<P> parametersClass) {
-        return parameterMap.get(parametersClass) != null;
+    public static boolean contains(final String parameterGroupName) {
+        return parameterGroupMap.containsKey(parameterGroupName) && parameterGroupMap.get(parameterGroupName) != null;
     }
 
     /**
-     * Get all the entries in the parameters map.
+     * Get all parameter groups.
      *
      * @return The entries
      */
-    public static Set<Entry<Class<? extends AbstractParameters>, AbstractParameters>> getAll() {
-        return parameterMap.entrySet();
+    public static Set<Entry<String, AbstractParameterGroup>> getAll() {
+        return parameterGroupMap.entrySet();
     }
 
     /**
-     * Clear all parameters in the parameter service.
+     * Clear all parameter groups in the parameter service.
      */
     public static void clear() {
-        parameterMap.clear();
+        parameterGroupMap.clear();
     }
 }
