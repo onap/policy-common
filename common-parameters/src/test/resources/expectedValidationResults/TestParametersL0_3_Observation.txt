@@ -1,0 +1,15 @@
+parameter group "l0Parameters" type "org.onap.policy.common.parameters.TestParametersL00" OBSERVATION, parameter group has status OBSERVATION
+  field "l00IntField" type "int" value "1" OBSERVATION, this field has been set to 1
+  field "l00StringField" type "java.lang.String" value "aString" OBSERVATION, this value for name is unhelpful
+  parameter group "l00L10Nested" type "org.onap.policy.common.parameters.TestParametersL10" OBSERVATION, parameter group has status OBSERVATION
+    field "l10IntField" type "int" value "1" OBSERVATION, this field has been set to 1
+    field "l10StringField" type "java.lang.String" value "aString" OBSERVATION, this value for name is unhelpful
+    parameter group "l10LGenericNested0" type "org.onap.policy.common.parameters.TestParametersLGeneric" OBSERVATION, parameter group has status OBSERVATION
+      field "lgenericIntField" type "int" value "1" OBSERVATION, this field has been set to 1
+      field "lgenericStringField" type "java.lang.String" value "aString" OBSERVATION, this value for name is unhelpful
+    parameter group "l10LGenericNested1" type "org.onap.policy.common.parameters.TestParametersLGeneric" OBSERVATION, parameter group has status OBSERVATION
+      field "lgenericIntField" type "int" value "1" OBSERVATION, this field has been set to 1
+      field "lgenericStringField" type "java.lang.String" value "aString" OBSERVATION, this value for name is unhelpful
+  parameter group "l00LGenericNested" type "org.onap.policy.common.parameters.TestParametersLGeneric" OBSERVATION, parameter group has status OBSERVATION
+    field "lgenericIntField" type "int" value "1" OBSERVATION, this field has been set to 1
+    field "lgenericStringField" type "java.lang.String" value "aString" OBSERVATION, this value for name is unhelpful

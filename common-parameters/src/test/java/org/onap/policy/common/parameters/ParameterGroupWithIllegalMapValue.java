@@ -20,12 +20,36 @@
 
 package org.onap.policy.common.parameters;
 
-import org.onap.policy.common.parameters.AbstractParameters;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-/**
- * @author Liam Fallon (liam.fallon@ericsson.com)
- */
-public class LegalParameters implements AbstractParameters {
-    public LegalParameters() {
+public class ParameterGroupWithIllegalMapValue implements AbstractParameterGroup {
+    private String name;
+    private Map<String, Integer> intMap = new LinkedHashMap<>();
+
+    /**
+     * Create a test parameter group.
+     * @param name the parameter group name
+     */
+    public ParameterGroupWithIllegalMapValue(final String name) {
+        this.name = name;
+        
+        intMap.put("One", 1);
+        intMap.put("Two", 2);
+        intMap.put("Three", 3);
+    }
+
+    public Map<String, Integer> getIntArrayList() {
+        return intMap;
+    }
+    
+    @Override
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public GroupValidationResult validate() {
+        return new GroupValidationResult(this);
     }
 }

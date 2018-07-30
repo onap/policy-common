@@ -1,4 +1,3 @@
-package org.onap.policy.common.parameters;
 /*
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
@@ -19,29 +18,22 @@ package org.onap.policy.common.parameters;
  * ============LICENSE_END=========================================================
  */
 
-/**
- * This class defines an abstract parameter interface that acts as a base interface for all parameters in the ONAP
- * Policy Framework. All parameter POJOs are subclass of the abstract parameter class and can be used with the
- * {@link ParameterService}.
- *
- * @author Liam Fallon (liam.fallon@ericsson.com)
- */
-public interface AbstractParameters {
-    /**
-     * Gets the parameter class.
-     *
-     * @return the parameter class
-     */
-    default Class<? extends AbstractParameters> getParameterClass() {
-        return this.getClass();
+package org.onap.policy.common.parameters;
+
+public class EmptyParameterGroup implements AbstractParameterGroup {
+    private String name;
+
+    public EmptyParameterGroup(final String name) {
+        this.name = name;
     }
 
-    /**
-     * Gets the parameter class name.
-     *
-     * @return the parameter class name
-     */
-    default String getParameterClassName() {
-        return this.getClass().getCanonicalName();
+    @Override
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public GroupValidationResult validate() {
+        return new GroupValidationResult(this);
     }
 }

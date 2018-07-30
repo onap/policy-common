@@ -34,47 +34,57 @@ public class TestParameterService {
     public void testParameterService() {
         ParameterService.clear();
 
-        assertFalse(ParameterService.existsParameters(LegalParameters.class));
+        assertFalse(ParameterService.contains("EmptyGroup"));
         try {
-            ParameterService.getParameters(LegalParameters.class);
+            ParameterService.get("EmptyGroup");
             fail("Test should throw an exception here");
         } catch (final Exception e) {
-            assertEquals(
-                    "Parameters for org.onap.policy.common.parameters.LegalParameters not found in parameter service",
-                    e.getMessage());
+            assertEquals("\"EmptyGroup\" not found in parameter service", e.getMessage());
         }
 
-        ParameterService.registerParameters(new LegalParameters());
-        assertTrue(ParameterService.existsParameters(LegalParameters.class));
-        assertNotNull(ParameterService.getParameters(LegalParameters.class));
-
-        ParameterService.deregisterParameters(LegalParameters.class);
-
-        assertFalse(ParameterService.existsParameters(LegalParameters.class));
+        ParameterService.register(new EmptyParameterGroup("Empty Group"));
+        assertTrue(ParameterService.contains("Empty Group"));
+        assertNotNull(ParameterService.get("Empty Group"));
+        
         try {
-            ParameterService.getParameters(LegalParameters.class);
+            ParameterService.register(new EmptyParameterGroup("Empty Group"));
+            fail("this test should throw an exception");
+        }
+        catch (ParameterRuntimeException e) {
+            assertEquals("\"Empty Group\" already registered in parameter service", e.getMessage());
+        }
+
+        ParameterService.deregister("Empty Group");
+        assertFalse(ParameterService.contains("Empty Group"));
+
+        try {
+            ParameterService.deregister("Empty Group");
+            fail("this test should throw an exception");
+        }
+        catch (ParameterRuntimeException e) {
+            assertEquals("\"Empty Group\" not registered in parameter service", e.getMessage());
+        }
+
+        try {
+            ParameterService.get("Empty Group");
             fail("Test should throw an exception here");
         } catch (final Exception e) {
-            assertEquals(
-                    "Parameters for org.onap.policy.common.parameters.LegalParameters not found in parameter service",
-                    e.getMessage());
+            assertEquals("\"Empty Group\" not found in parameter service", e.getMessage());
         }
 
-        ParameterService.registerParameters(new LegalParameters());
-        assertTrue(ParameterService.existsParameters(LegalParameters.class));
-        assertNotNull(ParameterService.getParameters(LegalParameters.class));
+        ParameterService.register(new EmptyParameterGroup("Empty Group"));
+        assertTrue(ParameterService.contains("Empty Group"));
+        assertNotNull(ParameterService.get("Empty Group"));
 
         assertEquals(1, ParameterService.getAll().size());
         ParameterService.clear();
         assertEquals(0, ParameterService.getAll().size());
-        assertFalse(ParameterService.existsParameters(LegalParameters.class));
+        assertFalse(ParameterService.contains("Empty Group"));
         try {
-            ParameterService.getParameters(LegalParameters.class);
+            ParameterService.get("Empty Group");
             fail("Test should throw an exception here");
         } catch (final Exception e) {
-            assertEquals(
-                    "Parameters for org.onap.policy.common.parameters.LegalParameters not found in parameter service",
-                    e.getMessage());
+            assertEquals("\"Empty Group\" not found in parameter service", e.getMessage());
         }
     }
 }
