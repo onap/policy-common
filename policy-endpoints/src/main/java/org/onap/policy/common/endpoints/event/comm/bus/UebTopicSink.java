@@ -25,4 +25,8 @@ package org.onap.policy.common.endpoints.event.comm.bus;
  */
 public interface UebTopicSink extends BusTopicSink {
 
+    /**
+     * Factory of UEB Topic Sinks for instantiation and management purposes
+     */
+    public static final UebTopicSinkFactory factory = new IndexedUebTopicSinkFactory();
 }

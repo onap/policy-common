@@ -26,4 +26,8 @@ package org.onap.policy.common.endpoints.event.comm.bus;
  */
 public interface UebTopicSource extends BusTopicSource {
 
+    /**
+     * factory for managing and tracking UEB readers
+     */
+    public static UebTopicSourceFactory factory = new IndexedUebTopicSourceFactory();
 }

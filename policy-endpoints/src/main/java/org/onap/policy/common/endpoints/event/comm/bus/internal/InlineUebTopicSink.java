@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSink;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.impl.CambriaPublisherWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,8 +62,8 @@ public class InlineUebTopicSink extends InlineBusTopicSink implements UebTopicSi
     @Override
     public void init() {
 
-        this.publisher =
-                new CambriaPublisherWrapper(this.servers, this.topic, this.apiKey, this.apiSecret, this.useHttps);
+        this.publisher = new BusPublisher.CambriaPublisherWrapper(this.servers, this.topic, this.apiKey, this.apiSecret,
+                this.useHttps);
         logger.info("{}: UEB SINK created", this);
     }
 

@@ -25,8 +25,6 @@ import java.util.Map;
 
 import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSink;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.impl.CambriaPublisherWrapper;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.impl.DmaapDmePublisherWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,11 +101,11 @@ public class InlineDmaapTopicSink extends InlineBusTopicSink implements DmaapTop
     @Override
     public void init() {
         if (allNullOrEmpty(this.environment, this.aftEnvironment, this.latitude, this.longitude, this.partner)) {
-            this.publisher = new CambriaPublisherWrapper(this.servers, this.topic, this.apiKey, this.apiSecret,
-                    this.userName, this.password, this.useHttps);
+            this.publisher = new BusPublisher.CambriaPublisherWrapper(this.servers, this.topic, this.apiKey,
+                    this.apiSecret, this.userName, this.password, this.useHttps);
         } else {
-            this.publisher = new DmaapDmePublisherWrapper(this.servers, this.topic, this.userName, this.password,
-                    this.environment, this.aftEnvironment, this.partner, this.latitude, this.longitude,
+            this.publisher = new BusPublisher.DmaapDmePublisherWrapper(this.servers, this.topic, this.userName,
+                    this.password, this.environment, this.aftEnvironment, this.partner, this.latitude, this.longitude,
                     this.additionalProps, this.useHttps);
         }
 

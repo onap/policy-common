@@ -28,7 +28,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
-import org.onap.policy.common.endpoints.http.server.impl.IndexedHttpServletServerFactory;
 
 @Path("/junit/endpoints")
 public class RestEndpoints {
@@ -36,10 +35,11 @@ public class RestEndpoints {
     @GET
     @Path("http/servers")
     @Produces(MediaType.TEXT_PLAIN)
-    public String httpServers() {
-        List<HttpServletServer> servers = IndexedHttpServletServerFactory.getInstance().inventory();
-        return servers.toString();
+    public String httpServers() {   
+    	List<HttpServletServer> servers = 
+    			HttpServletServer.factory.inventory();
+    	return servers.toString();
     }
-
-
+    
+    
 }

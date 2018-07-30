@@ -27,6 +27,12 @@ import org.onap.policy.common.capabilities.Startable;
  */
 public interface HttpServletServer extends Startable {
 
+
+    /**
+     * factory for managing and tracking DMAAP sources
+     */
+    public static HttpServletServerFactory factory = new IndexedHttpServletServerFactory();
+
     /**
      * 
      * @return port

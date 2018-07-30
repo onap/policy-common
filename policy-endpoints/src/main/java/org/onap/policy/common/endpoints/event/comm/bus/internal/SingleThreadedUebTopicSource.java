@@ -24,7 +24,6 @@ import java.util.List;
 
 import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSource;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.impl.CambriaConsumerWrapper;
 
 /**
  * This topic source implementation specializes in reading messages over an UEB Bus topic source and
@@ -66,7 +65,7 @@ public class SingleThreadedUebTopicSource extends SingleThreadedBusTopicSource i
      */
     @Override
     public void init() {
-        this.consumer = new CambriaConsumerWrapper(this.servers, this.topic, this.apiKey, this.apiSecret,
+        this.consumer = new BusConsumer.CambriaConsumerWrapper(this.servers, this.topic, this.apiKey, this.apiSecret,
                 this.consumerGroup, this.consumerInstance, this.fetchTimeout, this.fetchLimit, this.useHttps,
                 this.allowSelfSignedCerts);
     }

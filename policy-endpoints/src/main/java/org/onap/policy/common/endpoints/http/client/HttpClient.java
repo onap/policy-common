@@ -51,4 +51,7 @@ public interface HttpClient extends Startable {
     public String getPassword();
 
     public String getBaseUrl();
+
+
+    public static final HttpClientFactory factory = new IndexedHttpClientFactory();
 }

@@ -32,9 +32,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.http.client.HttpClient;
-import org.onap.policy.common.endpoints.http.client.impl.IndexedHttpClientFactory;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
-import org.onap.policy.common.endpoints.http.server.impl.IndexedHttpServletServerFactory;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.utils.network.NetworkUtil;
 import org.slf4j.Logger;
@@ -51,7 +49,7 @@ public class HttpClientTest {
         /* echo server */
 
         final HttpServletServer echoServerNoAuth =
-                IndexedHttpServletServerFactory.getInstance().build("echo", "localhost", 6666, "/", false, true);
+                HttpServletServer.factory.build("echo", "localhost", 6666, "/", false, true);
         echoServerNoAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
         echoServerNoAuth.waitedStart(5000);
 
@@ -62,7 +60,7 @@ public class HttpClientTest {
         /* no auth echo server */
 
         final HttpServletServer echoServerAuth =
-                IndexedHttpServletServerFactory.getInstance().build("echo", "localhost", 6667, "/", false, true);
+                HttpServletServer.factory.build("echo", "localhost", 6667, "/", false, true);
         echoServerAuth.setBasicAuthentication("x", "y", null);
         echoServerAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
         echoServerAuth.waitedStart(5000);
@@ -76,16 +74,16 @@ public class HttpClientTest {
     public static void tearDown() {
         logger.info("-- tearDown() --");
 
-        IndexedHttpServletServerFactory.getInstance().destroy();
-        IndexedHttpClientFactory.getInstance().destroy();
+        HttpServletServer.factory.destroy();
+        HttpClient.factory.destroy();
     }
 
     @Test
     public void testHttpNoAuthClient() throws Exception {
         logger.info("-- testHttpNoAuthClient() --");
 
-        final HttpClient client = IndexedHttpClientFactory.getInstance().build("testHttpNoAuthClient", false, false,
-                "localhost", 6666, "junit/echo", null, null, true);
+        final HttpClient client = HttpClient.factory.build("testHttpNoAuthClient", false, false, "localhost", 6666,
+                "junit/echo", null, null, true);
         final Response response = client.get("hello");
         final String body = HttpClient.getBody(response, String.class);
 
@@ -97,8 +95,8 @@ public class HttpClientTest {
     public void testHttpAuthClient() throws Exception {
         logger.info("-- testHttpAuthClient() --");
 
-        final HttpClient client = IndexedHttpClientFactory.getInstance().build("testHttpAuthClient", false, false,
-                "localhost", 6667, "junit/echo", "x", "y", true);
+        final HttpClient client = HttpClient.factory.build("testHttpAuthClient", false, false, "localhost", 6667,
+                "junit/echo", "x", "y", true);
         final Response response = client.get("hello");
         final String body = HttpClient.getBody(response, String.class);
 
@@ -110,8 +108,8 @@ public class HttpClientTest {
     public void testHttpAuthClient401() throws Exception {
         logger.info("-- testHttpAuthClient401() --");
 
-        final HttpClient client = IndexedHttpClientFactory.getInstance().build("testHttpAuthClient401", false, false,
-                "localhost", 6667, "junit/echo", null, null, true);
+        final HttpClient client = HttpClient.factory.build("testHttpAuthClient401", false, false, "localhost", 6667,
+                "junit/echo", null, null, true);
         final Response response = client.get("hello");
         assertTrue(response.getStatus() == 401);
     }
@@ -131,11 +129,12 @@ public class HttpClientTest {
                 + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, "testpap");
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PAP"
                 + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, "alpha123");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX, RestMockHealthCheck.class.getName());
         httpProperties.setProperty(
-                PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP" + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX,
-                "true");
+                PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PAP"
+                        + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX,
+                RestMockHealthCheck.class.getName());
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
+                + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
 
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PDP"
                 + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, "localhost");
@@ -145,11 +144,12 @@ public class HttpClientTest {
                 + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, "testpdp");
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PDP"
                 + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, "alpha123");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PDP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX, RestMockHealthCheck.class.getName());
         httpProperties.setProperty(
-                PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP" + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX,
-                "true");
+                PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PDP"
+                        + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX,
+                RestMockHealthCheck.class.getName());
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
+                + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
 
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES, "PAP,PDP");
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
@@ -164,9 +164,8 @@ public class HttpClientTest {
                 + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, "testpap");
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
                 + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, "alpha123");
-        httpProperties.setProperty(
-                PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP" + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX,
-                "true");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
+                + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
 
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PDP"
                 + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, "localhost");
@@ -180,25 +179,24 @@ public class HttpClientTest {
                 + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, "testpdp");
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PDP"
                 + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, "alpha123");
-        httpProperties.setProperty(
-                PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PDP" + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX,
-                "true");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PDP"
+                + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
 
-        final List<HttpServletServer> servers = IndexedHttpServletServerFactory.getInstance().build(httpProperties);
+        final List<HttpServletServer> servers = HttpServletServer.factory.build(httpProperties);
         assertTrue(servers.size() == 2);
 
-        final List<HttpClient> clients = IndexedHttpClientFactory.getInstance().build(httpProperties);
+        final List<HttpClient> clients = HttpClient.factory.build(httpProperties);
         assertTrue(clients.size() == 2);
 
         for (final HttpServletServer server : servers) {
             server.waitedStart(10000);
         }
 
-        final HttpClient clientPAP = IndexedHttpClientFactory.getInstance().get("PAP");
+        final HttpClient clientPAP = HttpClient.factory.get("PAP");
         final Response response = clientPAP.get();
         assertTrue(response.getStatus() == 200);
 
-        final HttpClient clientPDP = IndexedHttpClientFactory.getInstance().get("PDP");
+        final HttpClient clientPDP = HttpClient.factory.get("PDP");
         final Response response2 = clientPDP.get("test");
         assertTrue(response2.getStatus() == 500);
     }
