@@ -22,6 +22,30 @@
       "revId": "1e16558b22996f9698c51ec49a22f821255f049f",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a6a9dd7_3a5f9d74",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/AbstractParameterGroup.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-30T12:40:23Z",
+      "side": 1,
+      "message": "Oops, I found another one as well.",
+      "parentUuid": "9a6a9dd7_9af10998",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 42
+      },
+      "revId": "1e16558b22996f9698c51ec49a22f821255f049f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
