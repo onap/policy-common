@@ -1,4 +1,4 @@
-/*
+/*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  * ================================================================================
@@ -20,12 +20,33 @@
 
 package org.onap.policy.common.parameters;
 
-import org.onap.policy.common.parameters.AbstractParameters;
-
 /**
+ * This interface acts as a base interface for all parameter groups in the ONAP Policy Framework. All parameter group
+ * POJOs are implementations of the parameter group interface and can be used with the {@link ParameterService}.
+ *
  * @author Liam Fallon (liam.fallon@ericsson.com)
  */
-public class LegalParameters implements AbstractParameters {
-    public LegalParameters() {
+public interface ParameterGroup {
+    /**
+     * Get the group name.
+     * 
+     * @return the group name
+     */
+    public String getName();
+
+    /**
+     * Validate parameters.
+     * 
+     * @return the result of the parameter validation
+     */
+    GroupValidationResult validate();
+
+    /**
+     * Check if the parameters are valid.
+     * 
+     * @return true if the parameters are valid
+     */
+    default boolean isValid() {
+        return validate().getStatus().isValid();
     }
 }

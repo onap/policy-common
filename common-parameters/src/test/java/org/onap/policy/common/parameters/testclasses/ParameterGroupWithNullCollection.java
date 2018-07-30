@@ -1,5 +1,4 @@
-package org.onap.policy.common.parameters;
-/*
+/*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  * ================================================================================
@@ -19,29 +18,36 @@ package org.onap.policy.common.parameters;
  * ============LICENSE_END=========================================================
  */
 
-/**
- * This class defines an abstract parameter interface that acts as a base interface for all parameters in the ONAP
- * Policy Framework. All parameter POJOs are subclass of the abstract parameter class and can be used with the
- * {@link ParameterService}.
- *
- * @author Liam Fallon (liam.fallon@ericsson.com)
- */
-public interface AbstractParameters {
-    /**
-     * Gets the parameter class.
-     *
-     * @return the parameter class
-     */
-    default Class<? extends AbstractParameters> getParameterClass() {
-        return this.getClass();
-    }
+package org.onap.policy.common.parameters.testclasses;
+
+import java.util.List;
+
+import org.onap.policy.common.parameters.ParameterGroup;
+import org.onap.policy.common.parameters.GroupValidationResult;
+
+public class ParameterGroupWithNullCollection implements ParameterGroup {
+    private String name;
+    private List<Integer> nullList = null;
 
     /**
-     * Gets the parameter class name.
-     *
-     * @return the parameter class name
+     * Create a test parameter group.
+     * @param name the parameter group name
      */
-    default String getParameterClassName() {
-        return this.getClass().getCanonicalName();
+    public ParameterGroupWithNullCollection(final String name) {
+        this.name = name;
+    }
+
+    public List<Integer> getNullList() {
+        return nullList;
+    }
+    
+    @Override
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public GroupValidationResult validate() {
+        return new GroupValidationResult(this);
     }
 }
