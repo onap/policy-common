@@ -20,12 +20,20 @@
 
 package org.onap.policy.common.parameters;
 
-import org.onap.policy.common.parameters.AbstractParameters;
+public class EmptyParameterGroup implements AbstractParameterGroup {
+    private String name;
 
-/**
- * @author Liam Fallon (liam.fallon@ericsson.com)
- */
-public class LegalParameters implements AbstractParameters {
-    public LegalParameters() {
+    public EmptyParameterGroup(final String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public GroupValidationResult validate() {
+        return new GroupValidationResult(this);
     }
 }
