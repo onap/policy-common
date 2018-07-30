@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a6a9dd7_3dd6b7c6",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/ResourceUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2018-07-30T17:28:12Z",
+      "side": 1,
+      "message": "Please update this.",
+      "range": {
+        "startLine": 3,
+        "startChar": 18,
+        "endLine": 3,
+        "endChar": 27
+      },
+      "revId": "6d66f332c0e35d3084cf6a238c186871e9870789",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a6a9dd7_bde1679c",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/resources/ResourceUtilsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2018-07-30T17:28:12Z",
+      "side": 1,
+      "message": "Please update this",
+      "range": {
+        "startLine": 3,
+        "startChar": 18,
+        "endLine": 3,
+        "endChar": 27
+      },
+      "revId": "6d66f332c0e35d3084cf6a238c186871e9870789",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a6a9dd7_5dee0b8d",
+        "filename": "utils/src/test/resources/testdir/testfile.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2018-07-30T17:28:12Z",
+      "side": 1,
+      "message": "Please update this",
+      "range": {
+        "startLine": 4,
+        "startChar": 17,
+        "endLine": 4,
+        "endChar": 26
+      },
+      "revId": "6d66f332c0e35d3084cf6a238c186871e9870789",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
