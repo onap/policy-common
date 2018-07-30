@@ -1,4 +1,4 @@
-/*
+/*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  * ================================================================================
@@ -18,14 +18,30 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.parameters;
+package org.onap.policy.common.parameters.testclasses;
 
-import org.onap.policy.common.parameters.AbstractParameters;
+import org.onap.policy.common.parameters.ParameterGroup;
+import org.onap.policy.common.parameters.GroupValidationResult;
 
-/**
- * @author Liam Fallon (liam.fallon@ericsson.com)
- */
-public class LegalParameters implements AbstractParameters {
-    public LegalParameters() {
+public class ParameterGroupWithArray implements ParameterGroup {
+    private String name;
+    private int[] intArray = {1, 2, 3};
+
+    public ParameterGroupWithArray(final String name) {
+        this.name = name;
+    }
+
+    public int[] getIntArray() {
+        return intArray;
+    }
+    
+    @Override
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public GroupValidationResult validate() {
+        return new GroupValidationResult(this);
     }
 }

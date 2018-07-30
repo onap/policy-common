@@ -1,0 +1,37 @@
+name: l00NameFromFile
+l00IntField: 1
+l00StringField: l00 string field value from file
+l00L10Nested:
+  name: l00L10NestedNameFromFile
+  l10IntField: 1
+  l10StringField: l00 L10 nested string field value from file
+  l10LGenericNested0:
+    name: l10LGenericNested0NameFromFile
+    lgenericIntField: 1
+    lgenericStringField: l10 generic nested 0 string field value from file
+  l10LGenericNested1:
+    name: l10LGenericNested1NameFromFile
+    lgenericIntField: 1
+    lgenericStringField: l10 generic nested 1 string field value from file
+  l10LGenericNestedMap:
+    l10Entry0:
+      name: L10Entry0Name
+      lgenericIntField: 1
+      lgenericStringField: L10Entry0 value from file
+    L10Entry1:
+      name: L10Entry1Name
+      lgenericIntField: 1
+      lgenericStringField: L10Entry1 value from file
+l00LGenericNested:
+  name: l00GenericNestedNameFromFile
+  lgenericIntField: 1
+  lgenericStringField: l00 generic nested string field value from file
+l00LGenericNestedMap:
+  L00Entry0:
+    name: L00Entry0Name
+    lgenericIntField: 1
+    lgenericStringField: L00Entry0 value from file
+  L00Entry1:
+    name: L00Entry1Name
+    lgenericIntField: 1
+    lgenericStringField: L00Entry1 value from file

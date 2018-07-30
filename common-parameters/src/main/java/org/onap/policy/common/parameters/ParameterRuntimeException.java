@@ -55,21 +55,21 @@ public class ParameterRuntimeException extends RuntimeException {
      * Instantiates a new parameter runtime exception.
      *
      * @param message the message on the exception
-     * @param e the exception that caused this parameter exception
+     * @param exception the exception that caused this parameter exception
      */
-    public ParameterRuntimeException(final String message, final Exception e) {
-        this(message, e, null);
+    public ParameterRuntimeException(final String message, final Exception exception) {
+        this(message, exception, null);
     }
 
     /**
      * Instantiates a new parameter runtime exception.
      *
      * @param message the message on the exception
-     * @param e the exception that caused this parameter exception
+     * @param exception the exception that caused this parameter exception
      * @param object the object that the exception was thrown on
      */
-    public ParameterRuntimeException(final String message, final Exception e, final Object object) {
-        super(message, e);
+    public ParameterRuntimeException(final String message, final Exception exception, final Object object) {
+        super(message, exception);
         this.object = object;
     }
 

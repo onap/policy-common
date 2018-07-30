@@ -18,19 +18,41 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.parameters;
+package org.onap.policy.common.parameters.testclasses;
 
-/**
- * This interface is implemented by ONAP PF parameter classes so that they can be validated.
- *
- * @author Liam Fallon (liam.fallon@ericsson.com)
- */
-public interface ParameterValidator {
+import java.util.ArrayList;
+import java.util.List;
+
+import org.onap.policy.common.parameters.ParameterGroup;
+import org.onap.policy.common.parameters.GroupValidationResult;
+
+public class ParameterGroupWithCollection implements ParameterGroup {
+    private String name;
+    private List<Integer> intArrayList = new ArrayList<>();
+
     /**
-     * Validate a parameter java bean, if the parameter bean is valid, an empty string is returned,
-     * otherwise the string gives details of the invalid parameters.
-     *
-     * @return the string with validation errors
+     * Create a test parameter group.
+     * @param name the parameter group name
      */
-    String validate();
+    public ParameterGroupWithCollection(final String name) {
+        this.name = name;
+        
+        intArrayList.add(1);
+        intArrayList.add(2);
+        intArrayList.add(3);
+    }
+
+    public List<Integer> getIntArrayList() {
+        return intArrayList;
+    }
+    
+    @Override
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public GroupValidationResult validate() {
+        return new GroupValidationResult(this);
+    }
 }
