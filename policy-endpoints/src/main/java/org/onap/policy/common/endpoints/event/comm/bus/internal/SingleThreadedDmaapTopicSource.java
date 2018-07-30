@@ -26,8 +26,6 @@ import java.util.Map;
 
 import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSource;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.impl.CambriaConsumerWrapper;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.impl.DmaapDmeConsumerWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -140,15 +138,15 @@ public class SingleThreadedDmaapTopicSource extends SingleThreadedBusTopicSource
     @Override
     public void init() throws MalformedURLException {
         if (anyNullOrEmpty(this.userName, this.password)) {
-            this.consumer = new CambriaConsumerWrapper(this.servers, this.topic, this.apiKey, this.apiSecret,
-                    this.consumerGroup, this.consumerInstance, this.fetchTimeout, this.fetchLimit, this.useHttps,
-                    this.allowSelfSignedCerts);
+            this.consumer = new BusConsumer.CambriaConsumerWrapper(this.servers, this.topic, this.apiKey,
+                    this.apiSecret, this.consumerGroup, this.consumerInstance, this.fetchTimeout, this.fetchLimit,
+                    this.useHttps, this.allowSelfSignedCerts);
         } else if (allNullOrEmpty(this.environment, this.aftEnvironment, this.latitude, this.longitude, this.partner)) {
-            this.consumer = new CambriaConsumerWrapper(this.servers, this.topic, this.apiKey, this.apiSecret,
-                    this.userName, this.password, this.consumerGroup, this.consumerInstance, this.fetchTimeout,
-                    this.fetchLimit, this.useHttps, this.allowSelfSignedCerts);
+            this.consumer = new BusConsumer.CambriaConsumerWrapper(this.servers, this.topic, this.apiKey,
+                    this.apiSecret, this.userName, this.password, this.consumerGroup, this.consumerInstance,
+                    this.fetchTimeout, this.fetchLimit, this.useHttps, this.allowSelfSignedCerts);
         } else {
-            this.consumer = new DmaapDmeConsumerWrapper(this.servers, this.topic, this.apiKey,
+            this.consumer = new BusConsumer.DmaapDmeConsumerWrapper(this.servers, this.topic, this.apiKey,
                     this.apiSecret, this.userName, this.password, this.consumerGroup, this.consumerInstance,
                     this.fetchTimeout, this.fetchLimit, this.environment, this.aftEnvironment, this.partner,
                     this.latitude, this.longitude, this.additionalProps, this.useHttps);

@@ -32,8 +32,6 @@ import java.util.UUID;
 
 import org.junit.Test;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
-import org.onap.policy.common.endpoints.http.server.HttpServletServerFactory;
-import org.onap.policy.common.endpoints.http.server.impl.IndexedHttpServletServerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +39,6 @@ import org.slf4j.LoggerFactory;
  * HttpServletServer JUNIT tests
  */
 public class HttpServerTest {
-
-    HttpServletServerFactory httpServletServerFactory = IndexedHttpServletServerFactory.getInstance();
 
     /**
      * Logger
@@ -53,64 +49,64 @@ public class HttpServerTest {
     public void testSingleServer() throws Exception {
         logger.info("-- testSingleServer() --");
 
-        HttpServletServer server = httpServletServerFactory.build("echo", "localhost", 5678, "/", false, true);
+        HttpServletServer server = HttpServletServer.factory.build("echo", "localhost", 5678, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
         server.waitedStart(5000);
 
-        assertTrue(httpServletServerFactory.get(5678).isAlive());
+        assertTrue(HttpServletServer.factory.get(5678).isAlive());
 
-        String response = http(httpServletServerFactory.get(5678), "http://localhost:5678/junit/echo/hello");
+        String response = http(HttpServletServer.factory.get(5678), "http://localhost:5678/junit/echo/hello");
         assertTrue("hello".equals(response));
 
         response = null;
         try {
-            response = http(httpServletServerFactory.get(5678), "http://localhost:5678/swagger.json");
+            response = http(HttpServletServer.factory.get(5678), "http://localhost:5678/swagger.json");
         } catch (IOException e) {
             // Expected
         }
         assertTrue(response == null);
 
-        assertTrue(httpServletServerFactory.get(5678).isAlive());
-        assertTrue(httpServletServerFactory.inventory().size() == 1);
+        assertTrue(HttpServletServer.factory.get(5678).isAlive());
+        assertTrue(HttpServletServer.factory.inventory().size() == 1);
 
-        httpServletServerFactory.destroy(5678);
-        assertTrue(httpServletServerFactory.inventory().size() == 0);
+        HttpServletServer.factory.destroy(5678);
+        assertTrue(HttpServletServer.factory.inventory().size() == 0);
     }
 
     @Test
     public void testMultipleServers() throws Exception {
         logger.info("-- testMultipleServers() --");
 
-        HttpServletServer server1 = httpServletServerFactory.build("echo-1", "localhost", 5688, "/", true, true);
+        HttpServletServer server1 = HttpServletServer.factory.build("echo-1", "localhost", 5688, "/", true, true);
         server1.addServletPackage("/*", this.getClass().getPackage().getName());
         server1.waitedStart(5000);
 
-        HttpServletServer server2 = httpServletServerFactory.build("echo-2", "localhost", 5689, "/", false, true);
+        HttpServletServer server2 = HttpServletServer.factory.build("echo-2", "localhost", 5689, "/", false, true);
         server2.addServletPackage("/*", this.getClass().getPackage().getName());
         server2.waitedStart(5000);
 
-        assertTrue(httpServletServerFactory.get(5688).isAlive());
-        assertTrue(httpServletServerFactory.get(5689).isAlive());
+        assertTrue(HttpServletServer.factory.get(5688).isAlive());
+        assertTrue(HttpServletServer.factory.get(5689).isAlive());
 
-        String response = http(httpServletServerFactory.get(5688), "http://localhost:5688/junit/echo/hello");
+        String response = http(HttpServletServer.factory.get(5688), "http://localhost:5688/junit/echo/hello");
         assertTrue("hello".equals(response));
 
-        response = http(httpServletServerFactory.get(5688), "http://localhost:5688/swagger.json");
+        response = http(HttpServletServer.factory.get(5688), "http://localhost:5688/swagger.json");
         assertTrue(response != null);
 
-        response = http(httpServletServerFactory.get(5689), "http://localhost:5689/junit/echo/hello");
+        response = http(HttpServletServer.factory.get(5689), "http://localhost:5689/junit/echo/hello");
         assertTrue("hello".equals(response));
 
         response = null;
         try {
-            response = http(httpServletServerFactory.get(5689), "http://localhost:5689/swagger.json");
+            response = http(HttpServletServer.factory.get(5689), "http://localhost:5689/swagger.json");
         } catch (IOException e) {
             // Expected
         }
         assertTrue(response == null);
 
-        httpServletServerFactory.destroy();
-        assertTrue(httpServletServerFactory.inventory().size() == 0);
+        HttpServletServer.factory.destroy();
+        assertTrue(HttpServletServer.factory.inventory().size() == 0);
     }
 
     @Test
@@ -119,20 +115,20 @@ public class HttpServerTest {
 
         String randomName = UUID.randomUUID().toString();
 
-        HttpServletServer server = httpServletServerFactory.build(randomName, "localhost", 5668, "/", false, true);
+        HttpServletServer server = HttpServletServer.factory.build(randomName, "localhost", 5668, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
         server.waitedStart(5000);
 
-        assertTrue(httpServletServerFactory.get(5668).isAlive());
+        assertTrue(HttpServletServer.factory.get(5668).isAlive());
 
-        String response = http(httpServletServerFactory.get(5668), "http://localhost:5668/junit/echo/hello");
+        String response = http(HttpServletServer.factory.get(5668), "http://localhost:5668/junit/echo/hello");
         assertTrue("hello".equals(response));
 
-        response = http(httpServletServerFactory.get(5668), "http://localhost:5668/junit/endpoints/http/servers");
+        response = http(HttpServletServer.factory.get(5668), "http://localhost:5668/junit/endpoints/http/servers");
         assertTrue(response.contains(randomName));
 
-        httpServletServerFactory.destroy();
-        assertTrue(httpServletServerFactory.inventory().size() == 0);
+        HttpServletServer.factory.destroy();
+        assertTrue(HttpServletServer.factory.inventory().size() == 0);
     }
 
     @Test
@@ -140,17 +136,17 @@ public class HttpServerTest {
         logger.info("-- testServiceClass() --");
         String randomName = UUID.randomUUID().toString();
 
-        HttpServletServer server = httpServletServerFactory.build(randomName, "localhost", 5658, "/", false, true);
+        HttpServletServer server = HttpServletServer.factory.build(randomName, "localhost", 5658, "/", false, true);
         server.addServletClass("/*", RestEchoService.class.getCanonicalName());
         server.waitedStart(5000);
 
-        assertTrue(httpServletServerFactory.get(5658).isAlive());
+        assertTrue(HttpServletServer.factory.get(5658).isAlive());
 
-        String response = http(httpServletServerFactory.get(5658), "http://localhost:5658/junit/echo/hello");
+        String response = http(HttpServletServer.factory.get(5658), "http://localhost:5658/junit/echo/hello");
         assertTrue("hello".equals(response));
 
-        httpServletServerFactory.destroy();
-        assertTrue(httpServletServerFactory.inventory().size() == 0);
+        HttpServletServer.factory.destroy();
+        assertTrue(HttpServletServer.factory.inventory().size() == 0);
     }
 
     @Test
@@ -159,21 +155,21 @@ public class HttpServerTest {
 
         String randomName = UUID.randomUUID().toString();
 
-        HttpServletServer server = httpServletServerFactory.build(randomName, "localhost", 5648, "/", false, true);
+        HttpServletServer server = HttpServletServer.factory.build(randomName, "localhost", 5648, "/", false, true);
         server.addServletClass("/*", RestEchoService.class.getCanonicalName());
         server.addServletClass("/*", RestEndpoints.class.getCanonicalName());
         server.waitedStart(5000);
 
-        assertTrue(httpServletServerFactory.get(5648).isAlive());
+        assertTrue(HttpServletServer.factory.get(5648).isAlive());
 
-        String response = http(httpServletServerFactory.get(5648), "http://localhost:5648/junit/echo/hello");
+        String response = http(HttpServletServer.factory.get(5648), "http://localhost:5648/junit/echo/hello");
         assertTrue("hello".equals(response));
 
-        response = http(httpServletServerFactory.get(5648), "http://localhost:5648/junit/endpoints/http/servers");
+        response = http(HttpServletServer.factory.get(5648), "http://localhost:5648/junit/endpoints/http/servers");
         assertTrue(response.contains(randomName));
 
-        httpServletServerFactory.destroy();
-        assertTrue(httpServletServerFactory.inventory().size() == 0);
+        HttpServletServer.factory.destroy();
+        assertTrue(HttpServletServer.factory.inventory().size() == 0);
     }
 
     /**

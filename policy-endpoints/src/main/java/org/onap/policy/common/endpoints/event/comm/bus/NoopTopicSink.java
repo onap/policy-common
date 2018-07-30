@@ -33,6 +33,11 @@ import org.slf4j.LoggerFactory;
 public class NoopTopicSink extends TopicBase implements TopicSink {
 
     /**
+     * factory
+     */
+    public static final NoopTopicSinkFactory factory = new IndexedNoopTopicSinkFactory();
+
+    /**
      * logger
      */
     private static Logger logger = LoggerFactory.getLogger(NoopTopicSink.class);

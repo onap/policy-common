@@ -27,11 +27,10 @@ import java.util.Properties;
 
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
+import org.onap.policy.common.endpoints.event.comm.TopicEndpoint;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.TopicSink;
-import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSinkFactory;
-import org.onap.policy.common.endpoints.event.comm.bus.impl.IndexedNoopTopicSinkFactory;
-import org.onap.policy.common.endpoints.event.comm.impl.ProxyTopicEndpointManager;
+import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSink;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,17 +56,14 @@ public class NoopTopicTest implements TopicListener {
         Properties noopSinkProperties = new Properties();
         noopSinkProperties.put(PolicyEndPointProperties.PROPERTY_NOOP_SINK_TOPICS, topicName);
 
-        List<? extends TopicSink> noopTopics =
-                ProxyTopicEndpointManager.getInstance().addTopicSinks(noopSinkProperties);
+        List<? extends TopicSink> noopTopics = TopicEndpoint.manager.addTopicSinks(noopSinkProperties);
 
-        NoopTopicSinkFactory noopTopicSinkFactory = IndexedNoopTopicSinkFactory.getInstance();
-        TopicSink sink = noopTopicSinkFactory.get(topicName);
-
+        TopicSink sink = NoopTopicSink.factory.get(topicName);
 
         assertTrue(noopTopics.size() == 1);
-        assertTrue(noopTopics.size() == noopTopicSinkFactory.inventory().size());
+        assertTrue(noopTopics.size() == NoopTopicSink.factory.inventory().size());
         assertTrue(noopTopics.get(0) == sink);
-        assertTrue(sink == noopTopicSinkFactory.inventory().get(0));
+        assertTrue(sink == NoopTopicSink.factory.inventory().get(0));
 
         assertTrue(!sink.isAlive());
 
@@ -104,8 +100,8 @@ public class NoopTopicTest implements TopicListener {
         }
         assertTrue(badState);
 
-        noopTopicSinkFactory.destroy(topicName);
-        assertTrue(noopTopicSinkFactory.inventory().size() == 0);
+        NoopTopicSink.factory.destroy(topicName);
+        assertTrue(NoopTopicSink.factory.inventory().size() == 0);
     }
 
     @Override
