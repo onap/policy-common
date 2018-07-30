@@ -18,14 +18,25 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.parameters;
+package org.onap.policy.common.parameters.testclasses;
 
-import org.onap.policy.common.parameters.AbstractParameters;
+import org.onap.policy.common.parameters.ParameterGroup;
+import org.onap.policy.common.parameters.GroupValidationResult;
 
-/**
- * @author Liam Fallon (liam.fallon@ericsson.com)
- */
-public class LegalParameters implements AbstractParameters {
-    public LegalParameters() {
+public class EmptyParameterGroup implements ParameterGroup {
+    private String name;
+
+    public EmptyParameterGroup(final String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+    
+    @Override
+    public GroupValidationResult validate() {
+        return new GroupValidationResult(this);
     }
 }
