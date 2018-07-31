@@ -1,0 +1,119 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9a6a9dd7_51e27404",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupMapValidationResult.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-07-31T13:22:34Z",
+      "side": 1,
+      "message": "put dash",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 2
+      },
+      "revId": "b47beb2e3dd9e96b70049fde2ada15265ba8ecc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a6a9dd7_9187ac61",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupMapValidationResult.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-07-31T13:22:34Z",
+      "side": 1,
+      "message": "spelling \"string\"",
+      "range": {
+        "startLine": 52,
+        "startChar": 83,
+        "endLine": 52,
+        "endChar": 90
+      },
+      "revId": "b47beb2e3dd9e96b70049fde2ada15265ba8ecc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a6a9dd7_317ca072",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupMapValidationResult.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-07-31T13:22:34Z",
+      "side": 1,
+      "message": "is this method needed ?",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 72,
+        "endChar": 5
+      },
+      "revId": "b47beb2e3dd9e96b70049fde2ada15265ba8ecc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a6a9dd7_b102f0b2",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupValidationResult.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-07-31T13:22:34Z",
+      "side": 1,
+      "message": "put - dash to avoid formating for license header",
+      "range": {
+        "startLine": 1,
+        "startChar": 1,
+        "endLine": 1,
+        "endChar": 2
+      },
+      "revId": "b47beb2e3dd9e96b70049fde2ada15265ba8ecc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a6a9dd7_11f63cd8",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupValidationResult.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 3237
+      },
+      "writtenOn": "2018-07-31T13:22:34Z",
+      "side": 1,
+      "message": "Subjective : this can be extracted to its own method to reduce method complexity \n\n    private ValidationResult getValidationResult(final Field field, final ParameterGroup parameterGroup)\n            throws IllegalAccessException {\n        final String fieldName \u003d field.getName();\n        final Class\u003c?\u003e fieldType \u003d field.getType();\n        final Object fieldObject \u003d field.get(parameterGroup);\n\n        // Nested parameter groups are allowed\n        if (ParameterGroup.class.isAssignableFrom(fieldType)) {\n            return new GroupValidationResult((ParameterGroup) field.get(parameterGroup));\n        } else {\n            if (fieldObject !\u003d null) {\n                if (Map.class.isAssignableFrom(fieldType)) {\n                    checkMapIsParameterGroupMap(fieldName, fieldObject);\n                    return new GroupMapValidationResult(field, fieldObject);\n                }\n                // Collections of parameter groups are not allowed\n                else if (Collection.class.isAssignableFrom(fieldType)) {\n                    checkCollection4ParameterGroups(fieldName, fieldObject);\n                    return new ParameterValidationResult(field, fieldObject);\n                }\n                // It\u0027s a regular parameter\n                return new ParameterValidationResult(field, fieldObject);\n            }\n        }\n        return null;\n    }",
+      "range": {
+        "startLine": 61,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 17
+      },
+      "revId": "b47beb2e3dd9e96b70049fde2ada15265ba8ecc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
