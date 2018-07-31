@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "9a6a9dd7_06d844ee",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/AbstractParameterGroup.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-31T12:12:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a6a9dd7_66ba60e3",
+      "range": {
+        "startLine": 30,
+        "startChar": 17,
+        "endLine": 30,
+        "endChar": 25
+      },
+      "revId": "44ca8fe3cb69ad974aeb02048a611ef794ab4a28",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a6a9dd7_46b07cf4",
         "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupValidationResult.java",
         "patchSetId": 3
@@ -36,6 +60,30 @@
       "writtenOn": "2018-07-31T09:29:39Z",
       "side": 1,
       "message": "Comment is inaccurate - checking here for nested parameter groups rather than nested maps of parameter groups",
+      "range": {
+        "startLine": 61,
+        "startChar": 19,
+        "endLine": 61,
+        "endChar": 49
+      },
+      "revId": "44ca8fe3cb69ad974aeb02048a611ef794ab4a28",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a6a9dd7_a6e4f8ac",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupValidationResult.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-31T12:12:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a6a9dd7_46b07cf4",
       "range": {
         "startLine": 61,
         "startChar": 19,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "9a6a9dd7_66eee08d",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupValidationResult.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-31T12:12:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a6a9dd7_06928457",
+      "range": {
+        "startLine": 142,
+        "startChar": 28,
+        "endLine": 142,
+        "endChar": 37
+      },
+      "revId": "44ca8fe3cb69ad974aeb02048a611ef794ab4a28",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a6a9dd7_a69e3862",
         "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupValidationResult.java",
         "patchSetId": 3
@@ -82,6 +154,30 @@
       "writtenOn": "2018-07-31T09:29:39Z",
       "side": 1,
       "message": "\"the group\" rather than \"the field\"",
+      "range": {
+        "startLine": 164,
+        "startChar": 43,
+        "endLine": 164,
+        "endChar": 52
+      },
+      "revId": "44ca8fe3cb69ad974aeb02048a611ef794ab4a28",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a6a9dd7_86f3f472",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupValidationResult.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-31T12:12:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a6a9dd7_a69e3862",
       "range": {
         "startLine": 164,
         "startChar": 43,
@@ -128,6 +224,30 @@
       "writtenOn": "2018-07-31T09:29:39Z",
       "side": 1,
       "message": "This is something that might be better explained in the javadoc so as users are aware of the behaviour, perhaps in the javadoc for the getResult() method",
+      "range": {
+        "startLine": 179,
+        "startChar": 8,
+        "endLine": 180,
+        "endChar": 40
+      },
+      "revId": "44ca8fe3cb69ad974aeb02048a611ef794ab4a28",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a6a9dd7_26e8e87b",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupValidationResult.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-07-31T12:12:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a6a9dd7_26822801",
       "range": {
         "startLine": 179,
         "startChar": 8,
