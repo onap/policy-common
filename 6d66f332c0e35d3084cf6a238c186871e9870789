@@ -49,6 +49,23 @@
     },
     {
       "key": {
+        "uuid": "9a6a9dd7_acacd78d",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/ResourceUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-08-01T13:15:59Z",
+      "side": 1,
+      "message": "I think you may get sonar here about not logging exection",
+      "revId": "6d66f332c0e35d3084cf6a238c186871e9870789",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9a6a9dd7_bde1679c",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/resources/ResourceUtilsTest.java",
         "patchSetId": 1
