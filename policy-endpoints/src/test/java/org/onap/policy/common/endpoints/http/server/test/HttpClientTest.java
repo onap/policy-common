@@ -1,8 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,11 @@ package org.onap.policy.common.endpoints.http.server.test;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import java.util.UUID;
 import javax.ws.rs.core.Response;
 
 import org.junit.AfterClass;
@@ -33,20 +35,23 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.http.client.HttpClient;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
+import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
+import org.onap.policy.common.endpoints.http.server.internal.JettyServletServer;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.utils.network.NetworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HttpClientTest {
+    private static final Logger logger = LoggerFactory.getLogger(HttpClientTest.class);
 
-    private static Logger logger = LoggerFactory.getLogger(HttpClientTest.class);
+    private static final HashMap<String, String> savedValuesMap = new HashMap<>();
 
     @BeforeClass
     public static void setUp() throws InterruptedException, IOException {
         logger.info("-- setup() --");
 
-        /* echo server */
+        /* echo server - http + no auth */
 
         final HttpServletServer echoServerNoAuth =
                 HttpServletServer.factory.build("echo", "localhost", 6666, "/", false, true);
@@ -57,10 +62,38 @@ public class HttpClientTest {
             throw new IllegalStateException("cannot connect to port " + echoServerNoAuth.getPort());
         }
 
-        /* no auth echo server */
+        String keyStoreSystemProperty = System.getProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME);
+        if (keyStoreSystemProperty != null) {
+            savedValuesMap.put(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME, keyStoreSystemProperty);
+        }
+
+        String keyStorePasswordSystemProperty = System.getProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
+        if (keyStorePasswordSystemProperty != null) {
+            savedValuesMap.put(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME, keyStorePasswordSystemProperty);
+        }
+
+        String trustStoreSystemProperty = System.getProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME);
+        if (trustStoreSystemProperty != null) {
+            savedValuesMap
+                .put(JettyServletServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME, trustStoreSystemProperty);
+        }
+
+        String trustStorePasswordSystemProperty = System.getProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
+        if (trustStorePasswordSystemProperty != null) {
+            savedValuesMap
+                .put(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME, trustStorePasswordSystemProperty);
+        }
+
+        System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME, "src/test/resources/keystore-test");
+        System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME, "kstest");
+
+        System.setProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME, "src/test/resources/keystore-test");
+        System.setProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME, "kstest");
+
+        /* echo server - https + basic auth */
 
         final HttpServletServer echoServerAuth =
-                HttpServletServer.factory.build("echo", "localhost", 6667, "/", false, true);
+                HttpServletServer.factory.build("echo", true, "localhost", 6667, "/", false, true);
         echoServerAuth.setBasicAuthentication("x", "y", null);
         echoServerAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
         echoServerAuth.waitedStart(5000);
@@ -76,6 +109,36 @@ public class HttpClientTest {
 
         HttpServletServer.factory.destroy();
         HttpClient.factory.destroy();
+
+        if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME)) {
+            System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME, savedValuesMap.get(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME));
+            savedValuesMap.remove(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME);
+        } else {
+            System.clearProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME);
+        }
+
+        if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME)) {
+            System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME, savedValuesMap.get(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME));
+            savedValuesMap.remove(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
+        } else {
+            System.clearProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
+        }
+
+        if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME)) {
+            System.setProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME, savedValuesMap.get(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME));
+            savedValuesMap.remove(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME);
+        } else {
+            System.clearProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME);
+        }
+
+        if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME)) {
+            System.setProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME, savedValuesMap.get(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME));
+            savedValuesMap.remove(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
+        } else {
+            System.clearProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
+        }
+
+
     }
 
     @Test
@@ -95,7 +158,7 @@ public class HttpClientTest {
     public void testHttpAuthClient() throws Exception {
         logger.info("-- testHttpAuthClient() --");
 
-        final HttpClient client = HttpClient.factory.build("testHttpAuthClient", false, false, "localhost", 6667,
+        final HttpClient client = HttpClient.factory.build("testHttpAuthClient", true, true,"localhost", 6667,
                 "junit/echo", "x", "y", true);
         final Response response = client.get("hello");
         final String body = HttpClient.getBody(response, String.class);
@@ -108,7 +171,7 @@ public class HttpClientTest {
     public void testHttpAuthClient401() throws Exception {
         logger.info("-- testHttpAuthClient401() --");
 
-        final HttpClient client = HttpClient.factory.build("testHttpAuthClient401", false, false, "localhost", 6667,
+        final HttpClient client = HttpClient.factory.build("testHttpAuthClient401", true, true, "localhost", 6667,
                 "junit/echo", null, null, true);
         final Response response = client.get("hello");
         assertTrue(response.getStatus() == 401);

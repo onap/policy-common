@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,16 @@ import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.Slf4jRequestLog;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Credential;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +44,14 @@ import org.slf4j.LoggerFactory;
  * Http Server implementation using Embedded Jetty
  */
 public abstract class JettyServletServer implements HttpServletServer, Runnable {
+
+    /**
+     * Keystore/Truststore system property names
+     */
+    public static final String SYSTEM_KEYSTORE_PROPERTY_NAME = "javax.net.ssl.keyStore";
+    public static final String SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME = "javax.net.ssl.keyStorePassword";
+    public static final String SYSTEM_TRUSTSTORE_PROPERTY_NAME = "javax.net.ssl.trustStore";
+    public static final String SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME = "javax.net.ssl.trustStorePassword";
 
     /**
      * Logger
@@ -111,7 +123,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      * 
      * @throws IllegalArgumentException if invalid parameters are passed in
      */
-    public JettyServletServer(String name, String host, int port, String contextPath) {
+    public JettyServletServer(String name, boolean https, String host, int port, String contextPath) {
         String srvName = name;
         String srvHost = host;
         String ctxtPath = contextPath;
@@ -120,7 +132,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
             srvName = "http-" + port;
         }
 
-        if (port <= 0 && port >= 65535) {
+        if (port <= 0 || port >= 65535) {
             throw new IllegalArgumentException("Invalid Port provided: " + port);
         }
 
@@ -145,7 +157,11 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         this.jettyServer = new Server();
         this.jettyServer.setRequestLog(new Slf4jRequestLog());
 
-        this.connector = new ServerConnector(this.jettyServer);
+        if (https)
+            this.connector = httpsConnector();
+        else
+            this.connector = httpConnector();
+
         this.connector.setName(srvName);
         this.connector.setReuseAddress(true);
         this.connector.setPort(port);
@@ -153,6 +169,41 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
         this.jettyServer.addConnector(this.connector);
         this.jettyServer.setHandler(context);
+    }
+
+    public JettyServletServer(String name, String host, int port, String contextPath) {
+        this(name, false, host, port, contextPath);
+    }
+
+    public ServerConnector httpsConnector() {
+        SslContextFactory sslContextFactory = new SslContextFactory();
+
+        String keyStore = System.getProperty(SYSTEM_KEYSTORE_PROPERTY_NAME);
+        if (keyStore != null) {
+            sslContextFactory.setKeyStorePath(keyStore);
+
+            String ksPassword = System.getProperty(SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
+            if (ksPassword != null)
+                sslContextFactory.setKeyStorePassword(ksPassword);
+        }
+
+        String trustStore = System.getProperty(SYSTEM_TRUSTSTORE_PROPERTY_NAME);
+        if (trustStore != null) {
+            sslContextFactory.setTrustStorePath(trustStore);
+
+            String tsPassword = System.getProperty(SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
+            if (tsPassword != null)
+                sslContextFactory.setTrustStorePassword(tsPassword);
+        }
+
+        HttpConfiguration https = new HttpConfiguration();
+        https.addCustomizer(new SecureRequestCustomizer());
+
+        return new ServerConnector(jettyServer, sslContextFactory, new HttpConnectionFactory(https));
+    }
+
+    public ServerConnector httpConnector() {
+        return new ServerConnector(this.jettyServer);
     }
 
     @Override
