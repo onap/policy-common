@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
+import org.onap.policy.common.endpoints.properties.HttpServerPropertiesHelper;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,64 +38,76 @@ import org.slf4j.LoggerFactory;
 public interface HttpServletServerFactory {
 
     /**
-     * builds an http server with support for servlets
-     * 
-     * @param name name
+     * builds an http or https server with support for servlets
+     *
+     * @param name service name
+     * @param https use https?
      * @param host binding host
      * @param port port
      * @param contextPath server base path
-     * @param swagger enable swagger documentation
-     * @param managed is it managed by infrastructure
+     * @param swagger generate swagger spec?
+     * @param managed managed by the engine infrastructure?
      * @return http server
      * @throws IllegalArgumentException when invalid parameters are provided
      */
-    public HttpServletServer build(String name, String host, int port, String contextPath, boolean swagger,
-            boolean managed);
+    HttpServletServer build(String name, boolean https, String host, int port, String contextPath,
+        boolean swagger, boolean managed);
+
+    /**
+     * builds an http server with support for servlets
+     *
+     * @param name service name
+     * @param host binding host
+     * @param port port
+     * @param contextPath server base path
+     * @param swagger generate swagger spec?
+     * @param managed managed by the engine infrastructure?
+     * @return http server
+     * @throws IllegalArgumentException when invalid parameters are provided
+     */
+    HttpServletServer build(String name, String host, int port, String contextPath,
+        boolean swagger, boolean managed);
 
     /**
      * list of http servers per properties
-     * 
+     *
      * @param properties properties based configuration
      * @return list of http servers
      * @throws IllegalArgumentException when invalid parameters are provided
      */
-    public List<HttpServletServer> build(Properties properties);
+    List<HttpServletServer> build(Properties properties);
 
     /**
      * gets a server based on the port
-     * 
+     *
      * @param port port
      * @return http server
      */
-    public HttpServletServer get(int port);
+    HttpServletServer get(int port);
 
     /**
      * provides an inventory of servers
-     * 
+     *
      * @return inventory of servers
      */
-    public List<HttpServletServer> inventory();
+    List<HttpServletServer> inventory();
 
     /**
      * destroys server bound to a port
-     * 
-     * @param port
+     * @param port port
      */
-    public void destroy(int port);
+    void destroy(int port);
 
     /**
      * destroys the factory and therefore all servers
      */
-    public void destroy();
+    void destroy();
 }
-
 
 /**
  * Indexed factory implementation
  */
 class IndexedHttpServletServerFactory implements HttpServletServerFactory {
-
-    private static final String SPACES_COMMA_SPACES = "\\s*,\\s*";
 
     /**
      * logger
@@ -107,111 +120,63 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
     protected HashMap<Integer, HttpServletServer> servers = new HashMap<>();
 
     @Override
-    public synchronized HttpServletServer build(String name, String host, int port, String contextPath, boolean swagger,
-            boolean managed) {
+    public synchronized HttpServletServer build(String name, boolean https, String host, int port,
+        String contextPath, boolean swagger,
+        boolean managed) {
 
-        if (servers.containsKey(port)) {
+        if (servers.containsKey(port))
             return servers.get(port);
-        }
 
-        JettyJerseyServer server = new JettyJerseyServer(name, host, port, contextPath, swagger);
-        if (managed) {
+        JettyJerseyServer server = new JettyJerseyServer(name, https, host, port, contextPath, swagger);
+        if (managed)
             servers.put(port, server);
-        }
 
         return server;
     }
 
     @Override
-    public synchronized List<HttpServletServer> build(Properties properties) {
+    public HttpServletServer build(String name, String host, int port, String contextPath, boolean swagger,
+                                    boolean managed) {
+        return build(name, false, host, port, contextPath, swagger, managed);
+    }
 
+    @Override
+    public synchronized List<HttpServletServer> build(Properties properties) {
         ArrayList<HttpServletServer> serviceList = new ArrayList<>();
 
-        String serviceNames = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES);
-        if (serviceNames == null || serviceNames.isEmpty()) {
-            logger.warn("No topic for HTTP Service: {}", properties);
-            return serviceList;
-        }
-
-        List<String> serviceNameList = Arrays.asList(serviceNames.split(SPACES_COMMA_SPACES));
-
-        for (String serviceName : serviceNameList) {
-            String servicePortString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
-                    + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX);
-
-            int servicePort;
+        HttpServerPropertiesHelper serverProperties = new HttpServerPropertiesHelper(properties);
+        for (String serviceName : serverProperties.getEndpointNames()) {
             try {
-                if (servicePortString == null || servicePortString.isEmpty()) {
-                    if (logger.isWarnEnabled()) {
-                        logger.warn("No HTTP port for service in {}", serviceName);
-                    }
-                    continue;
+                int servicePort = serverProperties.getPort(serviceName);
+                String hostName = serverProperties.getHost(serviceName);
+                String contextUriPath = serverProperties.getContextUriPath(serviceName);
+                String userName = serverProperties.getUserName(serviceName);
+                String password = serverProperties.getPassword(serviceName);
+                String authUriPath = serverProperties.getAuthUriPath(serviceName);
+                String restUriPath = serverProperties.getRestUriPath(serviceName);
+                boolean https = serverProperties.isHttps(serviceName, false);
+
+                boolean managed = serverProperties.isManaged(serviceName, true);
+                boolean swagger = serverProperties.isSwagger(serviceName, false);
+
+                HttpServletServer service = build(serviceName, https, hostName, servicePort, contextUriPath,
+                    swagger, managed);
+                if (userName != null && !userName.isEmpty() && password != null && !password.isEmpty()) {
+                    service.setBasicAuthentication(userName, password, authUriPath);
                 }
-                servicePort = Integer.parseInt(servicePortString);
-            } catch (NumberFormatException nfe) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn("No HTTP port for service in {}", serviceName);
-                }
-                continue;
-            }
 
-            String hostName = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX);
-
-            String contextUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_CONTEXT_URIPATH_SUFFIX);
-
-            String userName = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX);
-
-            String password = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX);
-
-            String authUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_URIPATH_SUFFIX);
-
-            String restClasses = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX);
-
-            String restPackages = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_PACKAGES_SUFFIX);
-            String restUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_URIPATH_SUFFIX);
-
-            String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
-            boolean managed = true;
-            if (managedString != null && !managedString.isEmpty()) {
-                managed = Boolean.parseBoolean(managedString);
-            }
-
-            String swaggerString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX);
-            boolean swagger = false;
-            if (swaggerString != null && !swaggerString.isEmpty()) {
-                swagger = Boolean.parseBoolean(swaggerString);
-            }
-
-            HttpServletServer service = build(serviceName, hostName, servicePort, contextUriPath, swagger, managed);
-            if (userName != null && !userName.isEmpty() && password != null && !password.isEmpty()) {
-                service.setBasicAuthentication(userName, password, authUriPath);
-            }
-
-            if (restClasses != null && !restClasses.isEmpty()) {
-                List<String> restClassesList = Arrays.asList(restClasses.split(SPACES_COMMA_SPACES));
-                for (String restClass : restClassesList) {
+                for (String restClass : serverProperties.getRestClasses(serviceName)) {
                     service.addServletClass(restUriPath, restClass);
                 }
-            }
 
-            if (restPackages != null && !restPackages.isEmpty()) {
-                List<String> restPackageList = Arrays.asList(restPackages.split(SPACES_COMMA_SPACES));
-                for (String restPackage : restPackageList) {
+                for (String restPackage : serverProperties.getRestPackages(serviceName)) {
                     service.addServletPackage(restUriPath, restPackage);
                 }
-            }
 
-            serviceList.add(service);
+                serviceList.add(service);
+            } catch (NumberFormatException nfe) {
+                logger.warn("No HTTP port found for service in {}", serviceName, nfe);
+            }
         }
 
         return serviceList;
@@ -246,11 +211,11 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
     @Override
     public synchronized void destroy() {
         List<HttpServletServer> httpServletServers = this.inventory();
-        for (HttpServletServer server : httpServletServers) {
+        for (HttpServletServer server: httpServletServers) {
             server.shutdown();
         }
 
-        synchronized (this) {
+        synchronized(this) {
             this.servers.clear();
         }
     }
