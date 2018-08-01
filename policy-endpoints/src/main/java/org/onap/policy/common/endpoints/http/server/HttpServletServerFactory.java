@@ -37,8 +37,24 @@ import org.slf4j.LoggerFactory;
 public interface HttpServletServerFactory {
 
     /**
-     * builds an http server with support for servlets
+     * builds an http or https server with support for servlets
      * 
+     * @param name name
+     * @param https use secured http over tls connection
+     * @param host binding host
+     * @param port port
+     * @param contextPath server base path
+     * @param swagger enable swagger documentation
+     * @param managed is it managed by infrastructure
+     * @return http server
+     * @throws IllegalArgumentException when invalid parameters are provided
+     */
+    HttpServletServer build(String name, boolean https, String host, int port, String contextPath, boolean swagger,
+            boolean managed);
+
+    /**
+     * builds an http server with support for servlets
+     *
      * @param name name
      * @param host binding host
      * @param port port
@@ -48,8 +64,8 @@ public interface HttpServletServerFactory {
      * @return http server
      * @throws IllegalArgumentException when invalid parameters are provided
      */
-    public HttpServletServer build(String name, String host, int port, String contextPath, boolean swagger,
-            boolean managed);
+    HttpServletServer build(String name, String host, int port, String contextPath, boolean swagger,
+        boolean managed);
 
     /**
      * list of http servers per properties
@@ -58,7 +74,7 @@ public interface HttpServletServerFactory {
      * @return list of http servers
      * @throws IllegalArgumentException when invalid parameters are provided
      */
-    public List<HttpServletServer> build(Properties properties);
+    List<HttpServletServer> build(Properties properties);
 
     /**
      * gets a server based on the port
@@ -66,26 +82,26 @@ public interface HttpServletServerFactory {
      * @param port port
      * @return http server
      */
-    public HttpServletServer get(int port);
+    HttpServletServer get(int port);
 
     /**
      * provides an inventory of servers
      * 
      * @return inventory of servers
      */
-    public List<HttpServletServer> inventory();
+    List<HttpServletServer> inventory();
 
     /**
      * destroys server bound to a port
      * 
      * @param port
      */
-    public void destroy(int port);
+    void destroy(int port);
 
     /**
      * destroys the factory and therefore all servers
      */
-    public void destroy();
+    void destroy();
 }
 
 
@@ -107,20 +123,27 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
     protected HashMap<Integer, HttpServletServer> servers = new HashMap<>();
 
     @Override
-    public synchronized HttpServletServer build(String name, String host, int port, String contextPath, boolean swagger,
+    public synchronized HttpServletServer build(String name, boolean https, String host, int port, String contextPath, boolean swagger,
             boolean managed) {
 
         if (servers.containsKey(port)) {
             return servers.get(port);
         }
 
-        JettyJerseyServer server = new JettyJerseyServer(name, host, port, contextPath, swagger);
+        JettyJerseyServer server = new JettyJerseyServer(name, https, host, port, contextPath, swagger);
         if (managed) {
             servers.put(port, server);
         }
 
         return server;
     }
+
+    @Override
+    public synchronized HttpServletServer build(String name, String host, int port, String contextPath,
+                                                boolean swagger, boolean managed) {
+        return build(name, false, host, port, contextPath, swagger, managed);
+    }
+
 
     @Override
     public synchronized List<HttpServletServer> build(Properties properties) {
@@ -192,7 +215,14 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
                 swagger = Boolean.parseBoolean(swaggerString);
             }
 
-            HttpServletServer service = build(serviceName, hostName, servicePort, contextUriPath, swagger, managed);
+            String httpsString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+                + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX);
+            boolean https = false;
+            if (httpsString != null && !httpsString.isEmpty()) {
+                https = Boolean.parseBoolean(httpsString);
+            }
+
+            HttpServletServer service = build(serviceName, https, hostName, servicePort, contextUriPath, swagger, managed);
             if (userName != null && !userName.isEmpty() && password != null && !password.isEmpty()) {
                 service.setBasicAuthentication(userName, password, authUriPath);
             }

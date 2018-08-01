@@ -104,6 +104,7 @@ public class JettyJerseyServer extends JettyServletServer {
      * Constructor
      * 
      * @param name name
+     * @param https enable https?
      * @param host host server host
      * @param port port server port
      * @param swagger support swagger?
@@ -111,19 +112,19 @@ public class JettyJerseyServer extends JettyServletServer {
      * 
      * @throws IllegalArgumentException in invalid arguments are provided
      */
-    public JettyJerseyServer(String name, String host, int port, String contextPath, boolean swagger) {
+    public JettyJerseyServer(String name, boolean https, String host, int port, String contextPath, boolean swagger) {
 
-        super(name, host, port, contextPath);
+        super(name, https, host, port, contextPath);
         if (swagger) {
             this.swaggerId = "swagger-" + this.port;
-            attachSwaggerServlet();
+            attachSwaggerServlet(https);
         }
     }
 
     /**
      * attaches a swagger initialization servlet
      */
-    protected void attachSwaggerServlet() {
+    protected void attachSwaggerServlet(boolean https) {
 
         ServletHolder swaggerServlet = context.addServlet(JerseyJaxrsConfig.class, "/");
 
@@ -133,7 +134,7 @@ public class JettyJerseyServer extends JettyServletServer {
         }
 
         swaggerServlet.setInitParameter(SWAGGER_API_BASEPATH,
-                "http://" + hostname + ":" + this.connector.getPort() + "/");
+                ((https) ? "https://" : "http://") + hostname + ":" + this.connector.getPort() + "/");
         swaggerServlet.setInitParameter(SWAGGER_CONTEXT_ID, swaggerId);
         swaggerServlet.setInitParameter(SWAGGER_SCANNER_ID, swaggerId);
         swaggerServlet.setInitParameter(SWAGGER_PRETTY_PRINT, "true");
