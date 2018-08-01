@@ -333,7 +333,7 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
                 }
 
                 String useHttpsString = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS + "."
-                        + topic + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX);
+                        + topic + PolicyEndPointProperties.PROPERTY_HTTPS_SUFFIX);
 
                 // default is to use HTTP if no https property exists
                 boolean useHttps = false;

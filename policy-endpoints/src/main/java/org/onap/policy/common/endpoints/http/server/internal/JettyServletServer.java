@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,16 @@ import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
+import org.eclipse.jetty.server.HttpConfiguration;
+import org.eclipse.jetty.server.HttpConnectionFactory;
+import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.Slf4jRequestLog;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Credential;
+import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -103,34 +107,31 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     /**
      * constructor
-     * 
+     *
      * @param name server name
      * @param host server host
      * @param port server port
+     * @param https is https?
      * @param contextPath context path
-     * 
+     *
      * @throws IllegalArgumentException if invalid parameters are passed in
      */
-    public JettyServletServer(String name, String host, int port, String contextPath) {
+    public JettyServletServer(String name, boolean https, String host, int port, String contextPath) {
         String srvName = name;
         String srvHost = host;
         String ctxtPath = contextPath;
 
-        if (srvName == null || srvName.isEmpty()) {
+        if (srvName == null || srvName.isEmpty())
             srvName = "http-" + port;
-        }
 
-        if (port <= 0 && port >= 65535) {
+        if (port <= 0 || port >= 65535)
             throw new IllegalArgumentException("Invalid Port provided: " + port);
-        }
 
-        if (srvHost == null || srvHost.isEmpty()) {
+        if (srvHost == null || srvHost.isEmpty())
             srvHost = "localhost";
-        }
 
-        if (ctxtPath == null || ctxtPath.isEmpty()) {
+        if (ctxtPath == null || ctxtPath.isEmpty())
             ctxtPath = "/";
-        }
 
         this.name = srvName;
 
@@ -145,7 +146,11 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         this.jettyServer = new Server();
         this.jettyServer.setRequestLog(new Slf4jRequestLog());
 
-        this.connector = new ServerConnector(this.jettyServer);
+        if (https)
+            this.connector = httpsConnector();
+        else
+            this.connector = httpConnector();
+
         this.connector.setName(srvName);
         this.connector.setReuseAddress(true);
         this.connector.setPort(port);
@@ -155,25 +160,60 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         this.jettyServer.setHandler(context);
     }
 
+    public JettyServletServer(String name, String host, int port, String contextPath) {
+        this(name, false, host, port, contextPath);
+    }
+
+    public ServerConnector httpsConnector() {
+        SslContextFactory sslContextFactory = new SslContextFactory();
+
+        String keyStore = System.getProperty("javax.net.ssl.keyStore");
+        if (keyStore != null) {
+            sslContextFactory.setKeyStorePath(keyStore);
+
+            String ksPassword = System.getProperty("javax.net.ssl.keyStorePassword");
+            if (ksPassword != null)
+                sslContextFactory.setKeyStorePassword(ksPassword);
+        }
+
+        String trustStore = System.getProperty("javax.net.ssl.trustStore");
+        if (trustStore != null) {
+            sslContextFactory.setTrustStorePath(trustStore);
+
+            String tsPassword = System.getProperty("javax.net.ssl.trustStorePassword");
+            if (tsPassword != null)
+                sslContextFactory.setTrustStorePassword(tsPassword);
+        }
+
+        HttpConfiguration https = new HttpConfiguration();
+        https.addCustomizer(new SecureRequestCustomizer());
+
+        return new ServerConnector(jettyServer, sslContextFactory, new HttpConnectionFactory(https));
+    }
+
+    public ServerConnector httpConnector() {
+        return new ServerConnector(this.jettyServer);
+    }
+
     @Override
     public void setBasicAuthentication(String user, String password, String servletPath) {
         String srvltPath = servletPath;
 
-        if (user == null || user.isEmpty() || password == null || password.isEmpty()) {
+        if (user == null || user.isEmpty() || password == null || password.isEmpty())
             throw new IllegalArgumentException("Missing user and/or password");
-        }
 
-        if (srvltPath == null || srvltPath.isEmpty()) {
+        if (srvltPath == null || srvltPath.isEmpty())
             srvltPath = "/*";
-        }
 
         HashLoginService hashLoginService = new HashLoginService();
-        hashLoginService.putUser(user, Credential.getCredential(password), new String[] {"user"});
+        hashLoginService.putUser(user,
+            Credential.getCredential(password),
+            new String[] {"user"});
         hashLoginService.setName(this.connector.getName() + "-login-service");
 
         Constraint constraint = new Constraint();
         constraint.setName(Constraint.__BASIC_AUTH);
-        constraint.setRoles(new String[] {"user"});
+        constraint.setRoles(new String[]{"user"});
         constraint.setAuthenticate(true);
 
         ConstraintMapping constraintMapping = new ConstraintMapping();
@@ -202,11 +242,10 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
             this.jettyServer.start();
 
-            if (logger.isInfoEnabled()) {
+            if (logger.isInfoEnabled())
                 logger.info("{}: STARTED: {}", this, this.jettyServer.dump());
-            }
 
-            synchronized (this.startCondition) {
+            synchronized(this.startCondition) {
                 this.startCondition.notifyAll();
             }
 
@@ -220,15 +259,13 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     public boolean waitedStart(long maxWaitTime) throws InterruptedException {
         logger.info("{}: WAITED-START", this);
 
-        if (maxWaitTime < 0) {
+        if (maxWaitTime < 0)
             throw new IllegalArgumentException("max-wait-time cannot be negative");
-        }
 
         long pendingWaitTime = maxWaitTime;
 
-        if (!this.start()) {
+        if (!this.start())
             return false;
-        }
 
         synchronized (this.startCondition) {
 
@@ -238,19 +275,17 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
                     this.startCondition.wait(pendingWaitTime);
 
-                    if (maxWaitTime == 0) {
+                    if (maxWaitTime == 0)
                         /* spurious notification */
                         continue;
-                    }
 
                     long endTs = System.currentTimeMillis();
                     pendingWaitTime = pendingWaitTime - (endTs - startTs);
 
                     logger.info("{}: pending time is {} ms.", this, pendingWaitTime);
 
-                    if (pendingWaitTime <= 0) {
+                    if (pendingWaitTime <= 0)
                         return false;
-                    }
 
                 } catch (InterruptedException e) {
                     logger.warn("{}: waited-start has been interrupted", this);
@@ -266,8 +301,9 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     public boolean start() {
         logger.info("{}: STARTING", this);
 
-        synchronized (this) {
-            if (jettyThread == null || !this.jettyThread.isAlive()) {
+        synchronized(this) {
+            if (jettyThread == null ||
+                !this.jettyThread.isAlive()) {
 
                 this.jettyThread = new Thread(this);
                 this.jettyThread.setName(this.name + "-" + this.port);
@@ -282,7 +318,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     public boolean stop() {
         logger.info("{}: STOPPING", this);
 
-        synchronized (this) {
+        synchronized(this) {
             if (jettyThread == null) {
                 return true;
             }
@@ -316,9 +352,8 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
         this.stop();
 
-        if (this.jettyThread == null) {
+        if (this.jettyThread == null)
             return;
-        }
 
         Thread jettyThreadCopy = this.jettyThread;
 
@@ -332,7 +367,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
             if (!jettyThreadCopy.isInterrupted()) {
                 try {
                     jettyThreadCopy.interrupt();
-                } catch (Exception e) {
+                } catch(Exception e) {
                     // do nothing
                     logger.warn("{}: exception while shutting down (OK)", this, e);
                 }
@@ -344,9 +379,8 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     @Override
     public boolean isAlive() {
-        if (this.jettyThread != null) {
+        if (this.jettyThread != null)
             return this.jettyThread.isAlive();
-        }
 
         return false;
     }
@@ -389,10 +423,10 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("JettyServer [name=").append(name).append(", host=").append(host).append(", port=").append(port)
-                .append(", user=").append(user).append(", password=").append(password != null).append(", contextPath=")
-                .append(contextPath).append(", jettyServer=").append(jettyServer).append(", context=")
-                .append(this.context).append(", connector=").append(connector).append(", jettyThread=")
-                .append(jettyThread).append("]");
+            .append(", user=").append(user).append(", password=").append(password != null).append(", contextPath=")
+            .append(contextPath).append(", jettyServer=").append(jettyServer).append(", context=").append(this.context)
+            .append(", connector=").append(connector).append(", jettyThread=").append(jettyThread)
+            .append("]");
         return builder.toString();
     }
 

@@ -1,8 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,13 +49,14 @@ public class HttpServerTest {
     public void testSingleServer() throws Exception {
         logger.info("-- testSingleServer() --");
 
-        HttpServletServer server = HttpServletServer.factory.build("echo", "localhost", 5678, "/", false, true);
+        HttpServletServer server = HttpServletServer.factory.build("echo", false, "localhost", 5678, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(5678).isAlive());
 
-        String response = http(HttpServletServer.factory.get(5678), "http://localhost:5678/junit/echo/hello");
+        String response =
+            http(HttpServletServer.factory.get(5678), "http://localhost:5678/junit/echo/hello");
         assertTrue("hello".equals(response));
 
         response = null;
@@ -77,24 +78,27 @@ public class HttpServerTest {
     public void testMultipleServers() throws Exception {
         logger.info("-- testMultipleServers() --");
 
-        HttpServletServer server1 = HttpServletServer.factory.build("echo-1", "localhost", 5688, "/", true, true);
+        HttpServletServer server1 = HttpServletServer.factory.build("echo-1", false, "localhost", 5688, "/", true, true);
         server1.addServletPackage("/*", this.getClass().getPackage().getName());
         server1.waitedStart(5000);
 
-        HttpServletServer server2 = HttpServletServer.factory.build("echo-2", "localhost", 5689, "/", false, true);
+        HttpServletServer server2 = HttpServletServer.factory.build("echo-2", false, "localhost", 5689, "/", false, true);
         server2.addServletPackage("/*", this.getClass().getPackage().getName());
         server2.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(5688).isAlive());
         assertTrue(HttpServletServer.factory.get(5689).isAlive());
 
-        String response = http(HttpServletServer.factory.get(5688), "http://localhost:5688/junit/echo/hello");
+        String response =
+            http(HttpServletServer.factory.get(5688), "http://localhost:5688/junit/echo/hello");
         assertTrue("hello".equals(response));
 
-        response = http(HttpServletServer.factory.get(5688), "http://localhost:5688/swagger.json");
+        response =
+            http(HttpServletServer.factory.get(5688), "http://localhost:5688/swagger.json");
         assertTrue(response != null);
 
-        response = http(HttpServletServer.factory.get(5689), "http://localhost:5689/junit/echo/hello");
+        response =
+            http(HttpServletServer.factory.get(5689), "http://localhost:5689/junit/echo/hello");
         assertTrue("hello".equals(response));
 
         response = null;
@@ -115,16 +119,18 @@ public class HttpServerTest {
 
         String randomName = UUID.randomUUID().toString();
 
-        HttpServletServer server = HttpServletServer.factory.build(randomName, "localhost", 5668, "/", false, true);
+        HttpServletServer server = HttpServletServer.factory.build(randomName, false, "localhost", 5668, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(5668).isAlive());
 
-        String response = http(HttpServletServer.factory.get(5668), "http://localhost:5668/junit/echo/hello");
+        String response =
+            http(HttpServletServer.factory.get(5668), "http://localhost:5668/junit/echo/hello");
         assertTrue("hello".equals(response));
 
-        response = http(HttpServletServer.factory.get(5668), "http://localhost:5668/junit/endpoints/http/servers");
+        response =
+            http(HttpServletServer.factory.get(5668), "http://localhost:5668/junit/endpoints/http/servers");
         assertTrue(response.contains(randomName));
 
         HttpServletServer.factory.destroy();
@@ -136,13 +142,14 @@ public class HttpServerTest {
         logger.info("-- testServiceClass() --");
         String randomName = UUID.randomUUID().toString();
 
-        HttpServletServer server = HttpServletServer.factory.build(randomName, "localhost", 5658, "/", false, true);
+        HttpServletServer server = HttpServletServer.factory.build(randomName, false, "localhost", 5658, "/", false, true);
         server.addServletClass("/*", RestEchoService.class.getCanonicalName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(5658).isAlive());
 
-        String response = http(HttpServletServer.factory.get(5658), "http://localhost:5658/junit/echo/hello");
+        String response =
+            http(HttpServletServer.factory.get(5658), "http://localhost:5658/junit/echo/hello");
         assertTrue("hello".equals(response));
 
         HttpServletServer.factory.destroy();
@@ -155,17 +162,19 @@ public class HttpServerTest {
 
         String randomName = UUID.randomUUID().toString();
 
-        HttpServletServer server = HttpServletServer.factory.build(randomName, "localhost", 5648, "/", false, true);
+        HttpServletServer server = HttpServletServer.factory.build(randomName, false, "localhost", 5648, "/", false, true);
         server.addServletClass("/*", RestEchoService.class.getCanonicalName());
         server.addServletClass("/*", RestEndpoints.class.getCanonicalName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(5648).isAlive());
 
-        String response = http(HttpServletServer.factory.get(5648), "http://localhost:5648/junit/echo/hello");
+        String response =
+            http(HttpServletServer.factory.get(5648), "http://localhost:5648/junit/echo/hello");
         assertTrue("hello".equals(response));
 
-        response = http(HttpServletServer.factory.get(5648), "http://localhost:5648/junit/endpoints/http/servers");
+        response =
+            http(HttpServletServer.factory.get(5648), "http://localhost:5648/junit/endpoints/http/servers");
         assertTrue(response.contains(randomName));
 
         HttpServletServer.factory.destroy();
@@ -174,13 +183,13 @@ public class HttpServerTest {
 
     /**
      * performs an http request
-     * 
+     *
      * @throws MalformedURLException
      * @throws IOException
      * @throws InterruptedException
      */
     protected String http(HttpServletServer server, String aUrl)
-            throws MalformedURLException, IOException, InterruptedException {
+        throws MalformedURLException, IOException, InterruptedException {
         URL url = new URL(aUrl);
         String response = null;
         int numRetries = 1, maxNumberRetries = 5;
@@ -189,7 +198,8 @@ public class HttpServerTest {
                 response = response(url);
                 break;
             } catch (ConnectException e) {
-                logger.warn("http server {} @ {} ({}) - cannot connect yet ..", server, aUrl, numRetries, e);
+                logger.warn("http server {} @ {} ({}) - cannot connect yet ..",
+                    server, aUrl, numRetries, e);
                 numRetries++;
                 Thread.sleep(10000L);
             } catch (Exception e) {
@@ -202,9 +212,9 @@ public class HttpServerTest {
 
     /**
      * gets http response
-     * 
+     *
      * @param url url
-     * 
+     *
      * @throws IOException
      */
     protected String response(URL url) throws IOException {
