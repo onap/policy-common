@@ -1,8 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-1018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,13 +23,12 @@ package org.onap.policy.common.endpoints.http.client;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
 import org.onap.policy.common.endpoints.http.client.internal.JerseyClient;
-import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
+import org.onap.policy.common.endpoints.properties.HttpClientPropertiesHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,40 +40,40 @@ public interface HttpClientFactory {
     /**
      * build and http client with the following parameters
      */
-    public HttpClient build(String name, boolean https, boolean selfSignedCerts, String hostname, int port,
-            String baseUrl, String userName, String password, boolean managed)
-            throws KeyManagementException, NoSuchAlgorithmException;
+    HttpClient build(String name, boolean https,
+        boolean selfSignedCerts,
+        String hostname, int port,
+        String baseUrl, String userName,
+        String password, boolean managed)
+        throws KeyManagementException, NoSuchAlgorithmException;
 
     /**
      * build http client from properties
      */
-    public List<HttpClient> build(Properties properties) throws KeyManagementException, NoSuchAlgorithmException;
+    List<HttpClient> build(Properties properties)
+        throws KeyManagementException, NoSuchAlgorithmException;
 
     /**
      * get http client
-     * 
      * @param name the name
      * @return the http client
      */
-    public HttpClient get(String name);
+    HttpClient get(String name);
 
     /**
      * list of http clients
-     * 
      * @return http clients
      */
-    public List<HttpClient> inventory();
+    List<HttpClient> inventory();
 
     /**
      * destroy by name
-     * 
      * @param name name
      */
-    public void destroy(String name);
+    void destroy(String name);
 
-    public void destroy();
+    void destroy();
 }
-
 
 /**
  * http client factory implementation indexed by name
@@ -86,84 +85,49 @@ class IndexedHttpClientFactory implements HttpClientFactory {
      */
     private static Logger logger = LoggerFactory.getLogger(IndexedHttpClientFactory.class);
 
-    protected HashMap<String, HttpClient> clients = new HashMap<>();
+    private HashMap<String, HttpClient> clients = new HashMap<>();
 
     @Override
-    public synchronized HttpClient build(String name, boolean https, boolean selfSignedCerts, String hostname, int port,
-            String baseUrl, String userName, String password, boolean managed)
-            throws KeyManagementException, NoSuchAlgorithmException {
-        if (clients.containsKey(name)) {
+    public synchronized HttpClient build(String name, boolean https, boolean selfSignedCerts,
+        String hostname, int port,
+        String baseUrl, String userName, String password,
+        boolean managed)
+        throws KeyManagementException, NoSuchAlgorithmException {
+        if (clients.containsKey(name))
             return clients.get(name);
-        }
 
         JerseyClient client =
-                new JerseyClient(name, https, selfSignedCerts, hostname, port, baseUrl, userName, password);
+            new JerseyClient(name, https, selfSignedCerts, hostname, port, baseUrl, userName, password);
 
-        if (managed) {
+        if (managed)
             clients.put(name, client);
-        }
 
         return client;
     }
 
     @Override
-    public synchronized List<HttpClient> build(Properties properties)
-            throws KeyManagementException, NoSuchAlgorithmException {
+    public synchronized List<HttpClient> build(Properties properties) {
         ArrayList<HttpClient> clientList = new ArrayList<>();
 
-        String clientNames = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES);
-        if (clientNames == null || clientNames.isEmpty()) {
-            return clientList;
-        }
-
-        List<String> clientNameList = new ArrayList<>(Arrays.asList(clientNames.split("\\s*,\\s*")));
-
-        for (String clientName : clientNameList) {
-            String httpsString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "."
-                    + clientName + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX);
-            boolean https = false;
-            if (httpsString != null && !httpsString.isEmpty()) {
-                https = Boolean.parseBoolean(httpsString);
-            }
-
-            String hostName = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "."
-                    + clientName + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX);
-
-            String servicePortString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES
-                    + "." + clientName + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX);
-            int port;
+        HttpClientPropertiesHelper clientProperties = new HttpClientPropertiesHelper(properties);
+        for (String clientName : clientProperties.getEndpointNames()) {
             try {
-                if (servicePortString == null || servicePortString.isEmpty()) {
-                    continue;
-                }
-                port = Integer.parseInt(servicePortString);
-            } catch (NumberFormatException nfe) {
-                logger.error("http-client-factory: cannot parse port {}", servicePortString, nfe);
-                continue;
-            }
+                int port = clientProperties.getPort(clientName);
+                String hostName = clientProperties.getHost(clientName);
+                String baseUrl = clientProperties.getContextUriPath(clientName);
+                String userName = clientProperties.getUserName(clientName);
+                String password = clientProperties.getPassword(clientName);
+                boolean managed = clientProperties.isManaged(clientName, true);
+                boolean https = clientProperties.isHttps(clientName, false);
 
-            String baseUrl = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "."
-                    + clientName + PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX);
-
-            String userName = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "."
-                    + clientName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX);
-
-            String password = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "."
-                    + clientName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX);
-
-            String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "."
-                    + clientName + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
-            boolean managed = true;
-            if (managedString != null && !managedString.isEmpty()) {
-                managed = Boolean.parseBoolean(managedString);
-            }
-
-            try {
                 HttpClient client =
-                        this.build(clientName, https, https, hostName, port, baseUrl, userName, password, managed);
+                    this.build(clientName, https, https, hostName, port, baseUrl,
+                        userName, password, managed);
                 clientList.add(client);
+            } catch (NumberFormatException nfe) {
+                logger.error("No HTTP port found for HTTP Client Endpoint {}", clientName, nfe);
             } catch (Exception e) {
-                logger.error("http-client-factory: cannot build client {}", clientName, e);
+                logger.error("Cannot build HTTP Client Endpoint {}", clientName, e);
             }
         }
 
@@ -201,11 +165,11 @@ class IndexedHttpClientFactory implements HttpClientFactory {
     @Override
     public void destroy() {
         List<HttpClient> clientsInventory = this.inventory();
-        for (HttpClient client : clientsInventory) {
+        for (HttpClient client: clientsInventory) {
             client.shutdown();
         }
 
-        synchronized (this) {
+        synchronized(this) {
             this.clients.clear();
         }
     }

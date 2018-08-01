@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -201,7 +201,7 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
                 }
 
                 String useHttpsString = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS + "."
-                        + topic + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX);
+                        + topic + PolicyEndPointProperties.PROPERTY_HTTPS_SUFFIX);
 
                 // default is to use HTTP if no https property exists
                 boolean useHttps = false;
