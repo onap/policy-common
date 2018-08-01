@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_220f70e3",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/properties/HttpClientProperties.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-08-01T23:31:11Z",
+      "side": 1,
+      "message": "I wasnt aware of this sonar constraint.  In any case, I don\u0027t think I can do this change since it will incur in multiple inheritance, not supported in java language (note that HttpClientPropertiesHelper already extends from the HttpEndpointHelper; PolicyEndpointProperties was already defined in a similar manner too).  I suggest to leave as is, it is an improvement handling these properties over previous version.",
+      "parentUuid": "1a76adc5_c2e31c32",
+      "revId": "fee36b7fde92641cd90fbdf20909b0a6dfd0530d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_22ca10a2",
         "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpClientTest.java",
         "patchSetId": 3
