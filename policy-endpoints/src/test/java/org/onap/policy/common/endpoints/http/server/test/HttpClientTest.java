@@ -1,8 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ public class HttpClientTest {
     public static void setUp() throws InterruptedException, IOException {
         logger.info("-- setup() --");
 
-        /* echo server */
+        /* echo server - http + no auth */
 
         final HttpServletServer echoServerNoAuth =
                 HttpServletServer.factory.build("echo", "localhost", 6666, "/", false, true);
@@ -57,10 +57,16 @@ public class HttpClientTest {
             throw new IllegalStateException("cannot connect to port " + echoServerNoAuth.getPort());
         }
 
-        /* no auth echo server */
+        System.setProperty("javax.net.ssl.keyStore", "src/test/resources/keystore-test");
+        System.setProperty("javax.net.ssl.keyStorePassword", "kstest");
+
+        System.setProperty("javax.net.ssl.trustStore", "src/test/resources/keystore-test");
+        System.setProperty("javax.net.ssl.trustStorePassword", "kstest");
+
+        /* echo server - https + basic auth */
 
         final HttpServletServer echoServerAuth =
-                HttpServletServer.factory.build("echo", "localhost", 6667, "/", false, true);
+                HttpServletServer.factory.build("echo", true, "localhost", 6667, "/", false, true);
         echoServerAuth.setBasicAuthentication("x", "y", null);
         echoServerAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
         echoServerAuth.waitedStart(5000);
@@ -95,7 +101,7 @@ public class HttpClientTest {
     public void testHttpAuthClient() throws Exception {
         logger.info("-- testHttpAuthClient() --");
 
-        final HttpClient client = HttpClient.factory.build("testHttpAuthClient", false, false, "localhost", 6667,
+        final HttpClient client = HttpClient.factory.build("testHttpAuthClient", true, true,"localhost", 6667,
                 "junit/echo", "x", "y", true);
         final Response response = client.get("hello");
         final String body = HttpClient.getBody(response, String.class);
@@ -108,7 +114,7 @@ public class HttpClientTest {
     public void testHttpAuthClient401() throws Exception {
         logger.info("-- testHttpAuthClient401() --");
 
-        final HttpClient client = HttpClient.factory.build("testHttpAuthClient401", false, false, "localhost", 6667,
+        final HttpClient client = HttpClient.factory.build("testHttpAuthClient401", true, true, "localhost", 6667,
                 "junit/echo", null, null, true);
         final Response response = client.get("hello");
         assertTrue(response.getStatus() == 401);
