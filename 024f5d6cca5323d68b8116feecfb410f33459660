@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_0b8928ca",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-08-03T11:42:28Z",
+      "side": 1,
+      "message": "Should we pull these classes out altogether into separate compilation units especially as they are public?",
+      "range": {
+        "startLine": 315,
+        "startChar": 4,
+        "endLine": 536,
+        "endChar": 1
+      },
+      "revId": "024f5d6cca5323d68b8116feecfb410f33459660",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
