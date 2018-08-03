@@ -21,7 +21,6 @@
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import java.net.MalformedURLException;
-import java.util.List;
 import java.util.Map;
 
 import org.onap.policy.common.endpoints.event.comm.Topic;
@@ -52,81 +51,28 @@ public class SingleThreadedDmaapTopicSource extends SingleThreadedBusTopicSource
 
     /**
      * 
-     * @param servers DMaaP servers
-     * @param topic DMaaP Topic to be monitored
-     * @param apiKey DMaaP API Key (optional)
-     * @param apiSecret DMaaP API Secret (optional)
-     * @param consumerGroup DMaaP Reader Consumer Group
-     * @param consumerInstance DMaaP Reader Instance
-     * @param fetchTimeout DMaaP fetch timeout
-     * @param fetchLimit DMaaP fetch limit
-     * @param environment DME2 Environment
-     * @param aftEnvironment DME2 AFT Environment
-     * @param partner DME2 Partner
-     * @param latitude DME2 Latitude
-     * @param longitude DME2 Longitude
-     * @param additionalProps Additional properties to pass to DME2
-     * @param useHttps does connection use HTTPS?
-     * @param allowSelfSignedCerts are self-signed certificates allow
-     * 
+     * @param busTopicParams Parameters object containing all the required inputs     *
      * @throws IllegalArgumentException An invalid parameter passed in
      */
-    public SingleThreadedDmaapTopicSource(List<String> servers, String topic, String apiKey, String apiSecret,
-            String userName, String password, String consumerGroup, String consumerInstance, int fetchTimeout,
-            int fetchLimit, String environment, String aftEnvironment, String partner, String latitude,
-            String longitude, Map<String, String> additionalProps, boolean useHttps, boolean allowSelfSignedCerts) {
+    public SingleThreadedDmaapTopicSource(BusTopicParams busTopicParams) {
 
-        super(servers, topic, apiKey, apiSecret, consumerGroup, consumerInstance, fetchTimeout, fetchLimit, useHttps,
-                allowSelfSignedCerts);
+        super(busTopicParams);
 
-        this.userName = userName;
-        this.password = password;
+        this.userName = busTopicParams.getUserName();
+        this.password = busTopicParams.getPassword();
 
-        this.environment = environment;
-        this.aftEnvironment = aftEnvironment;
-        this.partner = partner;
+        this.environment = busTopicParams.getEnvironment();
+        this.aftEnvironment = busTopicParams.getAftEnvironment();
+        this.partner = busTopicParams.getPartner();
 
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.latitude = busTopicParams.getLatitude();
+        this.longitude = busTopicParams.getLongitude();
 
-        this.additionalProps = additionalProps;
+        this.additionalProps = busTopicParams.getAdditionalProps();
         try {
             this.init();
         } catch (Exception e) {
-            logger.error("ERROR during init of topic {}", this.topic);
-            throw new IllegalArgumentException(e);
-        }
-    }
-
-    /**
-     * 
-     * @param servers DMaaP servers
-     * @param topic DMaaP Topic to be monitored
-     * @param apiKey DMaaP API Key (optional)
-     * @param apiSecret DMaaP API Secret (optional)
-     * @param consumerGroup DMaaP Reader Consumer Group
-     * @param consumerInstance DMaaP Reader Instance
-     * @param fetchTimeout DMaaP fetch timeout
-     * @param fetchLimit DMaaP fetch limit
-     * @param useHttps does connection use HTTPS?
-     * @param allowSelfSignedCerts are self-signed certificates allow
-     * @throws IllegalArgumentException An invalid parameter passed in
-     */
-    public SingleThreadedDmaapTopicSource(List<String> servers, String topic, String apiKey, String apiSecret,
-            String userName, String password, String consumerGroup, String consumerInstance, int fetchTimeout,
-            int fetchLimit, boolean useHttps, boolean allowSelfSignedCerts) {
-
-
-        super(servers, topic, apiKey, apiSecret, consumerGroup, consumerInstance, fetchTimeout, fetchLimit, useHttps,
-                allowSelfSignedCerts);
-
-        this.userName = userName;
-        this.password = password;
-
-        try {
-            this.init();
-        } catch (Exception e) {
-            logger.warn("dmaap-source: cannot create topic {} because of {}", topic, e.getMessage(), e);
+            logger.error("ERROR during init in dmaap-source: cannot create topic {} because of {}", topic, e.getMessage(), e);
             throw new IllegalArgumentException(e);
         }
     }

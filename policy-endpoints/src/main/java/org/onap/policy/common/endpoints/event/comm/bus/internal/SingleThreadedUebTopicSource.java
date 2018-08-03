@@ -20,8 +20,6 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
-import java.util.List;
-
 import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSource;
 
@@ -33,29 +31,16 @@ public class SingleThreadedUebTopicSource extends SingleThreadedBusTopicSource i
 
     /**
      * 
-     * @param servers UEB servers
-     * @param topic UEB Topic to be monitored
-     * @param apiKey UEB API Key (optional)
-     * @param apiSecret UEB API Secret (optional)
-     * @param consumerGroup UEB Reader Consumer Group
-     * @param consumerInstance UEB Reader Instance
-     * @param fetchTimeout UEB fetch timeout
-     * @param fetchLimit UEB fetch limit
-     * @param useHttps does topicSource use HTTPS?
-     * @param allowSelfSignedCerts does topicSource allow self-signed certs?
-     * 
+     * @param busTopicParams Parameters object containing all the required inputs     *
      * @throws IllegalArgumentException An invalid parameter passed in
      */
 
 
-    public SingleThreadedUebTopicSource(List<String> servers, String topic, String apiKey, String apiSecret,
-            String consumerGroup, String consumerInstance, int fetchTimeout, int fetchLimit, boolean useHttps,
-            boolean allowSelfSignedCerts) {
+    public SingleThreadedUebTopicSource(BusTopicParams busTopicParams) {
 
-        super(servers, topic, apiKey, apiSecret, consumerGroup, consumerInstance, fetchTimeout, fetchLimit, useHttps,
-                allowSelfSignedCerts);
+        super(busTopicParams);
 
-        this.allowSelfSignedCerts = allowSelfSignedCerts;
+        this.allowSelfSignedCerts = busTopicParams.isAllowSelfSignedCerts();
 
         this.init();
     }

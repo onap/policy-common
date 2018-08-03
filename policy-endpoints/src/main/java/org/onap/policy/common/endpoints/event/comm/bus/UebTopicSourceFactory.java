@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import org.onap.policy.common.endpoints.event.comm.bus.internal.SingleThreadedBusTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.SingleThreadedUebTopicSource;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;
@@ -63,8 +64,8 @@ public interface UebTopicSourceFactory {
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public UebTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret,
-            String consumerGroup, String consumerInstance, int fetchTimeout, int fetchLimit, boolean managed,
-            boolean useHttps, boolean allowSelfSignedCerts);
+                                String consumerGroup, String consumerInstance, int fetchTimeout, int fetchLimit, boolean managed,
+                                boolean useHttps, boolean allowSelfSignedCerts);
 
     /**
      * Instantiates a new UEB Topic Source
@@ -160,8 +161,18 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
                 return uebTopicSources.get(topic);
             }
 
-            UebTopicSource uebTopicSource = new SingleThreadedUebTopicSource(servers, topic, apiKey, apiSecret,
-                    consumerGroup, consumerInstance, fetchTimeout, fetchLimit, useHttps, allowSelfSignedCerts);
+            UebTopicSource uebTopicSource = new SingleThreadedUebTopicSource(SingleThreadedBusTopicSource.BusTopicParams.builder()
+                    .servers(servers)
+                    .topic(topic)
+                    .apiKey(apiKey)
+                    .apiSecret(apiSecret)
+                    .consumerGroup(consumerGroup)
+                    .consumerInstance(consumerInstance)
+                    .fetchTimeout(fetchTimeout)
+                    .fetchLimit(fetchLimit)
+                    .useHttps(useHttps)
+                    .allowSelfSignedCerts(allowSelfSignedCerts)
+                    .build());
 
             if (managed) {
                 uebTopicSources.put(topic, uebTopicSource);
