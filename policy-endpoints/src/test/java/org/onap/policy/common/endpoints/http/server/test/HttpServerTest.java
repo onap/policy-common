@@ -1,8 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,7 +77,7 @@ public class HttpServerTest {
     public void testMultipleServers() throws Exception {
         logger.info("-- testMultipleServers() --");
 
-        HttpServletServer server1 = HttpServletServer.factory.build("echo-1", "localhost", 5688, "/", true, true);
+        HttpServletServer server1 = HttpServletServer.factory.build("echo-1", false,"localhost", 5688, "/", true, true);
         server1.addServletPackage("/*", this.getClass().getPackage().getName());
         server1.waitedStart(5000);
 

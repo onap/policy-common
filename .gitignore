@@ -8,6 +8,9 @@
 target
 bin
 .metadata/
+.idea/
+**/*.iml
+*/logs/
 integrity-audit/sql/generatedCreateIA.ddl
 integrity-audit/sql/generatedDropIA.ddl
 integrity-audit/sql/iaTest.mv.db
