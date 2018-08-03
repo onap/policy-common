@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_01f8297b",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpClientTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-03T18:50:28Z",
+      "side": 1,
+      "message": "typo: remove \"_PASSWORD\" from property name",
+      "revId": "5ef5eb4b56ad496ab45693a3b67f710cb1d3a975",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_8112f9b2",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpClientTest.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-03T18:50:28Z",
+      "side": 1,
+      "message": "could just invoke: System.getProperties().putAll(savedValueMap)\n\n(For that matter, could use a similar call to create the original savedValueMap.)",
+      "revId": "5ef5eb4b56ad496ab45693a3b67f710cb1d3a975",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
