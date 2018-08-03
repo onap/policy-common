@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.onap.policy.common.endpoints.event.comm.bus.internal.SingleThreadedBusTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.SingleThreadedDmaapTopicSource;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;
@@ -76,12 +77,12 @@ public interface DmaapTopicSourceFactory {
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public DmaapTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret, String userName,
-            String password, String consumerGroup, String consumerInstance, int fetchTimeout, int fetchLimit,
-            boolean managed, boolean useHttps, boolean allowSelfSignedCerts);
+                                  String password, String consumerGroup, String consumerInstance, int fetchTimeout, int fetchLimit,
+                                  boolean managed, boolean useHttps, boolean allowSelfSignedCerts);
 
     /**
      * Instantiates a new DMAAP Topic Source
-     * 
+     *
      * @param servers list of servers
      * @param topic topic name
      * @param apiKey API Key
@@ -101,14 +102,14 @@ public interface DmaapTopicSourceFactory {
      * @param managed is this endpoind managed?
      * @param useHttps does the connection use HTTPS?
      * @param allowSelfSignedCerts does connection allow self-signed certificates?
-     * 
+     *
      * @return an DMAAP Topic Source
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public DmaapTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret, String userName,
-            String password, String consumerGroup, String consumerInstance, int fetchTimeout, int fetchLimit,
-            String environment, String aftEnvironment, String partner, String latitude, String longitude,
-            Map<String, String> additionalProps, boolean managed, boolean useHttps, boolean allowSelfSignedCerts);
+                                  String password, String consumerGroup, String consumerInstance, int fetchTimeout, int fetchLimit,
+                                  String environment, String aftEnvironment, String partner, String latitude, String longitude,
+                                  Map<String, String> additionalProps, boolean managed, boolean useHttps, boolean allowSelfSignedCerts);
 
     /**
      * Instantiates a new DMAAP Topic Source
@@ -203,9 +204,26 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
                 return dmaapTopicSources.get(topic);
             }
 
-            DmaapTopicSource dmaapTopicSource = new SingleThreadedDmaapTopicSource(servers, topic, apiKey, apiSecret,
-                    userName, password, consumerGroup, consumerInstance, fetchTimeout, fetchLimit, environment,
-                    aftEnvironment, partner, latitude, longitude, additionalProps, useHttps, allowSelfSignedCerts);
+            DmaapTopicSource dmaapTopicSource = new SingleThreadedDmaapTopicSource(SingleThreadedBusTopicSource.BusTopicParams.builder()
+                    .servers(servers)
+                    .topic(topic)
+                    .apiKey(apiKey)
+                    .apiSecret(apiSecret)
+                    .userName(userName)
+                    .password(password)
+                    .consumerGroup(consumerGroup)
+                    .consumerInstance(consumerInstance)
+                    .fetchTimeout(fetchTimeout)
+                    .fetchLimit(fetchLimit)
+                    .environment(environment)
+                    .aftEnvironment(aftEnvironment)
+                    .partner(partner)
+                    .latitude(latitude)
+                    .longitude(longitude)
+                    .additionalProps(additionalProps)
+                    .useHttps(useHttps)
+                    .allowSelfSignedCerts(allowSelfSignedCerts)
+                    .build());
 
             if (managed) {
                 dmaapTopicSources.put(topic, dmaapTopicSource);
@@ -237,8 +255,20 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
             }
 
             DmaapTopicSource dmaapTopicSource =
-                    new SingleThreadedDmaapTopicSource(servers, topic, apiKey, apiSecret, userName, password,
-                            consumerGroup, consumerInstance, fetchTimeout, fetchLimit, useHttps, allowSelfSignedCerts);
+                    new SingleThreadedDmaapTopicSource(SingleThreadedBusTopicSource.BusTopicParams.builder()
+                            .servers(servers)
+                            .topic(topic)
+                            .apiKey(apiKey)
+                            .apiSecret(apiSecret)
+                            .userName(userName)
+                            .password(password)
+                            .consumerGroup(consumerGroup)
+                            .consumerInstance(consumerInstance)
+                            .fetchTimeout(fetchTimeout)
+                            .fetchLimit(fetchLimit)
+                            .useHttps(useHttps)
+                            .allowSelfSignedCerts(allowSelfSignedCerts)
+                            .build());
 
             if (managed) {
                 dmaapTopicSources.put(topic, dmaapTopicSource);
