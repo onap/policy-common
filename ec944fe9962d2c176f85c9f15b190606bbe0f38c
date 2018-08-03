@@ -16,6 +16,24 @@
       "revId": "ec944fe9962d2c176f85c9f15b190606bbe0f38c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_612b1d31",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpClientTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-08-03T16:44:19Z",
+      "side": 1,
+      "message": "It is not an issue at this point but I can add it though to cover for that possibility in the future.",
+      "parentUuid": "1a76adc5_26921b58",
+      "revId": "ec944fe9962d2c176f85c9f15b190606bbe0f38c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
