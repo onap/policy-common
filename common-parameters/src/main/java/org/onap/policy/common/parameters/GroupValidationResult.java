@@ -71,7 +71,7 @@ public class GroupValidationResult implements ValidationResult {
     }
 
     /**
-     * Construct a validation result for a field
+     * Construct a validation result for a field.
      * 
      * @param field The parameter field
      * @param ParameterGroup The parameter group containing the field
@@ -197,7 +197,6 @@ public class GroupValidationResult implements ValidationResult {
 
     /**
      * Set the validation result on on a parameter group.
-     * 
      * On a sequence of calls, the most serious validation status is recorded, assuming the status enum ordinal increase
      * in order of severity
      * 

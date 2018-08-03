@@ -42,7 +42,8 @@ public class TestYamlInput {
         try {
             // Read the parameters from JSON using Gson
             final Yaml yaml = new Yaml();
-            testParameterGroup = yaml.loadAs(new FileReader("src/test/resources/parameters/TestParameters.yaml"), TestParametersL00.class);
+            testParameterGroup = yaml.loadAs(new FileReader("src/test/resources/parameters/TestParameters.yaml"),
+                            TestParametersL00.class);
         } catch (final Exception e) {
             fail("test should not throw an exception here: " + e.getMessage());
         }
@@ -50,7 +51,7 @@ public class TestYamlInput {
         GroupValidationResult validationResult = testParameterGroup.validate();
         assertTrue(validationResult.isValid());
         assertEquals("l00NameFromFile", testParameterGroup.getName());
-        
+
         String expectedResult = new String(Files.readAllBytes(
                         Paths.get("src/test/resources/expectedValidationResults/TestJsonYamlValidationResult.txt")))
                                         .replaceAll("\\s+", "");

@@ -24,6 +24,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,8 +35,6 @@ import java.nio.file.Paths;
 import org.junit.Test;
 import org.onap.policy.common.parameters.testclasses.TestParametersL00;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 public class TestJsonInput {
 
@@ -45,7 +46,8 @@ public class TestJsonInput {
         try {
             // Read the parameters from JSON using Gson
             final Gson gson = new GsonBuilder().create();
-            testParameterGroup = gson.fromJson(new FileReader("src/test/resources/parameters/TestParameters.json"), TestParametersL00.class);
+            testParameterGroup = gson.fromJson(new FileReader("src/test/resources/parameters/TestParameters.json"),
+                            TestParametersL00.class);
         } catch (final Exception e) {
             fail("test should not throw an exception here: " + e.getMessage());
         }
@@ -53,7 +55,7 @@ public class TestJsonInput {
         GroupValidationResult validationResult = testParameterGroup.validate();
         assertTrue(validationResult.isValid());
         assertEquals("l00NameFromFile", testParameterGroup.getName());
-        
+
         String expectedResult = new String(Files.readAllBytes(
                         Paths.get("src/test/resources/expectedValidationResults/TestJsonYamlValidationResult.txt")))
                                         .replaceAll("\\s+", "");

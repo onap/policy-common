@@ -62,7 +62,6 @@
         <dependency>
             <groupId>com.att.nsa</groupId>
             <artifactId>cambriaClient</artifactId>
-            <version>${cambria.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.slf4j</groupId>
@@ -156,18 +155,15 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>${http.client.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpcore</artifactId>
-            <version>${http.core.version}</version>
         </dependency>
 
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-jersey2-jaxrs</artifactId>
-            <version>${jersey.swagger.version}</version>
         </dependency>
 
         <dependency>

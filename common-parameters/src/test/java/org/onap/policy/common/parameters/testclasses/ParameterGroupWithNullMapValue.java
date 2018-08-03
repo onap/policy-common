@@ -22,8 +22,8 @@ package org.onap.policy.common.parameters.testclasses;
 
 import java.util.Map;
 
-import org.onap.policy.common.parameters.ParameterGroup;
 import org.onap.policy.common.parameters.GroupValidationResult;
+import org.onap.policy.common.parameters.ParameterGroup;
 
 public class ParameterGroupWithNullMapValue implements ParameterGroup {
     private String name;

@@ -20,9 +20,9 @@
 
 package org.onap.policy.common.parameters.testclasses;
 
-import org.onap.policy.common.parameters.ParameterGroup;
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.parameters.ParameterConstants;
+import org.onap.policy.common.parameters.ParameterGroup;
 import org.onap.policy.common.parameters.ValidationStatus;
 
 public class TestParametersLGeneric implements ParameterGroup {
@@ -31,9 +31,10 @@ public class TestParametersLGeneric implements ParameterGroup {
     private String lgenericStringField = "Legal " + this.getClass().getCanonicalName();
     
     /**
-     * Default constructor
+     * Default constructor.
      */
     public TestParametersLGeneric() {
+        // Default Constructor
     }
     
     /**

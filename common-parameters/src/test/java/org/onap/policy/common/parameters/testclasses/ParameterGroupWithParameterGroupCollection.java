@@ -23,8 +23,8 @@ package org.onap.policy.common.parameters.testclasses;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.onap.policy.common.parameters.ParameterGroup;
 import org.onap.policy.common.parameters.GroupValidationResult;
+import org.onap.policy.common.parameters.ParameterGroup;
 
 public class ParameterGroupWithParameterGroupCollection implements ParameterGroup {
     private String name;

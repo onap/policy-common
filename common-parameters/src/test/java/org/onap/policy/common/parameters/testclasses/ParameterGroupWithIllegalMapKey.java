@@ -23,8 +23,8 @@ package org.onap.policy.common.parameters.testclasses;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.onap.policy.common.parameters.ParameterGroup;
 import org.onap.policy.common.parameters.GroupValidationResult;
+import org.onap.policy.common.parameters.ParameterGroup;
 
 public class ParameterGroupWithIllegalMapKey implements ParameterGroup {
     private String name;

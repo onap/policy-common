@@ -26,21 +26,21 @@ package org.onap.policy.common.capabilities;
 public interface Lockable {
 
     /**
-     * locks this entity
+     * Locks this entity.
      * 
      * @return true is the lock operation was successful, false otherwise
      */
     public boolean lock();
 
     /**
-     * unlocks this entity
+     * Unlocks this entity.
      * 
      * @return true is the unlock operation was successful, false otherwise
      */
     public boolean unlock();
 
     /**
-     * is this entity locked?
+     * Checks if this entity is locked.
      * 
      * @return true if the entity is in a locked state, false otherwise
      */

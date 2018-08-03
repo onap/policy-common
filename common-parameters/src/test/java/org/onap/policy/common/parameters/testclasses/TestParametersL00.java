@@ -24,9 +24,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.onap.policy.common.parameters.ParameterGroup;
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.parameters.ParameterConstants;
+import org.onap.policy.common.parameters.ParameterGroup;
 import org.onap.policy.common.parameters.ValidationStatus;
 
 public class TestParametersL00 implements ParameterGroup {
@@ -38,9 +38,10 @@ public class TestParametersL00 implements ParameterGroup {
     private Map<String, TestParametersLGeneric> l00LGenericNestedMap = new LinkedHashMap<>();
 
     /**
-     * Default constructor
+     * Default constructor.
      */
     public TestParametersL00() {
+        // Default Cnstructor
     }
     
     /**

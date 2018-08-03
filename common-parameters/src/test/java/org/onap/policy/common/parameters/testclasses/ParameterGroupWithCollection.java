@@ -23,8 +23,8 @@ package org.onap.policy.common.parameters.testclasses;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.onap.policy.common.parameters.ParameterGroup;
 import org.onap.policy.common.parameters.GroupValidationResult;
+import org.onap.policy.common.parameters.ParameterGroup;
 
 public class ParameterGroupWithCollection implements ParameterGroup {
     private String name;
@@ -32,11 +32,12 @@ public class ParameterGroupWithCollection implements ParameterGroup {
 
     /**
      * Create a test parameter group.
+     * 
      * @param name the parameter group name
      */
     public ParameterGroupWithCollection(final String name) {
         this.name = name;
-        
+
         intArrayList.add(1);
         intArrayList.add(2);
         intArrayList.add(3);
@@ -45,12 +46,12 @@ public class ParameterGroupWithCollection implements ParameterGroup {
     public List<Integer> getIntArrayList() {
         return intArrayList;
     }
-    
+
     @Override
     public String getName() {
         return name;
     }
-    
+
     @Override
     public GroupValidationResult validate() {
         return new GroupValidationResult(this);

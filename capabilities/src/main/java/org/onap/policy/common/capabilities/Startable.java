@@ -53,7 +53,7 @@ public interface Startable {
     public void shutdown();
 
     /**
-     * is it alive?
+     * Checks if the entity is alive.
      * 
      * @return boolean. true if alive, otherwise false
      */
