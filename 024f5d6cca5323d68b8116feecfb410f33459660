@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a76adc5_8b9538e6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 2543
+      },
+      "writtenOn": "2018-08-03T16:31:28Z",
+      "side": 1,
+      "message": "Constructor using 10 params , but allowed only 7. I applied this builder pattern for 3 of the classes. \nThere is also build interface in Factory class, which too have many params. \nBut that needs more deep analysis of code. Hence i did not do it in this code. \nHope this is right. If yes, then I will try to do for Factory as well. \nPlease let me know your review comments.",
+      "revId": "024f5d6cca5323d68b8116feecfb410f33459660",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_ab9a7412",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/DmaapTopicSourceFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 2543
+      },
+      "writtenOn": "2018-08-03T16:31:28Z",
+      "side": 1,
+      "message": "Here also builder pattern could be applied., if this is correct, then i will apply in another review. \nI wanted to first confirm if you guys like this way.\nsimilarly below and other build(...) methods",
+      "revId": "024f5d6cca5323d68b8116feecfb410f33459660",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_4b9f2004",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/UebTopicSourceFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 2543
+      },
+      "writtenOn": "2018-08-03T16:31:28Z",
+      "side": 1,
+      "message": "thsi could also lead to bugs, when accidentally, the parameters are switched , because many of them are strings.",
+      "revId": "024f5d6cca5323d68b8116feecfb410f33459660",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_0b8928ca",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
         "patchSetId": 1
