@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,18 +85,52 @@ public class SingleThreadedDmaapTopicSource extends SingleThreadedBusTopicSource
     @Override
     public void init() throws MalformedURLException {
         if (anyNullOrEmpty(this.userName, this.password)) {
-            this.consumer = new BusConsumer.CambriaConsumerWrapper(this.servers, this.topic, this.apiKey,
-                    this.apiSecret, this.consumerGroup, this.consumerInstance, this.fetchTimeout, this.fetchLimit,
-                    this.useHttps, this.allowSelfSignedCerts);
+            this.consumer = new BusConsumer.CambriaConsumerWrapper(BusTopicParams.builder()
+                    .servers(this.servers)
+                    .topic(this.topic)
+                    .apiKey(this.apiKey)
+                    .apiSecret(this.apiSecret)
+                    .consumerGroup(this.consumerGroup)
+                    .consumerInstance(this.consumerInstance)
+                    .fetchTimeout(this.fetchTimeout)
+                    .fetchLimit(this.fetchLimit)
+                    .useHttps(this.useHttps)
+                    .allowSelfSignedCerts(this.allowSelfSignedCerts)
+                    .build());
         } else if (allNullOrEmpty(this.environment, this.aftEnvironment, this.latitude, this.longitude, this.partner)) {
-            this.consumer = new BusConsumer.CambriaConsumerWrapper(this.servers, this.topic, this.apiKey,
-                    this.apiSecret, this.userName, this.password, this.consumerGroup, this.consumerInstance,
-                    this.fetchTimeout, this.fetchLimit, this.useHttps, this.allowSelfSignedCerts);
+            this.consumer = new BusConsumer.CambriaConsumerWrapper(BusTopicParams.builder()
+                    .servers(this.servers)
+                    .topic(this.topic)
+                    .apiKey(this.apiKey)
+                    .apiSecret(this.apiSecret)
+                    .userName(this.userName)
+                    .password(this.password)
+                    .consumerGroup(this.consumerGroup)
+                    .consumerInstance(this.consumerInstance)
+                    .fetchTimeout(this.fetchTimeout)
+                    .fetchLimit(this.fetchLimit)
+                    .useHttps(this.useHttps)
+                    .allowSelfSignedCerts(this.allowSelfSignedCerts)
+                    .build());
         } else {
-            this.consumer = new BusConsumer.DmaapDmeConsumerWrapper(this.servers, this.topic, this.apiKey,
-                    this.apiSecret, this.userName, this.password, this.consumerGroup, this.consumerInstance,
-                    this.fetchTimeout, this.fetchLimit, this.environment, this.aftEnvironment, this.partner,
-                    this.latitude, this.longitude, this.additionalProps, this.useHttps);
+            this.consumer = new BusConsumer.DmaapDmeConsumerWrapper(BusTopicParams.builder()
+                    .servers(this.servers)
+                    .topic(this.topic)
+                    .apiKey(this.apiKey)
+                    .apiSecret(this.apiSecret)
+                    .userName(this.userName)
+                    .password(this.password)
+                    .consumerGroup(this.consumerGroup)
+                    .consumerInstance(this.consumerInstance)
+                    .fetchTimeout(this.fetchTimeout)
+                    .fetchLimit(this.fetchLimit)
+                    .environment(this.environment)
+                    .aftEnvironment(this.aftEnvironment)
+                    .partner(this.partner)
+                    .latitude(this.latitude)
+                    .longitude(this.longitude)
+                    .additionalProps(this.additionalProps)
+                    .useHttps(this.useHttps).build());
         }
 
         logger.info("{}: INITTED", this);

@@ -3,13 +3,14 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,65 +49,67 @@ public class InlineDmaapTopicSink extends InlineBusTopicSink implements DmaapTop
     protected Map<String, String> additionalProps = null;
 
     /**
-     * 
-     * @param servers DMaaP servers
-     * @param topic DMaaP Topic to be monitored
-     * @param apiKey DMaaP API Key (optional)
-     * @param apiSecret DMaaP API Secret (optional)
-     * @param consumerGroup DMaaP Reader Consumer Group
-     * @param consumerInstance DMaaP Reader Instance
-     * @param fetchTimeout DMaaP fetch timeout
-     * @param fetchLimit DMaaP fetch limit
-     * @param environment DME2 Environment
-     * @param aftEnvironment DME2 AFT Environment
-     * @param partner DME2 Partner
-     * @param latitude DME2 Latitude
-     * @param longitude DME2 Longitude
-     * @param additionalProps Additional properties to pass to DME2
-     * @param useHttps does connection use HTTPS?
-     * @param allowSelfSignedCerts are self-signed certificates allow
-     * 
+     * BusTopicParams contains the below mentioned attributes
+     * servers              DMaaP servers
+     * topic                DMaaP Topic to be monitored
+     * apiKey               DMaaP API Key (optional)
+     * apiSecret            DMaaP API Secret (optional)
+     * environment          DME2 Environment
+     * aftEnvironment       DME2 AFT Environment
+     * partner              DME2 Partner
+     * latitude             DME2 Latitude
+     * longitude            DME2 Longitude
+     * additionalProps      Additional properties to pass to DME2
+     * useHttps             does connection use HTTPS?
+     * allowSelfSignedCerts are self-signed certificates allow
+     * @param busTopicParams Contains the above mentioned parameters
      * @throws IllegalArgumentException An invalid parameter passed in
      */
-    public InlineDmaapTopicSink(List<String> servers, String topic, String apiKey, String apiSecret, String userName,
-            String password, String partitionKey, String environment, String aftEnvironment, String partner,
-            String latitude, String longitude, Map<String, String> additionalProps, boolean useHttps,
-            boolean allowSelfSignedCerts) {
+    public InlineDmaapTopicSink(BusTopicParams busTopicParams) {
 
-        super(servers, topic, apiKey, apiSecret, partitionKey, useHttps, allowSelfSignedCerts);
+        super(busTopicParams);
 
-        this.userName = userName;
-        this.password = password;
+        this.userName = busTopicParams.getUserName();
+        this.password = busTopicParams.getPassword();
 
-        this.environment = environment;
-        this.aftEnvironment = aftEnvironment;
-        this.partner = partner;
+        this.environment = busTopicParams.getEnvironment();
+        this.aftEnvironment = busTopicParams.getAftEnvironment();
+        this.partner = busTopicParams.getPartner();
 
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.latitude = busTopicParams.getLatitude();
+        this.longitude = busTopicParams.getLongitude();
 
-        this.additionalProps = additionalProps;
-    }
-
-    public InlineDmaapTopicSink(List<String> servers, String topic, String apiKey, String apiSecret, String userName,
-            String password, String partitionKey, boolean useHttps, boolean allowSelfSignedCerts) {
-
-        super(servers, topic, apiKey, apiSecret, partitionKey, useHttps, allowSelfSignedCerts);
-
-        this.userName = userName;
-        this.password = password;
+        this.additionalProps = busTopicParams.getAdditionalProps();
     }
 
 
     @Override
     public void init() {
         if (allNullOrEmpty(this.environment, this.aftEnvironment, this.latitude, this.longitude, this.partner)) {
-            this.publisher = new BusPublisher.CambriaPublisherWrapper(this.servers, this.topic, this.apiKey,
-                    this.apiSecret, this.userName, this.password, this.useHttps, this.allowSelfSignedCerts);
+            this.publisher = new BusPublisher.CambriaPublisherWrapper(BusTopicParams.builder()
+                    .servers(this.servers)
+                    .topic(this.topic)
+                    .apiKey(this.apiKey)
+                    .apiSecret(this.apiSecret)
+                    .userName(this.userName)
+                    .password(this.password)
+                    .useHttps(this.useHttps)
+                    .allowSelfSignedCerts(this.allowSelfSignedCerts)
+                    .build());
         } else {
-            this.publisher = new BusPublisher.DmaapDmePublisherWrapper(this.servers, this.topic, this.userName,
-                    this.password, this.environment, this.aftEnvironment, this.partner, this.latitude, this.longitude,
-                    this.additionalProps, this.useHttps);
+            this.publisher = new BusPublisher.DmaapDmePublisherWrapper(BusTopicParams.builder()
+                    .servers(this.servers)
+                    .topic(this.topic)
+                    .userName(this.userName)
+                    .password(this.password)
+                    .environment(this.environment)
+                    .aftEnvironment(this.aftEnvironment)
+                    .partner(this.partner)
+                    .latitude(this.latitude)
+                    .longitude(this.longitude)
+                    .additionalProps(this.additionalProps)
+                    .useHttps(this.useHttps)
+                    .build());
         }
 
         logger.info("{}: DMAAP SINK created", this);

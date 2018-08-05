@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +31,7 @@ import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSource;
 public class SingleThreadedUebTopicSource extends SingleThreadedBusTopicSource implements UebTopicSource {
 
     /**
-     * 
-     * @param busTopicParams Parameters object containing all the required inputs     *
+     * @param busTopicParams Parameters object containing all the required inputs
      * @throws IllegalArgumentException An invalid parameter passed in
      */
 
@@ -50,9 +50,17 @@ public class SingleThreadedUebTopicSource extends SingleThreadedBusTopicSource i
      */
     @Override
     public void init() {
-        this.consumer = new BusConsumer.CambriaConsumerWrapper(this.servers, this.topic, this.apiKey, this.apiSecret,
-                this.consumerGroup, this.consumerInstance, this.fetchTimeout, this.fetchLimit, this.useHttps,
-                this.allowSelfSignedCerts);
+        this.consumer = new BusConsumer.CambriaConsumerWrapper(BusTopicParams.builder()
+                .servers(this.servers)
+                .topic(this.topic)
+                .apiKey(this.apiKey)
+                .apiSecret(this.apiSecret)
+                .consumerGroup(this.consumerGroup)
+                .consumerInstance(this.consumerInstance)
+                .fetchTimeout(this.fetchTimeout)
+                .fetchLimit(this.fetchLimit)
+                .useHttps(this.useHttps)
+                .allowSelfSignedCerts(this.allowSelfSignedCerts).build());
     }
 
     /**

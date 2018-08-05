@@ -75,7 +75,7 @@ public interface TopicEndpoint extends Startable, Lockable {
     /**
      * get the Topic Sources for the given topic name
      *
-     * @param topicName the topic name
+     * @param topicNames the topic name
      *
      * @return the Topic Source List
      * @throws IllegalStateException if the entity is in an invalid state
@@ -150,7 +150,6 @@ public interface TopicEndpoint extends Startable, Lockable {
      * infrastructure type
      *
      * @param topicName the topic name
-     * @param commType communication infrastructure type
      *
      * @return the Topic Sink List
      * @throws IllegalStateException if the entity is in an invalid state, for example multiple
