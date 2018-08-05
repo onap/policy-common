@@ -52,25 +52,22 @@ public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
     /**
      * Instantiates a new Bus Topic Base
      * 
-     * @param servers list of servers
-     * @param topic topic name
-     * @param apiKey API Key
-     * @param apiSecret API Secret
-     * @param useHttps does connection use HTTPS?
-     * @param allowSelfSignedCerts are self-signed certificates allow
-     * 
+     *  servers list of servers
+     *  topic topic name
+     *  apiKey API Key
+     *  apiSecret API Secret
+     *  useHttps does connection use HTTPS?
+     *  allowSelfSignedCerts are self-signed certificates allow
+     * @param busTopicParams
      * @return a Bus Topic Base
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public BusTopicBase(List<String> servers, String topic, String apiKey, String apiSecret, boolean useHttps,
-            boolean allowSelfSignedCerts) {
-
-        super(servers, topic);
-
-        this.apiKey = apiKey;
-        this.apiSecret = apiSecret;
-        this.useHttps = useHttps;
-        this.allowSelfSignedCerts = allowSelfSignedCerts;
+    public BusTopicBase(BusTopicParams busTopicParams) {
+        super(busTopicParams.getServers(), busTopicParams.getTopic());
+        this.apiKey = busTopicParams.getApiKey();
+        this.apiSecret = busTopicParams.getApiSecret();
+        this.useHttps = busTopicParams.isUseHttps();
+        this.allowSelfSignedCerts = busTopicParams.isAllowSelfSignedCerts();
     }
 
     @Override

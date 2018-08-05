@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.InlineUebTopicSink;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;
@@ -141,8 +143,15 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
                 return uebTopicSinks.get(topic);
             }
 
-            UebTopicSink uebTopicWriter = new InlineUebTopicSink(servers, topic, apiKey, apiSecret, partitionKey,
-                    useHttps, allowSelfSignedCerts);
+            UebTopicSink uebTopicWriter = new InlineUebTopicSink(BusTopicParams.builder()
+                    .servers(servers)
+                    .topic(topic)
+                    .apiKey(apiKey)
+                    .apiSecret(apiSecret)
+                    .partitionId(partitionKey)
+                    .useHttps(useHttps)
+                    .allowSelfSignedCerts(allowSelfSignedCerts)
+                    .build());
 
             if (managed) {
                 uebTopicSinks.put(topic, uebTopicWriter);
