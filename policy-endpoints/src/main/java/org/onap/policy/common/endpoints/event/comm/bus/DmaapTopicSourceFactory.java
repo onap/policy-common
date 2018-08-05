@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.onap.policy.common.endpoints.event.comm.bus.internal.SingleThreadedBusTopicSource;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.SingleThreadedDmaapTopicSource;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;
@@ -204,7 +205,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
                 return dmaapTopicSources.get(topic);
             }
 
-            DmaapTopicSource dmaapTopicSource = new SingleThreadedDmaapTopicSource(SingleThreadedBusTopicSource.BusTopicParams.builder()
+            DmaapTopicSource dmaapTopicSource = new SingleThreadedDmaapTopicSource(BusTopicParams.builder()
                     .servers(servers)
                     .topic(topic)
                     .apiKey(apiKey)
@@ -255,7 +256,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
             }
 
             DmaapTopicSource dmaapTopicSource =
-                    new SingleThreadedDmaapTopicSource(SingleThreadedBusTopicSource.BusTopicParams.builder()
+                    new SingleThreadedDmaapTopicSource(BusTopicParams.builder()
                             .servers(servers)
                             .topic(topic)
                             .apiKey(apiKey)

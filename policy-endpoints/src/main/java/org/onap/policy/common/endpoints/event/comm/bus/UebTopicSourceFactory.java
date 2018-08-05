@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
-import org.onap.policy.common.endpoints.event.comm.bus.internal.SingleThreadedBusTopicSource;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.SingleThreadedUebTopicSource;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;
@@ -161,7 +162,7 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
                 return uebTopicSources.get(topic);
             }
 
-            UebTopicSource uebTopicSource = new SingleThreadedUebTopicSource(SingleThreadedBusTopicSource.BusTopicParams.builder()
+            UebTopicSource uebTopicSource = new SingleThreadedUebTopicSource(BusTopicParams.builder()
                     .servers(servers)
                     .topic(topic)
                     .apiKey(apiKey)
@@ -366,5 +367,4 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
         builder.append("IndexedUebTopicSourceFactory []");
         return builder.toString();
     }
-
 }

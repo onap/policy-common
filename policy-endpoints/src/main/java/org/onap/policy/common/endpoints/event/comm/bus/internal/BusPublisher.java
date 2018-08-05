@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +48,7 @@ public interface BusPublisher {
     /**
      * sends a message
      * 
-     * @param partition id
+     * @param partitionId id
      * @param message the message
      * @return true if success, false otherwise
      * @throws IllegalArgumentException if no message provided
@@ -72,23 +73,17 @@ public interface BusPublisher {
         @JsonIgnore
         protected volatile CambriaBatchingPublisher publisher;
 
-        public CambriaPublisherWrapper(List<String> servers, String topic, String apiKey, String apiSecret,
-                boolean useHttps) {
-            this(servers, topic, apiKey, apiSecret, null, null, useHttps, false);
-        }
-
-        public CambriaPublisherWrapper(List<String> servers, String topic, String apiKey, String apiSecret,
-                String username, String password, boolean useHttps, boolean selfSignedCerts) {
+        public CambriaPublisherWrapper(BusTopicParams busTopicParams) {
 
             PublisherBuilder builder = new CambriaClientBuilders.PublisherBuilder();
 
-            builder.usingHosts(servers).onTopic(topic);
+            builder.usingHosts(busTopicParams.getServers()).onTopic(busTopicParams.getTopic());
 
             // Set read timeout to 30 seconds (TBD: this should be configurable)
             builder.withSocketTimeout(30000);
 
-            if (useHttps) {
-                if (selfSignedCerts) {
+            if (busTopicParams.isUseHttps()) {
+                if (busTopicParams.isAllowSelfSignedCerts()) {
                     builder.withConnectionType(ConnectionType.HTTPS_NO_VALIDATION);
                 } else {
                     builder.withConnectionType(ConnectionType.HTTPS);
@@ -96,12 +91,12 @@ public interface BusPublisher {
             }
 
 
-            if (apiKey != null && !apiKey.isEmpty() && apiSecret != null && !apiSecret.isEmpty()) {
-                builder.authenticatedBy(apiKey, apiSecret);
+            if (busTopicParams.isApiKeyValid() && busTopicParams.isApiSecretValid()) {
+                builder.authenticatedBy(busTopicParams.getApiKey(), busTopicParams.getApiSecret());
             }
 
-            if (username != null && !username.isEmpty() && password != null && !password.isEmpty()) {
-                builder.authenticatedByHttp(username, password);
+            if (busTopicParams.isUserNameValid() && busTopicParams.isPasswordValid()) {
+                builder.authenticatedByHttp(busTopicParams.getUserName(), busTopicParams.getPassword());
             }
 
             try {
@@ -297,55 +292,60 @@ public interface BusPublisher {
     }
 
     public static class DmaapDmePublisherWrapper extends DmaapPublisherWrapper {
-        public DmaapDmePublisherWrapper(List<String> servers, String topic, String username, String password,
-                String environment, String aftEnvironment, String dme2Partner, String latitude, String longitude,
-                Map<String, String> additionalProps, boolean useHttps) {
+        public DmaapDmePublisherWrapper(BusTopicParams busTopicParams) {
 
-            super(ProtocolTypeConstants.DME2, servers, topic, username, password, useHttps);
-
-
-
-            String dme2RouteOffer = additionalProps.get(DmaapTopicSinkFactory.DME2_ROUTE_OFFER_PROPERTY);
-
-            if (environment == null || environment.isEmpty()) {
-                throw parmException(topic, PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ENVIRONMENT_SUFFIX);
-            }
-            if (aftEnvironment == null || aftEnvironment.isEmpty()) {
-                throw parmException(topic, PolicyEndPointProperties.PROPERTY_DMAAP_DME2_AFT_ENVIRONMENT_SUFFIX);
-            }
-            if (latitude == null || latitude.isEmpty()) {
-                throw parmException(topic, PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LATITUDE_SUFFIX);
-            }
-            if (longitude == null || longitude.isEmpty()) {
-                throw parmException(topic, PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LONGITUDE_SUFFIX);
+            super(ProtocolTypeConstants.DME2, busTopicParams.getServers(),busTopicParams.getTopic(),
+                    busTopicParams.getUserName(),busTopicParams.getPassword(),busTopicParams.isUseHttps());
+            String dme2RouteOffer = null;
+            if (busTopicParams.isAdditionalPropsValid()) {
+                dme2RouteOffer = busTopicParams.getAdditionalProps().get(
+                        DmaapTopicSinkFactory.DME2_ROUTE_OFFER_PROPERTY);
             }
 
-            if ((dme2Partner == null || dme2Partner.isEmpty())
-                    && (dme2RouteOffer == null || dme2RouteOffer.isEmpty())) {
+            if (busTopicParams.isEnvironmentNullOrEmpty()) {
+                throw parmException(busTopicParams.getTopic(),
+                        PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ENVIRONMENT_SUFFIX);
+            }
+            if (busTopicParams.isAftEnvironmentNullOrEmpty()) {
+                throw parmException(busTopicParams.getTopic(),
+                        PolicyEndPointProperties.PROPERTY_DMAAP_DME2_AFT_ENVIRONMENT_SUFFIX);
+            }
+            if (busTopicParams.isLatitudeNullOrEmpty()) {
+                throw parmException(busTopicParams.getTopic(),
+                        PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LATITUDE_SUFFIX);
+            }
+            if (busTopicParams.isLongitudeNullOrEmpty()) {
+                throw parmException(busTopicParams.getTopic(),
+                        PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LONGITUDE_SUFFIX);
+            }
+
+            if ((busTopicParams.isPartnerNullOrEmpty())
+                    && (dme2RouteOffer == null || dme2RouteOffer.trim().isEmpty())) {
                 throw new IllegalArgumentException(
-                        "Must provide at least " + PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "." + topic
+                        "Must provide at least " + PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
+                                + busTopicParams.getTopic()
                                 + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_PARTNER_SUFFIX + " or "
-                                + PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS + "." + topic
+                                + PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS + "." + busTopicParams.getTopic()
                                 + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ROUTE_OFFER_SUFFIX + " for DME2");
             }
 
-            String serviceName = servers.get(0);
+            String serviceName = busTopicParams.getServers().get(0);
 
             /* These are required, no defaults */
-            props.setProperty("Environment", environment);
-            props.setProperty("AFT_ENVIRONMENT", aftEnvironment);
+            props.setProperty("Environment", busTopicParams.getEnvironment());
+            props.setProperty("AFT_ENVIRONMENT", busTopicParams.getAftEnvironment());
 
             props.setProperty(DmaapTopicSinkFactory.DME2_SERVICE_NAME_PROPERTY, serviceName);
 
-            if (dme2Partner != null) {
-                props.setProperty("Partner", dme2Partner);
+            if (busTopicParams.getPartner() != null) {
+                props.setProperty("Partner", busTopicParams.getPartner());
             }
             if (dme2RouteOffer != null) {
                 props.setProperty(DmaapTopicSinkFactory.DME2_ROUTE_OFFER_PROPERTY, dme2RouteOffer);
             }
 
-            props.setProperty("Latitude", latitude);
-            props.setProperty("Longitude", longitude);
+            props.setProperty("Latitude", busTopicParams.getLatitude());
+            props.setProperty("Longitude", busTopicParams.getLongitude());
 
             // ServiceName also a default, found in additionalProps
 
@@ -361,7 +361,7 @@ public interface BusPublisher {
             props.setProperty("TransportType", "DME2");
             props.setProperty("MethodType", "POST");
 
-            for (Map.Entry<String, String> entry : additionalProps.entrySet()) {
+            for (Map.Entry<String, String> entry : busTopicParams.getAdditionalProps().entrySet()) {
                 String key = entry.getKey();
                 String value = entry.getValue();
 

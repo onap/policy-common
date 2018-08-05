@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +22,6 @@
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import java.net.MalformedURLException;
-import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.onap.policy.common.endpoints.event.comm.FilterableTopicSource;
@@ -85,15 +84,15 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
      */
     public SingleThreadedBusTopicSource(BusTopicParams busTopicParams) {
 
-        super(busTopicParams.getServers(), busTopicParams.getTopic(), busTopicParams.getApiKey(), busTopicParams.getApiSecret(), busTopicParams.isUseHttps(), busTopicParams.isAllowSelfSignedCerts());
+        super(busTopicParams);
 
-        if (busTopicParams.getConsumerGroup() == null || busTopicParams.getConsumerGroup().isEmpty()) {
+        if (busTopicParams.isConsumerGroupNullOrEmpty()) {
             this.consumerGroup = UUID.randomUUID().toString();
         } else {
             this.consumerGroup = busTopicParams.getConsumerGroup();
         }
 
-        if (busTopicParams.getConsumerInstance() == null || busTopicParams.getConsumerInstance().isEmpty()) {
+        if (busTopicParams.isConsumerInstanceNullOrEmpty()) {
             this.consumerInstance = NetworkUtil.getHostname();
         } else {
             this.consumerInstance = busTopicParams.getConsumerInstance();
@@ -312,225 +311,4 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
         return fetchLimit;
     }
 
-    /**
-     * Member variables of this Params class are as follows
-     * servers DMaaP servers
-     * topic DMaaP Topic to be monitored
-     * apiKey DMaaP API Key (optional)
-     * apiSecret DMaaP API Secret (optional)
-     * consumerGroup DMaaP Reader Consumer Group
-     * consumerInstance DMaaP Reader Instance
-     * fetchTimeout DMaaP fetch timeout
-     * fetchLimit DMaaP fetch limit
-     * environment DME2 Environment
-     * aftEnvironment DME2 AFT Environment
-     * partner DME2 Partner
-     * latitude DME2 Latitude
-     * longitude DME2 Longitude
-     * additionalProps Additional properties to pass to DME2
-     * useHttps does connection use HTTPS?
-     * allowSelfSignedCerts are self-signed certificates allow
-     *
-     */
-    public static class BusTopicParams {
-
-        public static TopicParamsBuilder builder() {
-            return new TopicParamsBuilder();
-        }
-        private List<String> servers;
-        private String topic;
-        private String apiKey;
-        private String apiSecret;
-        private String consumerGroup;
-        private String consumerInstance;
-        private int fetchTimeout;
-        private int fetchLimit;
-        private boolean useHttps;
-        private boolean allowSelfSignedCerts;
-
-        private String userName;
-        private String password;
-        private String environment;
-        private String aftEnvironment;
-        private String partner;
-        private String latitude;
-        private String longitude;
-        private Map<String, String> additionalProps;
-
-        public String getUserName() {
-            return userName;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public String getEnvironment() {
-            return environment;
-        }
-
-        public String getAftEnvironment() {
-            return aftEnvironment;
-        }
-
-        public String getPartner() {
-            return partner;
-        }
-
-        public String getLatitude() {
-            return latitude;
-        }
-
-        public String getLongitude() {
-            return longitude;
-        }
-
-        public Map<String, String> getAdditionalProps() {
-            return additionalProps;
-        }
-
-        public List<String> getServers() {
-            return servers;
-        }
-
-        public String getTopic() {
-            return topic;
-        }
-
-        public String getApiKey() {
-            return apiKey;
-        }
-
-        public String getApiSecret() {
-            return apiSecret;
-        }
-
-        public String getConsumerGroup() {
-            return consumerGroup;
-        }
-
-        public String getConsumerInstance() {
-            return consumerInstance;
-        }
-
-        public int getFetchTimeout() {
-            return fetchTimeout;
-        }
-
-        public int getFetchLimit() {
-            return fetchLimit;
-        }
-
-        public boolean isUseHttps() {
-            return useHttps;
-        }
-
-        public boolean isAllowSelfSignedCerts() {
-            return allowSelfSignedCerts;
-        }
-
-
-        public static class TopicParamsBuilder {
-            BusTopicParams m = new BusTopicParams();
-
-            private TopicParamsBuilder() {
-            }
-
-            public TopicParamsBuilder servers(List<String> servers) {
-                this.m.servers = servers;
-                return this;
-            }
-
-            public TopicParamsBuilder topic(String topic) {
-                this.m.topic = topic;
-                return this;
-            }
-
-            public TopicParamsBuilder apiKey(String apiKey) {
-                this.m.apiKey = apiKey;
-                return this;
-            }
-
-            public TopicParamsBuilder apiSecret(String apiSecret) {
-                this.m.apiSecret = apiSecret;
-                return this;
-            }
-
-            public TopicParamsBuilder consumerGroup(String consumerGroup) {
-                this.m.consumerGroup = consumerGroup;
-                return this;
-            }
-
-            public TopicParamsBuilder consumerInstance(String consumerInstance) {
-                this.m.consumerInstance = consumerInstance;
-                return this;
-            }
-
-            public TopicParamsBuilder fetchTimeout(int fetchTimeout) {
-                this.m.fetchTimeout = fetchTimeout;
-                return this;
-            }
-
-            public TopicParamsBuilder fetchLimit(int fetchLimit) {
-                this.m.fetchLimit = fetchLimit;
-                return this;
-            }
-
-            public TopicParamsBuilder useHttps(boolean useHttps) {
-                this.m.useHttps = useHttps;
-                return this;
-            }
-
-            public TopicParamsBuilder allowSelfSignedCerts(boolean allowSelfSignedCerts) {
-                this.m.allowSelfSignedCerts = allowSelfSignedCerts;
-                return this;
-            }
-
-            public TopicParamsBuilder userName(String userName) {
-                this.m.userName = userName;
-                return this;
-            }
-
-            public TopicParamsBuilder password(String password) {
-                this.m.password = password;
-                return this;
-            }
-
-            public TopicParamsBuilder environment(String environment) {
-                this.m.environment = environment;
-                return this;
-            }
-
-            public TopicParamsBuilder aftEnvironment(String aftEnvironment) {
-                this.m.aftEnvironment = aftEnvironment;
-                return this;
-            }
-
-            public TopicParamsBuilder partner(String partner) {
-                this.m.partner = partner;
-                return this;
-            }
-
-            public TopicParamsBuilder latitude(String latitude) {
-                this.m.latitude = latitude;
-                return this;
-            }
-
-            public TopicParamsBuilder longitude(String longitude) {
-                this.m.longitude = longitude;
-                return this;
-            }
-
-            public TopicParamsBuilder additionalProps(Map<String, String> additionalProps) {
-                this.m.additionalProps = additionalProps;
-                return this;
-            }
-
-            public BusTopicParams build() {
-                return m;
-            }
-
-        }
-
-    }
 }

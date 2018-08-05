@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,23 +53,24 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
 
     /**
      * constructor for abstract sink
-     * 
-     * @param servers servers
-     * @param topic topic
-     * @param apiKey api secret
-     * @param apiSecret api secret
-     * @param partitionId partition id
-     * @param useHttps does connection use HTTPS?
-     * @param allowSelfSignedCerts are self-signed certificates allow
+     * @param busTopicParams contains below listed attributes
+     * servers servers
+     * topic topic
+     * apiKey api secret
+     * apiSecret api secret
+     * partitionId partition id
+     * useHttps does connection use HTTPS?
+     * allowSelfSignedCerts are self-signed certificates allow     *
      * @throws IllegalArgumentException in invalid parameters are passed in
      */
-    public InlineBusTopicSink(List<String> servers, String topic, String apiKey, String apiSecret, String partitionId,
-            boolean useHttps, boolean allowSelfSignedCerts) {
+    public InlineBusTopicSink(BusTopicParams busTopicParams) {
 
-        super(servers, topic, apiKey, apiSecret, useHttps, allowSelfSignedCerts);
+        super(busTopicParams);
 
-        if (partitionId == null || partitionId.isEmpty()) {
+        if (busTopicParams.isPartitionIdNullOrEmpty()) {
             this.partitionId = UUID.randomUUID().toString();
+        } else {
+            this.partitionId = busTopicParams.getPartitionId();
         }
     }
 
