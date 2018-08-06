@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_2e266d17",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusTopicParams.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-08-06T12:49:46Z",
+      "side": 1,
+      "message": "Remove - since you are creating first time. Should only be Samsung",
+      "range": {
+        "startLine": 5,
+        "startChar": 1,
+        "endLine": 6,
+        "endChar": 11
+      },
+      "revId": "0c4c97298778bb55ee278392fd32db04bd252776",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
