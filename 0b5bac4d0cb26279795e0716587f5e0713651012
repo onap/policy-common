@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_f3fb7145",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-08-08T17:18:53Z",
+      "side": 1,
+      "message": "I\u0027ve been debating about the convenience of adding it or keep the interface thinner.   I decided that this method is as is is a \"for sure\" for consistency with addServlet interface and how that method is used from properties, etc .. in other repo code.\n\nThe debate in my mind is to have an additional convenience method of having another overloaded version with Class parameter in the signature (same argument would apply to addServlet).  I tend to it, but not considering it a critical decision at this stage, decided to postpone it to the future as I go through other review iterations.",
+      "parentUuid": "1a76adc5_93b55dcf",
+      "revId": "0b5bac4d0cb26279795e0716587f5e0713651012",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_b3ddf916",
         "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpServerTest.java",
         "patchSetId": 1
