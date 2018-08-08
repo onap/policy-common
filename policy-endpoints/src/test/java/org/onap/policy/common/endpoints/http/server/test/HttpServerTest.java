@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.http.server.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
@@ -51,6 +52,7 @@ public class HttpServerTest {
 
         HttpServletServer server = HttpServletServer.factory.build("echo", "localhost", 5678, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
+        server.addFilterClass("/*", TestFilter.class.getCanonicalName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(5678).isAlive());
@@ -65,6 +67,9 @@ public class HttpServerTest {
             // Expected
         }
         assertTrue(response == null);
+
+        response = http(HttpServletServer.factory.get(5678), "http://localhost:5678/junit/echo/hello?block=true");
+        assertEquals("FILTERED", response);
 
         assertTrue(HttpServletServer.factory.get(5678).isAlive());
         assertTrue(HttpServletServer.factory.inventory().size() == 1);
