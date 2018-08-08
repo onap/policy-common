@@ -22,6 +22,8 @@ package org.onap.policy.common.endpoints.http.server.internal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.EnumSet;
+import javax.servlet.DispatcherType;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
@@ -173,6 +175,21 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     public JettyServletServer(String name, String host, int port, String contextPath) {
         this(name, false, host, port, contextPath);
+    }
+
+    @Override
+    public void addFilterClass(String aFilterPath, String aFilterClass) {
+        if (aFilterClass == null || aFilterClass.isEmpty()) {
+            throw new IllegalArgumentException("No filter class provided");
+        }
+
+        String filterPath = aFilterPath;
+        if (aFilterPath == null || aFilterPath.isEmpty()) {
+            filterPath = "/*";
+        }
+
+        context.addFilter(aFilterClass, filterPath,
+                EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
     }
 
     public ServerConnector httpsConnector() {

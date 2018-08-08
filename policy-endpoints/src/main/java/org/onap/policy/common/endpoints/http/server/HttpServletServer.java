@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -23,30 +23,38 @@ package org.onap.policy.common.endpoints.http.server;
 import org.onap.policy.common.capabilities.Startable;
 
 /**
- * A Jetty Server to server REST Requests
+ * Http Servlet Server interface
  */
 public interface HttpServletServer extends Startable {
 
 
     /**
-     * factory for managing and tracking DMAAP sources
+     * Factory of Http Servlet Servers
      */
-    public static HttpServletServerFactory factory = new IndexedHttpServletServerFactory();
+    HttpServletServerFactory factory = new IndexedHttpServletServerFactory();
 
     /**
      * 
      * @return port
      */
-    public int getPort();
+    int getPort();
 
     /**
      * enables basic authentication with user and password on the the relative path relativeUriPath
      * 
-     * @param user
-     * @param password
-     * @param relativeUriPath
+     * @param user user
+     * @param password password
+     * @param relativeUriPath relative path
      */
-    public void setBasicAuthentication(String user, String password, String relativeUriPath);
+    void setBasicAuthentication(String user, String password, String relativeUriPath);
+
+    /**
+     * adds a filter at the specified path
+     *
+     * @param filterPath filter path
+     * @param filterClass filter class
+     */
+    void addFilterClass(String filterPath, String filterClass);
 
     /**
      * adds a JAX-RS servlet class to serve REST requests
@@ -57,7 +65,7 @@ public interface HttpServletServer extends Startable {
      * @throws IllegalArgumentException unable to process because of invalid input
      * @throws IllegalStateException unable to process because of invalid state
      */
-    public void addServletClass(String servletPath, String restClass);
+    void addServletClass(String servletPath, String restClass);
 
     /**
      * adds a package containing JAX-RS classes to serve REST requests
@@ -68,7 +76,7 @@ public interface HttpServletServer extends Startable {
      * @throws IllegalArgumentException unable to process because of invalid input
      * @throws IllegalStateException unable to process because of invalid state
      */
-    public void addServletPackage(String servletPath, String restPackage);
+    void addServletPackage(String servletPath, String restPackage);
 
     /**
      * blocking start of the http server
@@ -79,5 +87,5 @@ public interface HttpServletServer extends Startable {
      * @throws IllegalArgumentException if arguments are invalid
      * @throws InterruptedException if the blocking operation is interrupted
      */
-    public boolean waitedStart(long maxWaitTime) throws InterruptedException;
+    boolean waitedStart(long maxWaitTime) throws InterruptedException;
 }
