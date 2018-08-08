@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_536a651b",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-08-08T17:08:42Z",
+      "side": 1,
+      "message": "Jim, removing the \"static\" keyword has no effect, the compiler will convert it to \"public static final\" as the previous code was, so nothing has changed, it is just cleaning some sonar lint for superflous keywords in this file, nothing else has changed.",
+      "parentUuid": "1a76adc5_d3bbd5c2",
+      "revId": "0b5bac4d0cb26279795e0716587f5e0713651012",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_93b55dcf",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
         "patchSetId": 1
