@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_d3bbd5c2",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-08T16:05:48Z",
+      "side": 1,
+      "message": "no longer \"static\"?  If regular member data, then this should be an abstract class instead of an interface.  Or is this still a multiple-inheritance issue?  If so, then instead of putting the factory here, perhaps add a getInstance() method to the Factory interface, similar to how its typically done within standard java code.",
+      "revId": "0b5bac4d0cb26279795e0716587f5e0713651012",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_93b55dcf",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-08T16:05:48Z",
+      "side": 1,
+      "message": "is there a reason that filterClass is a String instead of just a Class object?",
+      "revId": "0b5bac4d0cb26279795e0716587f5e0713651012",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_b3ddf916",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpServerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-08T16:05:48Z",
+      "side": 1,
+      "message": "use assertEquals",
+      "revId": "0b5bac4d0cb26279795e0716587f5e0713651012",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
