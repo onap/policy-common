@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_d72500ac",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-08T17:59:57Z",
+      "side": 1,
+      "message": "well I just learned something new. :-)",
+      "parentUuid": "1a76adc5_536a651b",
+      "revId": "0b5bac4d0cb26279795e0716587f5e0713651012",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_93b55dcf",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
         "patchSetId": 1
