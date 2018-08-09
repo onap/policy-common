@@ -122,7 +122,7 @@ public class GroupMapValidationResult implements ValidationResult {
 
         // Set the status of the parameter group and replace the field result
         validationResultMap.put(entryName, mapEntryValidationResult);
-        this.setResult(status);
+        this.setResult(mapEntryValidationResult.getStatus());
     }
 
     /**

@@ -10,6 +10,20 @@ parameter group "l0Parameters" type "org.onap.policy.common.parameters.testclass
     parameter group "l10LGenericNested1" type "org.onap.policy.common.parameters.testclasses.TestParametersLGeneric" INVALID, parameter group has status INVALID
       field "lgenericIntField" type "int" value "-1" INVALID, lgenericIntField must be a positive integer
       field "lgenericStringField" type "java.lang.String" value "" INVALID, lgenericStringField must be a non-blank string
+    parameter group map "l10LGenericNestedMap" INVALID, parameter group has status INVALID
+      parameter group "l10LGenericNestedMapVal0" type "org.onap.policy.common.parameters.testclasses.TestParametersLGeneric" INVALID, parameter group has status INVALID
+        field "lgenericIntField" type "int" value "-1" INVALID, lgenericIntField must be a positive integer
+        field "lgenericStringField" type "java.lang.String" value "" INVALID, lgenericStringField must be a non-blank string
+      parameter group "l10LGenericNestedMapVal1" type "org.onap.policy.common.parameters.testclasses.TestParametersLGeneric" INVALID, parameter group has status INVALID
+        field "lgenericIntField" type "int" value "-1" INVALID, lgenericIntField must be a positive integer
+        field "lgenericStringField" type "java.lang.String" value "" INVALID, lgenericStringField must be a non-blank string
   parameter group "l00LGenericNested" type "org.onap.policy.common.parameters.testclasses.TestParametersLGeneric" INVALID, parameter group has status INVALID
     field "lgenericIntField" type "int" value "-1" INVALID, lgenericIntField must be a positive integer
     field "lgenericStringField" type "java.lang.String" value "" INVALID, lgenericStringField must be a non-blank string
+  parameter group map "l00LGenericNestedMap" INVALID, parameter group has status INVALID
+    parameter group "l00LGenericNestedMapVal0" type "org.onap.policy.common.parameters.testclasses.TestParametersLGeneric" INVALID, parameter group has status INVALID
+      field "lgenericIntField" type "int" value "-1" INVALID, lgenericIntField must be a positive integer
+      field "lgenericStringField" type "java.lang.String" value "" INVALID, lgenericStringField must be a non-blank string
+    parameter group "l00LGenericNestedMapVal1" type "org.onap.policy.common.parameters.testclasses.TestParametersLGeneric" INVALID, parameter group has status INVALID
+      field "lgenericIntField" type "int" value "-1" INVALID, lgenericIntField must be a positive integer
+      field "lgenericStringField" type "java.lang.String" value "" INVALID, lgenericStringField must be a non-blank string
