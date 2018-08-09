@@ -255,7 +255,7 @@ public class GroupValidationResult implements ValidationResult {
 
         // Set the status of the parameter group and replace the field result
         validationResultMap.put(parameterName, nestedValidationResult);
-        this.setResult(status);
+        this.setResult(nestedValidationResult.getStatus());
     }
 
     /**
@@ -280,7 +280,7 @@ public class GroupValidationResult implements ValidationResult {
 
         // Set the status of the parameter group and the field
         groupMapValidationResult.setResult(key, nestedMapValidationResult);
-        this.setResult(status);
+        this.setResult(nestedMapValidationResult.getStatus());
     }
 
     /**
