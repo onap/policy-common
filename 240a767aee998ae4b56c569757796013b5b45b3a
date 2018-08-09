@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_0b611139",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupMapValidationResult.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-08-09T14:13:18Z",
+      "side": 1,
+      "message": "Nice catch!",
+      "range": {
+        "startLine": 125,
+        "startChar": 0,
+        "endLine": 125,
+        "endChar": 61
+      },
+      "revId": "240a767aee998ae4b56c569757796013b5b45b3a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
