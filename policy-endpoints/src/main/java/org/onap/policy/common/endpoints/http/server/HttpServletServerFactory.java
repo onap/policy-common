@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import org.onap.aaf.cadi.filter.CadiFilter;
 import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;
@@ -222,6 +223,13 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
                 https = Boolean.parseBoolean(httpsString);
             }
 
+            String aafString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+                + serviceName + PolicyEndPointProperties.PROPERTY_AAF_SUFFIX);
+            boolean aaf = false;
+            if (aafString != null && !aafString.isEmpty()) {
+                aaf = Boolean.parseBoolean(httpsString);
+            }
+
             HttpServletServer service = build(serviceName, https, hostName, servicePort, contextUriPath, swagger, managed);
             if (userName != null && !userName.isEmpty() && password != null && !password.isEmpty()) {
                 service.setBasicAuthentication(userName, password, authUriPath);
@@ -239,6 +247,10 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
                 for (String restPackage : restPackageList) {
                     service.addServletPackage(restUriPath, restPackage);
                 }
+            }
+
+            if (aaf) {
+                service.addFilterClass(contextUriPath, CadiFilter.class.getCanonicalName());
             }
 
             serviceList.add(service);
