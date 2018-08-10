@@ -28,27 +28,27 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * NOOP topic sink
+ * NOOP topic sink.
  */
 public class NoopTopicSink extends TopicBase implements TopicSink {
 
     /**
-     * factory
+     * factory.
      */
     public static final NoopTopicSinkFactory factory = new IndexedNoopTopicSinkFactory();
 
     /**
-     * logger
+     * logger.
      */
     private static Logger logger = LoggerFactory.getLogger(NoopTopicSink.class);
 
     /**
-     * net logger
+     * net logger.
      */
     private static final Logger netLogger = LoggerFactory.getLogger(NETWORK_LOGGER);
 
     /**
-     * constructor
+     * constructor.
      * 
      * @param servers servers
      * @param topic topic

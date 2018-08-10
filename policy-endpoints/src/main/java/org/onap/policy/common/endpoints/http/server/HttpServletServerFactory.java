@@ -33,12 +33,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Factory of HTTP Servlet-Enabled Servlets
+ * Factory of HTTP Servlet-Enabled Servlets.
  */
 public interface HttpServletServerFactory {
 
     /**
-     * builds an http or https server with support for servlets
+     * Builds an http or https server with support for servlets.
      * 
      * @param name name
      * @param https use secured http over tls connection
@@ -54,7 +54,7 @@ public interface HttpServletServerFactory {
             boolean managed);
 
     /**
-     * builds an http server with support for servlets
+     * Builds an http server with support for servlets.
      *
      * @param name name
      * @param host binding host
@@ -69,7 +69,7 @@ public interface HttpServletServerFactory {
         boolean managed);
 
     /**
-     * list of http servers per properties
+     * Build a list of http servers per properties.
      * 
      * @param properties properties based configuration
      * @return list of http servers
@@ -78,7 +78,7 @@ public interface HttpServletServerFactory {
     List<HttpServletServer> build(Properties properties);
 
     /**
-     * gets a server based on the port
+     * Gets a server based on the port.
      * 
      * @param port port
      * @return http server
@@ -86,45 +86,46 @@ public interface HttpServletServerFactory {
     HttpServletServer get(int port);
 
     /**
-     * provides an inventory of servers
+     * Provides an inventory of servers.
      * 
      * @return inventory of servers
      */
     List<HttpServletServer> inventory();
 
     /**
-     * destroys server bound to a port
+     * Destroys server bound to a port.
      * 
-     * @param port
+     * @param port the port the server is bound to
      */
     void destroy(int port);
 
     /**
-     * destroys the factory and therefore all servers
+     * Destroys the factory and therefore all servers.
      */
     void destroy();
 }
 
 
 /**
- * Indexed factory implementation
+ * Indexed factory implementation.
  */
 class IndexedHttpServletServerFactory implements HttpServletServerFactory {
 
     private static final String SPACES_COMMA_SPACES = "\\s*,\\s*";
 
     /**
-     * logger
+     * logger.
      */
     protected static Logger logger = LoggerFactory.getLogger(IndexedHttpServletServerFactory.class);
 
     /**
-     * servers index
+     * servers index.
      */
     protected HashMap<Integer, HttpServletServer> servers = new HashMap<>();
 
     @Override
-    public synchronized HttpServletServer build(String name, boolean https, String host, int port, String contextPath, boolean swagger,
+    public synchronized HttpServletServer build(String name, boolean https, 
+                    String host, int port, String contextPath, boolean swagger,
             boolean managed) {
 
         if (servers.containsKey(port)) {

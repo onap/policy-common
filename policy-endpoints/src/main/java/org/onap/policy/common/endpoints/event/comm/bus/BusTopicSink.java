@@ -23,23 +23,23 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 import org.onap.policy.common.endpoints.event.comm.TopicSink;
 
 /**
- * Topic Sink over Bus Infrastructure (DMAAP/UEB)
+ * Topic Sink over Bus Infrastructure (DMAAP/UEB).
  */
 public interface BusTopicSink extends ApiKeyEnabled, TopicSink {
     /**
-     * Log Failures after X number of retries
+     * Log Failures after X number of retries.
      */
     public static final int DEFAULT_LOG_SEND_FAILURES_AFTER = 1;
 
     /**
-     * Sets the UEB partition key for published messages
+     * Sets the UEB partition key for published messages.
      * 
      * @param partitionKey the partition key
      */
     public void setPartitionKey(String partitionKey);
 
     /**
-     * return the partition key in used by the system to publish messages
+     * Return the partition key in used by the system to publish messages.
      * 
      * @return the partition key
      */

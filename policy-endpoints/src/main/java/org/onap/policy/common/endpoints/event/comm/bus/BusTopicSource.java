@@ -23,54 +23,54 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 import org.onap.policy.common.endpoints.event.comm.TopicSource;
 
 /**
- * Generic Topic Source for UEB/DMAAP Communication Infrastructure
+ * Generic Topic Source for UEB/DMAAP Communication Infrastructure.
  *
  */
 public interface BusTopicSource extends ApiKeyEnabled, TopicSource {
 
     /**
-     * Default Timeout fetching in milliseconds
+     * Default Timeout fetching in milliseconds.
      */
     public static int DEFAULT_TIMEOUT_MS_FETCH = 15000;
 
     /**
-     * Default maximum number of messages fetch at the time
+     * Default maximum number of messages fetch at the time.
      */
     public static int DEFAULT_LIMIT_FETCH = 100;
 
     /**
-     * Definition of No Timeout fetching
+     * Definition of No Timeout fetching.
      */
     public static int NO_TIMEOUT_MS_FETCH = -1;
 
     /**
-     * Definition of No limit fetching
+     * Definition of No limit fetching.
      */
     public static int NO_LIMIT_FETCH = -1;
 
     /**
-     * gets the consumer group
+     * Gets the consumer group.
      * 
      * @return consumer group
      */
     public String getConsumerGroup();
 
     /**
-     * gets the consumer instance
+     * Gets the consumer instance.
      * 
      * @return consumer instance
      */
     public String getConsumerInstance();
 
     /**
-     * gets the fetch timeout
+     * Gets the fetch timeout.
      * 
      * @return fetch timeout
      */
     public int getFetchTimeout();
 
     /**
-     * gets the fetch limit
+     * Gets the fetch limit.
      * 
      * @return fetch limit
      */

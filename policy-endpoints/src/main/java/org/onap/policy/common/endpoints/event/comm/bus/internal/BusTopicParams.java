@@ -24,8 +24,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Member variables of this Params class are as follows
- * servers DMaaP servers
+ * Member variables of this Params class are as follows.
+ * 
+ * <p>servers DMaaP servers
  * topic DMaaP Topic to be monitored
  * apiKey DMaaP API Key (optional)
  * apiSecret DMaaP API Secret (optional)

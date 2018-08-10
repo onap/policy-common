@@ -21,20 +21,20 @@
 package org.onap.policy.common.endpoints.event.comm;
 
 /**
- * Marks a given Topic Endpoint as able to send messages over a topic
+ * Marks a given Topic Endpoint as able to send messages over a topic.
  */
 public interface TopicSink extends Topic {
-	
-	/**
-	 * Sends a string message over this Topic Endpoint
-	 * 
-	 * @param message message to send
-	 * 
-	 * @return true if the send operation succeeded, false otherwise
-	 * @throws IllegalArgumentException an invalid message has been provided
-	 * @throws IllegalStateException the entity is in an state that prevents
-	 *         it from sending messages, for example, locked or stopped.
-	 */
-	public boolean send(String message);
+
+    /**
+     * Sends a string message over this Topic Endpoint.
+     * 
+     * @param message message to send
+     * 
+     * @return true if the send operation succeeded, false otherwise
+     * @throws IllegalArgumentException an invalid message has been provided
+     * @throws IllegalStateException the entity is in an state that prevents
+     *         it from sending messages, for example, locked or stopped.
+     */
+    public boolean send(String message);
 
 }

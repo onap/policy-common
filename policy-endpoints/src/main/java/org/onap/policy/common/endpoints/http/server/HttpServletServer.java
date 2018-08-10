@@ -23,24 +23,25 @@ package org.onap.policy.common.endpoints.http.server;
 import org.onap.policy.common.capabilities.Startable;
 
 /**
- * Http Servlet Server interface
+ * Http Servlet Server interface.
  */
 public interface HttpServletServer extends Startable {
 
 
     /**
-     * Factory of Http Servlet Servers
+     * Factory of Http Servlet Servers.
      */
     HttpServletServerFactory factory = new IndexedHttpServletServerFactory();
 
     /**
+     * Get the port.
      * 
      * @return port
      */
     int getPort();
 
     /**
-     * enables basic authentication with user and password on the the relative path relativeUriPath
+     * Enables basic authentication with user and password on the the relative path relativeUriPath.
      * 
      * @param user user
      * @param password password
@@ -49,7 +50,7 @@ public interface HttpServletServer extends Startable {
     void setBasicAuthentication(String user, String password, String relativeUriPath);
 
     /**
-     * adds a filter at the specified path
+     * Adds a filter at the specified path.
      *
      * @param filterPath filter path
      * @param filterClass filter class
@@ -57,7 +58,7 @@ public interface HttpServletServer extends Startable {
     void addFilterClass(String filterPath, String filterClass);
 
     /**
-     * adds a JAX-RS servlet class to serve REST requests
+     * Adds a JAX-RS servlet class to serve REST requests.
      * 
      * @param servletPath servlet path
      * @param restClass JAX-RS API Class
@@ -68,7 +69,7 @@ public interface HttpServletServer extends Startable {
     void addServletClass(String servletPath, String restClass);
 
     /**
-     * adds a package containing JAX-RS classes to serve REST requests
+     * Adds a package containing JAX-RS classes to serve REST requests.
      * 
      * @param servletPath servlet path
      * @param restPackage JAX-RS package to scan
@@ -79,7 +80,7 @@ public interface HttpServletServer extends Startable {
     void addServletPackage(String servletPath, String restPackage);
 
     /**
-     * blocking start of the http server
+     * Blocking start of the http server.
      * 
      * @param maxWaitTime max time to wait for the start to take place
      * @return true if start was successful

@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * DMAAP Topic Source Factory
+ * DMAAP Topic Source Factory.
  */
 public interface DmaapTopicSourceFactory {
     public final String DME2_READ_TIMEOUT_PROPERTY = "AFT_DME2_EP_READ_TIMEOUT_MS";
@@ -48,7 +48,7 @@ public interface DmaapTopicSourceFactory {
     public final String DME2_SESSION_STICKINESS_REQUIRED_PROPERTY = "sessionstickinessrequired";
 
     /**
-     * Creates an DMAAP Topic Source based on properties files
+     * Creates an DMAAP Topic Source based on properties files.
      * 
      * @param properties Properties containing initialization values
      * 
@@ -58,7 +58,7 @@ public interface DmaapTopicSourceFactory {
     public List<DmaapTopicSource> build(Properties properties);
 
     /**
-     * Instantiates a new DMAAP Topic Source
+     * Instantiates a new DMAAP Topic Source.
      * 
      * @param servers list of servers
      * @param topic topic name
@@ -78,11 +78,12 @@ public interface DmaapTopicSourceFactory {
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public DmaapTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret, String userName,
-                                  String password, String consumerGroup, String consumerInstance, int fetchTimeout, int fetchLimit,
+                                  String password, String consumerGroup, String consumerInstance,
+                                  int fetchTimeout, int fetchLimit,
                                   boolean managed, boolean useHttps, boolean allowSelfSignedCerts);
 
     /**
-     * Instantiates a new DMAAP Topic Source
+     * Instantiates a new DMAAP Topic Source.
      *
      * @param servers list of servers
      * @param topic topic name
@@ -108,12 +109,13 @@ public interface DmaapTopicSourceFactory {
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public DmaapTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret, String userName,
-                                  String password, String consumerGroup, String consumerInstance, int fetchTimeout, int fetchLimit,
-                                  String environment, String aftEnvironment, String partner, String latitude, String longitude,
-                                  Map<String, String> additionalProps, boolean managed, boolean useHttps, boolean allowSelfSignedCerts);
+                                  String password, String consumerGroup, String consumerInstance, int fetchTimeout,
+                                  int fetchLimit, String environment, String aftEnvironment, String partner, 
+                                  String latitude, String longitude, Map<String, String> additionalProps, 
+                                  boolean managed, boolean useHttps, boolean allowSelfSignedCerts);
 
     /**
-     * Instantiates a new DMAAP Topic Source
+     * Instantiates a new DMAAP Topic Source.
      * 
      * @param servers list of servers
      * @param topic topic name
@@ -126,7 +128,7 @@ public interface DmaapTopicSourceFactory {
     public DmaapTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret);
 
     /**
-     * Instantiates a new DMAAP Topic Source
+     * Instantiates a new DMAAP Topic Source.
      * 
      * @param servers list of servers
      * @param topic topic name
@@ -137,7 +139,7 @@ public interface DmaapTopicSourceFactory {
     public DmaapTopicSource build(List<String> servers, String topic);
 
     /**
-     * Destroys an DMAAP Topic Source based on a topic
+     * Destroys an DMAAP Topic Source based on a topic.
      * 
      * @param topic topic name
      * @throws IllegalArgumentException if invalid parameters are present
@@ -145,12 +147,12 @@ public interface DmaapTopicSourceFactory {
     public void destroy(String topic);
 
     /**
-     * Destroys all DMAAP Topic Sources
+     * Destroys all DMAAP Topic Sources.
      */
     public void destroy();
 
     /**
-     * gets an DMAAP Topic Source based on topic name
+     * Gets an DMAAP Topic Source based on topic name.
      * 
      * @param topic the topic name
      * @return an DMAAP Topic Source with topic name
@@ -160,7 +162,7 @@ public interface DmaapTopicSourceFactory {
     public DmaapTopicSource get(String topic);
 
     /**
-     * Provides a snapshot of the DMAAP Topic Sources
+     * Provides a snapshot of the DMAAP Topic Sources.
      * 
      * @return a list of the DMAAP Topic Sources
      */
@@ -171,19 +173,19 @@ public interface DmaapTopicSourceFactory {
 /* ------------- implementation ----------------- */
 
 /**
- * Factory of DMAAP Source Topics indexed by topic name
+ * Factory of DMAAP Source Topics indexed by topic name.
  */
 
 class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
     private static final String MISSING_TOPIC = "A topic must be provided";
 
     /**
-     * Logger
+     * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(IndexedDmaapTopicSourceFactory.class);
 
     /**
-     * DMaaP Topic Name Index
+     * DMaaP Topic Name Index.
      */
     protected HashMap<String, DmaapTopicSource> dmaapTopicSources = new HashMap<>();
 
@@ -507,6 +509,18 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
         uebTopicSource.shutdown();
     }
 
+    @Override
+    public void destroy() {
+        List<DmaapTopicSource> readers = this.inventory();
+        for (DmaapTopicSource reader : readers) {
+            reader.shutdown();
+        }
+
+        synchronized (this) {
+            this.dmaapTopicSources.clear();
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -529,18 +543,6 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
     @Override
     public synchronized List<DmaapTopicSource> inventory() {
         return new ArrayList<>(this.dmaapTopicSources.values());
-    }
-
-    @Override
-    public void destroy() {
-        List<DmaapTopicSource> readers = this.inventory();
-        for (DmaapTopicSource reader : readers) {
-            reader.shutdown();
-        }
-
-        synchronized (this) {
-            this.dmaapTopicSources.clear();
-        }
     }
 
     @Override

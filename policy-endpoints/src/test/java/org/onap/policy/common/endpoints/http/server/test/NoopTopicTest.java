@@ -36,12 +36,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * NOOP Endpoint Tests
+ * NOOP Endpoint Tests.
  */
 public class NoopTopicTest implements TopicListener {
 
     /**
-     * Logger
+     * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(NoopTopicTest.class);
 

@@ -23,7 +23,7 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 public interface DmaapTopicSource extends BusTopicSource {
 
     /**
-     * factory for managing and tracking DMAAP sources
+     * factory for managing and tracking DMAAP sources.
      */
     public static DmaapTopicSourceFactory factory = new IndexedDmaapTopicSourceFactory();
 }

@@ -34,12 +34,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * UEB Topic Sink Factory
+ * UEB Topic Sink Factory.
  */
 public interface UebTopicSinkFactory {
 
     /**
-     * Instantiates a new UEB Topic Writer
+     * Instantiates a new UEB Topic Writer.
      * 
      * @param servers list of servers
      * @param topic topic name
@@ -55,7 +55,7 @@ public interface UebTopicSinkFactory {
             boolean managed, boolean useHttps, boolean allowSelfSignedCerts);
 
     /**
-     * Creates an UEB Topic Writer based on properties files
+     * Creates an UEB Topic Writer based on properties files.
      * 
      * @param properties Properties containing initialization values
      * 
@@ -65,7 +65,7 @@ public interface UebTopicSinkFactory {
     public List<UebTopicSink> build(Properties properties);
 
     /**
-     * Instantiates a new UEB Topic Writer
+     * Instantiates a new UEB Topic Writer.
      * 
      * @param servers list of servers
      * @param topic topic name
@@ -76,7 +76,7 @@ public interface UebTopicSinkFactory {
     public UebTopicSink build(List<String> servers, String topic);
 
     /**
-     * Destroys an UEB Topic Writer based on a topic
+     * Destroys an UEB Topic Writer based on a topic.
      * 
      * @param topic topic name
      * @throws IllegalArgumentException if invalid parameters are present
@@ -84,7 +84,12 @@ public interface UebTopicSinkFactory {
     public void destroy(String topic);
 
     /**
-     * gets an UEB Topic Writer based on topic name
+     * Destroys all UEB Topic Writers.
+     */
+    public void destroy();
+
+    /**
+     * gets an UEB Topic Writer based on topic name.
      * 
      * @param topic the topic name
      * 
@@ -95,34 +100,29 @@ public interface UebTopicSinkFactory {
     public UebTopicSink get(String topic);
 
     /**
-     * Provides a snapshot of the UEB Topic Writers
+     * Provides a snapshot of the UEB Topic Writers.
      * 
      * @return a list of the UEB Topic Writers
      */
     public List<UebTopicSink> inventory();
-
-    /**
-     * Destroys all UEB Topic Writers
-     */
-    public void destroy();
 }
 
 
 /* ------------- implementation ----------------- */
 
 /**
- * Factory of UEB Reader Topics indexed by topic name
+ * Factory of UEB Reader Topics indexed by topic name.
  */
 class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
     private static final String MISSING_TOPIC = "A topic must be provided";
 
     /**
-     * Logger
+     * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(IndexedUebTopicSinkFactory.class);
 
     /**
-     * UEB Topic Name Index
+     * UEB Topic Name Index.
      */
     protected HashMap<String, UebTopicSink> uebTopicSinks = new HashMap<>();
 

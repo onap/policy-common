@@ -26,11 +26,13 @@ import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSource;
 
 /**
  * This topic source implementation specializes in reading messages over an UEB Bus topic source and
- * notifying its listeners
+ * notifying its listeners.
  */
 public class SingleThreadedUebTopicSource extends SingleThreadedBusTopicSource implements UebTopicSource {
 
     /**
+     * Constructor.
+     * 
      * @param busTopicParams Parameters object containing all the required inputs
      * @throws IllegalArgumentException An invalid parameter passed in
      */
@@ -46,7 +48,7 @@ public class SingleThreadedUebTopicSource extends SingleThreadedBusTopicSource i
     }
 
     /**
-     * Initialize the Cambria client
+     * Initialize the Cambria client.
      */
     @Override
     public void init() {

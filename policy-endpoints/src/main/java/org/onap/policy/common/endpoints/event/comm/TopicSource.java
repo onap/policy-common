@@ -22,16 +22,16 @@ package org.onap.policy.common.endpoints.event.comm;
 
 /**
  * Marker for a Topic Entity, indicating that the entity is able to read
- * over a topic
+ * over a topic.
  */
 public interface TopicSource extends Topic {
-	
-	/**
-	 * pushes an event into the source programatically
-	 * 
-	 * @param event the event in json format
-	 * @return true if it can be processed correctly, false otherwise
-	 */
-	public boolean offer(String event);
+
+    /**
+     * Pushes an event into the source programatically.
+     * 
+     * @param event the event in json format
+     * @return true if it can be processed correctly, false otherwise
+     */
+    public boolean offer(String event);
 
 }

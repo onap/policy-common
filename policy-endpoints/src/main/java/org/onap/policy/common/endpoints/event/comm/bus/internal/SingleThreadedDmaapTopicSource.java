@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This topic reader implementation specializes in reading messages over DMAAP topic and notifying
- * its listeners
+ * its listeners.
  */
 public class SingleThreadedDmaapTopicSource extends SingleThreadedBusTopicSource implements DmaapTopicSource, Runnable {
 
@@ -73,14 +73,15 @@ public class SingleThreadedDmaapTopicSource extends SingleThreadedBusTopicSource
         try {
             this.init();
         } catch (Exception e) {
-            logger.error("ERROR during init in dmaap-source: cannot create topic {} because of {}", topic, e.getMessage(), e);
+            logger.error("ERROR during init in dmaap-source: cannot create topic {} because of {}", 
+                            topic, e.getMessage(), e);
             throw new IllegalArgumentException(e);
         }
     }
 
 
     /**
-     * Initialize the Cambria or MR Client
+     * Initialize the Cambria or MR Client.
      */
     @Override
     public void init() throws MalformedURLException {

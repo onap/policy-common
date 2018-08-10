@@ -35,7 +35,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * DMAAP Topic Sink Factory
+ * DMAAP Topic Sink Factory.
  */
 public interface DmaapTopicSinkFactory {
     public final String DME2_READ_TIMEOUT_PROPERTY = "AFT_DME2_EP_READ_TIMEOUT_MS";
@@ -48,7 +48,7 @@ public interface DmaapTopicSinkFactory {
     public final String DME2_SESSION_STICKINESS_REQUIRED_PROPERTY = "sessionstickinessrequired";
 
     /**
-     * Instantiates a new DMAAP Topic Sink
+     * Instantiates a new DMAAP Topic Sink.
      *
      * @param servers         list of servers
      * @param topic           topic name
@@ -68,12 +68,12 @@ public interface DmaapTopicSinkFactory {
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public DmaapTopicSink build(List<String> servers, String topic, String apiKey, String apiSecret, String userName,
-                                String password, String partitionKey, String environment, String aftEnvironment, String partner,
-                                String latitude, String longitude, Map<String, String> additionalProps, boolean managed, boolean useHttps,
-                                boolean allowSelfSignedCerts);
+                                String password, String partitionKey, String environment, String aftEnvironment, 
+                                String partner, String latitude, String longitude, Map<String, String> additionalProps,
+                                boolean managed, boolean useHttps, boolean allowSelfSignedCerts);
 
     /**
-     * Instantiates a new DMAAP Topic Sink
+     * Instantiates a new DMAAP Topic Sink.
      *
      * @param servers      list of servers
      * @param topic        topic name
@@ -87,10 +87,11 @@ public interface DmaapTopicSinkFactory {
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public DmaapTopicSink build(List<String> servers, String topic, String apiKey, String apiSecret, String userName,
-                                String password, String partitionKey, boolean managed, boolean useHttps, boolean allowSelfSignedCerts);
+                                String password, String partitionKey, boolean managed, 
+                                boolean useHttps, boolean allowSelfSignedCerts);
 
     /**
-     * Creates an DMAAP Topic Sink based on properties files
+     * Creates an DMAAP Topic Sink based on properties files.
      *
      * @param properties Properties containing initialization values
      * @return an DMAAP Topic Sink
@@ -99,7 +100,7 @@ public interface DmaapTopicSinkFactory {
     public List<DmaapTopicSink> build(Properties properties);
 
     /**
-     * Instantiates a new DMAAP Topic Sink
+     * Instantiates a new DMAAP Topic Sink.
      *
      * @param servers list of servers
      * @param topic   topic name
@@ -109,7 +110,7 @@ public interface DmaapTopicSinkFactory {
     public DmaapTopicSink build(List<String> servers, String topic);
 
     /**
-     * Destroys an DMAAP Topic Sink based on a topic
+     * Destroys an DMAAP Topic Sink based on a topic.
      *
      * @param topic topic name
      * @throws IllegalArgumentException if invalid parameters are present
@@ -117,7 +118,12 @@ public interface DmaapTopicSinkFactory {
     public void destroy(String topic);
 
     /**
-     * gets an DMAAP Topic Sink based on topic name
+     * Destroys all DMAAP Topic Sinks.
+     */
+    public void destroy();
+
+    /**
+     * Gets an DMAAP Topic Sink based on topic name.
      *
      * @param topic the topic name
      * @return an DMAAP Topic Sink with topic name
@@ -127,42 +133,37 @@ public interface DmaapTopicSinkFactory {
     public DmaapTopicSink get(String topic);
 
     /**
-     * Provides a snapshot of the DMAAP Topic Sinks
+     * Provides a snapshot of the DMAAP Topic Sinks.
      *
      * @return a list of the DMAAP Topic Sinks
      */
     public List<DmaapTopicSink> inventory();
-
-    /**
-     * Destroys all DMAAP Topic Sinks
-     */
-    public void destroy();
 }
 
 
 /* ------------- implementation ----------------- */
 
 /**
- * Factory of DMAAP Reader Topics indexed by topic name
+ * Factory of DMAAP Reader Topics indexed by topic name.
  */
 class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
     private static final String MISSING_TOPIC = "A topic must be provided";
 
     /**
-     * Logger
+     * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(IndexedDmaapTopicSinkFactory.class);
 
     /**
-     * DMAAP Topic Name Index
+     * DMAAP Topic Name Index.
      */
     protected HashMap<String, DmaapTopicSink> dmaapTopicWriters = new HashMap<>();
 
     @Override
     public DmaapTopicSink build(List<String> servers, String topic, String apiKey, String apiSecret, String userName,
-                                String password, String partitionKey, String environment, String aftEnvironment, String partner,
-                                String latitude, String longitude, Map<String, String> additionalProps, boolean managed, boolean useHttps,
-                                boolean allowSelfSignedCerts) {
+                                String password, String partitionKey, String environment, String aftEnvironment, 
+                                String partner, String latitude, String longitude, Map<String, String> additionalProps,
+                                boolean managed, boolean useHttps, boolean allowSelfSignedCerts) {
 
         if (topic == null || topic.isEmpty()) {
             throw new IllegalArgumentException(MISSING_TOPIC);

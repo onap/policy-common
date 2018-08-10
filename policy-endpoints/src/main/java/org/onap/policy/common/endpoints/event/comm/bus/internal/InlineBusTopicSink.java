@@ -21,7 +21,6 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
-import java.util.List;
 import java.util.UUID;
 
 import org.onap.policy.common.endpoints.event.comm.bus.BusTopicSink;
@@ -36,31 +35,31 @@ import org.slf4j.LoggerFactory;
 public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopicSink {
 
     /**
-     * loggers
+     * Loggers.
      */
     private static Logger logger = LoggerFactory.getLogger(InlineBusTopicSink.class);
     private static final Logger netLogger = LoggerFactory.getLogger(NETWORK_LOGGER);
 
     /**
-     * The partition key to publish to
+     * The partition key to publish to.
      */
     protected String partitionId;
 
     /**
-     * message bus publisher
+     * Message bus publisher.
      */
     protected BusPublisher publisher;
 
     /**
-     * constructor for abstract sink
+     * Constructor for abstract sink.
      * @param busTopicParams contains below listed attributes
-     * servers servers
-     * topic topic
-     * apiKey api secret
-     * apiSecret api secret
-     * partitionId partition id
-     * useHttps does connection use HTTPS?
-     * allowSelfSignedCerts are self-signed certificates allow     *
+     *     servers servers
+     *     topic topic
+     *     apiKey api secret
+     *     apiSecret api secret
+     *     partitionId partition id
+     *     useHttps does connection use HTTPS?
+     *     allowSelfSignedCerts are self-signed certificates allow     *
      * @throws IllegalArgumentException in invalid parameters are passed in
      */
     public InlineBusTopicSink(BusTopicParams busTopicParams) {
@@ -75,7 +74,7 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
     }
 
     /**
-     * Initialize the Bus publisher
+     * Initialize the Bus publisher.
      */
     public abstract void init();
 

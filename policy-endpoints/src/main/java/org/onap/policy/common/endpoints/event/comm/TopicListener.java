@@ -21,18 +21,18 @@
 package org.onap.policy.common.endpoints.event.comm;
 
 /**
- * Listener for event messages entering the Policy Engine
+ * Listener for event messages entering the Policy Engine.
  */
 @FunctionalInterface
 public interface TopicListener {
-	
-	/**
-	 * Notification of a new Event over a given Topic
-	 * 
-	 * @param commType communication infrastructure type
-	 * @param topic topic name
-	 * @param event event message as a string
-	 */
-	public void onTopicEvent(Topic.CommInfrastructure commType, String topic, String event);
+
+    /**
+     * Notification of a new Event over a given Topic.
+     * 
+     * @param commType communication infrastructure type
+     * @param topic topic name
+     * @param event event message as a string
+     */
+    public void onTopicEvent(Topic.CommInfrastructure commType, String topic, String event);
 
 }

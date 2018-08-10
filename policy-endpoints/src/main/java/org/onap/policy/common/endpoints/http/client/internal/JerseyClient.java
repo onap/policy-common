@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public class JerseyClient implements HttpClient {
 
     /**
-     * Logger
+     * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(JerseyClient.class);
 
