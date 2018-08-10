@@ -37,7 +37,7 @@ public class TestTimeTest {
         assertEquals(tcur, tm.getDate().getTime());
 
         long tsleep = 10000L;
-        long tcur2 = tcur;
+        long tcur2 = tm2.getMillis();
 
         // sleep a bit and then check values
         tcur2 += tsleep;
