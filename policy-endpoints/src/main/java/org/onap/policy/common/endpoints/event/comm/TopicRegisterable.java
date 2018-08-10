@@ -21,22 +21,22 @@
 package org.onap.policy.common.endpoints.event.comm;
 
 /**
- * Marks a Topic entity as registerable
+ * Marks a Topic entity as registerable.
  */
 public interface TopicRegisterable {
-	
-	/**
-	 * Register for notification of events with this Topic Entity
-	 * 
-	 * @param topicListener the listener of events
-	 */
-	public void register(TopicListener topicListener);
-	
-	/**
-	 * Unregisters for notification of events with this Topic Entity
-	 * 
-	 * @param topicListener the listener of events
-	 */
-	public void unregister(TopicListener topicListener);
+
+    /**
+     * Register for notification of events with this Topic Entity.
+     * 
+     * @param topicListener the listener of events
+     */
+    public void register(TopicListener topicListener);
+
+    /**
+     * Unregisters for notification of events with this Topic Entity.
+     * 
+     * @param topicListener the listener of events
+     */
+    public void unregister(TopicListener topicListener);
 
 }

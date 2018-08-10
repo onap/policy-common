@@ -21,16 +21,16 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 /**
- * API
+ * API.
  */
 public interface ApiKeyEnabled {
-	/**
-	 * @return api key
-	 */
-	public String getApiKey();
-	
-	/**
-	 * @return api secret
-	 */
-	public String getApiSecret();
+    /**
+     * @return api key
+     */
+    public String getApiKey();
+
+    /**
+     * @return api secret
+     */
+    public String getApiSecret();
 }

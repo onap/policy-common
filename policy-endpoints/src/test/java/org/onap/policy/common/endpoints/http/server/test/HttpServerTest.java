@@ -37,12 +37,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * HttpServletServer JUNIT tests
+ * HttpServletServer JUNIT tests.
  */
 public class HttpServerTest {
 
     /**
-     * Logger
+     * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(HttpServerTest.class);
 
@@ -178,17 +178,18 @@ public class HttpServerTest {
     }
 
     /**
-     * performs an http request
+     * performs an http request.
      * 
-     * @throws MalformedURLException
-     * @throws IOException
-     * @throws InterruptedException
+     * @throws MalformedURLException make sure URL is good
+     * @throws IOException thrown is IO exception occurs
+     * @throws InterruptedException thrown if thread interrupted occurs
      */
     protected String http(HttpServletServer server, String aUrl)
             throws MalformedURLException, IOException, InterruptedException {
         URL url = new URL(aUrl);
         String response = null;
-        int numRetries = 1, maxNumberRetries = 5;
+        int numRetries = 1;
+        int maxNumberRetries = 5;
         while (numRetries <= maxNumberRetries) {
             try {
                 response = response(url);
@@ -206,11 +207,11 @@ public class HttpServerTest {
     }
 
     /**
-     * gets http response
+     * gets http response.
      * 
      * @param url url
      * 
-     * @throws IOException
+     * @throws IOException if an I/O error occurs
      */
     protected String response(URL url) throws IOException {
         String response = "";

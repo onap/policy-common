@@ -49,7 +49,7 @@ public class InlineDmaapTopicSink extends InlineBusTopicSink implements DmaapTop
     protected Map<String, String> additionalProps = null;
 
     /**
-     * BusTopicParams contains the below mentioned attributes
+     * BusTopicParams contains the below mentioned attributes.
      * servers              DMaaP servers
      * topic                DMaaP Topic to be monitored
      * apiKey               DMaaP API Key (optional)

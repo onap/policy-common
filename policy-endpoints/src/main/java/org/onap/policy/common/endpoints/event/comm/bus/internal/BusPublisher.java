@@ -46,7 +46,7 @@ import org.slf4j.LoggerFactory;
 public interface BusPublisher {
 
     /**
-     * sends a message
+     * sends a message.
      * 
      * @param partitionId id
      * @param message the message
@@ -56,19 +56,19 @@ public interface BusPublisher {
     public boolean send(String partitionId, String message);
 
     /**
-     * closes the publisher
+     * closes the publisher.
      */
     public void close();
 
     /**
-     * Cambria based library publisher
+     * Cambria based library publisher.
      */
     public static class CambriaPublisherWrapper implements BusPublisher {
 
         private static Logger logger = LoggerFactory.getLogger(CambriaPublisherWrapper.class);
 
         /**
-         * The actual Cambria publisher
+         * The actual Cambria publisher.
          */
         @JsonIgnore
         protected volatile CambriaBatchingPublisher publisher;
@@ -147,20 +147,20 @@ public interface BusPublisher {
     }
 
     /**
-     * DmaapClient library wrapper
+     * DmaapClient library wrapper.
      */
     public abstract class DmaapPublisherWrapper implements BusPublisher {
 
         private static Logger logger = LoggerFactory.getLogger(DmaapPublisherWrapper.class);
 
         /**
-         * MR based Publisher
+         * MR based Publisher.
          */
         protected MRSimplerBatchPublisher publisher;
         protected Properties props;
 
         /**
-         * MR Publisher Wrapper
+         * MR Publisher Wrapper.
          *
          * @param servers messaging bus hosts
          * @param topic topic
@@ -278,11 +278,11 @@ public interface BusPublisher {
     }
 
     /**
-     * DmaapClient library wrapper
+     * DmaapClient library wrapper.
      */
     public static class DmaapAafPublisherWrapper extends DmaapPublisherWrapper {
         /**
-         * MR based Publisher
+         * MR based Publisher.
          */
         public DmaapAafPublisherWrapper(List<String> servers, String topic, String aafLogin, String aafPassword,
                 boolean useHttps) {

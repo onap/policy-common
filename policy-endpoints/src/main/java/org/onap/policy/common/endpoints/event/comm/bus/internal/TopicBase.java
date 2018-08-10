@@ -32,50 +32,49 @@ import org.slf4j.LoggerFactory;
 public abstract class TopicBase implements Topic {
 
     /**
-     * logger
+     * logger.
      */
     private static Logger logger = LoggerFactory.getLogger(TopicBase.class);
 
     /**
-     * list of servers
+     * list of servers.
      */
     protected List<String> servers;
 
     /**
-     * Topic
+     * Topic.
      */
     protected String topic;
 
     /**
-     * event cache
+     * event cache.
      */
     protected CircularFifoQueue<String> recentEvents = new CircularFifoQueue<>(10);
 
     /**
      * Am I running? reflects invocation of start()/stop() !locked & start() => alive stop() =>
-     * !alive
+     * !alive.
      */
     protected volatile boolean alive = false;
 
     /**
      * Am I locked? reflects invocation of lock()/unlock() operations locked => !alive (but not in
      * the other direction necessarily) locked => !offer, !run, !start, !stop (but this last one is
-     * obvious since locked => !alive)
+     * obvious since locked => !alive).
      */
     protected volatile boolean locked = false;
 
     /**
-     * All my subscribers for new message notifications
+     * All my subscribers for new message notifications.
      */
     protected final ArrayList<TopicListener> topicListeners = new ArrayList<>();
 
     /**
-     * Instantiates a new Topic Base
+     * Instantiates a new Topic Base.
      * 
      * @param servers list of servers
      * @param topic topic name
      * 
-     * @return a Topic Base
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public TopicBase(List<String> servers, String topic) {
@@ -127,7 +126,7 @@ public abstract class TopicBase implements Topic {
     }
 
     /**
-     * broadcast event to all listeners
+     * broadcast event to all listeners.
      * 
      * @param message the event
      * @return true if all notifications are performed with no error, false otherwise
@@ -148,7 +147,7 @@ public abstract class TopicBase implements Topic {
     }
 
     /**
-     * take a snapshot of current topic listeners
+     * take a snapshot of current topic listeners.
      * 
      * @return the topic listeners
      */

@@ -35,15 +35,15 @@ import org.slf4j.LoggerFactory;
 public class InlineUebTopicSink extends InlineBusTopicSink implements UebTopicSink {
 
     /**
-     * logger
+     * logger.
      */
     private static Logger logger = LoggerFactory.getLogger(InlineUebTopicSink.class);
 
     /**
      * Argument-based UEB Topic Writer instantiation. BusTopicParams contains below mentioned
-     * attributes
+     * attributes.
      *
-     * servers              list of UEB servers available for publishing
+     * <p>servers              list of UEB servers available for publishing
      * topic                the topic to publish to
      * apiKey               the api key (optional)
      * apiSecret            the api secret (optional)
@@ -58,7 +58,7 @@ public class InlineUebTopicSink extends InlineBusTopicSink implements UebTopicSi
     }
 
     /**
-     * Instantiation of internal resources
+     * Instantiation of internal resources.
      */
     @Override
     public void init() {

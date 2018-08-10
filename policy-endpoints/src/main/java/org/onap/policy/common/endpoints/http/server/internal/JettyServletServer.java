@@ -43,12 +43,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Http Server implementation using Embedded Jetty
+ * Http Server implementation using Embedded Jetty.
  */
 public abstract class JettyServletServer implements HttpServletServer, Runnable {
 
     /**
-     * Keystore/Truststore system property names
+     * Keystore/Truststore system property names.
      */
     public static final String SYSTEM_KEYSTORE_PROPERTY_NAME = "javax.net.ssl.keyStore";
     public static final String SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME = "javax.net.ssl.keyStorePassword";
@@ -56,67 +56,67 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     public static final String SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME = "javax.net.ssl.trustStorePassword";
 
     /**
-     * Logger
+     * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(JettyServletServer.class);
 
     /**
-     * server name
+     * server name.
      */
     protected final String name;
 
     /**
-     * server host address
+     * server host address.
      */
     protected final String host;
 
     /**
-     * server port to bind
+     * server port to bind.
      */
     protected final int port;
 
     /**
-     * server auth user name
+     * server auth user name.
      */
     protected String user;
 
     /**
-     * server auth password name
+     * server auth password name.
      */
     protected String password;
 
     /**
-     * server base context path
+     * server base context path.
      */
     protected final String contextPath;
 
     /**
-     * embedded jetty server
+     * embedded jetty server.
      */
     protected final Server jettyServer;
 
     /**
-     * servlet context
+     * servlet context.
      */
     protected final ServletContextHandler context;
 
     /**
-     * jetty connector
+     * jetty connector.
      */
     protected final ServerConnector connector;
 
     /**
-     * jetty thread
+     * jetty thread.
      */
     protected volatile Thread jettyThread;
 
     /**
-     * start condition
+     * start condition.
      */
     protected Object startCondition = new Object();
 
     /**
-     * constructor
+     * constructor.
      * 
      * @param name server name
      * @param host server host
@@ -159,11 +159,12 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         this.jettyServer = new Server();
         this.jettyServer.setRequestLog(new Slf4jRequestLog());
 
-        if (https)
+        if (https) {
             this.connector = httpsConnector();
-        else
+        } else {
             this.connector = httpConnector();
-
+        }
+        
         this.connector.setName(srvName);
         this.connector.setReuseAddress(true);
         this.connector.setPort(port);
@@ -261,7 +262,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     }
 
     /**
-     * jetty server execution
+     * jetty server execution.
      */
     @Override
     public void run() {

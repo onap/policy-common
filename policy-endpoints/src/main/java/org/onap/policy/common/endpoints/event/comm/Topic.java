@@ -27,60 +27,60 @@ import org.onap.policy.common.capabilities.Startable;
 
 
 /**
- * Essential Topic Data
+ * Essential Topic Data.
  */
 public interface Topic extends TopicRegisterable, Startable, Lockable {
 
     /**
-     * network logger
+     * network logger.
      */
     public static final String NETWORK_LOGGER = "network";
 
     /**
-     * Underlying Communication infrastructure Types
+     * Underlying Communication infrastructure Types.
      */
     public enum CommInfrastructure {
         /**
-         * UEB Communication Infrastructure
+         * UEB Communication Infrastructure.
          */
         UEB,
         /**
-         * DMAAP Communication Infrastructure
+         * DMAAP Communication Infrastructure.
          */
         DMAAP,
         /**
-         * NOOP for internal use only
+         * NOOP for internal use only.
          */
         NOOP,
         /**
-         * REST Communication Infrastructure
+         * REST Communication Infrastructure.
          */
         REST
     }
 
     /**
-     * gets the topic name
+     * Gets the topic name.
      * 
      * @return topic name
      */
     public String getTopic();
 
     /**
-     * gets the communication infrastructure type
+     * Gets the communication infrastructure type.
      * 
      * @return
      */
     public CommInfrastructure getTopicCommInfrastructure();
 
     /**
-     * return list of servers
+     * Return list of servers.
      * 
      * @return bus servers
      */
     public List<String> getServers();
 
     /**
-     * get the more recent events in this topic entity
+     * Get the more recent events in this topic entity.
      * 
      * @return list of most recent events
      */

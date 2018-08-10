@@ -30,78 +30,78 @@ import org.slf4j.LoggerFactory;
 import io.swagger.jersey.config.JerseyJaxrsConfig;
 
 /**
- * REST Jetty Server that uses Jersey Servlets to support JAX-RS Web Services
+ * REST Jetty Server that uses Jersey Servlets to support JAX-RS Web Services.
  */
 public class JettyJerseyServer extends JettyServletServer {
 
     /**
-     * Swagger API Base Path
+     * Swagger API Base Path.
      */
     protected static final String SWAGGER_API_BASEPATH = "swagger.api.basepath";
 
     /**
-     * Swagger Context ID
+     * Swagger Context ID.
      */
     protected static final String SWAGGER_CONTEXT_ID = "swagger.context.id";
 
     /**
-     * Swagger Scanner ID
+     * Swagger Scanner ID.
      */
     protected static final String SWAGGER_SCANNER_ID = "swagger.scanner.id";
 
     /**
-     * Swagger Pretty Print
+     * Swagger Pretty Print.
      */
     protected static final String SWAGGER_PRETTY_PRINT = "swagger.pretty.print";
 
     /**
-     * Swagger Packages
+     * Swagger Packages.
      */
     protected static final String SWAGGER_INIT_PACKAGES_PARAM_VALUE = "io.swagger.jaxrs.listing";
 
     /**
-     * Jersey Packages Init Param Name
+     * Jersey Packages Init Param Name.
      */
     protected static final String JERSEY_INIT_PACKAGES_PARAM_NAME = "jersey.config.server.provider.packages";
 
     /**
-     * Jersey Packages Init Param Value
+     * Jersey Packages Init Param Value.
      */
     protected static final String JERSEY_INIT_PACKAGES_PARAM_VALUE = "com.fasterxml.jackson.jaxrs.json";
 
     /**
-     * Jersey Classes Init Param Name
+     * Jersey Classes Init Param Name.
      */
     protected static final String JERSEY_INIT_CLASSNAMES_PARAM_NAME = "jersey.config.server.provider.classnames";
 
     /**
-     * Jersey Jackson Classes Init Param Value
+     * Jersey Jackson Classes Init Param Value.
      */
     protected static final String JERSEY_JACKSON_INIT_CLASSNAMES_PARAM_VALUE =
             "com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider";
 
     /**
-     * Jersey Swagger Classes Init Param Value
+     * Jersey Swagger Classes Init Param Value.
      */
     protected static final String SWAGGER_INIT_CLASSNAMES_PARAM_VALUE =
             "io.swagger.jaxrs.listing.ApiListingResource," + "io.swagger.jaxrs.listing.SwaggerSerializers";
     /**
-     * Logger
+     * Logger.
      */
     protected static Logger logger = LoggerFactory.getLogger(JettyJerseyServer.class);
 
     /**
-     * Container for servlets
+     * Container for servlets.
      */
     protected HashMap<String, ServletHolder> servlets = new HashMap<>();
 
     /**
-     * Swagger ID
+     * Swagger ID.
      */
     protected String swaggerId = null;
 
     /**
-     * Constructor
+     * Constructor.
      * 
      * @param name name
      * @param https enable https?
@@ -122,7 +122,7 @@ public class JettyJerseyServer extends JettyServletServer {
     }
 
     /**
-     * attaches a swagger initialization servlet
+     * attaches a swagger initialization servlet.
      */
     protected void attachSwaggerServlet(boolean https) {
 
@@ -146,7 +146,7 @@ public class JettyJerseyServer extends JettyServletServer {
     }
 
     /**
-     * retrieves cached server based on servlet path
+     * retrieves cached server based on servlet path.
      * 
      * @param servletPath servlet path
      * @return the jetty servlet holder

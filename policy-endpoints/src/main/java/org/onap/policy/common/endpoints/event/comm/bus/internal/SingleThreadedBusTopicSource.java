@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * This topic source implementation specializes in reading messages over a bus topic source and
- * notifying its listeners
+ * notifying its listeners.
  */
 public abstract class SingleThreadedBusTopicSource extends BusTopicBase
         implements Runnable, BusTopicSource, FilterableTopicSource {
@@ -47,32 +47,32 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
     private static final Logger netLogger = LoggerFactory.getLogger(NETWORK_LOGGER);
 
     /**
-     * Bus consumer group
+     * Bus consumer group.
      */
     protected final String consumerGroup;
 
     /**
-     * Bus consumer instance
+     * Bus consumer instance.
      */
     protected final String consumerInstance;
 
     /**
-     * Bus fetch timeout
+     * Bus fetch timeout.
      */
     protected final int fetchTimeout;
 
     /**
-     * Bus fetch limit
+     * Bus fetch limit.
      */
     protected final int fetchLimit;
 
     /**
-     * Message Bus Consumer
+     * Message Bus Consumer.
      */
     protected BusConsumer consumer;
 
     /**
-     * Independent thread reading message over my topic
+     * Independent thread reading message over my topic.
      */
     protected Thread busPollerThread;
 
@@ -113,7 +113,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
     }
 
     /**
-     * Initialize the Bus client
+     * Initialize the Bus client.
      */
     public abstract void init() throws MalformedURLException;
 
@@ -204,7 +204,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
     }
 
     /**
-     * Run thread method for the Bus Reader
+     * Run thread method for the Bus Reader.
      */
     @Override
     public void run() {

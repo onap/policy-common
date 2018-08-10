@@ -36,31 +36,31 @@ import org.slf4j.LoggerFactory;
 public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopicSink {
 
     /**
-     * loggers
+     * loggers.
      */
     private static Logger logger = LoggerFactory.getLogger(InlineBusTopicSink.class);
     private static final Logger netLogger = LoggerFactory.getLogger(NETWORK_LOGGER);
 
     /**
-     * The partition key to publish to
+     * The partition key to publish to.
      */
     protected String partitionId;
 
     /**
-     * message bus publisher
+     * message bus publisher.
      */
     protected BusPublisher publisher;
 
     /**
-     * constructor for abstract sink
+     * constructor for abstract sink.
      * @param busTopicParams contains below listed attributes
-     * servers servers
-     * topic topic
-     * apiKey api secret
-     * apiSecret api secret
-     * partitionId partition id
-     * useHttps does connection use HTTPS?
-     * allowSelfSignedCerts are self-signed certificates allow     *
+     *     servers servers
+     *     topic topic
+     *     apiKey api secret
+     *     apiSecret api secret
+     *     partitionId partition id
+     *     useHttps does connection use HTTPS?
+     *     allowSelfSignedCerts are self-signed certificates allow     *
      * @throws IllegalArgumentException in invalid parameters are passed in
      */
     public InlineBusTopicSink(BusTopicParams busTopicParams) {
@@ -75,7 +75,7 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
     }
 
     /**
-     * Initialize the Bus publisher
+     * Initialize the Bus publisher.
      */
     public abstract void init();
 

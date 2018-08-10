@@ -42,12 +42,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Wrapper around libraries to consume from message bus
+ * Wrapper around libraries to consume from message bus.
  */
 public interface BusConsumer {
 
     /**
-     * fetch messages
+     * fetch messages.
      *
      * @return list of messages
      * @throws Exception when error encountered by underlying libraries
@@ -55,7 +55,7 @@ public interface BusConsumer {
     public Iterable<String> fetch() throws InterruptedException, IOException;
 
     /**
-     * close underlying library consumer
+     * close underlying library consumer.
      */
     public void close();
 
@@ -74,12 +74,12 @@ public interface BusConsumer {
     }
 
     /**
-     * Cambria based consumer
+     * Cambria based consumer.
      */
     public static class CambriaConsumerWrapper implements FilterableBusConsumer {
 
         /**
-         * logger
+         * logger.
          */
         private static Logger logger = LoggerFactory.getLogger(CambriaConsumerWrapper.class);
 
@@ -94,29 +94,29 @@ public interface BusConsumer {
         private final Object consLocker = new Object();
 
         /**
-         * Cambria client
+         * Cambria client.
          */
         private CambriaConsumer consumer;
 
         /**
-         * Cambria client to use for next fetch
+         * Cambria client to use for next fetch.
          */
         private CambriaConsumer newConsumer = null;
 
         /**
-         * fetch timeout
+         * fetch timeout.
          */
         protected int fetchTimeout;
 
         /**
-         * close condition
+         * close condition.
          */
         protected Object closeCondition = new Object();
 
         /**
-         * Cambria Consumer Wrapper
+         * Cambria Consumer Wrapper.
          * BusTopicParam object contains the following parameters
-         * servers messaging bus hosts
+         * servers messaging bus hosts.
          * topic topic
          * apiKey API Key
          * apiSecret API Secret
@@ -125,9 +125,9 @@ public interface BusConsumer {
          * fetchTimeout Fetch Timeout
          * fetchLimit Fetch Limit
          *
-         * @param busTopicParams
-         * @throws GeneralSecurityException
-         * @throws MalformedURLException
+         * @param busTopicParams - The parameters for the bus topic
+         * @throws GeneralSecurityException - Security exception
+         * @throws MalformedURLException - Malformed URL exception
          */
         public CambriaConsumerWrapper(BusTopicParams busTopicParams) {
 
@@ -244,12 +244,12 @@ public interface BusConsumer {
     }
 
     /**
-     * MR based consumer
+     * MR based consumer.
      */
     public abstract class DmaapConsumerWrapper implements BusConsumer {
 
         /**
-         * logger
+         * logger.
          */
         private static Logger logger = LoggerFactory.getLogger(DmaapConsumerWrapper.class);
 
@@ -259,24 +259,24 @@ public interface BusConsumer {
         protected static final String PROTOCOL_PROP = "Protocol";
 
         /**
-         * fetch timeout
+         * fetch timeout.
          */
         protected int fetchTimeout;
 
         /**
-         * close condition
+         * close condition.
          */
         protected Object closeCondition = new Object();
 
         /**
-         * MR Consumer
+         * MR Consumer.
          */
         protected MRConsumerImpl consumer;
 
         /**
-         * MR Consumer Wrapper
-         * <p>
-         * servers          messaging bus hosts
+         * MR Consumer Wrapper.
+         * 
+         * <p>servers          messaging bus hosts
          * topic            topic
          * apiKey           API Key
          * apiSecret        API Secret
@@ -288,7 +288,7 @@ public interface BusConsumer {
          * fetchLimit       Fetch Limit
          *
          * @param busTopicParams contains above listed attributes
-         * @throws MalformedURLException
+         * @throws MalformedURLException URL should be valid
          */
         public DmaapConsumerWrapper(BusTopicParams busTopicParams) throws MalformedURLException {
 
@@ -360,7 +360,7 @@ public interface BusConsumer {
     }
 
     /**
-     * MR based consumer
+     * MR based consumer.
      */
     public static class DmaapAafConsumerWrapper extends DmaapConsumerWrapper {
 
@@ -369,10 +369,10 @@ public interface BusConsumer {
         private final Properties props;
 
         /**
-         * BusTopicParams contain the following parameters
-         * MR Consumer Wrapper
-         * <p>
-         * servers messaging bus hosts
+         * BusTopicParams contain the following parameters.
+         * MR Consumer Wrapper.
+         * 
+         * <p>servers messaging bus hosts
          * topic topic
          * apiKey API Key
          * apiSecret API Secret
@@ -384,7 +384,7 @@ public interface BusConsumer {
          * fetchLimit Fetch Limit
          *
          * @param busTopicParams contains above listed params
-         * @throws MalformedURLException
+         * @throws MalformedURLException URL should be valid
          */
         public DmaapAafConsumerWrapper(BusTopicParams busTopicParams) throws MalformedURLException {
 

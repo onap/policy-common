@@ -25,41 +25,40 @@ import java.util.List;
 import org.onap.policy.common.endpoints.event.comm.bus.ApiKeyEnabled;
 
 /**
- * Bus Topic Base
+ * Bus Topic Base.
  */
 public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
 
     /**
-     * API Key
+     * API Key.
      */
     protected String apiKey;
 
     /**
-     * API Secret
+     * API Secret.
      */
     protected String apiSecret;
 
     /**
-     * Use https
+     * Use https.
      */
     protected boolean useHttps;
 
     /**
-     * allow self signed certificates
+     * allow self signed certificates.
      */
     protected boolean allowSelfSignedCerts;
 
     /**
-     * Instantiates a new Bus Topic Base
+     * Instantiates a new Bus Topic Base.
      * 
-     *  servers list of servers
+     * <p>servers list of servers
      *  topic topic name
      *  apiKey API Key
      *  apiSecret API Secret
      *  useHttps does connection use HTTPS?
      *  allowSelfSignedCerts are self-signed certificates allow
-     * @param busTopicParams
-     * @return a Bus Topic Base
+     * @param busTopicParams holds all our parameters
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public BusTopicBase(BusTopicParams busTopicParams) {
@@ -81,6 +80,8 @@ public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
     }
 
     /**
+     * Is using HTTPS.
+     * 
      * @return if using https
      */
     public boolean isUseHttps() {
@@ -88,6 +89,8 @@ public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
     }
 
     /**
+     * Is self signed certificates allowed.
+     * 
      * @return if self signed certificates are allowed
      */
     public boolean isAllowSelfSignedCerts() {

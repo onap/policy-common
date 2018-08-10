@@ -23,7 +23,7 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 public interface DmaapTopicSink extends BusTopicSink {
 
     /**
-     * Factory of UebTopicWriter for instantiation and management purposes
+     * Factory of UebTopicWriter for instantiation and management purposes.
      */
 
     public static final DmaapTopicSinkFactory factory = new IndexedDmaapTopicSinkFactory();

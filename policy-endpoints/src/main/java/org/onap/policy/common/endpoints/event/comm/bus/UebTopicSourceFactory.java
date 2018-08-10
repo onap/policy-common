@@ -34,12 +34,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * UEB Topic Source Factory
+ * UEB Topic Source Factory.
  */
 public interface UebTopicSourceFactory {
 
     /**
-     * Creates an UEB Topic Source based on properties files
+     * Creates an UEB Topic Source based on properties files.
      * 
      * @param properties Properties containing initialization values
      * 
@@ -49,7 +49,7 @@ public interface UebTopicSourceFactory {
     public List<UebTopicSource> build(Properties properties);
 
     /**
-     * Instantiates a new UEB Topic Source
+     * Instantiates a new UEB Topic Source.
      * 
      * @param servers list of servers
      * @param topic topic name
@@ -65,11 +65,12 @@ public interface UebTopicSourceFactory {
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public UebTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret,
-                                String consumerGroup, String consumerInstance, int fetchTimeout, int fetchLimit, boolean managed,
+                                String consumerGroup, String consumerInstance, 
+                                int fetchTimeout, int fetchLimit, boolean managed,
                                 boolean useHttps, boolean allowSelfSignedCerts);
 
     /**
-     * Instantiates a new UEB Topic Source
+     * Instantiates a new UEB Topic Source.
      * 
      * @param servers list of servers
      * @param topic topic name
@@ -82,7 +83,7 @@ public interface UebTopicSourceFactory {
     public UebTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret);
 
     /**
-     * Instantiates a new UEB Topic Source
+     * Instantiates a new UEB Topic Source.
      * 
      * @param servers list of servers
      * @param topic topic name
@@ -93,7 +94,7 @@ public interface UebTopicSourceFactory {
     public UebTopicSource build(List<String> servers, String topic);
 
     /**
-     * Destroys an UEB Topic Source based on a topic
+     * Destroys an UEB Topic Source based on a topic.
      * 
      * @param topic topic name
      * @throws IllegalArgumentException if invalid parameters are present
@@ -101,12 +102,12 @@ public interface UebTopicSourceFactory {
     public void destroy(String topic);
 
     /**
-     * Destroys all UEB Topic Sources
+     * Destroys all UEB Topic Sources.
      */
     public void destroy();
 
     /**
-     * gets an UEB Topic Source based on topic name
+     * Gets an UEB Topic Source based on topic name.
      * 
      * @param topic the topic name
      * @return an UEB Topic Source with topic name
@@ -116,7 +117,7 @@ public interface UebTopicSourceFactory {
     public UebTopicSource get(String topic);
 
     /**
-     * Provides a snapshot of the UEB Topic Sources
+     * Provides a snapshot of the UEB Topic Sources.
      * 
      * @return a list of the UEB Topic Sources
      */
@@ -127,18 +128,18 @@ public interface UebTopicSourceFactory {
 /* ------------- implementation ----------------- */
 
 /**
- * Factory of UEB Source Topics indexed by topic name
+ * Factory of UEB Source Topics indexed by topic name.
  */
 class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
     private static final String MISSING_TOPIC = "A topic must be provided";
 
     /**
-     * Logger
+     * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(IndexedUebTopicSourceFactory.class);
 
     /**
-     * UEB Topic Name Index
+     * UEB Topic Name Index.
      */
     protected HashMap<String, UebTopicSource> uebTopicSources = new HashMap<>();
 
@@ -325,6 +326,18 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
         uebTopicSource.shutdown();
     }
 
+    @Override
+    public void destroy() {
+        List<UebTopicSource> readers = this.inventory();
+        for (UebTopicSource reader : readers) {
+            reader.shutdown();
+        }
+
+        synchronized (this) {
+            this.uebTopicSources.clear();
+        }
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -347,18 +360,6 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
     @Override
     public synchronized List<UebTopicSource> inventory() {
         return new ArrayList<>(this.uebTopicSources.values());
-    }
-
-    @Override
-    public void destroy() {
-        List<UebTopicSource> readers = this.inventory();
-        for (UebTopicSource reader : readers) {
-            reader.shutdown();
-        }
-
-        synchronized (this) {
-            this.uebTopicSources.clear();
-        }
     }
 
     @Override

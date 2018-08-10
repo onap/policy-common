@@ -31,12 +31,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Noop Topic Sink Factory
+ * Noop Topic Sink Factory.
  */
 public interface NoopTopicSinkFactory {
 
     /**
-     * Creates noop topic sinks based on properties files
+     * Creates noop topic sinks based on properties files.
      * 
      * @param properties Properties containing initialization values
      * 
@@ -46,7 +46,7 @@ public interface NoopTopicSinkFactory {
     public List<NoopTopicSink> build(Properties properties);
 
     /**
-     * builds a noop sink
+     * builds a noop sink.
      * 
      * @param servers list of servers
      * @param topic topic name
@@ -57,7 +57,7 @@ public interface NoopTopicSinkFactory {
     public NoopTopicSink build(List<String> servers, String topic, boolean managed);
 
     /**
-     * Destroys a sink based on the topic
+     * Destroys a sink based on the topic.
      * 
      * @param topic topic name
      * @throws IllegalArgumentException if invalid parameters are present
@@ -65,7 +65,12 @@ public interface NoopTopicSinkFactory {
     public void destroy(String topic);
 
     /**
-     * gets a sink based on topic name
+     * Destroys all sinks.
+     */
+    public void destroy();
+
+    /**
+     * gets a sink based on topic name.
      * 
      * @param topic the topic name
      * 
@@ -76,34 +81,30 @@ public interface NoopTopicSinkFactory {
     public NoopTopicSink get(String topic);
 
     /**
-     * Provides a snapshot of the UEB Topic Writers
+     * Provides a snapshot of the UEB Topic Writers.
      * 
      * @return a list of the UEB Topic Writers
      */
     public List<NoopTopicSink> inventory();
 
-    /**
-     * Destroys all sinks
-     */
-    public void destroy();
 }
 
 
 /* ------------- implementation ----------------- */
 
 /**
- * Factory of noop sinks
+ * Factory of noop sinks.
  */
 class IndexedNoopTopicSinkFactory implements NoopTopicSinkFactory {
     private static final String MISSING_TOPIC = "A topic must be provided";
 
     /**
-     * Logger
+     * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(IndexedUebTopicSinkFactory.class);
 
     /**
-     * noop topic sinks map
+     * noop topic sinks map.
      */
     protected HashMap<String, NoopTopicSink> noopTopicSinks = new HashMap<>();
 
