@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_c9dd5772",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/test/log/logback/ExtractAppender.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-08-13T18:47:41Z",
+      "side": 1,
+      "message": "Changed the naming of this also.",
+      "range": {
+        "startLine": 113,
+        "startChar": 23,
+        "endLine": 117,
+        "endChar": 26
+      },
+      "revId": "2d381afcd78b61d8791ace22b676e88271b3bdce",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_e9da9377",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/time/TestTimeMulti.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-08-13T18:47:41Z",
+      "side": 1,
+      "message": "Changed the name",
+      "range": {
+        "startLine": 192,
+        "startChar": 34,
+        "endLine": 192,
+        "endChar": 42
+      },
+      "revId": "2d381afcd78b61d8791ace22b676e88271b3bdce",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_a9e49b3b",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/properties/PropertyConfiguration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-08-13T18:47:41Z",
+      "side": 1,
+      "message": "Moved per checkstyle so that it is next to the other getSetter() method",
+      "range": {
+        "startLine": 153,
+        "startChar": 4,
+        "endLine": 171,
+        "endChar": 7
+      },
+      "revId": "2d381afcd78b61d8791ace22b676e88271b3bdce",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_49d14756",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/PropertyConfigurationTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-08-13T18:47:41Z",
+      "side": 1,
+      "message": "Removed extra commas",
+      "revId": "2d381afcd78b61d8791ace22b676e88271b3bdce",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
