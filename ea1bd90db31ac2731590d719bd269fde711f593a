@@ -1,0 +1,259 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_0a7a6288",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/TopicEndpoint.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "\"singleton\" \u003d\u003e \"Singleton\"?",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_aaa56e05",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineBusTopicSink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize?",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_0aa102f8",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineBusTopicSink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "\"constructor\" \u003d\u003e \"Constructor\"?",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_6aaf56e4",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineUebTopicSink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize?",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_8aac32ef",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/TopicBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize?",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_2ab95e2e",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/TopicBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize?",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_4ab61a3f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/TopicBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize?",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_ea828651",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/TopicBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize?",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_aa7c8e73",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/TopicBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize?",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_ca81ca4b",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/client/HttpClientFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize? (et., al.)",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_6a967696",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize? (et., al.)",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_2a907e94",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServerFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize? (et., al.)",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_4a8dba7a",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyJerseyServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize? (et., al.)",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_eae9261b",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyServletServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize? (et., al.)",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_0aefc21f",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpServerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T13:46:04Z",
+      "side": 1,
+      "message": "capitalize? (et., al.)",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
