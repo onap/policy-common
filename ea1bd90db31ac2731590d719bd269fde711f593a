@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_0a1822d2",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineBusTopicSink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-13T14:51:20Z",
+      "side": 1,
+      "message": "I wasn\u0027t sure.  I noticed you had changed it for some, so thought I\u0027d point out the others, in case they needed to be changed, too.",
+      "parentUuid": "1a76adc5_4aee1aee",
+      "revId": "ea1bd90db31ac2731590d719bd269fde711f593a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_0aa102f8",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineBusTopicSink.java",
         "patchSetId": 1
