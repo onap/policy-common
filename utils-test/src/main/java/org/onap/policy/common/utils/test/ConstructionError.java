@@ -24,35 +24,41 @@ package org.onap.policy.common.utils.test;
  * An error that occurred while trying to construct an object for a junit test.
  */
 public class ConstructionError extends AssertionError {
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	/**
-	 *
-	 */
-	public ConstructionError() {
-		super();
-	}
+    /**
+     * Constructor.
+     */
+    public ConstructionError() {
+        super();
+    }
 
-	/**
-	 * @param message denotes the error message
-	 */
-	public ConstructionError(final String message) {
-		super(message);
-	}
+    /**
+     * Constructor.
+     * 
+     * @param message denotes the error message
+     */
+    public ConstructionError(final String message) {
+        super(message);
+    }
 
-	/**
-	 * @param cause denotes the cause of the error
-	 */
-	public ConstructionError(final Throwable cause) {
-		super(cause);
-	}
+    /**
+     * Constructor.
+     * 
+     * @param cause denotes the cause of the error
+     */
+    public ConstructionError(final Throwable cause) {
+        super(cause);
+    }
 
-	/**
-	 * @param message denotes the error message
-	 * @param cause denotes the cause of the error
-	 */
-	public ConstructionError(final String message, final Throwable cause) {
-		super(message, cause);
-	}
+    /**
+     * Constructor.
+     * 
+     * @param message denotes the error message
+     * @param cause denotes the cause of the error
+     */
+    public ConstructionError(final String message, final Throwable cause) {
+        super(message, cause);
+    }
 
 }

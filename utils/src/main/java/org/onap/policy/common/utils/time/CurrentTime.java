@@ -29,6 +29,7 @@ import java.util.Date;
 public class CurrentTime {
 
     /**
+     * Constructor.
      * 
      */
     public CurrentTime() {
@@ -36,6 +37,8 @@ public class CurrentTime {
     }
 
     /**
+     * Get the millisecond time.
+     * 
      * @return the current time, in milliseconds
      */
     public long getMillis() {
@@ -43,6 +46,8 @@ public class CurrentTime {
     }
 
     /**
+     * Get the current date.
+     * 
      * @return the current Date
      */
     public Date getDate() {
@@ -53,7 +58,7 @@ public class CurrentTime {
      * Sleeps for a period of time.
      * 
      * @param sleepMs amount of time to sleep, in milliseconds
-     * @throws InterruptedException
+     * @throws InterruptedException can be interrupted
      */
     public void sleep(long sleepMs) throws InterruptedException {
         Thread.sleep(sleepMs);

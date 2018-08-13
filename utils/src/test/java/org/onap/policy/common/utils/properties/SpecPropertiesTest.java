@@ -22,6 +22,7 @@ package org.onap.policy.common.utils.properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+
 import java.util.Properties;
 import org.junit.Before;
 import org.junit.Test;
@@ -78,6 +79,9 @@ public class SpecPropertiesTest {
     private Properties supportingProps;
     private SpecProperties props;
 
+    /**
+     * Set up the tests.
+     */
     @Before
     public void setUp() {
         supportingProps = new Properties();

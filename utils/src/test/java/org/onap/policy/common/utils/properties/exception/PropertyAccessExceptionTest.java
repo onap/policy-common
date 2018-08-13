@@ -23,12 +23,14 @@ package org.onap.policy.common.utils.properties.exception;
 import org.junit.Test;
 
 /**
- * 
+ * Test class for PropertyAccessException.
  */
 public class PropertyAccessExceptionTest extends BasicPropertyExceptionTester {
 
     /**
-     * Test method for {@link org.onap.policy.common.utils.properties.exception.PropertyAccessException#PropertyAccessException(java.lang.String, java.lang.String)}.
+     * Test method for 
+     * {@link org.onap.policy.common.utils.properties.exception.PropertyAccessException#PropertyAccessException
+     * (java.lang.String, java.lang.String)}.
      */
     @Test
     public void testPropertyAccessExceptionStringField() {
@@ -39,7 +41,9 @@ public class PropertyAccessExceptionTest extends BasicPropertyExceptionTester {
     }
 
     /**
-     * Test method for {@link org.onap.policy.common.utils.properties.exception.PropertyAccessException#PropertyAccessException(java.lang.String, java.lang.String, java.lang.String)}.
+     * Test method for 
+     * {@link org.onap.policy.common.utils.properties.exception.PropertyAccessException#PropertyAccessException
+     * (java.lang.String, java.lang.String, java.lang.String)}.
      */
     @Test
     public void testPropertyAccessExceptionStringFieldString() {
@@ -47,7 +51,9 @@ public class PropertyAccessExceptionTest extends BasicPropertyExceptionTester {
     }
 
     /**
-     * Test method for {@link org.onap.policy.common.utils.properties.exception.PropertyAccessException#PropertyAccessException(java.lang.String, java.lang.String, java.lang.Throwable)}.
+     * Test method for 
+     * {@link org.onap.policy.common.utils.properties.exception.PropertyAccessException#PropertyAccessException
+     * (java.lang.String, java.lang.String, java.lang.Throwable)}.
      */
     @Test
     public void testPropertyAccessExceptionStringFieldThrowable() {
@@ -55,7 +61,9 @@ public class PropertyAccessExceptionTest extends BasicPropertyExceptionTester {
     }
 
     /**
-     * Test method for {@link org.onap.policy.common.utils.properties.exception.PropertyAccessException#PropertyAccessException(java.lang.String, java.lang.String, java.lang.String, java.lang.Throwable)}.
+     * Test method for 
+     * {@link org.onap.policy.common.utils.properties.exception.PropertyAccessException#PropertyAccessException
+     * (java.lang.String, java.lang.String, java.lang.String, java.lang.Throwable)}.
      */
     @Test
     public void testPropertyAccessExceptionStringFieldStringThrowable() {

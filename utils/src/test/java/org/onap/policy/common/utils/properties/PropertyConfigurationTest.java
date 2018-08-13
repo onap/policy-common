@@ -22,6 +22,7 @@ package org.onap.policy.common.utils.properties;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+
 import java.lang.reflect.Field;
 import java.util.Properties;
 import org.junit.Before;
@@ -32,7 +33,7 @@ import org.onap.policy.common.utils.properties.exception.PropertyInvalidExceptio
 import org.onap.policy.common.utils.properties.exception.PropertyMissingException;
 
 /**
- * 
+ * Test class for PropertyConfiguration.
  */
 public class PropertyConfigurationTest {
 
@@ -100,7 +101,7 @@ public class PropertyConfigurationTest {
             public void setGrandparentValue(boolean grandparentValue) {
                 this.grandparentValue = grandparentValue;
             }
-        };
+        }
 
         /*
          * Implements the extra interface, too.
@@ -114,7 +115,7 @@ public class PropertyConfigurationTest {
             public void setParentValue(long parentValue) {
                 this.parentValue = parentValue;
             }
-        };
+        }
 
         class Config extends ParentConfig {
 
@@ -125,10 +126,10 @@ public class PropertyConfigurationTest {
             public void setValue(String value) {
                 this.value = value;
             }
-        };
+        }
 
 
-        Config cfg = new Config();
+        final Config cfg = new Config();
 
         // try one set of values
         props.setProperty(THE_VALUE, STRING_VALUE);
@@ -162,7 +163,7 @@ public class PropertyConfigurationTest {
             public void setValue(String value) {
                 this.value = value;
             }
-        };
+        }
 
 
         Config cfg = new Config();
@@ -195,7 +196,7 @@ public class PropertyConfigurationTest {
             public void setValue(String value) {
                 this.value = value;
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, STRING_VALUE);
         Config cfg = new Config(props);
@@ -219,7 +220,7 @@ public class PropertyConfigurationTest {
             public void setValue(Exception value) {
                 this.value = value;
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, STRING_VALUE);
         new Config(props);
@@ -235,7 +236,7 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, STRING_VALUE);
         new Config(props);
@@ -262,7 +263,7 @@ public class PropertyConfigurationTest {
             protected Object getValue(Field field, Properties props, Property prop) throws PropertyException {
                 return Boolean.TRUE;
             }
-        };
+        }
 
         new Config(props);
     }
@@ -279,7 +280,7 @@ public class PropertyConfigurationTest {
             public void setValue(String value) {
                 throw new IllegalArgumentException("expected exception");
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, STRING_VALUE);
         new Config(props);
@@ -410,7 +411,7 @@ public class PropertyConfigurationTest {
             public void setPrimLongValue(long primLongValue) {
                 this.primLongValue = primLongValue;
             }
-        };
+        }
 
         props.setProperty("string", "a string");
         props.setProperty("boolean.true", "true");
@@ -451,7 +452,7 @@ public class PropertyConfigurationTest {
             public void setValue(Exception value) {
                 this.value = value;
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, STRING_VALUE);
         new Config(props);
@@ -489,7 +490,7 @@ public class PropertyConfigurationTest {
             public void setProtectedString(String protectedString) {
                 this.protectedString = protectedString;
             }
-        };
+        }
 
         props.setProperty("public", "a public string");
         props.setProperty("private", "a private string");
@@ -519,7 +520,7 @@ public class PropertyConfigurationTest {
             public Config(Properties props) throws PropertyException {
                 super(props);
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, STRING_VALUE);
         new Config(props);
@@ -562,7 +563,7 @@ public class PropertyConfigurationTest {
             public void setValue(Boolean value) {
                 this.value = value;
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, "true");
         new Config(props);
@@ -583,7 +584,7 @@ public class PropertyConfigurationTest {
             public void setValue(Boolean value) {
                 this.value = value;
             }
-        };
+        }
 
         // property not defined
         Config cfg = new Config(props);
@@ -615,7 +616,7 @@ public class PropertyConfigurationTest {
             public void setValue(Boolean value) {
                 this.value = value;
             }
-        };
+        }
 
         // property not defined
         Config cfg = new Config(props);
@@ -647,7 +648,7 @@ public class PropertyConfigurationTest {
             public void setValue(Integer value) {
                 this.value = value;
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, "200");
         Config cfg = new Config(props);
@@ -670,7 +671,7 @@ public class PropertyConfigurationTest {
             public void setValue(Integer value) {
                 this.value = value;
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, "200");
         new Config(props);
@@ -691,7 +692,7 @@ public class PropertyConfigurationTest {
             public void setValue(Integer value) {
                 this.value = value;
             }
-        };
+        }
 
         // property not defined
         Config cfg = new Config(props);
@@ -718,7 +719,7 @@ public class PropertyConfigurationTest {
             public void setValue(Long value) {
                 this.value = value;
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, "20000");
         Config cfg = new Config(props);
@@ -741,7 +742,7 @@ public class PropertyConfigurationTest {
             public void setValue(Long value) {
                 this.value = value;
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, "20000");
         new Config(props);
@@ -762,7 +763,7 @@ public class PropertyConfigurationTest {
             public void setValue(Long value) {
                 this.value = value;
             }
-        };
+        }
 
         // property not defined
         Config cfg = new Config(props);
@@ -797,7 +798,7 @@ public class PropertyConfigurationTest {
             public void setValue(String value) {
                 this.value = value;
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, STRING_VALUE);
         Config cfg = new Config(props);
@@ -820,7 +821,7 @@ public class PropertyConfigurationTest {
             public void setValue(String value) {
                 this.value = value;
             }
-        };
+        }
 
         props.setProperty(THE_VALUE, "");
         Config cfg = new Config(props);
@@ -843,7 +844,7 @@ public class PropertyConfigurationTest {
             public void setValue(String value) {
                 this.value = value;
             }
-        };
+        }
 
         Config cfg = new Config(props);
 
@@ -865,7 +866,7 @@ public class PropertyConfigurationTest {
             public void setValue(String value) {
                 this.value = value;
             }
-        };
+        }
 
         Config cfg = new Config(props);
 
@@ -887,7 +888,7 @@ public class PropertyConfigurationTest {
             public void setValue(String value) {
                 this.value = value;
             }
-        };
+        }
 
         new Config(props);
     }
@@ -907,7 +908,7 @@ public class PropertyConfigurationTest {
             public void setValue(String value) {
                 this.value = value;
             }
-        };
+        }
 
         Config cfg = new Config(props);
 
@@ -926,7 +927,7 @@ public class PropertyConfigurationTest {
             protected String getRawPropertyValue(Properties props, String propnm) {
                 return STRING_VALUE;
             }
-        };
+        }
 
         Config cfg = new Config(props);
 
@@ -1005,7 +1006,7 @@ public class PropertyConfigurationTest {
             public void setValue(long value) {
                 this.value = value;
             }
-        };
+        }
 
         Config cfg = new Config(props);
 
@@ -1027,7 +1028,7 @@ public class PropertyConfigurationTest {
             public void setValue(long value) {
                 this.value = value;
             }
-        };
+        }
 
         new Config(props);
     }
@@ -1047,7 +1048,7 @@ public class PropertyConfigurationTest {
             public void setValue(long value) {
                 this.value = value;
             }
-        };
+        }
 
         new Config(props);
     }
@@ -1067,7 +1068,7 @@ public class PropertyConfigurationTest {
             public void setValue(String value) {
                 this.value = value;
             }
-        };
+        }
 
         // missing property - should default to ""
         Config cfg = new Config(props);
@@ -1099,7 +1100,7 @@ public class PropertyConfigurationTest {
             public void setValue(long value) {
                 this.value = value;
             }
-        };
+        }
 
         new Config(props);
     }
@@ -1119,7 +1120,7 @@ public class PropertyConfigurationTest {
             public void setValue(String value) {
                 this.value = value;
             }
-        };
+        }
 
         Config cfg = new Config(props);
 
@@ -1141,7 +1142,7 @@ public class PropertyConfigurationTest {
             public void setValue(long value) {
                 this.value = value;
             }
-        };
+        }
 
         new Config(props);
     }
@@ -1169,7 +1170,7 @@ public class PropertyConfigurationTest {
         public void setValue(String value) {
             this.value = value;
         }
-    };
+    }
 
     /**
      * Config with a Boolean value having no qualifiers.
@@ -1186,7 +1187,7 @@ public class PropertyConfigurationTest {
         public void setValue(Boolean value) {
             this.value = value;
         }
-    };
+    }
 
     /**
      * Config with an int value having no qualifiers.
@@ -1203,7 +1204,7 @@ public class PropertyConfigurationTest {
         public void setValue(int value) {
             this.value = value;
         }
-    };
+    }
 
     /**
      * Config with a long value having no qualifiers.
@@ -1220,7 +1221,7 @@ public class PropertyConfigurationTest {
         public void setValue(long value) {
             this.value = value;
         }
-    };
+    }
 
     /**
      * A config whose field is "static".
@@ -1238,7 +1239,7 @@ public class PropertyConfigurationTest {
         public static void setValue(String value) {
             StaticPropConfig.value = value;
         }
-    };
+    }
 
     /**
      * A config whose method is "static".
@@ -1256,7 +1257,7 @@ public class PropertyConfigurationTest {
         public static void setValue(String value) {
             
         }
-    };
+    }
 
     /**
      * This is just used as a mix-in to ensure that the configuration ignores interfaces.

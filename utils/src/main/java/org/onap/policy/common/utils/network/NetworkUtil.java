@@ -30,14 +30,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Network Utilities
+ * Network Utilities.
  */
 public class NetworkUtil {
 
     public static final Logger logger = LoggerFactory.getLogger(NetworkUtil.class.getName());
 
     /**
-     * IPv4 Wildcard IP address
+     * IPv4 Wildcard IP address.
      */
     public static final String IPv4_WILDCARD_ADDRESS = "0.0.0.0";
 
@@ -73,7 +73,7 @@ public class NetworkUtil {
     }
 
     /**
-     * gets host name
+     * Gets host name.
      *
      * @return host name
      */
@@ -95,7 +95,7 @@ public class NetworkUtil {
     }
 
     /**
-     * gets host's IP
+     * Gets host's IP.
      *
      * @return host IP
      */

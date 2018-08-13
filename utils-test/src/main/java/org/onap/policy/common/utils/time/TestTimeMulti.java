@@ -56,6 +56,7 @@ public class TestTimeMulti extends CurrentTime {
     private final Object locker = new Object();
 
     /**
+     * Constructor.
      * 
      * @param nthreads number of threads that will be sleeping simultaneously
      */
@@ -122,7 +123,7 @@ public class TestTimeMulti extends CurrentTime {
      */
     private void wakeThreads() {
         Info info = queue.poll();
-        if(info == null) {
+        if (info == null) {
             return;
         }
 
@@ -157,6 +158,8 @@ public class TestTimeMulti extends CurrentTime {
         private final CountDownLatch latch = new CountDownLatch(1);
 
         /**
+         * Constructor.
+         * 
          * @param awakenAtMs time, in milliseconds, at which the associated thread should
          *        awaken
          */
@@ -179,20 +182,20 @@ public class TestTimeMulti extends CurrentTime {
          * Blocks the current thread until awakened (i.e., until its latch is
          * decremented).
          * 
-         * @throws InterruptedException
+         * @throws InterruptedException can be interrupted
          */
         public void await() throws InterruptedException {
             latch.await();
         }
 
         @Override
-        public int compareTo(Info o) {
-            int diff = Long.compare(awakenAtMs, o.awakenAtMs);
+        public int compareTo(Info object) {
+            int diff = Long.compare(awakenAtMs, object.awakenAtMs);
 
             // this assumes that Object.toString() is unique for each Info object
-            if (diff == 0)
-                diff = this.toString().compareTo(o.toString());
-
+            if (diff == 0) {
+                diff = this.toString().compareTo(object.toString());
+            }
             return diff;
         }
 

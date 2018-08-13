@@ -22,6 +22,7 @@ package org.onap.policy.common.utils.time;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 public class TestTimeTest {
@@ -31,7 +32,7 @@ public class TestTimeTest {
         TestTime tm = new TestTime();
         TestTime tm2 = new TestTime();
 
-        long treal = System.currentTimeMillis();
+        final long treal = System.currentTimeMillis();
 
         long tcur = tm.getMillis();
         assertEquals(tcur, tm.getDate().getTime());

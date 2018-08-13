@@ -21,6 +21,7 @@
 package org.onap.policy.common.utils.time;
 
 import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 public class CurrentTimeTest {

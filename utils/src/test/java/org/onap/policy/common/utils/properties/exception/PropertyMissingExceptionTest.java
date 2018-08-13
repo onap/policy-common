@@ -23,13 +23,14 @@ package org.onap.policy.common.utils.properties.exception;
 import org.junit.Test;
 
 /**
- * 
+ * Test class for PropertyMissingException.
  */
 public class PropertyMissingExceptionTest extends BasicPropertyExceptionTester {
 
     /**
      * Test method for
-     * {@link org.onap.policy.common.utils.properties.exception.PropertyException#PropertyException(java.lang.String, java.lang.String)}.
+     * {@link org.onap.policy.common.utils.properties.exception.PropertyException#PropertyException
+     * (java.lang.String, java.lang.String)}.
      */
     @Test
     public void testPropertyExceptionStringField() {

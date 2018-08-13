@@ -41,8 +41,8 @@ import org.onap.policy.common.utils.properties.exception.PropertyMissingExceptio
  * subclass. The values of the fields are set via <i>setXxx()</i> methods. As a result, if
  * a field is annotated and there is no corresponding <i>setXxx()</i> method, then an
  * exception will be thrown.
- * <p>
- * It is possible that an invalid <i>defaultValue</i> is specified via the
+ * 
+ * <p>It is possible that an invalid <i>defaultValue</i> is specified via the
  * {@link Property} annotation. This could remain undetected until an optional property is
  * left out of the {@link Properties}. Consequently, this class will always validate a
  * {@link Property}'s default value, if the <i>defaultValue</i> is not empty or if
@@ -120,23 +120,6 @@ public class PropertyConfiguration {
     }
 
     /**
-     * @param field field whose value is to be set
-     * @param prop property of interest
-     * @return the method to be used to set the field's value
-     * @throws PropertyAccessException if a "set" method cannot be identified
-     */
-    private Method getSetter(Field field, Property prop) throws PropertyAccessException {
-        String nm = "set" + StringUtils.capitalize(field.getName());
-
-        try {
-            return this.getClass().getMethod(nm, field.getType());
-
-        } catch (NoSuchMethodException | SecurityException e) {
-            throw new PropertyAccessException(prop.name(), nm, e);
-        }
-    }
-
-    /**
      * Sets a field's value from a particular property.
      * 
      * @param setter method to be used to set the field's value
@@ -163,6 +146,25 @@ public class PropertyConfiguration {
 
         } catch (IllegalAccessException | InvocationTargetException e) {
             throw new PropertyAccessException(prop.name(), setter.getName(), e);
+        }
+    }
+
+    /**
+     * Get the setter.
+     * 
+     * @param field field whose value is to be set
+     * @param prop property of interest
+     * @return the method to be used to set the field's value
+     * @throws PropertyAccessException if a "set" method cannot be identified
+     */
+    private Method getSetter(Field field, Property prop) throws PropertyAccessException {
+        String nm = "set" + StringUtils.capitalize(field.getName());
+
+        try {
+            return this.getClass().getMethod(nm, field.getType());
+
+        } catch (NoSuchMethodException | SecurityException e) {
+            throw new PropertyAccessException(prop.name(), nm, e);
         }
     }
 

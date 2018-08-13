@@ -22,6 +22,7 @@ package org.onap.policy.common.utils.time;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
@@ -29,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 import org.junit.Test;
 
 /**
- * 
+ * Class to test TestTimeMulti.
  */
 public class TestTimeMultiTest {
 
@@ -46,7 +47,7 @@ public class TestTimeMultiTest {
         ttm = new TestTimeMulti(NTHREADS);
         done = new Semaphore(0);
 
-        long tbeg = ttm.getMillis();
+        final long tbeg = ttm.getMillis();
 
         // create threads
         List<MyThread> threads = new ArrayList<>(NTHREADS);

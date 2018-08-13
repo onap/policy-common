@@ -27,6 +27,7 @@ public class PropertyMissingException extends PropertyException {
     private static final long serialVersionUID = 1L;
 
     /**
+     * Constructor.
      * 
      * @param propnm name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}

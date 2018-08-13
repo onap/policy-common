@@ -23,13 +23,14 @@ package org.onap.policy.common.utils.properties.exception;
 import org.junit.Test;
 
 /**
- * 
+ *  Test class for PropertyAnnotationException.
  */
 public class PropertyAnnotationExceptionTest extends BasicPropertyExceptionTester {
 
     /**
      * Test method for
-     * {@link org.onap.policy.common.utils.properties.exception.PropertyException#PropertyException(java.lang.String, java.lang.String)}.
+     * {@link org.onap.policy.common.utils.properties.exception.PropertyException#PropertyException
+     * (java.lang.String, java.lang.String)}.
      */
     @Test
     public void testPropertyExceptionStringField() {
@@ -41,7 +42,8 @@ public class PropertyAnnotationExceptionTest extends BasicPropertyExceptionTeste
 
     /**
      * Test method for
-     * {@link org.onap.policy.common.utils.properties.exception.PropertyException#PropertyException(java.lang.String, java.lang.String, java.lang.String)}.
+     * {@link org.onap.policy.common.utils.properties.exception.PropertyException#PropertyException
+     * (java.lang.String, java.lang.String, java.lang.String)}.
      */
     @Test
     public void testPropertyExceptionStringFieldString() {
@@ -50,7 +52,8 @@ public class PropertyAnnotationExceptionTest extends BasicPropertyExceptionTeste
 
     /**
      * Test method for
-     * {@link org.onap.policy.common.utils.properties.exception.PropertyException#PropertyException(java.lang.String, java.lang.String, java.lang.Throwable)}.
+     * {@link org.onap.policy.common.utils.properties.exception.PropertyException#PropertyException
+     * (java.lang.String, java.lang.String, java.lang.Throwable)}.
      */
     @Test
     public void testPropertyExceptionStringFieldThrowable() {
@@ -59,7 +62,8 @@ public class PropertyAnnotationExceptionTest extends BasicPropertyExceptionTeste
 
     /**
      * Test method for
-     * {@link org.onap.policy.common.utils.properties.exception.PropertyException#PropertyException(java.lang.String, java.lang.String, java.lang.String, java.lang.Throwable)}.
+     * {@link org.onap.policy.common.utils.properties.exception.PropertyException#PropertyException
+     * (java.lang.String, java.lang.String, java.lang.String, java.lang.Throwable)}.
      */
     @Test
     public void testPropertyExceptionStringFieldStringThrowable() {

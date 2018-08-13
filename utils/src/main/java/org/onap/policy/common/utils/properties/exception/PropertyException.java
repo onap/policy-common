@@ -37,6 +37,7 @@ public class PropertyException extends Exception {
     private final String fieldName;
 
     /**
+     * Constructor.
      * 
      * @param propName name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}
@@ -49,6 +50,7 @@ public class PropertyException extends Exception {
     }
 
     /**
+     * Constructor.
      * 
      * @param propnm name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}
@@ -62,6 +64,7 @@ public class PropertyException extends Exception {
     }
 
     /**
+     * Constructor.
      * 
      * @param propnm name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}
@@ -75,6 +78,7 @@ public class PropertyException extends Exception {
     }
 
     /**
+     * Constructor.
      * 
      * @param propnm name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}
@@ -89,6 +93,7 @@ public class PropertyException extends Exception {
     }
 
     /**
+     * Get the property name.
      * 
      * @return name of the property for which the exception was thrown, or {@code null} if
      *         no name was provided
@@ -98,6 +103,7 @@ public class PropertyException extends Exception {
     }
 
     /**
+     * Get the field name.
      * 
      * @return name of the field for which the exception was thrown, or {@code null} if no
      *         field was provided
@@ -107,6 +113,8 @@ public class PropertyException extends Exception {
     }
 
     /**
+     * Make the message.
+     * 
      * @param propnm name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}
      * @param message error message, never {@code null}
@@ -117,6 +125,7 @@ public class PropertyException extends Exception {
     }
 
     /**
+     * Make the message.
      * 
      * @param propnm name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}

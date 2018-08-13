@@ -39,6 +39,7 @@ public class SpecProperties extends Properties {
     private final String specPrefix;
 
     /**
+     * Constructor.
      * 
      * @param prefix the property name prefix that appears before any specialization, may
      *        be ""
@@ -50,6 +51,7 @@ public class SpecProperties extends Properties {
     }
 
     /**
+     * Constructor.
      * 
      * @param prefix the property name prefix that appears before any specialization, may
      *        be ""

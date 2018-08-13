@@ -36,7 +36,8 @@ public class TestTime extends CurrentTime {
     private AtomicLong tcur = new AtomicLong(System.currentTimeMillis());
 
     /**
-     * 
+     *  Constructor.
+     *  
      */
     public TestTime() {
         super();
