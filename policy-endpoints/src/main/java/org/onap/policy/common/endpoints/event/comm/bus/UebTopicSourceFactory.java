@@ -46,7 +46,25 @@ public interface UebTopicSourceFactory {
      * @return an UEB Topic Source
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public List<UebTopicSource> build(Properties properties);
+    List<UebTopicSource> build(Properties properties);
+
+    /**
+     * Instantiates a new UEB Topic Source
+     * 
+     * servers list of servers
+     * topic topic name
+     * apiKey API Key
+     * apiSecret API Secret
+     * consumerGroup Consumer Group
+     * consumerInstance Consumer Instance
+     * fetchTimeout Read Fetch Timeout
+     * fetchLimit Fetch Limit
+     * managed is this source endpoint managed?
+     * @param busTopicParams parameters object
+     * @return an UEB Topic Source
+     * @throws IllegalArgumentException if invalid parameters are present
+     */
+    UebTopicSource build(BusTopicParams busTopicParams);
 
     /**
      * Instantiates a new UEB Topic Source
@@ -55,31 +73,11 @@ public interface UebTopicSourceFactory {
      * @param topic topic name
      * @param apiKey API Key
      * @param apiSecret API Secret
-     * @param consumerGroup Consumer Group
-     * @param consumerInstance Consumer Instance
-     * @param fetchTimeout Read Fetch Timeout
-     * @param fetchLimit Fetch Limit
-     * @param managed is this source endpoint managed?
      * 
      * @return an UEB Topic Source
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public UebTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret,
-                                String consumerGroup, String consumerInstance, int fetchTimeout, int fetchLimit, boolean managed,
-                                boolean useHttps, boolean allowSelfSignedCerts);
-
-    /**
-     * Instantiates a new UEB Topic Source
-     * 
-     * @param servers list of servers
-     * @param topic topic name
-     * @param apiKey API Key
-     * @param apiSecret API Secret
-     * 
-     * @return an UEB Topic Source
-     * @throws IllegalArgumentException if invalid parameters are present
-     */
-    public UebTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret);
+    UebTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret);
 
     /**
      * Instantiates a new UEB Topic Source
@@ -90,7 +88,7 @@ public interface UebTopicSourceFactory {
      * @return an UEB Topic Source
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public UebTopicSource build(List<String> servers, String topic);
+    UebTopicSource build(List<String> servers, String topic);
 
     /**
      * Destroys an UEB Topic Source based on a topic
@@ -98,12 +96,12 @@ public interface UebTopicSourceFactory {
      * @param topic topic name
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public void destroy(String topic);
+    void destroy(String topic);
 
     /**
      * Destroys all UEB Topic Sources
      */
-    public void destroy();
+    void destroy();
 
     /**
      * gets an UEB Topic Source based on topic name
@@ -113,14 +111,14 @@ public interface UebTopicSourceFactory {
      * @throws IllegalArgumentException if an invalid topic is provided
      * @throws IllegalStateException if the UEB Topic Source is an incorrect state
      */
-    public UebTopicSource get(String topic);
+    UebTopicSource get(String topic);
 
     /**
      * Provides a snapshot of the UEB Topic Sources
      * 
      * @return a list of the UEB Topic Sources
      */
-    public List<UebTopicSource> inventory();
+    List<UebTopicSource> inventory();
 }
 
 
@@ -146,37 +144,24 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
      * {@inheritDoc}
      */
     @Override
-    public UebTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret,
-            String consumerGroup, String consumerInstance, int fetchTimeout, int fetchLimit, boolean managed,
-            boolean useHttps, boolean allowSelfSignedCerts) {
-        if (servers == null || servers.isEmpty()) {
+    public UebTopicSource build(BusTopicParams busTopicParams) {
+        if (busTopicParams.getServers() == null || busTopicParams.getServers().isEmpty()) {
             throw new IllegalArgumentException("UEB Server(s) must be provided");
         }
 
-        if (topic == null || topic.isEmpty()) {
+        if (busTopicParams.getTopic() == null || busTopicParams.getTopic().isEmpty()) {
             throw new IllegalArgumentException(MISSING_TOPIC);
         }
 
         synchronized (this) {
-            if (uebTopicSources.containsKey(topic)) {
-                return uebTopicSources.get(topic);
+            if (uebTopicSources.containsKey(busTopicParams.getTopic())) {
+                return uebTopicSources.get(busTopicParams.getTopic());
             }
 
-            UebTopicSource uebTopicSource = new SingleThreadedUebTopicSource(BusTopicParams.builder()
-                    .servers(servers)
-                    .topic(topic)
-                    .apiKey(apiKey)
-                    .apiSecret(apiSecret)
-                    .consumerGroup(consumerGroup)
-                    .consumerInstance(consumerInstance)
-                    .fetchTimeout(fetchTimeout)
-                    .fetchLimit(fetchLimit)
-                    .useHttps(useHttps)
-                    .allowSelfSignedCerts(allowSelfSignedCerts)
-                    .build());
+            UebTopicSource uebTopicSource = new SingleThreadedUebTopicSource(busTopicParams);
 
-            if (managed) {
-                uebTopicSources.put(topic, uebTopicSource);
+            if (busTopicParams.isManaged()) {
+                uebTopicSources.put(busTopicParams.getTopic(), uebTopicSource);
             }
 
             return uebTopicSource;
@@ -276,8 +261,18 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
                     allowSelfSignedCerts = Boolean.parseBoolean(allowSelfSignedCertsString);
                 }
 
-                UebTopicSource uebTopicSource = this.build(serverList, topic, apiKey, apiSecret, consumerGroup,
-                        consumerInstance, fetchTimeout, fetchLimit, managed, useHttps, allowSelfSignedCerts);
+                UebTopicSource uebTopicSource = this.build(BusTopicParams.builder()
+                        .servers(serverList)
+                        .topic(topic)
+                        .apiKey(apiKey)
+                        .apiSecret(apiSecret)
+                        .consumerGroup(consumerGroup)
+                        .consumerInstance(consumerInstance)
+                        .fetchTimeout(fetchTimeout)
+                        .fetchLimit(fetchLimit)
+                        .managed(managed)
+                        .useHttps(useHttps)
+                        .allowSelfSignedCerts(allowSelfSignedCerts).build());
                 newUebTopicSources.add(uebTopicSource);
             }
         }
@@ -290,8 +285,16 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
     @Override
     public UebTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret) {
 
-        return this.build(servers, topic, apiKey, apiSecret, null, null, UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH,
-                UebTopicSource.DEFAULT_LIMIT_FETCH, true, false, true);
+        return this.build(BusTopicParams.builder()
+                .servers(servers)
+                .topic(topic)
+                .apiKey(apiKey)
+                .apiSecret(apiSecret)
+                .fetchTimeout(UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH)
+                .fetchLimit(UebTopicSource.DEFAULT_LIMIT_FETCH)
+                .managed(true)
+                .useHttps(false)
+                .allowSelfSignedCerts(true).build());
     }
 
     /**

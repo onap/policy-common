@@ -68,80 +68,81 @@ public class BusTopicParams {
     private String longitude;
     private Map<String, String> additionalProps;
     private String partitionId;
+    private boolean managed;
 
-    String getPartitionId() {
+    public String getPartitionId() {
         return partitionId;
     }
 
-    String getUserName() {
+    public String getUserName() {
         return userName;
     }
 
-    String getPassword() {
+    public String getPassword() {
         return password;
     }
 
-    String getEnvironment() {
+    public String getEnvironment() {
         return environment;
     }
 
-    String getAftEnvironment() {
+    public String getAftEnvironment() {
         return aftEnvironment;
     }
 
-    String getPartner() {
+    public String getPartner() {
         return partner;
     }
 
-    String getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    String getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
-    Map<String, String> getAdditionalProps() {
+    public Map<String, String> getAdditionalProps() {
         return additionalProps;
     }
 
-    List<String> getServers() {
+    public List<String> getServers() {
         return servers;
     }
 
-    String getTopic() {
+    public String getTopic() {
         return topic;
     }
 
-    String getApiKey() {
+    public String getApiKey() {
         return apiKey;
     }
 
-    String getApiSecret() {
+    public String getApiSecret() {
         return apiSecret;
     }
 
-    String getConsumerGroup() {
+    public String getConsumerGroup() {
         return consumerGroup;
     }
 
-    String getConsumerInstance() {
+    public String getConsumerInstance() {
         return consumerInstance;
     }
 
-    int getFetchTimeout() {
+    public int getFetchTimeout() {
         return fetchTimeout;
     }
 
-    int getFetchLimit() {
+    public int getFetchLimit() {
         return fetchLimit;
     }
 
-    boolean isUseHttps() {
+    public boolean isUseHttps() {
         return useHttps;
     }
 
-    boolean isAllowSelfSignedCerts() {
+    public boolean isAllowSelfSignedCerts() {
         return allowSelfSignedCerts;
     }
 
@@ -204,6 +205,10 @@ public class BusTopicParams {
 
     boolean isPartitionIdNullOrEmpty() {
         return (partitionId == null || partitionId.trim().isEmpty());
+    }
+
+    public boolean isManaged() {
+        return managed;
     }
 
     public static class TopicParamsBuilder {
@@ -311,6 +316,10 @@ public class BusTopicParams {
             return m;
         }
 
+        public TopicParamsBuilder managed(boolean managed) {
+            this.m.managed = managed;
+            return this;
+        }
     }
 }
 
