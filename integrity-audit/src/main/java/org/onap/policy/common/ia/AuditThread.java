@@ -709,7 +709,7 @@ public class AuditThread extends Thread {
      * Indicates that the {@link #run()} method has started. This method simply returns,
      * and may overridden by junit tests.
      * 
-     * @throws InterruptedException
+     * @throws InterruptedException can be interrupted
      */
     public void runStarted() throws InterruptedException {
         // does nothing
@@ -719,7 +719,7 @@ public class AuditThread extends Thread {
      * Indicates that an audit has completed. This method simply returns, and may
      * overridden by junit tests.
      * 
-     * @throws InterruptedException
+     * @throws InterruptedException can be interrupted
      */
     public void auditCompleted() throws InterruptedException {
         // does nothing

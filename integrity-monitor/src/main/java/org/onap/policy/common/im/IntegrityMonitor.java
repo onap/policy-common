@@ -213,7 +213,8 @@ public class IntegrityMonitor {
         // Did it get created?
         //
         if (emf == null) {
-            logger.error("Error creating IM entity manager factory with persistence unit: {}", factory.getPersistenceUnit());
+            logger.error("Error creating IM entity manager factory with persistence unit: {}", 
+                            factory.getPersistenceUnit());
             throw new IntegrityMonitorException("Unable to create IM Entity Manager Factory");
         }
 
@@ -1713,7 +1714,7 @@ public class IntegrityMonitor {
             try {
                 factory.runStarted();
 
-                while(!stopRequested) {
+                while (!stopRequested) {
                     MonitorTime.getInstance().sleep(CYCLE_INTERVAL_MILLIS);
                     
                     IntegrityMonitor.this.runOnce();
@@ -1873,7 +1874,7 @@ public class IntegrityMonitor {
          * Indicates that the {@link FpManager#run()} method has started. This method
          * simply returns.
          * 
-         * @throws InterruptedException
+         * @throws InterruptedException can be interrupted
          */
         public void runStarted() throws InterruptedException {
             // does nothing
@@ -1882,13 +1883,15 @@ public class IntegrityMonitor {
         /**
          * Indicates that a monitor activity has completed. This method simply returns.
          * 
-         * @throws InterruptedException
+         * @throws InterruptedException can be interrupted
          */
         public void monitorCompleted() throws InterruptedException {
             // does nothing
         }
 
         /**
+         * Get persistence unit.
+         * 
          * @return the persistence unit to be used
          */
         public String getPersistenceUnit() {

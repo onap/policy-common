@@ -33,13 +33,15 @@ public class MonitorTime {
     private static CurrentTime instance = new CurrentTime();
 
     /**
-     * 
+     * Constructor.
      */
     private MonitorTime() {
         super();
     }
 
     /**
+     * Get instance.
+     * 
      * @return the CurrentTime singleton
      */
     public static CurrentTime getInstance() {

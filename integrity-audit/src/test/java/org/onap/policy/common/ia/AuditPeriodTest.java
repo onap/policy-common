@@ -227,7 +227,7 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
                         runAudit(p);
                         long elapsed = p.getTimeInMillis() - tbegin;
                         
-                        synchronized(tmin) {
+                        synchronized (tmin) {
                             tmin.set(Math.min(tmin.get(), elapsed));
                         }
 

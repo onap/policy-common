@@ -206,8 +206,10 @@ public class IntegrityAudit {
         logger.info("startAuditThread: Entering");
 
         if (integrityAuditPeriodSeconds >= 0) {
-            this.auditThread = makeAuditThread(this.resourceName, this.persistenceUnit, this.properties, integrityAuditPeriodSeconds);
-            logger.info("startAuditThread: Audit started and will run every " + integrityAuditPeriodSeconds + " seconds");
+            this.auditThread = makeAuditThread(this.resourceName, this.persistenceUnit, 
+                            this.properties, integrityAuditPeriodSeconds);
+            logger.info("startAuditThread: Audit started and will run every " + integrityAuditPeriodSeconds 
+                            + " seconds");
             this.auditThread.start();
             
         } else {
@@ -269,6 +271,7 @@ public class IntegrityAudit {
     }
 
     /**
+     * Return if audit thread.
      * 
      * @return {@code true} if an audit thread exists, {@code false} otherwise
      */
@@ -279,13 +282,13 @@ public class IntegrityAudit {
     /**
      * Creates an audit thread. May be overridden by junit tests.
      * 
-     * @param resourceName2
-     * @param persistenceUnit2
-     * @param properties2
+     * @param resourceName2 the resource name
+     * @param persistenceUnit2 the persistence unit
+     * @param properties2 properties
      * @param integrityAuditPeriodSeconds2
      * 
      * @return a new audit thread
-     * @throws IntegrityAuditException
+     * @throws IntegrityAuditException audit exception
      */
     protected AuditThread makeAuditThread(String resourceName2, String persistenceUnit2, Properties properties2,
                     int integrityAuditPeriodSeconds2) throws IntegrityAuditException {

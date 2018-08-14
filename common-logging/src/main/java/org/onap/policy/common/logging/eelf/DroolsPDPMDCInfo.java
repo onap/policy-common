@@ -41,7 +41,7 @@ public class DroolsPDPMDCInfo implements MDCInfo {
     }
 
     /**
-     * Get the MMDC Info
+     * Get the MMDC Info.
      * 
      * @return the instance of ConcurrentHashMap.
      */

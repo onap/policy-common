@@ -20,24 +20,27 @@
   -->
 
 <persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
-	<persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
-	<!-- Limited use for generating the DB and schema files for iatest DB - uses eclipselink -->
-		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<class>org.onap.policy.common.ia.jpa.IntegrityAuditEntity</class>
-		<class>org.onap.policy.common.ia.jpa.IaTestEntity</class>
-		<shared-cache-mode>NONE</shared-cache-mode>
-		<properties>
-			<property name="javax.persistence.schema-generation.database.action" value="drop-and-create"/>
-        </properties>
-	</persistence-unit>
+ <persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
+  <!-- Limited use for generating the DB and schema files for iatest DB - 
+   uses eclipselink -->
+  <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+  <class>org.onap.policy.common.ia.jpa.IntegrityAuditEntity</class>
+  <class>org.onap.policy.common.ia.jpa.IaTestEntity</class>
+  <shared-cache-mode>NONE</shared-cache-mode>
+  <properties>
+   <property name="javax.persistence.schema-generation.database.action"
+    value="drop-and-create" />
+  </properties>
+ </persistence-unit>
 
-	<persistence-unit name="integrityAuditPU" transaction-type="RESOURCE_LOCAL">
-	<!-- For operational use -->
-		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
-		<class>org.onap.policy.common.ia.jpa.IntegrityAuditEntity</class>		
-		<shared-cache-mode>NONE</shared-cache-mode>	
-		<properties>
-			<!-- none -->
-        </properties>
-	</persistence-unit>
+ <persistence-unit name="integrityAuditPU"
+  transaction-type="RESOURCE_LOCAL">
+  <!-- For operational use -->
+  <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+  <class>org.onap.policy.common.ia.jpa.IntegrityAuditEntity</class>
+  <shared-cache-mode>NONE</shared-cache-mode>
+  <properties>
+   <!-- none -->
+  </properties>
+ </persistence-unit>
 </persistence>

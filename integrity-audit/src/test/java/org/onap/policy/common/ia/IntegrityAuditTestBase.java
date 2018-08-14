@@ -22,6 +22,9 @@ package org.onap.policy.common.ia;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,8 +48,6 @@ import org.onap.policy.common.utils.time.CurrentTime;
 import org.onap.policy.common.utils.time.TestTime;
 import org.powermock.reflect.Whitebox;
 import org.slf4j.LoggerFactory;
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
 
 /**
  * All JUnits are designed to run in the local development environment where they have write
@@ -267,6 +268,8 @@ public class IntegrityAuditTestBase {
     }
 
     /**
+     * Get the test time.
+     * 
      * @return the {@link TestTime} in use by this thread
      */
     public static TestTime getTestTime() {
@@ -521,10 +524,11 @@ public class IntegrityAuditTestBase {
          * @param resourceName the resource name
          * @param persistenceUnit the persistence unit
          * @param properties the properties
-         * @param time 
+         * @param time the time
          * @throws Exception if an error occurs
          */
-        public MyIntegrityAudit(String resourceName, String persistenceUnit, Properties properties, TestTime time) throws Exception {
+        public MyIntegrityAudit(String resourceName, String persistenceUnit, 
+                        Properties properties, TestTime time) throws Exception {
             super(resourceName, persistenceUnit, properties);
             
             myTime = time;
@@ -536,6 +540,8 @@ public class IntegrityAuditTestBase {
         }
         
         /**
+         * Get time in milliseconds.
+         * 
          * @return the "current" time for the auditor
          */
         public long getTimeInMillis() {
@@ -545,8 +551,8 @@ public class IntegrityAuditTestBase {
         /**
          * Sleeps for a period of time.
          * 
-         * @param sleepMs
-         * @throws InterruptedException
+         * @param sleepMs time to sleep
+         * @throws InterruptedException can be interrupted
          */
         public void sleep(long sleepMs) throws InterruptedException {
             myTime.sleep(sleepMs);

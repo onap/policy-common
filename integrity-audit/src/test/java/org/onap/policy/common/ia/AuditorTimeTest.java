@@ -21,11 +21,12 @@
 package org.onap.policy.common.ia;
 
 import static org.junit.Assert.*;
+
 import org.junit.Test;
 import org.onap.policy.common.utils.time.CurrentTime;
 
 /**
- * 
+ * Tests the AuditorTime class.
  */
 public class AuditorTimeTest {
 
