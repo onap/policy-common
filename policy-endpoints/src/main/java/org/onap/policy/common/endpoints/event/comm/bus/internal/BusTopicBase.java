@@ -20,8 +20,6 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
-import java.util.List;
-
 import org.onap.policy.common.endpoints.event.comm.bus.ApiKeyEnabled;
 
 /**

@@ -51,8 +51,10 @@ public class SingleThreadedDmaapTopicSource extends SingleThreadedBusTopicSource
 
 
     /**
+     * Constructor.
      * 
-     * @param busTopicParams Parameters object containing all the required inputs     *
+     * @param busTopicParams Parameters object containing all the required inputs
+     * 
      * @throws IllegalArgumentException An invalid parameter passed in
      */
     public SingleThreadedDmaapTopicSource(BusTopicParams busTopicParams) {

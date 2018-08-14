@@ -429,6 +429,13 @@ public interface BusConsumer {
 
         private final Properties props;
 
+        /**
+         * Constructor.
+         * 
+         * @param busTopicParams topic paramters
+         * 
+         * @throws MalformedURLException must provide a valid URL
+         */
         public DmaapDmeConsumerWrapper(BusTopicParams busTopicParams) throws MalformedURLException {
 
 

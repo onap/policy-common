@@ -41,15 +41,8 @@ public interface UebTopicSinkFactory {
     /**
      * Instantiates a new UEB Topic Writer.
      * 
-     * servers list of servers
-     * topic topic name
-     * apiKey API Key
-     * apiSecret API Secret
-     * partitionKey Consumer Group
-     * managed is this sink endpoint managed?
-     * @param busTopicParams parameter object
+     * @param busTopicParams parameters object
      * @return an UEB Topic Sink
-     * @throws IllegalArgumentException if invalid parameters are present
      */
     UebTopicSink build(BusTopicParams busTopicParams);
 
@@ -189,14 +182,14 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
                     continue;
                 }
 
-                List<String> serverList = new ArrayList<>(Arrays.asList(servers.split("\\s*,\\s*")));
+                final List<String> serverList = new ArrayList<>(Arrays.asList(servers.split("\\s*,\\s*")));
 
-                String apiKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS + "." + topic
-                        + PolicyEndPointProperties.PROPERTY_TOPIC_API_KEY_SUFFIX);
-                String apiSecret = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS + "."
-                        + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_SECRET_SUFFIX);
-                String partitionKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS + "."
-                        + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX);
+                final String apiKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS 
+                                + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_KEY_SUFFIX);
+                final String apiSecret = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS 
+                                + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_SECRET_SUFFIX);
+                final String partitionKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS 
+                                + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX);
 
                 String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS + "."
                         + topic + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);

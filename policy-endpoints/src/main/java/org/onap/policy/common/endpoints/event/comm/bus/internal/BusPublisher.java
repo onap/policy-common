@@ -73,6 +73,11 @@ public interface BusPublisher {
         @JsonIgnore
         protected volatile CambriaBatchingPublisher publisher;
 
+        /**
+         * Constructor.
+         * 
+         * @param busTopicParams topic parameters
+         */
         public CambriaPublisherWrapper(BusTopicParams busTopicParams) {
 
             PublisherBuilder builder = new CambriaClientBuilders.PublisherBuilder();
@@ -292,6 +297,12 @@ public interface BusPublisher {
     }
 
     public static class DmaapDmePublisherWrapper extends DmaapPublisherWrapper {
+        
+        /**
+         * Constructor.
+         * 
+         * @param busTopicParams topic parameters
+         */
         public DmaapDmePublisherWrapper(BusTopicParams busTopicParams) {
 
             super(ProtocolTypeConstants.DME2, busTopicParams.getServers(),busTopicParams.getTopic(),

@@ -61,7 +61,21 @@ public class JerseyClient implements HttpClient {
 
     protected boolean alive = true;
 
-
+    /**
+     * Constructor.
+     * 
+     * @param name the name
+     * @param https is it https or not
+     * @param selfSignedCerts are there self signed certs
+     * @param hostname the hostname
+     * @param port port being used
+     * @param basePath base context
+     * @param userName user
+     * @param password password
+     * 
+     * @throws KeyManagementException key exception
+     * @throws NoSuchAlgorithmException no algorithm exception
+     */
     public JerseyClient(String name, boolean https, boolean selfSignedCerts, String hostname, int port, String basePath,
             String userName, String password) throws KeyManagementException, NoSuchAlgorithmException {
 

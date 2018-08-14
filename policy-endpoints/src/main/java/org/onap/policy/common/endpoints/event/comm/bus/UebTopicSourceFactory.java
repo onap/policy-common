@@ -51,18 +51,8 @@ public interface UebTopicSourceFactory {
     /**
      * Instantiates a new UEB Topic Source.
      * 
-     * servers list of servers
-     * topic topic name
-     * apiKey API Key
-     * apiSecret API Secret
-     * consumerGroup Consumer Group
-     * consumerInstance Consumer Instance
-     * fetchTimeout Read Fetch Timeout
-     * fetchLimit Fetch Limit
-     * managed is this source endpoint managed?
      * @param busTopicParams parameters object
      * @return an UEB Topic Source
-     * @throws IllegalArgumentException if invalid parameters are present
      */
     UebTopicSource build(BusTopicParams busTopicParams);
 
