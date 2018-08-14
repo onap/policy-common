@@ -45,6 +45,12 @@ public class HttpClientTest {
 
     private static final HashMap<String, String> savedValuesMap = new HashMap<>();
 
+    /**
+     * Setup before class method.
+     * 
+     * @throws InterruptedException can be interrupted
+     * @throws IOException can have an IO exception
+     */
     @BeforeClass
     public static void setUp() throws InterruptedException, IOException {
         logger.info("-- setup() --");
@@ -65,9 +71,11 @@ public class HttpClientTest {
             savedValuesMap.put(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME, keyStoreSystemProperty);
         }
 
-        String keyStorePasswordSystemProperty = System.getProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
+        String keyStorePasswordSystemProperty = 
+                        System.getProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
         if (keyStorePasswordSystemProperty != null) {
-            savedValuesMap.put(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME, keyStorePasswordSystemProperty);
+            savedValuesMap.put(
+                            JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME, keyStorePasswordSystemProperty);
         }
 
         String trustStoreSystemProperty = System.getProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME);
@@ -76,7 +84,8 @@ public class HttpClientTest {
                 .put(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME, trustStoreSystemProperty);
         }
 
-        String trustStorePasswordSystemProperty = System.getProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
+        String trustStorePasswordSystemProperty = 
+                        System.getProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
         if (trustStorePasswordSystemProperty != null) {
             savedValuesMap
                 .put(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME, trustStorePasswordSystemProperty);
@@ -101,6 +110,10 @@ public class HttpClientTest {
         }
     }
 
+    /**
+     * After the class is created method.
+     * 
+     */
     @AfterClass
     public static void tearDown() {
         logger.info("-- tearDown() --");
@@ -109,28 +122,32 @@ public class HttpClientTest {
         HttpClient.factory.destroy();
 
         if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME)) {
-            System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME, savedValuesMap.get(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME));
+            System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME, 
+                            savedValuesMap.get(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME));
             savedValuesMap.remove(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME);
         } else {
             System.clearProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME);
         }
 
         if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME)) {
-            System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME, savedValuesMap.get(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME));
+            System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME, 
+                            savedValuesMap.get(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME));
             savedValuesMap.remove(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
         } else {
             System.clearProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
         }
 
         if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME)) {
-            System.setProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME, savedValuesMap.get(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME));
+            System.setProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME, 
+                            savedValuesMap.get(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME));
             savedValuesMap.remove(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME);
         } else {
             System.clearProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME);
         }
 
         if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME)) {
-            System.setProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME, savedValuesMap.get(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME));
+            System.setProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME, 
+                            savedValuesMap.get(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME));
             savedValuesMap.remove(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
         } else {
             System.clearProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);

@@ -78,9 +78,11 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
 
 
     /**
-     * 
+     * Constructor.
      *
-     * @param busTopicParams@throws IllegalArgumentException An invalid parameter passed in
+     * @param busTopicParams topic parameters
+     * 
+     * @throws IllegalArgumentException An invalid parameter passed in
      */
     public SingleThreadedBusTopicSource(BusTopicParams busTopicParams) {
 

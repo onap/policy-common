@@ -32,13 +32,18 @@ import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 @Path("/junit/endpoints")
 public class RestEndpoints {
 
+    /**
+     * Returns the http servers.
+     * 
+     * @return the list of servers as a string
+     */
     @GET
     @Path("http/servers")
     @Produces(MediaType.TEXT_PLAIN)
     public String httpServers() {   
-    	List<HttpServletServer> servers = 
-    			HttpServletServer.factory.inventory();
-    	return servers.toString();
+        List<HttpServletServer> servers = 
+                        HttpServletServer.factory.inventory();
+        return servers.toString();
     }
     
     

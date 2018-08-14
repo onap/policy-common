@@ -60,7 +60,7 @@ public interface DmaapTopicSourceFactory {
     /**
      * Instantiates a new DMAAP Topic Source.
      *
-     * servers list of servers
+     * <p>servers list of servers
      * topic topic name
      * apiKey API Key
      * apiSecret API Secret
@@ -211,65 +211,81 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
                     serverList = new ArrayList<>();
                 }
 
-                String apiKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
+                final String apiKey = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
                         + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_KEY_SUFFIX);
 
-                String apiSecret = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
+                final String apiSecret = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
                         + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_SECRET_SUFFIX);
 
-                String aafMechId = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
+                final String aafMechId = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
                         + topic + PolicyEndPointProperties.PROPERTY_TOPIC_AAF_MECHID_SUFFIX);
 
-                String aafPassword = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
+                final String aafPassword = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
                         + topic + PolicyEndPointProperties.PROPERTY_TOPIC_AAF_PASSWORD_SUFFIX);
 
-                String consumerGroup = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
+                final String consumerGroup = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
                         + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_GROUP_SUFFIX);
 
-                String consumerInstance = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
+                final String consumerInstance = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
                         + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_INSTANCE_SUFFIX);
 
-                String fetchTimeoutString = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
+                final String fetchTimeoutString = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
                         + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX);
 
                 /* DME2 Properties */
 
-                String dme2Environment = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
+                final String dme2Environment = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
                         + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ENVIRONMENT_SUFFIX);
 
-                String dme2AftEnvironment = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
+                final String dme2AftEnvironment = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
                         + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_AFT_ENVIRONMENT_SUFFIX);
 
-                String dme2Partner = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
+                final String dme2Partner = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
                         + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_PARTNER_SUFFIX);
 
-                String dme2RouteOffer = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
+                final String dme2RouteOffer = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
                         + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ROUTE_OFFER_SUFFIX);
 
-                String dme2Latitude = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
+                final String dme2Latitude = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
                         + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LATITUDE_SUFFIX);
 
-                String dme2Longitude = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
+                final String dme2Longitude = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
                         + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LONGITUDE_SUFFIX);
 
-                String dme2EpReadTimeoutMs =
+                final String dme2EpReadTimeoutMs =
                         properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "." + topic
                                 + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_EP_READ_TIMEOUT_MS_SUFFIX);
 
-                String dme2EpConnTimeout = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
+                final String dme2EpConnTimeout = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
                         + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_EP_CONN_TIMEOUT_SUFFIX);
 
-                String dme2RoundtripTimeoutMs =
+                final String dme2RoundtripTimeoutMs =
                         properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "." + topic
                                 + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ROUNDTRIP_TIMEOUT_MS_SUFFIX);
 
-                String dme2Version = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
+                final String dme2Version = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
                         + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_VERSION_SUFFIX);
 
-                String dme2SubContextPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
+                final String dme2SubContextPath = properties.getProperty(
+                                PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
                         + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_SUB_CONTEXT_PATH_SUFFIX);
 
-                String dme2SessionStickinessRequired =
+                final String dme2SessionStickinessRequired =
                         properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "." + topic
                                 + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_SESSION_STICKINESS_REQUIRED_SUFFIX);
 
@@ -384,7 +400,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
     /**
      * {@inheritDoc}
      * 
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException throws illegal argument exception
      */
     @Override
     public DmaapTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret) {
@@ -404,7 +420,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
     /**
      * {@inheritDoc}
      * 
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException throws illegal argument exception
      */
     @Override
     public DmaapTopicSource build(List<String> servers, String topic) {

@@ -184,9 +184,9 @@ public class HttpServerTest {
      * @throws IOException thrown is IO exception occurs
      * @throws InterruptedException thrown if thread interrupted occurs
      */
-    protected String http(HttpServletServer server, String aUrl)
+    protected String http(HttpServletServer server, String urlString)
             throws MalformedURLException, IOException, InterruptedException {
-        URL url = new URL(aUrl);
+        URL url = new URL(urlString);
         String response = null;
         int numRetries = 1;
         int maxNumberRetries = 5;
@@ -195,7 +195,7 @@ public class HttpServerTest {
                 response = response(url);
                 break;
             } catch (ConnectException e) {
-                logger.warn("http server {} @ {} ({}) - cannot connect yet ..", server, aUrl, numRetries, e);
+                logger.warn("http server {} @ {} ({}) - cannot connect yet ..", server, urlString, numRetries, e);
                 numRetries++;
                 Thread.sleep(10000L);
             } catch (Exception e) {

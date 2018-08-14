@@ -51,7 +51,7 @@ public interface UebTopicSourceFactory {
     /**
      * Instantiates a new UEB Topic Source.
      * 
-     * servers list of servers
+     * <p>servers list of servers
      * topic topic name
      * apiKey API Key
      * apiSecret API Secret
