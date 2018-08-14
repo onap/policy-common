@@ -20,14 +20,12 @@
 
 package org.onap.policy.common.endpoints.http.server.internal;
 
+import io.swagger.jersey.config.JerseyJaxrsConfig;
 import java.util.HashMap;
-
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.onap.policy.common.utils.network.NetworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import io.swagger.jersey.config.JerseyJaxrsConfig;
 
 /**
  * REST Jetty Server that uses Jersey Servlets to support JAX-RS Web Services.

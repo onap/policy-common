@@ -213,112 +213,113 @@ public class BusTopicParams {
     }
 
     public static class TopicParamsBuilder {
-        BusTopicParams m = new BusTopicParams();
+        
+        BusTopicParams params = new BusTopicParams();
 
         private TopicParamsBuilder() {
         }
 
         public TopicParamsBuilder servers(List<String> servers) {
-            this.m.servers = servers;
+            this.params.servers = servers;
             return this;
         }
 
         public TopicParamsBuilder topic(String topic) {
-            this.m.topic = topic;
+            this.params.topic = topic;
             return this;
         }
 
         public TopicParamsBuilder apiKey(String apiKey) {
-            this.m.apiKey = apiKey;
+            this.params.apiKey = apiKey;
             return this;
         }
 
         public TopicParamsBuilder apiSecret(String apiSecret) {
-            this.m.apiSecret = apiSecret;
+            this.params.apiSecret = apiSecret;
             return this;
         }
 
         public TopicParamsBuilder consumerGroup(String consumerGroup) {
-            this.m.consumerGroup = consumerGroup;
+            this.params.consumerGroup = consumerGroup;
             return this;
         }
 
         public TopicParamsBuilder consumerInstance(String consumerInstance) {
-            this.m.consumerInstance = consumerInstance;
+            this.params.consumerInstance = consumerInstance;
             return this;
         }
 
         public TopicParamsBuilder fetchTimeout(int fetchTimeout) {
-            this.m.fetchTimeout = fetchTimeout;
+            this.params.fetchTimeout = fetchTimeout;
             return this;
         }
 
         public TopicParamsBuilder fetchLimit(int fetchLimit) {
-            this.m.fetchLimit = fetchLimit;
+            this.params.fetchLimit = fetchLimit;
             return this;
         }
 
         public TopicParamsBuilder useHttps(boolean useHttps) {
-            this.m.useHttps = useHttps;
+            this.params.useHttps = useHttps;
             return this;
         }
 
         public TopicParamsBuilder allowSelfSignedCerts(boolean allowSelfSignedCerts) {
-            this.m.allowSelfSignedCerts = allowSelfSignedCerts;
+            this.params.allowSelfSignedCerts = allowSelfSignedCerts;
             return this;
         }
 
         public TopicParamsBuilder userName(String userName) {
-            this.m.userName = userName;
+            this.params.userName = userName;
             return this;
         }
 
         public TopicParamsBuilder password(String password) {
-            this.m.password = password;
+            this.params.password = password;
             return this;
         }
 
         public TopicParamsBuilder environment(String environment) {
-            this.m.environment = environment;
+            this.params.environment = environment;
             return this;
         }
 
         public TopicParamsBuilder aftEnvironment(String aftEnvironment) {
-            this.m.aftEnvironment = aftEnvironment;
+            this.params.aftEnvironment = aftEnvironment;
             return this;
         }
 
         public TopicParamsBuilder partner(String partner) {
-            this.m.partner = partner;
+            this.params.partner = partner;
             return this;
         }
 
         public TopicParamsBuilder latitude(String latitude) {
-            this.m.latitude = latitude;
+            this.params.latitude = latitude;
             return this;
         }
 
         public TopicParamsBuilder longitude(String longitude) {
-            this.m.longitude = longitude;
+            this.params.longitude = longitude;
             return this;
         }
 
         public TopicParamsBuilder additionalProps(Map<String, String> additionalProps) {
-            this.m.additionalProps = additionalProps;
+            this.params.additionalProps = additionalProps;
             return this;
         }
 
         public TopicParamsBuilder partitionId(String partitionId) {
-            this.m.partitionId = partitionId;
+            this.params.partitionId = partitionId;
             return this;
         }
 
         public BusTopicParams build() {
-            return m;
+            return params;
         }
 
         public TopicParamsBuilder managed(boolean managed) {
-            this.m.managed = managed;
+            this.params.managed = managed;
             return this;
         }
     }

@@ -127,8 +127,6 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      */
     public JettyServletServer(String name, boolean https, String host, int port, String contextPath) {
         String srvName = name;
-        String srvHost = host;
-        String ctxtPath = contextPath;
 
         if (srvName == null || srvName.isEmpty()) {
             srvName = "http-" + port;
@@ -138,10 +136,12 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
             throw new IllegalArgumentException("Invalid Port provided: " + port);
         }
 
+        String srvHost = host;
         if (srvHost == null || srvHost.isEmpty()) {
             srvHost = "localhost";
         }
 
+        String ctxtPath = contextPath;
         if (ctxtPath == null || ctxtPath.isEmpty()) {
             ctxtPath = "/";
         }
@@ -179,20 +179,25 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     }
 
     @Override
-    public void addFilterClass(String aFilterPath, String aFilterClass) {
-        if (aFilterClass == null || aFilterClass.isEmpty()) {
+    public void addFilterClass(String filterPath, String filterClass) {
+        if (filterClass == null || filterClass.isEmpty()) {
             throw new IllegalArgumentException("No filter class provided");
         }
 
-        String filterPath = aFilterPath;
-        if (aFilterPath == null || aFilterPath.isEmpty()) {
-            filterPath = "/*";
+        String tempFilterPath = filterPath;
+        if (filterPath == null || filterPath.isEmpty()) {
+            tempFilterPath = "/*";
         }
 
-        context.addFilter(aFilterClass, filterPath,
+        context.addFilter(filterClass, tempFilterPath,
                 EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
     }
 
+    /**
+     * Returns the https connector.
+     * 
+     * @return
+     */
     public ServerConnector httpsConnector() {
         SslContextFactory sslContextFactory = new SslContextFactory();
 
