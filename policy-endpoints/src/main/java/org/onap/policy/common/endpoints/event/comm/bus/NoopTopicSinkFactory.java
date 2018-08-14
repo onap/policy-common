@@ -43,7 +43,7 @@ public interface NoopTopicSinkFactory {
      * @return a noop topic sink
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public List<NoopTopicSink> build(Properties properties);
+    List<NoopTopicSink> build(Properties properties);
 
     /**
      * builds a noop sink.
@@ -54,7 +54,7 @@ public interface NoopTopicSinkFactory {
      * @return a noop topic sink
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public NoopTopicSink build(List<String> servers, String topic, boolean managed);
+    NoopTopicSink build(List<String> servers, String topic, boolean managed);
 
     /**
      * Destroys a sink based on the topic.
@@ -62,12 +62,12 @@ public interface NoopTopicSinkFactory {
      * @param topic topic name
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public void destroy(String topic);
+    void destroy(String topic);
 
     /**
      * Destroys all sinks.
      */
-    public void destroy();
+    void destroy();
 
     /**
      * gets a sink based on topic name.
@@ -78,14 +78,14 @@ public interface NoopTopicSinkFactory {
      * @throws IllegalArgumentException if an invalid topic is provided
      * @throws IllegalStateException if the sink is in an incorrect state
      */
-    public NoopTopicSink get(String topic);
+    NoopTopicSink get(String topic);
 
     /**
      * Provides a snapshot of the UEB Topic Writers.
      * 
      * @return a list of the UEB Topic Writers
      */
-    public List<NoopTopicSink> inventory();
+    List<NoopTopicSink> inventory();
 
 }
 

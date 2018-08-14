@@ -41,18 +41,17 @@ public interface UebTopicSinkFactory {
     /**
      * Instantiates a new UEB Topic Writer.
      * 
-     * @param servers list of servers
-     * @param topic topic name
-     * @param apiKey API Key
-     * @param apiSecret API Secret
-     * @param partitionKey Consumer Group
-     * @param managed is this sink endpoint managed?
-     * 
+     * servers list of servers
+     * topic topic name
+     * apiKey API Key
+     * apiSecret API Secret
+     * partitionKey Consumer Group
+     * managed is this sink endpoint managed?
+     * @param busTopicParams parameter object
      * @return an UEB Topic Sink
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public UebTopicSink build(List<String> servers, String topic, String apiKey, String apiSecret, String partitionKey,
-            boolean managed, boolean useHttps, boolean allowSelfSignedCerts);
+    UebTopicSink build(BusTopicParams busTopicParams);
 
     /**
      * Creates an UEB Topic Writer based on properties files.
@@ -62,7 +61,7 @@ public interface UebTopicSinkFactory {
      * @return an UEB Topic Writer
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public List<UebTopicSink> build(Properties properties);
+    List<UebTopicSink> build(Properties properties);
 
     /**
      * Instantiates a new UEB Topic Writer.
@@ -73,7 +72,7 @@ public interface UebTopicSinkFactory {
      * @return an UEB Topic Writer
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public UebTopicSink build(List<String> servers, String topic);
+    UebTopicSink build(List<String> servers, String topic);
 
     /**
      * Destroys an UEB Topic Writer based on a topic.
@@ -81,12 +80,12 @@ public interface UebTopicSinkFactory {
      * @param topic topic name
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public void destroy(String topic);
+    void destroy(String topic);
 
     /**
      * Destroys all UEB Topic Writers.
      */
-    public void destroy();
+    void destroy();
 
     /**
      * gets an UEB Topic Writer based on topic name.
@@ -97,14 +96,14 @@ public interface UebTopicSinkFactory {
      * @throws IllegalArgumentException if an invalid topic is provided
      * @throws IllegalStateException if the UEB Topic Reader is an incorrect state
      */
-    public UebTopicSink get(String topic);
+    UebTopicSink get(String topic);
 
     /**
      * Provides a snapshot of the UEB Topic Writers.
      * 
      * @return a list of the UEB Topic Writers
      */
-    public List<UebTopicSink> inventory();
+    List<UebTopicSink> inventory();
 }
 
 
@@ -127,34 +126,25 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
     protected HashMap<String, UebTopicSink> uebTopicSinks = new HashMap<>();
 
     @Override
-    public UebTopicSink build(List<String> servers, String topic, String apiKey, String apiSecret, String partitionKey,
-            boolean managed, boolean useHttps, boolean allowSelfSignedCerts) {
+    public UebTopicSink build(BusTopicParams busTopicParams) {
 
-        if (servers == null || servers.isEmpty()) {
+        if (busTopicParams.getServers() == null || busTopicParams.getServers().isEmpty()) {
             throw new IllegalArgumentException("UEB Server(s) must be provided");
         }
 
-        if (topic == null || topic.isEmpty()) {
+        if (busTopicParams.getTopic() == null || busTopicParams.getTopic().isEmpty()) {
             throw new IllegalArgumentException(MISSING_TOPIC);
         }
 
         synchronized (this) {
-            if (uebTopicSinks.containsKey(topic)) {
-                return uebTopicSinks.get(topic);
+            if (uebTopicSinks.containsKey(busTopicParams.getTopic())) {
+                return uebTopicSinks.get(busTopicParams.getTopic());
             }
 
-            UebTopicSink uebTopicWriter = new InlineUebTopicSink(BusTopicParams.builder()
-                    .servers(servers)
-                    .topic(topic)
-                    .apiKey(apiKey)
-                    .apiSecret(apiSecret)
-                    .partitionId(partitionKey)
-                    .useHttps(useHttps)
-                    .allowSelfSignedCerts(allowSelfSignedCerts)
-                    .build());
+            UebTopicSink uebTopicWriter = new InlineUebTopicSink(busTopicParams);
 
-            if (managed) {
-                uebTopicSinks.put(topic, uebTopicWriter);
+            if (busTopicParams.isManaged()) {
+                uebTopicSinks.put(busTopicParams.getTopic(), uebTopicWriter);
             }
 
             return uebTopicWriter;
@@ -164,7 +154,13 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
 
     @Override
     public UebTopicSink build(List<String> servers, String topic) {
-        return this.build(servers, topic, null, null, null, true, false, false);
+        return this.build(BusTopicParams.builder()
+                .servers(servers)
+                .topic(topic)
+                .managed(true)
+                .useHttps(false)
+                .allowSelfSignedCerts(false)
+                .build());
     }
 
 
@@ -229,8 +225,16 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
                     allowSelfSignedCerts = Boolean.parseBoolean(allowSelfSignedCertsString);
                 }
 
-                UebTopicSink uebTopicWriter = this.build(serverList, topic, apiKey, apiSecret, partitionKey, managed,
-                        useHttps, allowSelfSignedCerts);
+                UebTopicSink uebTopicWriter = this.build(BusTopicParams.builder()
+                        .servers(serverList)
+                        .topic(topic)
+                        .apiKey(apiKey)
+                        .apiSecret(apiSecret)
+                        .partitionId(partitionKey)
+                        .managed(managed)
+                        .useHttps(useHttps)
+                        .allowSelfSignedCerts(allowSelfSignedCerts)
+                        .build());
                 newUebTopicSinks.add(uebTopicWriter);
             }
             return newUebTopicSinks;
