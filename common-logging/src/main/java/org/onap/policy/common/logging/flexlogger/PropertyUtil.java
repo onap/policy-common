@@ -49,7 +49,7 @@ public class PropertyUtil {
     private static HashMap<File, ListenerRegistration> registrations = new HashMap<>();
 
     /**
-     * Read in a properties file
+     * Read in a properties file.
      * 
      * @param file the properties file
      * @return a Properties object, containing the associated properties
@@ -73,7 +73,7 @@ public class PropertyUtil {
     }
 
     /**
-     * Read in a properties file
+     * Read in a properties file.
      * 
      * @param fileName the properties file
      * @return a Properties object, containing the associated properties

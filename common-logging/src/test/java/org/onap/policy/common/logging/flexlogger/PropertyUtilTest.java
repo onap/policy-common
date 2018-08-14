@@ -27,6 +27,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -46,9 +47,6 @@ import org.powermock.reflect.Whitebox;
 
 public class PropertyUtilTest {
 
-    /**
-     * 
-     */
     private static final String TIMER_FIELD = "timer";
     private static final File FILE = new File("target/test.properties");
     private static Timer saveTimer;

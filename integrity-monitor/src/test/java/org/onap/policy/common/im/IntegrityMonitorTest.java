@@ -23,6 +23,7 @@ package org.onap.policy.common.im;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
@@ -645,8 +646,6 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         myProp.put(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL, "5");
         myProp.put(IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL, "5");
 
-        IntegrityMonitor im = makeMonitor(resourceName, myProp);
-
         // Note: do ***NOT*** do waitStep() here
 
         // Add a group1 dependent resources to put an entry in the forward
@@ -662,6 +661,8 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         et.commit();
 
         new StateManagement(emf, "group1_dep1");
+
+        IntegrityMonitor im = makeMonitor(resourceName, myProp);
 
         assertNoException(im, imx -> {
             imx.evaluateSanity();

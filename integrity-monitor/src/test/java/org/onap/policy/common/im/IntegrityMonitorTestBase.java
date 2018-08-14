@@ -22,6 +22,7 @@ package org.onap.policy.common.im;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -233,6 +234,8 @@ public class IntegrityMonitorTestBase {
     }
 
     /**
+     * Get saved factory.
+     * 
      * @return the original integrity monitor factory
      */
     static Factory getSavedFactory() {
@@ -252,6 +255,8 @@ public class IntegrityMonitorTestBase {
     }
     
     /**
+     * Get current test time.
+     * 
      * @return the "current" time, in milliseconds
      */
     protected static long getCurrentTestTime() {
@@ -272,7 +277,7 @@ public class IntegrityMonitorTestBase {
     /**
      * Waits for a semaphore to be acquired.
      * 
-     * @param sem
+     * @param sem semaphore to wait on
      * @throws InterruptedException if the thread is interrupted
      * @throws AssertionError if the semaphore was not acquired within the allotted time
      */

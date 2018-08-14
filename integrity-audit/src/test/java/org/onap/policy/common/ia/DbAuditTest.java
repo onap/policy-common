@@ -23,6 +23,7 @@ package org.onap.policy.common.ia;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.fail;
+
 import java.util.List;
 import java.util.Properties;
 import javax.persistence.EntityManager;

@@ -41,13 +41,15 @@ public class AuditorTime {
     private static Supplier<CurrentTime> supplier = () -> currentTime;
 
     /**
-     * 
+     * Constructor.
      */
     private AuditorTime() {
         super();
     }
 
     /**
+     * Get instance.
+     * 
      * @return the CurrentTime singleton
      */
     public static CurrentTime getInstance() {
