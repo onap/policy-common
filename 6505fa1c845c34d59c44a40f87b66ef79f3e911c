@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_18ee3389",
+        "filename": "integrity-audit/src/main/resources/META-INF/persistence.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-14T14:43:04Z",
+      "side": 1,
+      "message": "shouldn\u0027t indentations be 4 spaces?",
+      "revId": "6505fa1c845c34d59c44a40f87b66ef79f3e911c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
