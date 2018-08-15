@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_2bd4f61e",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/DmaapTopicSourceFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-08-15T13:54:56Z",
+      "side": 1,
+      "message": "I think these lines should go away: servers to managed, seems to be have left over.",
+      "revId": "df6ffa11a8007e9c1d9892fafc52733c05c432a0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_cbe4620f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/UebTopicSinkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-08-15T13:54:56Z",
+      "side": 1,
+      "message": "I think these lines should go away: servers to managed",
+      "revId": "df6ffa11a8007e9c1d9892fafc52733c05c432a0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_6bc8ae74",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/UebTopicSourceFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-08-15T13:54:56Z",
+      "side": 1,
+      "message": "any reason to keep these lines below?",
+      "revId": "df6ffa11a8007e9c1d9892fafc52733c05c432a0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
