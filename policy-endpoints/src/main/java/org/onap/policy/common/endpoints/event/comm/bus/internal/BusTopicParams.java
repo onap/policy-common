@@ -25,7 +25,7 @@ import java.util.Map;
 
 /**
  * Member variables of this Params class are as follows.
- * 
+ *
  * <p>servers DMaaP servers
  * topic DMaaP Topic to be monitored
  * apiKey DMaaP API Key (optional)
@@ -45,10 +45,7 @@ import java.util.Map;
  */
 public class BusTopicParams {
 
-    public static TopicParamsBuilder builder() {
-        return new TopicParamsBuilder();
-    }
-
+    private int port;
     private List<String> servers;
     private String topic;
     private String apiKey;
@@ -59,6 +56,7 @@ public class BusTopicParams {
     private int fetchLimit;
     private boolean useHttps;
     private boolean allowSelfSignedCerts;
+    private boolean managed;
 
     private String userName;
     private String password;
@@ -69,7 +67,13 @@ public class BusTopicParams {
     private String longitude;
     private Map<String, String> additionalProps;
     private String partitionId;
-    private boolean managed;
+    private String clientName;
+    private String hostname;
+    private String basePath;
+
+    public static TopicParamsBuilder builder() {
+        return new TopicParamsBuilder();
+    }
 
     public String getPartitionId() {
         return partitionId;
@@ -212,9 +216,25 @@ public class BusTopicParams {
         return managed;
     }
 
+    public String getClientName() {
+        return clientName;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getBasePath() {
+        return basePath;
+    }
+
     public static class TopicParamsBuilder {
-        
-        BusTopicParams params = new BusTopicParams();
+
+        final BusTopicParams params = new BusTopicParams();
 
         private TopicParamsBuilder() {
         }
@@ -322,6 +342,27 @@ public class BusTopicParams {
             this.params.managed = managed;
             return this;
         }
+
+        public TopicParamsBuilder hostname(String hostname) {
+            this.params.hostname = hostname;
+            return this;
+        }
+
+        public TopicParamsBuilder clientName(String clientName) {
+            this.params.clientName = clientName;
+            return this;
+        }
+
+        public TopicParamsBuilder port(int port) {
+            this.params.port = port;
+            return this;
+        }
+
+        public TopicParamsBuilder basePath(String basePath) {
+            this.params.basePath = basePath;
+            return this;
+        }
+
     }
 }
 

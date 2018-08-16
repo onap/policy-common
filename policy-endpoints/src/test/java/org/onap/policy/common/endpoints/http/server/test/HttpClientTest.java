@@ -32,6 +32,7 @@ import javax.ws.rs.core.Response;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.http.client.HttpClient;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
@@ -47,9 +48,9 @@ public class HttpClientTest {
 
     /**
      * Setup before class method.
-     * 
+     *
      * @throws InterruptedException can be interrupted
-     * @throws IOException can have an IO exception
+     * @throws IOException          can have an IO exception
      */
     @BeforeClass
     public static void setUp() throws InterruptedException, IOException {
@@ -71,24 +72,24 @@ public class HttpClientTest {
             savedValuesMap.put(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME, keyStoreSystemProperty);
         }
 
-        String keyStorePasswordSystemProperty = 
-                        System.getProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
+        String keyStorePasswordSystemProperty =
+                System.getProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
         if (keyStorePasswordSystemProperty != null) {
             savedValuesMap.put(
-                            JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME, keyStorePasswordSystemProperty);
+                    JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME, keyStorePasswordSystemProperty);
         }
 
         String trustStoreSystemProperty = System.getProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME);
         if (trustStoreSystemProperty != null) {
             savedValuesMap
-                .put(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME, trustStoreSystemProperty);
+                    .put(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME, trustStoreSystemProperty);
         }
 
-        String trustStorePasswordSystemProperty = 
-                        System.getProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
+        String trustStorePasswordSystemProperty =
+                System.getProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
         if (trustStorePasswordSystemProperty != null) {
             savedValuesMap
-                .put(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME, trustStorePasswordSystemProperty);
+                    .put(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME, trustStorePasswordSystemProperty);
         }
 
         System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME, "src/test/resources/keystore-test");
@@ -112,7 +113,6 @@ public class HttpClientTest {
 
     /**
      * After the class is created method.
-     * 
      */
     @AfterClass
     public static void tearDown() {
@@ -122,32 +122,32 @@ public class HttpClientTest {
         HttpClient.factory.destroy();
 
         if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME)) {
-            System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME, 
-                            savedValuesMap.get(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME));
+            System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME,
+                    savedValuesMap.get(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME));
             savedValuesMap.remove(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME);
         } else {
             System.clearProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME);
         }
 
         if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME)) {
-            System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME, 
-                            savedValuesMap.get(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME));
+            System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME,
+                    savedValuesMap.get(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME));
             savedValuesMap.remove(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
         } else {
             System.clearProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
         }
 
         if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME)) {
-            System.setProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME, 
-                            savedValuesMap.get(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME));
+            System.setProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME,
+                    savedValuesMap.get(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME));
             savedValuesMap.remove(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME);
         } else {
             System.clearProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME);
         }
 
         if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME)) {
-            System.setProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME, 
-                            savedValuesMap.get(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME));
+            System.setProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME,
+                    savedValuesMap.get(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME));
             savedValuesMap.remove(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
         } else {
             System.clearProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
@@ -160,8 +160,11 @@ public class HttpClientTest {
     public void testHttpNoAuthClient() throws Exception {
         logger.info("-- testHttpNoAuthClient() --");
 
-        final HttpClient client = HttpClient.factory.build("testHttpNoAuthClient", false, false, "localhost", 6666,
-                "junit/echo", null, null, true);
+        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpNoAuthClient")
+                .useHttps(false)
+                .allowSelfSignedCerts(false)
+                .hostname("localhost")
+                .port(6666).basePath("junit/echo").userName(null).password(null).managed(true).build());
         final Response response = client.get("hello");
         final String body = HttpClient.getBody(response, String.class);
 
@@ -173,8 +176,16 @@ public class HttpClientTest {
     public void testHttpAuthClient() throws Exception {
         logger.info("-- testHttpAuthClient() --");
 
-        final HttpClient client = HttpClient.factory.build("testHttpAuthClient", true, true,"localhost", 6667,
-                "junit/echo", "x", "y", true);
+        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient")
+                .useHttps(true)
+                .allowSelfSignedCerts(true)
+                .hostname("localhost")
+                .port(6667)
+                .basePath("junit/echo")
+                .userName("x")
+                .password("y")
+                .managed(true).build());
+
         final Response response = client.get("hello");
         final String body = HttpClient.getBody(response, String.class);
 
@@ -186,8 +197,15 @@ public class HttpClientTest {
     public void testHttpAuthClient401() throws Exception {
         logger.info("-- testHttpAuthClient401() --");
 
-        final HttpClient client = HttpClient.factory.build("testHttpAuthClient401", true, true, "localhost", 6667,
-                "junit/echo", null, null, true);
+        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient401")
+                .useHttps(true)
+                .allowSelfSignedCerts(true)
+                .hostname("localhost")
+                .port(6667)
+                .basePath("junit/echo")
+                .userName(null)
+                .password(null)
+                .managed(true).build());
         final Response response = client.get("hello");
         assertTrue(response.getStatus() == 401);
     }
