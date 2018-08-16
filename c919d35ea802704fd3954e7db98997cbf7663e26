@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_a432700e",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusTopicParams.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-16T21:37:14Z",
+      "side": 1,
+      "message": "perhaps follow the convention of the methods below and rename this to \"isClientNameValid\" and reverse the sign of the return value (same comment applies to isHostnameNullOrEmpty and isPortOutOfRange)",
+      "revId": "c919d35ea802704fd3954e7db98997cbf7663e26",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_0454841f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusTopicParams.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-16T21:37:14Z",
+      "side": 1,
+      "message": "consider using StringUtils.isBlank() (same comment for all of these String-checking methods)",
+      "revId": "c919d35ea802704fd3954e7db98997cbf7663e26",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
