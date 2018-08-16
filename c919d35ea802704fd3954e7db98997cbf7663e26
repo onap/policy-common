@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_2f14f942",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusTopicParams.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-16T21:55:02Z",
+      "side": 1,
+      "message": "Sometimes these tools really get in the way!  Ok, in that case, maybe just rename it to \"isClientNameInvalid\" (similar for the others), and leave it\u0027s return value unchanged",
+      "parentUuid": "1a76adc5_84165454",
+      "revId": "c919d35ea802704fd3954e7db98997cbf7663e26",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_0454841f",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusTopicParams.java",
         "patchSetId": 2
