@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +29,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.http.client.internal.JerseyClient;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;
@@ -41,8 +44,7 @@ public interface HttpClientFactory {
     /**
      * Build and http client with the following parameters.
      */
-    public HttpClient build(String name, boolean https, boolean selfSignedCerts, String hostname, int port,
-            String baseUrl, String userName, String password, boolean managed)
+    public HttpClient build(BusTopicParams busTopicParams)
             throws KeyManagementException, NoSuchAlgorithmException;
 
     /**
@@ -89,18 +91,17 @@ class IndexedHttpClientFactory implements HttpClientFactory {
     protected HashMap<String, HttpClient> clients = new HashMap<>();
 
     @Override
-    public synchronized HttpClient build(String name, boolean https, boolean selfSignedCerts, String hostname, int port,
-            String baseUrl, String userName, String password, boolean managed)
+    public synchronized HttpClient build(BusTopicParams busTopicParams)
             throws KeyManagementException, NoSuchAlgorithmException {
-        if (clients.containsKey(name)) {
-            return clients.get(name);
+        if (clients.containsKey(busTopicParams.getClientName())) {
+            return clients.get(busTopicParams.getClientName());
         }
 
         JerseyClient client =
-                new JerseyClient(name, https, selfSignedCerts, hostname, port, baseUrl, userName, password);
+                new JerseyClient(busTopicParams);
 
-        if (managed) {
-            clients.put(name, client);
+        if (busTopicParams.isManaged()) {
+            clients.put(busTopicParams.getClientName(), client);
         }
 
         return client;
@@ -122,7 +123,7 @@ class IndexedHttpClientFactory implements HttpClientFactory {
             String httpsString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "."
                     + clientName + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX);
             boolean https = false;
-            if (httpsString != null && !httpsString.isEmpty()) {
+            if (StringUtils.isNotBlank(httpsString)) {
                 https = Boolean.parseBoolean(httpsString);
             }
 
@@ -160,7 +161,17 @@ class IndexedHttpClientFactory implements HttpClientFactory {
 
             try {
                 HttpClient client =
-                        this.build(clientName, https, https, hostName, port, baseUrl, userName, password, managed);
+                        this.build(BusTopicParams.builder()
+                                .clientName(clientName)
+                                .useHttps(https)
+                                .allowSelfSignedCerts(https)
+                                .hostname(hostName)
+                                .port(port)
+                                .basePath(baseUrl)
+                                .userName(userName)
+                                .password(password)
+                                .managed(managed)
+                                .build());
                 clientList.add(client);
             } catch (Exception e) {
                 logger.error("http-client-factory: cannot build client {}", clientName, e);

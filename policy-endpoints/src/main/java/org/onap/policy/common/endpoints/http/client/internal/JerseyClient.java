@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +37,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.http.client.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,43 +66,42 @@ public class JerseyClient implements HttpClient {
     /**
      * Constructor.
      * 
-     * @param name the name
-     * @param https is it https or not
-     * @param selfSignedCerts are there self signed certs
-     * @param hostname the hostname
-     * @param port port being used
-     * @param basePath base context
-     * @param userName user
-     * @param password password
-     * 
+     * name the name
+     * https is it https or not
+     * selfSignedCerts are there self signed certs
+     * hostname the hostname
+     * port port being used
+     * basePath base context
+     * userName user
+     * password password
+     * @param busTopicParams Input parameters object
      * @throws KeyManagementException key exception
      * @throws NoSuchAlgorithmException no algorithm exception
      */
-    public JerseyClient(String name, boolean https, boolean selfSignedCerts, String hostname, int port, String basePath,
-            String userName, String password) throws KeyManagementException, NoSuchAlgorithmException {
+    public JerseyClient(BusTopicParams busTopicParams) throws KeyManagementException, NoSuchAlgorithmException {
 
         super();
 
-        if (name == null || name.isEmpty()) {
+        if (busTopicParams.isClientNameInvalid()) {
             throw new IllegalArgumentException("Name must be provided");
         }
 
-        if (hostname == null || hostname.isEmpty()) {
+        if (busTopicParams.isHostnameInvalid()) {
             throw new IllegalArgumentException("Hostname must be provided");
         }
 
-        if (port <= 0 && port >= 65535) {
-            throw new IllegalArgumentException("Invalid Port provided: " + port);
+        if (busTopicParams.isPortInvalid()) {
+            throw new IllegalArgumentException("Invalid Port provided: " + busTopicParams.getPort());
         }
 
-        this.name = name;
-        this.https = https;
-        this.hostname = hostname;
-        this.port = port;
-        this.basePath = basePath;
-        this.userName = userName;
-        this.password = password;
-        this.selfSignedCerts = selfSignedCerts;
+        this.name = busTopicParams.getClientName();
+        this.https = busTopicParams.isUseHttps();
+        this.hostname = busTopicParams.getHostname();
+        this.port = busTopicParams.getPort();
+        this.basePath = busTopicParams.getBasePath();
+        this.userName = busTopicParams.getUserName();
+        this.password = busTopicParams.getPassword();
+        this.selfSignedCerts = busTopicParams.isAllowSelfSignedCerts();
 
         StringBuilder tmpBaseUrl = new StringBuilder();
         if (this.https) {

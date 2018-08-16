@@ -88,13 +88,13 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
 
         super(busTopicParams);
 
-        if (busTopicParams.isConsumerGroupNullOrEmpty()) {
+        if (busTopicParams.isConsumerGroupInvalid()) {
             this.consumerGroup = UUID.randomUUID().toString();
         } else {
             this.consumerGroup = busTopicParams.getConsumerGroup();
         }
 
-        if (busTopicParams.isConsumerInstanceNullOrEmpty()) {
+        if (busTopicParams.isConsumerInstanceInvalid()) {
             this.consumerInstance = NetworkUtil.getHostname();
         } else {
             this.consumerInstance = busTopicParams.getConsumerInstance();
