@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_cf2a257e",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusTopicParams.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 2543
+      },
+      "writtenOn": "2018-08-16T22:26:09Z",
+      "side": 1,
+      "message": "haha :) sure, thats right, Thanks",
+      "parentUuid": "1a76adc5_2f14f942",
+      "revId": "c919d35ea802704fd3954e7db98997cbf7663e26",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_0454841f",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusTopicParams.java",
         "patchSetId": 2
@@ -66,6 +84,24 @@
       "writtenOn": "2018-08-16T21:37:14Z",
       "side": 1,
       "message": "consider using StringUtils.isBlank() (same comment for all of these String-checking methods)",
+      "revId": "c919d35ea802704fd3954e7db98997cbf7663e26",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_cf03050c",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusTopicParams.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 2543
+      },
+      "writtenOn": "2018-08-16T22:26:09Z",
+      "side": 1,
+      "message": "Sure, I will change it",
+      "parentUuid": "1a76adc5_0454841f",
       "revId": "c919d35ea802704fd3954e7db98997cbf7663e26",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
