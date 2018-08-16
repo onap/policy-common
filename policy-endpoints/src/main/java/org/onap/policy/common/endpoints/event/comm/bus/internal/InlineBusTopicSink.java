@@ -66,7 +66,7 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
 
         super(busTopicParams);
 
-        if (busTopicParams.isPartitionIdNullOrEmpty()) {
+        if (busTopicParams.isPartitionIdInvalid()) {
             this.partitionId = UUID.randomUUID().toString();
         } else {
             this.partitionId = busTopicParams.getPartitionId();

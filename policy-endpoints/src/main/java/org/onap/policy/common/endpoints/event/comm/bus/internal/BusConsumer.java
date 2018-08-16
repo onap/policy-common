@@ -36,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSinkFactory;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;
@@ -294,7 +295,7 @@ public interface BusConsumer {
 
             this.fetchTimeout = busTopicParams.getFetchTimeout();
 
-            if (busTopicParams.isTopicNullOrEmpty()) {
+            if (busTopicParams.isTopicInvalid()) {
                 throw new IllegalArgumentException("No topic for DMaaP");
             }
 
@@ -391,7 +392,7 @@ public interface BusConsumer {
             super(busTopicParams);
 
             // super constructor sets servers = {""} if empty to avoid errors when using DME2
-            if (busTopicParams.isServersNullOrEmpty()) {
+            if (busTopicParams.isServersInvalid()) {
                 throw new IllegalArgumentException("Must provide at least one host for HTTP AAF");
             }
 
@@ -445,25 +446,25 @@ public interface BusConsumer {
             final String dme2RouteOffer = busTopicParams.getAdditionalProps()
                     .get(DmaapTopicSinkFactory.DME2_ROUTE_OFFER_PROPERTY);
 
-            if (busTopicParams.isEnvironmentNullOrEmpty()) {
+            if (busTopicParams.isEnvironmentInvalid()) {
                 throw parmException(busTopicParams.getTopic(),
                         PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ENVIRONMENT_SUFFIX);
             }
-            if (busTopicParams.isAftEnvironmentNullOrEmpty()) {
+            if (busTopicParams.isAftEnvironmentInvalid()) {
                 throw parmException(busTopicParams.getTopic(),
                         PolicyEndPointProperties.PROPERTY_DMAAP_DME2_AFT_ENVIRONMENT_SUFFIX);
             }
-            if (busTopicParams.isLatitudeNullOrEmpty()) {
+            if (busTopicParams.isLatitudeInvalid()) {
                 throw parmException(busTopicParams.getTopic(),
                         PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LATITUDE_SUFFIX);
             }
-            if (busTopicParams.isLongitudeNullOrEmpty()) {
+            if (busTopicParams.isLongitudeInvalid()) {
                 throw parmException(busTopicParams.getTopic(),
                         PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LONGITUDE_SUFFIX);
             }
 
-            if ((busTopicParams.isPartnerNullOrEmpty())
-                    && (dme2RouteOffer == null || dme2RouteOffer.isEmpty())) {
+            if ((busTopicParams.isPartnerInvalid())
+                    && StringUtils.isBlank(dme2RouteOffer)) {
                 throw new IllegalArgumentException(
                         "Must provide at least " + PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS
                                 + "." + busTopicParams.getTopic()
