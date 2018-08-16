@@ -20,12 +20,14 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.List;
 import java.util.Map;
 
 /**
  * Member variables of this Params class are as follows.
- * 
+ *
  * <p>servers DMaaP servers
  * topic DMaaP Topic to be monitored
  * apiKey DMaaP API Key (optional)
@@ -45,11 +47,9 @@ import java.util.Map;
  */
 public class BusTopicParams {
 
-    public static TopicParamsBuilder builder() {
-        return new TopicParamsBuilder();
-    }
-
+    private int port;
     private List<String> servers;
+    private Map<String, String> additionalProps;
     private String topic;
     private String apiKey;
     private String apiSecret;
@@ -59,6 +59,7 @@ public class BusTopicParams {
     private int fetchLimit;
     private boolean useHttps;
     private boolean allowSelfSignedCerts;
+    private boolean managed;
 
     private String userName;
     private String password;
@@ -67,9 +68,14 @@ public class BusTopicParams {
     private String partner;
     private String latitude;
     private String longitude;
-    private Map<String, String> additionalProps;
     private String partitionId;
-    private boolean managed;
+    private String clientName;
+    private String hostname;
+    private String basePath;
+
+    public static TopicParamsBuilder builder() {
+        return new TopicParamsBuilder();
+    }
 
     public String getPartitionId() {
         return partitionId;
@@ -139,6 +145,26 @@ public class BusTopicParams {
         return fetchLimit;
     }
 
+    public String getClientName() {
+        return clientName;
+    }
+
+    public String getHostname() {
+        return hostname;
+    }
+
+    public int getPort() {
+        return port;
+    }
+
+    public String getBasePath() {
+        return basePath;
+    }
+
+    public boolean isManaged() {
+        return managed;
+    }
+
     public boolean isUseHttps() {
         return useHttps;
     }
@@ -147,74 +173,90 @@ public class BusTopicParams {
         return allowSelfSignedCerts;
     }
 
-    boolean isEnvironmentNullOrEmpty() {
-        return (environment == null || environment.trim().isEmpty());
+    /**
+     * Methods to Check if the property is INVALID
+     */
+
+    boolean isEnvironmentInvalid() {
+        return StringUtils.isBlank(environment);
     }
 
-    boolean isAftEnvironmentNullOrEmpty() {
-        return (aftEnvironment == null || aftEnvironment.trim().isEmpty());
+    boolean isAftEnvironmentInvalid() {
+        return StringUtils.isBlank(aftEnvironment);
     }
 
-    boolean isLatitudeNullOrEmpty() {
-        return (latitude == null || latitude.trim().isEmpty());
+    boolean isLatitudeInvalid() {
+        return StringUtils.isBlank(latitude);
     }
 
-    boolean isLongitudeNullOrEmpty() {
-        return (longitude == null || longitude.trim().isEmpty());
+    boolean isLongitudeInvalid() {
+        return StringUtils.isBlank(longitude);
     }
 
-    boolean isConsumerInstanceNullOrEmpty() {
-        return (consumerInstance == null || consumerInstance.trim().isEmpty());
+    boolean isConsumerInstanceInvalid() {
+        return StringUtils.isBlank(consumerInstance);
     }
 
-    boolean isConsumerGroupNullOrEmpty() {
-        return (consumerGroup == null || consumerGroup.trim().isEmpty());
+    boolean isConsumerGroupInvalid() {
+        return StringUtils.isBlank(consumerGroup);
     }
+
+    public boolean isClientNameInvalid() {
+        return StringUtils.isBlank(clientName);
+    }
+
+    boolean isPartnerInvalid() {
+        return StringUtils.isBlank(partner);
+    }
+
+    boolean isServersInvalid() {
+        return (servers == null || servers.isEmpty()
+                || (servers.size() == 1 && ("".equals(servers.get(0)))));
+    }
+
+    boolean isTopicInvalid() {
+        return StringUtils.isBlank(topic);
+    }
+
+    boolean isPartitionIdInvalid() {
+        return StringUtils.isBlank(partitionId);
+    }
+
+    public boolean isHostnameInvalid() {
+        return StringUtils.isBlank(hostname);
+    }
+
+    public boolean isPortInvalid() {
+        return  (getPort() <= 0 || getPort() >= 65535);
+    }
+
+    /**
+     * Methods to Check if the property is Valid
+     */
 
     boolean isApiKeyValid() {
-        return !(apiKey == null || apiKey.trim().isEmpty());
+        return StringUtils.isNotBlank(apiKey);
     }
 
     boolean isApiSecretValid() {
-        return !(apiSecret == null || apiSecret.trim().isEmpty());
+        return StringUtils.isNotBlank(apiSecret);
     }
 
     boolean isUserNameValid() {
-        return !(userName == null || userName.trim().isEmpty());
+        return StringUtils.isNotBlank(userName);
     }
 
     boolean isPasswordValid() {
-        return !(password == null || password.trim().isEmpty());
-    }
-
-    boolean isPartnerNullOrEmpty() {
-        return (partner == null || partner.trim().isEmpty());
-    }
-
-    boolean isServersNullOrEmpty() {
-        return (servers == null || servers.isEmpty()
-                || (servers.size() == 1 && ("".equals(servers.get(0)))));
+        return StringUtils.isNotBlank(password);
     }
 
     boolean isAdditionalPropsValid() {
         return additionalProps != null;
     }
 
-    boolean isTopicNullOrEmpty() {
-        return (topic == null || topic.trim().isEmpty());
-    }
-
-    boolean isPartitionIdNullOrEmpty() {
-        return (partitionId == null || partitionId.trim().isEmpty());
-    }
-
-    public boolean isManaged() {
-        return managed;
-    }
-
     public static class TopicParamsBuilder {
-        
-        BusTopicParams params = new BusTopicParams();
+
+        final BusTopicParams params = new BusTopicParams();
 
         private TopicParamsBuilder() {
         }
@@ -322,6 +364,27 @@ public class BusTopicParams {
             this.params.managed = managed;
             return this;
         }
+
+        public TopicParamsBuilder hostname(String hostname) {
+            this.params.hostname = hostname;
+            return this;
+        }
+
+        public TopicParamsBuilder clientName(String clientName) {
+            this.params.clientName = clientName;
+            return this;
+        }
+
+        public TopicParamsBuilder port(int port) {
+            this.params.port = port;
+            return this;
+        }
+
+        public TopicParamsBuilder basePath(String basePath) {
+            this.params.basePath = basePath;
+            return this;
+        }
+
     }
 }
 

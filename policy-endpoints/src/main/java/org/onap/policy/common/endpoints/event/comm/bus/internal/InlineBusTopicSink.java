@@ -3,7 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
- * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
+ * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
 
         super(busTopicParams);
 
-        if (busTopicParams.isPartitionIdNullOrEmpty()) {
+        if (busTopicParams.isPartitionIdInvalid()) {
             this.partitionId = UUID.randomUUID().toString();
         } else {
             this.partitionId = busTopicParams.getPartitionId();

@@ -3,7 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
- * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
+ * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,13 +88,13 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
 
         super(busTopicParams);
 
-        if (busTopicParams.isConsumerGroupNullOrEmpty()) {
+        if (busTopicParams.isConsumerGroupInvalid()) {
             this.consumerGroup = UUID.randomUUID().toString();
         } else {
             this.consumerGroup = busTopicParams.getConsumerGroup();
         }
 
-        if (busTopicParams.isConsumerInstanceNullOrEmpty()) {
+        if (busTopicParams.isConsumerInstanceInvalid()) {
             this.consumerInstance = NetworkUtil.getHostname();
         } else {
             this.consumerInstance = busTopicParams.getConsumerInstance();
