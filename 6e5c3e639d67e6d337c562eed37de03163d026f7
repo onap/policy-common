@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_b09ce6c1",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusTopicParams.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-08-17T12:05:18Z",
+      "side": 1,
+      "message": "should this be? size() \u003e\u003d 1",
+      "revId": "6e5c3e639d67e6d337c562eed37de03163d026f7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
