@@ -336,7 +336,7 @@ public class PropertyConfiguration {
      * 
      * @param props properties from which to get the value
      * @param propnm name of the property of interest
-     * @return
+     * @return the raw property value
      */
     protected String getRawPropertyValue(Properties props, String propnm) {
         return props.getProperty(propnm);
