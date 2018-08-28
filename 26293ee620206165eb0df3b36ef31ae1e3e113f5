@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_9073b7e6",
+        "filename": "utils/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-08-28T13:38:11Z",
+      "side": 1,
+      "message": "These ones survived ;-)",
+      "range": {
+        "startLine": 106,
+        "startChar": 0,
+        "endLine": 108,
+        "endChar": 2
+      },
+      "revId": "26293ee620206165eb0df3b36ef31ae1e3e113f5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
