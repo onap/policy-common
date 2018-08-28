@@ -20,9 +20,16 @@
 
 package org.onap.policy.common.endpoints.report;
 
-import static org.junit.Assert.assertEquals;
+import com.openpojo.reflection.filters.FilterClassName;
+import com.openpojo.validation.Validator;
+import com.openpojo.validation.ValidatorBuilder;
+import com.openpojo.validation.rule.impl.GetterMustExistRule;
+import com.openpojo.validation.rule.impl.SetterMustExistRule;
+import com.openpojo.validation.test.impl.GetterTester;
+import com.openpojo.validation.test.impl.SetterTester;
 
 import org.junit.Test;
+import org.onap.policy.common.utils.validation.ToStringTester;
 
 /**
  * Class to perform unit test of HealthCheckReport.
@@ -32,28 +39,11 @@ import org.junit.Test;
 public class TestHealthCheckReport {
 
     @Test
-    public void testReport() {
-        final String name = "Policy";
-        final String url = "self";
-        final boolean healthy = true;
-        final int code = 200;
-        final String message = "alive";
-        final HealthCheckReport report = new HealthCheckReport();
-        report.setName(name);
-        report.setUrl(url);
-        report.setHealthy(healthy);
-        report.setCode(code);
-        report.setMessage(message);
-        validateReport(name, url, healthy, code, message, report);
-    }
-
-    private void validateReport(final String name, final String url, final boolean healthy, final int code,
-            final String message, final HealthCheckReport report) {
-        assertEquals(name, report.getName());
-        assertEquals(url, report.getUrl());
-        assertEquals(healthy, report.isHealthy());
-        assertEquals(code, report.getCode());
-        assertEquals(message, report.getMessage());
-        assertEquals("Report [name=Policy, url=self, healthy=true, code=200, message=alive]", report.toString());
+    public void testHealthCheckReport() {
+        final Validator validator =
+                ValidatorBuilder.create().with(new GetterMustExistRule()).with(new SetterMustExistRule())
+                        .with(new GetterTester()).with(new SetterTester()).with(new ToStringTester()).build();
+        validator.validate(HealthCheckReport.class.getPackage().getName(),
+                new FilterClassName(HealthCheckReport.class.getName()));
     }
 }
