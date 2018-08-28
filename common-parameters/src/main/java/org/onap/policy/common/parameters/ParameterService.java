@@ -61,6 +61,20 @@ public abstract class ParameterService {
     }
 
     /**
+     * Register a parameter group with the parameter service.
+     *
+     * @param parameterGroup the parameter group
+     * @param overwrite if true, overwrite the current value if set
+     */
+    public static void register(final ParameterGroup parameterGroup, final boolean overwrite) {
+        if (overwrite && parameterGroupMap.containsKey(parameterGroup.getName())) {
+            deregister(parameterGroup);
+        }
+        
+        register(parameterGroup);
+    }
+
+    /**
      * Remove a parameter group from the parameter service.
      *
      * @param parameterGroupName the name of the parameter group
@@ -74,13 +88,23 @@ public abstract class ParameterService {
     }
 
     /**
+     * Remove a parameter group from the parameter service.
+     *
+     * @param parameterGroup the parameter group
+     */
+    public static void deregister(final ParameterGroup parameterGroup) {
+        deregister(parameterGroup.getName());
+    }
+
+    /**
      * Get a parameter group from the parameter service.
      *
      * @param parameterGroupName the name of the parameter group
      * @return The parameter group
      */
-    public static ParameterGroup get(final String parameterGroupName) {
-        final ParameterGroup parameterGroup = parameterGroupMap.get(parameterGroupName);
+    public static <T extends ParameterGroup> T get(final String parameterGroupName) {
+        @SuppressWarnings("unchecked")
+        final T parameterGroup = (T) parameterGroupMap.get(parameterGroupName);
 
         if (parameterGroup == null) {
             throw new ParameterRuntimeException("\"" + parameterGroupName + "\" not found in parameter service");

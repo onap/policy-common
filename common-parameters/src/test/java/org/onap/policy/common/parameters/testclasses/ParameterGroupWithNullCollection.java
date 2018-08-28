@@ -40,12 +40,17 @@ public class ParameterGroupWithNullCollection implements ParameterGroup {
     public List<Integer> getNullList() {
         return nullList;
     }
-    
+
     @Override
     public String getName() {
         return name;
     }
-    
+
+    @Override
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     @Override
     public GroupValidationResult validate() {
         return new GroupValidationResult(this);

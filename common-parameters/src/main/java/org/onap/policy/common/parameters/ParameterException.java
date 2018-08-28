@@ -88,7 +88,7 @@ public class ParameterException extends Exception {
      * @param throwable the top level exception
      * @return cascaded message string
      */
-    public static String buildCascadedMessage(Throwable throwable) {
+    public static String buildCascadedMessage(final Throwable throwable) {
         final StringBuilder builder = new StringBuilder();
         builder.append(throwable.getMessage());
 

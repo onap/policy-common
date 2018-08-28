@@ -35,6 +35,13 @@ public interface ParameterGroup {
     public String getName();
 
     /**
+     * Set the group name.
+     * 
+     * @param name the group name
+     */
+    public void setName(final String name);
+
+    /**
      * Validate parameters.
      * 
      * @return the result of the parameter validation

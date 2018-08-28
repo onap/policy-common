@@ -48,6 +48,11 @@ public class GroupValidationResult implements ValidationResult {
     public GroupValidationResult(final ParameterGroup parameterGroup) {
         this.parameterGroup = parameterGroup;
 
+        // Parameter group definitions may be optional
+        if (parameterGroup == null) {
+            return;
+        }
+
         // Add a validation result per field
         for (Field field : parameterGroup.getClass().getDeclaredFields()) {
             // Exclude system fields
@@ -86,15 +91,15 @@ public class GroupValidationResult implements ValidationResult {
 
         // Nested parameter groups are allowed
         if (ParameterGroup.class.isAssignableFrom(fieldType)) {
-            return new GroupValidationResult((ParameterGroup) field.get(parameterGroup));
+            return new GroupValidationResult((ParameterGroup) fieldObject);
         }
-        
+
         // Nested maps of parameter groups are allowed
         if (Map.class.isAssignableFrom(field.getType())) {
             checkMapIsParameterGroupMap(fieldName, fieldObject);
             return new GroupMapValidationResult(field, fieldObject);
         }
-        
+
         // Collections of parameter groups are not allowed
         if (Collection.class.isAssignableFrom(field.getType())) {
             checkCollection4ParameterGroups(fieldName, fieldObject);
@@ -115,7 +120,7 @@ public class GroupValidationResult implements ValidationResult {
         if (mapObject == null) {
             throw new ParameterRuntimeException("map parameter \"" + fieldName + "\" is null");
         }
-        
+
         Map<?, ?> incomingMap = (Map<?, ?>) mapObject;
 
         for (Entry<?, ?> mapEntry : incomingMap.entrySet()) {
@@ -184,7 +189,7 @@ public class GroupValidationResult implements ValidationResult {
     }
 
     /**
-     * Set the validation result on on a parameter group.
+     * Set the validation result on a parameter group.
      * 
      * @param status The validation status the parameter group is receiving
      * @param message The validation message explaining the validation status
@@ -196,9 +201,8 @@ public class GroupValidationResult implements ValidationResult {
     }
 
     /**
-     * Set the validation result on on a parameter group.
-     * On a sequence of calls, the most serious validation status is recorded, assuming the status enum ordinal increase
-     * in order of severity
+     * Set the validation result on a parameter group. On a sequence of calls, the most serious validation status is
+     * recorded, assuming the status enum ordinal increase in order of severity
      * 
      * @param status The validation status the parameter group is receiving
      */
@@ -211,27 +215,23 @@ public class GroupValidationResult implements ValidationResult {
     }
 
     /**
-     * Set the validation result on a parameter group.
+     * Set the validation result on a parameter in a parameter group.
      * 
-     * @param parameterGroupName The name of the parameter group
+     * @param parameterName The name of the parameter
      * @param status The validation status the field is receiving
      * @param message The validation message explaining the validation status
      */
-    public void setResult(final String parameterGroupName, final ValidationStatus status, final String message) {
-        ParameterValidationResult parameterValidationResult;
-        try {
-            parameterValidationResult = (ParameterValidationResult) validationResultMap.get(parameterGroupName);
-        } catch (ClassCastException e) {
-            throw new ParameterRuntimeException("parameter not a regular parameter: " + parameterGroupName, e);
+    public void setResult(final String parameterName, final ValidationStatus status, final String message) {
+        ValidationResult validationResult = validationResultMap.get(parameterName);
+
+        if (validationResult == null) {
+            throw new ParameterRuntimeException("no parameter field exists for parameter: " + parameterName);
         }
 
-        if (parameterValidationResult == null) {
-            throw new ParameterRuntimeException(
-                            "no regular parameter field exists for parameter: " + parameterGroupName);
-        }
+        // Set the status and the message on the result irrespective of validation result type
+        validationResult.setResult(status, message);
 
-        // Set the status of the parameter group and the field
-        parameterValidationResult.setResult(status, message);
+        // Set the status of this result
         this.setResult(status);
     }
 
@@ -241,7 +241,7 @@ public class GroupValidationResult implements ValidationResult {
      * @param parameterName The name of the parameter field
      * @param nestedValidationResult The validation result from a nested field
      */
-    public void setResult(String parameterName, ValidationResult nestedValidationResult) {
+    public void setResult(final String parameterName, final ValidationResult nestedValidationResult) {
         GroupValidationResult groupValidationResult;
         try {
             groupValidationResult = (GroupValidationResult) validationResultMap.get(parameterName);
@@ -284,6 +284,32 @@ public class GroupValidationResult implements ValidationResult {
     }
 
     /**
+     * Set the validation status on a group map entry.
+     * 
+     * @param parameterName The name of the parameter field
+     * @param key The key of the map entry
+     * @param status The validation status of the entry
+     * @param message The message for the parameter group
+     */
+    public void setResult(final String parameterName, final String key, final ValidationStatus status,
+                    final String message) {
+        GroupMapValidationResult groupMapValidationResult;
+        try {
+            groupMapValidationResult = (GroupMapValidationResult) validationResultMap.get(parameterName);
+        } catch (ClassCastException e) {
+            throw new ParameterRuntimeException("parameter is not a nested group map parameter: " + parameterName, e);
+        }
+
+        if (groupMapValidationResult == null) {
+            throw new ParameterRuntimeException("no group map parameter field exists for parameter: " + parameterName);
+        }
+
+        // Set the status of the parameter group and the field
+        groupMapValidationResult.setResult(key, status, message);
+        this.setResult(status);
+    }
+
+    /**
      * Gets the validation result.
      *
      * @param initialIndentation the indentation to use on the main result output
@@ -301,9 +327,15 @@ public class GroupValidationResult implements ValidationResult {
 
         validationResultBuilder.append(initialIndentation);
         validationResultBuilder.append("parameter group \"");
-        validationResultBuilder.append(parameterGroup.getName());
-        validationResultBuilder.append("\" type \"");
-        validationResultBuilder.append(parameterGroup.getClass().getCanonicalName());
+        
+        if (parameterGroup != null) {
+            validationResultBuilder.append(parameterGroup.getName());
+            validationResultBuilder.append("\" type \"");
+            validationResultBuilder.append(parameterGroup.getClass().getCanonicalName());
+        }
+        else {
+            validationResultBuilder.append("UNDEFINED");
+        }
         validationResultBuilder.append("\" ");
         validationResultBuilder.append(status);
         validationResultBuilder.append(", ");

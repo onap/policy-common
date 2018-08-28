@@ -39,6 +39,7 @@ public class TestValidation {
 
         GroupValidationResult validationResult = l0Parameters.validate();
         assertTrue(validationResult.isValid());
+        assertTrue(validationResult.isClean());
         assertNull(validationResult.getResult());
         assertEquals(l0Parameters, validationResult.getParameterGroup());
         assertEquals(l0Parameters.getName(), validationResult.getName());
@@ -61,6 +62,7 @@ public class TestValidation {
 
         GroupValidationResult validationResult = l0Parameters.validate();
         assertTrue(validationResult.isValid());
+        assertFalse(validationResult.isClean());
         assertEquals(expectedResult, validationResult.getResult().replaceAll("\\s+", ""));
         
         l0Parameters.triggerValidationStatus(ValidationStatus.CLEAN, 3);

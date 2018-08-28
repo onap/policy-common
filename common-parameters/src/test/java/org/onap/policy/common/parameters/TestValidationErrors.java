@@ -21,6 +21,7 @@
 package org.onap.policy.common.parameters;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -31,6 +32,7 @@ import org.onap.policy.common.parameters.testclasses.ParameterGroupWithIllegalMa
 import org.onap.policy.common.parameters.testclasses.ParameterGroupWithIllegalMapValue;
 import org.onap.policy.common.parameters.testclasses.ParameterGroupWithNullCollection;
 import org.onap.policy.common.parameters.testclasses.ParameterGroupWithNullMapValue;
+import org.onap.policy.common.parameters.testclasses.ParameterGroupWithNullSubGroup;
 import org.onap.policy.common.parameters.testclasses.ParameterGroupWithParameterGroupCollection;
 
 public class TestValidationErrors {
@@ -66,6 +68,14 @@ public class TestValidationErrors {
         } catch (ParameterRuntimeException e) {
             assertEquals("collection parameter \"nullList\" is null", e.getMessage());
         }
+    }
+
+    @Test
+    public void testMapNullSubGroupValidation() {
+        ParameterGroupWithNullSubGroup nullSub = new ParameterGroupWithNullSubGroup("Null sub group value");
+
+        nullSub.isValid();
+        assertNull(nullSub.getSubGroup());
     }
 
     @Test
