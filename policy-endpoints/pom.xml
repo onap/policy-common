@@ -189,6 +189,11 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.openpojo</groupId>
+            <artifactId>openpojo</artifactId>
+        </dependency>
+
     </dependencies>
 
 </project>
