@@ -46,6 +46,30 @@
       "revId": "655d6f798878cd69b6c02c54d4bbed83d01fd937",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_0318be1c",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/ParameterService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1581
+      },
+      "writtenOn": "2018-08-29T11:40:04Z",
+      "side": 1,
+      "message": "I would consider it cleaner without the boolean! with separate methods for different functionality.\nBut Ill leave it up to yourself",
+      "parentUuid": "1a76adc5_8324ce60",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 67
+      },
+      "revId": "655d6f798878cd69b6c02c54d4bbed83d01fd937",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
