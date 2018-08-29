@@ -22,6 +22,30 @@
       "revId": "655d6f798878cd69b6c02c54d4bbed83d01fd937",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_8324ce60",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/ParameterService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-08-29T11:34:52Z",
+      "side": 1,
+      "message": "I thought of that, I just thought it was cleaner to have the boolean to make it explicit.",
+      "parentUuid": "1a76adc5_c3288688",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 67
+      },
+      "revId": "655d6f798878cd69b6c02c54d4bbed83d01fd937",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
