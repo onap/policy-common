@@ -33,4 +33,12 @@ public enum ValidationStatus {
     public boolean isValid() {
         return !this.equals(INVALID);
     }
+    
+    /**
+     * Check if the validation was clean.
+     * @return true if the validation is clean
+     */
+    public boolean isClean() {
+        return this.equals(CLEAN);
+    }
 }

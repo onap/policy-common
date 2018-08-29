@@ -89,7 +89,7 @@ public class GroupMapValidationResult implements ValidationResult {
      * @param message The validation message explaining the validation status
      */
     @Override
-    public void setResult(ValidationStatus status, String message) {
+    public void setResult(final ValidationStatus status, final String message) {
         setResult(status);
         this.message = message;
     }
@@ -112,9 +112,28 @@ public class GroupMapValidationResult implements ValidationResult {
      * Set the validation result on a parameter map entry.
      * 
      * @param entryName The name of the parameter map entry
+     * @param status The validation status for the entry
+     * @param message The validation message for the entry
+     */
+    public void setResult(final String entryName, final ValidationStatus status, final String message) {
+        ValidationResult validationResult = validationResultMap.get(entryName);
+        if (validationResult == null) {
+            throw new ParameterRuntimeException("no entry with name \"" + entryName + "\" exists");
+        }
+
+        // Set the status of the parameter group and replace the field result
+        validationResult.setResult(status, message); 
+        this.setResult(status);
+    }
+
+
+    /**
+     * Set the validation result on a parameter map entry.
+     * 
+     * @param entryName The name of the parameter map entry
      * @param mapEntryValidationResult The validation result for the entry
      */
-    public void setResult(String entryName, ValidationResult mapEntryValidationResult) {
+    public void setResult(final String entryName, final ValidationResult mapEntryValidationResult) {
         ValidationResult validationResult = validationResultMap.get(entryName);
         if (validationResult == null) {
             throw new ParameterRuntimeException("no entry with name \"" + entryName + "\" exists");

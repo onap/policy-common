@@ -34,12 +34,17 @@ public class ParameterGroupWithArray implements ParameterGroup {
     public int[] getIntArray() {
         return intArray;
     }
-    
+
     @Override
     public String getName() {
         return name;
     }
-    
+
+    @Override
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     @Override
     public GroupValidationResult validate() {
         return new GroupValidationResult(this);

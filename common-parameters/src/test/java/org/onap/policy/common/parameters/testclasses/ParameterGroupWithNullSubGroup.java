@@ -20,42 +20,35 @@
 
 package org.onap.policy.common.parameters.testclasses;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.parameters.ParameterGroup;
 
-public class ParameterGroupWithIllegalMapValue implements ParameterGroup {
+public class ParameterGroupWithNullSubGroup implements ParameterGroup {
     private String name;
-    private Map<String, Integer> intMap = new LinkedHashMap<>();
+    private ParameterGroup subGroup = null;
 
     /**
      * Create a test parameter group.
      * @param name the parameter group name
      */
-    public ParameterGroupWithIllegalMapValue(final String name) {
+    public ParameterGroupWithNullSubGroup(final String name) {
         this.name = name;
-        
-        intMap.put("One", 1);
-        intMap.put("Two", 2);
-        intMap.put("Three", 3);
     }
 
-    public Map<String, Integer> getIntMap() {
-        return intMap;
+    public ParameterGroup getSubGroup() {
+        return subGroup;
     }
-    
+
     @Override
     public String getName() {
         return name;
     }
-    
+
     @Override
     public void setName(final String name) {
         this.name = name;
     }
-    
+
     @Override
     public GroupValidationResult validate() {
         return new GroupValidationResult(this);

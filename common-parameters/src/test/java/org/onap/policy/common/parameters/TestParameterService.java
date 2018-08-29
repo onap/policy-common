@@ -57,7 +57,32 @@ public class TestParameterService {
             assertEquals("\"Empty Group\" already registered in parameter service", e.getMessage());
         }
 
+        try {
+            ParameterService.register(new EmptyParameterGroup("Empty Group"), false);
+            fail("this test should throw an exception");
+        }
+        catch (ParameterRuntimeException e) {
+            assertEquals("\"Empty Group\" already registered in parameter service", e.getMessage());
+        }
+
+        ParameterService.register(new EmptyParameterGroup("Empty Group"), true);
+        assertTrue(ParameterService.contains("Empty Group"));
+
         ParameterService.deregister("Empty Group");
+        assertFalse(ParameterService.contains("Empty Group"));
+
+        ParameterService.register(new EmptyParameterGroup("Empty Group"), true);
+        assertTrue(ParameterService.contains("Empty Group"));
+
+        ParameterService.deregister("Empty Group");
+        assertFalse(ParameterService.contains("Empty Group"));
+
+        EmptyParameterGroup epg = new EmptyParameterGroup("Empty Group");
+        ParameterService.register(epg);
+        assertTrue(ParameterService.contains("Empty Group"));
+        assertNotNull(ParameterService.get("Empty Group"));
+
+        ParameterService.deregister(epg);
         assertFalse(ParameterService.contains("Empty Group"));
 
         try {

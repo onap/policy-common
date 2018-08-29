@@ -103,15 +103,11 @@ public class TestValidationResults {
             result.setResult("nonExistantParameter", ValidationStatus.OBSERVATION, "Something was observed");
             fail("test shold throw an exception here");
         } catch (Exception e) {
-            assertEquals("no regular parameter field exists for parameter: nonExistantParameter", e.getMessage());
+            assertEquals("no parameter field exists for parameter: nonExistantParameter", e.getMessage());
         }
 
-        try {
-            result.setResult("l10LGenericNestedMap", ValidationStatus.OBSERVATION, "Something was observed");
-            fail("test shold throw an exception here");
-        } catch (Exception e) {
-            assertEquals("parameter not a regular parameter: l10LGenericNestedMap", e.getMessage());
-        }
+        result.setResult("l10IntField", ValidationStatus.OBSERVATION, "Something was observed");
+        assertTrue(result.isValid());
 
         try {
             result.setResult("nonExistantParameter", new GroupValidationResult(pg));
@@ -142,6 +138,34 @@ public class TestValidationResults {
             fail("test shold throw an exception here");
         } catch (Exception e) {
             assertEquals("parameter is not a nested group map parameter: l10IntField", e.getMessage());
+        }
+
+        result.setResult("l10LGenericNestedMap", "l10LGenericNestedMapVal0", ValidationStatus.INVALID,
+                        "This value is invalid");
+        assertEquals(ValidationStatus.INVALID, result.getStatus());
+        
+        try {
+            result.setResult("l10IntField", "l10LGenericNestedMapVal0", ValidationStatus.INVALID,
+                            "This value is invalid");
+            fail("test shold throw an exception here");
+        } catch (Exception e) {
+            assertEquals("parameter is not a nested group map parameter: l10IntField", e.getMessage());
+        }
+        
+        try {
+            result.setResult("nonExistantParameter", "l10LGenericNestedMapVal0", ValidationStatus.INVALID,
+                            "This value is invalid");
+            fail("test shold throw an exception here");
+        } catch (Exception e) {
+            assertEquals("no group map parameter field exists for parameter: nonExistantParameter", e.getMessage());
+        }
+        
+        try {
+            result.setResult("l10LGenericNestedMap", "NonExistantKey", ValidationStatus.INVALID,
+                            "This value is invalid");
+            fail("test shold throw an exception here");
+        } catch (Exception e) {
+            assertEquals("no entry with name \"NonExistantKey\" exists", e.getMessage());
         }
     }
 }

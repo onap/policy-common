@@ -48,6 +48,15 @@ public interface ValidationResult {
     }
 
     /**
+     * Checks if the result is clean.
+     *
+     * @return true, if is clean
+     */
+    default boolean isClean() {
+        return getStatus().isClean(); 
+    }
+
+    /**
      * Gets the validation result.
      *
      * @return the full validation result

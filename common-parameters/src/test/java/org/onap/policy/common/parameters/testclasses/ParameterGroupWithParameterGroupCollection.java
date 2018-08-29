@@ -52,6 +52,11 @@ public class ParameterGroupWithParameterGroupCollection implements ParameterGrou
     }
     
     @Override
+    public void setName(final String name) {
+        this.name = name;
+    }
+    
+    @Override
     public GroupValidationResult validate() {
         return new GroupValidationResult(this);
     }

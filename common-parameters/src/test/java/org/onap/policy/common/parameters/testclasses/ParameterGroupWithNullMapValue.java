@@ -40,12 +40,17 @@ public class ParameterGroupWithNullMapValue implements ParameterGroup {
     public Map<String, Integer> getNullMap() {
         return nullMap;
     }
-    
+
     @Override
     public String getName() {
         return name;
     }
-    
+
+    @Override
+    public void setName(final String name) {
+        this.name = name;
+    }
+
     @Override
     public GroupValidationResult validate() {
         return new GroupValidationResult(this);
