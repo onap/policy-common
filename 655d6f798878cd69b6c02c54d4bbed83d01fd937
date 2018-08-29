@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_c3288688",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/ParameterService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1581
+      },
+      "writtenOn": "2018-08-29T10:54:38Z",
+      "side": 1,
+      "message": "Is there any value in the boolean, rather than just naming the method something like registerOverwrite (with the existing method available where non overwrite is desired)",
+      "range": {
+        "startLine": 67,
+        "startChar": 0,
+        "endLine": 67,
+        "endChar": 67
+      },
+      "revId": "655d6f798878cd69b6c02c54d4bbed83d01fd937",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
