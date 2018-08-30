@@ -28,12 +28,16 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -66,14 +70,9 @@ public class JerseyClient implements HttpClient {
     /**
      * Constructor.
      * 
-     * name the name
-     * https is it https or not
-     * selfSignedCerts are there self signed certs
-     * hostname the hostname
-     * port port being used
-     * basePath base context
-     * userName user
-     * password password
+     * name the name https is it https or not selfSignedCerts are there self signed certs hostname
+     * the hostname port port being used basePath base context userName user password password
+     * 
      * @param busTopicParams Input parameters object
      * @throws KeyManagementException key exception
      * @throws NoSuchAlgorithmException no algorithm exception
@@ -163,6 +162,14 @@ public class JerseyClient implements HttpClient {
         return this.client.target(this.baseUrl).request().get();
     }
 
+    @Override
+    public Response put(String path, Entity<?> entity, Map<String, Object> headers) {
+        Builder builder = this.client.target(this.baseUrl).path(path).request();
+        for (Entry<String, Object> header : headers.entrySet()) {
+            builder.header(header.getKey(), header.getValue());
+        }
+        return builder.put(entity);
+    }
 
     @Override
     public boolean start() {

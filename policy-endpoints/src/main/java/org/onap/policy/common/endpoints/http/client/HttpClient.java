@@ -20,6 +20,9 @@
 
 package org.onap.policy.common.endpoints.http.client;
 
+import java.util.Map;
+
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Response;
 
 import org.onap.policy.common.capabilities.Startable;
@@ -29,6 +32,8 @@ public interface HttpClient extends Startable {
     public Response get(String path);
 
     public Response get();
+
+    public Response put(String path, Entity<?> entity, Map<String, Object> headers);
 
     public static <T> T getBody(Response response, Class<T> entityType) {
         return response.readEntity(entityType);
@@ -54,4 +59,5 @@ public interface HttpClient extends Startable {
 
 
     public static final HttpClientFactory factory = new IndexedHttpClientFactory();
+
 }

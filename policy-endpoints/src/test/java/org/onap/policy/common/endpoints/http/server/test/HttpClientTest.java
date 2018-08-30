@@ -21,13 +21,17 @@
 
 package org.onap.policy.common.endpoints.http.server.test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.junit.AfterClass;
@@ -51,7 +55,7 @@ public class HttpClientTest {
      * Setup before class method.
      *
      * @throws InterruptedException can be interrupted
-     * @throws IOException          can have an IO exception
+     * @throws IOException can have an IO exception
      */
     @BeforeClass
     public static void setUp() throws InterruptedException, IOException {
@@ -76,21 +80,20 @@ public class HttpClientTest {
         String keyStorePasswordSystemProperty =
                 System.getProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
         if (keyStorePasswordSystemProperty != null) {
-            savedValuesMap.put(
-                    JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME, keyStorePasswordSystemProperty);
+            savedValuesMap.put(JettyJerseyServer.SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME,
+                    keyStorePasswordSystemProperty);
         }
 
         String trustStoreSystemProperty = System.getProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME);
         if (trustStoreSystemProperty != null) {
-            savedValuesMap
-                    .put(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME, trustStoreSystemProperty);
+            savedValuesMap.put(JettyJerseyServer.SYSTEM_TRUSTSTORE_PROPERTY_NAME, trustStoreSystemProperty);
         }
 
         String trustStorePasswordSystemProperty =
                 System.getProperty(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
         if (trustStorePasswordSystemProperty != null) {
-            savedValuesMap
-                    .put(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME, trustStorePasswordSystemProperty);
+            savedValuesMap.put(JettyJerseyServer.SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME,
+                    trustStorePasswordSystemProperty);
         }
 
         System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME, "src/test/resources/keystore-test");
@@ -158,14 +161,12 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpNoAuthClient() throws Exception {
+    public void testHttpGetNoAuthClient() throws Exception {
         logger.info("-- testHttpNoAuthClient() --");
 
         final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpNoAuthClient")
-                .useHttps(false)
-                .allowSelfSignedCerts(false)
-                .hostname("localhost")
-                .port(6666).basePath("junit/echo").userName(null).password(null).managed(true).build());
+                .useHttps(false).allowSelfSignedCerts(false).hostname("localhost").port(6666).basePath("junit/echo")
+                .userName(null).password(null).managed(true).build());
         final Response response = client.get("hello");
         final String body = HttpClient.getBody(response, String.class);
 
@@ -174,24 +175,50 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpAuthClient() throws Exception {
+    public void testHttpPutNoAuthClient() throws Exception {
+        logger.info("-- testHttpNoAuthClient() --");
+
+        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpNoAuthClient")
+                .useHttps(false).allowSelfSignedCerts(false).hostname("localhost").port(6666).basePath("junit/echo")
+                .userName(null).password(null).managed(true).build());
+
+        Entity<MyEntity> entity = Entity.entity(new MyEntity("myValue"), MediaType.APPLICATION_JSON);
+        final Response response = client.put("hello", entity, Collections.emptyMap());
+        final String body = HttpClient.getBody(response, String.class);
+
+        assertTrue(response.getStatus() == 200);
+        assertTrue(body.equals("hello:{myParameter=myValue}"));
+    }
+
+    @Test
+    public void testHttpGetAuthClient() throws Exception {
         logger.info("-- testHttpAuthClient() --");
 
         final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient")
-                .useHttps(true)
-                .allowSelfSignedCerts(true)
-                .hostname("localhost")
-                .port(6667)
-                .basePath("junit/echo")
-                .userName("x")
-                .password("y")
-                .managed(true).build());
+                .useHttps(true).allowSelfSignedCerts(true).hostname("localhost").port(6667).basePath("junit/echo")
+                .userName("x").password("y").managed(true).build());
 
         final Response response = client.get("hello");
         final String body = HttpClient.getBody(response, String.class);
 
         assertTrue(response.getStatus() == 200);
         assertTrue(body.equals("hello"));
+    }
+
+    @Test
+    public void testHttpPutAuthClient() throws Exception {
+        logger.info("-- testHttpAuthClient() --");
+
+        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient")
+                .useHttps(true).allowSelfSignedCerts(true).hostname("localhost").port(6667).basePath("junit/echo")
+                .userName("x").password("y").managed(true).build());
+
+        Entity<MyEntity> entity = Entity.entity(new MyEntity("myValue"), MediaType.APPLICATION_JSON);
+        final Response response = client.put("hello", entity, Collections.emptyMap());
+        final String body = HttpClient.getBody(response, String.class);
+
+        assertTrue(response.getStatus() == 200);
+        assertTrue(body.equals("hello:{myParameter=myValue}"));
     }
 
     @Test
@@ -199,16 +226,10 @@ public class HttpClientTest {
         logger.info("-- testHttpAuthClient401() --");
 
         final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient401")
-                .useHttps(true)
-                .allowSelfSignedCerts(true)
-                .hostname("localhost")
-                .port(6667)
-                .basePath("junit/echo")
-                .userName(null)
-                .password(null)
-                .managed(true).build());
+                .useHttps(true).allowSelfSignedCerts(true).hostname("localhost").port(6667).basePath("junit/echo")
+                .userName(null).password(null).managed(true).build());
         final Response response = client.get("hello");
-        assertTrue(response.getStatus() == 401);
+        assertEquals(new Integer(response.getStatus()).toString(), response.getStatus(), 401);
     }
 
     @Test
@@ -298,5 +319,22 @@ public class HttpClientTest {
         assertTrue(response2.getStatus() == 500);
     }
 
+    class MyEntity {
+
+        private String myParameter;
+
+        public MyEntity(final String myParameter) {
+            this.myParameter = myParameter;
+        }
+
+        public void setMyParameter(final String myParameter) {
+            this.myParameter = myParameter;
+        }
+
+        public String getMyParameter() {
+            return myParameter;
+        }
+
+    }
 
 }

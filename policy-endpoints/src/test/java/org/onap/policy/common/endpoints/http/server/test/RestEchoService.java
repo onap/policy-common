@@ -22,11 +22,14 @@ package org.onap.policy.common.endpoints.http.server.test;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+
 
 @Api(value = "echo")
 @Path("/junit/echo")
@@ -35,11 +38,17 @@ public class RestEchoService {
     @GET
     @Path("{word}")
     @Produces(MediaType.TEXT_PLAIN)
-    @ApiOperation(
-        value = "echoes back whatever received"
-                    )
-    public String echo(@PathParam("word") String word) {   
+    @ApiOperation(value = "echoes back whatever received")
+    public String echo(@PathParam("word") String word) {
         return word;
+    }
+
+    @PUT
+    @Path("{word}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @ApiOperation(value = "echoes back whatever received")
+    public String echoPut(@PathParam("word") String word, Object entity) {
+        return word + ":" + entity.toString();
     }
 
 }

@@ -23,7 +23,9 @@ package org.onap.policy.common.endpoints.http.server.internal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.util.EnumSet;
+
 import javax.servlet.DispatcherType;
+
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
@@ -164,7 +166,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         } else {
             this.connector = httpConnector();
         }
-        
+
         this.connector.setName(srvName);
         this.connector.setReuseAddress(true);
         this.connector.setPort(port);
@@ -189,8 +191,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
             tempFilterPath = "/*";
         }
 
-        context.addFilter(filterClass, tempFilterPath,
-                EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
+        context.addFilter(filterClass, tempFilterPath, EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
     }
 
     /**
