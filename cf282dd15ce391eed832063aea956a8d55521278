@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_e4b1df8f",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupValidationResult.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-09-07T13:35:11Z",
+      "side": 1,
+      "message": "I checked with a boxed boolean method. In Eclipse anyway, the convention is that boxed boolean values get gettters generated using the \"get\" prefix:\n\nprivate Boolean myBoolean;\n\nresults in a generated getter as follows:\n\npublic Boolean getMyBoolean() {\n    return myBoolean;\n}",
+      "parentUuid": "1a76adc5_a44687be",
+      "revId": "cf282dd15ce391eed832063aea956a8d55521278",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_84190bd9",
         "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestValidation.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2018-09-07T13:11:58Z",
       "side": 1,
       "message": "test for static fields?",
+      "revId": "cf282dd15ce391eed832063aea956a8d55521278",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_644cef9e",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestValidation.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-09-07T13:35:11Z",
+      "side": 1,
+      "message": "I added a static field to the class\norg.onap.policy.common.parameters.testclasses.TestParametersL00\n\npublic class TestParametersL00 implements ParameterGroup {\n    private static final String A_CONSTANT \u003d \"A Constant\";\n\nOnce the static field is in there, then the code gets executed using the current tests, in that the implementation does not go looking for a getA_CONSTANT() method",
+      "parentUuid": "1a76adc5_84190bd9",
       "revId": "cf282dd15ce391eed832063aea956a8d55521278",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
