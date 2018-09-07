@@ -46,6 +46,14 @@ public class TestParametersLGeneric implements ParameterGroup {
         this.name = name;
     }
 
+    public int getLgenericIntField() {
+        return lgenericIntField;
+    }
+
+    public String getLgenericStringField() {
+        return lgenericStringField;
+    }
+
     public void setName(String name) {
         this.name = name;
     }

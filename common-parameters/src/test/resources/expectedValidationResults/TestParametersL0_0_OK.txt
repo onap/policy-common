@@ -36,4 +36,6 @@ parameter group "l0Parameters" type "org.onap.policy.common.parameters.testclass
       field "name" type "java.lang.String" value "l00LGenericNestedMapVal1" CLEAN, parameter has status CLEAN
       field "lgenericIntField" type "int" value "0" CLEAN, parameter has status CLEAN
       field "lgenericStringField" type "java.lang.String" value "Legal org.onap.policy.common.parameters.testclasses.TestParametersLGeneric" CLEAN, parameter has status CLEAN
-
+  field "isSomeFlag" type "boolean" value "false" CLEAN, parameter has status CLEAN
+  field "someNonIsFlag" type "boolean" value "false" CLEAN, parameter has status CLEAN
+  

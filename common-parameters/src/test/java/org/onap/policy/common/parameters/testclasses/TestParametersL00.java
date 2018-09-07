@@ -30,12 +30,16 @@ import org.onap.policy.common.parameters.ParameterGroup;
 import org.onap.policy.common.parameters.ValidationStatus;
 
 public class TestParametersL00 implements ParameterGroup {
-    private String name;
+    private static final String A_CONSTANT = "A Constant";
+    
+    private String name = A_CONSTANT;
     private int l00IntField = 0;
     private String l00StringField = "Legal " + this.getClass().getCanonicalName();
     private TestParametersL10 l00L10Nested = new TestParametersL10("l00L10Nested");
     private TestParametersLGeneric l00LGenericNested = new TestParametersLGeneric("l00LGenericNested");
     private Map<String, TestParametersLGeneric> l00LGenericNestedMap = new LinkedHashMap<>();
+    private boolean isSomeFlag;
+    private boolean someNonIsFlag;
 
     /**
      * Default constructor.
@@ -43,7 +47,7 @@ public class TestParametersL00 implements ParameterGroup {
     public TestParametersL00() {
         // Default Cnstructor
     }
-    
+
     /**
      * Create a test parameter group.
      * 
@@ -56,6 +60,38 @@ public class TestParametersL00 implements ParameterGroup {
         l00LGenericNestedMap.put(l00LGenericNestedMapVal0.getName(), l00LGenericNestedMapVal0);
         TestParametersLGeneric l00LGenericNestedMapVal1 = new TestParametersLGeneric("l00LGenericNestedMapVal1");
         l00LGenericNestedMap.put(l00LGenericNestedMapVal1.getName(), l00LGenericNestedMapVal1);
+    }
+
+    public int getL00IntField() {
+        return l00IntField;
+    }
+
+    public String getL00StringField() {
+        return l00StringField;
+    }
+
+    public TestParametersL10 getL00L10Nested() {
+        return l00L10Nested;
+    }
+
+    public TestParametersLGeneric getL00LGenericNested() {
+        return l00LGenericNested;
+    }
+
+    public Map<String, TestParametersLGeneric> getL00LGenericNestedMap() {
+        return l00LGenericNestedMap;
+    }
+
+    public boolean isSomeFlag() {
+        return isSomeFlag;
+    }
+
+    public boolean isSomeNonIsFlag() {
+        return someNonIsFlag;
+    }
+
+    public void setSomeFlag(boolean isSomeFlag) {
+        this.isSomeFlag = isSomeFlag;
     }
 
     public void setName(String name) {

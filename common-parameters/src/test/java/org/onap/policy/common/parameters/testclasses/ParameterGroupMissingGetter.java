@@ -20,42 +20,35 @@
 
 package org.onap.policy.common.parameters.testclasses;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.parameters.ParameterGroup;
 
-public class ParameterGroupWithParameterGroupCollection implements ParameterGroup {
+public class ParameterGroupMissingGetter implements ParameterGroup {
     private String name;
-    private List<ParameterGroup> parameterGroupArrayList = new ArrayList<>();
+    private String value;
 
-    /**
-     * Create a test parameter group.
-     * @param name the parameter group name
-     */
-    public ParameterGroupWithParameterGroupCollection(final String name) {
+    public ParameterGroupMissingGetter(final String name) {
         this.name = name;
-        
-        parameterGroupArrayList.add(new TestParametersLGeneric("Generic0"));
-        parameterGroupArrayList.add(new TestParametersLGeneric("Generic1"));
-        parameterGroupArrayList.add(new TestParametersLGeneric("Generic2"));
-    }
-
-    public List<ParameterGroup> getParameterGroupArrayList() {
-        return parameterGroupArrayList;
     }
     
+    public String getTheValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
     @Override
     public String getName() {
         return name;
     }
-    
+
     @Override
     public void setName(final String name) {
         this.name = name;
     }
-    
+
     @Override
     public GroupValidationResult validate() {
         return new GroupValidationResult(this);

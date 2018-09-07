@@ -36,4 +36,6 @@ parameter group "l00NameFromFile" type "org.onap.policy.common.parameters.testcl
       field "name" type "java.lang.String" value "L00Entry1Name" CLEAN, parameter has status CLEAN
       field "lgenericIntField" type "int" value "1" CLEAN, parameter has status CLEAN
       field "lgenericStringField" type "java.lang.String" value "L00Entry1 value from file" CLEAN, parameter has status CLEAN
-
+  field "isSomeFlag" type "boolean" value "false" CLEAN, parameter has status CLEAN
+  field "someNonIsFlag" type "boolean" value "false" CLEAN, parameter has status CLEAN
+  
