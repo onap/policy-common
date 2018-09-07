@@ -26,7 +26,7 @@
         <groupId>org.onap.policy.parent</groupId>
         <artifactId>integration</artifactId>
         <version>2.0.0-SNAPSHOT</version>
-        <relativePath/>
+        <relativePath />
     </parent>
 
     <groupId>org.onap.policy.common</groupId>
@@ -70,6 +70,7 @@
         <!-- Project common dependency versions -->
         <javax.persistence.api.version>1.0.2</javax.persistence.api.version>
         <h2.version>1.4.186</h2.version>
+        <commons-lang3.version>3.4</commons-lang3.version>
     </properties>
 
     <modules>
@@ -122,6 +123,11 @@
                 <groupId>org.eclipse.persistence</groupId>
                 <artifactId>eclipselink</artifactId>
                 <version>${eclipselink.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commons-lang3.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -252,41 +258,41 @@
                 </dependencies>
             </plugin>
             <plugin>
-              <artifactId>maven-checkstyle-plugin</artifactId>
-              <executions>
-                <execution>
-                  <id>onap-java-style</id>
-                  <goals>
-                    <goal>check</goal>
-                  </goals>
-                  <phase>process-sources</phase>
-                  <configuration>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>onap-java-style</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                        <configuration>
                     <!-- Use Google Java Style Guide:
                     https://github.com/checkstyle/checkstyle/blob/master/src/main/resources/google_checks.xml
                     with minor changes -->
-                    <configLocation>onap-checkstyle/onap-java-style.xml</configLocation>
+                            <configLocation>onap-checkstyle/onap-java-style.xml</configLocation>
                     <!-- <sourceDirectory> is needed so that checkstyle ignores the generated sources directory -->
-                    <sourceDirectory>${project.build.sourceDirectory}/src/main/java</sourceDirectory>
-                    <includeResources>true</includeResources>
-                    <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <includeTestResources>true</includeTestResources>
-                    <excludes>
-                    </excludes>
-                    <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
-                    <consoleOutput>true</consoleOutput>
-                    <failOnViolation>true</failOnViolation>
-                    <violationSeverity>warning</violationSeverity>
-                  </configuration>
-                </execution>
-              </executions>
-              <dependencies>
-                <dependency>
-                  <groupId>org.onap.oparent</groupId>
-                  <artifactId>checkstyle</artifactId>
-                  <version>${oparent.version}</version>
-                  <scope>compile</scope>
-                </dependency>
-              </dependencies>
+                            <sourceDirectory>${project.build.sourceDirectory}/src/main/java</sourceDirectory>
+                            <includeResources>true</includeResources>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                            <includeTestResources>true</includeTestResources>
+                            <excludes>
+                            </excludes>
+                            <suppressionsLocation>checkstyle-suppressions.xml</suppressionsLocation>
+                            <consoleOutput>true</consoleOutput>
+                            <failOnViolation>true</failOnViolation>
+                            <violationSeverity>warning</violationSeverity>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.onap.oparent</groupId>
+                        <artifactId>checkstyle</artifactId>
+                        <version>${oparent.version}</version>
+                        <scope>compile</scope>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

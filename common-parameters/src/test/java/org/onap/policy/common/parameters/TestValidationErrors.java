@@ -26,6 +26,8 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
+import org.onap.policy.common.parameters.testclasses.ParameterGroupMissingGetter;
+import org.onap.policy.common.parameters.testclasses.ParameterGroupPrivateGetter;
 import org.onap.policy.common.parameters.testclasses.ParameterGroupWithArray;
 import org.onap.policy.common.parameters.testclasses.ParameterGroupWithCollection;
 import org.onap.policy.common.parameters.testclasses.ParameterGroupWithIllegalMapKey;
@@ -111,5 +113,29 @@ public class TestValidationErrors {
             assertEquals("map entry is not a parameter group keyed by a string, value \"1\" in "
                             + "map \"intMap\" is not a parameter group", e.getMessage());
         }
+    }
+    
+    @Test
+    public void testMissingGetter() {
+        ParameterGroupMissingGetter badGetterName = new ParameterGroupMissingGetter("BGN");
+        try {
+            badGetterName.isValid();
+            fail("test should throw an exception");
+        } catch (ParameterRuntimeException e) {
+            assertEquals("could not get getter method for parameter \"value\"", e.getMessage());
+        }
+        
+    }
+    
+    @Test
+    public void testPrivateGetter() {
+        ParameterGroupPrivateGetter privateGetter = new ParameterGroupPrivateGetter("privateGetter");
+        try {
+            privateGetter.isValid();
+            fail("test should throw an exception");
+        } catch (ParameterRuntimeException e) {
+            assertEquals("could not get getter method for parameter \"value\"", e.getMessage());
+        }
+        
     }
 }

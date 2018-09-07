@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 
 import org.junit.Test;
 import org.onap.policy.common.parameters.testclasses.TestParametersL00;
+import org.onap.policy.common.parameters.testclasses.TestParametersL10;
 
 public class TestValidation {
     @Test
@@ -181,5 +182,17 @@ public class TestValidation {
         validationResult = l0Parameters.validate();
         assertTrue(validationResult.isValid());
         assertEquals(null, validationResult.getResult());
+    }
+    
+    @Test
+    public void testValidationEmptySubGroup() throws IOException {
+        TestParametersL10 l10Parameters = new TestParametersL10("l10Parameters");
+
+        l10Parameters.setL10LGenericNested0(null);
+
+        GroupValidationResult validationResult = l10Parameters.validate();
+        assertTrue(validationResult.isValid());
+        
+        assertTrue(validationResult.getResult("", "", true).contains("UNDEFINED"));
     }
 }

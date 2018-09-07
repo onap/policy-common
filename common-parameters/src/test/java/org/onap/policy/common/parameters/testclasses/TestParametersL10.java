@@ -58,6 +58,26 @@ public class TestParametersL10 implements ParameterGroup {
         l10LGenericNestedMap.put(l10LGenericNestedMapVal1.getName(), l10LGenericNestedMapVal1);
     }
 
+    public int getL10IntField() {
+        return l10IntField;
+    }
+
+    public String getL10StringField() {
+        return l10StringField;
+    }
+
+    public TestParametersLGeneric getL10LGenericNested0() {
+        return l10LGenericNested0;
+    }
+
+    public TestParametersLGeneric getL10LGenericNested1() {
+        return l10LGenericNested1;
+    }
+
+    public Map<String, TestParametersLGeneric> getL10LGenericNestedMap() {
+        return l10LGenericNestedMap;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -160,8 +180,9 @@ public class TestParametersL10 implements ParameterGroup {
                             ParameterConstants.PARAMETER_HAS_STATUS_MESSAGE + ValidationStatus.CLEAN.toString());
         }
 
-
-        validationResult.setResult("l10LGenericNested0", l10LGenericNested0.validate());
+        if (l10LGenericNested0 != null) {
+            validationResult.setResult("l10LGenericNested0", l10LGenericNested0.validate());
+        }
         validationResult.setResult("l10LGenericNested1", l10LGenericNested1.validate());
 
         for (Entry<String, TestParametersLGeneric> nestedGroupEntry : l10LGenericNestedMap.entrySet()) {

@@ -21,10 +21,15 @@
 package org.onap.policy.common.parameters;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This class holds the result of the validation of a parameter group.
@@ -60,18 +65,13 @@ public class GroupValidationResult implements ValidationResult {
                 continue;
             }
 
-            // Make the field accessible
-            boolean savedAccessibilityValue = field.isAccessible();
-            field.setAccessible(true);
-
-            try {
-                // Set the validation result
-                validationResultMap.put(field.getName(), getValidationResult(field, parameterGroup));
-            } catch (IllegalArgumentException | IllegalAccessException e) {
-                throw new ParameterRuntimeException("could not get value of parameter \"" + field.getName() + "\"", e);
-            } finally {
-                field.setAccessible(savedAccessibilityValue);
+            // Exclude static fields
+            if (Modifier.isStatic(field.getModifiers())) {
+                continue;
             }
+
+            // Set the validation result
+            validationResultMap.put(field.getName(), getValidationResult(field, parameterGroup));
         }
     }
 
@@ -81,13 +81,12 @@ public class GroupValidationResult implements ValidationResult {
      * @param field The parameter field
      * @param ParameterGroup The parameter group containing the field
      * @return the validation result
-     * @throws IllegalAccessException on accessing private fields
+     * @throws Exception on accessing private fields
      */
-    private ValidationResult getValidationResult(final Field field, final ParameterGroup parameterGroup)
-                    throws IllegalAccessException {
+    private ValidationResult getValidationResult(final Field field, final ParameterGroup parameterGroup) {
         final String fieldName = field.getName();
         final Class<?> fieldType = field.getType();
-        final Object fieldObject = field.get(parameterGroup);
+        final Object fieldObject = getObjectField(parameterGroup, field);
 
         // Nested parameter groups are allowed
         if (ParameterGroup.class.isAssignableFrom(fieldType)) {
@@ -108,6 +107,47 @@ public class GroupValidationResult implements ValidationResult {
 
         // It's a regular parameter
         return new ParameterValidationResult(field, fieldObject);
+    }
+
+    /**
+     * Get the value of a field in an object using a getter found with reflection
+     * 
+     * @param targetObject The object on which to read the field value
+     * @param fieldName The name of the field
+     * @return The field value
+     */
+    private Object getObjectField(final Object targetObject, final Field field) {
+        String getterMethodName;
+
+        // Check for Boolean fields, the convention for boolean getters is that they start with "is"
+        // If the field name already starts with "is" then the getter has the field name otherwise
+        // the field name is prepended with "is"
+        if (boolean.class.equals(field.getType())) {
+            if (field.getName().startsWith("is")) {
+                getterMethodName = field.getName();
+            } else {
+                getterMethodName = "is" + StringUtils.capitalize(field.getName());
+            }
+        } else {
+            getterMethodName = "get" + StringUtils.capitalize(field.getName());
+        }
+
+        // Look up the getter method for the field
+        Method getterMethod;
+        try {
+            getterMethod = targetObject.getClass().getMethod(getterMethodName, (Class<?>[]) null);
+        } catch (NoSuchMethodException | SecurityException e) {
+            throw new ParameterRuntimeException("could not get getter method for parameter \"" + field.getName() + "\"",
+                            e);
+        }
+
+        // Invoke the getter
+        try {
+            return getterMethod.invoke(targetObject, (Object[]) null);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+            throw new ParameterRuntimeException("error calling getter method for parameter \"" + field.getName() + "\"",
+                            e);
+        }
     }
 
     /**
@@ -327,13 +367,12 @@ public class GroupValidationResult implements ValidationResult {
 
         validationResultBuilder.append(initialIndentation);
         validationResultBuilder.append("parameter group \"");
-        
+
         if (parameterGroup != null) {
             validationResultBuilder.append(parameterGroup.getName());
             validationResultBuilder.append("\" type \"");
             validationResultBuilder.append(parameterGroup.getClass().getCanonicalName());
-        }
-        else {
+        } else {
             validationResultBuilder.append("UNDEFINED");
         }
         validationResultBuilder.append("\" ");
