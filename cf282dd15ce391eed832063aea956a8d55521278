@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_a44687be",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/GroupValidationResult.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-09-07T13:11:58Z",
+      "side": 1,
+      "message": "also check for boxed Boolean?",
+      "revId": "cf282dd15ce391eed832063aea956a8d55521278",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_84190bd9",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestValidation.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-09-07T13:11:58Z",
+      "side": 1,
+      "message": "test for static fields?",
+      "revId": "cf282dd15ce391eed832063aea956a8d55521278",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
