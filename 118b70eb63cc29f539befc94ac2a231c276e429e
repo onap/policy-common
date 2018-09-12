@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_775483c9",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/io/Serializer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-09-12T22:45:33Z",
+      "side": 1,
+      "message": "I believe the \"ois\" autoclose will also close \"in\", but if you can confirm ..",
+      "revId": "118b70eb63cc29f539befc94ac2a231c276e429e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
