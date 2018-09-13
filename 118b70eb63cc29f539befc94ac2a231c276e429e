@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "1a76adc5_8dc27051",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/io/Serializer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-09-13T12:38:43Z",
+      "side": 1,
+      "message": "This is auto-closeable but should be in a try-with-resources???",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 63
+      },
+      "revId": "118b70eb63cc29f539befc94ac2a231c276e429e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_775483c9",
         "filename": "utils-test/src/main/java/org/onap/policy/common/utils/io/Serializer.java",
         "patchSetId": 1
