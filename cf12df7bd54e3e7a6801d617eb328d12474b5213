@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_8d71100e",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/io/Serializer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-09-13T13:01:12Z",
+      "side": 1,
+      "message": "That will work?? Wondering if this would be the intent of auto-closeable and would work cleanly:\n\ntry (ByteArrayOutputSream out \u003d new ByteArrayOutputStream()) {\n    try (ObjectOutputStream oos \u003d new ObjectOutputStream(out)) {\n        oos.writeObject(object);\n    }\n    return out.toByteArray();\n}",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 57,
+        "endChar": 32
+      },
+      "revId": "cf12df7bd54e3e7a6801d617eb328d12474b5213",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
