@@ -22,6 +22,30 @@
       "revId": "cf12df7bd54e3e7a6801d617eb328d12474b5213",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_0da2e04a",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/io/Serializer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-09-13T13:08:16Z",
+      "side": 1,
+      "message": "oh, duh, thanks!",
+      "parentUuid": "1a76adc5_8d71100e",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 57,
+        "endChar": 32
+      },
+      "revId": "cf12df7bd54e3e7a6801d617eb328d12474b5213",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
