@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_8d4350ae",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/io/Serializer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-09-13T13:02:00Z",
+      "side": 1,
+      "message": "don\u0027t believe it\u0027s necessary, as oos.close() will invoke out.close().  However, it\u0027s easy enough to add out.close()",
+      "parentUuid": "1a76adc5_8dc27051",
+      "range": {
+        "startLine": 49,
+        "startChar": 8,
+        "endLine": 49,
+        "endChar": 63
+      },
+      "revId": "118b70eb63cc29f539befc94ac2a231c276e429e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_775483c9",
         "filename": "utils-test/src/main/java/org/onap/policy/common/utils/io/Serializer.java",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2018-09-12T22:45:33Z",
       "side": 1,
       "message": "I believe the \"ois\" autoclose will also close \"in\", but if you can confirm ..",
+      "revId": "118b70eb63cc29f539befc94ac2a231c276e429e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a76adc5_ed59a48e",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/io/Serializer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-09-13T13:02:00Z",
+      "side": 1,
+      "message": "don\u0027t believe it\u0027s necessary, as ois.close() will invoke in.close().  In addition, it isn\u0027t necessary to invoke close on a ByteArrayInputStream.  Nevertheless, it\u0027s easy enough to include it in the try-with-resources.  Oddly, I expected jacoco to complain about not testing all of the exception paths when that was added, but it still seems happy with it for some reason.",
+      "parentUuid": "1a76adc5_775483c9",
       "revId": "118b70eb63cc29f539befc94ac2a231c276e429e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
