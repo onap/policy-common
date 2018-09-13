@@ -32,6 +32,11 @@ import java.io.ObjectOutputStream;
 public class Serializer {
 
     /**
+     * Factory to access various objects. May be overridden for junit tests.
+     */
+    private static Factory factory = new Factory();
+
+    /**
      * The constructor.
      */
     private Serializer() {
@@ -46,9 +51,14 @@ public class Serializer {
      * @throws IOException if an error occurs
      */
     public static <T> byte[] serialize(T object) throws IOException {
-        try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
-            try (ObjectOutputStream oos = new ObjectOutputStream(out)) {
-                oos.writeObject(object);
+        try (ByteArrayOutputStream out = factory.makeByteArrayOutputStream()) {
+            try (ObjectOutputStream oos = factory.makeObjectOutputStream(out)) {
+                /*
+                 * writeObject() is final and mockito can't mock final methods. In
+                 * addition, powermock seemed to be having difficult with the junit test
+                 * class as well, so we'll just do it with a factory method.
+                 */
+                factory.writeObject(object, oos);
             }
 
             return out.toByteArray();
@@ -65,9 +75,14 @@ public class Serializer {
      */
     public static <T> T deserialize(Class<T> clazz, byte[] data) throws IOException {
 
-        try (ByteArrayInputStream in = new ByteArrayInputStream(data);
-                        ObjectInputStream ois = new ObjectInputStream(in)) {
-            return clazz.cast(ois.readObject());
+        try (ByteArrayInputStream in = factory.makeByteArrayInputStream(data);
+                        ObjectInputStream ois = factory.makeObjectInputStream(in)) {
+            /*
+             * readObject() is final and mockito can't mock final methods. In
+             * addition, powermock seemed to be having difficult with the junit test
+             * class as well, so we'll just do it with a factory method.
+             */
+            return clazz.cast(factory.readObject(ois));
 
         } catch (ClassNotFoundException e) {
             throw new IOException(e);
@@ -85,5 +100,36 @@ public class Serializer {
     @SuppressWarnings("unchecked")
     public static <T> T roundTrip(T object) throws IOException {
         return (T) deserialize(object.getClass(), serialize(object));
+    }
+
+    /**
+     * Factory to access various objects.
+     */
+    public static class Factory {
+
+        public ByteArrayOutputStream makeByteArrayOutputStream() {
+            return new ByteArrayOutputStream();
+        }
+
+        public ByteArrayInputStream makeByteArrayInputStream(byte[] data) {
+            return new ByteArrayInputStream(data);
+        }
+
+        public ObjectOutputStream makeObjectOutputStream(ByteArrayOutputStream out) throws IOException {
+            return new ObjectOutputStream(out);
+        }
+
+        public ObjectInputStream makeObjectInputStream(ByteArrayInputStream in) throws IOException {
+            return new ObjectInputStream(in);
+        }
+
+        public void writeObject(Object object, ObjectOutputStream oos) throws IOException {
+            oos.writeObject(object);
+        }
+
+        public Object readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+            return ois.readObject();
+        }
+
     }
 }
