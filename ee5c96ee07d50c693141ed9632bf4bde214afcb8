@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_b511a15e",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServerFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-09-17T15:54:56Z",
+      "side": 1,
+      "message": "I think sonar prefers this \"if\" to be combined with the preceding \"else\"",
+      "revId": "ee5c96ee07d50c693141ed9632bf4bde214afcb8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
