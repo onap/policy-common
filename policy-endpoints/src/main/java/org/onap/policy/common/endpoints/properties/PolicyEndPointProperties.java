@@ -85,6 +85,7 @@ public interface PolicyEndPointProperties {
     String PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX = ".password";
     String PROPERTY_HTTP_AUTH_URIPATH_SUFFIX = ".authUriPath";
 
+    String PROPERTY_HTTP_FILTER_CLASSES_SUFFIX = ".filterClasses";
     String PROPERTY_HTTP_REST_CLASSES_SUFFIX = ".restClasses";
     String PROPERTY_HTTP_REST_PACKAGES_SUFFIX = ".restPackages";
     String PROPERTY_HTTP_REST_URIPATH_SUFFIX = ".restUriPath";

@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-
 import org.onap.aaf.cadi.filter.CadiFilter;
 import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
@@ -198,6 +197,9 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
             String restClasses = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
                     + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX);
 
+            String filterClasses = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+                + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX);
+
             String restPackages = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
                     + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_PACKAGES_SUFFIX);
             String restUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
@@ -232,8 +234,22 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
             }
 
             HttpServletServer service = build(serviceName, https, hostName, servicePort, contextUriPath, swagger, managed);
-            if (userName != null && !userName.isEmpty() && password != null && !password.isEmpty()) {
-                service.setBasicAuthentication(userName, password, authUriPath);
+
+            /* authentication method either AAF or HTTP Basic Auth */
+
+            if (aaf) {
+                service.addFilterClass(contextUriPath, CadiFilter.class.getCanonicalName());
+            } else {
+                if (userName != null && !userName.isEmpty() && password != null && !password.isEmpty()) {
+                    service.setBasicAuthentication(userName, password, authUriPath);
+                }
+            }
+
+            if (filterClasses != null && !filterClasses.isEmpty()) {
+                List<String> filterClassesList = Arrays.asList(filterClasses.split(SPACES_COMMA_SPACES));
+                for (String filterClass : filterClassesList) {
+                    service.addFilterClass(restUriPath, filterClass);
+                }
             }
 
             if (restClasses != null && !restClasses.isEmpty()) {
@@ -250,9 +266,6 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
                 }
             }
 
-            if (aaf) {
-                service.addFilterClass(contextUriPath, CadiFilter.class.getCanonicalName());
-            }
 
             serviceList.add(service);
         }
