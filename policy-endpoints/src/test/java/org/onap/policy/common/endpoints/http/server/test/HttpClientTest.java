@@ -108,6 +108,7 @@ public class HttpClientTest {
                 HttpServletServer.factory.build("echo", true, "localhost", 6667, "/", false, true);
         echoServerAuth.setBasicAuthentication("x", "y", null);
         echoServerAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
+        echoServerAuth.addFilterClass("/*", TestFilter.class.getCanonicalName());
         echoServerAuth.waitedStart(5000);
 
         if (!NetworkUtil.isTcpPortOpen("localhost", echoServerAuth.getPort(), 5, 10000L)) {
@@ -251,6 +252,10 @@ public class HttpClientTest {
                 PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PAP"
                         + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX,
                 RestMockHealthCheck.class.getName());
+        httpProperties.setProperty(
+            PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PAP"
+                + PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX,
+            TestFilter.class.getName());
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
                 + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
 
