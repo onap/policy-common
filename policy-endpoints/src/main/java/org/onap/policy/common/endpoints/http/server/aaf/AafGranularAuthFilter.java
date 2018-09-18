@@ -24,17 +24,15 @@ import javax.servlet.http.HttpServletRequest;
 import org.onap.policy.common.utils.network.NetworkUtil;
 
 /**
- * Allows per server direct permissions from all rest apis to aaf permission types
- * for evaluation, hence the granularity.
+ * This generic class allows the mapping of REST APIs to AAF permissions
+ * to be evaluated in an AAF context.   This class can be used for
+ * highly granular permissions where each REST resource can be directly
+ * mapped transparently to an AAF permission type, the instance being the host
+ * server, and the HTTP method corresponding to the action.
+ * Subclasses are responsible to provide the root permission prefix, typically
+ * the namespace.
  */
 public abstract class AafGranularAuthFilter extends AafAuthFilter {
-
-    @Override
-    protected String getRole(HttpServletRequest request) {
-        return
-            String.format("%s|%s|%s", getPermissionType(request), getPermissionInstance(request),
-                request.getMethod().toLowerCase());
-    }
 
     @Override
     protected String getPermissionType(HttpServletRequest request) {
