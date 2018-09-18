@@ -23,7 +23,14 @@ package org.onap.policy.common.endpoints.http.server.aaf;
 import javax.servlet.http.HttpServletRequest;
 import org.onap.policy.common.endpoints.http.server.AuthorizationFilter;
 
+/**
+ * Generic Authorization AAF Filter Skeleton.   This class will return
+ * a permission in AAF format.  Subclasses are responsible to provide
+ * the AAF permission type and instance.
+ */
 public abstract class AafAuthFilter extends AuthorizationFilter {
+
+    public static final String DEFAULT_NAMESPACE = "org.onap.policy";
 
     @Override
     protected String getRole(HttpServletRequest request) {
