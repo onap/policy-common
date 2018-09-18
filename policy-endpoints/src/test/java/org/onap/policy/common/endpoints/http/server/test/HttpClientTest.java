@@ -109,6 +109,9 @@ public class HttpClientTest {
         echoServerAuth.setBasicAuthentication("x", "y", null);
         echoServerAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
         echoServerAuth.addFilterClass("/*", TestFilter.class.getCanonicalName());
+        echoServerAuth.addFilterClass("/*", TestAuthorizationFilter.class.getCanonicalName());
+        echoServerAuth.addFilterClass("/*", TestAafAuthFilter.class.getCanonicalName());
+        echoServerAuth.addFilterClass("/*", TestAafGranularAuthFilter.class.getCanonicalName());
         echoServerAuth.waitedStart(5000);
 
         if (!NetworkUtil.isTcpPortOpen("localhost", echoServerAuth.getPort(), 5, 10000L)) {

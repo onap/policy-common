@@ -264,7 +264,6 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
                 }
             }
 
-
             serviceList.add(service);
         }
 
