@@ -29,6 +29,7 @@ import javax.servlet.DispatcherType;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.security.UserStore;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
@@ -244,8 +245,10 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
             srvltPath = "/*";
         }
 
-        HashLoginService hashLoginService = new HashLoginService();
-        hashLoginService.putUser(user, Credential.getCredential(password), new String[] {"user"});
+        final HashLoginService hashLoginService = new HashLoginService();
+        final UserStore userStore = new UserStore();
+        userStore.addUser(user, Credential.getCredential(password), new String[] {"user"});
+        hashLoginService.setUserStore(userStore);
         hashLoginService.setName(this.connector.getName() + "-login-service");
 
         Constraint constraint = new Constraint();
