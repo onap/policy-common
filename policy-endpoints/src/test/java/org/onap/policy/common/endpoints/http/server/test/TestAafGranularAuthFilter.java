@@ -28,7 +28,7 @@ public class TestAafGranularAuthFilter extends AafGranularAuthFilter {
 
     @Override
     protected String getRole(HttpServletRequest request) {
-        String expectedPerm = this.getPermissionTypeRoot() + "."
+        String expectedPerm = this.getPermissionTypeRoot()
             + request.getRequestURI().replace('/', '.') + "|"
             + NetworkUtil.getHostname() + "|"
             + request.getMethod().toLowerCase();

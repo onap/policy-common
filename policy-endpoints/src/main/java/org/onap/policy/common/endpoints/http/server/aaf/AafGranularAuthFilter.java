@@ -36,8 +36,7 @@ public abstract class AafGranularAuthFilter extends AafAuthFilter {
 
     @Override
     protected String getPermissionType(HttpServletRequest request) {
-        return getPermissionTypeRoot() + "." +
-                request.getRequestURI().replace('/', '.');
+        return getPermissionTypeRoot() + request.getRequestURI().replace('/', '.');
     }
 
     @Override

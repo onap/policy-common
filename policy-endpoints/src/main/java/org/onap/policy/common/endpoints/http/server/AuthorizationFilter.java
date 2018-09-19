@@ -54,7 +54,7 @@ public abstract class AuthorizationFilter implements Filter {
         boolean authorized = request.isUserInRole(role);
 
         logger.info("user {} in role {} is {}authorized to {}",
-            request.getUserPrincipal().getName(), role, ((authorized) ? "" : "NOT "), request.getMethod());
+            request.getUserPrincipal(), role, ((authorized) ? "" : "NOT "), request.getMethod());
 
         if (!authorized) {
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
