@@ -53,7 +53,7 @@ public abstract class AuthorizationFilter implements Filter {
         String role = getRole(request);
         boolean authorized = request.isUserInRole(role);
 
-        logger.info("user {} in role {}  is {}authorized to {}",
+        logger.info("user {} in role {} is {}authorized to {}",
             request.getUserPrincipal().getName(), role, ((authorized) ? "" : "NOT "), request.getMethod());
 
         if (!authorized) {
