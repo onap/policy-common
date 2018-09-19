@@ -230,7 +230,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
                 + serviceName + PolicyEndPointProperties.PROPERTY_AAF_SUFFIX);
             boolean aaf = false;
             if (aafString != null && !aafString.isEmpty()) {
-                aaf = Boolean.parseBoolean(httpsString);
+                aaf = Boolean.parseBoolean(aafString);
             }
 
             HttpServletServer service = build(serviceName, https, hostName, servicePort, contextUriPath, swagger, managed);
