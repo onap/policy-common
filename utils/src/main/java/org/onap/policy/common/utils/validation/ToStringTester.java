@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
+ *  Modifications Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,21 +40,21 @@ import org.hamcrest.Matcher;
 @SuppressWarnings("rawtypes")
 public class ToStringTester implements Tester {
 
-    private final Matcher m;
+    private final Matcher matcher;
 
     public ToStringTester() {
-        m = anything();
+        matcher = anything();
     }
 
-    public ToStringTester(final Matcher m) {
-        this.m = m;
+    public ToStringTester(final Matcher matcher) {
+        this.matcher = matcher;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void run(final PojoClass pojoClass) {
         final Class clazz = pojoClass.getClazz();
-        if (anyOf(m).matches(clazz)) {
+        if (anyOf(matcher).matches(clazz)) {
             final Object classInstance = ValidationHelper.getBasicInstance(pojoClass);
 
             Affirm.affirmFalse("Found default toString output",

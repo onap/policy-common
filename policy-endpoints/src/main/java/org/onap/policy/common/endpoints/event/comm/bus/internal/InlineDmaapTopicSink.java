@@ -114,9 +114,6 @@ public class InlineDmaapTopicSink extends InlineBusTopicSink implements DmaapTop
         logger.info("{}: DMAAP SINK created", this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public CommInfrastructure getTopicCommInfrastructure() {
         return Topic.CommInfrastructure.DMAAP;

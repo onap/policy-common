@@ -139,9 +139,6 @@ public class SingleThreadedDmaapTopicSource extends SingleThreadedBusTopicSource
         logger.info("{}: INITTED", this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public CommInfrastructure getTopicCommInfrastructure() {
         return Topic.CommInfrastructure.DMAAP;

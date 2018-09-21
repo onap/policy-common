@@ -80,9 +80,6 @@ public class InlineUebTopicSink extends InlineBusTopicSink implements UebTopicSi
         return builder.toString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public CommInfrastructure getTopicCommInfrastructure() {
         return Topic.CommInfrastructure.UEB;
