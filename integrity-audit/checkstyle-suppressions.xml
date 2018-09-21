@@ -6,6 +6,6 @@
  
 <suppressions>
   <suppress checks="AbbreviationAsWordInName"
-    files="SystemOutLoggerTest.java|Logger4JTest.java|EelfLoggerTest.java|PolicyLoggerTest.java|DroolsPDPMDCInfoTest.java|EventTrackInfoTest.java|DbDAOTest.java|HttpClientTest.java"
+    files="DbDAO.java|DbDAOTest.java"
     lines="1-9999"/>
 </suppressions>

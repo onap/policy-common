@@ -198,7 +198,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     /**
      * Returns the https connector.
      * 
-     * @return
+     * @return the server connector
      */
     public ServerConnector httpsConnector() {
         SslContextFactory sslContextFactory = new SslContextFactory();

@@ -112,9 +112,6 @@ public interface BusPublisher {
             }
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public boolean send(String partitionId, String message) {
             if (message == null) {
@@ -130,9 +127,6 @@ public interface BusPublisher {
             return true;
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public void close() {
             logger.info("{}: CLOSE", this);
@@ -240,9 +234,6 @@ public interface BusPublisher {
             logger.info("{}: CREATION: using protocol {}", this, protocol.getValue());
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public void close() {
             logger.info("{}: CLOSE", this);
@@ -254,9 +245,6 @@ public interface BusPublisher {
             }
         }
 
-        /**
-         * {@inheritDoc}
-         */
         @Override
         public boolean send(String partitionId, String message) {
             if (message == null) {

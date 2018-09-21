@@ -110,7 +110,7 @@ public class GroupValidationResult implements ValidationResult {
     }
 
     /**
-     * Get the value of a field in an object using a getter found with reflection
+     * Get the value of a field in an object using a getter found with reflection.
      * 
      * @param targetObject The object on which to read the field value
      * @param fieldName The name of the field

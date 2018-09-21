@@ -318,12 +318,12 @@ public class HttpClientTest {
             server.waitedStart(10000);
         }
 
-        final HttpClient clientPAP = HttpClient.factory.get("PAP");
-        final Response response = clientPAP.get();
+        final HttpClient clientPap = HttpClient.factory.get("PAP");
+        final Response response = clientPap.get();
         assertTrue(response.getStatus() == 200);
 
-        final HttpClient clientPDP = HttpClient.factory.get("PDP");
-        final Response response2 = clientPDP.get("test");
+        final HttpClient clientPdp = HttpClient.factory.get("PDP");
+        final Response response2 = clientPdp.get("test");
         assertTrue(response2.getStatus() == 500);
     }
 
