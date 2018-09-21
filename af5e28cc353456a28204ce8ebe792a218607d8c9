@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_bcc3a556",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/client/internal/JerseyClient.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-09-21T22:00:36Z",
+      "side": 1,
+      "message": "I think this is correct. Either Sonar or Checkstyle will complain if the \u003cp\u003e tag is not at the start of the paragraph and if there is not a blank line before the \u003cp\u003e tag.",
+      "parentUuid": "1a76adc5_1ca41907",
+      "revId": "af5e28cc353456a28204ce8ebe792a218607d8c9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_dcad41ec",
         "filename": "utils/src/main/java/org/onap/policy/common/utils/validation/ToStringTester.java",
         "patchSetId": 6
