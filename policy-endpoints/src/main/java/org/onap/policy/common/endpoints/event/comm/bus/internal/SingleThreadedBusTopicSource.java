@@ -234,9 +234,6 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
         logger.info("{}: exiting thread", this);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean offer(String event) {
         if (!this.alive) {
@@ -272,42 +269,27 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
                 + topicListeners.size() + ", toString()=" + super.toString() + "]";
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getConsumerGroup() {
         return consumerGroup;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getConsumerInstance() {
         return consumerInstance;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void shutdown() {
         this.stop();
         this.topicListeners.clear();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getFetchTimeout() {
         return fetchTimeout;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public int getFetchLimit() {
         return fetchLimit;

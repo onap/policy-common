@@ -78,9 +78,6 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
      */
     public abstract void init();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean start() {
         logger.info("{}: starting", this);
@@ -102,9 +99,6 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean stop() {
 
@@ -129,9 +123,6 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
         return true;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean send(String message) {
 
@@ -161,26 +152,16 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
         return true;
     }
 
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void setPartitionKey(String partitionKey) {
         this.partitionId = partitionKey;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String getPartitionKey() {
         return this.partitionId;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void shutdown() {
         this.stop();
@@ -207,7 +188,6 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
 
         return true;
     }
-
 
     @Override
     public String toString() {

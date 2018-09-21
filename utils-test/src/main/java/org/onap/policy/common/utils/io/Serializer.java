@@ -124,6 +124,13 @@ public class Serializer {
             oos.writeObject(object);
         }
 
+        /**
+         * Read the object.
+         * 
+         * @param ois input stream
+         * @return the object
+         * @throws IOException throws IO exception if cannot read
+         */
         public Object readObject(ObjectInputStream ois) throws IOException {
             try {
                 return ois.readObject();
