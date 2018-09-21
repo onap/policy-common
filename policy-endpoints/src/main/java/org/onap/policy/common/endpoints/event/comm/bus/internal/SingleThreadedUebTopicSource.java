@@ -36,8 +36,6 @@ public class SingleThreadedUebTopicSource extends SingleThreadedBusTopicSource i
      * @param busTopicParams Parameters object containing all the required inputs
      * @throws IllegalArgumentException An invalid parameter passed in
      */
-
-
     public SingleThreadedUebTopicSource(BusTopicParams busTopicParams) {
 
         super(busTopicParams);
@@ -65,9 +63,6 @@ public class SingleThreadedUebTopicSource extends SingleThreadedBusTopicSource i
                 .allowSelfSignedCerts(this.allowSelfSignedCerts).build());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public CommInfrastructure getTopicCommInfrastructure() {
         return Topic.CommInfrastructure.UEB;

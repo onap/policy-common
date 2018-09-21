@@ -40,5 +40,6 @@ public abstract class AafAuthFilter extends AuthorizationFilter {
     }
 
     protected abstract String getPermissionType(HttpServletRequest request);
+    
     protected abstract String getPermissionInstance(HttpServletRequest request);
 }

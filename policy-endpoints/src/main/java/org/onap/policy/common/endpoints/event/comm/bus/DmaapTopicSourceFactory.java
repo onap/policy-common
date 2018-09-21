@@ -140,10 +140,6 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
      */
     protected HashMap<String, DmaapTopicSource> dmaapTopicSources = new HashMap<>();
 
-
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DmaapTopicSource build(BusTopicParams busTopicParams) {
 
@@ -166,9 +162,6 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<DmaapTopicSource> build(Properties properties) {
 
@@ -383,11 +376,6 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
         return dmaapTopicSourceLst;
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws IllegalArgumentException throws illegal argument exception
-     */
     @Override
     public DmaapTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret) {
         return this.build(BusTopicParams.builder()
@@ -403,19 +391,11 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
                 .build());
     }
 
-    /**
-     * {@inheritDoc}
-     * 
-     * @throws IllegalArgumentException throws illegal argument exception
-     */
     @Override
     public DmaapTopicSource build(List<String> servers, String topic) {
         return this.build(servers, topic, null, null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void destroy(String topic) {
 
@@ -448,9 +428,6 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public DmaapTopicSource get(String topic) {
 
