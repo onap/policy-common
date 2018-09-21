@@ -130,9 +130,6 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
      */
     protected HashMap<String, UebTopicSource> uebTopicSources = new HashMap<>();
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public UebTopicSource build(BusTopicParams busTopicParams) {
         if (busTopicParams.getServers() == null || busTopicParams.getServers().isEmpty()) {
@@ -158,9 +155,6 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<UebTopicSource> build(Properties properties) {
 
@@ -187,18 +181,19 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
                     continue;
                 }
 
-                List<String> serverList = new ArrayList<>(Arrays.asList(servers.split("\\s*,\\s*")));
+                final List<String> serverList = new ArrayList<>(Arrays.asList(servers.split("\\s*,\\s*")));
 
-                String apiKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS + "." + topic
-                        + PolicyEndPointProperties.PROPERTY_TOPIC_API_KEY_SUFFIX);
+                final String apiKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS 
+                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_KEY_SUFFIX);
 
-                String apiSecret = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS + "."
-                        + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_SECRET_SUFFIX);
+                final String apiSecret = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS 
+                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_SECRET_SUFFIX);
 
-                String consumerGroup = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS + "."
-                        + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_GROUP_SUFFIX);
+                final String consumerGroup = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS 
+                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_GROUP_SUFFIX);
 
-                String consumerInstance = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS
+                final String consumerInstance = properties.getProperty(
+                        PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS
                         + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_INSTANCE_SUFFIX);
 
                 String fetchTimeoutString = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS
@@ -269,9 +264,6 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
         return newUebTopicSources;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public UebTopicSource build(List<String> servers, String topic, String apiKey, String apiSecret) {
 
@@ -287,17 +279,11 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
                 .allowSelfSignedCerts(true).build());
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public UebTopicSource build(List<String> servers, String topic) {
         return this.build(servers, topic, null, null);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void destroy(String topic) {
 
@@ -330,9 +316,6 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
         }
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public UebTopicSource get(String topic) {
 

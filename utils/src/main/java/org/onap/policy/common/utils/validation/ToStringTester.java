@@ -39,21 +39,21 @@ import org.hamcrest.Matcher;
 @SuppressWarnings("rawtypes")
 public class ToStringTester implements Tester {
 
-    private final Matcher m;
+    private final Matcher matcher;
 
     public ToStringTester() {
-        m = anything();
+        matcher = anything();
     }
 
-    public ToStringTester(final Matcher m) {
-        this.m = m;
+    public ToStringTester(final Matcher matcher) {
+        this.matcher = matcher;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void run(final PojoClass pojoClass) {
         final Class clazz = pojoClass.getClazz();
-        if (anyOf(m).matches(clazz)) {
+        if (anyOf(matcher).matches(clazz)) {
             final Object classInstance = ValidationHelper.getBasicInstance(pojoClass);
 
             Affirm.affirmFalse("Found default toString output",

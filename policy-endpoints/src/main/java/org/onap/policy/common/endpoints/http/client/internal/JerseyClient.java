@@ -70,7 +70,7 @@ public class JerseyClient implements HttpClient {
     /**
      * Constructor.
      * 
-     * name the name https is it https or not selfSignedCerts are there self signed certs hostname
+     * <p>name the name https is it https or not selfSignedCerts are there self signed certs hostname
      * the hostname port port being used basePath base context userName user password password
      * 
      * @param busTopicParams Input parameters object
@@ -126,7 +126,7 @@ public class JerseyClient implements HttpClient {
                         return new X509Certificate[0];
                     }
 
-                }}, new SecureRandom());
+                } }, new SecureRandom());
                 clientBuilder =
                         ClientBuilder.newBuilder().sslContext(sslContext).hostnameVerifier((host, session) -> true);
             } else {

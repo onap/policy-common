@@ -123,9 +123,6 @@ public class HealthCheckReport {
         this.message = message;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String toString() {
         final StringBuilder builder = new StringBuilder();

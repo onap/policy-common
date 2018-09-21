@@ -20,10 +20,9 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Member variables of this Params class are as follows.
@@ -174,7 +173,7 @@ public class BusTopicParams {
     }
 
     /**
-     * Methods to Check if the property is INVALID
+     * Methods to Check if the property is INVALID.
      */
 
     boolean isEnvironmentInvalid() {
@@ -231,7 +230,7 @@ public class BusTopicParams {
     }
 
     /**
-     * Methods to Check if the property is Valid
+     * Methods to Check if the property is Valid.
      */
 
     boolean isApiKeyValid() {

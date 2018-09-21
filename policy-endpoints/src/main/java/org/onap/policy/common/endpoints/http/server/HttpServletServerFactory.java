@@ -179,33 +179,41 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
                 continue;
             }
 
-            String hostName = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+            final String hostName = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
                     + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX);
 
-            String contextUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+            final String contextUriPath = properties.getProperty(
+                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
                     + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_CONTEXT_URIPATH_SUFFIX);
 
-            String userName = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+            final String userName = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
                     + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX);
 
-            String password = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+            final String password = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
                     + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX);
 
-            String authUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+            final String authUriPath = properties.getProperty(
+                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
                     + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_URIPATH_SUFFIX);
 
-            String restClasses = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+            final String restClasses = properties.getProperty(
+                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
                     + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX);
 
-            String filterClasses = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX);
+            final String filterClasses = properties.getProperty(
+                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX);
 
-            String restPackages = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+            final String restPackages = properties.getProperty(
+                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
                     + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_PACKAGES_SUFFIX);
-            String restUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+            
+            final String restUriPath = properties.getProperty(
+                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
                     + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_URIPATH_SUFFIX);
 
-            String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+            final String managedString = properties.getProperty(
+                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
                     + serviceName + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
             boolean managed = true;
             if (managedString != null && !managedString.isEmpty()) {
@@ -233,14 +241,15 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
                 aaf = Boolean.parseBoolean(aafString);
             }
 
-            HttpServletServer service = build(serviceName, https, hostName, servicePort, contextUriPath, swagger, managed);
+            HttpServletServer service = build(serviceName, https, hostName, servicePort, 
+                    contextUriPath, swagger, managed);
 
             /* authentication method either AAF or HTTP Basic Auth */
 
             if (aaf) {
                 service.addFilterClass(contextUriPath, CadiFilter.class.getCanonicalName());
             } else if (userName != null && !userName.isEmpty() && password != null && !password.isEmpty()) {
-                    service.setBasicAuthentication(userName, password, authUriPath);
+                service.setBasicAuthentication(userName, password, authUriPath);
             }
 
             if (filterClasses != null && !filterClasses.isEmpty()) {

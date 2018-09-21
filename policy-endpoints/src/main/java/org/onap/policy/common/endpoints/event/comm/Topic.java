@@ -68,7 +68,7 @@ public interface Topic extends TopicRegisterable, Startable, Lockable {
     /**
      * Gets the communication infrastructure type.
      * 
-     * @return
+     * @return CommInfrastructure object
      */
     public CommInfrastructure getTopicCommInfrastructure();
 
