@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018 Samsung Electronics Co., Ltd. All rights reserved.
+ * Modifications Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +21,9 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.List;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Member variables of this Params class are as follows.
@@ -174,7 +174,7 @@ public class BusTopicParams {
     }
 
     /**
-     * Methods to Check if the property is INVALID
+     * Methods to Check if the property is INVALID.
      */
 
     boolean isEnvironmentInvalid() {
@@ -231,7 +231,7 @@ public class BusTopicParams {
     }
 
     /**
-     * Methods to Check if the property is Valid
+     * Methods to Check if the property is Valid.
      */
 
     boolean isApiKeyValid() {

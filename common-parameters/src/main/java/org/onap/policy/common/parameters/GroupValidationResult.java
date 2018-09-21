@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
+ *  Modifications Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,7 +111,7 @@ public class GroupValidationResult implements ValidationResult {
     }
 
     /**
-     * Get the value of a field in an object using a getter found with reflection
+     * Get the value of a field in an object using a getter found with reflection.
      * 
      * @param targetObject The object on which to read the field value
      * @param fieldName The name of the field
