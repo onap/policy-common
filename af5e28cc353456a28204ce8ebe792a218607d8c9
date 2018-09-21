@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "1a76adc5_fc903d50",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/client/internal/JerseyClient.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-09-21T22:04:42Z",
+      "side": 1,
+      "message": "It looks to me like this whole line used to be a list of @param items (e.g, \"name\", \"https\", etc.), but was combined into one long line after the \"builder\" pattern was incorporated. It should probably be deleted.",
+      "parentUuid": "1a76adc5_bcc3a556",
+      "revId": "af5e28cc353456a28204ce8ebe792a218607d8c9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1a76adc5_dcad41ec",
         "filename": "utils/src/main/java/org/onap/policy/common/utils/validation/ToStringTester.java",
         "patchSetId": 6
