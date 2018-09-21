@@ -83,9 +83,6 @@ public class Serializer {
              * so we'll just do it with a factory method.
              */
             return clazz.cast(factory.readObject(ois));
-
-        } catch (ClassNotFoundException e) {
-            throw new IOException(e);
         }
     }
 
@@ -127,8 +124,13 @@ public class Serializer {
             oos.writeObject(object);
         }
 
-        public Object readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-            return ois.readObject();
+        public Object readObject(ObjectInputStream ois) throws IOException {
+            try {
+                return ois.readObject();
+                
+            } catch (ClassNotFoundException e) {
+                throw new IOException(e);
+            }
         }
 
     }

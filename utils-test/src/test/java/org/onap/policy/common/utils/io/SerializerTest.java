@@ -163,6 +163,54 @@ public class SerializerTest {
     }
 
     @Test
+    public void testSerialize_BothCloseEx() throws Exception {
+        IOException ex = new IOException("testSerialize_BothCloseEx");
+        IOException ex2 = new IOException("testSerialize_BothCloseEx_2");
+        ObjectOutputStream oos = mock(ObjectOutputStream.class);
+        doThrow(ex2).when(oos).close();
+
+        /*
+         * This stream will throw an exception when close() is invoked. However, close()
+         * is called twice, once by the ObjectOutputStream and once by the code we want to
+         * test. As a result, we'll have the first close() succeed and the second one
+         * fail.
+         */
+        ByteArrayOutputStream out = new ByteArrayOutputStream() {
+            private int nclose = 0;
+
+            @Override
+            public void close() throws IOException {
+                if (++nclose > 1) {
+                    throw ex;
+                }
+            }
+        };
+
+        /*
+         * Use a factory that returns our special stream.
+         */
+        setFactory(new Factory() {
+            @Override
+            public ByteArrayOutputStream makeByteArrayOutputStream() {
+                return out;
+            }
+            
+            @Override
+            public ObjectOutputStream makeObjectOutputStream(ByteArrayOutputStream out) throws IOException {
+                return oos;
+            }
+
+            @Override
+            public void writeObject(Object object, ObjectOutputStream oos) throws IOException {
+                return;
+            }
+        });
+
+        assertEquals(ex2, expectException(() -> Serializer.serialize(new MyObject(130))));
+        
+    }
+
+    @Test
     public void testDeserialize() throws Exception {
         MyObject obj1 = new MyObject(3);
         byte[] data = Serializer.serialize(obj1);
@@ -202,29 +250,6 @@ public class SerializerTest {
     }
 
     @Test
-    public void testDeserialize_ObjectReadClassEx() throws Exception {
-        ClassNotFoundException ex = new ClassNotFoundException("testDeserialize_ObjectReadClassEx");
-
-        /*
-         * Use a factory that throws a ClassNotFoundException when readObject() is
-         * invoked.
-         */
-        setFactory(new Factory() {
-            @Override
-            public Object readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
-                throw ex;
-            }
-        });
-
-        byte[] data = Serializer.serialize(new MyObject(305));
-
-        Exception exwrap = expectException(() -> Serializer.deserialize(MyObject.class, data));
-        assertTrue(exwrap instanceof IOException);
-        assertNotNull(exwrap.getCause());
-        assertEquals(ex, exwrap.getCause());
-    }
-
-    @Test
     public void testDeserialize_ObjectReadEx() throws Exception {
         IOException ex = new IOException("testDeserialize_ObjectReadEx");
 
@@ -233,7 +258,7 @@ public class SerializerTest {
          */
         setFactory(new Factory() {
             @Override
-            public Object readObject(ObjectInputStream ois) throws IOException, ClassNotFoundException {
+            public Object readObject(ObjectInputStream ois) throws IOException {
                 throw ex;
             }
         });
