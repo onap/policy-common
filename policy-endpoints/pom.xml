@@ -42,6 +42,7 @@
         <jackson.version>2.9.5</jackson.version>
         <http.client.version>4.5.5</http.client.version>
         <http.core.version>4.4.4</http.core.version>
+        <powermock.version>1.7.3</powermock.version>
     </properties>
 
     <dependencies>
@@ -187,6 +188,13 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
 
