@@ -168,7 +168,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
                 try {
                     this.init();
                     this.alive = true;
-                    this.busPollerThread = new Thread(this);
+                    this.busPollerThread = makePollerThread();
                     this.busPollerThread.setName(this.getTopicCommInfrastructure() + "-source-" + this.getTopic());
                     busPollerThread.start();
                 } catch (Exception e) {
@@ -179,6 +179,15 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
         }
 
         return this.alive;
+    }
+
+    /**
+     * Makes a new thread to be used for polling.
+     * 
+     * @return a new Thread
+     */
+    protected Thread makePollerThread() {
+        return new Thread(this);
     }
 
     @Override
