@@ -322,7 +322,7 @@ public interface BusConsumer {
                 logger.debug("DMaaP consumer received {} : {}" + response.getResponseCode(),
                         response.getResponseMessage());
 
-                if (response.getResponseCode() == null || !"200".equals(response.getResponseCode())) {
+                if (!"200".equals(response.getResponseCode())) {
 
                     logger.error("DMaaP consumer received: {} : {}", response.getResponseCode(),
                             response.getResponseMessage());
@@ -443,8 +443,9 @@ public interface BusConsumer {
             super(busTopicParams);
 
 
-            final String dme2RouteOffer = busTopicParams.getAdditionalProps()
-                    .get(DmaapTopicSinkFactory.DME2_ROUTE_OFFER_PROPERTY);
+            final String dme2RouteOffer = (busTopicParams.isAdditionalPropsValid()
+                            ? busTopicParams.getAdditionalProps().get(DmaapTopicSinkFactory.DME2_ROUTE_OFFER_PROPERTY)
+                            : null);
 
             if (busTopicParams.isEnvironmentInvalid()) {
                 throw parmException(busTopicParams.getTopic(),

@@ -204,6 +204,8 @@ public interface BusPublisher {
                 this.publisher = new MRSimplerBatchPublisher.Builder().againstUrls(dmaapServers).onTopic(topic).build();
 
                 this.publisher.setProtocolFlag(ProtocolTypeConstants.DME2.getValue());
+            } else {
+                throw new IllegalArgumentException("Invalid DMaaP protocol " + protocol);
             }
 
             this.publisher.logTo(LoggerFactory.getLogger(MRSimplerBatchPublisher.class.getName()));
@@ -361,12 +363,14 @@ public interface BusPublisher {
             props.setProperty("TransportType", "DME2");
             props.setProperty("MethodType", "POST");
 
-            for (Map.Entry<String, String> entry : busTopicParams.getAdditionalProps().entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
+            if(busTopicParams.isAdditionalPropsValid()) {
+                for (Map.Entry<String, String> entry : busTopicParams.getAdditionalProps().entrySet()) {
+                    String key = entry.getKey();
+                    String value = entry.getValue();
 
-                if (value != null) {
-                    props.setProperty(key, value);
+                    if (value != null) {
+                        props.setProperty(key, value);
+                    }
                 }
             }
 
