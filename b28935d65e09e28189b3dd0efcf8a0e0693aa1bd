@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1a76adc5_cb2fabf5",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-09-26T12:20:29Z",
+      "side": 1,
+      "message": "Let\u0027s consolidate this into policy/parent. There is already a declaration in there for org.powermock, but a newer version.",
+      "range": {
+        "startLine": 194,
+        "startChar": 1,
+        "endLine": 199,
+        "endChar": 2
+      },
+      "revId": "b28935d65e09e28189b3dd0efcf8a0e0693aa1bd",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
