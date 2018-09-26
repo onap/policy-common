@@ -32,7 +32,7 @@ public class NetworkUtilTest {
     @Test
     public void test() throws InterruptedException, IOException {
         assertNotNull(NetworkUtil.IPv4_WILDCARD_ADDRESS);
-        assertFalse(NetworkUtil.isTcpPortOpen("localhost", 8080, 1, 5));
+        assertFalse(NetworkUtil.isTcpPortOpen("localhost", 8180, 1, 5));
         assertNotNull(NetworkUtil.getHostname());
         assertNotNull(NetworkUtil.getHostIp());
     }
