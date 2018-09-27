@@ -152,14 +152,23 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
                 return dmaapTopicSources.get(busTopicParams.getTopic());
             }
 
-            DmaapTopicSource dmaapTopicSource =
-                    new SingleThreadedDmaapTopicSource(busTopicParams);
+            DmaapTopicSource dmaapTopicSource = makeSource(busTopicParams);
 
             if (busTopicParams.isManaged()) {
                 dmaapTopicSources.put(busTopicParams.getTopic(), dmaapTopicSource);
             }
             return dmaapTopicSource;
         }
+    }
+
+    /**
+     * Makes a new source.
+     * 
+     * @param busTopicParams parameters to use to configure the source
+     * @return a new source
+     */
+    protected DmaapTopicSource makeSource(BusTopicParams busTopicParams) {
+        return new SingleThreadedDmaapTopicSource(busTopicParams);
     }
 
     @Override
@@ -451,9 +460,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("IndexedDmaapTopicSourceFactory []");
-        return builder.toString();
+        return "IndexedDmaapTopicSourceFactory []";
     }
 
 }
