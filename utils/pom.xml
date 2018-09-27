@@ -32,11 +32,6 @@
     <description>Common Utilities</description>
     <packaging>jar</packaging>
 
-    <properties>
-        <powermock.version>1.6.6</powermock.version>
-        <slf4j.version>1.7.25</slf4j.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -60,32 +55,12 @@
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-api-mockito</artifactId>
-            <version>${powermock.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.powermock</groupId>
             <artifactId>powermock-module-junit4</artifactId>
-            <version>${powermock.version}</version>
             <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>junit</groupId>
-                    <artifactId>junit</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.powermock</groupId>
-                    <artifactId>powermock-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.powermock</groupId>
-                    <artifactId>powermock-reflect</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.javassist</groupId>
-                    <artifactId>javassist</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.openpojo</groupId>
