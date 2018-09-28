@@ -32,7 +32,7 @@ import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 
-public class NoopTopicSinkTest extends BusTopicTestBase {
+public class NoopTopicSinkTest extends TopicTestBase {
 
     private NoopTopicSink sink;
 

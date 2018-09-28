@@ -23,7 +23,7 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS;
+import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_LIMIT_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX;
 
@@ -36,7 +36,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 
-public class DmaapTopicSourceFactoryTest extends DmaapTopicFactoryTestBase<DmaapTopicSource> {
+public class UebTopicSourceFactoryTest extends UebTopicFactoryTestBase<UebTopicSource> {
 
     private SourceFactory factory;
 
@@ -63,6 +63,7 @@ public class DmaapTopicSourceFactoryTest extends DmaapTopicFactoryTestBase<Dmaap
 
     @Test
     public void testBuildProperties() {
+        
         super.testBuildProperties();
 
         // check source-specific parameters that were used
@@ -71,31 +72,31 @@ public class DmaapTopicSourceFactoryTest extends DmaapTopicFactoryTestBase<Dmaap
         assertEquals(MY_CONS_INST, params.getConsumerInstance());
         assertEquals(MY_FETCH_LIMIT, params.getFetchLimit());
         assertEquals(MY_FETCH_TIMEOUT, params.getFetchTimeout());
-
+        
         super.testBuildProperties_Variations();
         super.testBuildProperties_Multiple();
 
         // check default values for source-specific parameters
         checkDefault(PROPERTY_TOPIC_SOURCE_FETCH_LIMIT_SUFFIX,
-            params2 -> params2.getFetchLimit() == DmaapTopicSource.DEFAULT_LIMIT_FETCH,
+            params2 -> params2.getFetchLimit() == UebTopicSource.DEFAULT_LIMIT_FETCH,
             null, "", "invalid-limit-number");
         
         checkDefault(PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX,
-            params2 -> params2.getFetchTimeout() == DmaapTopicSource.DEFAULT_TIMEOUT_MS_FETCH,
+            params2 -> params2.getFetchTimeout() == UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH,
             null, "", "invalid-timeout-number");
     }
 
     @Test
     public void testBuildListOfStringStringStringString() {
-        DmaapTopicSource source1 = factory.build(servers, MY_TOPIC, MY_API_KEY, MY_API_SECRET);
+        UebTopicSource source1 = factory.build(servers, MY_TOPIC, MY_API_KEY, MY_API_SECRET);
         assertNotNull(source1);
 
         // check source-specific parameters that were used
         BusTopicParams params = factory.params.getFirst();
         assertEquals(MY_API_KEY, params.getApiKey());
         assertEquals(MY_API_SECRET, params.getApiSecret());
-        assertEquals(DmaapTopicSource.DEFAULT_LIMIT_FETCH, params.getFetchLimit());
-        assertEquals(DmaapTopicSource.DEFAULT_TIMEOUT_MS_FETCH, params.getFetchTimeout());
+        assertEquals(UebTopicSource.DEFAULT_LIMIT_FETCH, params.getFetchLimit());
+        assertEquals(UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH, params.getFetchTimeout());
     }
 
     @Test
@@ -106,8 +107,10 @@ public class DmaapTopicSourceFactoryTest extends DmaapTopicFactoryTestBase<Dmaap
         BusTopicParams params = factory.params.getFirst();
         assertEquals(null, params.getApiKey());
         assertEquals(null, params.getApiSecret());
-        assertEquals(DmaapTopicSource.DEFAULT_LIMIT_FETCH, params.getFetchLimit());
-        assertEquals(DmaapTopicSource.DEFAULT_TIMEOUT_MS_FETCH, params.getFetchTimeout());
+        assertEquals(UebTopicSource.DEFAULT_LIMIT_FETCH, params.getFetchLimit());
+        assertEquals(UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH, params.getFetchTimeout());
+
+        assertEquals(true, params.isAllowSelfSignedCerts());
     }
 
     @Test
@@ -128,7 +131,7 @@ public class DmaapTopicSourceFactoryTest extends DmaapTopicFactoryTestBase<Dmaap
 
     @Test
     public void testToString() {
-        assertTrue(factory.toString().startsWith("IndexedDmaapTopicSourceFactory ["));
+        assertTrue(factory.toString().startsWith("IndexedUebTopicSourceFactory ["));
     }
 
     @Override
@@ -141,17 +144,17 @@ public class DmaapTopicSourceFactoryTest extends DmaapTopicFactoryTestBase<Dmaap
     }
 
     @Override
-    protected List<DmaapTopicSource> buildTopics(Properties properties) {
+    protected List<UebTopicSource> buildTopics(Properties properties) {
         return factory.build(properties);
     }
 
     @Override
-    protected DmaapTopicSource buildTopic(BusTopicParams params) {
+    protected UebTopicSource buildTopic(BusTopicParams params) {
         return factory.build(params);
     }
 
     @Override
-    protected DmaapTopicSource buildTopic(List<String> servers, String topic) {
+    protected UebTopicSource buildTopic(List<String> servers, String topic) {
         return factory.build(servers, topic);
     }
 
@@ -166,12 +169,12 @@ public class DmaapTopicSourceFactoryTest extends DmaapTopicFactoryTestBase<Dmaap
     }
 
     @Override
-    protected List<DmaapTopicSource> getInventory() {
+    protected List<UebTopicSource> getInventory() {
         return factory.inventory();
     }
 
     @Override
-    protected DmaapTopicSource getTopic(String topic) {
+    protected UebTopicSource getTopic(String topic) {
         return factory.get(topic);
     }
 
@@ -182,17 +185,17 @@ public class DmaapTopicSourceFactoryTest extends DmaapTopicFactoryTestBase<Dmaap
 
     @Override
     protected TopicPropertyBuilder makePropBuilder() {
-        return new DmaapTopicPropertyBuilder(PROPERTY_DMAAP_SOURCE_TOPICS);
+        return new UebTopicPropertyBuilder(PROPERTY_UEB_SOURCE_TOPICS);
     }
 
     /**
      * Factory that records the parameters of all of the sources it creates.
      */
-    private static class SourceFactory extends IndexedDmaapTopicSourceFactory {
+    private static class SourceFactory extends IndexedUebTopicSourceFactory {
         private Deque<BusTopicParams> params = new LinkedList<>();
 
         @Override
-        protected DmaapTopicSource makeSource(BusTopicParams busTopicParams) {
+        protected UebTopicSource makeSource(BusTopicParams busTopicParams) {
             params.add(busTopicParams);
             return super.makeSource(busTopicParams);
         }

@@ -134,7 +134,7 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
                 return uebTopicSinks.get(busTopicParams.getTopic());
             }
 
-            UebTopicSink uebTopicWriter = new InlineUebTopicSink(busTopicParams);
+            UebTopicSink uebTopicWriter = makeSink(busTopicParams);
 
             if (busTopicParams.isManaged()) {
                 uebTopicSinks.put(busTopicParams.getTopic(), uebTopicWriter);
@@ -276,7 +276,7 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
             if (uebTopicSinks.containsKey(topic)) {
                 return uebTopicSinks.get(topic);
             } else {
-                throw new IllegalStateException("UebTopicSink for " + topic + " not found");
+                throw new IllegalArgumentException("UebTopicSink for " + topic + " not found");
             }
         }
     }
@@ -284,6 +284,16 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
     @Override
     public synchronized List<UebTopicSink> inventory() {
         return new ArrayList<>(this.uebTopicSinks.values());
+    }
+
+    /**
+     * Makes a new sink.
+     * 
+     * @param busTopicParams parameters to use to configure the sink
+     * @return a new sink
+     */
+    protected UebTopicSink makeSink(BusTopicParams busTopicParams) {
+        return new InlineUebTopicSink(busTopicParams);
     }
 
 

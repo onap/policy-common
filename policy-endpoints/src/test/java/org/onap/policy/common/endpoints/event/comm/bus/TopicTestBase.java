@@ -28,9 +28,9 @@ import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams.TopicParamsBuilder;
 
 /**
- * Base class for BusTopicXxxTest classes.
+ * Base class for Topic Test classes.
  */
-public class BusTopicTestBase {
+public class TopicTestBase {
 
     public static final String MY_AFT_ENV = "my-aft-env";
     public static final String MY_API_KEY = "my-api-key";

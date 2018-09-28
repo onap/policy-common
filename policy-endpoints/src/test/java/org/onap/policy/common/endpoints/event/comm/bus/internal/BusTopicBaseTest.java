@@ -27,9 +27,9 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.endpoints.event.comm.bus.BusTopicTestBase;
+import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 
-public class BusTopicBaseTest extends BusTopicTestBase {
+public class BusTopicBaseTest extends TopicTestBase {
 
     private BusTopicBaseImpl base;
 

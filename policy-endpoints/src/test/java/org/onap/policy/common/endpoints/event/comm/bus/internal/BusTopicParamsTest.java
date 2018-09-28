@@ -29,10 +29,10 @@ import java.util.LinkedList;
 import java.util.function.BiConsumer;
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.endpoints.event.comm.bus.BusTopicTestBase;
+import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams.TopicParamsBuilder;
 
-public class BusTopicParamsTest extends BusTopicTestBase {
+public class BusTopicParamsTest extends TopicTestBase {
 
     @Before
     public void setUp() {
