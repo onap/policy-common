@@ -101,7 +101,7 @@ class IndexedNoopTopicSinkFactory implements NoopTopicSinkFactory {
     /**
      * Logger.
      */
-    private static Logger logger = LoggerFactory.getLogger(IndexedUebTopicSinkFactory.class);
+    private static Logger logger = LoggerFactory.getLogger(IndexedNoopTopicSinkFactory.class);
 
     /**
      * noop topic sinks map.
@@ -153,12 +153,8 @@ class IndexedNoopTopicSinkFactory implements NoopTopicSinkFactory {
     public NoopTopicSink build(List<String> servers, String topic, boolean managed) {
 
         List<String> noopSinkServers = servers;
-        if (noopSinkServers == null) {
-            noopSinkServers = new ArrayList<>();
-        }
-
-        if (noopSinkServers.isEmpty()) {
-            noopSinkServers.add("noop");
+        if (noopSinkServers == null || noopSinkServers.isEmpty()) {
+            noopSinkServers = Arrays.asList("noop");
         }
 
         if (topic == null || topic.isEmpty()) {

@@ -28,9 +28,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
-import org.onap.policy.common.endpoints.event.comm.bus.BusTopicTestBase;
+import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 
-public class SingleThreadedDmaapTopicSourceTest extends BusTopicTestBase {
+public class SingleThreadedDmaapTopicSourceTest extends TopicTestBase {
     private SingleThreadedDmaapTopicSource source;
 
     /**

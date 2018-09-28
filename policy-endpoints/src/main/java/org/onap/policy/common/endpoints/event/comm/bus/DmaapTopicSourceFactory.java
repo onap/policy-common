@@ -448,7 +448,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
             if (dmaapTopicSources.containsKey(topic)) {
                 return dmaapTopicSources.get(topic);
             } else {
-                throw new IllegalArgumentException("DmaapTopiceSource for " + topic + " not found");
+                throw new IllegalStateException("DmaapTopiceSource for " + topic + " not found");
             }
         }
     }

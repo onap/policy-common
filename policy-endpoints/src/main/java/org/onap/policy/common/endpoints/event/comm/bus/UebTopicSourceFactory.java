@@ -145,7 +145,7 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
                 return uebTopicSources.get(busTopicParams.getTopic());
             }
 
-            UebTopicSource uebTopicSource = new SingleThreadedUebTopicSource(busTopicParams);
+            UebTopicSource uebTopicSource = makeSource(busTopicParams);
 
             if (busTopicParams.isManaged()) {
                 uebTopicSources.put(busTopicParams.getTopic(), uebTopicSource);
@@ -282,6 +282,16 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
     @Override
     public UebTopicSource build(List<String> servers, String topic) {
         return this.build(servers, topic, null, null);
+    }
+
+    /**
+     * Makes a new source.
+     * 
+     * @param busTopicParams parameters to use to configure the source
+     * @return a new source
+     */
+    protected UebTopicSource makeSource(BusTopicParams busTopicParams) {
+        return new SingleThreadedUebTopicSource(busTopicParams);
     }
 
     @Override

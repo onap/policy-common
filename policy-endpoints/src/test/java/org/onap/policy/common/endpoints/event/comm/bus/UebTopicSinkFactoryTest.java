@@ -22,7 +22,7 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS;
+import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -33,7 +33,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 
-public class DmaapTopicSinkFactoryTest extends DmaapTopicFactoryTestBase<DmaapTopicSink> {
+public class UebTopicSinkFactoryTest extends UebTopicFactoryTestBase<UebTopicSink> {
 
     private SinkFactory factory;
 
@@ -61,6 +61,10 @@ public class DmaapTopicSinkFactoryTest extends DmaapTopicFactoryTestBase<DmaapTo
     @Test
     public void testBuildListOfStringString() {
         super.testBuildListOfStringString();
+
+        // check parameters that were used
+        BusTopicParams params = getLastParams();
+        assertEquals(false, params.isAllowSelfSignedCerts());
     }
 
     @Test
@@ -68,9 +72,12 @@ public class DmaapTopicSinkFactoryTest extends DmaapTopicFactoryTestBase<DmaapTo
         super.testBuildProperties();
         super.testBuildProperties_Variations();
         super.testBuildProperties_Multiple();
+        
+        initFactory();
 
-        // check sink-specific parameters that were used
-        BusTopicParams params = factory.params.getFirst();
+        assertEquals(1, buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build()).size());
+
+        BusTopicParams params = getLastParams();
         assertEquals(MY_PARTITION, params.getPartitionId());
     }
 
@@ -92,7 +99,7 @@ public class DmaapTopicSinkFactoryTest extends DmaapTopicFactoryTestBase<DmaapTo
 
     @Test
     public void testToString() {
-        assertTrue(factory.toString().startsWith("IndexedDmaapTopicSinkFactory ["));
+        assertTrue(factory.toString().startsWith("IndexedUebTopicSinkFactory ["));
     }
 
     @Override
@@ -105,17 +112,17 @@ public class DmaapTopicSinkFactoryTest extends DmaapTopicFactoryTestBase<DmaapTo
     }
 
     @Override
-    protected List<DmaapTopicSink> buildTopics(Properties properties) {
+    protected List<UebTopicSink> buildTopics(Properties properties) {
         return factory.build(properties);
     }
 
     @Override
-    protected DmaapTopicSink buildTopic(BusTopicParams params) {
+    protected UebTopicSink buildTopic(BusTopicParams params) {
         return factory.build(params);
     }
 
     @Override
-    protected DmaapTopicSink buildTopic(List<String> servers, String topic) {
+    protected UebTopicSink buildTopic(List<String> servers, String topic) {
         return factory.build(servers, topic);
     }
 
@@ -130,12 +137,12 @@ public class DmaapTopicSinkFactoryTest extends DmaapTopicFactoryTestBase<DmaapTo
     }
 
     @Override
-    protected List<DmaapTopicSink> getInventory() {
+    protected List<UebTopicSink> getInventory() {
         return factory.inventory();
     }
 
     @Override
-    protected DmaapTopicSink getTopic(String topic) {
+    protected UebTopicSink getTopic(String topic) {
         return factory.get(topic);
     }
 
@@ -146,17 +153,17 @@ public class DmaapTopicSinkFactoryTest extends DmaapTopicFactoryTestBase<DmaapTo
 
     @Override
     protected TopicPropertyBuilder makePropBuilder() {
-        return new DmaapTopicPropertyBuilder(PROPERTY_DMAAP_SINK_TOPICS);
+        return new UebTopicPropertyBuilder(PROPERTY_UEB_SINK_TOPICS);
     }
 
     /**
      * Factory that records the parameters of all of the sinks it creates.
      */
-    private static class SinkFactory extends IndexedDmaapTopicSinkFactory {
+    private static class SinkFactory extends IndexedUebTopicSinkFactory {
         private Deque<BusTopicParams> params = new LinkedList<>();
 
         @Override
-        protected DmaapTopicSink makeSink(BusTopicParams busTopicParams) {
+        protected UebTopicSink makeSink(BusTopicParams busTopicParams) {
             params.add(busTopicParams);
             return super.makeSink(busTopicParams);
         }

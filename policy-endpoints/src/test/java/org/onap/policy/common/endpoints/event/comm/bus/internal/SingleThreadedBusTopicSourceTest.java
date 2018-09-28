@@ -41,10 +41,10 @@ import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
-import org.onap.policy.common.endpoints.event.comm.bus.BusTopicTestBase;
+import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FilterableBusConsumer;
 
-public class SingleThreadedBusTopicSourceTest extends BusTopicTestBase {
+public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     private Thread thread;
     private BusConsumer cons;
     private TopicListener listener;
