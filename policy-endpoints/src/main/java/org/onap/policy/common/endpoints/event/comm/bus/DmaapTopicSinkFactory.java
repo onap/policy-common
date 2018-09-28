@@ -150,7 +150,7 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
                 return dmaapTopicWriters.get(busTopicParams.getTopic());
             }
 
-            DmaapTopicSink dmaapTopicSink = new InlineDmaapTopicSink(busTopicParams);
+            DmaapTopicSink dmaapTopicSink = makeSink(busTopicParams);
 
             if (busTopicParams.isManaged()) {
                 dmaapTopicWriters.put(busTopicParams.getTopic(), dmaapTopicSink);
@@ -210,7 +210,7 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
                 final String partitionKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
                                 + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX);
 
-                final String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS 
+                final String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS 
                                 + "." + topic + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
 
                 /* DME2 Properties */
@@ -343,6 +343,16 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
         }
     }
 
+    /**
+     * Makes a new sink.
+     * 
+     * @param busTopicParams parameters to use to configure the sink
+     * @return a new sink
+     */
+    protected DmaapTopicSink makeSink(BusTopicParams busTopicParams) {
+        return new InlineDmaapTopicSink(busTopicParams);
+    }
+
     @Override
     public void destroy(String topic) {
 
@@ -385,7 +395,7 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
             if (dmaapTopicWriters.containsKey(topic)) {
                 return dmaapTopicWriters.get(topic);
             } else {
-                throw new IllegalStateException("DmaapTopicSink for " + topic + " not found");
+                throw new IllegalArgumentException("DmaapTopicSink for " + topic + " not found");
             }
         }
     }
@@ -397,9 +407,7 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("IndexedDmaapTopicSinkFactory []");
-        return builder.toString();
+        return "IndexedDmaapTopicSinkFactory []";
     }
 
 }
