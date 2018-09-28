@@ -36,9 +36,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
-import org.onap.policy.common.endpoints.event.comm.bus.BusTopicTestBase;
+import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 
-public class InlineBusTopicSinkTest extends BusTopicTestBase {
+public class InlineBusTopicSinkTest extends TopicTestBase {
 
     private InlineBusTopicSinkImpl sink;
 

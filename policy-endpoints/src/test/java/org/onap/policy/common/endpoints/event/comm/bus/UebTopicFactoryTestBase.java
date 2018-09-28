@@ -18,48 +18,31 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.endpoints.event.comm.bus.internal;
+package org.onap.policy.common.endpoints.event.comm.bus;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
-import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
+import java.util.Collections;
+import org.onap.policy.common.endpoints.event.comm.Topic;
 
-public class InlineUebTopicSinkTest extends TopicTestBase {
-    private InlineUebTopicSink sink;
+/**
+ * Base class for UebTopicXxxFactory tests.
+ *
+ * @param <T> type of topic managed by the factory
+ */
+public abstract class UebTopicFactoryTestBase<T extends Topic> extends BusTopicFactoryTestBase<T> {
 
-    /**
-     * Creates the object to be tested.
-     */
-    @Before
-    public void setUp() {
-        super.setUp();
+    @Override
+    public void testBuildBusTopicParams_Ex() {
 
-        sink = new InlineUebTopicSink(makeBuilder().build());
+        super.testBuildBusTopicParams_Ex();
+
+        // null servers
+        RuntimeException actual = expectException(() -> buildTopic(makeBuilder().servers(null).build()));
+        assertEquals(IllegalArgumentException.class, actual.getClass());
+
+        // empty servers
+        actual = expectException(() -> buildTopic(makeBuilder().servers(Collections.emptyList()).build()));
+        assertEquals(IllegalArgumentException.class, actual.getClass());
     }
-
-    @After
-    public void tearDown() {
-        sink.shutdown();
-    }
-
-    @Test
-    public void testToString() {
-        assertTrue(sink.toString().startsWith("InlineUebTopicSink ["));
-    }
-
-    @Test
-    public void testInit() {
-        sink.init();
-    }
-
-    @Test
-    public void testGetTopicCommInfrastructure() {
-        assertEquals(CommInfrastructure.UEB, sink.getTopicCommInfrastructure());
-    }
-
 }

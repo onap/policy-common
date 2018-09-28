@@ -25,7 +25,7 @@ import java.util.Properties;
 /**
  * Builder of properties used when configuring topics.
  */
-public class TopicPropertyBuilder {
+public abstract class TopicPropertyBuilder {
     private final Properties properties = new Properties();
     private final String prefix;
     private String topicPrefix;
@@ -37,7 +37,6 @@ public class TopicPropertyBuilder {
      */
     public TopicPropertyBuilder(String prefix) {
         this.prefix = prefix;
-        properties.setProperty(prefix, "");
     }
 
     /**
@@ -53,6 +52,15 @@ public class TopicPropertyBuilder {
     }
 
     /**
+     * Adds a topic to the list of topics, configuring all of its properties with default
+     * values.
+     * 
+     * @param topic the topic to be added
+     * @return this builder
+     */
+    public abstract TopicPropertyBuilder makeTopic(String topic);
+
+    /**
      * Adds a topic to the list of topics. Also sets the current topic so that subsequent
      * invocations of property methods will manipulate the topic's properties.
      *
@@ -62,10 +70,12 @@ public class TopicPropertyBuilder {
     public TopicPropertyBuilder addTopic(String topic) {
         // add topic to the list of topics
         String topicList = properties.getProperty(prefix);
-        if (!topicList.isEmpty()) {
-            topicList += ",";
+        if (topicList == null || topicList.isEmpty()) {
+            topicList = topic;
+        } else {
+            topicList += "," + topic;
         }
-        topicList += topic;
+
         properties.setProperty(prefix, topicList);
 
         setTopic(topic);
