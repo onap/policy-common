@@ -106,4 +106,28 @@ public abstract class DmaapTopicFactoryTestBase<T extends Topic> extends BusTopi
         BusTopicParams params = getLastParams();
         assertEquals(false, params.isAllowSelfSignedCerts());
     }
+
+    /**
+     * Tests exception cases with get(topic).  DMaaP topics are special in that they
+     * throw IllegalArgumentException, even for an unknown topic name; all of the
+     * other Topic Factory classes throw IllegalStateException, thus we override
+     * the default test method.
+     */
+    @Override
+    public void testGet_Ex() {
+        // null topic
+        RuntimeException actual = expectException(() -> getTopic(null));
+        assertEquals("null topic", IllegalArgumentException.class, actual.getClass());
+
+        // empty topic
+        actual = expectException(() -> getTopic(""));
+        assertEquals("empty topic", IllegalArgumentException.class, actual.getClass());
+
+        // unknown topic
+        initFactory();
+        buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build());
+
+        actual = expectException(() -> getTopic(TOPIC2));
+        assertEquals("unknown topic", IllegalArgumentException.class, actual.getClass());
+    }
 }
