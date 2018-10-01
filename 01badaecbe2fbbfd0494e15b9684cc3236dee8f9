@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bada0100_04a0468f",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1784,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-10-01T19:29:19Z",
+      "side": 0,
+      "message": "are we sure asw can never be null?",
+      "revId": "01badaecbe2fbbfd0494e15b9684cc3236dee8f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_c4a9de7c",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1788,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-10-01T19:29:19Z",
+      "side": 0,
+      "message": "are we sure msg can never be null?",
+      "revId": "01badaecbe2fbbfd0494e15b9684cc3236dee8f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
