@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "bada0100_c4f8fe4b",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1776,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2018-10-01T20:12:18Z",
+      "side": 0,
+      "message": "I believe the @NotNull does nothing by themselves, they are pretty much documentation I think.   I think it would be safer to just @NotNull from the parameters all together (to correct the sonar) and leave the \" \u003d\u003d null\" checks as below.    Not sure how this code works, and if guarantees non-null references to be passed in.",
+      "parentUuid": "bada0100_641272b6",
+      "range": {
+        "startLine": 1776,
+        "startChar": 29,
+        "endLine": 1776,
+        "endChar": 91
+      },
+      "revId": "01badaecbe2fbbfd0494e15b9684cc3236dee8f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bada0100_04a0468f",
         "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
         "patchSetId": 3
