@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,8 @@ import javax.ws.rs.core.Response;
 import org.onap.policy.common.capabilities.Startable;
 
 public interface HttpClient extends Startable {
+
+    public static final HttpClientFactory factory = new IndexedHttpClientFactory();
 
     public Response get(String path);
 
@@ -56,8 +58,5 @@ public interface HttpClient extends Startable {
     public String getPassword();
 
     public String getBaseUrl();
-
-
-    public static final HttpClientFactory factory = new IndexedHttpClientFactory();
 
 }
