@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "bada0100_641272b6",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1776,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-10-01T20:01:50Z",
+      "side": 0,
+      "message": "I believe this is why sonar-lint was flagging it as always true. But it wasn\u0027t showing up on sonar.onap.org. Do those params @NotNull mean anything runtime wise? they are javax validation constraints, are they not guaranteed?",
+      "range": {
+        "startLine": 1776,
+        "startChar": 29,
+        "endLine": 1776,
+        "endChar": 91
+      },
+      "revId": "01badaecbe2fbbfd0494e15b9684cc3236dee8f9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "bada0100_04a0468f",
         "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
         "patchSetId": 3
