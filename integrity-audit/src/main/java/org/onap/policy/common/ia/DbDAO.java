@@ -65,6 +65,20 @@ public class DbDAO {
      * Supports designation serialization.
      */
     private static final Object lock = new Object();
+    
+    /*
+     * Common strings.
+     */
+    private static final String RESOURCE_MESSAGE = "Resource: ";
+    private static final String WITH_PERSISTENCE_MESSAGE = " with PersistenceUnit: ";
+    private static final String DBDAO_MESSAGE = "DbDAO: ";
+    private static final String ENCOUNTERED_MESSAGE = "ecountered a problem in execution: ";
+    
+    /*
+     * DB SELECT String.
+     */
+    private static final String SELECT_STRING = "Select i from IntegrityAuditEntity i "
+            + "where i.resourceName=:rn and i.persistenceUnit=:pu";
 
     /**
      * DbDAO Constructor.
@@ -303,7 +317,7 @@ public class DbDAO {
             logger.debug("getIntegrityAuditEntities: Exit, iaeList=" + iaeList);
             return iaeList;
         } catch (Exception e) {
-            String msg = "DbDAO: " + "getIntegrityAuditEntities() " + "ecountered a problem in execution: ";
+            String msg = DBDAO_MESSAGE + "getIntegrityAuditEntities() " + ENCOUNTERED_MESSAGE;
             logger.error(msg, e);
             throw new DbDaoTransactionException(e);
         }
@@ -327,7 +341,7 @@ public class DbDAO {
 
             // if IntegrityAuditEntity entry exists for resourceName and PU, retrieve it
             Query iaequery = em.createQuery(
-                    "Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu");
+                    SELECT_STRING);
             iaequery.setParameter("rn", this.resourceName);
             iaequery.setParameter("pu", this.persistenceUnit);
 
@@ -340,12 +354,12 @@ public class DbDAO {
                 iae = (IntegrityAuditEntity) iaeList.get(0);
                 // refresh the object from DB in case cached data was returned
                 em.refresh(iae);
-                logger.info("Resource: " + this.resourceName + " with PersistenceUnit: " + this.persistenceUnit
+                logger.info(RESOURCE_MESSAGE + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit
                         + " exists");
             } else {
                 // If it does not exist, log an error
-                logger.error("Attempting to setLastUpdated" + " on an entry that does not exist:" + " resource "
-                        + this.resourceName + " with PersistenceUnit: " + this.persistenceUnit);
+                logger.error("Attempting to setLastUpdated" + " on an entry that does not exist: resource "
+                        + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit);
             }
 
             // close the transaction
@@ -355,7 +369,7 @@ public class DbDAO {
 
             return iae;
         } catch (Exception e) {
-            String msg = "DbDAO: " + "setLastUpdated() " + "ecountered a problem in execution: ";
+            String msg = DBDAO_MESSAGE + "setLastUpdated() " + ENCOUNTERED_MESSAGE;
             logger.error(msg + e);
             throw new DbDaoTransactionException(e);
         }
@@ -385,7 +399,7 @@ public class DbDAO {
 
             return iae;
         } catch (Exception e) {
-            String msg = "DbDAO: " + "getIntegrityAuditEntity() " + "ecountered a problem in execution: ";
+            String msg = DBDAO_MESSAGE + "getIntegrityAuditEntity() " + ENCOUNTERED_MESSAGE;
             logger.error(msg + e);
             throw new DbDaoTransactionException(e);
         }
@@ -428,7 +442,7 @@ public class DbDAO {
             // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
             // found, create a new entry
             Query iaequery = em.createQuery(
-                    "Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu");
+                    SELECT_STRING);
             iaequery.setParameter("rn", this.resourceName);
             iaequery.setParameter("pu", this.persistenceUnit);
 
@@ -442,12 +456,12 @@ public class DbDAO {
                 iae = (IntegrityAuditEntity) iaeList.get(0);
                 // refresh the object from DB in case cached data was returned
                 em.refresh(iae);
-                logger.info("Resource: " + this.resourceName + " with PersistenceUnit: " + this.persistenceUnit
+                logger.info(RESOURCE_MESSAGE + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit
                         + " exists and entry be updated");
             } else {
                 // If it does not exist, we also must add teh resourceName, persistenceUnit and
                 // designated values
-                logger.info("Adding resource " + resourceName + " with PersistenceUnit: " + this.persistenceUnit
+                logger.info("Adding resource " + resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit
                         + " to IntegrityAuditEntity table");
                 iae = new IntegrityAuditEntity();
                 iae.setResourceName(this.resourceName);
@@ -470,7 +484,7 @@ public class DbDAO {
             et.commit();
             em.close();
         } catch (Exception e) {
-            String msg = "DbDAO: " + "register() " + "encountered a problem in execution: ";
+            String msg = DBDAO_MESSAGE + "register() " + "encountered a problem in execution: ";
             logger.error(msg + e);
             throw new DbDaoTransactionException(e);
         }
@@ -505,7 +519,7 @@ public class DbDAO {
             // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
             // found, create a new entry
             Query iaequery = em.createQuery(
-                    "Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu");
+                    SELECT_STRING);
             iaequery.setParameter("rn", resourceName);
             iaequery.setParameter("pu", persistenceUnit);
 
@@ -518,7 +532,7 @@ public class DbDAO {
                 iae = (IntegrityAuditEntity) iaeList.get(0);
                 // refresh the object from DB in case cached data was returned
                 em.refresh(iae);
-                logger.info("Resource: " + resourceName + " with PersistenceUnit: " + persistenceUnit
+                logger.info(RESOURCE_MESSAGE + resourceName + WITH_PERSISTENCE_MESSAGE + persistenceUnit
                         + " exists and designated be updated");
                 iae.setDesignated(desig);
 
@@ -528,7 +542,7 @@ public class DbDAO {
             } else {
                 // If it does not exist, log an error
                 logger.error("Attempting to setDesignated(" + desig + ") on an entry that does not exist:"
-                        + " resource " + resourceName + " with PersistenceUnit: " + persistenceUnit);
+                        + " resource " + resourceName + WITH_PERSISTENCE_MESSAGE + persistenceUnit);
             }
 
             // close the transaction
@@ -536,7 +550,7 @@ public class DbDAO {
             // close the EntityManager
             em.close();
         } catch (Exception e) {
-            String msg = "DbDAO: " + "setDesignated() " + "ecountered a problem in execution: ";
+            String msg = DBDAO_MESSAGE + "setDesignated() " + ENCOUNTERED_MESSAGE;
             logger.error(msg + e);
             throw new DbDaoTransactionException(e);
         }
@@ -562,7 +576,7 @@ public class DbDAO {
             // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
             // found, create a new entry
             Query iaequery = em.createQuery(
-                    "Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu");
+                    SELECT_STRING);
             iaequery.setParameter("rn", this.resourceName);
             iaequery.setParameter("pu", this.persistenceUnit);
 
@@ -575,7 +589,7 @@ public class DbDAO {
                 iae = (IntegrityAuditEntity) iaeList.get(0);
                 // refresh the object from DB in case cached data was returned
                 em.refresh(iae);
-                logger.info("Resource: " + this.resourceName + " with PersistenceUnit: " + this.persistenceUnit
+                logger.info(RESOURCE_MESSAGE + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit
                         + " exists and lastUpdated be updated");
                 iae.setLastUpdated(AuditorTime.getInstance().getDate());
 
@@ -585,7 +599,7 @@ public class DbDAO {
             } else {
                 // If it does not exist, log an error
                 logger.error("Attempting to setLastUpdated" + " on an entry that does not exist:" + " resource "
-                        + this.resourceName + " with PersistenceUnit: " + this.persistenceUnit);
+                        + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit);
             }
 
             // close the transaction
@@ -593,7 +607,7 @@ public class DbDAO {
             // close the EntityManager
             em.close();
         } catch (Exception e) {
-            String msg = "DbDAO: " + "setLastUpdated() " + "ecountered a problem in execution: ";
+            String msg = DBDAO_MESSAGE + "setLastUpdated() " + ENCOUNTERED_MESSAGE;
             logger.error(msg + e);
             throw new DbDaoTransactionException(e);
         }
@@ -609,7 +623,7 @@ public class DbDAO {
         try {
 
             if (!IntegrityAudit.isUnitTesting()) {
-                String msg = "DbDAO: " + "deleteAllIntegrityAuditEntities() "
+                String msg = DBDAO_MESSAGE + "deleteAllIntegrityAuditEntities() "
                         + "should only be invoked during JUnit testing";
                 logger.error(msg);
                 throw new DbDaoTransactionException(msg);
@@ -636,7 +650,7 @@ public class DbDAO {
             return returnCode;
 
         } catch (Exception e) {
-            String msg = "DbDAO: " + "deleteAllIntegrityAuditEntities() " + "encountered a problem in execution: ";
+            String msg = DBDAO_MESSAGE + "deleteAllIntegrityAuditEntities() " + "encountered a problem in execution: ";
             logger.error(msg + e);
             throw new DbDaoTransactionException(e);
         }
@@ -729,12 +743,12 @@ public class DbDAO {
                 if (em != null) {
                     em.getTransaction().rollback();
 
-                    String msg = "DbDAO: " + "changeDesignated() " + "caught LockTimeoutException, message="
+                    String msg = "DbDAO: changeDesignated() caught LockTimeoutException, message="
                             + e.getMessage();
                     logger.error(msg + e);
                     throw new DbDaoTransactionException(msg, e);
                 } else {
-                    String msg = "DbDAO: " + "changeDesignated() " + "caught LockTimeoutException, message="
+                    String msg = "DbDAO: changeDesignated() caught LockTimeoutException, message="
                             + e.getMessage() + ". Error rolling back transaction.";
                     logger.error(msg + e);
                     throw new DbDaoTransactionException(msg, e);
@@ -743,11 +757,11 @@ public class DbDAO {
                 if (em != null) {
                     em.getTransaction().rollback();
 
-                    String msg = "DbDAO: " + "changeDesignated() " + "caught Exception, message=" + e.getMessage();
+                    String msg = "DbDAO: changeDesignated() caught Exception, message=" + e.getMessage();
                     logger.error(msg + e);
                     throw new DbDaoTransactionException(msg, e);
                 } else {
-                    String msg = "DbDAO: " + "changeDesignated() " + "caught LockTimeoutException, message="
+                    String msg = "DbDAO: changeDesignated() caught Exception, message="
                             + e.getMessage() + ". Error rolling back transaction.";
                     logger.error(msg + e);
                     throw new DbDaoTransactionException(msg, e);

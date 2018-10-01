@@ -45,6 +45,7 @@ public class StateManagement extends Observable {
     private static final String RESOURCE_NAME = "resource";
     private static final String GET_STATE_MANAGEMENT_ENTITY_QUERY =
             "Select p from StateManagementEntity p where p.resourceName=:" + RESOURCE_NAME;
+    private static final String FIND_MESSAGE = "findStateManagementEntity for {}";
     private static final Logger logger = LoggerFactory.getLogger(StateManagement.class);
     public static final String LOCKED = "locked";
     public static final String UNLOCKED = "unlocked";
@@ -118,7 +119,7 @@ public class StateManagement extends Observable {
             try {
                 // Create a StateManagementEntity object
                 if (logger.isDebugEnabled()) {
-                    logger.debug("findStateManagementEntity for {}", this.resourceName);
+                    logger.debug(FIND_MESSAGE, this.resourceName);
                 }
                 final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
 
@@ -161,7 +162,7 @@ public class StateManagement extends Observable {
             try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
 
                 if (logger.isDebugEnabled()) {
-                    logger.debug("findStateManagementEntity for {}", this.resourceName);
+                    logger.debug(FIND_MESSAGE, this.resourceName);
                 }
                 final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
                 // set state
@@ -202,7 +203,7 @@ public class StateManagement extends Observable {
             try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
 
                 if (logger.isDebugEnabled()) {
-                    logger.debug("findStateManagementEntity for {}", this.resourceName);
+                    logger.debug(FIND_MESSAGE, this.resourceName);
                 }
                 final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
 
@@ -246,7 +247,7 @@ public class StateManagement extends Observable {
             try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
 
                 if (logger.isDebugEnabled()) {
-                    logger.debug("findStateManagementEntity for {}", this.resourceName);
+                    logger.debug(FIND_MESSAGE, this.resourceName);
                 }
                 final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
                 final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
@@ -291,7 +292,7 @@ public class StateManagement extends Observable {
             try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
 
                 if (logger.isDebugEnabled()) {
-                    logger.debug("findStateManagementEntity for {}", this.resourceName);
+                    logger.debug(FIND_MESSAGE, this.resourceName);
                 }
                 final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
                 final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
@@ -338,7 +339,7 @@ public class StateManagement extends Observable {
             try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
 
                 if (logger.isDebugEnabled()) {
-                    logger.debug("findStateManagementEntity for {}", this.resourceName);
+                    logger.debug(FIND_MESSAGE, this.resourceName);
                 }
                 final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
                 final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
@@ -389,7 +390,7 @@ public class StateManagement extends Observable {
             try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
 
                 if (logger.isDebugEnabled()) {
-                    logger.debug("findStateManagementEntity for " + otherResourceName);
+                    logger.debug(FIND_MESSAGE, otherResourceName);
                 }
                 final StateManagementEntity sm = findStateManagementEntity(em, otherResourceName);
                 final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
@@ -436,7 +437,7 @@ public class StateManagement extends Observable {
             try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
 
                 if (logger.isDebugEnabled()) {
-                    logger.debug("findStateManagementEntity for {}", this.resourceName);
+                    logger.debug(FIND_MESSAGE, this.resourceName);
                 }
                 final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
                 final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
@@ -482,7 +483,7 @@ public class StateManagement extends Observable {
             try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
 
                 if (logger.isDebugEnabled()) {
-                    logger.debug("findStateManagementEntity for {}", this.resourceName);
+                    logger.debug(FIND_MESSAGE, this.resourceName);
                 }
                 final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
                 final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
@@ -530,7 +531,7 @@ public class StateManagement extends Observable {
             try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
 
                 if (logger.isDebugEnabled()) {
-                    logger.debug("findStateManagementEntity for {}", this.resourceName);
+                    logger.debug(FIND_MESSAGE, this.resourceName);
                 }
                 sm = findStateManagementEntity(em, this.resourceName);
                 final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
@@ -551,7 +552,7 @@ public class StateManagement extends Observable {
             }
 
             if (logger.isDebugEnabled()) {
-                logger.debug("StateManagement: promote() operation completed, resourceName = ", this.resourceName);
+                logger.debug("StateManagement: promote() operation completed, resourceName = {}", this.resourceName);
             }
             if (sm.getStandbyStatus().equals(StateManagement.COLD_STANDBY)) {
                 final String msg =
@@ -569,15 +570,17 @@ public class StateManagement extends Observable {
     public void demote() throws StateManagementException {
         synchronized (SYNCLOCK) {
             if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK demote() operation for resourceName = \n", this.resourceName);
-                logger.debug("StateManagement: demote() operation started, resourceName = {}", this.resourceName);
+                logger.debug("\nStateManagement: SYNCLOCK demote() operation for resourceName = {}\n", 
+                        this.resourceName);
+                logger.debug("StateManagement: demote() operation started, resourceName = {}", 
+                        this.resourceName);
             }
             final EntityManager em = emf.createEntityManager();
 
             try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
 
                 if (logger.isDebugEnabled()) {
-                    logger.debug("findStateManagementEntity for {}", this.resourceName);
+                    logger.debug(FIND_MESSAGE, this.resourceName);
                 }
                 final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
                 final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
