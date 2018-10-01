@@ -29,6 +29,8 @@ import org.onap.policy.common.capabilities.Startable;
 
 public interface HttpClient extends Startable {
 
+    public static final HttpClientFactory factory = new IndexedHttpClientFactory();
+
     public Response get(String path);
 
     public Response get();
@@ -56,8 +58,5 @@ public interface HttpClient extends Startable {
     public String getPassword();
 
     public String getBaseUrl();
-
-
-    public static final HttpClientFactory factory = new IndexedHttpClientFactory();
 
 }
