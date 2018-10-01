@@ -22,8 +22,6 @@ package org.onap.policy.common.im;
 
 public class IntegrityMonitorProperties {
 
-    private IntegrityMonitorProperties() {}
-
     public static final String DB_DRIVER = "javax.persistence.jdbc.driver";
     public static final String DB_URL = "javax.persistence.jdbc.url";
     public static final String DB_USER = "javax.persistence.jdbc.user";
@@ -57,5 +55,6 @@ public class IntegrityMonitorProperties {
     public static final Boolean ALLNOTWELL = Boolean.FALSE;
     public static final Boolean ALLSEEMSWELL = Boolean.TRUE;
 
+    private IntegrityMonitorProperties() {}
 
 }
