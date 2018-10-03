@@ -34,21 +34,24 @@ public class PolicyAssert {
      *
      * @param clazz class of exception that is expected
      * @param func function
-     * @return object
+     * @return the exception that was thrown
+     * @throws AssertionError if the function does not throw an exception or throws the
+     *         wrong type of exception
      */
-    public static <T> T assertException(Class<T> clazz, RunnableWithEx func) {
+    public static <T extends Throwable> T assertThrows(Class<T> clazz, RunnableWithEx func) {
         try {
             func.run();
-            throw new AssertionError("missing exception");
 
-        } catch (Exception e) {
+        } catch (Throwable thrown) {
             try {
-                return clazz.cast(e);
+                return clazz.cast(thrown);
 
-            } catch (ClassCastException e2) {
-                throw new AssertionError("incorrect exception type", e2);
+            } catch (ClassCastException thrown2) {
+                throw new AssertionError("incorrect exception type", thrown2);
             }
         }
+
+        throw new AssertionError("missing exception");
     }
 
     /**
@@ -56,6 +59,6 @@ public class PolicyAssert {
      */
     @FunctionalInterface
     public static interface RunnableWithEx {
-        public void run() throws Exception;
+        public void run() throws Throwable;
     }
 }
