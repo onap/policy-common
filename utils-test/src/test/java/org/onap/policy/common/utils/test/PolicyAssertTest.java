@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,6 +35,10 @@ public class PolicyAssertTest {
         assertException(IllegalArgumentException.class, () -> {
             throw new IllegalArgumentException(EXPECTED);
         });
+
+        assertException(LinkageError.class, () -> {
+            throw new LinkageError(EXPECTED);
+        });
     }
 
     @Test
@@ -44,11 +48,12 @@ public class PolicyAssertTest {
                 throw new IllegalArgumentException(EXPECTED);
             });
 
-            fail("incorrect exception type");
-
         } catch (AssertionError err) {
             assertTrue(err.getMessage().contains("incorrect exception type"));
+            return;
         }
+
+        fail("incorrect exception type");
     }
 
     @Test
@@ -57,11 +62,12 @@ public class PolicyAssertTest {
             assertException(IllegalArgumentException.class, () -> {
             });
 
-            fail("missing exception");
-
         } catch (AssertionError err) {
             assertTrue(err.getMessage().contains("missing exception"));
+            return;
         }
+
+        fail("missing exception");
     }
 
 }
