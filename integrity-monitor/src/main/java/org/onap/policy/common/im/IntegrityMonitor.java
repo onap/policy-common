@@ -38,7 +38,6 @@ import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
-import javax.validation.constraints.NotNull;
 import org.onap.policy.common.im.jmx.ComponentAdmin;
 import org.onap.policy.common.im.jmx.ComponentAdminMBean;
 import org.onap.policy.common.im.jmx.JmxAgentConnection;
@@ -1783,7 +1782,7 @@ public class IntegrityMonitor {
      * @param msg message to add for the key
      * @throws AllSeemsWellException if an error occurs
      */
-    public void allSeemsWell(@NotNull String key, @NotNull Boolean asw, @NotNull String msg)
+    public void allSeemsWell(String key, Boolean asw, String msg)
             throws AllSeemsWellException {
 
         logger.debug("allSeemsWell entry: key = {}, asw = {}, msg = {}", key, asw, msg);
