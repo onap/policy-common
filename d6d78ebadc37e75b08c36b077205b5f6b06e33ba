@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bada0100_2e8719d9",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2018-10-24T15:09:13Z",
+      "side": 1,
+      "message": "We need to bump to 1.3.1-SNAPSHOT in order to re-release this.",
+      "range": {
+        "startLine": 34,
+        "startChar": 13,
+        "endLine": 34,
+        "endChar": 19
+      },
+      "revId": "d6d78ebadc37e75b08c36b077205b5f6b06e33ba",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
