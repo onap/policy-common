@@ -50,6 +50,18 @@ public interface HttpServletServer extends Startable {
     void setBasicAuthentication(String user, String password, String relativeUriPath);
 
     /**
+     * Enables AAF based authentication.
+     *
+     * @param filterPath filter path
+     */
+    void setAafAuthentication(String filterPath);
+
+    /**
+     * Checks if AAF authentication has been enabled.
+     */
+    boolean isAaf();
+
+    /**
      * Adds a filter at the specified path.
      *
      * @param filterPath filter path

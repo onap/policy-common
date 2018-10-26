@@ -37,10 +37,12 @@ import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.Slf4jRequestLog;
+import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
+import org.onap.aaf.cadi.filter.CadiFilter;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -231,6 +233,21 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     public ServerConnector httpConnector() {
         return new ServerConnector(this.jettyServer);
+    }
+
+    @Override
+    public void setAafAuthentication(String filterPath) {
+        this.addFilterClass(filterPath, CadiFilter.class.getCanonicalName());
+    }
+
+    @Override
+    public boolean isAaf() {
+        for (FilterHolder filter : context.getServletHandler().getFilters()) {
+            if (CadiFilter.class.getCanonicalName().equals(filter.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

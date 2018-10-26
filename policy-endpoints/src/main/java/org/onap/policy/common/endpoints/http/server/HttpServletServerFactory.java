@@ -247,7 +247,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
             /* authentication method either AAF or HTTP Basic Auth */
 
             if (aaf) {
-                service.addFilterClass(contextUriPath, CadiFilter.class.getCanonicalName());
+                service.setAafAuthentication(contextUriPath);
             } else if (userName != null && !userName.isEmpty() && password != null && !password.isEmpty()) {
                 service.setBasicAuthentication(userName, password, authUriPath);
             }

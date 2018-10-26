@@ -21,6 +21,7 @@
 package org.onap.policy.common.endpoints.http.server.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.BufferedReader;
@@ -56,6 +57,7 @@ public class HttpServerTest {
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(5678).isAlive());
+        assertFalse(HttpServletServer.factory.get(5678).isAaf());
 
         String response = http(HttpServletServer.factory.get(5678), "http://localhost:5678/junit/echo/hello");
         assertTrue("hello".equals(response));
@@ -73,6 +75,9 @@ public class HttpServerTest {
 
         assertTrue(HttpServletServer.factory.get(5678).isAlive());
         assertTrue(HttpServletServer.factory.inventory().size() == 1);
+
+        server.setAafAuthentication("/*");
+        assertTrue(HttpServletServer.factory.get(5678).isAaf());
 
         HttpServletServer.factory.destroy(5678);
         assertTrue(HttpServletServer.factory.inventory().size() == 0);
