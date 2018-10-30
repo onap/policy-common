@@ -84,13 +84,6 @@
         <module>policy-endpoints</module>
     </modules>
 
-    <distributionManagement>
-        <site>
-            <id>ecomp-site</id>
-            <url>dav:${nexusproxy}${sitePath}</url>
-        </site>
-    </distributionManagement>
-
     <dependencyManagement>
         <dependencies>
             <dependency>
