@@ -22,6 +22,30 @@
       "revId": "8e4bc6af777ac107a0b8b5956a4ce7384a783638",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bada0100_cbff4a66",
+        "filename": "pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-10-31T19:14:54Z",
+      "side": 1,
+      "message": "I stepped the version in parent to 2.0.1-SNAPSHOT and changed the version in all the other components to 2.0.1-SNAPSHOT as well, that\u0027s what it said to do in the Jira.",
+      "parentUuid": "bada0100_0bdf920e",
+      "range": {
+        "startLine": 27,
+        "startChar": 8,
+        "endLine": 27,
+        "endChar": 41
+      },
+      "revId": "8e4bc6af777ac107a0b8b5956a4ce7384a783638",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
