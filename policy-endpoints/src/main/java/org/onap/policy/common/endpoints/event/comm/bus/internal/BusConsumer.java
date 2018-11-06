@@ -24,10 +24,6 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 import com.att.nsa.cambria.client.CambriaClientBuilders;
 import com.att.nsa.cambria.client.CambriaClientBuilders.ConsumerBuilder;
 import com.att.nsa.cambria.client.CambriaConsumer;
-import com.att.nsa.mr.client.MRClientFactory;
-import com.att.nsa.mr.client.impl.MRConsumerImpl;
-import com.att.nsa.mr.client.response.MRConsumerResponse;
-import com.att.nsa.mr.test.clients.ProtocolTypeConstants;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -37,6 +33,10 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.onap.dmaap.mr.client.MRClientFactory;
+import org.onap.dmaap.mr.client.impl.MRConsumerImpl;
+import org.onap.dmaap.mr.client.response.MRConsumerResponse;
+import org.onap.dmaap.mr.test.clients.ProtocolTypeConstants;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSinkFactory;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;

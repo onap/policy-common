@@ -29,14 +29,14 @@ import static org.mockito.Mockito.when;
 
 import com.att.aft.dme2.internal.apache.commons.collections.IteratorUtils;
 import com.att.nsa.cambria.client.CambriaConsumer;
-import com.att.nsa.mr.client.impl.MRConsumerImpl;
-import com.att.nsa.mr.client.response.MRConsumerResponse;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
+import org.onap.dmaap.mr.client.impl.MRConsumerImpl;
+import org.onap.dmaap.mr.client.response.MRConsumerResponse;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.CambriaConsumerWrapper;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapAafConsumerWrapper;
