@@ -25,9 +25,6 @@ import com.att.nsa.apiClient.http.HttpClient.ConnectionType;
 import com.att.nsa.cambria.client.CambriaBatchingPublisher;
 import com.att.nsa.cambria.client.CambriaClientBuilders;
 import com.att.nsa.cambria.client.CambriaClientBuilders.PublisherBuilder;
-import com.att.nsa.mr.client.impl.MRSimplerBatchPublisher;
-import com.att.nsa.mr.client.response.MRPublisherResponse;
-import com.att.nsa.mr.test.clients.ProtocolTypeConstants;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.net.MalformedURLException;
@@ -39,6 +36,9 @@ import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.StringUtils;
+import org.onap.dmaap.mr.client.impl.MRSimplerBatchPublisher;
+import org.onap.dmaap.mr.client.response.MRPublisherResponse;
+import org.onap.dmaap.mr.test.clients.ProtocolTypeConstants;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSinkFactory;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;

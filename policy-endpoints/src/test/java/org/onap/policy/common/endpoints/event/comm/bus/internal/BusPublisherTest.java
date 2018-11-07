@@ -31,14 +31,14 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.att.nsa.cambria.client.CambriaBatchingPublisher;
-import com.att.nsa.mr.client.impl.MRSimplerBatchPublisher;
-import com.att.nsa.mr.client.response.MRPublisherResponse;
-import com.att.nsa.mr.test.clients.ProtocolTypeConstants;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Test;
+import org.onap.dmaap.mr.client.impl.MRSimplerBatchPublisher;
+import org.onap.dmaap.mr.client.response.MRPublisherResponse;
+import org.onap.dmaap.mr.test.clients.ProtocolTypeConstants;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusPublisher.CambriaPublisherWrapper;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusPublisher.DmaapAafPublisherWrapper;
