@@ -25,7 +25,7 @@ import org.junit.Test;
 /**
  * Test class for PropertyInvalidException.
  */
-public class PropertyInvalidExceptionTest extends BasicPropertyExceptionTester {
+public class PropertyInvalidExceptionTest extends SupportBasicPropertyExceptionTester {
 
     /**
      * Test method for

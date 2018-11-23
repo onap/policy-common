@@ -25,7 +25,7 @@ import org.junit.Test;
 /**
  * Test class for PropertyAccessException.
  */
-public class PropertyAccessExceptionTest extends BasicPropertyExceptionTester {
+public class PropertyAccessExceptionTest extends SupportBasicPropertyExceptionTester {
 
     /**
      * Test method for 

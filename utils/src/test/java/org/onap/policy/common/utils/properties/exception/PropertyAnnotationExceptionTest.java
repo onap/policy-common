@@ -25,7 +25,7 @@ import org.junit.Test;
 /**
  *  Test class for PropertyAnnotationException.
  */
-public class PropertyAnnotationExceptionTest extends BasicPropertyExceptionTester {
+public class PropertyAnnotationExceptionTest extends SupportBasicPropertyExceptionTester {
 
     /**
      * Test method for
