@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_d95e5945",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/exception/BasicPropertyExceptionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-11-23T16:06:19Z",
+      "side": 1,
+      "message": "Based on file naming conventions, this name would seem to indicate that this is a junit test for a class called \"BasicPropertyException\", which it is not.",
+      "revId": "0d2696216a584d3dccef96f187aa7532bb99c9d2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
