@@ -29,7 +29,7 @@ import org.hamcrest.CoreMatchers;
 /**
  * Superclass used to test subclasses of {@link PropertyException}.
  */
-public class BasicPropertyExceptionTester {
+public class BasicPropertyExceptionTest {
 
     /**
      * The "message" that's passed each time an exception is constructed.

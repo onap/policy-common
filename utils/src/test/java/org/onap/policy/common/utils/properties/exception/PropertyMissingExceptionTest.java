@@ -25,7 +25,7 @@ import org.junit.Test;
 /**
  * Test class for PropertyMissingException.
  */
-public class PropertyMissingExceptionTest extends BasicPropertyExceptionTester {
+public class PropertyMissingExceptionTest extends BasicPropertyExceptionTest {
 
     /**
      * Test method for
