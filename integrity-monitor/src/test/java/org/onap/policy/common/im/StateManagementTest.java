@@ -277,7 +277,7 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
     /**
      * Converts a state element to a comma-separated string.
      * 
-     * @param se element to be converted
+     * @param sm element to be converted
      * @return a string representing the element
      */
     private String makeString(final StateManagement sm) {

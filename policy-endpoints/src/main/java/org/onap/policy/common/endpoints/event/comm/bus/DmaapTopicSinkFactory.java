@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
  * DMAAP Topic Sink Factory.
  */
 public interface DmaapTopicSinkFactory {
+
     String DME2_READ_TIMEOUT_PROPERTY = "AFT_DME2_EP_READ_TIMEOUT_MS";
     String DME2_EP_CONN_TIMEOUT_PROPERTY = "AFT_DME2_EP_CONN_TIMEOUT";
     String DME2_ROUNDTRIP_TIMEOUT_PROPERTY = "AFT_DME2_ROUNDTRIP_TIMEOUT_MS";
@@ -48,21 +49,12 @@ public interface DmaapTopicSinkFactory {
     String DME2_SESSION_STICKINESS_REQUIRED_PROPERTY = "sessionstickinessrequired";
 
     /**
-     * Instantiate a new DMAAP Topic Sink, with following params.
-     * servers         list of servers
-     * topic           topic name
-     * apiKey          API Key
-     * apiSecret       API Secret
-     * userName        AAF user name
-     * password        AAF password
-     * partitionKey    Consumer Group
-     * environment     DME2 environment
-     * aftEnvironment  DME2 AFT environment
-     * partner         DME2 Partner
-     * latitude        DME2 latitude
-     * longitude       DME2 longitude
-     * additionalProps additional properties to pass to DME2
-     * managed         is this sink endpoint managed?
+     * Instantiate a new DMAAP Topic Sink, with following params. servers         list of servers topic           topic
+     * name apiKey          API Key apiSecret       API Secret userName        AAF user name password        AAF
+     * password partitionKey    Consumer Group environment     DME2 environment aftEnvironment  DME2 AFT environment
+     * partner         DME2 Partner latitude        DME2 latitude longitude       DME2 longitude additionalProps
+     * additional properties to pass to DME2 managed         is this sink endpoint managed?
+     *
      * @param busTopicParams parameter object
      * @return DmaapTopicSink object
      * @throws IllegalArgumentException if invalid parameters are present
@@ -82,7 +74,7 @@ public interface DmaapTopicSinkFactory {
      * Instantiates a new DMAAP Topic Sink.
      *
      * @param servers list of servers
-     * @param topic   topic name
+     * @param topic topic name
      * @return an DMAAP Topic Sink
      * @throws IllegalArgumentException if invalid parameters are present
      */
@@ -107,7 +99,7 @@ public interface DmaapTopicSinkFactory {
      * @param topic the topic name
      * @return an DMAAP Topic Sink with topic name
      * @throws IllegalArgumentException if an invalid topic is provided
-     * @throws IllegalStateException    if the DMAAP Topic Reader is an incorrect state
+     * @throws IllegalStateException if the DMAAP Topic Reader is an incorrect state
      */
     DmaapTopicSink get(String topic);
 
@@ -126,6 +118,7 @@ public interface DmaapTopicSinkFactory {
  * Factory of DMAAP Reader Topics indexed by topic name.
  */
 class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
+
     private static final String MISSING_TOPIC = "A topic must be provided";
 
     /**
@@ -197,70 +190,70 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
                     serverList = new ArrayList<>();
                 }
 
-                final String apiKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS 
-                                + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_KEY_SUFFIX);
-                final String apiSecret = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS 
-                                + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_SECRET_SUFFIX);
+                final String apiKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_KEY_SUFFIX);
+                final String apiSecret = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_SECRET_SUFFIX);
 
-                final String aafMechId = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS 
-                                + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_AAF_MECHID_SUFFIX);
-                final String aafPassword = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS 
-                                + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_AAF_PASSWORD_SUFFIX);
+                final String aafMechId = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_AAF_MECHID_SUFFIX);
+                final String aafPassword = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_AAF_PASSWORD_SUFFIX);
 
                 final String partitionKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
-                                + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX);
+                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX);
 
-                final String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS 
-                                + "." + topic + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
+                final String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                        + "." + topic + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
 
                 /* DME2 Properties */
 
                 final String dme2Environment = properties.getProperty(
-                                PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                        PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
                                 + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ENVIRONMENT_SUFFIX);
 
                 final String dme2AftEnvironment = properties.getProperty(
-                                PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                        PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
                                 + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_AFT_ENVIRONMENT_SUFFIX);
 
-                final String dme2Partner = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS 
-                                + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_PARTNER_SUFFIX);
+                final String dme2Partner = properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                        + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_PARTNER_SUFFIX);
 
                 final String dme2RouteOffer = properties.getProperty(
-                                PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS 
+                        PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
                                 + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ROUTE_OFFER_SUFFIX);
 
                 final String dme2Latitude = properties.getProperty(
-                                PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS + "."
-                                                + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LATITUDE_SUFFIX);
+                        PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS + "."
+                                + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LATITUDE_SUFFIX);
 
                 final String dme2Longitude = properties.getProperty(
-                                PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS 
+                        PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
                                 + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LONGITUDE_SUFFIX);
 
                 final String dme2EpReadTimeoutMs = properties.getProperty(
-                                PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                        PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
                                 + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_EP_READ_TIMEOUT_MS_SUFFIX);
 
                 final String dme2EpConnTimeout = properties.getProperty(
-                                PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                        PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
                                 + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_EP_CONN_TIMEOUT_SUFFIX);
 
                 final String dme2RoundtripTimeoutMs =
-                                properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS 
-                                + "." + topic 
+                        properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                                + "." + topic
                                 + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ROUNDTRIP_TIMEOUT_MS_SUFFIX);
 
                 final String dme2Version = properties.getProperty(
-                                PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS + "."
-                                                + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_VERSION_SUFFIX);
+                        PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS + "."
+                                + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_VERSION_SUFFIX);
 
                 final String dme2SubContextPath = properties.getProperty(
-                                PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                        PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
                                 + "." + topic + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_SUB_CONTEXT_PATH_SUFFIX);
 
                 final String dme2SessionStickinessRequired =
-                                properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
+                        properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS
                                 + "." + topic
                                 + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_SESSION_STICKINESS_REQUIRED_SUFFIX);
 
@@ -307,7 +300,6 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
                     useHttps = Boolean.parseBoolean(useHttpsString);
                 }
 
-
                 String allowSelfSignedCertsString =
                         properties.getProperty(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS + "." + topic
                                 + PolicyEndPointProperties.PROPERTY_ALLOW_SELF_SIGNED_CERTIFICATES_SUFFIX);
@@ -345,7 +337,7 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
 
     /**
      * Makes a new sink.
-     * 
+     *
      * @param busTopicParams parameters to use to configure the sink
      * @return a new sink
      */
