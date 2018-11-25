@@ -134,7 +134,6 @@ public class IntegrityMonitorTestBase {
     /**
      * Saves current configuration information and then sets new values.
      * 
-     * @param dbDriver the name of the DB Driver class
      * @param dbUrl the URL to the DB
      * @throws IOException if an IO error occurs
      */

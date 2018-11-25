@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -48,15 +48,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * IntegrityMonitor Main class for monitoring the integrity of a resource and managing its state.
- * State management follows the X.731 ITU standard.
+ * IntegrityMonitor Main class for monitoring the integrity of a resource and managing its state. State management
+ * follows the X.731 ITU standard.
  */
 public class IntegrityMonitor {
+
     private static final Logger logger = LoggerFactory.getLogger(IntegrityMonitor.class.getName());
 
     // only allow one instance of IntegrityMonitor
     private static IntegrityMonitor instance = null;
-    
+
     /*
      * Common strings
      */
@@ -65,17 +66,17 @@ public class IntegrityMonitor {
     private static final String PROPERTY_EXCEPTION_STRING = "IntegrityMonitor Property Exception: ";
     private static final String EXCEPTION_STRING = "IntegrityMonitor threw exception.";
     private static final String STATE_CHECK_STRING = "IntegrityMonitor.stateCheck(): "
-            + "Failed to diableFail dependent resource = ";
+            + "Failed to disableFail dependent resource = ";
     private static final String RESOURCE_STRING = "Resource ";
     private static final String LC_RESOURCE_STRING = "resource";
-    
+
     /*
      * Query String
      */
     private static final String QUERY_STRING = "Select f from ForwardProgressEntity f where f.resourceName=:rn";
-    
+
     // may be changed by junit tests
-    private static Factory factory = new Factory();
+    private static final Factory factory = new Factory();
 
     private static String resourceName = null;
     boolean alarmExists = false;
@@ -91,9 +92,9 @@ public class IntegrityMonitor {
     private EntityManager em;
 
     // Persistence Unit for JPA
-    public static final String PERSISTENCE_UNIT = "operationalPU";
+    private static final String PERSISTENCE_UNIT = "operationalPU";
 
-    public static final long CYCLE_INTERVAL_MILLIS = 1000L;
+    static final long CYCLE_INTERVAL_MILLIS = 1000L;
 
     private StateManagement stateManager = null;
 
@@ -143,7 +144,7 @@ public class IntegrityMonitor {
     private static long writeFpcIntervalMs = toMillis(IntegrityMonitorProperties.DEFAULT_WRITE_FPC_INTERVAL);
     // check the health of dependencies
     private static long checkDependencyIntervalMs =
-                    toMillis(IntegrityMonitorProperties.DEFAULT_CHECK_DEPENDENCY_INTERVAL);
+            toMillis(IntegrityMonitorProperties.DEFAULT_CHECK_DEPENDENCY_INTERVAL);
 
     // A lead subsystem will have dependency groups with resource names in the
     // properties file.
@@ -190,11 +191,10 @@ public class IntegrityMonitor {
     private Map<String, String> allNotWellMap;
 
     /**
-     * IntegrityMonitor constructor. It is invoked from the getInstance() method in this class or
-     * from the constructor of a child or sub-class. A class can extend the IntegrityMonitor class
-     * if there is a need to override any of the base methods (ex. subsystemTest()). Only one
-     * instance is allowed to be created per resource name.
-     * 
+     * IntegrityMonitor constructor. It is invoked from the getInstance() method in this class or from the constructor
+     * of a child or sub-class. A class can extend the IntegrityMonitor class if there is a need to override any of the
+     * base methods (ex. subsystemTest()). Only one instance is allowed to be created per resource name.
+     *
      * @param resourceName The resource name of the resource
      * @param properties a set of properties passed in from the resource
      * @throws IntegrityMonitorException if any errors are encountered in the constructor
@@ -229,8 +229,8 @@ public class IntegrityMonitor {
         // Did it get created?
         //
         if (emf == null) {
-            logger.error("Error creating IM entity manager factory with persistence unit: {}", 
-                            factory.getPersistenceUnit());
+            logger.error("Error creating IM entity manager factory with persistence unit: {}",
+                    factory.getPersistenceUnit());
             throw new IntegrityMonitorException("Unable to create IM Entity Manager Factory");
         }
 
@@ -323,7 +323,7 @@ public class IntegrityMonitor {
         }
 
         try {
-            // create instance of StateMangement class and pass emf to it
+            // create instance of StateManagement class and pass emf to it
             stateManager = new StateManagement(emf, resourceName);
 
             /**
@@ -352,14 +352,13 @@ public class IntegrityMonitor {
     }
 
     /**
-     * Get an instance of IntegrityMonitor for a given resource name. It creates one if it does not
-     * exist. Only one instance is allowed to be created per resource name.
-     * 
+     * Get an instance of IntegrityMonitor for a given resource name. It creates one if it does not exist. Only one
+     * instance is allowed to be created per resource name.
+     *
      * @param resourceName The resource name of the resource
      * @param properties a set of properties passed in from the resource
      * @return The new instance of IntegrityMonitor
-     * @throws IntegrityMonitorException if unable to create jmx url or the constructor returns an
-     *         exception
+     * @throws IntegrityMonitorException if unable to create jmx url or the constructor returns an exception
      */
     public static IntegrityMonitor getInstance(String resourceName, Properties properties)
             throws IntegrityMonitorException {
@@ -381,7 +380,7 @@ public class IntegrityMonitor {
 
     /**
      * Get the single instance.
-     * 
+     *
      * @return the instance
      * @throws IntegrityMonitorException if no instance exists
      */
@@ -397,8 +396,8 @@ public class IntegrityMonitor {
     }
 
     /**
-     * This is a facility used by JUnit testing to destroy the IntegrityMonitor instance before
-     * creating a new one. It waits a bit to allow the FPManager to fully exit.
+     * This is a facility used by JUnit testing to destroy the IntegrityMonitor instance before creating a new one. It
+     * waits a bit to allow the FPManager to fully exit.
      */
     public static void deleteInstance() throws IntegrityMonitorException {
         logger.debug("deleteInstance() called");
@@ -413,7 +412,7 @@ public class IntegrityMonitor {
                     // Make sure it has exited
                     fpm.join(2000L);
                 } catch (InterruptedException e) {
-                    logger.error("deleteInstance: Interrupted while waiting for FPManaager to fully exit", e);
+                    logger.error("deleteInstance: Interrupted while waiting for FPManager to fully exit", e);
                     Thread.currentThread().interrupt();
                 }
 
@@ -473,16 +472,15 @@ public class IntegrityMonitor {
         // assemble the jmx url
         String jmxUrl = "service:jmx:rmi:///jndi/rmi://" + jmxFqdn + ":" + port + "/jmxrmi";
 
-        logger.debug("IntegerityMonitor - jmx url={}", jmxUrl);
+        logger.debug("IntegrityMonitor - jmx url={}", jmxUrl);
 
         return jmxUrl;
     }
 
     /**
-     * evaluateSanity() is designed to be called by an external entity to evealuate the sanity of
-     * the node. It checks the operational and administrative states and the standby status. If the
-     * operational state is disabled, it will include the dependencyCheckErrorMsg which includes
-     * information about any dependency (node) which has failed.
+     * evaluateSanity() is designed to be called by an external entity to evaluate the sanity of the node. It checks the
+     * operational and administrative states and the standby status. If the operational state is disabled, it will
+     * include the dependencyCheckErrorMsg which includes information about any dependency (node) which has failed.
      */
     public void evaluateSanity() throws IntegrityMonitorException {
         logger.debug("evaluateSanity called ....");
@@ -516,14 +514,13 @@ public class IntegrityMonitor {
     }
 
     /**
-     * This method checks the forward progress counter and the state of a dependency. If the
-     * dependency is unavailable or failed, an error message is created which is checked when
-     * evaluateSanity interface is called. If the error message is set then the evaluateSanity will
-     * return an error.
-     * 
+     * This method checks the forward progress counter and the state of a dependency. If the dependency is unavailable
+     * or failed, an error message is created which is checked when evaluateSanity interface is called. If the error
+     * message is set then the evaluateSanity will return an error.
+     *
      * @param dep the dependency
      */
-    public String stateCheck(String dep) {
+    private String stateCheck(String dep) {
         logger.debug("checking state of dependent resource: {}", dep);
         String errorMsg = null;
         ForwardProgressEntity forwardProgressEntity = null;
@@ -632,9 +629,7 @@ public class IntegrityMonitor {
                     String msg = STATE_CHECK_STRING + dep
                             + "; " + " forwardProgressEntity == null.";
                     logger.error("{}", msg);
-                }
-
-                else {
+                } else {
                     String msg = STATE_CHECK_STRING + dep
                             + "; " + " stateManagementEntity == null.";
                     logger.error("{}", msg);
@@ -739,7 +734,7 @@ public class IntegrityMonitor {
 
     /**
      * Get all forward progress entities.
-     * 
+     *
      * @return list of all forward progress entities
      */
     public List<ForwardProgressEntity> getAllForwardProgressEntity() {
@@ -856,7 +851,7 @@ public class IntegrityMonitor {
 
     /**
      * Perform a dependency check.
-     * 
+     *
      * @return an error message detailing any issues found
      */
     public String dependencyCheck() {
@@ -979,7 +974,7 @@ public class IntegrityMonitor {
                                         + " to enableNoDependency");
                         if (stateManager.getAvailStatus() != null
                                 && ((stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY)
-                                        || (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED))) {
+                                || (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED))) {
                             // Note: redundant calls are made by
                             // refreshStateAudit
                             this.stateManager.enableNoDependency();
@@ -1005,7 +1000,7 @@ public class IntegrityMonitor {
                     logger.debug("There are no dependents. Updating this resource's state to enableNoDependency");
                     if (stateManager.getAvailStatus() != null
                             && ((stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY)
-                                    || (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED))) {
+                            || (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED))) {
                         // Note: redundant calls are made by refreshStateAudit
                         this.stateManager.enableNoDependency();
                     }
@@ -1033,11 +1028,11 @@ public class IntegrityMonitor {
     }
 
     /**
-     * Execute a test transaction. It is called when the test transaction timer fires. It could be
-     * overridden to provide additional test functionality. If overridden, the overriding method
-     * must invoke startTransaction() and endTransaction() and check if the allNotWellMap is empty.
+     * Execute a test transaction. It is called when the test transaction timer fires. It could be overridden to provide
+     * additional test functionality. If overridden, the overriding method must invoke startTransaction() and
+     * endTransaction() and check if the allNotWellMap is empty.
      */
-    public void testTransaction() {
+    private void testTransaction() {
         synchronized (testTransactionLock) {
             logger.debug("testTransaction: entry");
             //
@@ -1050,8 +1045,8 @@ public class IntegrityMonitor {
     }
 
     /**
-     * Additional testing for subsystems that do not have a /test interface (for ex. 3rd party
-     * processes like elk). This method would be overridden by the subsystem.
+     * Additional testing for subsystems that do not have a /test interface (for ex. 3rd party processes like elk). This
+     * method would be overridden by the subsystem.
      */
     public void subsystemTest() throws IntegrityMonitorException {
         // Testing provided by subsystem
@@ -1059,9 +1054,8 @@ public class IntegrityMonitor {
     }
 
     /**
-     * Checks admin state and resets transaction timer. Called by application at the start of a
-     * transaction.
-     * 
+     * Checks admin state and resets transaction timer. Called by application at the start of a transaction.
+     *
      * @throws AdministrativeStateException throws admin state exception if resource is locked
      * @throws StandbyStatusException if resource is in standby
      */
@@ -1078,7 +1072,7 @@ public class IntegrityMonitor {
 
             if ((stateManager.getStandbyStatus() != null)
                     && (stateManager.getStandbyStatus().equals(StateManagement.HOT_STANDBY)
-                            || stateManager.getStandbyStatus().equals(StateManagement.COLD_STANDBY))) {
+                    || stateManager.getStandbyStatus().equals(StateManagement.COLD_STANDBY))) {
                 String msg = RESOURCE_STRING + resourceName + " is standby";
 
                 throw new StandbyStatusException("IntegrityMonitor Standby Status Exception: " + msg);
@@ -1090,8 +1084,8 @@ public class IntegrityMonitor {
     }
 
     /**
-     * Increment the local forward progress counter. Called by application at the end of each
-     * transaction (successful or not).
+     * Increment the local forward progress counter. Called by application at the end of each transaction (successful or
+     * not).
      */
     public void endTransaction() {
         synchronized (endTransactionLock) {
@@ -1185,7 +1179,7 @@ public class IntegrityMonitor {
 
     /**
      * Read and validate properties.
-     * 
+     *
      * @throws IntegrityMonitorPropertiesException if a property is invalid
      */
     private static void validateProperties(Properties prop) throws IntegrityMonitorPropertiesException {
@@ -1343,7 +1337,7 @@ public class IntegrityMonitor {
 
     /**
      * Update properties.
-     * 
+     *
      * @param newprop the new properties
      */
     public static void updateProperties(Properties newprop) {
@@ -1369,9 +1363,8 @@ public class IntegrityMonitor {
     }
 
     /**
-     * Look for "Forward Progress" -- if the 'FPMonitor' is stalled for too long, the operational
-     * state is changed to 'Disabled', and an alarm is set. The state is restored when forward
-     * progress continues.
+     * Look for "Forward Progress" -- if the 'FPMonitor' is stalled for too long, the operational state is changed to
+     * 'Disabled', and an alarm is set. The state is restored when forward progress continues.
      */
     private void fpMonitorCycle() {
         logger.debug("fpMonitorCycle(): entry");
@@ -1430,8 +1423,8 @@ public class IntegrityMonitor {
     }
 
     /**
-     * Look for "Forward Progress" on other nodes. If they are not making forward progress, check
-     * their operational state. If it is not disabled, then disable them.
+     * Look for "Forward Progress" on other nodes. If they are not making forward progress, check their operational
+     * state. If it is not disabled, then disable them.
      */
     private void stateAudit() {
         logger.debug("IntegrityMonitor.stateAudit(): entry");
@@ -1450,8 +1443,8 @@ public class IntegrityMonitor {
             return;
         }
         if (!stateManager.getStandbyStatus().equals(StateManagement.NULL_VALUE)
-            && stateManager.getStandbyStatus() != null
-            && !stateManager.getStandbyStatus().equals(StateManagement.PROVIDING_SERVICE)) {
+                && stateManager.getStandbyStatus() != null
+                && !stateManager.getStandbyStatus().equals(StateManagement.PROVIDING_SERVICE)) {
             logger.debug("IntegrityMonitor.stateAudit(): NOT PROVIDING_SERVICE. returning");
             return;
         }
@@ -1504,7 +1497,7 @@ public class IntegrityMonitor {
             if (diffMs > staleMs) {
                 // ForwardProgress is stale. Disable it
                 // Start a transaction
-                logger.debug("IntegrityMonitor.executeStateAudit(): resource = {}, FPC is stale. Disabling it", 
+                logger.debug("IntegrityMonitor.executeStateAudit(): resource = {}, FPC is stale. Disabling it",
                         fpe.getResourceName());
                 EntityTransaction et = em.getTransaction();
                 et.begin();
@@ -1648,9 +1641,9 @@ public class IntegrityMonitor {
     /*
      * This is a simple refresh audit which is periodically run to assure that the states and status
      * attributes are aligned and notifications are sent to any listeners. It is possible for
-     * state/status to get out of synch and notified systems to be out of synch due to database
+     * state/status to get out of sync and notified systems to be out of synch due to database
      * corruption (manual or otherwise) or because a node became isolated.
-     * 
+     *
      * When the operation (lock/unlock) is called, it will cause a re-evaluation of the state and
      * send a notification to all registered observers.
      */
@@ -1703,11 +1696,11 @@ public class IntegrityMonitor {
     }
 
     /**
-     * The following nested class periodically performs the forward progress check, checks
-     * dependencies, does a refresh state audit and runs the stateAudit.
+     * The following nested class periodically performs the forward progress check, checks dependencies, does a refresh
+     * state audit and runs the stateAudit.
      */
     class FpManager extends Thread {
-        
+
         private volatile boolean stopRequested = false;
 
         // Constructor - start FP manager thread
@@ -1725,8 +1718,8 @@ public class IntegrityMonitor {
 
                 while (!stopRequested) {
                     MonitorTime.getInstance().sleep(CYCLE_INTERVAL_MILLIS);
-                    
-                    IntegrityMonitor.this.runOnce();
+
+                    this.runOnce();
                     factory.monitorCompleted();
                 }
 
@@ -1736,49 +1729,48 @@ public class IntegrityMonitor {
             }
         }
 
-        public void stopAndExit() {
+        void stopAndExit() {
             stopRequested = true;
             this.interrupt();
         }
-    }
 
-    private void runOnce() {
-        try {
-            logger.debug("FPManager calling fpMonitorCycle()");
-            // check forward progress timer
-            fpMonitorCycle();
+        private void runOnce() {
+            try {
+                logger.debug("FPManager calling fpMonitorCycle()");
+                // check forward progress timer
+                fpMonitorCycle();
 
-            logger.debug("FPManager calling checkTestTransaction()");
-            // check test transaction timer
-            checkTestTransaction();
+                logger.debug("FPManager calling checkTestTransaction()");
+                // check test transaction timer
+                checkTestTransaction();
 
-            logger.debug("FPManager calling checkWriteFpc()");
-            // check write Fpc timer
-            checkWriteFpc();
+                logger.debug("FPManager calling checkWriteFpc()");
+                // check write Fpc timer
+                checkWriteFpc();
 
-            logger.debug("FPManager calling checkDependentHealth()");
-            // check dependency health
-            checkDependentHealth();
+                logger.debug("FPManager calling checkDependentHealth()");
+                // check dependency health
+                checkDependentHealth();
 
-            logger.debug("FPManager calling refreshStateAudit()");
-            // check if it is time to run the refreshStateAudit
-            refreshStateAudit();
+                logger.debug("FPManager calling refreshStateAudit()");
+                // check if it is time to run the refreshStateAudit
+                refreshStateAudit();
 
-            logger.debug("FPManager calling stateAudit()");
-            // check if it is time to run the stateAudit
-            stateAudit();
+                logger.debug("FPManager calling stateAudit()");
+                // check if it is time to run the stateAudit
+                stateAudit();
 
-        } catch (Exception e) {
-            logger.error("Ignore FPManager thread processing timer(s) exception: ", e);
+            } catch (Exception e) {
+                logger.error("Ignore FPManager thread processing timer(s) exception: ", e);
+            }
         }
     }
 
     /**
      * Set all seems well or not well for the specified key.
-     * 
+     *
      * @param key the key
-     * @param asw <code>true</code> if all seems well for the key, <code>false</code> if all seems
-     *        not well for the key
+     * @param asw <code>true</code> if all seems well for the key, <code>false</code> if all seems not well for the key
      * @param msg message to add for the key
      * @throws AllSeemsWellException if an error occurs
      */
@@ -1855,10 +1847,10 @@ public class IntegrityMonitor {
             logger.debug("allSeemsWell exit");
         }
     }
-    
+
     /**
-     * Converts the given value to milliseconds using the current {@link #propertyUnits}.
-     * 
+     * Converts the given value to milliseconds using the current propertyUnits.
+     *
      * @param value value to be converted, or -1
      * @return the value, in milliseconds, or -1
      */
@@ -1880,9 +1872,8 @@ public class IntegrityMonitor {
     public static class Factory {
 
         /**
-         * Indicates that the {@link FpManager#run()} method has started. This method
-         * simply returns.
-         * 
+         * Indicates that the {@link FpManager#run()} method has started. This method simply returns.
+         *
          * @throws InterruptedException can be interrupted
          */
         public void runStarted() throws InterruptedException {
@@ -1891,7 +1882,7 @@ public class IntegrityMonitor {
 
         /**
          * Indicates that a monitor activity has completed. This method simply returns.
-         * 
+         *
          * @throws InterruptedException can be interrupted
          */
         public void monitorCompleted() throws InterruptedException {
@@ -1900,7 +1891,7 @@ public class IntegrityMonitor {
 
         /**
          * Get persistence unit.
-         * 
+         *
          * @return the persistence unit to be used
          */
         public String getPersistenceUnit() {
@@ -1912,11 +1903,11 @@ public class IntegrityMonitor {
      * The remaining methods are used by JUnit tests.
      */
 
-    public static boolean isUnitTesting() {
+    private static boolean isUnitTesting() {
         return isUnitTesting;
     }
 
-    public static void setUnitTesting(boolean isUnitTesting) {
+    static void setUnitTesting(boolean isUnitTesting) {
         IntegrityMonitor.isUnitTesting = isUnitTesting;
     }
 }
