@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_5fbd6967",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1722,
+      "author": {
+        "id": 2543
+      },
+      "writtenOn": "2018-11-25T14:09:27Z",
+      "side": 1,
+      "message": "reported by sonar to move method inside",
+      "range": {
+        "startLine": 1721,
+        "startChar": 0,
+        "endLine": 1722,
+        "endChar": 35
+      },
+      "revId": "48db96b20ef29a4bcf871edbed43516c52db5ac7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
