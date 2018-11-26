@@ -16,6 +16,24 @@
       "revId": "0d2696216a584d3dccef96f187aa7532bb99c9d2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_42e112fd",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/exception/BasicPropertyExceptionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2493
+      },
+      "writtenOn": "2018-11-26T05:19:12Z",
+      "side": 1,
+      "message": "true, any suggestions how we should rename this type of classes?",
+      "parentUuid": "9adffdf1_d95e5945",
+      "revId": "0d2696216a584d3dccef96f187aa7532bb99c9d2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
