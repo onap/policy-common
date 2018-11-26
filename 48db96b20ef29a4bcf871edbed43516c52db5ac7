@@ -22,6 +22,40 @@
       "revId": "48db96b20ef29a4bcf871edbed43516c52db5ac7",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_a8153de6",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-11-26T13:55:06Z",
+      "side": 1,
+      "message": "why remove \"@link\"?  That provided a hyperlink to the field and, in addition, would automatically be updated if the field name is changed",
+      "revId": "48db96b20ef29a4bcf871edbed43516c52db5ac7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_c8e76111",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/DmaapTopicSinkFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-11-26T13:55:06Z",
+      "side": 1,
+      "message": "probably need to use HTML markup - this is no longer legible",
+      "revId": "48db96b20ef29a4bcf871edbed43516c52db5ac7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
