@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import org.onap.policy.common.im.IntegrityMonitor.Factory;
 import org.onap.policy.common.utils.jpa.EntityTransCloser;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
 import org.onap.policy.common.utils.time.CurrentTime;
@@ -53,9 +52,9 @@ public class IntegrityMonitorTestBase {
     private static Logger logger = LoggerFactory.getLogger(IntegrityMonitorTestBase.class);
     
     /**
-     * Name of the factory field within the IntegrityMonitor class.
+     * Name of the instance field within the IntegrityMonitor class.
      */
-    public static final String FACTORY_FIELD = "factory";
+    public static final String IM_INSTANCE_FIELD = "instance";
     
     /**
      * Name of the instance field within the MonitorTime class.
@@ -121,11 +120,6 @@ public class IntegrityMonitorTestBase {
     private static Object savedJmxPort;
 
     /**
-     * Saved factory, to be restored once all tests complete.
-     */
-    private static Factory savedFactory;
-
-    /**
      * Saved time accessor, to be restored once all tests complete.
      */
     private static CurrentTime savedTime;
@@ -152,13 +146,10 @@ public class IntegrityMonitorTestBase {
         IntegrityMonitorTestBase.dbUrl = dbUrl;
 
         // save data that we have to restore at the end of the test
-        savedFactory = Whitebox.getInternalState(IntegrityMonitor.class, FACTORY_FIELD);
         savedJmxPort = systemProps.get(JMX_PORT_PROP);
         savedTime = MonitorTime.getInstance();
 
         systemProps.put(JMX_PORT_PROP, "9797");
-
-        Whitebox.setInternalState(IntegrityMonitor.class, FACTORY_FIELD, new TestFactory());
 
         IntegrityMonitor.setUnitTesting(true);
         
@@ -197,7 +188,6 @@ public class IntegrityMonitorTestBase {
         }
 
         Whitebox.setInternalState(MonitorTime.class, TIME_INSTANCE_FIELD, savedTime);
-        Whitebox.setInternalState(IntegrityMonitor.class, FACTORY_FIELD, savedFactory);
 
         IntegrityMonitor.setUnitTesting(false);
 
@@ -231,15 +221,6 @@ public class IntegrityMonitorTestBase {
      */
     protected void tearDownTest() {
         stopMonitor();
-    }
-
-    /**
-     * Get saved factory.
-     * 
-     * @return the original integrity monitor factory
-     */
-    static Factory getSavedFactory() {
-        return savedFactory;
     }
 
     /**
@@ -317,16 +298,6 @@ public class IntegrityMonitorTestBase {
             fail("missing exception");
         } catch (Exception e) {
             System.out.println("action found expected exception: " + e);
-        }
-    }
-    
-    /**
-     * Factory with overrides for junit testing.
-     */
-    public static class TestFactory extends Factory {
-        @Override
-        public String getPersistenceUnit() {
-            return PERSISTENCE_UNIT;
         }
     }
 

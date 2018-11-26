@@ -21,7 +21,6 @@
 package org.onap.policy.common.im;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.fail;
 
 import java.util.Date;
@@ -37,7 +36,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.onap.policy.common.im.IntegrityMonitor.Factory;
 import org.onap.policy.common.im.jpa.ForwardProgressEntity;
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
@@ -109,11 +107,6 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         }
 
         super.tearDownTest();
-    }
-    
-    @Test
-    public void testFactory() {
-        assertNotNull(getSavedFactory());
     }
 
     /*
@@ -917,10 +910,11 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
 
         monitorSem = new Semaphore(0);
         junitSem = new Semaphore(0);
-        
-        Factory factory = new TestFactory() {
+
+        IntegrityMonitor im = new IntegrityMonitor(resourceName, myProp) {
+            
             @Override
-            public void runStarted() throws InterruptedException {
+            protected void runStarted() throws InterruptedException {
                 monitorSem.acquire();
                 
                 junitSem.release();
@@ -928,15 +922,13 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
             }
 
             @Override
-            public void monitorCompleted() throws InterruptedException {
+            protected void monitorCompleted() throws InterruptedException {
                 junitSem.release();
                 monitorSem.acquire();
             }            
         };
-        
-        Whitebox.setInternalState(IntegrityMonitor.class, FACTORY_FIELD, factory);
 
-        IntegrityMonitor im = IntegrityMonitor.getInstance(resourceName, myProp);
+        Whitebox.setInternalState(IntegrityMonitor.class, IM_INSTANCE_FIELD, im);
 
         // wait for the monitor thread to start
         waitCycles(1);

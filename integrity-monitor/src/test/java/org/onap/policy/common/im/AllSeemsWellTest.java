@@ -31,7 +31,6 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.onap.policy.common.im.IntegrityMonitor.Factory;
 import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,19 +61,21 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
 
     /**
      * Set up for test cases.
+     * @throws Exception if an error occurs
      */
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         super.setUpTest();
 
         myProp = makeProperties();
 
         monitorSem = new Semaphore(0);
         junitSem = new Semaphore(0);
-        
-        Factory factory = new TestFactory() {
+
+        IntegrityMonitor im = new IntegrityMonitor(resourceName, myProp) {
+            
             @Override
-            public void runStarted() throws InterruptedException {
+            protected void runStarted() throws InterruptedException {
                 monitorSem.acquire();
                 
                 junitSem.release();
@@ -82,13 +83,13 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
             }
 
             @Override
-            public void monitorCompleted() throws InterruptedException {
+            protected void monitorCompleted() throws InterruptedException {
                 junitSem.release();
                 monitorSem.acquire();
-            }
+            }            
         };
 
-        Whitebox.setInternalState(IntegrityMonitor.class, FACTORY_FIELD, factory);
+        Whitebox.setInternalState(IntegrityMonitor.class, IM_INSTANCE_FIELD, im);
     }
 
     @After
