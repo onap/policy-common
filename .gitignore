@@ -23,3 +23,5 @@ integrity-audit/testingLogs/common-modules/integrity-audit/error.log
 integrity-audit/testingLogs/common-modules/integrity-audit/metrics.log
 integrity-monitor/IntegrityMonitor.log.*
 *.log
+*.ipr
+*.iws
