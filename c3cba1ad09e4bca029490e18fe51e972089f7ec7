@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_85efff86",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/DmaapTopicSinkFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2018-11-27T11:05:05Z",
+      "side": 1,
+      "message": "I know you are using INtellij but in Eclipse you can turn the formatter off and on with the tokens:\n\n// @formatter:off\n// @formatter:on\n\nMaybe Intellij has something similar?",
+      "range": {
+        "startLine": 51,
+        "startChar": 1,
+        "endLine": 72,
+        "endChar": 7
+      },
+      "revId": "c3cba1ad09e4bca029490e18fe51e972089f7ec7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
