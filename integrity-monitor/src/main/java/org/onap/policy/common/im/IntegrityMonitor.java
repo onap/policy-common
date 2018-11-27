@@ -75,9 +75,6 @@ public class IntegrityMonitor {
      */
     private static final String QUERY_STRING = "Select f from ForwardProgressEntity f where f.resourceName=:rn";
 
-    // may be changed by junit tests
-    private static Factory factory = new Factory();
-
     private static String resourceName = null;
     boolean alarmExists = false;
 
@@ -224,13 +221,13 @@ public class IntegrityMonitor {
         //
         // Create the entity manager factory
         //
-        emf = Persistence.createEntityManagerFactory(factory.getPersistenceUnit(), properties);
+        emf = Persistence.createEntityManagerFactory(getPersistenceUnit(), properties);
         //
         // Did it get created?
         //
         if (emf == null) {
-            logger.error("Error creating IM entity manager factory with persistence unit: {}",
-                    factory.getPersistenceUnit());
+            logger.error("Error creating IM entity manager factory with persistence unit: {}", 
+                            getPersistenceUnit());
             throw new IntegrityMonitorException("Unable to create IM Entity Manager Factory");
         }
 
@@ -1714,13 +1711,13 @@ public class IntegrityMonitor {
             logger.debug("FPManager thread running");
 
             try {
-                factory.runStarted();
+                runStarted();
 
                 while (!stopRequested) {
                     MonitorTime.getInstance().sleep(CYCLE_INTERVAL_MILLIS);
-
-                    this.runOnce();
-                    factory.monitorCompleted();
+                    
+                    runOnce();
+                    monitorCompleted();
                 }
 
             } catch (InterruptedException e) {
@@ -1865,38 +1862,35 @@ public class IntegrityMonitor {
     public Map<String, String> getAllNotWellMap() {
         return allNotWellMap;
     }
+    
+    // these methods may be overridden by junit tests
 
     /**
-     * Wrapper used to access various objects. Overridden by junit tests.
+     * Indicates that the {@link FpManager#run()} method has started. This method
+     * simply returns.
+     * 
+     * @throws InterruptedException can be interrupted
      */
-    public static class Factory {
+    protected void runStarted() throws InterruptedException {
+        // does nothing
+    }
 
-        /**
-         * Indicates that the {@link FpManager#run()} method has started. This method simply returns.
-         *
-         * @throws InterruptedException can be interrupted
-         */
-        public void runStarted() throws InterruptedException {
-            // does nothing
-        }
+    /**
+     * Indicates that a monitor activity has completed. This method simply returns.
+     * 
+     * @throws InterruptedException can be interrupted
+     */
+    protected void monitorCompleted() throws InterruptedException {
+        // does nothing
+    }
 
-        /**
-         * Indicates that a monitor activity has completed. This method simply returns.
-         *
-         * @throws InterruptedException can be interrupted
-         */
-        public void monitorCompleted() throws InterruptedException {
-            // does nothing
-        }
-
-        /**
-         * Get persistence unit.
-         *
-         * @return the persistence unit to be used
-         */
-        public String getPersistenceUnit() {
-            return PERSISTENCE_UNIT;
-        }
+    /**
+     * Get persistence unit.
+     * 
+     * @return the persistence unit to be used
+     */
+    protected String getPersistenceUnit() {
+        return PERSISTENCE_UNIT;
     }
 
     /*
