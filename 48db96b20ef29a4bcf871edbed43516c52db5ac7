@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "9adffdf1_42acada0",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 1852,
+      "author": {
+        "id": 2543
+      },
+      "writtenOn": "2018-11-27T10:53:38Z",
+      "side": 1,
+      "message": "hm, I guess this shows up as javadoc error in the idea, so i removed it., I will check once again,",
+      "parentUuid": "9adffdf1_a8153de6",
+      "revId": "48db96b20ef29a4bcf871edbed43516c52db5ac7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9adffdf1_c8e76111",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/DmaapTopicSinkFactory.java",
         "patchSetId": 3
