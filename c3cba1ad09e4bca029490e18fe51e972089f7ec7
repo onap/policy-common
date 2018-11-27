@@ -22,6 +22,30 @@
       "revId": "c3cba1ad09e4bca029490e18fe51e972089f7ec7",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_fbf9c8c8",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/DmaapTopicSinkFactory.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2018-11-27T15:15:54Z",
+      "side": 1,
+      "message": "Looks like \u003cpre\u003e...\u003c/pre\u003e works just fine, at least in Eclipse; it keeps the formatting in the javadoc AND it keeps the formatting when \"Source-\u003eReformat\" is performed, as it should.  I was thinking to use \u003cdl\u003e, \u003cdt\u003e, and \u003cdd\u003e, but \u003cpre\u003e seems much simpler AND is more legible",
+      "parentUuid": "9adffdf1_85efff86",
+      "range": {
+        "startLine": 51,
+        "startChar": 1,
+        "endLine": 72,
+        "endChar": 7
+      },
+      "revId": "c3cba1ad09e4bca029490e18fe51e972089f7ec7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
