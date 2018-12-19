@@ -25,8 +25,10 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -59,23 +61,24 @@ public class GroupValidationResult implements ValidationResult {
             return;
         }
 
-        // Add a validation result per field
+        // Add a validation result for all fields in the declared class
         for (Field field : parameterGroup.getClass().getDeclaredFields()) {
-            // Exclude system fields
-            if (field.getName().startsWith("$") || field.getName().startsWith("_")) {
-                continue;
+            // Check if a validation result should be added for this declared field
+            if (isIncludedField(field)) {
+                // Set a validation result for the field
+                validationResultMap.put(field.getName(), getValidationResult(field, parameterGroup));
             }
+        }
 
-            // Exclude static fields
-            if (Modifier.isStatic(field.getModifiers())) {
-                continue;
+        // Add a validation result for protected and public fields in super classes
+        for (Field field : getSuperclassFields(parameterGroup.getClass().getSuperclass())) {
+            // Check if a validation result should be added for this declared field
+            if (isIncludedField(field)) {
+                // Set a validation result for the field
+                validationResultMap.putIfAbsent(field.getName(), getValidationResult(field, parameterGroup));
             }
-
-            // Set the validation result
-            validationResultMap.put(field.getName(), getValidationResult(field, parameterGroup));
         }
     }
-
     /**
      * Construct a validation result for a field.
      * 
@@ -139,7 +142,7 @@ public class GroupValidationResult implements ValidationResult {
             getterMethod = targetObject.getClass().getMethod(getterMethodName, (Class<?>[]) null);
         } catch (NoSuchMethodException | SecurityException e) {
             throw new ParameterRuntimeException("could not get getter method for parameter \"" + field.getName() + "\"",
-                            e);
+                e);
         }
 
         // Invoke the getter
@@ -147,7 +150,7 @@ public class GroupValidationResult implements ValidationResult {
             return getterMethod.invoke(targetObject, (Object[]) null);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
             throw new ParameterRuntimeException("error calling getter method for parameter \"" + field.getName() + "\"",
-                            e);
+                e);
         }
     }
 
@@ -168,13 +171,13 @@ public class GroupValidationResult implements ValidationResult {
             // Check the key is a string
             if (!String.class.isAssignableFrom(mapEntry.getKey().getClass())) {
                 throw new ParameterRuntimeException("map entry is not a parameter group keyed by a string, key \""
-                                + mapEntry.getKey() + "\" in map \"" + fieldName + "\" is not a string");
+                    + mapEntry.getKey() + "\" in map \"" + fieldName + "\" is not a string");
             }
 
             // Check the value is a parameter group
             if (!ParameterGroup.class.isAssignableFrom(mapEntry.getValue().getClass())) {
                 throw new ParameterRuntimeException("map entry is not a parameter group keyed by a string, value \""
-                                + mapEntry.getValue() + "\" in map \"" + fieldName + "\" is not a parameter group");
+                    + mapEntry.getValue() + "\" in map \"" + fieldName + "\" is not a parameter group");
             }
         }
     }
@@ -195,7 +198,7 @@ public class GroupValidationResult implements ValidationResult {
         for (Object collectionMember : collection2Check) {
             if (ParameterGroup.class.isAssignableFrom(collectionMember.getClass())) {
                 throw new ParameterRuntimeException("collection parameter \"" + fieldName + "\" is illegal,"
-                                + " parameter groups are not allowed as collection members");
+                    + " parameter groups are not allowed as collection members");
             }
         }
     }
@@ -307,7 +310,7 @@ public class GroupValidationResult implements ValidationResult {
      * @param nestedMapValidationResult The validation result from a nested map entry
      */
     public void setResult(final String parameterName, final String key,
-                    final ValidationResult nestedMapValidationResult) {
+        final ValidationResult nestedMapValidationResult) {
         GroupMapValidationResult groupMapValidationResult;
         try {
             groupMapValidationResult = (GroupMapValidationResult) validationResultMap.get(parameterName);
@@ -333,7 +336,7 @@ public class GroupValidationResult implements ValidationResult {
      * @param message The message for the parameter group
      */
     public void setResult(final String parameterName, final String key, final ValidationStatus status,
-                    final String message) {
+        final String message) {
         GroupMapValidationResult groupMapValidationResult;
         try {
             groupMapValidationResult = (GroupMapValidationResult) validationResultMap.get(parameterName);
@@ -384,12 +387,49 @@ public class GroupValidationResult implements ValidationResult {
 
         for (ValidationResult fieldResult : validationResultMap.values()) {
             String fieldResultMessage = fieldResult.getResult(initialIndentation + subIndentation, subIndentation,
-                            showClean);
+                showClean);
             if (fieldResultMessage != null) {
                 validationResultBuilder.append(fieldResultMessage);
             }
         }
 
         return validationResultBuilder.toString();
+    }
+    
+
+    /**
+     * Check if a field should be included for validation.
+     * 
+     * @param field the field to check for inclusion
+     * @return true of the field should be included
+     */
+    private boolean isIncludedField(final Field field) {
+        return !field.getName().startsWith("$") && !field.getName().startsWith("_")
+            && !Modifier.isStatic(field.getModifiers());
+    }
+
+    /**
+     * Get the public and protected fields of super classes.
+     * @param firstSuperClass the first superclass to check
+     *
+     * @return a set of the superclass fields
+     */
+    private List<Field> getSuperclassFields(final Class<?> firstSuperClass) {
+        List<Field> superclassFields = new ArrayList<>();
+
+        Class<?> currentClass = firstSuperClass;
+        while (currentClass.getSuperclass() != null) {
+            for (Field field : currentClass.getDeclaredFields()) {
+                // Check if this field is public or protected
+                if (Modifier.isPublic(field.getModifiers()) || Modifier.isProtected(field.getModifiers())) {
+                    superclassFields.add(field);
+                }
+            }
+            
+            // Check the next super class down
+            currentClass = currentClass.getSuperclass();
+        }
+        
+        return superclassFields;
     }
 }

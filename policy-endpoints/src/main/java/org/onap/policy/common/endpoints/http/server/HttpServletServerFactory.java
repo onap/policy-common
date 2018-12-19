@@ -25,7 +25,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-import org.onap.aaf.cadi.filter.CadiFilter;
 import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.slf4j.Logger;
@@ -50,7 +49,7 @@ public interface HttpServletServerFactory {
      * @throws IllegalArgumentException when invalid parameters are provided
      */
     HttpServletServer build(String name, boolean https, String host, int port, String contextPath, boolean swagger,
-            boolean managed);
+        boolean managed);
 
     /**
      * Builds an http server with support for servlets.
@@ -64,8 +63,7 @@ public interface HttpServletServerFactory {
      * @return http server
      * @throws IllegalArgumentException when invalid parameters are provided
      */
-    HttpServletServer build(String name, String host, int port, String contextPath, boolean swagger,
-        boolean managed);
+    HttpServletServer build(String name, String host, int port, String contextPath, boolean swagger, boolean managed);
 
     /**
      * Build a list of http servers per properties.
@@ -104,7 +102,6 @@ public interface HttpServletServerFactory {
     void destroy();
 }
 
-
 /**
  * Indexed factory implementation.
  */
@@ -123,9 +120,8 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
     protected HashMap<Integer, HttpServletServer> servers = new HashMap<>();
 
     @Override
-    public synchronized HttpServletServer build(String name, boolean https, 
-                    String host, int port, String contextPath, boolean swagger,
-            boolean managed) {
+    public synchronized HttpServletServer build(String name, boolean https, String host, int port, String contextPath,
+        boolean swagger, boolean managed) {
 
         if (servers.containsKey(port)) {
             return servers.get(port);
@@ -140,11 +136,10 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
     }
 
     @Override
-    public synchronized HttpServletServer build(String name, String host, int port, String contextPath,
-                                                boolean swagger, boolean managed) {
+    public synchronized HttpServletServer build(String name, String host, int port, String contextPath, boolean swagger,
+        boolean managed) {
         return build(name, false, host, port, contextPath, swagger, managed);
     }
-
 
     @Override
     public synchronized List<HttpServletServer> build(Properties properties) {
@@ -161,7 +156,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
 
         for (String serviceName : serviceNameList) {
             String servicePortString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
-                    + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX);
+                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX);
 
             int servicePort;
             try {
@@ -180,48 +175,41 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
             }
 
             final String hostName = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX);
+                + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX);
 
-            final String contextUriPath = properties.getProperty(
-                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_CONTEXT_URIPATH_SUFFIX);
+            final String contextUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
+                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_CONTEXT_URIPATH_SUFFIX);
 
             final String userName = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX);
+                + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX);
 
             final String password = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX);
+                + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX);
 
-            final String authUriPath = properties.getProperty(
-                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_URIPATH_SUFFIX);
+            final String authUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
+                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_URIPATH_SUFFIX);
 
-            final String restClasses = properties.getProperty(
-                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX);
+            final String restClasses = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
+                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX);
 
-            final String filterClasses = properties.getProperty(
-                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX);
+            final String filterClasses = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
+                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX);
 
-            final String restPackages = properties.getProperty(
-                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_PACKAGES_SUFFIX);
-            
-            final String restUriPath = properties.getProperty(
-                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_URIPATH_SUFFIX);
+            final String restPackages = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
+                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_PACKAGES_SUFFIX);
 
-            final String managedString = properties.getProperty(
-                    PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
+            final String restUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
+                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_URIPATH_SUFFIX);
+
+            final String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
+                + "." + serviceName + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
             boolean managed = true;
             if (managedString != null && !managedString.isEmpty()) {
                 managed = Boolean.parseBoolean(managedString);
             }
 
             String swaggerString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                    + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX);
+                + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX);
             boolean swagger = false;
             if (swaggerString != null && !swaggerString.isEmpty()) {
                 swagger = Boolean.parseBoolean(swaggerString);
@@ -241,8 +229,8 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
                 aaf = Boolean.parseBoolean(aafString);
             }
 
-            HttpServletServer service = build(serviceName, https, hostName, servicePort, 
-                    contextUriPath, swagger, managed);
+            HttpServletServer service = build(serviceName, https, hostName, servicePort, contextUriPath, swagger,
+                managed);
 
             /* authentication method either AAF or HTTP Basic Auth */
 
