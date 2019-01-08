@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.Assert.assertEquals;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_DMAAP_DME2_EP_CONN_TIMEOUT_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_DMAAP_DME2_EP_READ_TIMEOUT_MS_SUFFIX;
@@ -116,18 +117,15 @@ public abstract class DmaapTopicFactoryTestBase<T extends Topic> extends BusTopi
     @Override
     public void testGet_Ex() {
         // null topic
-        RuntimeException actual = expectException(() -> getTopic(null));
-        assertEquals("null topic", IllegalArgumentException.class, actual.getClass());
+        assertThatIllegalArgumentException().as("null topic").isThrownBy(() -> getTopic(null));
 
         // empty topic
-        actual = expectException(() -> getTopic(""));
-        assertEquals("empty topic", IllegalArgumentException.class, actual.getClass());
+        assertThatIllegalArgumentException().as("empty topic").isThrownBy(() -> getTopic(""));
 
         // unknown topic
         initFactory();
         buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build());
 
-        actual = expectException(() -> getTopic(TOPIC2));
-        assertEquals("unknown topic", IllegalArgumentException.class, actual.getClass());
+        assertThatIllegalArgumentException().as("unknown topic").isThrownBy(() -> getTopic(TOPIC2));
     }
 }

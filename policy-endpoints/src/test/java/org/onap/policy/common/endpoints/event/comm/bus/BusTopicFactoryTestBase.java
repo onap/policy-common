@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -104,12 +105,10 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
      */
     public void testBuildBusTopicParams_Ex() {
         // null topic
-        RuntimeException actual = expectException(() -> buildTopic(makeBuilder().topic(null).build()));
-        assertEquals(IllegalArgumentException.class, actual.getClass());
+        assertThatIllegalArgumentException().isThrownBy(() -> buildTopic(makeBuilder().topic(null).build()));
 
         // empty topic
-        actual = expectException(() -> buildTopic(makeBuilder().topic("").build()));
-        assertEquals(IllegalArgumentException.class, actual.getClass());
+        assertThatIllegalArgumentException().isThrownBy(() -> buildTopic(makeBuilder().topic("").build()));
     }
 
     /**

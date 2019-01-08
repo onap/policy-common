@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.utils.io;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -116,7 +117,7 @@ public class SerializerTest {
             }
         });
 
-        assertEquals(ex, expectException(() -> Serializer.serialize(new MyObject(100))));
+        assertThatThrownBy(() -> Serializer.serialize(new MyObject(100))).isEqualTo(ex);
     }
 
     @Test
@@ -133,7 +134,7 @@ public class SerializerTest {
             }
         });
 
-        assertEquals(ex, expectException(() -> Serializer.serialize(new MyObject(110))));
+        assertThatThrownBy(() -> Serializer.serialize(new MyObject(110))).isEqualTo(ex);
     }
 
     @Test
@@ -159,7 +160,7 @@ public class SerializerTest {
             }
         });
 
-        assertEquals(ex, expectException(() -> Serializer.serialize(new MyObject(120))));
+        assertThatThrownBy(() -> Serializer.serialize(new MyObject(120))).isEqualTo(ex);
     }
 
     @Test
@@ -206,7 +207,7 @@ public class SerializerTest {
             }
         });
 
-        assertEquals(ex2, expectException(() -> Serializer.serialize(new MyObject(130))));
+        assertThatThrownBy(() -> Serializer.serialize(new MyObject(130))).isEqualTo(ex2);
         
     }
 
@@ -246,7 +247,7 @@ public class SerializerTest {
         });
 
         byte[] data = Serializer.serialize(new MyObject(300));
-        assertEquals(ex, expectException(() -> Serializer.deserialize(MyObject.class, data)));
+        assertThatThrownBy(() -> Serializer.deserialize(MyObject.class, data)).isEqualTo(ex);
     }
 
     @Test
@@ -264,7 +265,7 @@ public class SerializerTest {
         });
 
         byte[] data = Serializer.serialize(new MyObject(310));
-        assertEquals(ex, expectException(() -> Serializer.deserialize(MyObject.class, data)));
+        assertThatThrownBy(() -> Serializer.deserialize(MyObject.class, data)).isEqualTo(ex);
     }
 
     @Test
@@ -288,7 +289,7 @@ public class SerializerTest {
         });
 
         byte[] data = Serializer.serialize(new MyObject(320));
-        assertEquals(ex, expectException(() -> Serializer.deserialize(MyObject.class, data)));
+        assertThatThrownBy(() -> Serializer.deserialize(MyObject.class, data)).isEqualTo(ex);
     }
 
     @Test
@@ -323,7 +324,7 @@ public class SerializerTest {
         });
 
         byte[] data = Serializer.serialize(new MyObject(330));
-        assertEquals(ex2, expectException(() -> Serializer.deserialize(MyObject.class, data)));
+        assertThatThrownBy(() -> Serializer.deserialize(MyObject.class, data)).isEqualTo(ex2);
     }
 
     @Test
@@ -346,28 +347,6 @@ public class SerializerTest {
      */
     private void setFactory(Factory factory) {
         Whitebox.setInternalState(Serializer.class, "factory", factory);
-    }
-
-    /**
-     * Applies a function, which is expected to throw an exception.
-     *
-     * @param func the function to apply
-     * @return the exception thrown by the function, or {@code null} if it did not throw
-     *         an exception
-     */
-    private Exception expectException(RunnerWithEx func) {
-        try {
-            func.apply();
-            return null;
-
-        } catch (Exception ex) {
-            return ex;
-        }
-    }
-
-    @FunctionalInterface
-    private static interface RunnerWithEx {
-        public void apply() throws Exception;
     }
 
     /**

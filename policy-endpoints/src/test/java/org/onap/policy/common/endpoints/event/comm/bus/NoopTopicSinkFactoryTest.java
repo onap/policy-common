@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -112,7 +113,7 @@ public class NoopTopicSinkFactoryTest extends TopicFactoryTestBase<NoopTopicSink
         initFactory();
         assertEquals(1, buildTopics(makePropBuilder().makeTopic(MY_TOPIC)
                         .setTopicProperty(PROPERTY_MANAGED_SUFFIX, "false").build()).size());
-        assertNotNull(expectException(() -> factory.get(MY_TOPIC)));
+        assertThatThrownBy(() -> factory.get(MY_TOPIC));
 
         // managed undefined - default to true
         initFactory();

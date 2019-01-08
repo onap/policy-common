@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,11 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX;
 
 import java.util.List;
@@ -175,12 +176,10 @@ public abstract class TopicFactoryTestBase<T extends Topic> extends TopicTestBas
      */
     public void testDestroyString_Ex() {
         // null topic
-        RuntimeException actual = expectException(() -> destroyTopic(null));
-        assertEquals(IllegalArgumentException.class, actual.getClass());
+        assertThatIllegalArgumentException().as("null topic").isThrownBy(() -> destroyTopic(null));
 
         // empty topic
-        actual = expectException(() -> destroyTopic(""));
-        assertEquals(IllegalArgumentException.class, actual.getClass());
+        assertThatIllegalArgumentException().as("empty topic").isThrownBy(() -> destroyTopic(""));
     }
 
     /**
@@ -210,36 +209,15 @@ public abstract class TopicFactoryTestBase<T extends Topic> extends TopicTestBas
      */
     public void testGet_Ex() {
         // null topic
-        RuntimeException actual = expectException(() -> getTopic(null));
-        assertEquals("null topic", IllegalArgumentException.class, actual.getClass());
+        assertThatIllegalArgumentException().as("null topic").isThrownBy(() -> getTopic(null));
 
         // empty topic
-        actual = expectException(() -> getTopic(""));
-        assertEquals("empty topic", IllegalArgumentException.class, actual.getClass());
+        assertThatIllegalArgumentException().as("empty topic").isThrownBy(() -> getTopic(""));
 
         // unknown topic
         initFactory();
         buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build());
 
-        actual = expectException(() -> getTopic(TOPIC2));
-        assertEquals("unknown topic", IllegalStateException.class, actual.getClass());
-    }
-
-    /**
-     * Runs a function that is expected to throw an exception. Invokes fail() if the
-     * function does not throw an exception.
-     *
-     * @param function the function to run
-     * @return the exception thrown by the function
-     */
-    public RuntimeException expectException(Runnable function) {
-        try {
-            function.run();
-            fail("missing exception");
-            return null;
-
-        } catch (RuntimeException e) {
-            return e;
-        }
+        assertThatIllegalStateException().as("unknown topic").isThrownBy(() -> getTopic(TOPIC2));
     }
 }
