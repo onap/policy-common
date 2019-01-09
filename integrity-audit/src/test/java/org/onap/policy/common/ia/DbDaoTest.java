@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,14 +59,14 @@ import org.onap.policy.common.utils.time.TestTime;
  * where they have write privileges and can execute time-sensitive
  * tasks.
  */
-public class DbDAOTest extends IntegrityAuditTestBase {
+public class DbDaoTest extends IntegrityAuditTestBase {
     private static String resourceName = "pdp0";
 
-    private DbDAO dbDao;
+    private DbDao dbDao;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        IntegrityAuditTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + DbDAOTest.class.getSimpleName());
+        IntegrityAuditTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + DbDaoTest.class.getSimpleName());
     }
 
     @AfterClass
@@ -100,13 +100,13 @@ public class DbDAOTest extends IntegrityAuditTestBase {
         Properties properties = makeProperties();
 
         try (EntityTransCloser et = new EntityTransCloser(em.getTransaction())) {
-            dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+            dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
 
             // Find the proper entry in the database
             Query iaequery = em.createQuery(
                     "Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu");
-            iaequery.setParameter("rn", DbDAOTest.resourceName);
-            iaequery.setParameter("pu", DbDAOTest.A_SEQ_PU);
+            iaequery.setParameter("rn", DbDaoTest.resourceName);
+            iaequery.setParameter("pu", DbDaoTest.A_SEQ_PU);
 
             @SuppressWarnings("rawtypes")
             List iaeList = iaequery.getResultList();
@@ -127,19 +127,19 @@ public class DbDAOTest extends IntegrityAuditTestBase {
     public void testUpdateRegistration() throws Exception {
         Properties properties = makeProperties();
 
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
 
         // Change site_name in properties to test that an update was made to
         // an existing entry in the table
         properties.put(IntegrityAuditProperties.SITE_NAME, "SiteB");
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
 
         try (EntityTransCloser et = new EntityTransCloser(em.getTransaction())) {
             // Find the proper entry in the database
             Query iaequery = em.createQuery(
                     "Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu");
-            iaequery.setParameter("rn", DbDAOTest.resourceName);
-            iaequery.setParameter("pu", DbDAOTest.A_SEQ_PU);
+            iaequery.setParameter("rn", DbDaoTest.resourceName);
+            iaequery.setParameter("pu", DbDaoTest.A_SEQ_PU);
 
             @SuppressWarnings("rawtypes")
             List iaeList = iaequery.getResultList();
@@ -169,10 +169,10 @@ public class DbDAOTest extends IntegrityAuditTestBase {
         Properties properties = makeProperties();
 
         // Add some entries to the DB
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
-        new DbDAO("pdp1", A_SEQ_PU, properties).destroy();
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
+        new DbDao("pdp1", A_SEQ_PU, properties).destroy();
         properties.put(IntegrityAuditProperties.NODE_TYPE, "pdp_drools");
-        new DbDAO("pdp2", A_SEQ_PU, properties).destroy();
+        new DbDao("pdp2", A_SEQ_PU, properties).destroy();
 
         List<IntegrityAuditEntity> entities;
         // Obtain entries based on persistenceUnit and nodeType
@@ -180,12 +180,12 @@ public class DbDAOTest extends IntegrityAuditTestBase {
         assertEquals(2, entities.size());
     }
 
-    /* Tests retrieving a DbDAO instance's IntegrityAuditEntity */
+    /* Tests retrieving a DbDao instance's IntegrityAuditEntity */
     @Test
     public void testGetMyIntegrityAuditEntity() throws Exception {
         Properties properties = makeProperties();
 
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
         IntegrityAuditEntity iae = dbDao.getMyIntegrityAuditEntity();
         // assertEquals("integrityAuditPU", iae.getPersistenceUnit());
         assertEquals(A_SEQ_PU, iae.getPersistenceUnit());
@@ -197,13 +197,13 @@ public class DbDAOTest extends IntegrityAuditTestBase {
         Properties properties = makeProperties();
 
         // Obtain an entry from the database based on ID
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
 
         // Find the proper database entry
         Query iaequery = em
                 .createQuery("Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu");
-        iaequery.setParameter("rn", DbDAOTest.resourceName);
-        iaequery.setParameter("pu", DbDAOTest.A_SEQ_PU);
+        iaequery.setParameter("rn", DbDaoTest.resourceName);
+        iaequery.setParameter("pu", DbDaoTest.A_SEQ_PU);
 
         @SuppressWarnings("rawtypes")
         List iaeList = iaequery.getResultList();
@@ -235,7 +235,7 @@ public class DbDAOTest extends IntegrityAuditTestBase {
 
         try (EntityTransCloser et = new EntityTransCloser(em.getTransaction())) {
             // Create an entry and set it's designated field to true
-            dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+            dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
             dbDao.setDesignated(resourceName, A_SEQ_PU, true);
 
             // Find the proper entry in the database
@@ -277,7 +277,7 @@ public class DbDAOTest extends IntegrityAuditTestBase {
             TestTime testTime = getTestTime();
             
             // Create an entry
-            dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+            dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
 
             // Find the proper entry in the database
             Query iaequery = em.createQuery(
@@ -323,9 +323,9 @@ public class DbDAOTest extends IntegrityAuditTestBase {
         Properties properties = makeProperties();
 
         // create entries for the IntegrityAuditEntity table
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
-        new DbDAO("pdp1", A_SEQ_PU, properties).destroy();
-        new DbDAO("pdp2", A_SEQ_PU, properties).destroy();
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
+        new DbDao("pdp1", A_SEQ_PU, properties).destroy();
+        new DbDao("pdp2", A_SEQ_PU, properties).destroy();
 
         // Obtain a hash with the persisted objects
         Map<Object, Object> entries = dbDao.getAllMyEntries("org.onap.policy.common.ia.jpa.IntegrityAuditEntity");
@@ -342,9 +342,9 @@ public class DbDAOTest extends IntegrityAuditTestBase {
         Properties properties = makeProperties();
 
         // create entries for the IntegrityAuditEntity table
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
-        new DbDAO("pdp1", A_SEQ_PU, properties).destroy();
-        new DbDAO("pdp2", A_SEQ_PU, properties).destroy();
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
+        new DbDao("pdp1", A_SEQ_PU, properties).destroy();
+        new DbDao("pdp2", A_SEQ_PU, properties).destroy();
 
         // Obtain all entity keys
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -377,9 +377,9 @@ public class DbDAOTest extends IntegrityAuditTestBase {
         Properties properties = makeProperties();
 
         // create entries for the IntegrityAuditEntity table
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
-        new DbDAO("pdp1", A_SEQ_PU, properties).destroy();
-        new DbDAO("pdp2", A_SEQ_PU, properties).destroy();
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
+        new DbDao("pdp1", A_SEQ_PU, properties).destroy();
+        new DbDao("pdp2", A_SEQ_PU, properties).destroy();
 
         // Obtain a hash with the persisted objects
         Map<Object, Object> entries = dbDao.getAllEntries("integrityAuditPU", properties,
@@ -398,9 +398,9 @@ public class DbDAOTest extends IntegrityAuditTestBase {
         Properties properties = makeProperties();
 
         // create entries for the IntegrityAuditEntity table
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
-        new DbDAO("pdp1", A_SEQ_PU, properties).destroy();
-        new DbDAO("pdp2", A_SEQ_PU, properties).destroy();
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
+        new DbDao("pdp1", A_SEQ_PU, properties).destroy();
+        new DbDao("pdp2", A_SEQ_PU, properties).destroy();
 
         // Obtain all entity keys
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -433,9 +433,9 @@ public class DbDAOTest extends IntegrityAuditTestBase {
         Properties properties = makeProperties();
 
         // create entries for the IntegrityAuditEntity table
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
-        new DbDAO("pdp1", A_SEQ_PU, properties).destroy();
-        new DbDAO("pdp2", A_SEQ_PU, properties).destroy();
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
+        new DbDao("pdp1", A_SEQ_PU, properties).destroy();
+        new DbDao("pdp2", A_SEQ_PU, properties).destroy();
 
         // Obtain a hash with the persisted objects
         Map<Object, Object> entries =
@@ -451,7 +451,7 @@ public class DbDAOTest extends IntegrityAuditTestBase {
     public void testGetPersistenceClassNames() throws Exception {
         Properties properties = makeProperties();
 
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
 
         // Retrieve persistence class names
         Set<String> result = dbDao.getPersistenceClassNames();

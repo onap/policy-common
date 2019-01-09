@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -261,7 +261,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
         /*
          * Populate DB for pdp2, which will simulate it having registered but then having died.
          */
-        new DbDAO("pdp2", A_SEQ_PU, makeProperties()).destroy();
+        new DbDao("pdp2", A_SEQ_PU, makeProperties()).destroy();
 
         /*
          * Sleep long enough to allow
@@ -431,7 +431,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
         /*
          * Populate DB for pdp3, which will simulate it having registered but then having died.
          */
-        new DbDAO("pdp3", A_SEQ_PU, makeProperties()).destroy();
+        new DbDao("pdp3", A_SEQ_PU, makeProperties()).destroy();
 
         /*
          * Start audit for pdp4.
@@ -488,12 +488,12 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
         /*
          * Populate DB for "pdp1", which will simulate it having registered but then having died.
          */
-        new DbDAO("pdp1", A_SEQ_PU, makeProperties()).destroy();
+        new DbDao("pdp1", A_SEQ_PU, makeProperties()).destroy();
 
         /*
          * Populate DB for pdp2, which will simulate it having registered but then having died.
          */
-        new DbDAO("pdp2", A_SEQ_PU, makeProperties()).destroy();
+        new DbDao("pdp2", A_SEQ_PU, makeProperties()).destroy();
 
         /*
          * Start audit for pdp3.
@@ -503,7 +503,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
         /*
          * Populate DB for pdp4, which will simulate it having registered but then having died.
          */
-        new DbDAO("pdp4", A_SEQ_PU, makeProperties()).destroy();
+        new DbDao("pdp4", A_SEQ_PU, makeProperties()).destroy();
 
         /*
          * Sleep long enough to allow

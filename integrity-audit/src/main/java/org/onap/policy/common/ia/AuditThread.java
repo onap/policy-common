@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,7 +67,7 @@ public class AuditThread extends Thread {
     /*
      * DB access class.
      */
-    private DbDAO dbDao;
+    private DbDao dbDao;
 
     /*
      * E.g. pdp_xacml
@@ -129,13 +129,13 @@ public class AuditThread extends Thread {
         this.integrityAudit = integrityAudit;
 
         /*
-         * The DbDAO Constructor registers this node in the IntegrityAuditEntity table. Each
+         * The DbDao Constructor registers this node in the IntegrityAuditEntity table. Each
          * resource (node) inserts its own name, persistenceUnit, DB access properties and other
          * pertinent properties in the table. This allows the audit on each node to compare its own
          * version of the entities for the persistenceUnit in question with the versions from all
          * other nodes of similar type.
          */
-        dbDao = new DbDAO(this.resourceName, this.persistenceUnit, this.properties);
+        dbDao = new DbDao(this.resourceName, this.persistenceUnit, this.properties);
         this.nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE);
 
     }

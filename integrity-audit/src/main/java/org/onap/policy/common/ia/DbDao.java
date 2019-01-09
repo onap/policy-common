@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,11 +44,11 @@ import org.onap.policy.common.logging.flexlogger.FlexLogger;
 import org.onap.policy.common.logging.flexlogger.Logger;
 
 /**
- * class DbDAO provides the inteface to the DBs for the purpose of audits.
+ * class DbDao provides the inteface to the DBs for the purpose of audits.
  * 
  */
-public class DbDAO {
-    private static final Logger logger = FlexLogger.getLogger(DbDAO.class.getName());
+public class DbDao {
+    private static final Logger logger = FlexLogger.getLogger(DbDao.class.getName());
     
     private String resourceName;
     private String persistenceUnit;
@@ -71,7 +71,7 @@ public class DbDAO {
      */
     private static final String RESOURCE_MESSAGE = "Resource: ";
     private static final String WITH_PERSISTENCE_MESSAGE = " with PersistenceUnit: ";
-    private static final String DBDAO_MESSAGE = "DbDAO: ";
+    private static final String DBDAO_MESSAGE = "DbDao: ";
     private static final String ENCOUNTERED_MESSAGE = "ecountered a problem in execution: ";
     
     /*
@@ -81,19 +81,19 @@ public class DbDAO {
             + "where i.resourceName=:rn and i.persistenceUnit=:pu";
 
     /**
-     * DbDAO Constructor.
+     * DbDao Constructor.
      * 
      * @param resourceName the resource name
      * @param persistenceUnit the persistence unit
      * @param properties the properties
      * @throws IntegrityAuditException if an error occurs
      */
-    public DbDAO(String resourceName, String persistenceUnit, Properties properties) throws IntegrityAuditException {
+    public DbDao(String resourceName, String persistenceUnit, Properties properties) throws IntegrityAuditException {
         this(resourceName, persistenceUnit, properties, null);
     }
 
     /**
-     * DbDAO Constructor.
+     * DbDao Constructor.
      * 
      * @param resourceName the resource name
      * @param persistenceUnit the persistence unit
@@ -102,9 +102,9 @@ public class DbDAO {
      * @param altDbUrl may be {@code null}
      * @throws IntegrityAuditException if an error occurs
      */
-    protected DbDAO(String resourceName, String persistenceUnit, Properties properties, String altDbUrl)
+    protected DbDao(String resourceName, String persistenceUnit, Properties properties, String altDbUrl)
             throws IntegrityAuditException {
-        logger.debug("DbDAO contructor: enter");
+        logger.debug("DbDao contructor: enter");
 
         validateProperties(resourceName, persistenceUnit, properties);
 
@@ -112,7 +112,7 @@ public class DbDAO {
 
         register(altDbUrl);
 
-        logger.debug("DbDAO contructor: exit");
+        logger.debug("DbDao contructor: exit");
     }
 
     /**
@@ -134,7 +134,7 @@ public class DbDAO {
             throws IntegrityAuditPropertiesException {
         StringBuilder badparams = new StringBuilder();
         if (IntegrityAudit.parmsAreBad(resourceName, persistenceUnit, properties, badparams)) {
-            String msg = "DbDAO: Bad parameters: badparams" + badparams;
+            String msg = "DbDao: Bad parameters: badparams" + badparams;
             throw new IntegrityAuditPropertiesException(msg);
         }
         this.resourceName = resourceName;
@@ -145,7 +145,7 @@ public class DbDAO {
         this.siteName = properties.getProperty(IntegrityAuditProperties.SITE_NAME).trim();
         this.nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE).trim();
         this.properties = properties;
-        logger.debug("DbDAO.assignProperties: exit:" + "\nresourceName: " + this.resourceName + "\npersistenceUnit: "
+        logger.debug("DbDao.assignProperties: exit:" + "\nresourceName: " + this.resourceName + "\npersistenceUnit: "
                 + this.persistenceUnit + "\nproperties: " + this.properties);
     }
 
@@ -411,7 +411,7 @@ public class DbDAO {
      * @return the persistence class names
      */
     public Set<String> getPersistenceClassNames() {
-        logger.debug("DbDAO: getPersistenceClassNames() entry");
+        logger.debug("DbDao: getPersistenceClassNames() entry");
         HashSet<String> returnList = new HashSet<>();
         final Metamodel mm = emf.getMetamodel();
         logger.debug("\n" + persistenceUnit + " persistence unit classes:");
@@ -420,7 +420,7 @@ public class DbDAO {
             logger.debug("    " + clazz.getSimpleName());
             returnList.add(clazz.getName()); // the full class name needed to make a query using jpa
         }
-        logger.debug("DbDAO: getPersistenceClassNames() exit");
+        logger.debug("DbDao: getPersistenceClassNames() exit");
         return returnList;
     }
 
@@ -662,7 +662,7 @@ public class DbDAO {
      * 
      * <p>static lock object in conjunction with synchronized keyword ensures that designation
      * changes are done serially within a resource. I.e. static lock ensures that multiple
-     * instantiations of DbDAO don't interleave changeDesignated() invocations and potentially
+     * instantiations of DbDao don't interleave changeDesignated() invocations and potentially
      * produce simultaneous designations.
      * 
      * <p>Optimistic locking (the default, versus pessimistic) is sufficient to avoid simultaneous
@@ -734,7 +734,7 @@ public class DbDAO {
 
                 /*
                  * If we get a LockTimeoutException, no harm done really. We'll probably be
-                 * successful on the next attempt. The odds of another DbDAO instance on this entity
+                 * successful on the next attempt. The odds of another DbDao instance on this entity
                  * or another entity attempting a simultaneous IntegrityAuditEntity table
                  * read/update are pretty slim (we're only in this method for two or three
                  * milliseconds)
@@ -743,12 +743,12 @@ public class DbDAO {
                 if (em != null) {
                     em.getTransaction().rollback();
 
-                    String msg = "DbDAO: changeDesignated() caught LockTimeoutException, message="
+                    String msg = "DbDao: changeDesignated() caught LockTimeoutException, message="
                             + e.getMessage();
                     logger.error(msg + e);
                     throw new DbDaoTransactionException(msg, e);
                 } else {
-                    String msg = "DbDAO: changeDesignated() caught LockTimeoutException, message="
+                    String msg = "DbDao: changeDesignated() caught LockTimeoutException, message="
                             + e.getMessage() + ". Error rolling back transaction.";
                     logger.error(msg + e);
                     throw new DbDaoTransactionException(msg, e);
@@ -757,11 +757,11 @@ public class DbDAO {
                 if (em != null) {
                     em.getTransaction().rollback();
 
-                    String msg = "DbDAO: changeDesignated() caught Exception, message=" + e.getMessage();
+                    String msg = "DbDao: changeDesignated() caught Exception, message=" + e.getMessage();
                     logger.error(msg + e);
                     throw new DbDaoTransactionException(msg, e);
                 } else {
-                    String msg = "DbDAO: changeDesignated() caught Exception, message="
+                    String msg = "DbDao: changeDesignated() caught Exception, message="
                             + e.getMessage() + ". Error rolling back transaction.";
                     logger.error(msg + e);
                     throw new DbDaoTransactionException(msg, e);

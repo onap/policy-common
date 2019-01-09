@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
 
     private EntityManagerFactory emf2;
     private EntityManager em2;
-    private DbDAO dbDao;
+    private DbDao dbDao;
 
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -135,7 +135,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
 
         logger.info("noEntitiesTest: Entering");
 
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
         dbDao.deleteAllIntegrityAuditEntities();
         try {
             DbAudit dbAudit = new DbAudit(dbDao);
@@ -161,7 +161,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         final ExtractAppender log = watch(debugLogger, "DbAudit: Found only (one) IntegrityAuditEntity entry:");
 
         // Add one entry in the database
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
         DbAudit dbAudit = new DbAudit(dbDao);
         dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
 
@@ -206,24 +206,24 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         /*
          * Create entries in DB1 & DB2 for the resource of interest
          */
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
 
-        new DbDAO(resourceName, A_SEQ_PU, properties2).destroy();
+        new DbDao(resourceName, A_SEQ_PU, properties2).destroy();
 
         /*
          * Entries in DB1, pointing to DB2, except for pdp3
          */
-        new DbDAO("pdp2", A_SEQ_PU, properties, dbUrl2).destroy();
-        new DbDAO("pdp1", A_SEQ_PU, properties, dbUrl2).destroy();
-        new DbDAO("pdp3", A_SEQ_PU, properties).destroy(); // mismatched URL
-        new DbDAO("pdp4", A_SEQ_PU, properties, dbUrl2).destroy();
+        new DbDao("pdp2", A_SEQ_PU, properties, dbUrl2).destroy();
+        new DbDao("pdp1", A_SEQ_PU, properties, dbUrl2).destroy();
+        new DbDao("pdp3", A_SEQ_PU, properties).destroy(); // mismatched URL
+        new DbDao("pdp4", A_SEQ_PU, properties, dbUrl2).destroy();
 
         /*
          * Identical entries in DB2, all pointing to DB2, including pdp3, but leaving out pdp4
          */
-        new DbDAO("pdp2", A_SEQ_PU, properties2).destroy();
-        new DbDAO("pdp1", A_SEQ_PU, properties2).destroy();
-        new DbDAO("pdp3", A_SEQ_PU, properties2).destroy();
+        new DbDao("pdp2", A_SEQ_PU, properties2).destroy();
+        new DbDao("pdp1", A_SEQ_PU, properties2).destroy();
+        new DbDao("pdp3", A_SEQ_PU, properties2).destroy();
 
         /*
          * Run the DB Audit, once it finds a mismatch and sleeps, update DB1 to have the same entry
@@ -233,7 +233,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
 
         // update pdp3 entry in DB1 to point to DB2
-        new DbDAO("pdp3", A_SEQ_PU, properties, dbUrl2).destroy();
+        new DbDao("pdp3", A_SEQ_PU, properties, dbUrl2).destroy();
 
         /*
          * Run the audit again and correct the mismatch, the result should be one entry in the
