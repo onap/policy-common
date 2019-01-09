@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +52,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
 
     private static Logger logger = FlexLogger.getLogger(DbAuditCompareEntriesTest.class);
 
-    private DbDAO dbDao;
+    private DbDao2 dbDao;
     private static String resourceName = "pdp1";
 
     @BeforeClass
@@ -105,7 +105,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
     public void testSuccessfulComparison() throws Exception {
         logger.info("testSuccessfulComparison: Entering");
 
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, makeProperties());
+        dbDao = new DbDao2(resourceName, A_SEQ_PU, makeProperties());
         final DbAudit dbAudit = new DbAudit(dbDao);
 
         String className = null;
@@ -175,7 +175,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
     public void testComparisonError() throws Exception {
         logger.info("testComparisonError: Entering");
 
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, makeProperties());
+        dbDao = new DbDao2(resourceName, A_SEQ_PU, makeProperties());
         final DbAudit dbAudit = new DbAudit(dbDao);
 
         final String resourceName1 = resourceName;
@@ -235,7 +235,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
     public void testCompareMissingEntries() throws Exception {
         logger.info("testCompareMissingEntries: Entering");
 
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, makeProperties());
+        dbDao = new DbDao2(resourceName, A_SEQ_PU, makeProperties());
         final DbAudit dbAudit = new DbAudit(dbDao);
 
         final String resourceName1 = resourceName;
@@ -321,7 +321,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
     public void testCompareAllHashEntities() throws Exception {
         logger.info("testCompareAllHashEntities: Entering");
 
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, makeProperties());
+        dbDao = new DbDao2(resourceName, A_SEQ_PU, makeProperties());
         DbAudit dbAudit = new DbAudit(dbDao);
 
         Set<String> classNameSet = dbDao.getPersistenceClassNames();
@@ -442,13 +442,13 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
         truncateTables(properties2);
 
         // Add entries into DB1
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
-        new DbDAO("pdp2", A_SEQ_PU, properties).destroy();
+        dbDao = new DbDao2(resourceName, A_SEQ_PU, properties);
+        new DbDao2("pdp2", A_SEQ_PU, properties).destroy();
         DbAudit dbAudit = new DbAudit(dbDao);
 
         // Add entries into DB2
-        DbDAO dbDao3 = new DbDAO(resourceName, A_SEQ_PU, properties2);
-        new DbDAO("pdp2", A_SEQ_PU, properties2).destroy();
+        DbDao2 dbDao3 = new DbDao2(resourceName, A_SEQ_PU, properties2);
+        new DbDao2("pdp2", A_SEQ_PU, properties2).destroy();
 
         // Pull all entries and compare
         Set<String> classNameSet = dbDao.getPersistenceClassNames();
@@ -491,7 +491,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
     public void testEmbeddedClass() throws Exception {
         logger.info("testEmbeddedClasses: Entering");
 
-        dbDao = new DbDAO(resourceName, A_SEQ_PU, properties);
+        dbDao = new DbDao2(resourceName, A_SEQ_PU, properties);
         final DbAudit dbAudit = new DbAudit(dbDao);
 
         String className = null;
