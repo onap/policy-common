@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,14 +49,14 @@ public class DbAudit {
     private static final long DB_AUDIT_UPDATE_MS = 5000L;
     private static final long DB_AUDIT_SLEEP_MS = 2000L;
 
-    DbDAO dbDao = null;
+    DbDao2 dbDao = null;
 
     /**
-     * Construct an instance with the given DbDAO.
+     * Construct an instance with the given DbDao.
      * 
-     * @param dbDao the DbDAO
+     * @param dbDao the DbDao
      */
-    public DbAudit(DbDAO dbDao) {
+    public DbAudit(DbDao2 dbDao) {
 
         if (logger.isDebugEnabled()) {
             logger.debug("Constructor: Entering");
