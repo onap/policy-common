@@ -1,8 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
- * policy-core
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,6 +71,7 @@ public interface PolicyEndPointProperties {
     String PROPERTY_DMAAP_DME2_SESSION_STICKINESS_REQUIRED_SUFFIX =
             ".dme2.sessionStickinessRequired";
 
+    String PROPERTY_NOOP_SOURCE_TOPICS = "noop.source.topics";
     String PROPERTY_NOOP_SINK_TOPICS = "noop.sink.topics";
 
     /* HTTP Server Properties */
@@ -98,5 +99,4 @@ public interface PolicyEndPointProperties {
     String PROPERTY_HTTP_CLIENT_SERVICES = "http.client.services";
 
     String PROPERTY_HTTP_URL_SUFFIX = PROPERTY_HTTP_CONTEXT_URIPATH_SUFFIX;
-
 }

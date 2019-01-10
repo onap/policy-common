@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,36 +21,57 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 import java.util.List;
-import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
+import java.util.Properties;
+import org.onap.policy.common.endpoints.event.comm.Topic;
 
 /**
- * Noop Topic Sink Factory.
+ * Topic Base Factory.
+ *
+ * @param <T> Type.
  */
-public class NoopTopicSinkFactory extends NoopTopicFactory<NoopTopicSink> {
+public interface TopicBaseFactory<T extends Topic> {
 
     /**
-     * {@inheritDoc}.
+     * build a TopicBase instance.
+     *
+     * @param properties properties.
+     * @return T instance.
      */
-    @Override
-    protected String getTopicsPropertyName() {
-        return PolicyEndPointProperties.PROPERTY_NOOP_SINK_TOPICS;
-    }
+    List<T> build(Properties properties);
 
     /**
-     * {@inheritDoc}.
+     * build a TopicBase instance.
+     *
+     * @param servers servers.
+     * @param topic topic.
+     * @param managed managed.
+     * @return T instance.
      */
-    @Override
-    protected NoopTopicSink build(List<String> servers, String topic) {
-        return new NoopTopicSink(servers, topic);
-    }
+    T build(List<String> servers, String topic, boolean managed);
 
     /**
-     * {@inheritDoc}.
+     * destroy TopicBase instance.
+     * @param topic topic.
      */
-    @Override
-    public String toString() {
-        return "NoopTopicSinkFactory [" + super.toString() + "]";
-    }
+    void destroy(String topic);
 
+    /**
+     * destroy.
+     */
+    void destroy();
+
+    /**
+     * get T instance.
+     *
+     * @param topic topic.
+     * @return T instance.
+     */
+    T get(String topic);
+
+    /**
+     * inventory of T instances.
+     *
+     * @return T instance list.
+     */
+    List<T> inventory();
 }
-

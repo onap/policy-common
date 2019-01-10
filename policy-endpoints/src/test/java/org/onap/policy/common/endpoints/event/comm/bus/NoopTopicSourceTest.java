@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP
+ * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,37 +20,38 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
-import java.util.List;
-import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-/**
- * Noop Topic Sink Factory.
- */
-public class NoopTopicSinkFactory extends NoopTopicFactory<NoopTopicSink> {
+import org.junit.Test;
 
-    /**
-     * {@inheritDoc}.
-     */
-    @Override
-    protected String getTopicsPropertyName() {
-        return PolicyEndPointProperties.PROPERTY_NOOP_SINK_TOPICS;
+public class NoopTopicSourceTest extends NoopTopicEndpointTest<NoopTopicSourceFactory, NoopTopicSource> {
+
+    public NoopTopicSourceTest() {
+        super(new NoopTopicSourceFactory());
     }
 
-    /**
-     * {@inheritDoc}.
-     */
     @Override
-    protected NoopTopicSink build(List<String> servers, String topic) {
-        return new NoopTopicSink(servers, topic);
+    protected boolean io(String message) {
+        return this.endpoint.offer(message);
     }
 
-    /**
-     * {@inheritDoc}.
-     */
-    @Override
-    public String toString() {
-        return "NoopTopicSinkFactory [" + super.toString() + "]";
+    @Test
+    public void testToString() {
+        assertTrue(this.endpoint.toString().startsWith("NoopTopicSource"));
     }
 
+    @Test
+    public void testOffer() {
+        NoopTopicSource source = new NoopTopicSource(servers, MY_TOPIC) {
+            @Override
+            protected boolean broadcast(String message) {
+                throw new RuntimeException(EXPECTED);
+            }
+
+        };
+
+        source.start();
+        assertFalse(source.offer(MY_MESSAGE));
+    }
 }
-

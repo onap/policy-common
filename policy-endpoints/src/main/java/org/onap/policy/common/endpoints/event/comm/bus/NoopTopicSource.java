@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,27 +21,31 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 import java.util.List;
-import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
+import org.onap.policy.common.endpoints.event.comm.TopicSource;
 
 /**
- * Noop Topic Sink Factory.
+ * No Operation Topic Source.
  */
-public class NoopTopicSinkFactory extends NoopTopicFactory<NoopTopicSink> {
+public class NoopTopicSource extends NoopTopicEndpoint implements TopicSource {
+
+    /**
+     * Factory.
+     */
+    public static final NoopTopicSourceFactory factory = new NoopTopicSourceFactory();
 
     /**
      * {@inheritDoc}.
      */
-    @Override
-    protected String getTopicsPropertyName() {
-        return PolicyEndPointProperties.PROPERTY_NOOP_SINK_TOPICS;
+    public NoopTopicSource(List<String> servers, String topic) {
+        super(servers, topic);
     }
 
     /**
      * {@inheritDoc}.
      */
     @Override
-    protected NoopTopicSink build(List<String> servers, String topic) {
-        return new NoopTopicSink(servers, topic);
+    public boolean offer(String event) {
+        return super.io(event);
     }
 
     /**
@@ -49,8 +53,7 @@ public class NoopTopicSinkFactory extends NoopTopicFactory<NoopTopicSink> {
      */
     @Override
     public String toString() {
-        return "NoopTopicSinkFactory [" + super.toString() + "]";
+        return "NoopTopicSource[" + super.toString() + "]";
     }
 
 }
-
