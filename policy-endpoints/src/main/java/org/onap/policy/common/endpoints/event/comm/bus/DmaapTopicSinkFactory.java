@@ -398,7 +398,7 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
             if (dmaapTopicWriters.containsKey(topic)) {
                 return dmaapTopicWriters.get(topic);
             } else {
-                throw new IllegalArgumentException("DmaapTopicSink for " + topic + " not found");
+                throw new IllegalStateException("DmaapTopicSink for " + topic + " not found");
             }
         }
     }
