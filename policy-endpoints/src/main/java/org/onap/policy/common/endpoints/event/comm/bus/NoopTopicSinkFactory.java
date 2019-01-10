@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,209 +20,37 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Properties;
-
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Noop Topic Sink Factory.
  */
-public interface NoopTopicSinkFactory {
+public class NoopTopicSinkFactory extends NoopTopicFactory<NoopTopicSink> {
 
     /**
-     * Creates noop topic sinks based on properties files.
-     * 
-     * @param properties Properties containing initialization values
-     * 
-     * @return a noop topic sink
-     * @throws IllegalArgumentException if invalid parameters are present
+     * {@inheritDoc}.
      */
-    List<NoopTopicSink> build(Properties properties);
+    @Override
+    protected String getTopicsPropertyName() {
+        return PolicyEndPointProperties.PROPERTY_NOOP_SINK_TOPICS;
+    }
 
     /**
-     * builds a noop sink.
-     * 
-     * @param servers list of servers
-     * @param topic topic name
-     * @param managed is this sink endpoint managed?
-     * @return a noop topic sink
-     * @throws IllegalArgumentException if invalid parameters are present
+     * {@inheritDoc}.
      */
-    NoopTopicSink build(List<String> servers, String topic, boolean managed);
+    @Override
+    protected NoopTopicSink build(List<String> servers, String topic) {
+        return new NoopTopicSink(servers, topic);
+    }
 
     /**
-     * Destroys a sink based on the topic.
-     * 
-     * @param topic topic name
-     * @throws IllegalArgumentException if invalid parameters are present
+     * {@inheritDoc}.
      */
-    void destroy(String topic);
-
-    /**
-     * Destroys all sinks.
-     */
-    void destroy();
-
-    /**
-     * gets a sink based on topic name.
-     * 
-     * @param topic the topic name
-     * 
-     * @return a sink with topic name
-     * @throws IllegalArgumentException if an invalid topic is provided
-     * @throws IllegalStateException if the sink is in an incorrect state
-     */
-    NoopTopicSink get(String topic);
-
-    /**
-     * Provides a snapshot of the UEB Topic Writers.
-     * 
-     * @return a list of the UEB Topic Writers
-     */
-    List<NoopTopicSink> inventory();
+    @Override
+    public String toString() {
+        return "NoopTopicSinkFactory [" + super.toString() + "]";
+    }
 
 }
 
-
-/* ------------- implementation ----------------- */
-
-/**
- * Factory of noop sinks.
- */
-class IndexedNoopTopicSinkFactory implements NoopTopicSinkFactory {
-    private static final String MISSING_TOPIC = "A topic must be provided";
-
-    /**
-     * Logger.
-     */
-    private static Logger logger = LoggerFactory.getLogger(IndexedNoopTopicSinkFactory.class);
-
-    /**
-     * noop topic sinks map.
-     */
-    protected HashMap<String, NoopTopicSink> noopTopicSinks = new HashMap<>();
-
-    @Override
-    public List<NoopTopicSink> build(Properties properties) {
-
-        final String sinkTopics = properties.getProperty(PolicyEndPointProperties.PROPERTY_NOOP_SINK_TOPICS);
-        if (sinkTopics == null || sinkTopics.isEmpty()) {
-            logger.info("{}: no topic for noop sink", this);
-            return new ArrayList<>();
-        }
-
-        final List<String> sinkTopicList = new ArrayList<>(Arrays.asList(sinkTopics.split("\\s*,\\s*")));
-        final List<NoopTopicSink> newSinks = new ArrayList<>();
-        synchronized (this) {
-            for (final String topic : sinkTopicList) {
-                if (this.noopTopicSinks.containsKey(topic)) {
-                    newSinks.add(this.noopTopicSinks.get(topic));
-                    continue;
-                }
-
-                String servers = properties.getProperty(PolicyEndPointProperties.PROPERTY_NOOP_SINK_TOPICS + "." + topic
-                        + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX);
-
-                if (servers == null || servers.isEmpty()) {
-                    servers = "noop";
-                }
-
-                final List<String> serverList = new ArrayList<>(Arrays.asList(servers.split("\\s*,\\s*")));
-
-                final String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_NOOP_SINK_TOPICS
-                        + "." + topic + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
-                boolean managed = true;
-                if (managedString != null && !managedString.isEmpty()) {
-                    managed = Boolean.parseBoolean(managedString);
-                }
-
-                final NoopTopicSink noopSink = this.build(serverList, topic, managed);
-                newSinks.add(noopSink);
-            }
-            return newSinks;
-        }
-    }
-
-    @Override
-    public NoopTopicSink build(List<String> servers, String topic, boolean managed) {
-
-        List<String> noopSinkServers = servers;
-        if (noopSinkServers == null || noopSinkServers.isEmpty()) {
-            noopSinkServers = Arrays.asList("noop");
-        }
-
-        if (topic == null || topic.isEmpty()) {
-            throw new IllegalArgumentException(MISSING_TOPIC);
-        }
-
-        synchronized (this) {
-            if (this.noopTopicSinks.containsKey(topic)) {
-                return this.noopTopicSinks.get(topic);
-            }
-
-            final NoopTopicSink sink = new NoopTopicSink(noopSinkServers, topic);
-
-            if (managed) {
-                this.noopTopicSinks.put(topic, sink);
-            }
-
-            return sink;
-        }
-    }
-
-    @Override
-    public void destroy(String topic) {
-        if (topic == null || topic.isEmpty()) {
-            throw new IllegalArgumentException(MISSING_TOPIC);
-        }
-
-        NoopTopicSink noopSink;
-        synchronized (this) {
-            if (!this.noopTopicSinks.containsKey(topic)) {
-                return;
-            }
-
-            noopSink = this.noopTopicSinks.remove(topic);
-        }
-
-        noopSink.shutdown();
-    }
-
-    @Override
-    public void destroy() {
-        final List<NoopTopicSink> sinks = this.inventory();
-        for (final NoopTopicSink sink : sinks) {
-            sink.shutdown();
-        }
-
-        synchronized (this) {
-            this.noopTopicSinks.clear();
-        }
-    }
-
-    @Override
-    public NoopTopicSink get(String topic) {
-        if (topic == null || topic.isEmpty()) {
-            throw new IllegalArgumentException(MISSING_TOPIC);
-        }
-
-        synchronized (this) {
-            if (this.noopTopicSinks.containsKey(topic)) {
-                return this.noopTopicSinks.get(topic);
-            } else {
-                throw new IllegalStateException("DmaapTopicSink for " + topic + " not found");
-            }
-        }
-    }
-
-    @Override
-    public List<NoopTopicSink> inventory() {
-        return new ArrayList<>(this.noopTopicSinks.values());
-    }
-}

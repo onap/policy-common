@@ -21,6 +21,7 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
+import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.Assert.assertEquals;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_DMAAP_DME2_EP_CONN_TIMEOUT_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_DMAAP_DME2_EP_READ_TIMEOUT_MS_SUFFIX;
@@ -126,6 +127,6 @@ public abstract class DmaapTopicFactoryTestBase<T extends Topic> extends BusTopi
         initFactory();
         buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build());
 
-        assertThatIllegalArgumentException().as("unknown topic").isThrownBy(() -> getTopic(TOPIC2));
+        assertThatIllegalStateException().as("unknown topic").isThrownBy(() -> getTopic(TOPIC2));
     }
 }

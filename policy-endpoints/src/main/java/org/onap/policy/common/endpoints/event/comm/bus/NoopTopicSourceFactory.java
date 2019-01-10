@@ -20,38 +20,35 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
+import java.util.List;
+import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 
-import org.junit.Test;
+/**
+ * No Operation Topic Source Factory.
+ */
+public class NoopTopicSourceFactory extends NoopTopicFactory<NoopTopicSource> {
 
-public class NoopTopicSinkTest extends NoopTopicEndpointTest<NoopTopicSinkFactory, NoopTopicSink> {
-
-    public NoopTopicSinkTest() {
-        super(new NoopTopicSinkFactory());
-    }
-
+    /**
+     * {@inheritDoc}.
+     */
     @Override
-    protected boolean io(String message) {
-        return endpoint.send(message);
+    protected String getTopicsPropertyName() {
+        return PolicyEndPointProperties.PROPERTY_NOOP_SOURCE_TOPICS;
     }
 
-    @Test
-    public void testToString() {
-        assertThat(endpoint.toString()).startsWith("NoopTopicSink");
+    /**
+     * {@inheritDoc}.
+     */
+    @Override
+    protected NoopTopicSource build(List<String> servers, String topic) {
+        return new NoopTopicSource(servers, topic);
     }
 
-    @Test
-    public void testSend() {
-        NoopTopicSink sink = new NoopTopicSink(servers, MY_TOPIC) {
-            @Override
-            protected boolean broadcast(String message) {
-                throw new RuntimeException(EXPECTED);
-            }
-
-        };
-
-        sink.start();
-        assertFalse(sink.send(MY_MESSAGE));
+    /**
+     * {@inheritDoc}.
+     */
+    @Override
+    public String toString() {
+        return "NoopTopicSourceFactory[" + super.toString() + "]";
     }
 }

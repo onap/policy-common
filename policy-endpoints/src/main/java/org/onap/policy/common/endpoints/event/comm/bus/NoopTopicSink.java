@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,112 +21,39 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 import java.util.List;
-
 import org.onap.policy.common.endpoints.event.comm.TopicSink;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.TopicBase;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
- * NOOP topic sink.
+ * No Operation Topic Sink.
  */
-public class NoopTopicSink extends TopicBase implements TopicSink {
+public class NoopTopicSink extends NoopTopicEndpoint implements TopicSink {
 
     /**
-     * factory.
+     * Factory.
      */
-    public static final NoopTopicSinkFactory factory = new IndexedNoopTopicSinkFactory();
+    public static final NoopTopicSinkFactory factory = new NoopTopicSinkFactory();
 
     /**
-     * logger.
-     */
-    private static Logger logger = LoggerFactory.getLogger(NoopTopicSink.class);
-
-    /**
-     * net logger.
-     */
-    private static final Logger netLogger = LoggerFactory.getLogger(NETWORK_LOGGER);
-
-    /**
-     * constructor.
-     * 
-     * @param servers servers
-     * @param topic topic
-     * @throws IllegalArgumentException if an invalid argument has been passed in
+     * {@inheritDoc}.
      */
     public NoopTopicSink(List<String> servers, String topic) {
         super(servers, topic);
     }
 
+    /**
+     * {@inheritDoc}.
+     */
     @Override
     public boolean send(String message) {
-
-        if (message == null || message.isEmpty()) {
-            throw new IllegalArgumentException("Message to send is empty");
-        }
-
-        if (!this.alive) {
-            throw new IllegalStateException(this + " is stopped");
-        }
-
-        try {
-            synchronized (this) {
-                this.recentEvents.add(message);
-            }
-
-            netLogger.info("[OUT|{}|{}]{}{}", this.getTopicCommInfrastructure(), this.topic, System.lineSeparator(),
-                    message);
-
-            broadcast(message);
-        } catch (Exception e) {
-            logger.warn("{}: cannot send because of {}", this, e.getMessage(), e);
-            return false;
-        }
-
-        return true;
+        return super.io(message);
     }
 
-    @Override
-    public CommInfrastructure getTopicCommInfrastructure() {
-        return CommInfrastructure.NOOP;
-    }
-
-    @Override
-    public boolean start() {
-        logger.info("{}: starting", this);
-
-        synchronized (this) {
-
-            if (this.alive) {
-                return true;
-            }
-
-            if (locked) {
-                throw new IllegalStateException(this + " is locked.");
-            }
-
-            this.alive = true;
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean stop() {
-        synchronized (this) {
-            this.alive = false;
-        }
-        return true;
-    }
-
-    @Override
-    public void shutdown() {
-        this.stop();
-    }
-
+    /**
+     * {@inheritDoc}.
+     */
     @Override
     public String toString() {
-        return "NoopTopicSink [toString()=" + super.toString() + "]";
+        return "NoopTopicSink[" + super.toString() + "]";
     }
 
 }

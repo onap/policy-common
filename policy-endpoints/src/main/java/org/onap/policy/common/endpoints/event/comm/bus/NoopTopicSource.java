@@ -20,38 +20,40 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertFalse;
+import java.util.List;
+import org.onap.policy.common.endpoints.event.comm.TopicSource;
 
-import org.junit.Test;
+/**
+ * No Operation Topic Source.
+ */
+public class NoopTopicSource extends NoopTopicEndpoint implements TopicSource {
 
-public class NoopTopicSinkTest extends NoopTopicEndpointTest<NoopTopicSinkFactory, NoopTopicSink> {
+    /**
+     * Factory.
+     */
+    public static final NoopTopicSourceFactory factory = new NoopTopicSourceFactory();
 
-    public NoopTopicSinkTest() {
-        super(new NoopTopicSinkFactory());
+    /**
+     * {@inheritDoc}.
+     */
+    public NoopTopicSource(List<String> servers, String topic) {
+        super(servers, topic);
     }
 
+    /**
+     * {@inheritDoc}.
+     */
     @Override
-    protected boolean io(String message) {
-        return endpoint.send(message);
+    public boolean offer(String event) {
+        return super.io(event);
     }
 
-    @Test
-    public void testToString() {
-        assertThat(endpoint.toString()).startsWith("NoopTopicSink");
+    /**
+     * {@inheritDoc}.
+     */
+    @Override
+    public String toString() {
+        return "NoopTopicSource[" + super.toString() + "]";
     }
 
-    @Test
-    public void testSend() {
-        NoopTopicSink sink = new NoopTopicSink(servers, MY_TOPIC) {
-            @Override
-            protected boolean broadcast(String message) {
-                throw new RuntimeException(EXPECTED);
-            }
-
-        };
-
-        sink.start();
-        assertFalse(sink.send(MY_MESSAGE));
-    }
 }

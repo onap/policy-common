@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP
+ * policy-endpoints
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -20,30 +20,30 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-public class NoopTopicSinkTest extends NoopTopicEndpointTest<NoopTopicSinkFactory, NoopTopicSink> {
+public class NoopTopicSourceTest extends NoopTopicEndpointTest<NoopTopicSourceFactory, NoopTopicSource> {
 
-    public NoopTopicSinkTest() {
-        super(new NoopTopicSinkFactory());
+    public NoopTopicSourceTest() {
+        super(new NoopTopicSourceFactory());
     }
 
     @Override
     protected boolean io(String message) {
-        return endpoint.send(message);
+        return this.endpoint.offer(message);
     }
 
     @Test
     public void testToString() {
-        assertThat(endpoint.toString()).startsWith("NoopTopicSink");
+        assertTrue(this.endpoint.toString().startsWith("NoopTopicSource"));
     }
 
     @Test
-    public void testSend() {
-        NoopTopicSink sink = new NoopTopicSink(servers, MY_TOPIC) {
+    public void testOffer() {
+        NoopTopicSource source = new NoopTopicSource(servers, MY_TOPIC) {
             @Override
             protected boolean broadcast(String message) {
                 throw new RuntimeException(EXPECTED);
@@ -51,7 +51,7 @@ public class NoopTopicSinkTest extends NoopTopicEndpointTest<NoopTopicSinkFactor
 
         };
 
-        sink.start();
-        assertFalse(sink.send(MY_MESSAGE));
+        source.start();
+        assertFalse(source.offer(MY_MESSAGE));
     }
 }
