@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_1c1b0bcb",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/NoopTopicFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-01-11T21:53:06Z",
+      "side": 1,
+      "message": "it is not necessary to wrap in \"new ArrayList\u003c\u003e\" - Arrays.asList should be sufficient (et., al.)",
+      "revId": "c221c45bc8d9d58f4e0632d5aa6ea9d254921d54",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_bc7bdff3",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/NoopTopicFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-01-11T21:53:06Z",
+      "side": 1,
+      "message": "checkstyle: need space after comma",
+      "revId": "c221c45bc8d9d58f4e0632d5aa6ea9d254921d54",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_7c81f7c1",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/TopicEndpointProxyTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-01-11T21:53:06Z",
+      "side": 1,
+      "message": "\"assertSame\" \u003d\u003e I learned something new - Thanks!",
+      "revId": "c221c45bc8d9d58f4e0632d5aa6ea9d254921d54",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_dc8023c2",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/TopicEndpointProxyTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-01-11T21:53:06Z",
+      "side": 1,
+      "message": "getNoopTopicSinks \u003d\u003e getUebTopicSinks",
+      "revId": "c221c45bc8d9d58f4e0632d5aa6ea9d254921d54",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_5c6c3335",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/NoopTopicSinkTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-01-11T21:53:06Z",
+      "side": 1,
+      "message": "fyi: can use assertThat(xxx).startsWith(yyy) - it will generate a more useful error message if it fails",
+      "revId": "c221c45bc8d9d58f4e0632d5aa6ea9d254921d54",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
