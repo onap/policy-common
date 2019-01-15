@@ -1,8 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,9 @@ package org.onap.policy.common.endpoints.http.server.test;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -48,7 +50,22 @@ public class RestEchoService {
     @Produces(MediaType.TEXT_PLAIN)
     @ApiOperation(value = "echoes back whatever received")
     public String echoPut(@PathParam("word") String word, Object entity) {
-        return word + ":" + entity.toString();
+        return "PUT:" + word + ":" + entity.toString();
     }
 
+    @POST
+    @Path("{word}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @ApiOperation(value = "echoes back whatever received")
+    public String echoPost(@PathParam("word") String word, Object entity)  {
+        return "POST:" + word + ":" + entity.toString();
+    }
+
+    @DELETE
+    @Path("{word}")
+    @Produces(MediaType.TEXT_PLAIN)
+    @ApiOperation(value = "echoes back whatever received")
+    public String echoDelete(@PathParam("word") String word)  {
+        return "DELETE:" + word;
+    }
 }

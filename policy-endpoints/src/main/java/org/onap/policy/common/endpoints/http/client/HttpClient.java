@@ -1,8 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,36 +27,136 @@ import javax.ws.rs.core.Response;
 
 import org.onap.policy.common.capabilities.Startable;
 
+/**
+ * Http Client interface.
+ */
 public interface HttpClient extends Startable {
 
-    public static final HttpClientFactory factory = new IndexedHttpClientFactory();
+    /**
+     * Factory.
+     */
+    HttpClientFactory factory = new IndexedHttpClientFactory();
 
-    public Response get(String path);
+    /**
+     * GET request.
+     *
+     * @param path context uri path.
+     * @return response
+     */
+    Response get(String path);
 
-    public Response get();
+    /**
+     * GET request.
+     *
+     * @return response
+     */
+    Response get();
 
-    public Response put(String path, Entity<?> entity, Map<String, Object> headers);
+    /**
+     * PUT request.
+     *
+     * @param path context uri path
+     * @param entity body
+     * @param headers headers
+     *
+     * @return response.
+     */
+    Response put(String path, Entity<?> entity, Map<String, Object> headers);
 
-    public static <T> T getBody(Response response, Class<T> entityType) {
+    /**
+     * POST request.
+     *
+     * @param path context uri path
+     * @param entity body
+     * @param headers headers
+     *
+     * @return response.
+     */
+    Response post(String path, Entity<?> entity, Map<String, Object> headers);
+
+    /**
+     * DELETE request.
+     *
+     * @param path context uri path
+     * @param headers headers
+     *
+     * @return response.
+     */
+    Response delete(String path, Map<String, Object> headers);
+
+    /**
+     * Retrieve the body from the HTTP transaction.
+     *
+     * @param response response.
+     * @param entityType body type.
+     * @param <T> body class.
+     *
+     * @return response.
+     */
+    static <T> T getBody(Response response, Class<T> entityType) {
         return response.readEntity(entityType);
     }
 
-    public String getName();
+    /**
+     * Get the client name.
+     * @return name
+     */
+    String getName();
 
-    public boolean isHttps();
+    /**
+     * HTTPS support.
+     *
+     * @return if the client uses https
+     */
+    boolean isHttps();
 
-    public boolean isSelfSignedCerts();
+    /**
+     * Self-signed certificates.
+     *
+     * @return if the self-signed certificates are allowed
+     */
+    boolean isSelfSignedCerts();
 
-    public String getHostname();
+    /**
+     * Get the host name.
+     *
+     * @return host name
+     */
+    String getHostname();
 
-    public int getPort();
+    /**
+     * Get the port.
+     *
+     * @return port
+     */
+    int getPort();
 
-    public String getBasePath();
+    /**
+     * Get the base path.
+     *
+     * @return base path
+     */
+    String getBasePath();
 
-    public String getUserName();
+    /**
+     * Get the user name.
+     *
+     * @return the user name
+     */
+    String getUserName();
 
-    public String getPassword();
+    /**
+     * Get the password.
+     *
+     * @return the password
+     */
+    String getPassword();
 
-    public String getBaseUrl();
+    /**
+     * Get the base URL.
+     *
+     * @return the base URL
+     */
+    String getBaseUrl();
 
 }
