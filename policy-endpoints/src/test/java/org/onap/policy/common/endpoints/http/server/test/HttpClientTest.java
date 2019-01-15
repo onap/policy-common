@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,18 +22,15 @@
 package org.onap.policy.common.endpoints.http.server.test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -43,12 +40,8 @@ import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.utils.network.NetworkUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class HttpClientTest {
-    private static final Logger logger = LoggerFactory.getLogger(HttpClientTest.class);
-
     private static final HashMap<String, String> savedValuesMap = new HashMap<>();
 
     /**
@@ -59,8 +52,6 @@ public class HttpClientTest {
      */
     @BeforeClass
     public static void setUp() throws InterruptedException, IOException {
-        logger.info("-- setup() --");
-
         /* echo server - http + no auth */
 
         final HttpServletServer echoServerNoAuth =
@@ -124,8 +115,6 @@ public class HttpClientTest {
      */
     @AfterClass
     public static void tearDown() {
-        logger.info("-- tearDown() --");
-
         HttpServletServer.factory.destroy();
         HttpClient.factory.destroy();
 
@@ -166,22 +155,18 @@ public class HttpClientTest {
 
     @Test
     public void testHttpGetNoAuthClient() throws Exception {
-        logger.info("-- testHttpNoAuthClient() --");
-
         final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpNoAuthClient")
                 .useHttps(false).allowSelfSignedCerts(false).hostname("localhost").port(6666).basePath("junit/echo")
                 .userName(null).password(null).managed(true).build());
         final Response response = client.get("hello");
         final String body = HttpClient.getBody(response, String.class);
 
-        assertTrue(response.getStatus() == 200);
-        assertTrue(body.equals("hello"));
+        assertEquals(200, response.getStatus());
+        assertEquals("hello", body);
     }
 
     @Test
     public void testHttpPutNoAuthClient() throws Exception {
-        logger.info("-- testHttpNoAuthClient() --");
-
         final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpNoAuthClient")
                 .useHttps(false).allowSelfSignedCerts(false).hostname("localhost").port(6666).basePath("junit/echo")
                 .userName(null).password(null).managed(true).build());
@@ -190,14 +175,39 @@ public class HttpClientTest {
         final Response response = client.put("hello", entity, Collections.emptyMap());
         final String body = HttpClient.getBody(response, String.class);
 
-        assertTrue(response.getStatus() == 200);
-        assertTrue(body.equals("hello:{myParameter=myValue}"));
+        assertEquals(200, response.getStatus());
+        assertEquals("PUT:hello:{myParameter=myValue}", body);
+    }
+
+    @Test
+    public void testHttpPostNoAuthClient() throws Exception {
+        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpNoAuthClient")
+            .useHttps(false).allowSelfSignedCerts(false).hostname("localhost").port(6666).basePath("junit/echo")
+            .userName(null).password(null).managed(true).build());
+
+        Entity<MyEntity> entity = Entity.entity(new MyEntity("myValue"), MediaType.APPLICATION_JSON);
+        final Response response = client.post("hello", entity, Collections.emptyMap());
+        final String body = HttpClient.getBody(response, String.class);
+
+        assertEquals(200, response.getStatus());
+        assertEquals("POST:hello:{myParameter=myValue}", body);
+    }
+
+    @Test
+    public void testHttpDeletetNoAuthClient() throws Exception {
+        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpNoAuthClient")
+            .useHttps(false).allowSelfSignedCerts(false).hostname("localhost").port(6666).basePath("junit/echo")
+            .userName(null).password(null).managed(true).build());
+
+        final Response response = client.delete("hello", Collections.emptyMap());
+        final String body = HttpClient.getBody(response, String.class);
+
+        assertEquals(200, response.getStatus());
+        assertEquals("DELETE:hello", body);
     }
 
     @Test
     public void testHttpGetAuthClient() throws Exception {
-        logger.info("-- testHttpAuthClient() --");
-
         final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient")
                 .useHttps(true).allowSelfSignedCerts(true).hostname("localhost").port(6667).basePath("junit/echo")
                 .userName("x").password("y").managed(true).build());
@@ -205,14 +215,12 @@ public class HttpClientTest {
         final Response response = client.get("hello");
         final String body = HttpClient.getBody(response, String.class);
 
-        assertTrue(response.getStatus() == 200);
-        assertTrue(body.equals("hello"));
+        assertEquals(200, response.getStatus());
+        assertEquals("hello", body);
     }
 
     @Test
     public void testHttpPutAuthClient() throws Exception {
-        logger.info("-- testHttpAuthClient() --");
-
         final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient")
                 .useHttps(true).allowSelfSignedCerts(true).hostname("localhost").port(6667).basePath("junit/echo")
                 .userName("x").password("y").managed(true).build());
@@ -221,25 +229,21 @@ public class HttpClientTest {
         final Response response = client.put("hello", entity, Collections.emptyMap());
         final String body = HttpClient.getBody(response, String.class);
 
-        assertTrue(response.getStatus() == 200);
-        assertTrue(body.equals("hello:{myParameter=myValue}"));
+        assertEquals(200, response.getStatus());
+        assertEquals("PUT:hello:{myParameter=myValue}", body);
     }
 
     @Test
     public void testHttpAuthClient401() throws Exception {
-        logger.info("-- testHttpAuthClient401() --");
-
         final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient401")
                 .useHttps(true).allowSelfSignedCerts(true).hostname("localhost").port(6667).basePath("junit/echo")
                 .userName(null).password(null).managed(true).build());
         final Response response = client.get("hello");
-        assertEquals(new Integer(response.getStatus()).toString(), response.getStatus(), 401);
+        assertEquals(401, response.getStatus());
     }
 
     @Test
     public void testHttpAuthClientProps() throws Exception {
-        logger.info("-- testHttpAuthClientProps() --");
-
         final Properties httpProperties = new Properties();
 
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES, "PAP,PDP");
@@ -309,10 +313,10 @@ public class HttpClientTest {
                 + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
 
         final List<HttpServletServer> servers = HttpServletServer.factory.build(httpProperties);
-        assertTrue(servers.size() == 2);
+        assertEquals(2, servers.size());
 
         final List<HttpClient> clients = HttpClient.factory.build(httpProperties);
-        assertTrue(clients.size() == 2);
+        assertEquals(2, clients.size());
 
         for (final HttpServletServer server : servers) {
             server.waitedStart(10000);
@@ -320,11 +324,11 @@ public class HttpClientTest {
 
         final HttpClient clientPap = HttpClient.factory.get("PAP");
         final Response response = clientPap.get();
-        assertTrue(response.getStatus() == 200);
+        assertEquals(200, response.getStatus());
 
         final HttpClient clientPdp = HttpClient.factory.get("PDP");
         final Response response2 = clientPdp.get("test");
-        assertTrue(response2.getStatus() == 500);
+        assertEquals(500, response2.getStatus());
     }
 
     class MyEntity {
