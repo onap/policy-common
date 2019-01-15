@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
@@ -35,13 +35,13 @@ public interface HttpClientFactory {
     /**
      * Build and http client with the following parameters.
      */
-    public HttpClient build(BusTopicParams busTopicParams)
+    HttpClient build(BusTopicParams busTopicParams)
             throws KeyManagementException, NoSuchAlgorithmException;
 
     /**
      * Build http client from properties.
      */
-    public List<HttpClient> build(Properties properties) throws KeyManagementException, NoSuchAlgorithmException;
+    List<HttpClient> build(Properties properties) throws KeyManagementException, NoSuchAlgorithmException;
 
     /**
      * Get http client.
@@ -49,21 +49,24 @@ public interface HttpClientFactory {
      * @param name the name
      * @return the http client
      */
-    public HttpClient get(String name);
+    HttpClient get(String name);
 
     /**
      * List of http clients.
      * 
      * @return http clients
      */
-    public List<HttpClient> inventory();
+    List<HttpClient> inventory();
 
     /**
      * Destroy by name.
      * 
      * @param name name
      */
-    public void destroy(String name);
+    void destroy(String name);
 
-    public void destroy();
+    /**
+     * destroy the factory.
+     */
+    void destroy();
 }

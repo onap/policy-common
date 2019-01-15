@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -46,6 +46,9 @@ import org.onap.policy.common.endpoints.http.client.HttpClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Http Client implementation using a Jersey Client.
+ */
 public class JerseyClient implements HttpClient {
 
     /**
@@ -164,11 +167,17 @@ public class JerseyClient implements HttpClient {
 
     @Override
     public Response put(String path, Entity<?> entity, Map<String, Object> headers) {
-        Builder builder = this.client.target(this.baseUrl).path(path).request();
-        for (Entry<String, Object> header : headers.entrySet()) {
-            builder.header(header.getKey(), header.getValue());
-        }
-        return builder.put(entity);
+        return getBuilder(path, headers).put(entity);
+    }
+
+    @Override
+    public Response post(String path, Entity<?> entity, Map<String, Object> headers) {
+        return getBuilder(path, headers).post(entity);
+    }
+
+    @Override
+    public Response delete(String path, Map<String, Object> headers) {
+        return getBuilder(path, headers).delete();
     }
 
     @Override
@@ -273,5 +282,14 @@ public class JerseyClient implements HttpClient {
         builder.append("]");
         return builder.toString();
     }
+
+    private Builder getBuilder(String path, Map<String, Object> headers) {
+        Builder builder = this.client.target(this.baseUrl).path(path).request();
+        for (Entry<String, Object> header : headers.entrySet()) {
+            builder.header(header.getKey(), header.getValue());
+        }
+        return builder;
+    }
+
 
 }
