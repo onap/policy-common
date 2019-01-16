@@ -16,6 +16,24 @@
       "revId": "d91e7384cc6155dda5c7481d683cefea0cfbabe6",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_85ea3baa",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/RestMockHealthCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-01-16T19:59:12Z",
+      "side": 1,
+      "message": "right, there\u0027s no changes here, I\u0027ll restore 2017 in the license header.",
+      "parentUuid": "9adffdf1_05b96b14",
+      "revId": "d91e7384cc6155dda5c7481d683cefea0cfbabe6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
