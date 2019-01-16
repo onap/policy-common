@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_05b96b14",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/RestMockHealthCheck.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-01-16T14:02:49Z",
+      "side": 1,
+      "message": "Other than the license, it doesn\u0027t look like this file has changed.  Was it changed earlier this year and the license not updated?  Was it changed during 2018?",
+      "revId": "d91e7384cc6155dda5c7481d683cefea0cfbabe6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
