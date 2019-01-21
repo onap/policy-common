@@ -36,7 +36,7 @@ public interface HttpClientFactory {
      * Build and http client with the following parameters.
      */
     HttpClient build(BusTopicParams busTopicParams)
-            throws KeyManagementException, NoSuchAlgorithmException;
+            throws KeyManagementException, NoSuchAlgorithmException, ClassNotFoundException;
 
     /**
      * Build http client from properties.
