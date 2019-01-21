@@ -129,6 +129,9 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
             final String restUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
                 + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_URIPATH_SUFFIX);
 
+            final String classProv = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
+                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER);
+            
             final String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
                 + "." + serviceName + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
             boolean managed = true;
@@ -157,8 +160,13 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
                 aaf = Boolean.parseBoolean(aafString);
             }
 
+            
             HttpServletServer service = build(serviceName, https, hostName, servicePort, contextUriPath, swagger,
                 managed);
+
+            if (classProv != null && !classProv.isEmpty()) {
+                service.setSerializationProvider(classProv);
+            }
 
             /* authentication method either AAF or HTTP Basic Auth */
 
