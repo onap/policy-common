@@ -94,6 +94,8 @@ public interface PolicyEndPointProperties {
     String PROPERTY_HTTP_HTTPS_SUFFIX = ".https";
     String PROPERTY_HTTP_SWAGGER_SUFFIX = ".swagger";
 
+    String PROPERTY_HTTP_SERIALIZATION_PROVIDER = ".serialization.provider";
+
     /* HTTP Client Properties */
 
     String PROPERTY_HTTP_CLIENT_SERVICES = "http.client.services";
