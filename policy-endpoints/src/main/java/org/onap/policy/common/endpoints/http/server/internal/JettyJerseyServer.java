@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,12 +23,19 @@ package org.onap.policy.common.endpoints.http.server.internal;
 import io.swagger.jersey.config.JerseyJaxrsConfig;
 import java.util.HashMap;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.glassfish.jersey.server.ServerProperties;
 import org.onap.policy.common.utils.network.NetworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * REST Jetty Server that uses Jersey Servlets to support JAX-RS Web Services.
+ *
+ * <p>Note: the serialization provider will always be added to the server's class providers,
+ * as will the swagger providers (assuming swagger has been enabled). This happens whether
+ * {@link #addServletClass(String, String)} is used or
+ * {@link #addServletPackage(String, String)} is used. Thus it's possible to have both the
+ * server's class provider property and the server's package provider property populated.
  */
 public class JettyJerseyServer extends JettyServletServer {
 
@@ -51,26 +58,6 @@ public class JettyJerseyServer extends JettyServletServer {
      * Swagger Pretty Print.
      */
     protected static final String SWAGGER_PRETTY_PRINT = "swagger.pretty.print";
-
-    /**
-     * Swagger Packages.
-     */
-    protected static final String SWAGGER_INIT_PACKAGES_PARAM_VALUE = "io.swagger.jaxrs.listing";
-
-    /**
-     * Jersey Packages Init Param Name.
-     */
-    protected static final String JERSEY_INIT_PACKAGES_PARAM_NAME = "jersey.config.server.provider.packages";
-
-    /**
-     * Jersey Packages Init Param Value.
-     */
-    protected static final String JERSEY_INIT_PACKAGES_PARAM_VALUE = "com.fasterxml.jackson.jaxrs.json";
-
-    /**
-     * Jersey Classes Init Param Name.
-     */
-    protected static final String JERSEY_INIT_CLASSNAMES_PARAM_NAME = "jersey.config.server.provider.classnames";
 
     /**
      * Jersey Jackson Classes Init Param Value.
@@ -99,15 +86,20 @@ public class JettyJerseyServer extends JettyServletServer {
     protected String swaggerId = null;
 
     /**
+     * The serialization provider to be used when classes are added to the service.
+     */
+    private String classProvider = JERSEY_JACKSON_INIT_CLASSNAMES_PARAM_VALUE;
+
+    /**
      * Constructor.
-     * 
+     *
      * @param name name
      * @param https enable https?
      * @param host host server host
      * @param port port server port
      * @param swagger support swagger?
      * @param contextPath context path
-     * 
+     *
      * @throws IllegalArgumentException in invalid arguments are provided
      */
     public JettyJerseyServer(String name, boolean https, String host, int port, String contextPath, boolean swagger) {
@@ -145,10 +137,10 @@ public class JettyJerseyServer extends JettyServletServer {
 
     /**
      * Retrieves cached server based on servlet path.
-     * 
+     *
      * @param servletPath servlet path
      * @return the jetty servlet holder
-     * 
+     *
      * @throws IllegalArgumentException if invalid arguments are provided
      */
     protected synchronized ServletHolder getServlet(String servletPath) {
@@ -176,27 +168,19 @@ public class JettyJerseyServer extends JettyServletServer {
 
         ServletHolder jerseyServlet = this.getServlet(servPath);
 
-        String initClasses = jerseyServlet.getInitParameter(JERSEY_INIT_CLASSNAMES_PARAM_NAME);
-        if (initClasses != null && !initClasses.isEmpty()) {
-            logger.warn("Both packages and classes are used in Jetty+Jersey Configuration: {}", restPackage);
-        }
+        jerseyServlet.setInitParameter(ServerProperties.MOXY_JSON_FEATURE_DISABLE, "true");
 
-        String initPackages = jerseyServlet.getInitParameter(JERSEY_INIT_PACKAGES_PARAM_NAME);
+        initStandardParams(jerseyServlet);
+
+        String initPackages = jerseyServlet.getInitParameter(ServerProperties.PROVIDER_PACKAGES);
         if (initPackages == null) {
-            if (this.swaggerId != null) {
-                initPackages =
-                        JERSEY_INIT_PACKAGES_PARAM_VALUE + "," + SWAGGER_INIT_PACKAGES_PARAM_VALUE + "," + restPackage;
+            initPackages = restPackage;
 
-                jerseyServlet.setInitParameter(SWAGGER_CONTEXT_ID, swaggerId);
-                jerseyServlet.setInitParameter(SWAGGER_SCANNER_ID, swaggerId);
-            } else {
-                initPackages = JERSEY_INIT_PACKAGES_PARAM_VALUE + "," + restPackage;
-            }
         } else {
-            initPackages = initPackages + "," + restPackage;
+            initPackages += "," + restPackage;
         }
 
-        jerseyServlet.setInitParameter(JERSEY_INIT_PACKAGES_PARAM_NAME, initPackages);
+        jerseyServlet.setInitParameter(ServerProperties.PROVIDER_PACKAGES, initPackages);
 
         if (logger.isDebugEnabled()) {
             logger.debug("{}: added REST package: {}", this, jerseyServlet.dump());
@@ -216,31 +200,55 @@ public class JettyJerseyServer extends JettyServletServer {
 
         ServletHolder jerseyServlet = this.getServlet(servletPath);
 
-        String initPackages = jerseyServlet.getInitParameter(JERSEY_INIT_PACKAGES_PARAM_NAME);
-        if (initPackages != null && !initPackages.isEmpty()) {
-            logger.warn("Both classes and packages are used in Jetty+Jersey Configuration: {}", restClass);
-        }
+        initStandardParams(jerseyServlet);
 
-        String initClasses = jerseyServlet.getInitParameter(JERSEY_INIT_CLASSNAMES_PARAM_NAME);
+        String initClasses = jerseyServlet.getInitParameter(ServerProperties.PROVIDER_CLASSNAMES);
         if (initClasses == null) {
-            if (this.swaggerId != null) {
-                initClasses = JERSEY_JACKSON_INIT_CLASSNAMES_PARAM_VALUE + "," + SWAGGER_INIT_CLASSNAMES_PARAM_VALUE
-                        + "," + restClass;
+            initClasses = restClass;
 
-                jerseyServlet.setInitParameter(SWAGGER_CONTEXT_ID, swaggerId);
-                jerseyServlet.setInitParameter(SWAGGER_SCANNER_ID, swaggerId);
-            } else {
-                initClasses = JERSEY_JACKSON_INIT_CLASSNAMES_PARAM_VALUE + "," + restClass;
-            }
         } else {
-            initClasses = initClasses + "," + restClass;
+            initClasses += "," + restClass;
         }
 
-        jerseyServlet.setInitParameter(JERSEY_INIT_CLASSNAMES_PARAM_NAME, initClasses);
+        jerseyServlet.setInitParameter(ServerProperties.PROVIDER_CLASSNAMES, initClasses);
 
         if (logger.isDebugEnabled()) {
             logger.debug("{}: added REST class: {}", this, jerseyServlet.dump());
         }
+    }
+
+    /**
+     * Adds "standard" parameters to the initParameter set. Sets swagger parameters, if
+     * specified, and sets the class provider property. This can be invoked multiple
+     * times, but only the first actually causes any changes to the parameter set.
+     *
+     * @param jerseyServlet servlet into which parameters should be added
+     */
+    private void initStandardParams(ServletHolder jerseyServlet) {
+        String initClasses = jerseyServlet.getInitParameter(ServerProperties.PROVIDER_CLASSNAMES);
+        if (initClasses != null) {
+            return;
+        }
+
+        initClasses = classProvider;
+
+        if (this.swaggerId != null) {
+            initClasses += "," + SWAGGER_INIT_CLASSNAMES_PARAM_VALUE;
+
+            jerseyServlet.setInitParameter(SWAGGER_CONTEXT_ID, swaggerId);
+            jerseyServlet.setInitParameter(SWAGGER_SCANNER_ID, swaggerId);
+        }
+
+        jerseyServlet.setInitParameter(ServerProperties.PROVIDER_CLASSNAMES, initClasses);
+    }
+
+    /**
+     * Note: this must be invoked <i>before</i> {@link #addServletClass(String, String)}
+     * or {@link #addServletPackage(String, String)}.
+     */
+    @Override
+    public void setSerializationProvider(String provider) {
+        classProvider = provider;
     }
 
     @Override
