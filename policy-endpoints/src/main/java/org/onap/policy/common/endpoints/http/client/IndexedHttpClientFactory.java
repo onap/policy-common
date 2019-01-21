@@ -49,7 +49,7 @@ class IndexedHttpClientFactory implements HttpClientFactory {
 
     @Override
     public synchronized HttpClient build(BusTopicParams busTopicParams)
-            throws KeyManagementException, NoSuchAlgorithmException {
+            throws KeyManagementException, NoSuchAlgorithmException, ClassNotFoundException {
         if (clients.containsKey(busTopicParams.getClientName())) {
             return clients.get(busTopicParams.getClientName());
         }
@@ -109,6 +109,9 @@ class IndexedHttpClientFactory implements HttpClientFactory {
             String password = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "."
                     + clientName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX);
 
+            final String classProv = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES
+                + "." + clientName + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER);
+
             String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "."
                     + clientName + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
             boolean managed = true;
@@ -128,6 +131,7 @@ class IndexedHttpClientFactory implements HttpClientFactory {
                                 .userName(userName)
                                 .password(password)
                                 .managed(managed)
+                                .serializationProvider(classProv)
                                 .build());
                 clientList.add(client);
             } catch (Exception e) {
