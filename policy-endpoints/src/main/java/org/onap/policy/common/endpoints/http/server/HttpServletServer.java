@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,6 +60,13 @@ public interface HttpServletServer extends Startable {
      * Checks if AAF authentication has been enabled.
      */
     boolean isAaf();
+
+    /**
+     * Sets the serialization provider to be used when classes are added to the service.
+     * 
+     * @param provider the provider to use for message serialization and de-serialization
+     */
+    void setSerializationProvider(String provider);
 
     /**
      * Adds a filter at the specified path.

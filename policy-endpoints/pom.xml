@@ -80,6 +80,10 @@
                     <groupId>log4j</groupId>
                     <artifactId>log4j</artifactId>
                 </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish.jersey.media</groupId>
+                    <artifactId>jersey-media-json-jackson</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -110,11 +114,13 @@
             <version>${jersey.version}</version>
         </dependency>
 
+        <!-- jrh3
         <dependency>
             <groupId>org.glassfish.jersey.media</groupId>
             <artifactId>jersey-media-json-jackson</artifactId>
             <version>${jersey.version}</version>
         </dependency>
+         -->
 
         <dependency>
             <groupId>org.glassfish.jersey.containers</groupId>
@@ -138,6 +144,17 @@
             <groupId>org.glassfish.jersey.core</groupId>
             <artifactId>jersey-common</artifactId>
             <version>${jersey.version}</version>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
