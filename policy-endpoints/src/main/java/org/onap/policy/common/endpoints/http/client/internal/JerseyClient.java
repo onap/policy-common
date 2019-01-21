@@ -22,7 +22,6 @@
 package org.onap.policy.common.endpoints.http.client.internal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -30,7 +29,6 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -39,7 +37,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.Response;
-
+import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.http.client.HttpClient;
@@ -48,6 +46,10 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Http Client implementation using a Jersey Client.
+ * 
+ * <p>Note: the serialization provider will be ignored if the maven artifact,
+ * <i>jersey-media-json-jackson</i>, is included, regardless of whether it's included
+ * directly or indirectly.
  */
 public class JerseyClient implements HttpClient {
 
@@ -55,6 +57,9 @@ public class JerseyClient implements HttpClient {
      * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(JerseyClient.class);
+    
+    protected static final String JERSEY_DEFAULT_SERIALIZATION_PROVIDER =
+                    "com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider";
 
     protected final String name;
     protected final boolean https;
@@ -73,14 +78,17 @@ public class JerseyClient implements HttpClient {
     /**
      * Constructor.
      * 
-     * <p>name the name https is it https or not selfSignedCerts are there self signed certs hostname
-     * the hostname port port being used basePath base context userName user password password
+     * <p>name the name https is it https or not selfSignedCerts are there self signed certs
+     * hostname the hostname port port being used basePath base context userName user
+     * password password
      * 
      * @param busTopicParams Input parameters object
      * @throws KeyManagementException key exception
      * @throws NoSuchAlgorithmException no algorithm exception
+     * @throws ClassNotFoundException if the serialization provider cannot be found
      */
-    public JerseyClient(BusTopicParams busTopicParams) throws KeyManagementException, NoSuchAlgorithmException {
+    public JerseyClient(BusTopicParams busTopicParams)
+                    throws KeyManagementException, NoSuchAlgorithmException, ClassNotFoundException {
 
         super();
 
@@ -147,8 +155,25 @@ public class JerseyClient implements HttpClient {
             this.client.register(authFeature);
         }
 
+        this.client.register(getSerProvClass(busTopicParams.getSerializationProvider()));
+        this.client.property(ClientProperties.MOXY_JSON_FEATURE_DISABLE, "true");
+
         this.baseUrl = tmpBaseUrl.append(this.hostname).append(":").append(this.port).append("/")
                 .append((this.basePath == null) ? "" : this.basePath).toString();
+    }
+
+    /**
+     * Gets the serialization provider class.
+     * 
+     * @param serializationProvider class name of the serialization provider, or
+     *        {@code null} to use the default
+     * @return serialization provider class
+     * @throws ClassNotFoundException if the serialization provider cannot be found
+     */
+    private Class<?> getSerProvClass(String serializationProvider) throws ClassNotFoundException {
+        String className = (serializationProvider == null || serializationProvider.isEmpty()
+                        ? JERSEY_DEFAULT_SERIALIZATION_PROVIDER : serializationProvider);
+        return Class.forName(className);
     }
 
     @Override

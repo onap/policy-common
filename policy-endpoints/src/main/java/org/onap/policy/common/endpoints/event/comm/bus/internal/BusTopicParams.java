@@ -3,7 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018 Samsung Electronics Co., Ltd. All rights reserved.
- * Modifications Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,6 +72,7 @@ public class BusTopicParams {
     private String clientName;
     private String hostname;
     private String basePath;
+    private String serializationProvider;
 
     public static TopicParamsBuilder builder() {
         return new TopicParamsBuilder();
@@ -254,6 +255,10 @@ public class BusTopicParams {
         return additionalProps != null;
     }
 
+    public String getSerializationProvider() {
+        return serializationProvider;
+    }
+
     public static class TopicParamsBuilder {
 
         final BusTopicParams params = new BusTopicParams();
@@ -382,6 +387,11 @@ public class BusTopicParams {
 
         public TopicParamsBuilder basePath(String basePath) {
             this.params.basePath = basePath;
+            return this;
+        }
+
+        public TopicParamsBuilder serializationProvider(String serializationProvider) {
+            this.params.serializationProvider = serializationProvider;
             return this;
         }
 
