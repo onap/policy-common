@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_c5b35196",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-01-23T21:15:07Z",
+      "side": 1,
+      "message": "We don\u0027t seem to be using dmaapClient via configuration so far .. but what would happen this library is used?   The library uses jackson underneath and I suspect we could start getting ClassNotFound errors ?  Is that a correct assesment?\n\nOn the other hand, I think if there\u0027s no exclusion, the library would always be present and the new code you have added would not be exercised, it would use the jackson one default.\n\nIs my assesment correct?   What are your thoughts Jim?",
+      "revId": "c25eddd70e227068e22560281dc43b17568e3f12",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
