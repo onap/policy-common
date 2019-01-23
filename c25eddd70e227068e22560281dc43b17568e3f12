@@ -16,6 +16,23 @@
       "revId": "c25eddd70e227068e22560281dc43b17568e3f12",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_693d9fc3",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/client/HttpClientFactory.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-01-23T21:36:54Z",
+      "side": 1,
+      "message": "After merging, take a look through the non policy/common repos, since ClassNotFoundException is unchecked, can cause compiler errors if surrounding code catches exceptions individually rather than the generic exception.",
+      "revId": "c25eddd70e227068e22560281dc43b17568e3f12",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
