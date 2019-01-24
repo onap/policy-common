@@ -22,6 +22,8 @@
 package org.onap.policy.common.endpoints.http.server.test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.security.KeyManagementException;
@@ -34,6 +36,7 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
@@ -53,7 +56,7 @@ public class HttpClientTest {
      * @throws IOException can have an IO exception
      */
     @BeforeClass
-    public static void setUp() throws InterruptedException, IOException {
+    public static void setUpBeforeClass() throws InterruptedException, IOException {
         /* echo server - http + no auth */
 
         final HttpServletServer echoServerNoAuth =
@@ -113,10 +116,21 @@ public class HttpClientTest {
     }
 
     /**
+     * Clear https clients and reset providers.
+     */
+    @Before
+    public void setUp() {
+        HttpClient.factory.destroy();
+
+        MyGsonProvider.resetSome();
+        MyJacksonProvider.resetSome();
+    }
+
+    /**
      * After the class is created method.
      */
     @AfterClass
-    public static void tearDown() {
+    public static void tearDownAfterClass() {
         HttpServletServer.factory.destroy();
         HttpClient.factory.destroy();
 
@@ -227,6 +241,44 @@ public class HttpClientTest {
     }
 
     @Test
+    public void testHttpPutAuthClient_JacksonProvider() throws Exception {
+        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient")
+                        .useHttps(true).allowSelfSignedCerts(true).hostname("localhost").port(6667)
+                        .basePath("junit/echo").userName("x").password("y").managed(true)
+                        .serializationProvider(MyJacksonProvider.class.getCanonicalName()).build());
+
+        Entity<MyEntity> entity = Entity.entity(new MyEntity("myValue"), MediaType.APPLICATION_JSON);
+        final Response response = client.put("hello", entity, Collections.emptyMap());
+        final String body = HttpClient.getBody(response, String.class);
+
+        assertEquals(200, response.getStatus());
+        assertEquals("PUT:hello:{myParameter=myValue}", body);
+
+        assertTrue(MyJacksonProvider.hasWrittenSome());
+
+        assertFalse(MyGsonProvider.hasWrittenSome());
+    }
+
+    @Test
+    public void testHttpPutAuthClient_GsonProvider() throws Exception {
+        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient")
+                        .useHttps(true).allowSelfSignedCerts(true).hostname("localhost").port(6667)
+                        .basePath("junit/echo").userName("x").password("y").managed(true)
+                        .serializationProvider(MyGsonProvider.class.getCanonicalName()).build());
+
+        Entity<MyEntity> entity = Entity.entity(new MyEntity("myValue"), MediaType.APPLICATION_JSON);
+        final Response response = client.put("hello", entity, Collections.emptyMap());
+        final String body = HttpClient.getBody(response, String.class);
+
+        assertEquals(200, response.getStatus());
+        assertEquals("PUT:hello:{myParameter=myValue}", body);
+
+        assertTrue(MyGsonProvider.hasWrittenSome());
+
+        assertFalse(MyJacksonProvider.hasWrittenSome());
+    }
+
+    @Test
     public void testHttpAuthClient401() throws Exception {
         final HttpClient client = getNoAuthHttpClient("testHttpAuthClient401", true,
             6667);
@@ -321,16 +373,89 @@ public class HttpClientTest {
         final HttpClient clientPdp = HttpClient.factory.get("PDP");
         final Response response2 = clientPdp.get("test");
         assertEquals(500, response2.getStatus());
+
+        assertFalse(MyJacksonProvider.hasWrittenSome());
+        assertFalse(MyGsonProvider.hasWrittenSome());
     }
 
-    private HttpClient getAuthHttpClient() throws KeyManagementException, NoSuchAlgorithmException {
+    @Test
+    public void testHttpAuthClientProps_MixedProviders() throws Exception {
+        final Properties httpProperties = new Properties();
+
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES, "GSON,JACKSON");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "GSON"
+                + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, "localhost");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "GSON"
+                + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "6666");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "GSON"
+                + PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX, "junit/echo");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "GSON"
+                + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, "false");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "GSON"
+                + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
+        httpProperties.setProperty(
+                        PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "GSON"
+                                        + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER,
+                        MyGsonProvider.class.getCanonicalName());
+
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "JACKSON"
+                + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, "localhost");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "JACKSON"
+                + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "6666");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "JACKSON"
+                + PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX, "junit/echo");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "JACKSON"
+                + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, "false");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "JACKSON"
+                + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
+        httpProperties.setProperty(
+                        PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "JACKSON"
+                                        + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER,
+                        MyJacksonProvider.class.getCanonicalName());
+
+        final List<HttpClient> clients = HttpClient.factory.build(httpProperties);
+        assertEquals(2, clients.size());
+
+        Entity<MyEntity> entity = Entity.entity(new MyEntity("myValue"), MediaType.APPLICATION_JSON);
+
+        // use gson client
+        MyGsonProvider.resetSome();
+        MyJacksonProvider.resetSome();
+        HttpClient client = HttpClient.factory.get("GSON");
+
+        Response response = client.put("hello", entity, Collections.emptyMap());
+        String body = HttpClient.getBody(response, String.class);
+
+        assertEquals(200, response.getStatus());
+        assertEquals("PUT:hello:{myParameter=myValue}", body);
+
+        assertTrue(MyGsonProvider.hasWrittenSome());
+        assertFalse(MyJacksonProvider.hasWrittenSome());
+
+        // use jackson client
+        MyGsonProvider.resetSome();
+        MyJacksonProvider.resetSome();
+        client = HttpClient.factory.get("JACKSON");
+
+        response = client.put("hello", entity, Collections.emptyMap());
+        body = HttpClient.getBody(response, String.class);
+
+        assertEquals(200, response.getStatus());
+        assertEquals("PUT:hello:{myParameter=myValue}", body);
+
+        assertTrue(MyJacksonProvider.hasWrittenSome());
+        assertFalse(MyGsonProvider.hasWrittenSome());
+    }
+
+    private HttpClient getAuthHttpClient()
+                    throws KeyManagementException, NoSuchAlgorithmException, ClassNotFoundException {
         return HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient")
             .useHttps(true).allowSelfSignedCerts(true).hostname("localhost").port(6667).basePath("junit/echo")
             .userName("x").password("y").managed(true).build());
     }
 
     private HttpClient getNoAuthHttpClient(String clientName, boolean https, int port)
-        throws KeyManagementException, NoSuchAlgorithmException {
+        throws KeyManagementException, NoSuchAlgorithmException, ClassNotFoundException {
         return HttpClient.factory.build(BusTopicParams.builder().clientName(clientName)
             .useHttps(https).allowSelfSignedCerts(https).hostname("localhost").port(port).basePath("junit/echo")
             .userName(null).password(null).managed(true).build());
