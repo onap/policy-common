@@ -3,14 +3,14 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
+ * Modifications Copyright (C) 2018-2019 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,6 +29,7 @@ import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.BusTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FilterableBusConsumer;
 import org.onap.policy.common.utils.network.NetworkUtil;
+import org.onap.policy.common.utils.slf4j.LoggerFactoryWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +45,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
      * that in a single file in a concise format.
      */
     private static Logger logger = LoggerFactory.getLogger(InlineBusTopicSink.class);
-    private static final Logger netLogger = LoggerFactory.getLogger(NETWORK_LOGGER);
+    private static final Logger netLogger = LoggerFactoryWrapper.getNetworkLogger();
 
     /**
      * Bus consumer group.
@@ -81,7 +82,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
      * Constructor.
      *
      * @param busTopicParams topic parameters
-     * 
+     *
      * @throws IllegalArgumentException An invalid parameter passed in
      */
     public SingleThreadedBusTopicSource(BusTopicParams busTopicParams) {
@@ -183,7 +184,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
 
     /**
      * Makes a new thread to be used for polling.
-     * 
+     *
      * @return a new Thread
      */
     protected Thread makePollerThread() {
