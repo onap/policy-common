@@ -32,11 +32,6 @@ import org.onap.policy.common.capabilities.Startable;
 public interface Topic extends TopicRegisterable, Startable, Lockable {
 
     /**
-     * network logger.
-     */
-    public static final String NETWORK_LOGGER = "network";
-
-    /**
      * Underlying Communication infrastructure Types.
      */
     public enum CommInfrastructure {
