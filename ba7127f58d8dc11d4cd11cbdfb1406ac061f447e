@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_fca85921",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/slf4j/LoggerFactoryWrapperTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-01-30T13:32:04Z",
+      "side": 1,
+      "message": "perhaps use a mock logger object and change assertNull to assertSame(mockLogger, ...)",
+      "revId": "ba7127f58d8dc11d4cd11cbdfb1406ac061f447e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
