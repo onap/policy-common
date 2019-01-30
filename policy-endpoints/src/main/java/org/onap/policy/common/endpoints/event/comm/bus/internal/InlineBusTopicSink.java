@@ -93,10 +93,10 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
                 throw new IllegalStateException(this + " is locked.");
             }
 
+            this.init();
             this.alive = true;
         }
 
-        this.init();
         return true;
     }
 
