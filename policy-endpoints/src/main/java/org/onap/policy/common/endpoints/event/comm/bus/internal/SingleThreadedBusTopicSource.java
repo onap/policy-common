@@ -152,6 +152,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
 
     @Override
     public boolean start() {
+        boolean result = false;
         logger.info("{}: starting", this);
 
         synchronized (this) {
@@ -172,6 +173,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
                     this.busPollerThread = makePollerThread();
                     this.busPollerThread.setName(this.getTopicCommInfrastructure() + "-source-" + this.getTopic());
                     busPollerThread.start();
+                    result = true;
                 } catch (Exception e) {
                     logger.warn("{}: cannot start because of {}", this, e.getMessage(), e);
                     throw new IllegalStateException(e);
@@ -179,7 +181,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
             }
         }
 
-        return this.alive;
+        return result;
     }
 
     /**
