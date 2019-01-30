@@ -198,10 +198,13 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
         logger.info("{}: stopping", this);
 
         synchronized (this) {
-            BusConsumer consumerCopy = this.consumer;
+            final BusConsumer consumerCopy = this.consumer;
 
             this.alive = false;
             this.consumer = null;
+            if (this.busPollerThread != null) {
+                this.busPollerThread.interrupt();
+            }
 
             if (consumerCopy != null) {
                 try {
@@ -222,7 +225,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
      */
     @Override
     public void run() {
-        while (this.alive) {
+        while (!Thread.interrupted() && this.alive) {
             try {
                 for (String event : this.consumer.fetch()) {
                     synchronized (this) {
@@ -233,11 +236,13 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
                             System.lineSeparator(), event);
 
                     broadcast(event);
-
-                    if (!this.alive) {
+                    if (!this.alive || Thread.interrupted()) {
                         break;
                     }
                 }
+            } catch (InterruptedException e) {
+                /* We have been interrupted so just exit. */
+                break;
             } catch (Exception e) {
                 logger.error("{}: cannot fetch because of ", this, e.getMessage(), e);
             }
