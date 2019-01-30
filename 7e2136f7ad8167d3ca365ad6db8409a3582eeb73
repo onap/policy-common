@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9adffdf1_2299dc78",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/slf4j/LoggerFactoryWrapper.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-01-30T21:12:13Z",
+      "side": 1,
+      "message": "Thanks for catching this. Fixed.",
+      "parentUuid": "9adffdf1_c2a490bb",
+      "revId": "7e2136f7ad8167d3ca365ad6db8409a3582eeb73",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9adffdf1_62ccc489",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/slf4j/LoggerFactoryWrapperTest.java",
         "patchSetId": 4
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "9adffdf1_029e1863",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/slf4j/LoggerFactoryWrapperTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-01-30T21:12:13Z",
+      "side": 1,
+      "message": "whoops, sorry. Looks like I\u0027m still in previous year;)",
+      "parentUuid": "9adffdf1_62ccc489",
+      "revId": "7e2136f7ad8167d3ca365ad6db8409a3582eeb73",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9adffdf1_02c7f864",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/slf4j/LoggerFactoryWrapperTest.java",
         "patchSetId": 4
@@ -47,6 +83,24 @@
       "writtenOn": "2019-01-30T20:59:28Z",
       "side": 1,
       "message": "there seems to be some unused imports below ..",
+      "revId": "7e2136f7ad8167d3ca365ad6db8409a3582eeb73",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_a284ec0a",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/slf4j/LoggerFactoryWrapperTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-01-30T21:12:13Z",
+      "side": 1,
+      "message": "Right. Fixed.",
+      "parentUuid": "9adffdf1_02c7f864",
       "revId": "7e2136f7ad8167d3ca365ad6db8409a3582eeb73",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
