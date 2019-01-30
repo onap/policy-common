@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_2200fc00",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/Topic.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-01-30T23:47:12Z",
+      "side": 1,
+      "message": "2019 Samsung ..?",
+      "revId": "345ab954ebf221c9ee2e2bdc198a5a44beccee9f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
