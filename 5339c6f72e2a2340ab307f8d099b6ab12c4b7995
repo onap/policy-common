@@ -16,6 +16,24 @@
       "revId": "5339c6f72e2a2340ab307f8d099b6ab12c4b7995",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a5996d39_9434cdaa",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/NoopTopicEndpoint.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-01-31T20:18:25Z",
+      "side": 1,
+      "message": "Sure no problem. I\u0027ve just copy-pasted this from other file.",
+      "parentUuid": "9adffdf1_7ccc64bb",
+      "revId": "5339c6f72e2a2340ab307f8d099b6ab12c4b7995",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
