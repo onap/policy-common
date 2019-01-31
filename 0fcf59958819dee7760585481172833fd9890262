@@ -34,6 +34,24 @@
       "revId": "0fcf59958819dee7760585481172833fd9890262",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_9c77c89f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/NoopTopicEndpoint.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-01-31T14:56:34Z",
+      "side": 1,
+      "message": "Thanks for reminder;) I\u0027ve added this to all modified files",
+      "parentUuid": "9adffdf1_48fbdf78",
+      "revId": "0fcf59958819dee7760585481172833fd9890262",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
