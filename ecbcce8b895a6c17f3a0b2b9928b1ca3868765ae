@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9adffdf1_3cc25c85",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/Topic.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-01-31T15:11:34Z",
+      "side": 1,
+      "message": "\"Modified\" \u003d\u003e \"Modifications\"",
+      "revId": "ecbcce8b895a6c17f3a0b2b9928b1ca3868765ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
