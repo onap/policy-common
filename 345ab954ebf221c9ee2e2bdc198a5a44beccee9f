@@ -16,6 +16,24 @@
       "revId": "345ab954ebf221c9ee2e2bdc198a5a44beccee9f",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9adffdf1_28ec5bba",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/Topic.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-01-31T13:40:54Z",
+      "side": 1,
+      "message": "Yes we will need the 2019 copyright here",
+      "parentUuid": "9adffdf1_2200fc00",
+      "revId": "345ab954ebf221c9ee2e2bdc198a5a44beccee9f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
