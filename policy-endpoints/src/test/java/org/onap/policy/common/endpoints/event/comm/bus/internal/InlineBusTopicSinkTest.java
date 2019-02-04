@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
+import org.onap.policy.common.utils.gson.GsonTestUtils;
 
 public class InlineBusTopicSinkTest extends TopicTestBase {
 
@@ -55,6 +56,11 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
     @After
     public void tearDown() {
         sink.shutdown();
+    }
+    
+    @Test
+    public void testSerialize() {
+        new GsonTestUtils().compareJackson2Gson(sink);
     }
 
     @Test
@@ -202,8 +208,7 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
      * Implementation of InlineBusTopicSink that tracks the number of times that init() is
      * invoked.
      */
-    private static class InlineBusTopicSinkImpl extends InlineBusTopicSink {
-
+    public static class InlineBusTopicSinkImpl extends InlineBusTopicSink {
         private int initCount = 0;
 
         public InlineBusTopicSinkImpl(BusTopicParams busTopicParams) {
