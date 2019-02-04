@@ -240,6 +240,7 @@ class TopicEndpointProxy implements TopicEndpoint {
         return DmaapTopicSource.factory.inventory();
     }
 
+    @JsonIgnore
     @Override
     public List<NoopTopicSource> getNoopTopicSources() {
         return NoopTopicSource.factory.inventory();

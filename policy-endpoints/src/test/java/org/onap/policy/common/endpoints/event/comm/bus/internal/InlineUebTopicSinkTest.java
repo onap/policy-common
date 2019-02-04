@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
+import org.onap.policy.common.utils.gson.GsonTestUtils;
 
 public class InlineUebTopicSinkTest extends TopicTestBase {
     private InlineUebTopicSink sink;
@@ -45,6 +46,11 @@ public class InlineUebTopicSinkTest extends TopicTestBase {
     @After
     public void tearDown() {
         sink.shutdown();
+    }
+    
+    @Test
+    public void testSerialize() {
+        new GsonTestUtils().compareJackson2Gson(sink);
     }
 
     @Test

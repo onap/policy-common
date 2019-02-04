@@ -27,7 +27,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
-import org.onap.policy.common.endpoints.http.server.internal.GsonMessageBodyHandler;
+import org.onap.policy.common.utils.gson.GsonMessageBodyHandler;
 
 /**
  * GsonMessageBodyHandler that tracks activities.
