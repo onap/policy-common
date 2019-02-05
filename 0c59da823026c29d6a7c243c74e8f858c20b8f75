@@ -34,6 +34,24 @@
       "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c181e5ad_18b358b5",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-02-05T20:22:47Z",
+      "side": 0,
+      "message": "Yes, there is no much point in the return value in the method signature, but that would be a discussion independent of this one, as it\u0027s using a generic interface.\n\nNevertheless, the focus here is the scenario described in the review description.  At the point of method return, success is returned, but in reality there is no consumer object underneath, and that\u0027s very iffy to claim that it\u0027s correct, just focusing on thread creation aspect (which is pretty trivial unless jvm or os memory issues).\n\nSimpler solution is to move the \"return result\" within the synchronized block, that would be best.    Actually, you don\u0027t need a local variable.",
+      "parentUuid": "74f53447_ef86c221",
+      "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
