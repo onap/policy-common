@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3e18a5d8_34e67ece",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/gson/JacksonExclusionStrategy.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-02-05T16:17:08Z",
+      "side": 1,
+      "message": "Why is it necessary to check for these package names prefixes?   What scenarios is it trying to cover?",
+      "revId": "72a528826be293a99bdbced762713f6055d12592",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
