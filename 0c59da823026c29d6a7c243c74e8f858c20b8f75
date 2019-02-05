@@ -16,6 +16,24 @@
       "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "74f53447_ef86c221",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-02-05T19:18:01Z",
+      "side": 0,
+      "message": "I would disagree here as the result says only if we managed to start the thread not if it\u0027s running at the time that we return from this function.\n\nThere is no way to assign the later definition as any code that would try to use it without taking this synchronized block would have a race condition by design.\n\nI would even say that because we are throwing exceptions whenever anything goes wrong in this function the return value is redundant but I didn\u0027t wanted to change the API here as I wasn\u0027t sure about that",
+      "parentUuid": "90eecab6_0d5c4a50",
+      "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
