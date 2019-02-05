@@ -70,6 +70,24 @@
       "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bbcfe284_273a1035",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-05T20:56:38Z",
+      "side": 0,
+      "message": "personally, I like the \"return result\", because the contract says that it returns true if it was started, not if it\u0027s currently alive.  In addition, that\u0027s how \"start()\" works in a lot of the servlet code, too - if it returns successfully from start(), then you can assume that it was started, but you don\u0027t know that it\u0027s still running.",
+      "parentUuid": "44e7c1cf_c7790118",
+      "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
