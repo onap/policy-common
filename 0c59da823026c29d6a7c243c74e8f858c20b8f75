@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "90eecab6_0d5c4a50",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-02-05T19:03:37Z",
+      "side": 0,
+      "message": "Not sure about this one, in the unlikely case that stop() synchronized block fits right between 180 before 182, before the scheduler retuns to this thread to continue online 182, I think it is ok to return false, as there would be no consumer underneath (closed in stop), the operation failed if you will.",
+      "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
