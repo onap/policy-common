@@ -16,6 +16,24 @@
       "revId": "72a528826be293a99bdbced762713f6055d12592",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f2ec68db_70a57399",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/gson/JacksonExclusionStrategy.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-05T16:28:13Z",
+      "side": 1,
+      "message": "I\u0027m a little concerned about using the jackson default behavior for every single class.  However, this check can be removed, if that\u0027s the preference",
+      "parentUuid": "3e18a5d8_34e67ece",
+      "revId": "72a528826be293a99bdbced762713f6055d12592",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
