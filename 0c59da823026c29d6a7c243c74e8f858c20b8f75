@@ -52,6 +52,24 @@
       "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "44e7c1cf_c7790118",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-02-05T20:32:54Z",
+      "side": 0,
+      "message": "Yeah good point. I\u0027ll replace that.\n\nMy biggest concern is that using this.alive may make this function randomly return false and if someone use this value as error indicator then it may be very hard to debug what went wrong.",
+      "parentUuid": "c181e5ad_18b358b5",
+      "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
