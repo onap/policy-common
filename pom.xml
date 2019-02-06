@@ -1,8 +1,8 @@
-<!-- 
-  ============LICENSE_START======================================================= 
-  ONAP policy 
+<!--
+  ============LICENSE_START=======================================================
+  ONAP policy
   ================================================================================
-  Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+  Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
   ================================================================================
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
-  ============LICENSE_END========================================================= 
+  ============LICENSE_END=========================================================
 -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
@@ -51,7 +51,7 @@
         <staging.path>content/repositories/staging/</staging.path>
 
         <!-- sonar/jacoco overrides -->
-        <!-- Overriding oparent default sonar/jacoco settings Combine all 
+        <!-- Overriding oparent default sonar/jacoco settings Combine all
             our reports into one file shared across sub-modules -->
         <sonar.jacoco.reportPath>${project.basedir}/../target/code-coverage/jacoco-ut.exec</sonar.jacoco.reportPath>
         <sonar.jacoco.itReportPath>${project.basedir}/../target/code-coverage/jacoco-it.exec</sonar.jacoco.itReportPath>
@@ -65,6 +65,7 @@
         <module>capabilities</module>
         <module>utils-test</module>
         <module>utils</module>
+        <module>gson</module>
         <module>common-logging</module>
         <module>common-parameters</module>
         <module>integrity-audit</module>
@@ -90,7 +91,7 @@
                     <artifactId>jacoco-maven-plugin</artifactId>
                     <version>${jacoco.version}</version>
                     <configuration>
-                        <!-- Note: This exclusion list should match <sonar.exclusions> 
+                        <!-- Note: This exclusion list should match <sonar.exclusions>
                             property above -->
                         <excludes>
                             <exclude>**/gen/**</exclude>
@@ -100,8 +101,8 @@
                         </excludes>
                     </configuration>
                     <executions>
-                        <!-- Prepares the property pointing to the JaCoCo 
-                            runtime agent which is passed as VM argument when Maven the Surefire plugin 
+                        <!-- Prepares the property pointing to the JaCoCo
+                            runtime agent which is passed as VM argument when Maven the Surefire plugin
                             is executed. -->
                         <execution>
                             <id>pre-unit-test</id>
@@ -112,7 +113,7 @@
                                 <destFile>${sonar.jacoco.reportPath}</destFile>
                             </configuration>
                         </execution>
-                        <!-- Ensures that the code coverage report for unit 
+                        <!-- Ensures that the code coverage report for unit
                             tests is created after unit tests have been run. -->
                         <execution>
                             <id>post-unit-test</id>
