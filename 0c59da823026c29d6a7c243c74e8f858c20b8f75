@@ -106,6 +106,24 @@
       "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "638a020d_47966687",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-02-06T05:12:10Z",
+      "side": 0,
+      "message": "Not sure what is the debate.  As I mentioned in my previous comment: \n\n\"Simpler solution is to move the \"return result\" within the synchronized block. \n ..\" \n\nIt solves the scenario under discussion in a better way by removing the race condition described altogether, and is valid for any semantics you decide to attach to start(), therefore being independent of personal preference or interpretation.",
+      "parentUuid": "f071b1eb_f6ac87ec",
+      "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
