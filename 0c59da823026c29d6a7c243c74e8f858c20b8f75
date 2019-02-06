@@ -142,6 +142,24 @@
       "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "95f4e4c3_1eb8e47f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-06T12:47:47Z",
+      "side": 0,
+      "message": "Actually, it\u0027s irrelevant whether it\u0027s inside or outside of the synchronized block, as you always have the race condition that another thread could stop the server after the return result has been placed onto the stack, but before the invoking code can take action on it.\nThat being said, you could change line 176 to simply say \"return true\" and add \"return false\" after line 181, thus eliminating the \"result\" variable altogether.",
+      "parentUuid": "de866e8d_c45174cb",
+      "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
