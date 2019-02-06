@@ -160,6 +160,24 @@
       "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48834647_0c2401b2",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-02-06T17:35:14Z",
+      "side": 0,
+      "message": "Yes, these 176 and 181 changes are in line with my thoughts, I don\u0027t see result var necessary.  It also avoids conversation about method semantics that I would like to avoid for such small changes [operation result and alive are effectively fully coupled (with the caveat of thread start which should be fairly benign) which satisfies both perspectives].",
+      "parentUuid": "95f4e4c3_1eb8e47f",
+      "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
