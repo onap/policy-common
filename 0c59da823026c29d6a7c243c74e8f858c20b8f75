@@ -124,6 +124,24 @@
       "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "de866e8d_c45174cb",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-02-06T09:40:45Z",
+      "side": 0,
+      "message": "So the argument raised by Jim is that having return inside synchronization block may be misleading for some people as they may expect that the true value means that the thread is running not that it was started",
+      "parentUuid": "638a020d_47966687",
+      "revId": "0c59da823026c29d6a7c243c74e8f858c20b8f75",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
