@@ -53,6 +53,12 @@
 
         <dependency>
             <groupId>org.onap.policy.common</groupId>
+            <artifactId>gson</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.onap.policy.common</groupId>
             <artifactId>utils</artifactId>
             <version>${project.version}</version>
         </dependency>
