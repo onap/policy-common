@@ -16,6 +16,24 @@
       "revId": "56dec09aaa0b7acd1adc2f79a5cb2bd9b81bacad",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "004c361a_25e93236",
+        "filename": "utils/checkstyle-suppressions.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-07T14:21:31Z",
+      "side": 1,
+      "message": "I\u0027ll leave that up to you.  Currently, there are two sets of tests, both verifying that the code skips over fields and method names that contain \"$\".  The first set of tests do it by simply passing the names into a validation method, while the second set of tests do it by actually having fields and methods with \"$\" in their names.  The former can be done without the checkstyle suppression, while the latter cannot.",
+      "parentUuid": "89cf3f6c_9d5deb64",
+      "revId": "56dec09aaa0b7acd1adc2f79a5cb2bd9b81bacad",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
