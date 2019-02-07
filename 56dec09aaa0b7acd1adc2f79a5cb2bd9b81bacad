@@ -34,6 +34,24 @@
       "revId": "56dec09aaa0b7acd1adc2f79a5cb2bd9b81bacad",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dd8f8519_faf79fc7",
+        "filename": "utils/checkstyle-suppressions.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-07T14:23:51Z",
+      "side": 1,
+      "message": "I take that back; there\u0027s only one set of tests.  So, yes, the checkstyle suppression is needed, if we\u0027re to have 100% test coverage.",
+      "parentUuid": "004c361a_25e93236",
+      "revId": "56dec09aaa0b7acd1adc2f79a5cb2bd9b81bacad",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
