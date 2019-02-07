@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "e8cb8fb9_c52c9c7a",
+        "filename": "utils/checkstyle-suppressions.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-07T14:44:12Z",
+      "side": 1,
+      "message": "good idea - will do that",
+      "parentUuid": "c2f836bc_c2df3015",
+      "revId": "56dec09aaa0b7acd1adc2f79a5cb2bd9b81bacad",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "09cb9f1f_280f0a1f",
         "filename": "utils/pom.xml",
         "patchSetId": 3
@@ -84,6 +102,30 @@
       "writtenOn": "2019-02-07T14:28:15Z",
       "side": 1,
       "message": "This should use policy/parent version property. 2.9.6 I thought. I understand policy/engine must be upgraded to support it but that should be ok.",
+      "range": {
+        "startLine": 35,
+        "startChar": 25,
+        "endLine": 35,
+        "endChar": 30
+      },
+      "revId": "56dec09aaa0b7acd1adc2f79a5cb2bd9b81bacad",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "849fdbee_d4b31e27",
+        "filename": "utils/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-07T14:44:12Z",
+      "side": 1,
+      "message": "actually, there is not jackson version property in the parent pom; all of the poms specifically use 2.9.5.  (There\u0027s even a comment in one that 2.9.6 should NOT be used.)  Should I add one to parent?",
+      "parentUuid": "09cb9f1f_280f0a1f",
       "range": {
         "startLine": 35,
         "startChar": 25,
