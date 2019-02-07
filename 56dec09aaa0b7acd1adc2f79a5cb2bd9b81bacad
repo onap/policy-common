@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "89cf3f6c_9d5deb64",
+        "filename": "utils/checkstyle-suppressions.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-02-07T14:12:36Z",
+      "side": 1,
+      "message": "Are we sure we need this suppression?",
+      "revId": "56dec09aaa0b7acd1adc2f79a5cb2bd9b81bacad",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
