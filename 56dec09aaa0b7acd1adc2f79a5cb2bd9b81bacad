@@ -153,6 +153,30 @@
       "revId": "56dec09aaa0b7acd1adc2f79a5cb2bd9b81bacad",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4262eb31_90534a25",
+        "filename": "utils/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-02-08T13:03:42Z",
+      "side": 1,
+      "message": "Which one said 2.9.6 should not be used?",
+      "parentUuid": "849fdbee_d4b31e27",
+      "range": {
+        "startLine": 35,
+        "startChar": 25,
+        "endLine": 35,
+        "endChar": 30
+      },
+      "revId": "56dec09aaa0b7acd1adc2f79a5cb2bd9b81bacad",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
