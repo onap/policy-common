@@ -18,7 +18,7 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.endpoints.http.server.test;
+package org.onap.policy.common.gson;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -29,7 +29,7 @@ import java.io.ByteArrayOutputStream;
 import javax.ws.rs.core.MediaType;
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.endpoints.http.server.internal.GsonMessageBodyHandler;
+import org.onap.policy.common.gson.GsonMessageBodyHandler;
 
 public class GsonMessageBodyHandlerTest {
     private static final String GEN_TYPE = "some-type";
