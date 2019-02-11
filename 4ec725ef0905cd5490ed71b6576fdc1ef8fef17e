@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b203aa2c_16384241",
+        "filename": "gson/pom.xml",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-02-11T13:16:54Z",
+      "side": 1,
+      "message": "oparent version - but that\u0027s another JIRA for upgrading to the latest oparent.",
+      "range": {
+        "startLine": 37,
+        "startChar": 8,
+        "endLine": 37,
+        "endChar": 48
+      },
+      "revId": "4ec725ef0905cd5490ed71b6576fdc1ef8fef17e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
