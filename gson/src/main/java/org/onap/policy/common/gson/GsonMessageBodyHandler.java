@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -60,7 +60,7 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
 
     /**
      * Constructs the object.
-     *
+     * 
      * @param gson the Gson object to be used to serialize and de-serialize
      */
     public GsonMessageBodyHandler(Gson gson) {
@@ -95,7 +95,7 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
 
     /**
      * Determines if this provider can handle the given media type.
-     *
+     * 
      * @param mediaType the media type of interest
      * @return {@code true} if this provider handles the given media type, {@code false}
      *         otherwise

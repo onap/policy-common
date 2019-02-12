@@ -26,6 +26,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import java.util.List;
 import java.util.Properties;
 import org.junit.Test;
@@ -33,6 +34,7 @@ import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicPropertyBuilder;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicPropertyBuilder;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
+import org.onap.policy.common.utils.gson.GsonTestUtils;
 
 public class TopicEndpointProxyTest {
 
@@ -109,6 +111,16 @@ public class TopicEndpointProxyTest {
         return exists(topics, NOOP_SINK_TOPIC)
             || exists(topics, UEB_SINK_TOPIC)
             || exists(topics, DMAAP_SINK_TOPIC);
+    }
+
+    @Test
+    public void testSerialize() {
+        TopicEndpoint manager = new TopicEndpointProxy();
+
+        manager.addTopicSources(configuration);
+        manager.addTopicSinks(configuration);
+        
+        new GsonTestUtils().compareGson(manager, new File("TopicEndpointProxyTest.json"));
     }
 
     @Test

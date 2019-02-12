@@ -33,6 +33,7 @@
 
     <properties>
         <powermock.version>1.6.6</powermock.version>
+        <!-- TODO move to top-level or parent -->
     </properties>
 
     <dependencies>
@@ -54,6 +55,11 @@
         <dependency>
             <groupId>org.onap.policy.common</groupId>
             <artifactId>utils</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.onap.policy.common</groupId>
+            <artifactId>gson</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

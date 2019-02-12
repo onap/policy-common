@@ -18,27 +18,32 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.gson.annotation;
+package org.onap.policy.common.gson.internal;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import java.lang.reflect.Method;
 
 /**
- * Mimics Jackson JsonProperty annotation, but used by gson. This requires the gson object
- * to be configured with the jackson default behaviors (i.e., the associated JacksonXxx
- * strategy and adapters must be registered with the gson object).
+ * Serializer for methods that are exposed.
  */
-@Retention(RUNTIME)
-@Target({FIELD, METHOD})
-public @interface GsonJsonProperty {
+public class MethodSerializer extends MethodAdapter implements Serializer {
     
+    public static final String INVALID_NAME_ERR = "invalid property name: ";
+
     /**
-     * Property name of this item when placed into a JsonObject.
-     * @return the item's serialized name
+     * Constructs the object.
+     *
+     * @param gson Gson object providing type adapters
+     * @param getter method used to get the item from within an object
      */
-    String value() default "";
+    public MethodSerializer(Gson gson, Method getter) {
+        super(gson, getter, true, getter.getGenericReturnType());
+    }
+
+    @Override
+    public void addToTree(Object source, JsonObject target) {
+        Object value = invoke(source);
+        target.add(getPropName(), (value == null ? null : toJsonTree(value)));
+    }
 }

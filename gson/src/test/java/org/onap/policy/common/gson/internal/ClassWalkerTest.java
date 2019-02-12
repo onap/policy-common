@@ -46,7 +46,7 @@ import org.onap.policy.common.gson.internal.Adapter;
 import org.onap.policy.common.gson.internal.ClassWalker;
 
 public class ClassWalkerTest {
-
+    
     private MyWalker walker;
 
     /**

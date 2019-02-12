@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
+import org.onap.policy.common.utils.gson.GsonTestUtils;
 
 public class BusTopicBaseTest extends TopicTestBase {
 
@@ -46,6 +48,11 @@ public class BusTopicBaseTest extends TopicTestBase {
     @Test
     public void testToString() {
         assertNotNull(base.toString());
+    }
+    
+    @Test
+    public void testSerialize() {
+        new GsonTestUtils().compareGson(base, new File("BusTopicBaseTest.json"));
     }
 
     @Test
@@ -94,7 +101,7 @@ public class BusTopicBaseTest extends TopicTestBase {
         assertFalse(base.allNullOrEmpty("", "all-one-ok", null));
     }
 
-    private static class BusTopicBaseImpl extends BusTopicBase {
+    public static class BusTopicBaseImpl extends BusTopicBase {
 
         public BusTopicBaseImpl(BusTopicParams busTopicParams) {
             super(busTopicParams);

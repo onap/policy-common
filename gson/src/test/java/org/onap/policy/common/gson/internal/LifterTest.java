@@ -18,27 +18,38 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.gson.annotation;
+package org.onap.policy.common.gson.internal;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import com.google.gson.Gson;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
+import org.junit.Test;
+import org.onap.policy.common.gson.internal.Lifter;
 
-/**
- * Mimics Jackson JsonProperty annotation, but used by gson. This requires the gson object
- * to be configured with the jackson default behaviors (i.e., the associated JacksonXxx
- * strategy and adapters must be registered with the gson object).
- */
-@Retention(RUNTIME)
-@Target({FIELD, METHOD})
-public @interface GsonJsonProperty {
-    
-    /**
-     * Property name of this item when placed into a JsonObject.
-     * @return the item's serialized name
-     */
-    String value() default "";
+public class LifterTest {
+
+    private static Gson gson = new Gson();
+
+    @Test
+    public void testLifter_testShouldLift() throws Exception {
+        Set<String> set = new HashSet<>(Arrays.asList("abc", "def"));
+        Lifter lifter = new Lifter(gson, set, LifterTest.class.getDeclaredMethod("getValue"), true, String.class);
+
+        // should not lift these
+        assertFalse(lifter.shouldLift("abc"));
+        assertFalse(lifter.shouldLift("def"));
+        
+        // should lift anything else
+        assertTrue(lifter.shouldLift("hello"));
+        assertTrue(lifter.shouldLift("world"));
+    }
+
+    public String getValue() {
+        return "";
+    }
+
 }

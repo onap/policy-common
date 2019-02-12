@@ -172,7 +172,6 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
                     this.busPollerThread = makePollerThread();
                     this.busPollerThread.setName(this.getTopicCommInfrastructure() + "-source-" + this.getTopic());
                     busPollerThread.start();
-                    return true;
                 } catch (Exception e) {
                     logger.warn("{}: cannot start because of {}", this, e.getMessage(), e);
                     throw new IllegalStateException(e);
@@ -180,7 +179,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
             }
         }
 
-        return false;
+        return this.alive;
     }
 
     /**
