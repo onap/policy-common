@@ -140,7 +140,7 @@ public class AdapterTest {
 
         Method getter = mget("getMyList");
 
-        Adapter aget = new Adapter(gson, getter, true, getter.getReturnType());
+        Adapter aget = new Adapter(gson, getter, getter.getReturnType());
 
         dataAdapter.reset();
         JsonElement tree = aget.toJsonTree(listField);
@@ -148,7 +148,7 @@ public class AdapterTest {
         assertEquals(DataAdapterFactory.ENCODED_LIST, tree.toString());
 
         Method setter = AdapterTest.class.getDeclaredMethod("setMyList", List.class);
-        Adapter aset = new Adapter(gson, setter, true, setter.getGenericParameterTypes()[0]);
+        Adapter aset = new Adapter(gson, setter, setter.getGenericParameterTypes()[0]);
 
         dataAdapter.reset();
         @SuppressWarnings("unchecked")
@@ -168,7 +168,7 @@ public class AdapterTest {
 
 
         // test getter
-        adapter = new Adapter(gson, mget(GET_VALUE_NAME), true, String.class);
+        adapter = new Adapter(gson, mget(GET_VALUE_NAME), String.class);
 
         assertEquals(VALUE_NAME, adapter.getPropName());
         assertEquals(MY_NAME + ".getValue", adapter.getFullName());
@@ -177,7 +177,7 @@ public class AdapterTest {
 
 
         // test setter
-        adapter = new Adapter(gson, mset("setValue"), false, String.class);
+        adapter = new Adapter(gson, mset("setValue"), String.class);
 
         assertEquals(VALUE_NAME, adapter.getPropName());
         assertEquals(MY_NAME + ".setValue", adapter.getFullName());
