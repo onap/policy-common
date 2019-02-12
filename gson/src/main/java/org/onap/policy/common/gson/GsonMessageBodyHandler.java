@@ -80,7 +80,7 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
     @Override
     public void writeTo(Object object, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
                     MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
-                    throws IOException, WebApplicationException {
+                    throws IOException {
 
         try (OutputStreamWriter writer = new OutputStreamWriter(entityStream, StandardCharsets.UTF_8)) {
             Type jsonType = (type.equals(genericType) ? type : genericType);
@@ -107,8 +107,11 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
 
         String subtype = mediaType.getSubtype();
 
-        return "json".equalsIgnoreCase(subtype) || subtype.endsWith("+json") || "javascript".equals(subtype)
-                        || "x-javascript".equals(subtype) || "x-json".equals(subtype);
+        if ("json".equalsIgnoreCase(subtype) || "javascript".equals(subtype)) {
+            return true;
+        }
+
+        return subtype.endsWith("+json") || "x-json".equals(subtype) || "x-javascript".equals(subtype);
     }
 
     @Override

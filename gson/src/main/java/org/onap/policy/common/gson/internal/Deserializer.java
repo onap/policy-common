@@ -25,9 +25,8 @@ import com.google.gson.JsonObject;
 /**
  * Super class of all de-serializers.
  */
+@FunctionalInterface
 public interface Deserializer {
-
-    String INVOKE_ERR = "cannot invoke method to deserialize: ";
 
     /**
      * Gets an value from a tree, converts it, and puts it into a target object.
