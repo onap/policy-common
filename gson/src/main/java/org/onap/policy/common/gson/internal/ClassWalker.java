@@ -122,7 +122,7 @@ public class ClassWalker {
      * @return the property names having a non-null value
      */
     private List<String> getNonNull(Map<String, Object> props) {
-        List<String> lst = new ArrayList<String>(props.size());
+        List<String> lst = new ArrayList<>(props.size());
 
         for (Entry<String, Object> ent : props.entrySet()) {
             if (ent.getValue() != null) {
@@ -162,7 +162,7 @@ public class ClassWalker {
      */
     @SuppressWarnings("unchecked")
     private <T> List<T> getProps(Class<T> clazz, Collection<Object> values) {
-        List<T> lst = new ArrayList<T>(values.size());
+        List<T> lst = new ArrayList<>(values.size());
 
         for (Object val : values) {
             if (val != null && val.getClass() == clazz) {
