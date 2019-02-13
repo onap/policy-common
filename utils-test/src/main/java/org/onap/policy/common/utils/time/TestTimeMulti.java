@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Common Utils-Test
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -57,7 +57,7 @@ public class TestTimeMulti extends CurrentTime {
 
     /**
      * Constructor.
-     * 
+     *
      * @param nthreads number of threads that will be sleeping simultaneously
      */
     public TestTimeMulti(int nthreads) {
@@ -99,7 +99,7 @@ public class TestTimeMulti extends CurrentTime {
      * Indicates that a thread has terminated or that it will no longer be invoking
      * {@link #sleep(long)}. Awakens the next sleeping thread, if the queue is full after
      * removing the terminated thread.
-     * 
+     *
      * @throws IllegalStateException if the queue is already full
      */
     public void threadCompleted() {
@@ -159,7 +159,7 @@ public class TestTimeMulti extends CurrentTime {
 
         /**
          * Constructor.
-         * 
+         *
          * @param awakenAtMs time, in milliseconds, at which the associated thread should
          *        awaken
          */
@@ -181,7 +181,7 @@ public class TestTimeMulti extends CurrentTime {
         /**
          * Blocks the current thread until awakened (i.e., until its latch is
          * decremented).
-         * 
+         *
          * @throws InterruptedException can be interrupted
          */
         public void await() throws InterruptedException {

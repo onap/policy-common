@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -195,7 +197,7 @@ public class SerializerTest {
             public ByteArrayOutputStream makeByteArrayOutputStream() {
                 return out;
             }
-            
+
             @Override
             public ObjectOutputStream makeObjectOutputStream(ByteArrayOutputStream out) throws IOException {
                 return oos;
@@ -208,7 +210,7 @@ public class SerializerTest {
         });
 
         assertThatThrownBy(() -> Serializer.serialize(new MyObject(130))).isEqualTo(ex2);
-        
+
     }
 
     @Test
@@ -266,6 +268,28 @@ public class SerializerTest {
 
         byte[] data = Serializer.serialize(new MyObject(310));
         assertThatThrownBy(() -> Serializer.deserialize(MyObject.class, data)).isEqualTo(ex);
+    }
+
+    @Test
+    public void testDeserialize_ObjectRead_ClassEx() throws Exception {
+        MyObject obj1 = new MyObject(200);
+
+        // must use binary character set
+        Charset binary = StandardCharsets.ISO_8859_1;
+
+        // serialize the object
+        String text = new String(Serializer.serialize(obj1), binary);
+
+        /*
+         * Replace the class name with a bogus class name, which should cause
+         * ClassNotFoundException when we attempt to deserialize it.
+         */
+        text = text.replace("MyObject", "AnObject");
+
+        byte[] data = text.getBytes(binary);
+
+        assertThatThrownBy(() -> Serializer.deserialize(MyObject.class, data)).isInstanceOf(IOException.class)
+                        .hasCauseInstanceOf(ClassNotFoundException.class);
     }
 
     @Test
