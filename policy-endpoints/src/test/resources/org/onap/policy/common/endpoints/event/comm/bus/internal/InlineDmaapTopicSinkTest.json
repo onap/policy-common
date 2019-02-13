@@ -1,0 +1,13 @@
+{
+  "servers" : [ "svra", "svrb" ],
+  "topic" : "my-topic",
+  "recentEvents" : [ ],
+  "alive" : false,
+  "locked" : false,
+  "apiKey" : "my-api-key",
+  "apiSecret" : "my-api-secret",
+  "useHttps" : true,
+  "allowSelfSignedCerts" : true,
+  "topicCommInfrastructure" : "DMAAP",
+  "partitionKey" : "my-partition"
+}

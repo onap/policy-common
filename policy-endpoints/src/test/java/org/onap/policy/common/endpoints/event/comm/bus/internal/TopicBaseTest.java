@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,6 +37,7 @@ import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
+import org.onap.policy.common.utils.gson.GsonTestUtils;
 
 public class TopicBaseTest extends TopicTestBase {
 
@@ -48,7 +49,7 @@ public class TopicBaseTest extends TopicTestBase {
     @Before
     public void setUp() {
         super.setUp();
-        
+
         base = new TopicBaseImpl(servers, MY_TOPIC);
     }
 
@@ -70,6 +71,11 @@ public class TopicBaseTest extends TopicTestBase {
     @Test(expected = IllegalArgumentException.class)
     public void testTopicBase_EmptyTopic() {
         new TopicBaseImpl(servers, "");
+    }
+
+    @Test
+    public void testSerialize() {
+        new GsonTestUtils().compareGson(base, TopicBaseTest.class);
     }
 
     @Test
@@ -246,7 +252,7 @@ public class TopicBaseTest extends TopicTestBase {
 
         /**
          * Constructor.
-         * 
+         *
          * @param servers list of servers
          * @param topic topic name
          */
@@ -285,7 +291,7 @@ public class TopicBaseTest extends TopicTestBase {
 
         /**
          * Adds an event to the list of recent events.
-         * 
+         *
          * @param event event to be added
          */
         public void addEvent(String event) {

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FilterableBusConsumer;
+import org.onap.policy.common.utils.gson.GsonTestUtils;
 
 public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     private Thread thread;
@@ -66,6 +67,11 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     @After
     public void tearDown() {
         source.shutdown();
+    }
+
+    @Test
+    public void testSerialize() {
+        new GsonTestUtils().compareGson(source, SingleThreadedBusTopicSourceTest.class);
     }
 
     @Test
@@ -146,7 +152,7 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
                 // do nothing
             }
         };
-        
+
         assertNotNull(source2.makePollerThread());
     }
 

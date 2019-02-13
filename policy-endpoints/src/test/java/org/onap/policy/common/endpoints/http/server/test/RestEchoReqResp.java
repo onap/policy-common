@@ -22,6 +22,7 @@ package org.onap.policy.common.endpoints.http.server.test;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.SerializedName;
+import org.onap.policy.common.gson.annotation.GsonJsonProperty;
 
 /**
  * "ECHO" request and response supporting serialization and de-serialization via
@@ -29,10 +30,12 @@ import com.google.gson.annotations.SerializedName;
  */
 public class RestEchoReqResp {
     @JsonProperty("reqId")
+    @GsonJsonProperty("reqId")
     @SerializedName("reqId")
     private int requestId;
 
     @JsonProperty("textValue")
+    @GsonJsonProperty("textValue")
     @SerializedName("textValue")
     private String text;
 
