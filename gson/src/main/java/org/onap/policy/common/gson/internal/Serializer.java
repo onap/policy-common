@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 /**
  * Super class of all serializers.
  */
+@FunctionalInterface
 public interface Serializer {
 
     /**

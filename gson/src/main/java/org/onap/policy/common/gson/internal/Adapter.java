@@ -115,8 +115,9 @@ public class Adapter {
         }
 
         ConvInfo wtr = writer;
-        TypeAdapter<Object> conv =
-                        (TypeAdapter<Object>) (wtr.clazz == clazz ? wtr.getConverter() : gson.getAdapter(clazz));
+
+        @SuppressWarnings("rawtypes")
+        TypeAdapter conv = (wtr.clazz == clazz ? wtr.getConverter() : gson.getAdapter(clazz));
 
         return conv.toJsonTree(object);
     }
@@ -304,29 +305,33 @@ public class Adapter {
         /**
          * Type on which the converter works.
          */
-        private TypeToken<?> type;
+        @SuppressWarnings("rawtypes")
+        private TypeToken type;
 
         /**
          * Class of object on which the converter works.
          */
-        private Class<?> clazz;
+        @SuppressWarnings("rawtypes")
+        private Class clazz;
 
         /**
          * Converter to use, initialized lazily.
          */
-        private volatile TypeAdapter<?> conv = null;
+        @SuppressWarnings("rawtypes")
+        private volatile TypeAdapter conv = null;
 
         /**
          * Constructs the object.
          *
          * @param type type of object to be converted
          */
-        public ConvInfo(TypeToken<?> type) {
+        public ConvInfo(@SuppressWarnings("rawtypes") TypeToken type) {
             this.type = type;
             this.clazz = type.getRawType();
         }
 
-        public final TypeAdapter<?> getConverter() {
+        @SuppressWarnings({"rawtypes", "unchecked"})
+        public final TypeAdapter getConverter() {
             if (conv == null) {
                 // race condition here, but it's ok to overwrite a previous value
                 this.conv = gson.getAdapter(type);
