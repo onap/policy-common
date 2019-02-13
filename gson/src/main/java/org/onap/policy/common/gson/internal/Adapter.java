@@ -86,12 +86,11 @@ public class Adapter {
      *
      * @param gson Gson object providing type adapters
      * @param accessor method used to access the item from within an object
-     * @param forGetter {@code true} if the name is for a "getter" method, {@code false}
-     *        if for a "setter"
      * @param valueType the class of value on which this operates
      */
-    public Adapter(Gson gson, Method accessor, boolean forGetter, Type valueType) {
-        this.propName = (forGetter ? detmGetterPropName(accessor) : detmSetterPropName(accessor));
+    public Adapter(Gson gson, Method accessor, Type valueType) {
+        boolean forSetter = (accessor.getReturnType() == void.class);
+        this.propName = (forSetter ? detmSetterPropName(accessor) : detmGetterPropName(accessor));
         this.reader = new ConvInfo(TypeToken.get(valueType));
         this.gson = gson;
         this.fullName = getQualifiedName(accessor);
