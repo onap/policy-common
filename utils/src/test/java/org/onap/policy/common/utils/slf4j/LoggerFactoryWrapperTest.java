@@ -3,6 +3,7 @@
  * ONAP Policy Engine - Common Modules
  * ================================================================================
  * Copyright (C) 2019 Samsung Electronics. All rights reserved.
+ * Modifications Copyright (C) 2019 AT&T Intellectual Property.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +25,6 @@ package org.onap.policy.common.utils.slf4j;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.mock;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -47,6 +47,6 @@ public class LoggerFactoryWrapperTest {
         PowerMockito.mockStatic(LoggerFactory.class);
 
         PowerMockito.when(LoggerFactory.getLogger(netLoggerName)).thenReturn(mockLogger);
-        assertSame(LoggerFactoryWrapper.getNetworkLogger(), mockLogger);
+        assertSame(mockLogger, LoggerFactoryWrapper.getNetworkLogger());
     }
 }
