@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -126,7 +126,7 @@ public class Serializer {
 
         /**
          * Read the object.
-         * 
+         *
          * @param ois input stream
          * @return the object
          * @throws IOException throws IO exception if cannot read
@@ -134,7 +134,7 @@ public class Serializer {
         public Object readObject(ObjectInputStream ois) throws IOException {
             try {
                 return ois.readObject();
-                
+
             } catch (ClassNotFoundException e) {
                 throw new IOException(e);
             }

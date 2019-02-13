@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -41,7 +41,7 @@ import org.onap.policy.common.utils.properties.exception.PropertyMissingExceptio
  * subclass. The values of the fields are set via <i>setXxx()</i> methods. As a result, if
  * a field is annotated and there is no corresponding <i>setXxx()</i> method, then an
  * exception will be thrown.
- * 
+ *
  * <p>It is possible that an invalid <i>defaultValue</i> is specified via the
  * {@link Property} annotation. This could remain undetected until an optional property is
  * left out of the {@link Properties}. Consequently, this class will always validate a
@@ -66,7 +66,7 @@ public class PropertyConfiguration {
 
     /**
      * Initializes each "@Property" field with its value, as found in the properties.
-     * 
+     *
      * @param props properties from which to extract the values
      * @throws PropertyException if an error occurs
      */
@@ -77,7 +77,7 @@ public class PropertyConfiguration {
     /**
      * Walks the class hierarchy of "this" object, populating fields defined in each
      * class, using values extracted from the given property set.
-     * 
+     *
      * @param props properties from which to extract the values
      * @throws PropertyException if an error occurs
      */
@@ -95,7 +95,7 @@ public class PropertyConfiguration {
 
     /**
      * Sets a field's value, within an object, based on what's in the properties.
-     * 
+     *
      * @param field field whose value is to be set
      * @param props properties from which to get the value
      * @return {@code true} if the property's value was set, {@code false} otherwise
@@ -121,7 +121,7 @@ public class PropertyConfiguration {
 
     /**
      * Sets a field's value from a particular property.
-     * 
+     *
      * @param setter method to be used to set the field's value
      * @param field field whose value is to be set
      * @param props properties from which to get the value
@@ -151,7 +151,7 @@ public class PropertyConfiguration {
 
     /**
      * Get the setter.
-     * 
+     *
      * @param field field whose value is to be set
      * @param prop property of interest
      * @return the method to be used to set the field's value
@@ -170,7 +170,7 @@ public class PropertyConfiguration {
 
     /**
      * Gets a property value, coercing it to the field's type.
-     * 
+     *
      * @param field field whose value is to be set
      * @param props properties from which to get the value
      * @param prop property of interest
@@ -205,7 +205,7 @@ public class PropertyConfiguration {
     /**
      * Verifies that the field can be modified, i.e., it's neither <i>static</i>, nor
      * <i>final</i>.
-     * 
+     *
      * @param field field whose value is to be set
      * @param prop property of interest
      * @throws PropertyAccessException if the field is not modifiable
@@ -224,7 +224,7 @@ public class PropertyConfiguration {
 
     /**
      * Verifies that the setter method is not <i>static</i>.
-     * 
+     *
      * @param setter method to be checked
      * @param prop property of interest
      * @throws PropertyAccessException if the method is static
@@ -239,7 +239,7 @@ public class PropertyConfiguration {
 
     /**
      * Gets a property value, coercing it to a String.
-     * 
+     *
      * @param fieldName field whose value is to be set
      * @param props properties from which to get the value
      * @param prop property of interest
@@ -258,7 +258,7 @@ public class PropertyConfiguration {
 
     /**
      * Gets a property value, coercing it to a Boolean.
-     * 
+     *
      * @param fieldName field whose value is to be set
      * @param props properties from which to get the value
      * @param prop property of interest
@@ -274,7 +274,7 @@ public class PropertyConfiguration {
 
     /**
      * Gets a property value, coercing it to an Integer.
-     * 
+     *
      * @param fieldName field whose value is to be set
      * @param props properties from which to get the value
      * @param prop property of interest
@@ -290,7 +290,7 @@ public class PropertyConfiguration {
 
     /**
      * Gets a property value, coercing it to a Long.
-     * 
+     *
      * @param fieldName field whose value is to be set
      * @param props properties from which to get the value
      * @param prop property of interest
@@ -306,7 +306,7 @@ public class PropertyConfiguration {
 
     /**
      * Gets a value from the property set.
-     * 
+     *
      * @param fieldName field whose value is to be set
      * @param props properties from which to get the value
      * @param prop property of interest
@@ -333,7 +333,7 @@ public class PropertyConfiguration {
 
     /**
      * Gets the property value, straight from the property set.
-     * 
+     *
      * @param props properties from which to get the value
      * @param propnm name of the property of interest
      * @return the raw property value
@@ -344,7 +344,7 @@ public class PropertyConfiguration {
 
     /**
      * Coerces a String value into a Boolean.
-     * 
+     *
      * @param fieldName field whose value is to be set
      * @param prop property of interest
      * @param value value to be coerced
@@ -352,10 +352,10 @@ public class PropertyConfiguration {
      * @throws PropertyInvalidException if the value does not represent a valid Boolean
      */
     private Boolean makeBoolean(String fieldName, Property prop, String value) throws PropertyInvalidException {
-        if ("true".equals(value.toLowerCase())) {
+        if ("true".equalsIgnoreCase(value)) {
             return Boolean.TRUE;
 
-        } else if ("false".equals(value.toLowerCase())) {
+        } else if ("false".equalsIgnoreCase(value)) {
             return Boolean.FALSE;
 
         } else {
@@ -365,7 +365,7 @@ public class PropertyConfiguration {
 
     /**
      * Coerces a String value into an Integer.
-     * 
+     *
      * @param fieldName field whose value is to be set
      * @param prop property of interest
      * @param value value to be coerced
@@ -383,7 +383,7 @@ public class PropertyConfiguration {
 
     /**
      * Coerces a String value into a Long.
-     * 
+     *
      * @param fieldName field whose value is to be set
      * @param prop property of interest
      * @param value value to be coerced
@@ -403,7 +403,7 @@ public class PropertyConfiguration {
      * Applies a function to check a property's default value. If the function throws an
      * exception about an invalid property, then it's re-thrown as an exception about an
      * invalid <i>defaultValue</i>.
-     * 
+     *
      * @param fieldName name of the field being checked
      * @param prop property of interest
      * @param func function to invoke to check the default value
@@ -416,15 +416,14 @@ public class PropertyConfiguration {
                 func.apply(null);
 
             } catch (PropertyInvalidException ex) {
-                throw new PropertyInvalidException(ex.getPropertyName(), fieldName, "defaultValue is invalid",
-                                ex.getCause());
+                throw new PropertyInvalidException(ex.getPropertyName(), fieldName, "defaultValue is invalid", ex);
             }
         }
     }
 
     /**
      * Determines if a value is OK, even if it's empty.
-     * 
+     *
      * @param prop property specifying what's acceptable
      * @param value value to be checked
      * @return {@code true} if the value is not empty or empty is allowed, {@code false}
@@ -437,7 +436,7 @@ public class PropertyConfiguration {
     /**
      * Determines if a {@link Property}'s <i>accept</i> attribute includes the "empty"
      * option.
-     * 
+     *
      * @param prop property whose <i>accept</i> attribute is to be examined
      * @return {@code true} if the <i>accept</i> attribute includes "empty"
      */
@@ -459,7 +458,7 @@ public class PropertyConfiguration {
 
         /**
          * Checks the default value.
-         * 
+         *
          * @param arg always {@code null}
          * @throws PropertyInvalidException if an error occurs
          */
@@ -476,14 +475,14 @@ public class PropertyConfiguration {
 
         /**
          * Name of the property.
-         * 
+         *
          * @return the property name
          */
         public String name();
 
         /**
          * Default value, used when the property does not exist.
-         * 
+         *
          * @return the default value
          */
         public String defaultValue() default "";
@@ -491,10 +490,9 @@ public class PropertyConfiguration {
         /**
          * Comma-separated options identifying what's acceptable. The word, "empty",
          * indicates that an empty string, "", is an acceptable value.
-         * 
+         *
          * @return options identifying what's acceptable
          */
         public String accept() default "";
-
     }
 }

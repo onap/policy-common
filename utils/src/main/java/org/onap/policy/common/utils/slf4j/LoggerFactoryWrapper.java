@@ -1,8 +1,9 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
  * Copyright (C) 2019 Samsung Electronics. All rights reserved.
+ * Modifications Copyright (C) 2019 AT&T Intellectual Property.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +25,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Helper class to retrive particular types of loggers without storing the logger name everywhere in ths code.
+ * Helper class to retrieve particular types of loggers without storing the logger name everywhere in ths code.
  */
 public class LoggerFactoryWrapper {
+
+    /**
+     * Constructs the object.
+     */
+    private LoggerFactoryWrapper() {
+        super();
+    }
 
     /**
      * Get Network Logger.
