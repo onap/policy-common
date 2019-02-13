@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8af9fc27_86555f5f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-13T20:18:01Z",
+      "side": 1,
+      "message": "suggestion: null out busPollerThread",
+      "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "479e7ef2_912a2906",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-13T20:18:01Z",
+      "side": 1,
+      "message": "this can be deleted",
+      "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f046da9_ca23043f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-13T20:18:01Z",
+      "side": 1,
+      "message": "interrupted() clears the interrupt status so there\u0027s still a race condition in that the enclosing \"while\" may continue to execute.  Perhaps, invoke Thread.currentThread().interrupt() before \"break\"",
+      "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
