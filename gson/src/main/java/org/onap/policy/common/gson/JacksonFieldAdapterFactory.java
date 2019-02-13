@@ -21,14 +21,9 @@
 package org.onap.policy.common.gson;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +31,7 @@ import org.onap.policy.common.gson.internal.ClassWalker;
 import org.onap.policy.common.gson.internal.Deserializer;
 import org.onap.policy.common.gson.internal.FieldDeserializer;
 import org.onap.policy.common.gson.internal.FieldSerializer;
+import org.onap.policy.common.gson.internal.JacksonTypeAdapter;
 import org.onap.policy.common.gson.internal.Serializer;
 
 /**
@@ -66,116 +62,40 @@ public class JacksonFieldAdapterFactory implements TypeAdapterFactory {
             return null;
         }
 
-        return new JacksonFieldAdapter<>(gson, data, gson.getDelegateAdapter(this, type));
+        TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
+        List<Serializer> sers = makeSerializers(gson, data);
+        List<Deserializer> desers = makeDeserializers(gson, data);
+
+        return new JacksonTypeAdapter<>(gson, delegate, sers, desers);
     }
 
     /**
-     * Adapter for a single class.
+     * Creates a complete list of serializers.
      *
-     * @param <T> type of class on which the adapter works
+     * @param gson the associated gson object
+     * @param data data used to configure the serializers
+     * @return a list of all serializers
      */
-    private static class JacksonFieldAdapter<T> extends TypeAdapter<T> {
+    private List<Serializer> makeSerializers(Gson gson, ClassWalker data) {
+        List<Serializer> ser = new ArrayList<>();
 
-        /**
-         * Used to create an object of the given class.
-         */
-        private final TypeAdapter<T> delegate;
+        data.getOutProps(Field.class).forEach(field -> ser.add(new FieldSerializer(gson, field)));
 
-        /**
-         * Used to serialize/deserialize a JsonElement.
-         */
-        private final TypeAdapter<JsonElement> elementAdapter;
+        return ser;
+    }
 
-        /**
-         * Serializers for each item within the object.
-         */
-        private final Serializer[] serializers;
+    /**
+     * Creates a complete list of deserializers.
+     *
+     * @param gson the associated gson object
+     * @param data data used to configure the deserializers
+     * @return a list of all deserializers
+     */
+    private List<Deserializer> makeDeserializers(Gson gson, ClassWalker data) {
+        List<Deserializer> deser = new ArrayList<>();
 
-        /**
-         * Deserializers for each item within the object.
-         */
-        private final Deserializer[] deserializers;
+        data.getInProps(Field.class).forEach(field -> deser.add(new FieldDeserializer(gson, field)));
 
-        /**
-         * Constructs the object.
-         *
-         * @param gson the associated gson object
-         * @param data data used to configure the adapter
-         * @param delegate default constructor for the type
-         */
-        public JacksonFieldAdapter(Gson gson, ClassWalker data, TypeAdapter<T> delegate) {
-            this.delegate = delegate;
-
-            this.elementAdapter = gson.getAdapter(JsonElement.class);
-
-            // create serializers
-            this.serializers = makeSerializers(gson, data).toArray(new Serializer[0]);
-
-            // create deserializers
-            this.deserializers = makeDeserializers(gson, data).toArray(new Deserializer[0]);
-        }
-
-        /**
-         * Creates a complete list of serializers.
-         *
-         * @param gson the associated gson object
-         * @param data data used to configure the serializers
-         * @return a list of all serializers
-         */
-        private List<Serializer> makeSerializers(Gson gson, ClassWalker data) {
-            List<Serializer> ser = new ArrayList<Serializer>();
-
-            data.getOutProps(Field.class).forEach(field -> ser.add(new FieldSerializer(gson, field)));
-
-            return ser;
-        }
-
-        /**
-         * Creates a complete list of deserializers.
-         *
-         * @param gson the associated gson object
-         * @param data data used to configure the deserializers
-         * @return a list of all deserializers
-         */
-        private List<Deserializer> makeDeserializers(Gson gson, ClassWalker data) {
-            List<Deserializer> deser = new ArrayList<Deserializer>();
-
-            data.getInProps(Field.class).forEach(field -> deser.add(new FieldDeserializer(gson, field)));
-
-            return deser;
-        }
-
-        @Override
-        public void write(JsonWriter out, T value) throws IOException {
-            JsonElement tree = delegate.toJsonTree(value);
-
-            if (tree.isJsonObject()) {
-                JsonObject jsonObj = tree.getAsJsonObject();
-
-                // serialize each item from the value into the target tree
-                for (Serializer serializer : serializers) {
-                    serializer.addToTree(value, jsonObj);
-                }
-            }
-
-            elementAdapter.write(out, tree);
-        }
-
-        @Override
-        public T read(JsonReader in) throws IOException {
-            JsonElement tree = elementAdapter.read(in);
-            T object = delegate.fromJsonTree(tree);
-
-            if (tree.isJsonObject()) {
-                JsonObject jsonObj = tree.getAsJsonObject();
-
-                // deserialize each item from the tree into the target object
-                for (Deserializer dser : deserializers) {
-                    dser.getFromTree(jsonObj, object);
-                }
-            }
-
-            return object;
-        }
+        return deser;
     }
 }
