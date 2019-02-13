@@ -117,7 +117,7 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
     @Override
     public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations, MediaType mediaType,
                     MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
-                    throws IOException, WebApplicationException {
+                    throws IOException {
 
         try (InputStreamReader streamReader = new InputStreamReader(entityStream, StandardCharsets.UTF_8)) {
             Type jsonType = (type.equals(genericType) ? type : genericType);
