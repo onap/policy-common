@@ -36,6 +36,23 @@
     },
     {
       "key": {
+        "uuid": "9da8dbb2_97fab7a2",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-13T20:27:03Z",
+      "side": 1,
+      "message": "suggestion: with these changes, it seems like this method could stop using this.alive altogether.  That would be one less thing to try to reason about",
+      "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f046da9_ca23043f",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
         "patchSetId": 6
