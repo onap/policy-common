@@ -126,7 +126,7 @@ public class Serializer {
 
         /**
          * Read the object.
-         * 
+         *
          * @param ois input stream
          * @return the object
          * @throws IOException throws IO exception if cannot read
@@ -134,7 +134,7 @@ public class Serializer {
         public Object readObject(ObjectInputStream ois) throws IOException {
             try {
                 return ois.readObject();
-                
+
             } catch (ClassNotFoundException e) {
                 throw new IOException(e);
             }
