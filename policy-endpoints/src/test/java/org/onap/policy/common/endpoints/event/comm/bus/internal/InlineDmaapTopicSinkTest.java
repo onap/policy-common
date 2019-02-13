@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,13 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.io.File;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
+import org.onap.policy.common.utils.gson.GsonTestUtils;
 
 public class InlineDmaapTopicSinkTest extends TopicTestBase {
     private InlineDmaapTopicSink sink;
@@ -45,6 +47,11 @@ public class InlineDmaapTopicSinkTest extends TopicTestBase {
     @After
     public void tearDown() {
         sink.shutdown();
+    }
+    
+    @Test
+    public void testSerialize() {
+        new GsonTestUtils().compareGson(sink, new File("InlineDmaapTopicSinkTest.json"));
     }
 
     @Test

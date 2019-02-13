@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ConnectException;
@@ -39,6 +40,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
+import org.onap.policy.common.utils.gson.GsonTestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -230,6 +232,16 @@ public class HttpServerTest {
 
         assertFalse(MyJacksonProvider.hasReadSome());
         assertFalse(MyJacksonProvider.hasWrittenSome());
+    }
+    
+    @Test
+    public void testSerialize() {
+        HttpServletServer server = HttpServletServer.factory.build("echo", "localhost", port, "/", false, true);
+        server.addServletPackage("/*", this.getClass().getPackage().getName());
+        server.addFilterClass("/*", TestFilter.class.getCanonicalName());
+
+        // ensure we can serialize the server
+        new GsonTestUtils().compareGson(server, new File("HttpServerTest.json"));
     }
 
     @Test

@@ -44,6 +44,7 @@ import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.onap.aaf.cadi.filter.CadiFilter;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
+import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -486,6 +487,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      * @return the password
      */
     @JsonIgnore
+    @GsonJsonIgnore
     public String getPassword() {
         return password;
     }
