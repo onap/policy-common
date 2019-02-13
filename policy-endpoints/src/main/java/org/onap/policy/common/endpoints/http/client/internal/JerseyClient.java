@@ -41,6 +41,7 @@ import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.http.client.HttpClient;
+import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -270,6 +271,7 @@ public class JerseyClient implements HttpClient {
     }
 
     @JsonIgnore
+    @GsonJsonIgnore
     @Override
     public String getPassword() {
         return password;

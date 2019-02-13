@@ -1,0 +1,8 @@
+{
+  "servers" : [ "svra", "svrb" ],
+  "topic" : "my-topic",
+  "recentEvents" : [ ],
+  "alive" : false,
+  "locked" : false,
+  "topicCommInfrastructure" : "NOOP"
+}

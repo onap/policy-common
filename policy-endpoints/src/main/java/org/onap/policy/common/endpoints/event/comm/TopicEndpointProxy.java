@@ -31,6 +31,7 @@ import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSource;
+import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -229,35 +230,42 @@ class TopicEndpointProxy implements TopicEndpoint {
     }
 
     @JsonIgnore
+    @GsonJsonIgnore
     @Override
     public List<UebTopicSource> getUebTopicSources() {
         return UebTopicSource.factory.inventory();
     }
 
     @JsonIgnore
+    @GsonJsonIgnore
     @Override
     public List<DmaapTopicSource> getDmaapTopicSources() {
         return DmaapTopicSource.factory.inventory();
     }
 
+    @JsonIgnore
+    @GsonJsonIgnore
     @Override
     public List<NoopTopicSource> getNoopTopicSources() {
         return NoopTopicSource.factory.inventory();
     }
 
     @JsonIgnore
+    @GsonJsonIgnore
     @Override
     public List<UebTopicSink> getUebTopicSinks() {
         return UebTopicSink.factory.inventory();
     }
 
     @JsonIgnore
+    @GsonJsonIgnore
     @Override
     public List<DmaapTopicSink> getDmaapTopicSinks() {
         return DmaapTopicSink.factory.inventory();
     }
 
     @JsonIgnore
+    @GsonJsonIgnore
     @Override
     public List<NoopTopicSink> getNoopTopicSinks() {
         return NoopTopicSink.factory.inventory();
@@ -325,6 +333,7 @@ class TopicEndpointProxy implements TopicEndpoint {
      * @return list of managed endpoints
      */
     @JsonIgnore
+    @GsonJsonIgnore
     protected List<Startable> getEndpoints() {
         final List<Startable> endpoints = new ArrayList<>();
 

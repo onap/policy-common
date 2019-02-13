@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.onap.aaf.cadi.filter.CadiFilter;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
+import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -486,6 +487,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      * @return the password
      */
     @JsonIgnore
+    @GsonJsonIgnore
     public String getPassword() {
         return password;
     }
