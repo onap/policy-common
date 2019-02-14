@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "04cf48ce_a5dcb22c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-02-14T08:11:47Z",
+      "side": 1,
+      "message": "It would be nice to mention what kind of issue are you fixing.\nIt\u0027s not mentioned in ticket nor here so this information will be gone as soon as this patch is merged.",
+      "revId": "05b1bbe73744aee4fb807cf5ffaf27d622073188",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cec51dca_bf2ea19b",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/slf4j/LoggerFactoryWrapperTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-02-14T08:11:47Z",
+      "side": 1,
+      "message": "Any reason to change order of those params? Is it convention?",
+      "revId": "05b1bbe73744aee4fb807cf5ffaf27d622073188",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
