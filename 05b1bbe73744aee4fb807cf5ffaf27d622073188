@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "77962675_266a0dcc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-14T15:17:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04cf48ce_a5dcb22c",
+      "revId": "05b1bbe73744aee4fb807cf5ffaf27d622073188",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cec51dca_bf2ea19b",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/slf4j/LoggerFactoryWrapperTest.java",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-14T08:11:47Z",
       "side": 1,
       "message": "Any reason to change order of those params? Is it convention?",
+      "revId": "05b1bbe73744aee4fb807cf5ffaf27d622073188",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b2a6b579_4110d989",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/slf4j/LoggerFactoryWrapperTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-14T15:17:37Z",
+      "side": 1,
+      "message": "assertEquals \u0026 assertSame semantics are that the first argument is the \"expected\" value.  I know it matters with assertEquals, as it affects both the error message and the object for which \"equals()\" is invoked.  For assertSame, it may affect the error message - haven\u0027t checked.",
+      "parentUuid": "cec51dca_bf2ea19b",
       "revId": "05b1bbe73744aee4fb807cf5ffaf27d622073188",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
