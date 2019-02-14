@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "9fd2b7f8_d9b8c68e",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-02-14T10:07:44Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "8af9fc27_86555f5f",
+      "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "479e7ef2_912a2906",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
         "patchSetId": 6
@@ -30,6 +48,24 @@
       "writtenOn": "2019-02-13T20:18:01Z",
       "side": 1,
       "message": "this can be deleted",
+      "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "914e16b1_9fb082b5",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 217,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-02-14T10:07:44Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "479e7ef2_912a2906",
       "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "9f9c8d8e_fe71d58f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-02-14T10:07:44Z",
+      "side": 1,
+      "message": "To be honest I kind of dislike this method at all.\n\nIt looks racy from very beginning. I checks this.alive outside of synchronize block (just like other methods), then it fetch() events also outside of synchronized block, add() inside it and then broadcast them also outside. So basically it does not guarantee that when add() is executed we are still alive. There is even a unit test which checks this behavior and that\u0027s the main reason why I didn\u0027t moved that if to the synchronized block.",
+      "parentUuid": "9da8dbb2_97fab7a2",
+      "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f046da9_ca23043f",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
         "patchSetId": 6
@@ -64,6 +118,24 @@
       "writtenOn": "2019-02-13T20:18:01Z",
       "side": 1,
       "message": "interrupted() clears the interrupt status so there\u0027s still a race condition in that the enclosing \"while\" may continue to execute.  Perhaps, invoke Thread.currentThread().interrupt() before \"break\"",
+      "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1609484f_c55b9081",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 4965
+      },
+      "writtenOn": "2019-02-14T10:07:44Z",
+      "side": 1,
+      "message": "You are right. I should test this better.\nNow I see my mistake. I\u0027ve been interrupting this method in fetch() so it never executed this piece of code.\n\nThanks for catching this.",
+      "parentUuid": "6f046da9_ca23043f",
       "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
