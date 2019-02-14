@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "9c0271f7_6d2ec0bc",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-02-14T18:09:25Z",
+      "side": 1,
+      "message": "Some thoughts on solving the problem and tackling:\n\n1.\nWe know based on that no problems have been reported that the close() mechanisms causes the termination of the polling thread and successful clean up of the dmaap-client and cambria libraries underneath.\n\n2.\nThe interrupt is good but I think it should be done after attempting the close as we know it would cause resources to go down.   As this code can call arbitrary libraries in its callbacks, we don\u0027t know how they will handle the interrupt, underlying code may throw InterrupteException or InterruptedIOException and perhaps leak some clean up activities if they are not cooperative in interrupt handling, the may reset the interrupted flag and we won\u0027t see, we should be pessimistic on what they could do.\n\nI think it is safest a multiphase stop:\n\n1. issue the close() for a graceful shutdown.   This will allow all callbacks from the broadcast to finish with no interruption and potentially not leaving work half way through (which could happen if issuing the interrupt first).\n\n2. wait for a reasonable short amount of time to check that the polling thread is done, some sort of a timed join in the thread.\n\n3. if timed out waiting for the polling thread to end, issue the interrupt which can hit any code.\n\nDuring the start and stop interactions, the invariant that should be preserved is that the start and stop don\u0027t interfere with each other, so any stops() that are requested during 1-3 there is no possibility of interference, will have to wait till the very end of 3. \n\nThe nulling out of the consumer and the thread will help with high frequencey starts to start fresh.",
+      "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8af9fc27_86555f5f",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
         "patchSetId": 6
@@ -107,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "4eb586f6_86c94be8",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 226,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-02-14T18:09:25Z",
+      "side": 1,
+      "message": "I don\u0027t think you can depend on the interrupted flag by itself, actually cannot even assume that the \"interrupt\" flag will be set, unless we can guarantee that 3rd party libraries will handle the interrupt properly.   I think you can only rely on alive, you can only trust yourself when invoking foreign code.",
+      "parentUuid": "9da8dbb2_97fab7a2",
+      "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6f046da9_ca23043f",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
         "patchSetId": 6
@@ -136,6 +171,41 @@
       "side": 1,
       "message": "You are right. I should test this better.\nNow I see my mistake. I\u0027ve been interrupting this method in fetch() so it never executed this piece of code.\n\nThanks for catching this.",
       "parentUuid": "6f046da9_ca23043f",
+      "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf828e8b_c09c41c3",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-02-14T18:09:25Z",
+      "side": 1,
+      "message": "Thread.currentThread().isInterrupted() I think is what should be preferable here, will not reset the interrupted flag.",
+      "parentUuid": "1609484f_c55b9081",
+      "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5b24e116_90b571a8",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-02-14T18:09:25Z",
+      "side": 1,
+      "message": "It should also catch explicitly InterruptedIOException should be caught here as well, some IO libraries will throw it.  Want to avoid being handled by the generic Exception clause below.",
       "revId": "c3849f9d2a0cf1c7f5c379e38522027bd07e2942",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
