@@ -47,10 +47,6 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Http Client implementation using a Jersey Client.
- * 
- * <p>Note: the serialization provider will be ignored if the maven artifact,
- * <i>jersey-media-json-jackson</i>, is included, regardless of whether it's included
- * directly or indirectly.
  */
 public class JerseyClient implements HttpClient {
 
