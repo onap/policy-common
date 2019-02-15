@@ -135,8 +135,10 @@ public class GsonTestUtilsTest {
         result = utils.applyScripts("use ${obj.text} this", data);
         assertEquals("use null this", result);
 
-        assertThatThrownBy(() -> utils.applyScripts("use ${obj.text} this", null)).isInstanceOf(RuntimeException.class)
-                        .hasCauseInstanceOf(ScriptException.class).hasMessage("cannot expand element: ${obj.text}");
+        assertThatThrownBy(() -> utils.applyScripts("use ${obj.text} this", null))
+                        .isInstanceOf(JsonParseException.class)
+                        .hasCauseInstanceOf(ScriptException.class)
+                        .hasMessage("cannot expand element: ${obj.text}");
     }
 
     @Test

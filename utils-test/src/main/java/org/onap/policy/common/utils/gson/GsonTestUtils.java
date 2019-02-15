@@ -61,7 +61,7 @@ public class GsonTestUtils {
     /**
      * Engine used to interpolate strings before they're compared.
      */
-    private static volatile ScriptEngine engine = null;
+    private static volatile ScriptEngine engineInstance = null;
 
     /**
      * Used to encode and decode an object via gson.
@@ -198,13 +198,9 @@ public class GsonTestUtils {
             return text;
         }
 
-        // create the engine and bind the object to the variable, "obj"
-        if (engine == null) {
-            // race condition here, but it's ok to overwrite with a new engine
-            engine = new ScriptEngineManager().getEngineByName("javascript");
-        }
-
-        Bindings bindings = engine.createBindings();
+        // bind the object to the variable, "obj"
+        ScriptEngine eng = getEngine();
+        Bindings bindings = eng.createBindings();
         bindings.put("obj", object);
 
         // work our way through the text, interpolating script elements as we go
@@ -222,11 +218,15 @@ public class GsonTestUtils {
             // interpolate the script
             String script = mat.group(1);
             try {
-                Object result = engine.eval(script, bindings);
+                /*
+                 * Note: must use "eng" instead of "engineInstance" to ensure that we use
+                 * the same engine that's associated with the bindings.
+                 */
+                Object result = eng.eval(script, bindings);
                 bldr.append(result == null ? "null" : result.toString());
 
             } catch (ScriptException e) {
-                throw new RuntimeException("cannot expand element: " + mat.group(), e);
+                throw new JsonParseException("cannot expand element: " + mat.group(), e);
             }
         }
 
@@ -234,6 +234,20 @@ public class GsonTestUtils {
         bldr.append(text.substring(ilast));
 
         return bldr.toString();
+    }
+
+    /**
+     * Gets the script engine instance.
+     *
+     * @return the script engine
+     */
+    private static ScriptEngine getEngine() {
+        if (engineInstance == null) {
+            // race condition here, but it's ok to overwrite with a new engine
+            engineInstance = new ScriptEngineManager().getEngineByName("javascript");
+        }
+
+        return engineInstance;
     }
 
     /**
