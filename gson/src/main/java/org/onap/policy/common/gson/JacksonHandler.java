@@ -21,12 +21,16 @@
 package org.onap.policy.common.gson;
 
 import com.google.gson.GsonBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provider used to serialize and deserialize policy objects via gson using jackson
  * default behaviors and annotations.
  */
 public class JacksonHandler extends GsonMessageBodyHandler {
+
+    public static final Logger logger = LoggerFactory.getLogger(JacksonHandler.class);
 
     /**
      * Constructs the object.
@@ -45,6 +49,8 @@ public class JacksonHandler extends GsonMessageBodyHandler {
                         .registerTypeAdapterFactory(new JacksonMethodAdapterFactory())
                         .setExclusionStrategies(new JacksonExclusionStrategy())
                         .create());
+        
+        logger.info("Using GSON for REST calls");
     }
 
 }
