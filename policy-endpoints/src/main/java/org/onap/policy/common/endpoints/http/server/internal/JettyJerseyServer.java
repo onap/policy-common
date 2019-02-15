@@ -36,10 +36,6 @@ import org.slf4j.LoggerFactory;
  * {@link #addServletClass(String, String)} is used or
  * {@link #addServletPackage(String, String)} is used. Thus it's possible to have both the
  * server's class provider property and the server's package provider property populated.
- * 
- * <p>Also note: the serialization provider will be ignored if the maven artifact,
- * <i>jersey-media-json-jackson</i>, is included, regardless of whether it's included
- * directly or indirectly.
  */
 public class JettyJerseyServer extends JettyServletServer {
 
