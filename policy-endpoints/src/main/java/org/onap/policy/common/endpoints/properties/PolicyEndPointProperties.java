@@ -32,7 +32,6 @@ public interface PolicyEndPointProperties {
     String PROPERTY_TOPIC_EVENTS_SUFFIX = ".events";
     String PROPERTY_TOPIC_EVENTS_FILTER_SUFFIX = ".filter";
     String PROPERTY_TOPIC_EVENTS_CUSTOM_MODEL_CODER_GSON_SUFFIX = ".events.custom.gson";
-    String PROPERTY_TOPIC_EVENTS_CUSTOM_MODEL_CODER_JACKSON_SUFFIX = ".events.custom.jackson";
 
     String PROPERTY_TOPIC_SOURCE_CONSUMER_GROUP_SUFFIX = ".consumerGroup";
     String PROPERTY_TOPIC_SOURCE_CONSUMER_INSTANCE_SUFFIX = ".consumerInstance";
