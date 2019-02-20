@@ -4,6 +4,7 @@
   "topicSources" : [ {
     "servers" : [ "my-server" ],
     "topic" : "ueb-source",
+    "effectiveTopic" : "my-effective-topic",
     "recentEvents" : [ ],
     "alive" : false,
     "locked" : false,
@@ -19,6 +20,7 @@
   }, {
     "servers" : [ "my-server" ],
     "topic" : "dmaap-source",
+    "effectiveTopic" : "my-effective-topic",
     "recentEvents" : [ ],
     "alive" : false,
     "locked" : false,
@@ -34,6 +36,7 @@
   }, {
     "servers" : [ "my-server" ],
     "topic" : "noop-source",
+    "effectiveTopic" : "noop-source",
     "recentEvents" : [ ],
     "alive" : false,
     "locked" : false,
@@ -42,6 +45,7 @@
   "topicSinks" : [ {
     "servers" : [ "my-server" ],
     "topic" : "ueb-sink",
+    "effectiveTopic" : "my-effective-topic",
     "recentEvents" : [ ],
     "alive" : false,
     "locked" : false,
@@ -54,6 +58,7 @@
   }, {
     "servers" : [ "my-server" ],
     "topic" : "dmaap-sink",
+    "effectiveTopic" : "my-effective-topic",
     "recentEvents" : [ ],
     "alive" : false,
     "locked" : false,
@@ -66,6 +71,7 @@
   }, {
     "servers" : [ "my-server" ],
     "topic" : "noop-sink",
+    "effectiveTopic" : "noop-sink",
     "recentEvents" : [ ],
     "alive" : false,
     "locked" : false,

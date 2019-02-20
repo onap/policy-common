@@ -24,10 +24,13 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_ALLOW_SELF_SIGNED_CERTIFICATES_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX;
+import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX;
 
 import java.util.Arrays;
 import java.util.List;
@@ -74,17 +77,21 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
         initFactory();
 
         // two unmanaged topics
-        T item = buildTopic(makeBuilder().managed(false).build());
+        T item = buildTopic(makeBuilder().managed(false).effectiveTopic(null).build());
         T item2 = buildTopic(makeBuilder().managed(false).topic(TOPIC2).build());
         assertNotNull(item);
         assertNotNull(item2);
+        assertSame(item.getTopic(), item.getEffectiveTopic());
+        assertNotSame(item2.getTopic(), item2.getEffectiveTopic());
         assertTrue(item != item2);
 
         // duplicate topics, but since they aren't managed, they should be different
         T item3 = buildTopic(makeBuilder().managed(false).build());
-        T item4 = buildTopic(makeBuilder().managed(false).build());
+        T item4 = buildTopic(makeBuilder().managed(false).effectiveTopic(TOPIC2).build());
         assertNotNull(item3);
         assertNotNull(item4);
+        assertSame(MY_TOPIC, item4.getTopic());
+        assertSame(TOPIC2, item4.getEffectiveTopic());
         assertTrue(item != item3);
         assertTrue(item != item4);
         assertTrue(item3 != item4);
@@ -143,7 +150,10 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
     public void testBuildProperties() {
         initFactory();
 
-        assertEquals(1, buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build()).size());
+        List<T> topics = buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build());
+        assertEquals(1, topics.size());
+        assertSame(MY_TOPIC, topics.get(0).getTopic());
+        assertSame(MY_EFFECTIVE_TOPIC, topics.get(0).getEffectiveTopic());
 
         BusTopicParams params = getLastParams();
         assertEquals(true, params.isManaged());
@@ -153,6 +163,13 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
         assertEquals(MY_API_SECRET, params.getApiSecret());
         assertEquals(Arrays.asList(SERVER), params.getServers());
         assertEquals(MY_TOPIC, params.getTopic());
+        assertEquals(MY_EFFECTIVE_TOPIC, params.getEffectiveTopic());
+
+        List<T> topics2 = buildTopics(makePropBuilder().makeTopic(TOPIC3)
+            .removeTopicProperty(PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX).build());
+        assertEquals(1, topics2.size());
+        assertSame(TOPIC3, topics2.get(0).getTopic());
+        assertSame(topics2.get(0).getTopic(), topics2.get(0).getEffectiveTopic());
     }
 
     @Override

@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,12 @@ public abstract class TopicBase implements Topic {
     /**
      * Topic.
      */
-    protected String topic;
+    protected final String topic;
+
+    /**
+     * Topic Alias.
+     */
+    protected final String effectiveTopic;
 
     /**
      * Event cache.
@@ -78,6 +83,18 @@ public abstract class TopicBase implements Topic {
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public TopicBase(List<String> servers, String topic) {
+        this(servers, topic, topic);
+    }
+
+    /**
+     * Instantiates a new Topic Base.
+     *
+     * @param servers list of servers
+     * @param topic topic name
+     *
+     * @throws IllegalArgumentException if invalid parameters are present
+     */
+    public TopicBase(List<String> servers, String topic, String effectiveTopic) {
 
         if (servers == null || servers.isEmpty()) {
             throw new IllegalArgumentException("Server(s) must be provided");
@@ -87,8 +104,16 @@ public abstract class TopicBase implements Topic {
             throw new IllegalArgumentException("A Topic must be provided");
         }
 
+        String effectiveTopicCopy;
+        if (effectiveTopic == null || effectiveTopic.isEmpty()) {
+            effectiveTopicCopy = topic;
+        } else {
+            effectiveTopicCopy = effectiveTopic;
+        }
+
         this.servers = servers;
         this.topic = topic;
+        this.effectiveTopic = effectiveTopicCopy;
     }
 
     @Override
@@ -204,6 +229,11 @@ public abstract class TopicBase implements Topic {
     }
 
     @Override
+    public String getEffectiveTopic() {
+        return effectiveTopic;
+    }
+
+    @Override
     public boolean isAlive() {
         return this.alive;
     }
@@ -222,7 +252,12 @@ public abstract class TopicBase implements Topic {
 
     @Override
     public String toString() {
-        return "TopicBase [servers=" + servers + ", topic=" + topic + ", #recentEvents=" + recentEvents.size()
-                + ", locked=" + locked + ", #topicListeners=" + topicListeners.size() + "]";
+        return "TopicBase [servers=" + servers
+            + ", topic=" + topic
+            + ", effectiveTopic=" + effectiveTopic
+            + ", #recentEvents=" + recentEvents.size()
+            + ", locked=" + locked
+            + ", #topicListeners=" + topicListeners.size()
+            + "]";
     }
 }

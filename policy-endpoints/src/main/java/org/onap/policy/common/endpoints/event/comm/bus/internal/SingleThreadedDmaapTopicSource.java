@@ -1,8 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018-2019 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -89,7 +89,7 @@ public class SingleThreadedDmaapTopicSource extends SingleThreadedBusTopicSource
     public void init() throws MalformedURLException {
         BusTopicParams.TopicParamsBuilder builder = BusTopicParams.builder()
             .servers(this.servers)
-            .topic(this.topic)
+            .topic(this.effectiveTopic)
             .apiKey(this.apiKey)
             .apiSecret(this.apiSecret)
             .consumerGroup(this.consumerGroup)

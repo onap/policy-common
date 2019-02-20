@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP Policy Engine - Common Modules
+ * ONAP
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import static org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase.MY_A
 import static org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase.MY_API_SECRET;
 import static org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase.MY_CONS_GROUP;
 import static org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase.MY_CONS_INST;
+import static org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase.MY_EFFECTIVE_TOPIC;
 import static org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase.MY_FETCH_LIMIT;
 import static org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase.MY_FETCH_TIMEOUT;
 import static org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase.MY_PARTITION;
@@ -36,6 +37,7 @@ import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperti
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_AAF_PASSWORD_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_API_KEY_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_API_SECRET_SUFFIX;
+import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_GROUP_SUFFIX;
@@ -69,6 +71,7 @@ public class UebTopicPropertyBuilder extends TopicPropertyBuilder {
     public UebTopicPropertyBuilder makeTopic(String topic) {
         addTopic(topic);
 
+        setTopicProperty(PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX, MY_EFFECTIVE_TOPIC);
         setTopicProperty(PROPERTY_TOPIC_SOURCE_CONSUMER_GROUP_SUFFIX, MY_CONS_GROUP);
         setTopicProperty(PROPERTY_TOPIC_SOURCE_CONSUMER_INSTANCE_SUFFIX, MY_CONS_INST);
         setTopicProperty(PROPERTY_MANAGED_SUFFIX, "true");

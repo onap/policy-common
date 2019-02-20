@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,6 +49,7 @@ public class TopicTestBase {
     public static final String MY_PASSWD = "my-pass";
     public static final int MY_PORT = 102;
     public static final String MY_TOPIC = "my-topic";
+    public static final String MY_EFFECTIVE_TOPIC = "my-effective-topic";
     public static final String MY_USERNAME = "my-user";
 
     public static final String MY_MESSAGE = "my-message";
@@ -115,7 +116,7 @@ public class TopicTestBase {
                         .consumerGroup(MY_CONS_GROUP).consumerInstance(MY_CONS_INST).environment(MY_ENV)
                         .fetchLimit(MY_FETCH_LIMIT).fetchTimeout(MY_FETCH_TIMEOUT).hostname(MY_HOST).latitude(MY_LAT)
                         .longitude(MY_LONG).managed(true).partitionId(MY_PARTITION).partner(MY_PARTNER)
-                        .password(MY_PASSWD).port(MY_PORT).servers(servers).topic(MY_TOPIC).useHttps(true)
-                        .userName(MY_USERNAME);
+                        .password(MY_PASSWD).port(MY_PORT).servers(servers).topic(MY_TOPIC)
+                        .effectiveTopic(MY_EFFECTIVE_TOPIC).useHttps(true).userName(MY_USERNAME);
     }
 }

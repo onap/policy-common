@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP Policy Engine - Common Modules
+ * ONAP
  * ================================================================================
  * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -22,7 +22,9 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -71,6 +73,14 @@ public class TopicBaseTest extends TopicTestBase {
     @Test(expected = IllegalArgumentException.class)
     public void testTopicBase_EmptyTopic() {
         new TopicBaseImpl(servers, "");
+    }
+
+    @Test
+    public void testTopicBase_EffectiveTopic() {
+        TopicBase baseEf = new TopicBaseImpl(servers, MY_TOPIC, MY_EFFECTIVE_TOPIC);
+        assertSame(MY_TOPIC, baseEf.getTopic());
+        assertSame(MY_EFFECTIVE_TOPIC, baseEf.getEffectiveTopic());
+        assertNotEquals(baseEf.getTopic(), baseEf.getEffectiveTopic());
     }
 
     @Test
@@ -209,6 +219,12 @@ public class TopicBaseTest extends TopicTestBase {
     }
 
     @Test
+    public void testGetEffectiveTopic() {
+        assertSame(MY_TOPIC, base.getTopic());
+        assertSame(MY_TOPIC, base.getEffectiveTopic());
+    }
+
+    @Test
     public void testIsAlive() {
         assertFalse(base.isAlive());
         base.start();
@@ -258,6 +274,17 @@ public class TopicBaseTest extends TopicTestBase {
          */
         public TopicBaseImpl(List<String> servers, String topic) {
             super(servers, topic);
+        }
+
+        /**
+         * Constructor.
+         *
+         * @param servers list of servers
+         * @param topic topic name
+         * @param effectiveTopic effective topic name for network communication
+         */
+        public TopicBaseImpl(List<String> servers, String topic, String effectiveTopic) {
+            super(servers, topic, effectiveTopic);
         }
 
         @Override

@@ -1,8 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modified Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -87,7 +87,7 @@ public class InlineDmaapTopicSink extends InlineBusTopicSink implements DmaapTop
         if (allNullOrEmpty(this.environment, this.aftEnvironment, this.latitude, this.longitude, this.partner)) {
             this.publisher = new BusPublisher.CambriaPublisherWrapper(BusTopicParams.builder()
                     .servers(this.servers)
-                    .topic(this.topic)
+                    .topic(this.effectiveTopic)
                     .apiKey(this.apiKey)
                     .apiSecret(this.apiSecret)
                     .userName(this.userName)
@@ -98,7 +98,7 @@ public class InlineDmaapTopicSink extends InlineBusTopicSink implements DmaapTop
         } else {
             this.publisher = new BusPublisher.DmaapDmePublisherWrapper(BusTopicParams.builder()
                     .servers(this.servers)
-                    .topic(this.topic)
+                    .topic(this.effectiveTopic)
                     .userName(this.userName)
                     .password(this.password)
                     .environment(this.environment)

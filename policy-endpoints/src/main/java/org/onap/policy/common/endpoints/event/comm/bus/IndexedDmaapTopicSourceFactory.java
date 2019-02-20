@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP Policy Engine - Common Modules
+ * ONAP
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -98,6 +98,10 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
                 } else {
                     serverList = new ArrayList<>();
                 }
+
+                final String effectiveTopic = properties.getProperty(
+                    PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
+                        + topic + PolicyEndPointProperties.PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX, topic);
 
                 final String apiKey = properties.getProperty(
                                 PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
@@ -201,9 +205,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
                     dme2AdditionalProps.put(DME2_SESSION_STICKINESS_REQUIRED_PROPERTY, dme2SessionStickinessRequired);
                 }
 
-
                 if (servers == null || servers.isEmpty()) {
-
                     logger.error("{}: no DMaaP servers or DME2 ServiceName provided", this);
                     continue;
                 }
@@ -260,6 +262,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
                 DmaapTopicSource uebTopicSource = this.build(BusTopicParams.builder()
                         .servers(serverList)
                         .topic(topic)
+                        .effectiveTopic(effectiveTopic)
                         .apiKey(apiKey)
                         .apiSecret(apiSecret)
                         .userName(aafMechId)

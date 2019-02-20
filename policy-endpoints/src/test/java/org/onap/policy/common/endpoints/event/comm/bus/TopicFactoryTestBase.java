@@ -40,6 +40,7 @@ public abstract class TopicFactoryTestBase<T extends Topic> extends TopicTestBas
 
     public static final String SERVER = "my-server";
     public static final String TOPIC2 = "my-topic-2";
+    public static final String TOPIC3 = "my-topic-3";
 
     /**
      * Initializes a new factory.
