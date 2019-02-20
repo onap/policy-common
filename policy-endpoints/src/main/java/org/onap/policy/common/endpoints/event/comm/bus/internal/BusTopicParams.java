@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
  * Copyright (C) 2018 Samsung Electronics Co., Ltd. All rights reserved.
  * Modifications Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
@@ -51,6 +51,7 @@ public class BusTopicParams {
     private List<String> servers;
     private Map<String, String> additionalProps;
     private String topic;
+    private String effectiveTopic;
     private String apiKey;
     private String apiSecret;
     private String consumerGroup;
@@ -120,6 +121,10 @@ public class BusTopicParams {
 
     public String getTopic() {
         return topic;
+    }
+
+    public String getEffectiveTopic() {
+        return effectiveTopic;
     }
 
     public String getApiKey() {
@@ -273,6 +278,11 @@ public class BusTopicParams {
 
         public TopicParamsBuilder topic(String topic) {
             this.params.topic = topic;
+            return this;
+        }
+
+        public TopicParamsBuilder effectiveTopic(String effectiveTopic) {
+            this.params.effectiveTopic = effectiveTopic;
             return this;
         }
 

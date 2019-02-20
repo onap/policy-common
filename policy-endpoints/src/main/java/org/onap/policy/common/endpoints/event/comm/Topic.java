@@ -1,8 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -35,7 +35,7 @@ public interface Topic extends TopicRegisterable, Startable, Lockable {
     /**
      * Underlying Communication infrastructure Types.
      */
-    public enum CommInfrastructure {
+    enum CommInfrastructure {
         /**
          * UEB Communication Infrastructure.
          */
@@ -55,31 +55,40 @@ public interface Topic extends TopicRegisterable, Startable, Lockable {
     }
 
     /**
-     * Gets the topic name.
+     * Gets the canonical topic name.
      *
      * @return topic name
      */
-    public String getTopic();
+    String getTopic();
+
+    /**
+     * Gets the effective topic that is used in
+     * the network communication.  This name is usually
+     * the topic name.
+     *
+     * @return topic name alias
+     */
+    String getEffectiveTopic();
 
     /**
      * Gets the communication infrastructure type.
      *
      * @return CommInfrastructure object
      */
-    public CommInfrastructure getTopicCommInfrastructure();
+    CommInfrastructure getTopicCommInfrastructure();
 
     /**
      * Return list of servers.
      *
      * @return bus servers
      */
-    public List<String> getServers();
+    List<String> getServers();
 
     /**
      * Get the more recent events in this topic entity.
      *
      * @return list of most recent events
      */
-    public String[] getRecentEvents();
+    String[] getRecentEvents();
 
 }

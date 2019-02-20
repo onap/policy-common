@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018-2019 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,7 +38,6 @@ public class SingleThreadedUebTopicSource extends SingleThreadedBusTopicSource i
      */
     public SingleThreadedUebTopicSource(BusTopicParams busTopicParams) {
         super(busTopicParams);
-
         this.init();
     }
 
@@ -49,7 +48,7 @@ public class SingleThreadedUebTopicSource extends SingleThreadedBusTopicSource i
     public void init() {
         this.consumer = new BusConsumer.CambriaConsumerWrapper(BusTopicParams.builder()
                 .servers(this.servers)
-                .topic(this.topic)
+                .topic(this.effectiveTopic)
                 .apiKey(this.apiKey)
                 .apiSecret(this.apiSecret)
                 .consumerGroup(this.consumerGroup)

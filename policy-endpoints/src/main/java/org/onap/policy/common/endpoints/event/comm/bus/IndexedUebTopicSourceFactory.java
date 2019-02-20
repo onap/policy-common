@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP Policy Engine - Common Modules
+ * ONAP
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -101,7 +101,10 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
 
                 final List<String> serverList = new ArrayList<>(Arrays.asList(servers.split("\\s*,\\s*")));
 
-                final String apiKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS 
+                final String effectiveTopic = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS
+                    + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX, topic);
+
+                final String apiKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS
                         + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_KEY_SUFFIX);
 
                 final String apiSecret = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS 
@@ -167,6 +170,7 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
                 UebTopicSource uebTopicSource = this.build(BusTopicParams.builder()
                         .servers(serverList)
                         .topic(topic)
+                        .effectiveTopic(effectiveTopic)
                         .apiKey(apiKey)
                         .apiSecret(apiSecret)
                         .consumerGroup(consumerGroup)

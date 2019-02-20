@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,6 +65,7 @@ public class BusTopicParamsTest extends TopicTestBase {
         assertEquals(MY_PORT, params.getPort());
         assertEquals(servers, params.getServers());
         assertEquals(MY_TOPIC, params.getTopic());
+        assertEquals(MY_EFFECTIVE_TOPIC, params.getEffectiveTopic());
         assertEquals(true, params.isUseHttps());
         assertEquals(MY_USERNAME, params.getUserName());
 

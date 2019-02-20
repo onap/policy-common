@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * policy-endpoints
+ * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public BusTopicBase(BusTopicParams busTopicParams) {
-        super(busTopicParams.getServers(), busTopicParams.getTopic());
+        super(busTopicParams.getServers(), busTopicParams.getTopic(), busTopicParams.getEffectiveTopic());
         this.apiKey = busTopicParams.getApiKey();
         this.apiSecret = busTopicParams.getApiSecret();
         this.useHttps = busTopicParams.isUseHttps();
