@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "e8283194_df6ca541",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/BusTopicFactoryTestBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-02-21T16:18:49Z",
+      "side": 1,
+      "message": "This usage was intentional as expect the same object to be used in both cases based on the code.  The JVM if I recall correctly also keeps unique string references, accessible via String.intern().\n\nI can change it to be consistent across this file with the way you have the assertEquals for Strings, functionally makes no difference though.",
+      "parentUuid": "530c0352_6c643765",
+      "revId": "5aa821dee5ac862e07e53fbdef1a7072e215718d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e570c78_33b78bb2",
         "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/DmaapTopicPropertyBuilder.java",
         "patchSetId": 1
