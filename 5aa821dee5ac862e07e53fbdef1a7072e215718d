@@ -25,6 +25,23 @@
     },
     {
       "key": {
+        "uuid": "530c0352_6c643765",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/BusTopicFactoryTestBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-21T15:43:28Z",
+      "side": 1,
+      "message": "since these are plain strings, I prefer assertEquals(), but this should work as it is (I haven\u0027t tried: if they don\u0027t match, does Eclipse show both strings so it\u0027s easy to see what went wrong?).  I generally only use assertSame() when I want to verify that a reference that is returned is the same reference that I expect (i.e., object \"\u003d\u003d\" comparison instead of \".equals()\" comparison)\n\nsame comment elsewhere",
+      "revId": "5aa821dee5ac862e07e53fbdef1a7072e215718d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e570c78_33b78bb2",
         "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/DmaapTopicPropertyBuilder.java",
         "patchSetId": 1
@@ -88,6 +105,23 @@
         "endLine": 46,
         "endChar": 126
       },
+      "revId": "5aa821dee5ac862e07e53fbdef1a7072e215718d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "22a729bd_d7125a11",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/internal/TopicBaseTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-02-21T15:43:28Z",
+      "side": 1,
+      "message": "should also add test cases for passing null and \"\" for the last argument",
       "revId": "5aa821dee5ac862e07e53fbdef1a7072e215718d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
