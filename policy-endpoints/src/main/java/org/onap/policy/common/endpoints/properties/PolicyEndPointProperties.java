@@ -29,6 +29,7 @@ public interface PolicyEndPointProperties {
     String PROPERTY_TOPIC_API_SECRET_SUFFIX = ".apiSecret";
     String PROPERTY_TOPIC_AAF_MECHID_SUFFIX = ".aafMechId";
     String PROPERTY_TOPIC_AAF_PASSWORD_SUFFIX = ".aafPassword";
+    String PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX = ".effectiveTopic";
     String PROPERTY_TOPIC_EVENTS_SUFFIX = ".events";
     String PROPERTY_TOPIC_EVENTS_FILTER_SUFFIX = ".filter";
     String PROPERTY_TOPIC_EVENTS_CUSTOM_MODEL_CODER_GSON_SUFFIX = ".events.custom.gson";

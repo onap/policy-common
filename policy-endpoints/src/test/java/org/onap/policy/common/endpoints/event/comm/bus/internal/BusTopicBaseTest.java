@@ -22,6 +22,7 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -74,6 +75,13 @@ public class BusTopicBaseTest extends TopicTestBase {
     public void testIsAllowSelfSignedCerts() {
         assertEquals(true, base.isAllowSelfSignedCerts());
         assertEquals(false, new BusTopicBaseImpl(builder.allowSelfSignedCerts(false).build()).isAllowSelfSignedCerts());
+    }
+
+    @Test
+    public void testTopic() {
+        assertEquals(MY_TOPIC, base.getTopic());
+        assertEquals(MY_EFFECTIVE_TOPIC, base.getEffectiveTopic());
+        assertNotEquals(base.getTopic(), base.getEffectiveTopic());
     }
 
     @Test
