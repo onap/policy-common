@@ -37,6 +37,8 @@ public class JacksonHandler extends GsonMessageBodyHandler {
      */
     public JacksonHandler() {
         this(new GsonBuilder());
+        
+        logger.info("Using GSON with Jackson behaviors for REST calls");
     }
 
     /**
@@ -49,8 +51,6 @@ public class JacksonHandler extends GsonMessageBodyHandler {
                         .registerTypeAdapterFactory(new JacksonMethodAdapterFactory())
                         .setExclusionStrategies(new JacksonExclusionStrategy())
                         .create());
-        
-        logger.info("Using GSON for REST calls");
     }
 
 }

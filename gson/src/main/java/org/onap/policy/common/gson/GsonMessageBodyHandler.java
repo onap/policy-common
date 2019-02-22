@@ -36,6 +36,8 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Provider that serializes and de-serializes JSON via gson.
@@ -44,6 +46,8 @@ import javax.ws.rs.ext.Provider;
 @Consumes(MediaType.WILDCARD)
 @Produces(MediaType.WILDCARD)
 public class GsonMessageBodyHandler implements MessageBodyReader<Object>, MessageBodyWriter<Object> {
+
+    public static final Logger logger = LoggerFactory.getLogger(GsonMessageBodyHandler.class);
 
     /**
      * Object to be used to serialize and de-serialize.
@@ -55,6 +59,8 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
      */
     public GsonMessageBodyHandler() {
         this(new Gson());
+
+        logger.info("Using GSON for REST calls");
     }
 
     /**
