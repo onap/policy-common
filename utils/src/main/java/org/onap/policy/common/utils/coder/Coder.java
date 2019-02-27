@@ -20,6 +20,12 @@
 
 package org.onap.policy.common.utils.coder;
 
+import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.Writer;
+
 /**
  * JSON encoder and decoder.
  */
@@ -35,7 +41,34 @@ public interface Coder {
     String encode(Object object) throws CoderException;
 
     /**
-     * Decodes a json string into an object.
+     * Encodes an object into json, writing to the given target.
+     *
+     * @param target target to which to write the encoded json
+     * @param object object to be encoded
+     * @throws CoderException if an error occurs
+     */
+    void encode(Writer target, Object object) throws CoderException;
+
+    /**
+     * Encodes an object into json, writing to the given target.
+     *
+     * @param target target to which to write the encoded json
+     * @param object object to be encoded
+     * @throws CoderException if an error occurs
+     */
+    void encode(OutputStream target, Object object) throws CoderException;
+
+    /**
+     * Encodes an object into json, writing to the given target.
+     *
+     * @param target target to which to write the encoded json
+     * @param object object to be encoded
+     * @throws CoderException if an error occurs
+     */
+    void encode(File target, Object object) throws CoderException;
+
+    /**
+     * Decodes json into an object.
      *
      * @param json json string to be decoded
      * @param clazz class of object to be decoded
@@ -43,4 +76,34 @@ public interface Coder {
      * @throws CoderException if an error occurs
      */
     <T> T decode(String json, Class<T> clazz) throws CoderException;
+
+    /**
+     * Decodes json into an object, reading it from the given source.
+     *
+     * @param source source from which to read the json string to be decoded
+     * @param clazz class of object to be decoded
+     * @return the object represented by the given json string
+     * @throws CoderException if an error occurs
+     */
+    <T> T decode(Reader source, Class<T> clazz) throws CoderException;
+
+    /**
+     * Decodes json into an object, reading it from the given source.
+     *
+     * @param source source from which to read the json string to be decoded
+     * @param clazz class of object to be decoded
+     * @return the object represented by the given json string
+     * @throws CoderException if an error occurs
+     */
+    <T> T decode(InputStream source, Class<T> clazz) throws CoderException;
+
+    /**
+     * Decodes json into an object, reading it from the given source.
+     *
+     * @param source source from which to read the json string to be decoded
+     * @param clazz class of object to be decoded
+     * @return the object represented by the given json string
+     * @throws CoderException if an error occurs
+     */
+    <T> T decode(File source, Class<T> clazz) throws CoderException;
 }
