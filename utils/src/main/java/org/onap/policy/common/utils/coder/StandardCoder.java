@@ -21,6 +21,18 @@
 package org.onap.policy.common.utils.coder;
 
 import com.google.gson.Gson;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
 
 /**
  * JSON encoder and decoder using the "standard" mechanism, which is currently gson.
@@ -50,6 +62,42 @@ public class StandardCoder implements Coder {
     }
 
     @Override
+    public void encode(Writer target, Object object) throws CoderException {
+        try {
+            toJson(target, object);
+
+        } catch (RuntimeException | IOException e) {
+            throw new CoderException(e);
+        }
+    }
+
+    @Override
+    public void encode(OutputStream target, Object object) throws CoderException {
+        try {
+            Writer wtr = makeWriter(target);
+            toJson(wtr, object);
+
+            // flush, but don't close
+            wtr.flush();
+
+        } catch (RuntimeException | IOException e) {
+            throw new CoderException(e);
+        }
+    }
+
+    @Override
+    public void encode(File target, Object object) throws CoderException {
+        try (Writer wtr = makeWriter(target)) {
+            toJson(wtr, object);
+
+            // no need to flush or close here
+
+        } catch (RuntimeException | IOException e) {
+            throw new CoderException(e);
+        }
+    }
+
+    @Override
     public <T> T decode(String json, Class<T> clazz) throws CoderException {
         try {
             return fromJson(json, clazz);
@@ -59,7 +107,79 @@ public class StandardCoder implements Coder {
         }
     }
 
+    @Override
+    public <T> T decode(Reader source, Class<T> clazz) throws CoderException {
+        try {
+            return fromJson(source, clazz);
+
+        } catch (RuntimeException e) {
+            throw new CoderException(e);
+        }
+    }
+
+    @Override
+    public <T> T decode(InputStream source, Class<T> clazz) throws CoderException {
+        try {
+            return fromJson(makeReader(source), clazz);
+
+        } catch (RuntimeException e) {
+            throw new CoderException(e);
+        }
+    }
+
+    @Override
+    public <T> T decode(File source, Class<T> clazz) throws CoderException {
+        try (Reader input = makeReader(source)) {
+            return fromJson(input, clazz);
+
+        } catch (RuntimeException | IOException e) {
+            throw new CoderException(e);
+        }
+    }
+
     // the remaining methods are wrappers that can be overridden by junit tests
+
+    /**
+     * Makes a writer for the given file.
+     *
+     * @param target file of interest
+     * @return a writer for the file
+     * @throws FileNotFoundException if the file cannot be created
+     */
+    protected Writer makeWriter(File target) throws FileNotFoundException {
+        return makeWriter(new FileOutputStream(target));
+    }
+
+    /**
+     * Makes a writer for the given stream.
+     *
+     * @param target stream of interest
+     * @return a writer for the stream
+     */
+    protected Writer makeWriter(OutputStream target) {
+        return new OutputStreamWriter(target, StandardCharsets.UTF_8);
+    }
+
+    /**
+     * Makes a reader for the given file.
+     *
+     * @param source file of interest
+     * @return a reader for the file
+     * @throws FileNotFoundException if the file does not exist
+     */
+    protected Reader makeReader(File source) throws FileNotFoundException {
+        return makeReader(new FileInputStream(source));
+    }
+
+    /**
+     * Makes a reader for the given stream.
+     *
+     * @param source stream of interest
+     * @return a reader for the stream
+     */
+    protected Reader makeReader(InputStream source) {
+        return new InputStreamReader(source, StandardCharsets.UTF_8);
+    }
 
     /**
      * Encodes an object into json, without catching exceptions.
@@ -72,6 +192,17 @@ public class StandardCoder implements Coder {
     }
 
     /**
+     * Encodes an object into json, without catching exceptions.
+     *
+     * @param target target to which to write the encoded json
+     * @param object object to be encoded
+     * @throws IOException if an I/O error occurs
+     */
+    protected void toJson(Writer target, Object object) throws IOException {
+        GSON.toJson(object, object.getClass(), target);
+    }
+
+    /**
      * Decodes a json string into an object, without catching exceptions.
      *
      * @param json json string to be decoded
@@ -80,5 +211,16 @@ public class StandardCoder implements Coder {
      */
     protected <T> T fromJson(String json, Class<T> clazz) {
         return GSON.fromJson(json, clazz);
+    }
+
+    /**
+     * Decodes a json string into an object, without catching exceptions.
+     *
+     * @param source source from which to read the json string to be decoded
+     * @param clazz class of object to be decoded
+     * @return the object represented by the given json string
+     */
+    protected <T> T fromJson(Reader source, Class<T> clazz) {
+        return GSON.fromJson(source, clazz);
     }
 }
