@@ -22,17 +22,35 @@ package org.onap.policy.common.utils.coder;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
 public class StandardCoderTest {
+    private static final String EXPECTED_EXCEPTION = "expected exception";
+
+    private static final JsonParseException jpe = new JsonParseException(EXPECTED_EXCEPTION);
+    private static final IOException ioe = new IOException(EXPECTED_EXCEPTION);
 
     private StandardCoder coder;
 
@@ -42,32 +60,140 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testEncode() throws Exception {
-        List<Integer> arr = Arrays.asList(100, 110);
-        assertEquals("[100,110]", coder.encode(arr));
+    public void testEncodeObject() throws Exception {
+        List<Integer> arr = Arrays.asList(1100, 1110);
+        assertEquals("[1100,1110]", coder.encode(arr));
 
         // test exception case
-        JsonParseException jpe = new JsonParseException("expected exception");
-
-        coder = spy(coder);
+        coder = spy(new StandardCoder());
         when(coder.toJson(arr)).thenThrow(jpe);
-
         assertThatThrownBy(() -> coder.encode(arr)).isInstanceOf(CoderException.class).hasCause(jpe);
     }
 
     @Test
-    public void testDecode() throws Exception {
-        String text = "[200,210]";
+    public void testEncodeWriterObject() throws Exception {
+        List<Integer> arr = Arrays.asList(1200, 1210);
+        StringWriter wtr = new StringWriter();
+        coder.encode(wtr, arr);
+        assertEquals("[1200,1210]", wtr.toString());
+
+        // test json exception
+        coder = spy(new StandardCoder());
+        doThrow(jpe).when(coder).toJson(wtr, arr);
+        assertThatThrownBy(() -> coder.encode(wtr, arr)).isInstanceOf(CoderException.class).hasCause(jpe);
+    }
+
+    @Test
+    public void testEncodeOutputStreamObject() throws Exception {
+        List<Integer> arr = Arrays.asList(1300, 1310);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        coder.encode(stream, arr);
+        assertEquals("[1300,1310]", stream.toString("UTF-8"));
+
+        // test json exception
+        Writer wtr = new StringWriter();
+        coder = spy(new StandardCoder());
+        when(coder.makeWriter(stream)).thenReturn(wtr);
+        doThrow(jpe).when(coder).toJson(wtr, arr);
+        assertThatThrownBy(() -> coder.encode(stream, arr)).isInstanceOf(CoderException.class).hasCause(jpe);
+
+        // test exception when flushed
+        wtr = spy(new OutputStreamWriter(stream));
+        doThrow(ioe).when(wtr).flush();
+        coder = spy(new StandardCoder());
+        when(coder.makeWriter(stream)).thenReturn(wtr);
+        assertThatThrownBy(() -> coder.encode(stream, arr)).isInstanceOf(CoderException.class).hasCause(ioe);
+    }
+
+    @Test
+    public void testEncodeFileObject() throws Exception {
+        File file = new File(getClass().getResource(StandardCoder.class.getSimpleName() + ".json").getFile() + "X");
+        file.deleteOnExit();
+        List<Integer> arr = Arrays.asList(1400, 1410);
+        coder.encode(file, arr);
+        assertEquals("[1400,1410]", new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8));
+
+        // test json exception
+        StringWriter wtr = new StringWriter();
+        coder = spy(new StandardCoder());
+        when(coder.makeWriter(file)).thenReturn(wtr);
+        doThrow(jpe).when(coder).toJson(wtr, arr);
+        assertThatThrownBy(() -> coder.encode(file, arr)).isInstanceOf(CoderException.class).hasCause(jpe);
+
+        // test exception when closed
+        coder = spy(new StandardCoder());
+        wtr = spy(new StringWriter());
+        doThrow(ioe).when(wtr).close();
+        coder = spy(new StandardCoder());
+        when(coder.makeWriter(file)).thenReturn(wtr);
+        assertThatThrownBy(() -> coder.encode(file, arr)).isInstanceOf(CoderException.class).hasCause(ioe);
+    }
+
+    @Test
+    public void testDecodeStringClass() throws Exception {
+        String text = "[2200,2210]";
         assertEquals(text, coder.decode(text, JsonElement.class).toString());
 
-        // test exception case
-        JsonParseException jpe = new JsonParseException("expected exception");
-
-        coder = spy(coder);
+        // test json exception
+        coder = spy(new StandardCoder());
         when(coder.fromJson(text, JsonElement.class)).thenThrow(jpe);
-
         assertThatThrownBy(() -> coder.decode(text, JsonElement.class)).isInstanceOf(CoderException.class)
                         .hasCause(jpe);
     }
 
+    @Test
+    public void testDecodeReaderClass() throws Exception {
+        String text = "[2300,2310]";
+        assertEquals(text, coder.decode(new StringReader(text), JsonElement.class).toString());
+
+        // test json exception
+        coder = spy(new StandardCoder());
+        StringReader rdr = new StringReader(text);
+        when(coder.fromJson(rdr, JsonElement.class)).thenThrow(jpe);
+        assertThatThrownBy(() -> coder.decode(rdr, JsonElement.class)).isInstanceOf(CoderException.class).hasCause(jpe);
+    }
+
+    @Test
+    public void testDecodeInputStreamClass() throws Exception {
+        String text = "[2400,2410]";
+        assertEquals(text,
+                        coder.decode(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)), JsonElement.class)
+                                        .toString());
+
+        // test json exception
+        coder = spy(new StandardCoder());
+        ByteArrayInputStream stream = new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8));
+        StringReader rdr = new StringReader(text);
+        when(coder.makeReader(stream)).thenReturn(rdr);
+        when(coder.fromJson(rdr, JsonElement.class)).thenThrow(jpe);
+        assertThatThrownBy(() -> coder.decode(stream, JsonElement.class)).isInstanceOf(CoderException.class)
+                        .hasCause(jpe);
+    }
+
+    @Test
+    public void testDecodeFileClass() throws Exception {
+        File file = new File(getClass().getResource(StandardCoder.class.getSimpleName() + ".json").getFile());
+        String text = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
+        assertEquals(text, coder.decode(file, JsonElement.class).toString());
+
+        // test FileNotFoundException case
+        assertThatThrownBy(() -> coder.decode(new File("unknown-file"), JsonElement.class))
+                        .isInstanceOf(CoderException.class).hasCauseInstanceOf(FileNotFoundException.class);
+
+        // test json exception
+        Reader rdr = new StringReader(text);
+        coder = spy(new StandardCoder());
+        when(coder.makeReader(file)).thenReturn(rdr);
+        when(coder.fromJson(rdr, JsonElement.class)).thenThrow(jpe);
+        assertThatThrownBy(() -> coder.decode(file, JsonElement.class)).isInstanceOf(CoderException.class)
+                        .hasCause(jpe);
+
+        // test IOException case
+        rdr = spy(new FileReader(file));
+        doThrow(ioe).when(rdr).close();
+        coder = spy(new StandardCoder());
+        when(coder.makeReader(file)).thenReturn(rdr);
+        assertThatThrownBy(() -> coder.decode(file, JsonElement.class)).isInstanceOf(CoderException.class)
+                        .hasCause(ioe);
+    }
 }
