@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Common Utils-Test
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -201,8 +201,9 @@ public class ExtractAppenderTest {
 
         logger.info("hello");
         logger.info("world");
+        logger.info("hello {} world{}", "there", "!");
 
-        assertEquals(strList("hello", "world"), appender.getExtracted());
+        assertEquals(strList("hello", "world", "hello there world!"), appender.getExtracted());
     }
 
     @Test
@@ -402,7 +403,7 @@ public class ExtractAppenderTest {
 
     /**
      * Adds multiple threads to perform some function repeatedly until the given time is reached.
-     * 
+     *
      * @param tend time, in milliseconds, when the test should terminate
      * @param haderr this will be set to {@code true} if the function throws an exception other than
      *        an InterruptedException
@@ -437,7 +438,7 @@ public class ExtractAppenderTest {
 
     /**
      * Makes an appender that recognizes the given set of strings.
-     * 
+     *
      * @param strings regular expressions to be matched
      * @return a new appender
      */
@@ -451,7 +452,7 @@ public class ExtractAppenderTest {
 
     /**
      * Adds an appender to the logger.
-     * 
+     *
      * @param app appender to be added
      */
     private void addAppender(ExtractAppender app) {
@@ -463,7 +464,7 @@ public class ExtractAppenderTest {
 
     /**
      * Converts an array of strings into a list of strings.
-     * 
+     *
      * @param strings array of strings
      * @return a list of the strings
      */
