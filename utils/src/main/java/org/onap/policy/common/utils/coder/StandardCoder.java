@@ -21,6 +21,11 @@
 package org.onap.policy.common.utils.coder;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -42,7 +47,8 @@ public class StandardCoder implements Coder {
     /**
      * Gson object used to encode and decode messages.
      */
-    private static final Gson GSON = new Gson();
+    private static final Gson GSON = new GsonBuilder()
+                    .registerTypeAdapter(StandardCoderObject.class, new StandardTypeAdapter()).create();
 
     /**
      * Constructs the object.
@@ -137,6 +143,26 @@ public class StandardCoder implements Coder {
         }
     }
 
+    @Override
+    public StandardCoderObject toStandard(Object object) throws CoderException {
+        try {
+            return new StandardCoderObject(GSON.toJsonTree(object));
+
+        } catch (RuntimeException e) {
+            throw new CoderException(e);
+        }
+    }
+
+    @Override
+    public <T> T fromStandard(StandardCoderObject sco, Class<T> clazz) throws CoderException {
+        try {
+            return GSON.fromJson(sco.getData(), clazz);
+
+        } catch (RuntimeException e) {
+            throw new CoderException(e);
+        }
+    }
+
     // the remaining methods are wrappers that can be overridden by junit tests
 
     /**
@@ -222,5 +248,33 @@ public class StandardCoder implements Coder {
      */
     protected <T> T fromJson(Reader source, Class<T> clazz) {
         return GSON.fromJson(source, clazz);
+    }
+
+    /**
+     * Adapter for standard objects.
+     */
+    private static class StandardTypeAdapter extends TypeAdapter<StandardCoderObject> {
+
+        /**
+         * Used to read/write a JsonElement.
+         */
+        private static TypeAdapter<JsonElement> elementAdapter = new Gson().getAdapter(JsonElement.class);
+
+        /**
+         * Constructs the object.
+         */
+        public StandardTypeAdapter() {
+            super();
+        }
+
+        @Override
+        public void write(JsonWriter out, StandardCoderObject value) throws IOException {
+            elementAdapter.write(out, value.getData());
+        }
+
+        @Override
+        public StandardCoderObject read(JsonReader in) throws IOException {
+            return new StandardCoderObject(elementAdapter.read(in));
+        }
     }
 }

@@ -106,4 +106,22 @@ public interface Coder {
      * @throws CoderException if an error occurs
      */
     <T> T decode(File source, Class<T> clazz) throws CoderException;
+
+    /**
+     * Converts an object/POJO to a standard object.
+     *
+     * @param object object to be converted
+     * @return a new standard object representing the original object
+     * @throws CoderException if an error occurs
+     */
+    StandardCoderObject toStandard(Object object) throws CoderException;
+
+    /**
+     * Converts a standard object to an object/POJO.
+     *
+     * @param sco the standard object to be converted
+     * @return a new object represented by the standard object
+     * @throws CoderException if an error occurs
+     */
+    <T> T fromStandard(StandardCoderObject sco, Class<T> clazz) throws CoderException;
 }
