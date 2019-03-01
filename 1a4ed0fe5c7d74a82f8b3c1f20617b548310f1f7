@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b34c0651_69bdbb6a",
+        "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpHealthCheck.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2019-03-01T15:44:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0dc7751_ca36a5bb",
+      "revId": "1a4ed0fe5c7d74a82f8b3c1f20617b548310f1f7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c2db4976_20dcb618",
         "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpHealthCheck.java",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "774bef2f_0f2bb785",
+        "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpHealthCheck.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2019-03-01T15:44:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c2db4976_20dcb618",
+      "revId": "1a4ed0fe5c7d74a82f8b3c1f20617b548310f1f7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69be40c2_67d919dd",
         "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpResponseDetails.java",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2019-02-28T20:23:52Z",
       "side": 1,
       "message": "suggestion: could move the Getter/Setter annotations to the class level.\n\nthis comment applies to other classes, too",
+      "revId": "1a4ed0fe5c7d74a82f8b3c1f20617b548310f1f7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b9a55bfa_e5db6698",
+        "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpResponseDetails.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2019-03-01T15:44:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69be40c2_67d919dd",
       "revId": "1a4ed0fe5c7d74a82f8b3c1f20617b548310f1f7",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
