@@ -72,6 +72,7 @@
         <module>integrity-audit</module>
         <module>integrity-monitor</module>
         <module>policy-endpoints</module>
+        <module>pdp-common</module>
     </modules>
 
     <dependencyManagement>
