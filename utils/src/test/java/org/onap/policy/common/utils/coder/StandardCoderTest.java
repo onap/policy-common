@@ -22,10 +22,13 @@ package org.onap.policy.common.utils.coder;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import java.io.ByteArrayInputStream;
@@ -57,6 +60,13 @@ public class StandardCoderTest {
     @Before
     public void setUp() {
         coder = new StandardCoder();
+    }
+
+    @Test
+    public void testGetGson() {
+        Gson gson = coder.getGson();
+        assertNotNull(gson);
+        assertSame(gson, new StandardCoder().getGson());
     }
 
     @Test

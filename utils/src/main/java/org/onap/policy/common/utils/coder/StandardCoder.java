@@ -51,6 +51,14 @@ public class StandardCoder implements Coder {
         super();
     }
 
+    /**
+     * Gets the GSON object used by this coder.
+     * @return the GSON object used by this coder
+     */
+    protected Gson getGson() {
+        return GSON;
+    }
+
     @Override
     public String encode(Object object) throws CoderException {
         try {
