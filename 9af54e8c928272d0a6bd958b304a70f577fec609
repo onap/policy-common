@@ -37,6 +37,23 @@
     },
     {
       "key": {
+        "uuid": "d20999a1_78320113",
+        "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-01T16:47:55Z",
+      "side": 1,
+      "message": "should the messageName be an enum?",
+      "revId": "9af54e8c928272d0a6bd958b304a70f577fec609",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f3f6d55_c886b785",
         "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpResponseDetails.java",
         "patchSetId": 2
@@ -66,6 +83,40 @@
       "side": 1,
       "message": "Done",
       "parentUuid": "2f3f6d55_c886b785",
+      "revId": "9af54e8c928272d0a6bd958b304a70f577fec609",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fb39515_78001d42",
+        "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpStatistics.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-01T16:47:55Z",
+      "side": 1,
+      "message": "What does the download success and fail count mean?",
+      "revId": "9af54e8c928272d0a6bd958b304a70f577fec609",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3fdbae64_63449fbc",
+        "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpUpdate.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-01T16:47:55Z",
+      "side": 1,
+      "message": "should these identifiers be an enum?",
       "revId": "9af54e8c928272d0a6bd958b304a70f577fec609",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
