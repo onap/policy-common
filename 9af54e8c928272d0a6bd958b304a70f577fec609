@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2509504f_6c1f75c1",
+        "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2019-03-01T16:28:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db96de3e_2945d3e6",
+      "revId": "9af54e8c928272d0a6bd958b304a70f577fec609",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f3f6d55_c886b785",
         "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpResponseDetails.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-03-01T16:01:18Z",
       "side": 1,
       "message": "maybe add a comment that this should match the original request id in the request, if applicable",
+      "revId": "9af54e8c928272d0a6bd958b304a70f577fec609",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4f79098c_3ab9deb3",
+        "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpResponseDetails.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2019-03-01T16:28:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2f3f6d55_c886b785",
       "revId": "9af54e8c928272d0a6bd958b304a70f577fec609",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
