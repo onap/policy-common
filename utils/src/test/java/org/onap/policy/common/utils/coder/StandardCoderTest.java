@@ -22,6 +22,7 @@ package org.onap.policy.common.utils.coder;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -195,5 +196,52 @@ public class StandardCoderTest {
         when(coder.makeReader(file)).thenReturn(rdr);
         assertThatThrownBy(() -> coder.decode(file, JsonElement.class)).isInstanceOf(CoderException.class)
                         .hasCause(ioe);
+    }
+
+    @Test
+    public void testToStandard() throws Exception {
+        MyObject obj = new MyObject();
+        obj.abc = "xyz";
+        StandardCoderObject sco = coder.toStandard(obj);
+        assertNotNull(sco.getData());
+        assertEquals("{'abc':'xyz'}".replace('\'', '"'), sco.getData().toString());
+
+        // class instead of object -> exception
+        assertThatThrownBy(() -> coder.toStandard(String.class)).isInstanceOf(CoderException.class);
+    }
+
+    @Test
+    public void testFromStandard() throws Exception {
+        MyObject obj = new MyObject();
+        obj.abc = "pdq";
+        StandardCoderObject sco = coder.toStandard(obj);
+
+        MyObject obj2 = coder.fromStandard(sco, MyObject.class);
+        assertEquals(obj.toString(), obj2.toString());
+
+        // null class -> exception
+        assertThatThrownBy(() -> coder.fromStandard(sco, null)).isInstanceOf(CoderException.class);
+    }
+
+    @Test
+    public void testStandardTypeAdapter() throws Exception {
+        String json = "{'abc':'def'}".replace('\'', '"');
+        StandardCoderObject sco = coder.fromJson(json, StandardCoderObject.class);
+        assertNotNull(sco.getData());
+        assertEquals(json, sco.getData().toString());
+        assertEquals(json, coder.toJson(sco));
+
+        // invalid json -> exception
+        assertThatThrownBy(() -> coder.fromJson(new StringReader("["), StandardCoderObject.class));
+    }
+
+
+    private static class MyObject {
+        private String abc;
+
+        @Override
+        public String toString() {
+            return "MyObject [abc=" + abc + "]";
+        }
     }
 }
