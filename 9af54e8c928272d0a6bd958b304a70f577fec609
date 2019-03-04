@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "3ff35eb7_1d2cd57e",
+        "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpMessage.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2019-03-04T13:37:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d20999a1_78320113",
+      "revId": "9af54e8c928272d0a6bd958b304a70f577fec609",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2f3f6d55_c886b785",
         "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpResponseDetails.java",
         "patchSetId": 2
@@ -106,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "e73ee665_fb6a9d44",
+        "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpStatistics.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2019-03-04T13:37:30Z",
+      "side": 1,
+      "message": "As per API wiki, I think download success/fail will be the count of policy downloaded/deployed in the PDP by PAP since the time it was instantiated. \nThe same can be done by PAP through PDP_UPDATE message, either passing the actual policy artifact or providing the identifier of the policy artifact using which PDP can pull policies from DB.\n@Liam/Pam - Is that correct?",
+      "parentUuid": "5fb39515_78001d42",
+      "revId": "9af54e8c928272d0a6bd958b304a70f577fec609",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3fdbae64_63449fbc",
         "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpUpdate.java",
         "patchSetId": 2
@@ -117,6 +153,24 @@
       "writtenOn": "2019-03-01T16:47:55Z",
       "side": 1,
       "message": "should these identifiers be an enum?",
+      "revId": "9af54e8c928272d0a6bd958b304a70f577fec609",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "81d72330_cce31e7d",
+        "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpUpdate.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2019-03-04T13:37:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3fdbae64_63449fbc",
       "revId": "9af54e8c928272d0a6bd958b304a70f577fec609",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
