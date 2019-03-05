@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7af5bf01_269b8587",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/client/TopicSinkClient.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-05T22:54:51Z",
+      "side": 1,
+      "message": "Prefix with \"Modifications\"\n\nsame comment for all files",
+      "revId": "887a67d5ccfa3287e3451054d343860bcbd5ac1a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
