@@ -27,6 +27,7 @@ import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
  *
  * @param <T> type of message/POJO this handles
  */
+@FunctionalInterface
 public interface TypedMessageListener<T> {
 
     /**
