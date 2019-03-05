@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a22e7280_16342932",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/properties/BeanConfigurator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-05T14:58:54Z",
+      "side": 1,
+      "message": "Could you declare T at the class level, and use \"T bean\" as a parameter in general for all the methods that use it?",
+      "revId": "fabde091ed5589552885265f8ed91bc1d72a9a6e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5b19a2fe_c5c7e58f",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/properties/BeanConfigurator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-05T14:58:54Z",
+      "side": 1,
+      "message": "does capitalize(x) converts field name to uppercase?   In which case doesn\u0027t seem would be accurate set method composition?",
+      "revId": "fabde091ed5589552885265f8ed91bc1d72a9a6e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
