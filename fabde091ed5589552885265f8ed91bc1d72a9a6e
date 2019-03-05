@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e3b60b81_5f3f3554",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/properties/BeanConfigurator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-05T15:43:12Z",
+      "side": 1,
+      "message": "The intentation is that a single BeanConfigurator should work with objects any class.  However, I could make the methods parameterized, if that would be prefered.  Thoughts?",
+      "parentUuid": "a22e7280_16342932",
+      "revId": "fabde091ed5589552885265f8ed91bc1d72a9a6e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5b19a2fe_c5c7e58f",
         "filename": "utils/src/main/java/org/onap/policy/common/utils/properties/BeanConfigurator.java",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-03-05T14:58:54Z",
       "side": 1,
       "message": "does capitalize(x) converts field name to uppercase?   In which case doesn\u0027t seem would be accurate set method composition?",
+      "revId": "fabde091ed5589552885265f8ed91bc1d72a9a6e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c75121d7_dce10906",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/properties/BeanConfigurator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-05T15:43:12Z",
+      "side": 1,
+      "message": "capitalize() only capitalizes the first letter",
+      "parentUuid": "5b19a2fe_c5c7e58f",
       "revId": "fabde091ed5589552885265f8ed91bc1d72a9a6e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
