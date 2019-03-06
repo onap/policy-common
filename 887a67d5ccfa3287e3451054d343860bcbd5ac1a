@@ -16,6 +16,24 @@
       "revId": "887a67d5ccfa3287e3451054d343860bcbd5ac1a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5498835a_4f08b35b",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/client/TopicSinkClient.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2019-03-06T11:46:04Z",
+      "side": 1,
+      "message": "Jim, as per Nordix ways of working, when we edit an existing file we need to just append the Copyright header of Nordix to the existing header. No \"Modifications\" prefix.",
+      "parentUuid": "7af5bf01_269b8587",
+      "revId": "887a67d5ccfa3287e3451054d343860bcbd5ac1a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
