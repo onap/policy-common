@@ -1,9 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP Policy Engine - Common Modules
+ * utils
  * ================================================================================
- * Copyright (C) 2019 Samsung Electronics. All rights reserved.
- * Modifications Copyright (C) 2019 AT&T Intellectual Property.
+ * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,29 +18,30 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.utils.slf4j;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package org.onap.policy.common.utils.services;
 
 /**
- * Helper class to retrieve particular types of loggers without storing the logger name everywhere in ths code.
+ * This is a base interface that is used to control the order of a list
+ * of services (features) discovered via 'ServiceLoader'. See
+ * 'OrderedServiceImpl' for more details.
  */
-public class LoggerFactoryWrapper {
-
+@FunctionalInterface
+public interface OrderedService {
     /**
-     * Constructs the object.
-     */
-    private LoggerFactoryWrapper() {
-        super();
-    }
-
-    /**
-     * Get Network Logger.
+     * Get sequence number.
      *
-     * @return logger instance
+     * @return an integer sequence number, which determines the order of a list
+     *     of objects implementing this interface
      */
-    public static Logger getNetworkLogger() {
-        return LoggerFactory.getLogger("network");
+    public int getSequenceNumber();
+
+
+    /**
+     * Get the name.
+     *
+     * @return the name of the ordered service
+     */
+    public default String getName() {
+        return this.getClass().getName();
     }
 }

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018-2019 Samsung Electronics Co., Ltd.
 * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,8 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 import java.util.UUID;
 
 import org.onap.policy.common.endpoints.event.comm.bus.BusTopicSink;
-import org.onap.policy.common.utils.slf4j.LoggerFactoryWrapper;
+import org.onap.policy.common.endpoints.utils.NetLoggerUtil;
+import org.onap.policy.common.endpoints.utils.NetLoggerUtil.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +40,6 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
      * Loggers.
      */
     private static Logger logger = LoggerFactory.getLogger(InlineBusTopicSink.class);
-    private static final Logger netLogger = LoggerFactoryWrapper.getNetworkLogger();
 
     /**
      * The partition key to publish to.
@@ -140,8 +140,7 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
                 this.recentEvents.add(message);
             }
 
-            netLogger.info("[OUT|{}|{}]{}{}", this.getTopicCommInfrastructure(), this.topic, System.lineSeparator(),
-                    message);
+            NetLoggerUtil.log(EventType.OUT, this.getTopicCommInfrastructure(), this.topic, message);
 
             publisher.send(this.partitionId, message);
             broadcast(message);
