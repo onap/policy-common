@@ -22,6 +22,7 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 
 import java.util.List;
 import org.onap.policy.common.endpoints.event.comm.TopicSource;
+import org.onap.policy.common.endpoints.utils.NetLoggerUtil.EventType;
 
 /**
  * No Operation Topic Source.
@@ -45,7 +46,7 @@ public class NoopTopicSource extends NoopTopicEndpoint implements TopicSource {
      */
     @Override
     public boolean offer(String event) {
-        return super.io(event);
+        return super.io(EventType.IN, event);
     }
 
     /**

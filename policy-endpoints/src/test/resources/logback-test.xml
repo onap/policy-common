@@ -2,7 +2,7 @@
   ============LICENSE_START=======================================================
   ONAP
   ================================================================================
-  Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+  Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
   ================================================================================
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -27,8 +27,14 @@
         </encoder>
     </appender>
     
+    <appender name="testAppender" class="org.onap.policy.common.endpoints.utils.NetLoggerUtilTest$TestAppender"/>
+    
     <logger name="org.onap.policy.drools.http.server.test" level="INFO"/>
-
+    
+    <logger name="network" level="INFO">
+        <appender-ref ref="testAppender" />
+    </logger>
+    
     <root level="WARN">
         <appender-ref ref="STDOUT"/>
     </root>
