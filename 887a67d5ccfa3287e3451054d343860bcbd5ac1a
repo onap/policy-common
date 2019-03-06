@@ -52,6 +52,24 @@
       "revId": "887a67d5ccfa3287e3451054d343860bcbd5ac1a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "795cb1cc_70a749d1",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/client/TopicSinkClient.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-03-06T13:58:21Z",
+      "side": 1,
+      "message": "It\u0027s OK to prefix modifications to the header.",
+      "parentUuid": "2a75ffbe_72b5ccb1",
+      "revId": "887a67d5ccfa3287e3451054d343860bcbd5ac1a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
