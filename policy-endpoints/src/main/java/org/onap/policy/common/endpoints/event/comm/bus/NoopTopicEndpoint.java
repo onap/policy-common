@@ -23,7 +23,8 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 
 import java.util.List;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.TopicBase;
-import org.onap.policy.common.utils.slf4j.LoggerFactoryWrapper;
+import org.onap.policy.common.endpoints.utils.NetLoggerUtil;
+import org.onap.policy.common.endpoints.utils.NetLoggerUtil.EventType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,11 +37,6 @@ public abstract class NoopTopicEndpoint extends TopicBase {
      * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(NoopTopicEndpoint.class);
-
-    /**
-     * Network logger.
-     */
-    private static final Logger netLogger = LoggerFactoryWrapper.getNetworkLogger();
 
     /**
      * {@inheritDoc}.
@@ -70,8 +66,7 @@ public abstract class NoopTopicEndpoint extends TopicBase {
                 this.recentEvents.add(message);
             }
 
-            netLogger.info("[OUT|{}|{}]{}{}", this.getTopicCommInfrastructure(), this.topic, System.lineSeparator(),
-                    message);
+            NetLoggerUtil.log(EventType.OUT, this.getTopicCommInfrastructure(), this.topic, message);
 
             broadcast(message);
         } catch (Exception e) {
