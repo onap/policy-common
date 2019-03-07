@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8eee1c3c_f9c5af51",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-07T20:35:21Z",
+      "side": 1,
+      "message": "is this date correct?\n\nsame comment for other files",
+      "revId": "65f01c17658f69fd0baab7dd8cc892102de5669a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2a5b0c09_00ea1ef6",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-07T20:35:21Z",
+      "side": 1,
+      "message": "remove trailing spaces\n\nsame comment through-out this and other files",
+      "revId": "65f01c17658f69fd0baab7dd8cc892102de5669a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
