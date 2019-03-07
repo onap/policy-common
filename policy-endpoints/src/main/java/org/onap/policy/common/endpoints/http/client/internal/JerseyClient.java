@@ -8,9 +8,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,13 +25,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
 import java.util.Map;
 import java.util.Map.Entry;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
@@ -42,6 +38,7 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.http.client.HttpClient;
 import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
+import org.onap.policy.common.utils.network.NetworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +51,7 @@ public class JerseyClient implements HttpClient {
      * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(JerseyClient.class);
-    
+
     protected static final String JERSEY_DEFAULT_SERIALIZATION_PROVIDER =
                     "com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider";
 
@@ -74,11 +71,11 @@ public class JerseyClient implements HttpClient {
 
     /**
      * Constructor.
-     * 
+     *
      * <p>name the name https is it https or not selfSignedCerts are there self signed certs
      * hostname the hostname port port being used basePath base context userName user
      * password password
-     * 
+     *
      * @param busTopicParams Input parameters object
      * @throws KeyManagementException key exception
      * @throws NoSuchAlgorithmException no algorithm exception
@@ -116,25 +113,7 @@ public class JerseyClient implements HttpClient {
             ClientBuilder clientBuilder;
             SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
             if (this.selfSignedCerts) {
-                sslContext.init(null, new TrustManager[] {new X509TrustManager() {
-                    @Override
-                    public void checkClientTrusted(X509Certificate[] chain, String authType)
-                            throws CertificateException {
-                        // always trusted
-                    }
-
-                    @Override
-                    public void checkServerTrusted(X509Certificate[] chain, String authType)
-                            throws CertificateException {
-                        // always trusted
-                    }
-
-                    @Override
-                    public X509Certificate[] getAcceptedIssuers() {
-                        return new X509Certificate[0];
-                    }
-
-                } }, new SecureRandom());
+                sslContext.init(null, NetworkUtil.getAlwaysTrustingManager(), new SecureRandom());
                 clientBuilder =
                         ClientBuilder.newBuilder().sslContext(sslContext).hostnameVerifier((host, session) -> true);
             } else {
@@ -153,7 +132,7 @@ public class JerseyClient implements HttpClient {
         }
 
         registerSerProviders(busTopicParams.getSerializationProvider());
-        
+
         this.client.property(ClientProperties.METAINF_SERVICES_LOOKUP_DISABLE, "true");
 
         this.baseUrl = tmpBaseUrl.append(this.hostname).append(":").append(this.port).append("/")
@@ -162,7 +141,7 @@ public class JerseyClient implements HttpClient {
 
     /**
      * Registers the serialization provider(s) with the client.
-     * 
+     *
      * @param serializationProvider comma-separated list of serialization providers
      * @throws ClassNotFoundException if the serialization provider cannot be found
      */

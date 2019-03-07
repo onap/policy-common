@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,13 @@ package org.onap.policy.common.utils.network;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
+import java.security.cert.X509Certificate;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +45,70 @@ public class NetworkUtil {
      */
     public static final String IPv4_WILDCARD_ADDRESS = "0.0.0.0";
 
+
+    /**
+     * A trust manager that always trusts certificates.
+     */
+    // @formatter:off
+    private static final TrustManager[] ALWAYS_TRUST_MANAGER = new TrustManager[] {
+        new X509TrustManager() {
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
+
+            @Override
+            public void checkClientTrusted(final java.security.cert.X509Certificate[] certs,
+                            final String authType) {}
+
+            @Override
+            public void checkServerTrusted(final java.security.cert.X509Certificate[] certs,
+                            final String authType) {}
+        }
+    };
+    // @formatter:on
+
     private NetworkUtil() {
         // Empty constructor
+    }
+
+    /**
+     * Allocates an available port on which a server may listen.
+     *
+     * @return an available port
+     * @throws IOException if a socket cannot be created
+     */
+    public static int allocPort() throws IOException {
+        try (ServerSocket socket = new ServerSocket()) {
+            socket.bind(new InetSocketAddress(0));
+
+            return socket.getLocalPort();
+        }
+    }
+
+    /**
+     * Allocates an available port on which a server may listen.
+     *
+     * @param hostName the server's host name
+     * @return an available port
+     * @throws IOException if a socket cannot be created
+     */
+    public static int allocPort(String hostName) throws IOException {
+        try (ServerSocket socket = new ServerSocket()) {
+            socket.bind(new InetSocketAddress(hostName, 0));
+
+            return socket.getLocalPort();
+        }
+    }
+
+    /**
+     * Gets a trust manager that accepts all certificates.
+     *
+     * @return a trust manager that accepts all certificates
+     */
+    public static TrustManager[] getAlwaysTrustingManager() {
+        return ALWAYS_TRUST_MANAGER;
     }
 
     /**
