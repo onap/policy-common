@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c3bbfe47_cda33ca3",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/network/NetworkUtil.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-07T17:56:03Z",
+      "side": 1,
+      "message": "I think you may be able to have a single liner and reuse overloaded allocPort(hostname) with the below.   Untested though.\n\nallocPort(InetSocketAddress(0).getAddress().getHostAddress())",
+      "revId": "b884cf03f5a9554ede544f5f5ab3b0be0913bed7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
