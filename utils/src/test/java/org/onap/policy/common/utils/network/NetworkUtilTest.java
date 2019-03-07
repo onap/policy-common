@@ -1,15 +1,15 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * policy-utils
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,21 +20,95 @@
 
 package org.onap.policy.common.utils.network;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NetworkUtilTest {
+    protected static Logger logger = LoggerFactory.getLogger(NetworkUtilTest.class);
+
+    private static final String LOCALHOST = "localhost";
 
     @Test
     public void test() throws InterruptedException, IOException {
         assertNotNull(NetworkUtil.IPv4_WILDCARD_ADDRESS);
-        assertFalse(NetworkUtil.isTcpPortOpen("localhost", 8180, 1, 5));
+        assertFalse(NetworkUtil.isTcpPortOpen(LOCALHOST, NetworkUtil.allocPort(), 1, 5));
         assertNotNull(NetworkUtil.getHostname());
         assertNotNull(NetworkUtil.getHostIp());
     }
 
+    @Test
+    public void testAlwaysTrustManager() throws Exception {
+        TrustManager[] mgrarr = NetworkUtil.getAlwaysTrustingManager();
+        assertEquals(1, mgrarr.length);
+        assertTrue(mgrarr[0] instanceof X509TrustManager);
+
+        X509TrustManager mgr = (X509TrustManager) mgrarr[0];
+        assertNotNull(mgr.getAcceptedIssuers());
+        assertEquals(0, mgr.getAcceptedIssuers().length);
+
+        // these should not throw exceptions
+        mgr.checkClientTrusted(null, null);
+        mgr.checkServerTrusted(null, null);
+    }
+
+    @Test
+    public void testAllocPort_testAllocPortString() throws Exception {
+        // allocate wild-card port
+        int wildCardPort = NetworkUtil.allocPort();
+        assertTrue(wildCardPort != 0);
+
+        // verify that we can listen on the port
+        try (ServerSocket wildSocket = new ServerSocket(wildCardPort)) {
+            new Accepter(wildSocket).start();
+            assertTrue(NetworkUtil.isTcpPortOpen(LOCALHOST, wildCardPort, 5, 1000L));
+        }
+
+
+        // allocate port using host name
+        int localPort = NetworkUtil.allocPort(LOCALHOST);
+        assertTrue(localPort != 0);
+
+        // the OS should have allocated a new port, even though the first has been closed
+        assertTrue(localPort != wildCardPort);
+
+        try (ServerSocket localSocket = new ServerSocket()) {
+            localSocket.bind(new InetSocketAddress(LOCALHOST, localPort));
+            new Accepter(localSocket).start();
+            assertTrue(NetworkUtil.isTcpPortOpen(LOCALHOST, localPort, 5, 1000L));
+        }
+    }
+
+    /**
+     * Thread that accepts a connection on a socket.
+     */
+    private static class Accepter extends Thread {
+        private ServerSocket socket;
+
+        public Accepter(ServerSocket socket) {
+            this.socket = socket;
+            setDaemon(true);
+        }
+
+        @Override
+        public void run() {
+            try (Socket server = socket.accept()) {
+                // do nothing
+
+            } catch (IOException e) {
+                logger.error("socket not accepted", e);
+            }
+        }
+    }
 }
