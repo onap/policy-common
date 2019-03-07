@@ -1,26 +1,31 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
+ *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
 
 package org.onap.policy.common.parameters;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import org.onap.policy.common.parameters.annotations.Min;
+import org.onap.policy.common.parameters.annotations.NotBlank;
+import org.onap.policy.common.parameters.annotations.NotNull;
 
 /**
  * This class holds the result of the validation of a parameter.
@@ -43,6 +48,47 @@ public class ParameterValidationResult implements ValidationResult {
     protected ParameterValidationResult(final Field field, final Object parameterValue) {
         this.field = field;
         this.parameterValue = parameterValue;
+
+        if (parameterValue == null && getAnyAnnotation(field, NotNull.class) != null) {
+            setResult(ValidationStatus.INVALID, "is null");
+
+        } else if (parameterValue instanceof String && getAnyAnnotation(field, NotBlank.class) != null
+                        && parameterValue.toString().trim().isEmpty()) {
+            setResult(ValidationStatus.INVALID, "must be a non-blank string");
+
+        } else if (parameterValue instanceof Number) {
+            Min minAnnot = field.getAnnotation(Min.class);
+            if (minAnnot != null && ((Number) parameterValue).longValue() < minAnnot.value()) {
+                setResult(ValidationStatus.INVALID, "must be >= " + minAnnot.value());
+            }
+        }
+    }
+
+    /**
+     * Gets an annotation for a field, first checking the field, itself, and then checking
+     * at the class level for the current and superclasses.
+     *
+     * @param field field of interest
+     * @param annotClass class of annotation that is desired
+     * @return the field's annotation, or {@code null} if it does not exist
+     */
+    private static <T extends Annotation> T getAnyAnnotation(final Field field, Class<T> annotClass) {
+        T annot = field.getAnnotation(annotClass);
+        if (annot != null) {
+            return annot;
+        }
+
+        // check class level
+        Class<?> clazz = field.getDeclaringClass();
+        while (clazz != Object.class) {
+            if ((annot = clazz.getAnnotation(annotClass)) != null) {
+                return annot;
+            }
+
+            clazz = clazz.getSuperclass();
+        }
+
+        return null;
     }
 
     /**
@@ -66,14 +112,16 @@ public class ParameterValidationResult implements ValidationResult {
     }
 
     /**
-     * Set the validation result on on a parameter field. 
+     * Set the validation result on on a parameter field.
      * @param status The validation status the field is receiving
      * @param message The validation message explaining the validation status
      */
     @Override
     public void setResult(final ValidationStatus status, final String message) {
-        this.status = status;
-        this.message = message;
+        if (this.status == ValidationStatus.CLEAN) {
+            this.status = status;
+            this.message = message;
+        }
     }
 
     /**
