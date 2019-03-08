@@ -715,6 +715,27 @@ public class BeanConfiguratorTest {
     }
 
     @Test
+    public void testGetPropValue_NoName() throws PropertyException {
+        props.setProperty("myField", STRING_VALUE);
+
+        class Config {
+            @Property
+            private String myField;
+
+            @SuppressWarnings("unused")
+            public Config setMyField(String value) {
+                myField = value;
+                return this;
+            }
+        }
+
+        Config cfg = new Config();
+        beancfg.configureFromProperties(cfg, props);
+
+        assertEquals(STRING_VALUE, cfg.myField);
+    }
+
+    @Test
     public void testGetPropValue_Prop_NoDefault() throws PropertyException {
         props.setProperty(THE_VALUE, STRING_VALUE);
 

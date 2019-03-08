@@ -40,7 +40,7 @@ public @interface Property {
      *
      * @return the property name
      */
-    public String name();
+    public String name() default "";
 
     /**
      * Default value, used when the property does not exist.

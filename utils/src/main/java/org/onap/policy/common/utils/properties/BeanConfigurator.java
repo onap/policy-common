@@ -301,6 +301,9 @@ public class BeanConfigurator {
      */
     protected String getPropValue(String fieldName, Properties props, Property prop) throws PropertyMissingException {
         String propnm = prop.name();
+        if (propnm.isEmpty()) {
+            propnm = fieldName;
+        }
 
         String val = props.getProperty(propnm);
         if (val != null && isEmptyOk(prop, val)) {
