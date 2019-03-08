@@ -1,20 +1,20 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
- *  Modifications Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
@@ -66,7 +66,7 @@ public class GroupValidationResult implements ValidationResult {
             // Check if a validation result should be added for this declared field
             if (isIncludedField(field)) {
                 // Set a validation result for the field
-                validationResultMap.put(field.getName(), getValidationResult(field, parameterGroup));
+                validationResultMap.put(field.getName(), getSetValidationResult(field, parameterGroup));
             }
         }
 
@@ -75,13 +75,29 @@ public class GroupValidationResult implements ValidationResult {
             // Check if a validation result should be added for this declared field
             if (isIncludedField(field)) {
                 // Set a validation result for the field
-                validationResultMap.putIfAbsent(field.getName(), getValidationResult(field, parameterGroup));
+                validationResultMap.putIfAbsent(field.getName(), getSetValidationResult(field, parameterGroup));
             }
         }
     }
+
+    /**
+     * Construct a validation result for a field, updating "this" status.
+     *
+     * @param field The parameter field
+     * @param ParameterGroup The parameter group containing the field
+     * @return the validation result
+     * @throws Exception on accessing private fields
+     */
+    private ValidationResult getSetValidationResult(Field field, ParameterGroup parameterGroup) {
+        ValidationResult result = getValidationResult(field, parameterGroup);
+        setResult(result.getStatus());
+
+        return result;
+    }
+
     /**
      * Construct a validation result for a field.
-     * 
+     *
      * @param field The parameter field
      * @param ParameterGroup The parameter group containing the field
      * @return the validation result
@@ -91,6 +107,12 @@ public class GroupValidationResult implements ValidationResult {
         final String fieldName = field.getName();
         final Class<?> fieldType = field.getType();
         final Object fieldObject = getObjectField(parameterGroup, field);
+
+        // perform null checks
+        ParameterValidationResult result = new ParameterValidationResult(field, fieldObject);
+        if (!result.isValid()) {
+            return result;
+        }
 
         // Nested parameter groups are allowed
         if (ParameterGroup.class.isAssignableFrom(fieldType)) {
@@ -106,16 +128,16 @@ public class GroupValidationResult implements ValidationResult {
         // Collections of parameter groups are not allowed
         if (Collection.class.isAssignableFrom(field.getType())) {
             checkCollection4ParameterGroups(fieldName, fieldObject);
-            return new ParameterValidationResult(field, fieldObject);
+            return result;
         }
 
         // It's a regular parameter
-        return new ParameterValidationResult(field, fieldObject);
+        return result;
     }
 
     /**
      * Get the value of a field in an object using a getter found with reflection.
-     * 
+     *
      * @param targetObject The object on which to read the field value
      * @param fieldName The name of the field
      * @return The field value
@@ -156,7 +178,7 @@ public class GroupValidationResult implements ValidationResult {
 
     /**
      * Check if this field is a map of parameter groups indexed by string keys.
-     * 
+     *
      * @param fieldName the name of the collection field.
      * @param mapObject the map object to check
      */
@@ -184,7 +206,7 @@ public class GroupValidationResult implements ValidationResult {
 
     /**
      * Check if this field contains parameter groups.
-     * 
+     *
      * @param fieldName the name of the collection field.
      * @param collectionObject the collection object to check
      */
@@ -234,7 +256,7 @@ public class GroupValidationResult implements ValidationResult {
 
     /**
      * Set the validation result on a parameter group.
-     * 
+     *
      * @param status The validation status the parameter group is receiving
      * @param message The validation message explaining the validation status
      */
@@ -247,7 +269,7 @@ public class GroupValidationResult implements ValidationResult {
     /**
      * Set the validation result on a parameter group. On a sequence of calls, the most serious validation status is
      * recorded, assuming the status enum ordinal increase in order of severity
-     * 
+     *
      * @param status The validation status the parameter group is receiving
      */
     public void setResult(final ValidationStatus status) {
@@ -260,7 +282,7 @@ public class GroupValidationResult implements ValidationResult {
 
     /**
      * Set the validation result on a parameter in a parameter group.
-     * 
+     *
      * @param parameterName The name of the parameter
      * @param status The validation status the field is receiving
      * @param message The validation message explaining the validation status
@@ -281,7 +303,7 @@ public class GroupValidationResult implements ValidationResult {
 
     /**
      * Set the validation result on a nested parameter group.
-     * 
+     *
      * @param parameterName The name of the parameter field
      * @param nestedValidationResult The validation result from a nested field
      */
@@ -304,7 +326,7 @@ public class GroupValidationResult implements ValidationResult {
 
     /**
      * Set the validation result on a nested parameter group map entry.
-     * 
+     *
      * @param parameterName The name of the parameter field
      * @param key The key of the map entry
      * @param nestedMapValidationResult The validation result from a nested map entry
@@ -329,7 +351,7 @@ public class GroupValidationResult implements ValidationResult {
 
     /**
      * Set the validation status on a group map entry.
-     * 
+     *
      * @param parameterName The name of the parameter field
      * @param key The key of the map entry
      * @param status The validation status of the entry
@@ -395,11 +417,11 @@ public class GroupValidationResult implements ValidationResult {
 
         return validationResultBuilder.toString();
     }
-    
+
 
     /**
      * Check if a field should be included for validation.
-     * 
+     *
      * @param field the field to check for inclusion
      * @return true of the field should be included
      */
@@ -425,11 +447,11 @@ public class GroupValidationResult implements ValidationResult {
                     superclassFields.add(field);
                 }
             }
-            
+
             // Check the next super class down
             currentClass = currentClass.getSuperclass();
         }
-        
+
         return superclassFields;
     }
 }
