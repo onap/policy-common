@@ -49,12 +49,15 @@ public class ParameterValidationResult implements ValidationResult {
         this.field = field;
         this.parameterValue = parameterValue;
 
-        if (parameterValue == null && getAnyAnnotation(field, NotNull.class) != null) {
-            setResult(ValidationStatus.INVALID, "is null");
+        if (parameterValue == null) {
+            if (getAnyAnnotation(field, NotNull.class) != null) {
+                setResult(ValidationStatus.INVALID, "is null");
+            }
 
-        } else if (parameterValue instanceof String && getAnyAnnotation(field, NotBlank.class) != null
-                        && parameterValue.toString().trim().isEmpty()) {
-            setResult(ValidationStatus.INVALID, "must be a non-blank string");
+        } else if (parameterValue instanceof String) {
+            if (getAnyAnnotation(field, NotBlank.class) != null && parameterValue.toString().trim().isEmpty()) {
+                setResult(ValidationStatus.INVALID, "must be a non-blank string");
+            }
 
         } else if (parameterValue instanceof Number) {
             Min minAnnot = field.getAnnotation(Min.class);
@@ -66,7 +69,8 @@ public class ParameterValidationResult implements ValidationResult {
 
     /**
      * Gets an annotation for a field, first checking the field, itself, and then checking
-     * at the class level for the current and superclasses.
+     * at the class level. Does not check super classes as class-level annotations should
+     * only apply to the fields within the class.
      *
      * @param field field of interest
      * @param annotClass class of annotation that is desired
@@ -78,17 +82,7 @@ public class ParameterValidationResult implements ValidationResult {
             return annot;
         }
 
-        // check class level
-        Class<?> clazz = field.getDeclaringClass();
-        while (clazz != Object.class) {
-            if ((annot = clazz.getAnnotation(annotClass)) != null) {
-                return annot;
-            }
-
-            clazz = clazz.getSuperclass();
-        }
-
-        return null;
+        return field.getDeclaringClass().getAnnotation(annotClass);
     }
 
     /**

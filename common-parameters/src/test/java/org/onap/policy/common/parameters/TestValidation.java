@@ -293,6 +293,12 @@ public class TestValidation {
         // non-null should be OK
         result = new ParameterValidationResult(NotNullSub.class.getDeclaredField(NOT_NULL_STRING_NAME), "");
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
+
+        /*
+         * Super class annotation - null should be OK
+         */
+        result = new ParameterValidationResult(NotNullSub2.class.getDeclaredField("anotherString"), null);
+        assertEquals(ValidationStatus.CLEAN, result.getStatus());
     }
 
     @Test
@@ -358,47 +364,34 @@ public class TestValidation {
 
     // these classes are used to test class-level annotations
 
-    @NotNull
-    private static class NotNullBase {
+
+    private static class EmptyBase {
 
     }
 
-    private static class NotNullSub extends NotNullBase {
+    @NotNull
+    private static class NotNullSub extends EmptyBase {
         @SuppressWarnings("unused")
         private String notNullString;
     }
 
-    private static class NotBlankBase {
-
+    private static class NotNullSub2 extends NotNullSub {
+        @SuppressWarnings("unused")
+        private String anotherString;
     }
 
     @NotBlank
-    private static class NotBlankSub extends NotBlankBase {
+    private static class NotBlankSub extends EmptyBase {
         @SuppressWarnings("unused")
         private String notBlankString;
     }
 
-    private abstract static class SimpleGroup implements ParameterGroup {
-        private String name;
-
-        @Override
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public void setName(String name) {
-            this.name = name;
-        }
-    }
-
-    private static class Contained extends SimpleGroup {
+    private static class Contained extends ParameterGroupImpl {
         @Min(value = 1)
         private int minInt;
 
-        @Override
-        public GroupValidationResult validate() {
-            return new GroupValidationResult(this);
+        public Contained() {
+            super("Contained");
         }
 
         @SuppressWarnings("unused")
@@ -407,13 +400,12 @@ public class TestValidation {
         }
     }
 
-    private static class Container extends SimpleGroup {
+    private static class Container extends ParameterGroupImpl {
         @NotNull
         private Contained item;
 
-        @Override
-        public GroupValidationResult validate() {
-            return new GroupValidationResult(this);
+        public Container() {
+            super("Container");
         }
 
         @SuppressWarnings("unused")
