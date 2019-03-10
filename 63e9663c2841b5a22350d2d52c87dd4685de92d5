@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "65f7326b_914b9a61",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-10T19:36:33Z",
+      "side": 1,
+      "message": "I think there are sonars that complain of printing to stdout.   You could a regular slf4j logger as in other code in this repo and will print to System.out by default.",
+      "revId": "63e9663c2841b5a22350d2d52c87dd4685de92d5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "adb202c8_dd73710e",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-10T19:36:33Z",
+      "side": 1,
+      "message": "is it possible to add a comment on how to generate the secret key matching the crypto spec used here? is there an openssl equivalent?   This info can be added here in the code or in the jira ticket.",
+      "revId": "63e9663c2841b5a22350d2d52c87dd4685de92d5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cb38d78f_287314c9",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-10T19:36:33Z",
+      "side": 1,
+      "message": "Can it be created a public static method returning a boolean called \" boolean isEncrypted(String value)\" that simply returns a boolean indicating if the value is prefixed with \"enc:\" or not?   This may come handy in this library use code rather than checking directly for \"enc:\".",
+      "revId": "63e9663c2841b5a22350d2d52c87dd4685de92d5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aa331bb5_17c3b934",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-10T19:36:33Z",
+      "side": 1,
+      "message": "Can it be moved \"SHA1PRNG\" as a private static final constant to the top to have all encryption related parameters together for consistency?",
+      "revId": "63e9663c2841b5a22350d2d52c87dd4685de92d5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "67353eef_3eee8091",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-10T19:36:33Z",
+      "side": 1,
+      "message": "could the \"if\" below be split into two separate conditionos as the not starting with \"enc\" is the usual case, and the other one encrypted but invalid size could be considered an application error:\n\nif (!startsWith(\"enc:\") return value   (no logging statement)\n\nif (value.length() \u003c validSize) logger.error (not good).   I think even better throw an IllegalArgumentException instead.",
+      "revId": "63e9663c2841b5a22350d2d52c87dd4685de92d5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d48d4daf_f4b21510",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-10T19:36:33Z",
+      "side": 1,
+      "message": "could use an slf4j logger instead in general and will print to System.out by default.",
+      "revId": "63e9663c2841b5a22350d2d52c87dd4685de92d5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
