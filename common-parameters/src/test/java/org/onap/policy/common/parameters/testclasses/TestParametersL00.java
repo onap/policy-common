@@ -1,19 +1,20 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
+ *  Modifications Copyright (C) 2019 AT&T Intellectual Property.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
@@ -23,16 +24,14 @@ package org.onap.policy.common.parameters.testclasses;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.parameters.ParameterConstants;
-import org.onap.policy.common.parameters.ParameterGroup;
+import org.onap.policy.common.parameters.ParameterGroupImpl;
 import org.onap.policy.common.parameters.ValidationStatus;
 
-public class TestParametersL00 implements ParameterGroup {
+public class TestParametersL00 extends ParameterGroupImpl {
     private static final String A_CONSTANT = "A Constant";
-    
-    private String name = A_CONSTANT;
+
     private int l00IntField = 0;
     private String l00StringField = "Legal " + this.getClass().getCanonicalName();
     private TestParametersL10 l00L10Nested = new TestParametersL10("l00L10Nested");
@@ -45,16 +44,16 @@ public class TestParametersL00 implements ParameterGroup {
      * Default constructor.
      */
     public TestParametersL00() {
-        // Default Cnstructor
+        super(A_CONSTANT);
     }
 
     /**
      * Create a test parameter group.
-     * 
+     *
      * @param name the parameter group name
      */
     public TestParametersL00(final String name) {
-        this.name = name;
+        super(name);
 
         TestParametersLGeneric l00LGenericNestedMapVal0 = new TestParametersLGeneric("l00LGenericNestedMapVal0");
         l00LGenericNestedMap.put(l00LGenericNestedMapVal0.getName(), l00LGenericNestedMapVal0);
@@ -94,10 +93,6 @@ public class TestParametersL00 implements ParameterGroup {
         this.isSomeFlag = isSomeFlag;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public void setL00IntField(int l00IntField) {
         this.l00IntField = l00IntField;
     }
@@ -120,7 +115,7 @@ public class TestParametersL00 implements ParameterGroup {
 
     /**
      * Trigger a validation message.
-     * 
+     *
      * @param triggerStatus Validation status to trigger
      * @param level Number of levels to recurse before stopping
      */
@@ -162,15 +157,10 @@ public class TestParametersL00 implements ParameterGroup {
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
     public GroupValidationResult validate() {
-        GroupValidationResult validationResult = new GroupValidationResult(this);
+        GroupValidationResult validationResult = super.validate();
 
-        if (name == null || name.trim().length() == 0) {
+        if (getName() == null || getName().trim().length() == 0) {
             validationResult.setResult("name", ValidationStatus.INVALID, "name must be a non-blank string");
         }
 

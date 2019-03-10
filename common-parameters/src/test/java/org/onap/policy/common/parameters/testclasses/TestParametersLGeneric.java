@@ -22,13 +22,12 @@
 package org.onap.policy.common.parameters.testclasses;
 
 import org.onap.policy.common.parameters.GroupValidationResult;
-import org.onap.policy.common.parameters.ParameterGroup;
+import org.onap.policy.common.parameters.ParameterGroupImpl;
 import org.onap.policy.common.parameters.ValidationStatus;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
 
-public class TestParametersLGeneric implements ParameterGroup {
-    private String name;
+public class TestParametersLGeneric extends ParameterGroupImpl {
     private int lgenericIntField = 0;
 
     @NotNull @NotBlank
@@ -47,7 +46,7 @@ public class TestParametersLGeneric implements ParameterGroup {
      * @param name the parameter group name
      */
     public TestParametersLGeneric(final String name) {
-        this.name = name;
+        super(name);
     }
 
     public int getLgenericIntField() {
@@ -56,10 +55,6 @@ public class TestParametersLGeneric implements ParameterGroup {
 
     public String getLgenericStringField() {
         return lgenericStringField;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public void setLgenericIntField(int lgenericIntField) {
@@ -107,13 +102,8 @@ public class TestParametersLGeneric implements ParameterGroup {
     }
 
     @Override
-    public String getName() {
-        return this.name;
-    }
-
-    @Override
     public GroupValidationResult validate() {
-        GroupValidationResult validationResult = new GroupValidationResult(this);
+        GroupValidationResult validationResult = super.validate();
 
         if ("lgenericStringField".equals(lgenericStringField)) {
             validationResult.setResult("lgenericStringField", ValidationStatus.WARNING,
