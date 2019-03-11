@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8569d0f8_1e44ac07",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T20:56:41Z",
+      "side": 1,
+      "message": "if you have a chance, please remove \"\\n\".  Otherwise if want to maintain the newline character feed \"System.lineSeparator()\" into the logger statement I think is the recommended way.",
+      "revId": "78d4eb85b137cbaebdd9ada4b9746c9a5bea5d6a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "58a3fb76_ae5a3d69",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T20:56:41Z",
+      "side": 1,
+      "message": "remove comment in line below, does not apply.  It is passed as an argument called according to the method signature.",
+      "revId": "78d4eb85b137cbaebdd9ada4b9746c9a5bea5d6a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ead2c8a3_a693d176",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T20:56:41Z",
+      "side": 1,
+      "message": "if you have a chance, please remove \"\\n\".  Otherwise if want to maintain the newline character feed \"System.lineSeparator()\" into the logger statement I think is the recommended way.",
+      "revId": "78d4eb85b137cbaebdd9ada4b9746c9a5bea5d6a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7be58a25_c28d5a9a",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T20:56:41Z",
+      "side": 1,
+      "message": "remove comment in line below, does not apply.  It is passed as an argument called according to the method signature.",
+      "revId": "78d4eb85b137cbaebdd9ada4b9746c9a5bea5d6a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6b9ea1b1_70521a37",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T20:56:41Z",
+      "side": 1,
+      "message": "if you have a chance, please remove \"\\n\".  Otherwise if want to maintain the newline character feed \"System.lineSeparator()\" into the logger statement I think is the recommended way.",
+      "revId": "78d4eb85b137cbaebdd9ada4b9746c9a5bea5d6a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e96f5e8d_e9392733",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T20:56:41Z",
+      "side": 1,
+      "message": "remove comment in line below, does not apply.  It is passed as an argument called according to the method signature.",
+      "revId": "78d4eb85b137cbaebdd9ada4b9746c9a5bea5d6a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6296dccf_fb23ee81",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T20:56:41Z",
+      "side": 1,
+      "message": "if you have a chance, please remove \"\\n\".  Otherwise if want to maintain the newline character feed \"System.lineSeparator()\" into the logger statement I think is the recommended way.",
+      "revId": "78d4eb85b137cbaebdd9ada4b9746c9a5bea5d6a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "01d2ca16_4cae3919",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T20:56:41Z",
+      "side": 1,
+      "message": "remove comment in line below, does not apply.  It is passed as an argument called according to the method signature.",
+      "revId": "78d4eb85b137cbaebdd9ada4b9746c9a5bea5d6a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2b2e0433_3a907e2c",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T20:56:41Z",
+      "side": 1,
+      "message": "if you have a chance, please remove \"\\n\".  Otherwise if want to maintain the newline character feed \"System.lineSeparator()\" into the logger statement I think is the recommended way.",
+      "revId": "78d4eb85b137cbaebdd9ada4b9746c9a5bea5d6a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "76f8b94f_43d5309b",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T20:56:41Z",
+      "side": 1,
+      "message": "remove comment in line below, does not apply.  It is passed as an argument called according to the method signature.",
+      "revId": "78d4eb85b137cbaebdd9ada4b9746c9a5bea5d6a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
