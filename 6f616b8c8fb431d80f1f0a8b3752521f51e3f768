@@ -54,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "30c79f30_49577171",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/features/NetLoggerFeatureApi.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-11T20:53:16Z",
+      "side": 1,
+      "message": "actually, all methods in interfaces default to \"public\" (something I learned from Jorge) if not specified (and if you do specify something else, the compiler will complain)",
+      "parentUuid": "3cba8fc6_38a88820",
+      "revId": "6f616b8c8fb431d80f1f0a8b3752521f51e3f768",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d934e6cb_7a9a5eb6",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/features/NetLoggerFeatureApi.java",
         "patchSetId": 1
