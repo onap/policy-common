@@ -37,6 +37,11 @@
             <artifactId>gson</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.onap.policy.common</groupId>
+            <artifactId>capabilities</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
         </dependency>
