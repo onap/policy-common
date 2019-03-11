@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b5f3ec88_2833fa95",
+        "filename": "utils/src/test/resources/logback-test.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T22:37:42Z",
+      "side": 1,
+      "message": "I think if you don\u0027t have this logback.xml, logback will act very similar if it can\u0027t find one, print to stdout at the debug level.   I think you\u0027ll see equivalent output.   The only thing I am not sure if the Pattern used (may be that\u0027s the reason you added it).",
+      "revId": "1162f4b61e6893c0f44d1f9d5d8abc81a94bed48",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
