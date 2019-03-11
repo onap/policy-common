@@ -60,11 +60,15 @@ public class NetworkUtil {
 
             @Override
             public void checkClientTrusted(final java.security.cert.X509Certificate[] certs,
-                            final String authType) {}
+                            final String authType) {
+                // always trust
+            }
 
             @Override
             public void checkServerTrusted(final java.security.cert.X509Certificate[] certs,
-                            final String authType) {}
+                            final String authType) {
+                // always trust
+            }
         }
     };
     // @formatter:on

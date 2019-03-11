@@ -526,9 +526,8 @@ public class BeanConfigurator {
      * @param methodName name of the method to return
      * @return the method to be used to get the field's value
      * @throws NoSuchMethodException if the method does not exist
-     * @throws SecurityException if the method cannot be accessed
      */
-    protected Method getGetter(Field field, String methodName) throws NoSuchMethodException, SecurityException {
+    protected Method getGetter(Field field, String methodName) throws NoSuchMethodException {
         return field.getDeclaringClass().getMethod(methodName);
     }
 
