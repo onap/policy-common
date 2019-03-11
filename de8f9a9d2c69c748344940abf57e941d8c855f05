@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "75079eab_8571bbf3",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-11T16:11:21Z",
+      "side": 1,
+      "message": "this line will run together with the previous line when using javadoc.  Perhaps add a blank line and prefix with \"\u003cp\u003e\".",
+      "revId": "de8f9a9d2c69c748344940abf57e941d8c855f05",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cf615b11_3dace3cf",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-11T16:11:21Z",
+      "side": 1,
+      "message": "personal preference: remove the \"if\" test and make this method a one-liner",
+      "revId": "de8f9a9d2c69c748344940abf57e941d8c855f05",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "01514233_7cb85380",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-11T16:11:21Z",
+      "side": 1,
+      "message": "remove trailing spaces through-out this file",
+      "revId": "de8f9a9d2c69c748344940abf57e941d8c855f05",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
