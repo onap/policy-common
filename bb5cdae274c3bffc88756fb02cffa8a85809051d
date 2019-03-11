@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "650075bd_7962a966",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T17:59:53Z",
+      "side": 1,
+      "message": "Replace \"2018\" with \"2019\"",
+      "revId": "bb5cdae274c3bffc88756fb02cffa8a85809051d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "12a8b596_e658f2f3",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T17:59:53Z",
+      "side": 1,
+      "message": "Sorry Joseph, may be I didn\u0027t express myself correctly, what I meant is to have a\n\nprivate static final String BLAH \u003d \"SHA1PRNG\"\n\nabove with the other statics above.\n\nI think you still need the \n\nbyte[] iv \u003d new byte[IV_BLOCK_SIZE_IN_BYTES];\n\nstill here as you had.   Otherwise it can get corrupted with concurrent access I think.",
+      "revId": "bb5cdae274c3bffc88756fb02cffa8a85809051d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0b0cf3ab_3e04f385",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T17:59:53Z",
+      "side": 1,
+      "message": "You don\u0027t need the else below, I think you\u0027ll get a sonar with it, simply do:\n\nif (value.length() \u003c validSize) {\n   throw ..\n}",
+      "revId": "bb5cdae274c3bffc88756fb02cffa8a85809051d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a15b009_f47a997c",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T17:59:53Z",
+      "side": 1,
+      "message": "Replace \"2017-2018\" with \"2019\"",
+      "revId": "bb5cdae274c3bffc88756fb02cffa8a85809051d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84905204_dbb2d8f7",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-11T17:59:53Z",
+      "side": 1,
+      "message": "Not sure about how \"\\n\" will work here, but better off remove the \"\\n\" from the string.   I think static code analysis tooling may also complain about it.   This is general for all the places where you have the \"\\n\".",
+      "revId": "bb5cdae274c3bffc88756fb02cffa8a85809051d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
