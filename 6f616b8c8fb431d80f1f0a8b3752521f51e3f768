@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "3cba8fc6_38a88820",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/features/NetLoggerFeatureApi.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2019-03-11T20:43:35Z",
+      "side": 1,
+      "message": "I think removing the public static from providers is good but removing public from this will remove visibility to other packages. So features in other projects won\u0027t be able to use these.",
+      "parentUuid": "66cbfd82_675bf88b",
+      "revId": "6f616b8c8fb431d80f1f0a8b3752521f51e3f768",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d934e6cb_7a9a5eb6",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/features/NetLoggerFeatureApi.java",
         "patchSetId": 1
