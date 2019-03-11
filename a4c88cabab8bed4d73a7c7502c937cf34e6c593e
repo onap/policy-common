@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "33e1c186_ff9e56bf",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/features/NetLoggerFeatureApi.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-11T20:53:16Z",
+      "side": 1,
+      "message": "looked it up this morning - can remove \"final\", too",
+      "revId": "a4c88cabab8bed4d73a7c7502c937cf34e6c593e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dbf94fc1_d3a42e1c",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/utils/NetLoggerUtilTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-11T20:53:16Z",
+      "side": 1,
+      "message": "this doesn\u0027t appear to test the cases where a feature\u0027s before() returns false, or after() returns false",
+      "revId": "a4c88cabab8bed4d73a7c7502c937cf34e6c593e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "336d932d_59e6ae33",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/utils/NetLoggerUtilTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-11T20:53:16Z",
+      "side": 1,
+      "message": "typo: \"ever\" \u003d\u003e \"every\"",
+      "revId": "a4c88cabab8bed4d73a7c7502c937cf34e6c593e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
