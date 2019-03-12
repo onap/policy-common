@@ -34,6 +34,24 @@
       "revId": "1162f4b61e6893c0f44d1f9d5d8abc81a94bed48",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "74c8e985_4b57ec10",
+        "filename": "utils/src/test/resources/logback-test.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-03-12T14:25:43Z",
+      "side": 1,
+      "message": "I often use a logback-test.xml if I want the JUnit tests to have different output to the regular production logging level.",
+      "parentUuid": "0f509241_fe689d36",
+      "revId": "1162f4b61e6893c0f44d1f9d5d8abc81a94bed48",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
