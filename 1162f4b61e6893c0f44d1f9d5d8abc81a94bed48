@@ -16,6 +16,24 @@
       "revId": "1162f4b61e6893c0f44d1f9d5d8abc81a94bed48",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0f509241_fe689d36",
+        "filename": "utils/src/test/resources/logback-test.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-12T01:12:11Z",
+      "side": 1,
+      "message": "that\u0027s what I would have thought, but without it, slf4j complained and nothing was printed to the console, thus I added it",
+      "parentUuid": "b5f3ec88_2833fa95",
+      "revId": "1162f4b61e6893c0f44d1f9d5d8abc81a94bed48",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
