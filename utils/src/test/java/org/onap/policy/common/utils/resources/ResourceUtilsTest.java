@@ -5,15 +5,15 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * 
+ *
  * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
@@ -158,10 +158,10 @@ public class ResourceUtilsTest {
 
         theUrl = ResourceUtils.getLocalFile("file:///");
         assertNotNull(theUrl);
-        
+
         theUrl = ResourceUtils.getLocalFile("file:///testdir/testfile.xml");
         assertNull(theUrl);
-        
+
         theUrl = ResourceUtils.getLocalFile(null);
         assertNull(theUrl);
     }
@@ -185,7 +185,7 @@ public class ResourceUtilsTest {
 
         theStream = ResourceUtils.getResourceAsStream(jarFileResource);
         assertNotNull(theStream);
-        
+
         theStream = ResourceUtils.getResourceAsStream(pathDirResource);
         assertNotNull(theStream);
 
@@ -250,7 +250,7 @@ public class ResourceUtilsTest {
         assertNull(theString);
 
         theString = ResourceUtils.getResourceAsString("");
-        assertEquals("org\ntestdir\n", theString);
+        assertEquals("logback-test.xml\norg\ntestdir\n", theString);
     }
 
     @Test
@@ -295,7 +295,7 @@ public class ResourceUtilsTest {
         assertEquals("/something/else", ResourceUtils.getFilePath4Resource("/something/else"));
         assertTrue(ResourceUtils.getFilePath4Resource("xml/example.xml").endsWith("xml/example.xml"));
     }
-    
+
     /**
      * Cleandown resource utils test.
      */

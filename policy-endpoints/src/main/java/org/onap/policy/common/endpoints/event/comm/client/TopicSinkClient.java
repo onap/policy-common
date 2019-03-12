@@ -21,11 +21,8 @@
 
 package org.onap.policy.common.endpoints.event.comm.client;
 
-
 import java.util.List;
-
 import lombok.Getter;
-
 import org.onap.policy.common.endpoints.event.comm.TopicEndpoint;
 import org.onap.policy.common.endpoints.event.comm.TopicSink;
 import org.onap.policy.common.utils.coder.Coder;
