@@ -35,6 +35,7 @@ import lombok.ToString;
 public class Policy {
 
     private String name;
+    private String policyVersion;
     private String policyType;
     private String policyTypeVersion;
     private String properties;
