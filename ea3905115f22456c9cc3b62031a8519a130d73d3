@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "adc43b88_7113eb3c",
+        "filename": "gson/src/main/java/org/onap/policy/common/gson/GsonMessageBodyHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-03-14T14:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "45675289_358c3978",
+      "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cab2151f_794e85e3",
         "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2019-03-14T13:23:48Z",
       "side": 1,
       "message": "add \"UTF-8\" parameter (I typically use StandardCharsets.UTF_8)",
+      "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "85b454ee_8ecf6425",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-03-14T14:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cab2151f_794e85e3",
       "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "f238a33f_b519717a",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-03-14T14:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f51ac18_260cd6c2",
+      "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e8db945e_e23efd42",
         "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
         "patchSetId": 1
@@ -64,6 +118,24 @@
       "writtenOn": "2019-03-14T13:23:48Z",
       "side": 1,
       "message": "add \"UTF-8\" as parameter to InputStreamReader",
+      "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9510ee71_d91b1917",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-03-14T14:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8db945e_e23efd42",
       "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "074badd0_eea9d67f",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-03-14T14:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e03302ca_794502a6",
+      "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a905406b_96c50af3",
         "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
         "patchSetId": 1
@@ -98,6 +188,24 @@
       "writtenOn": "2019-03-14T13:23:48Z",
       "side": 1,
       "message": "suggestion: could just read read(chars)",
+      "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9835f8de_b9350e7d",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-03-14T14:25:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a905406b_96c50af3",
       "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
