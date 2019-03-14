@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "45675289_358c3978",
+        "filename": "gson/src/main/java/org/onap/policy/common/gson/GsonMessageBodyHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-14T13:23:48Z",
+      "side": 1,
+      "message": "while we\u0027re changing this, perhaps we can add the \"final\" keyword?",
+      "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cab2151f_794e85e3",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-14T13:23:48Z",
+      "side": 1,
+      "message": "add \"UTF-8\" parameter (I typically use StandardCharsets.UTF_8)",
+      "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f51ac18_260cd6c2",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-14T13:23:48Z",
+      "side": 1,
+      "message": "add \"UTF-8\" as parameter to getByte()",
+      "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e8db945e_e23efd42",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-14T13:23:48Z",
+      "side": 1,
+      "message": "add \"UTF-8\" as parameter to InputStreamReader",
+      "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e03302ca_794502a6",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-14T13:23:48Z",
+      "side": 1,
+      "message": "since this uses its own byte array buffer, there\u0027s no need to pass a BufferedReader; it can be a simple Reader (also impacts line 86 - don\u0027t need to wrap the reader)",
+      "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a905406b_96c50af3",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/TextFileUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-14T13:23:48Z",
+      "side": 1,
+      "message": "suggestion: could just read read(chars)",
+      "revId": "ea3905115f22456c9cc3b62031a8519a130d73d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
