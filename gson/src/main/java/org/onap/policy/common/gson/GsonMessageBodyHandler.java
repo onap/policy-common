@@ -21,6 +21,7 @@
 package org.onap.policy.common.gson;
 
 import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,6 +37,9 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
+
+import lombok.Getter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -52,6 +56,7 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
     /**
      * Object to be used to serialize and de-serialize.
      */
+    @Getter
     private Gson gson;
 
     /**
