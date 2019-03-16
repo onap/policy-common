@@ -16,6 +16,24 @@
       "revId": "bec5380fb30060a42cc8fecf45e6dae182e0b5ac",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2e4b316b_f0045d8c",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/services/ServiceManager.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-16T20:36:35Z",
+      "side": 1,
+      "message": "not necessary, because all access is synchronized",
+      "parentUuid": "9db24942_8b33c7a4",
+      "revId": "bec5380fb30060a42cc8fecf45e6dae182e0b5ac",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
