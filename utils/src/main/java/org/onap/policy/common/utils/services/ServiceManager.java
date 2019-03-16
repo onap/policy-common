@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
  * Manages a series of services. The services are started in order, and stopped in reverse
  * order.
  */
-public class ServiceManager {
+public class ServiceManager implements Startable {
     private static final Logger logger = LoggerFactory.getLogger(ServiceManager.class);
 
     /**
@@ -78,13 +78,13 @@ public class ServiceManager {
         return this;
     }
 
-    /**
-     * Starts each service, in order. If a service throws an exception, then the
-     * previously started services are stopped, in reverse order.
-     *
-     * @throws ServiceManagerException if a service fails to start
-     */
-    public synchronized void start() throws ServiceManagerException {
+    @Override
+    public synchronized boolean isAlive() {
+        return running;
+    }
+
+    @Override
+    public synchronized boolean start() {
         if (running) {
             throw new IllegalStateException("services are already running");
         }
@@ -108,7 +108,7 @@ public class ServiceManager {
 
         if (ex == null) {
             running = true;
-            return;
+            return true;
         }
 
         // one of the services failed to start - rewind those we've previously started
@@ -122,20 +122,21 @@ public class ServiceManager {
         throw new ServiceManagerException(ex);
     }
 
-    /**
-     * Stops the services, in reverse order from which they were started. Stops all of the
-     * services, even if one of the "stop" functions throws an exception. Assumes that
-     * {@link #start()} has completed successfully.
-     *
-     * @throws ServiceManagerException if a service fails to stop
-     */
-    public synchronized void stop() throws ServiceManagerException {
+    @Override
+    public synchronized boolean stop() {
         if (!running) {
             throw new IllegalStateException("services are not running");
         }
 
         running = false;
         rewind(items);
+
+        return true;
+    }
+
+    @Override
+    public void shutdown() {
+        stop();
     }
 
     /**
@@ -185,6 +186,6 @@ public class ServiceManager {
 
     @FunctionalInterface
     public static interface RunnableWithEx {
-        public void run() throws Exception;
+        void run() throws Exception;
     }
 }
