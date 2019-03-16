@@ -45,6 +45,15 @@ public class ServiceManager {
     private boolean running;
 
     /**
+     * Determines if the services are running.
+     *
+     * @return {@code true} if the services are running, {@code false} otherwise
+     */
+    public synchronized boolean isRunning() {
+        return running;
+    }
+
+    /**
      * Adds a pair of service actions to the manager.
      *
      * @param stepName name to be logged when the service is started/stopped
@@ -185,6 +194,6 @@ public class ServiceManager {
 
     @FunctionalInterface
     public static interface RunnableWithEx {
-        public void run() throws Exception;
+        void run() throws Exception;
     }
 }
