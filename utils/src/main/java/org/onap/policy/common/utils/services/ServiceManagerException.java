@@ -23,7 +23,7 @@ package org.onap.policy.common.utils.services;
 /**
  * Exceptions thrown by the ServiceManager.
  */
-public class ServiceManagerException extends Exception {
+public class ServiceManagerException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 
     public ServiceManagerException() {

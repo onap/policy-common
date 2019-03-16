@@ -23,6 +23,8 @@ package org.onap.policy.common.utils.services;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -36,7 +38,8 @@ import org.onap.policy.common.capabilities.Startable;
 import org.onap.policy.common.utils.services.ServiceManager.RunnableWithEx;
 
 public class ServiceManagerTest {
-    private static final String ALREADY_RUNNING = "services are already running";
+    private static final String MY_NAME = "my-name";
+    private static final String ALREADY_RUNNING = MY_NAME + " is already running";
     private static final String EXPECTED_EXCEPTION = "expected exception";
 
     private ServiceManager svcmgr;
@@ -46,7 +49,17 @@ public class ServiceManagerTest {
      */
     @Before
     public void setUp() {
-        svcmgr = new ServiceManager();
+        svcmgr = new ServiceManager(MY_NAME);
+    }
+
+    @Test
+    public void testServiceName() {
+        assertEquals("service manager", new ServiceManager().getName());
+    }
+
+    @Test
+    public void testGetName() {
+        assertEquals(MY_NAME, svcmgr.getName());
     }
 
     @Test
@@ -106,16 +119,20 @@ public class ServiceManagerTest {
         Startable start1 = mock(Startable.class);
         svcmgr.addService("test start", start1);
 
-        svcmgr.start();
+        assertTrue(svcmgr.start());
+
+        assertTrue(svcmgr.isAlive());
         verify(start1).start();
         verify(start1, never()).stop();
 
         // cannot re-start
-        assertThatIllegalStateException().isThrownBy(() -> svcmgr.start())
-                        .withMessage(ALREADY_RUNNING);
+        assertThatIllegalStateException().isThrownBy(() -> svcmgr.start()).withMessage(ALREADY_RUNNING);
 
         // verify that it didn't try to start the service again
         verify(start1).start();
+
+        // still running
+        assertTrue(svcmgr.isAlive());
     }
 
     @Test
@@ -139,6 +156,8 @@ public class ServiceManagerTest {
         svcmgr.addService("fifth test start ex", start5);
 
         assertThatThrownBy(() -> svcmgr.start()).isInstanceOf(ServiceManagerException.class).hasCause(exception);
+
+        assertFalse(svcmgr.isAlive());
 
         verify(start1).start();
         verify(start2).start();
@@ -177,6 +196,8 @@ public class ServiceManagerTest {
         svcmgr.addService("fifth test start rewind", start5);
 
         assertThatThrownBy(() -> svcmgr.start()).isInstanceOf(ServiceManagerException.class).hasCause(exception);
+
+        assertFalse(svcmgr.isAlive());
     }
 
     @Test
@@ -185,8 +206,7 @@ public class ServiceManagerTest {
         svcmgr.addService("first stop", start1);
 
         // cannot stop until started
-        assertThatIllegalStateException().isThrownBy(() -> svcmgr.stop())
-                        .withMessage("services are not running");
+        assertThatIllegalStateException().isThrownBy(() -> svcmgr.stop()).withMessage(MY_NAME + " is not running");
 
         // verify that it didn't try to stop the service
         verify(start1, never()).stop();
@@ -194,7 +214,9 @@ public class ServiceManagerTest {
         // start it
         svcmgr.start();
 
-        svcmgr.stop();
+        assertTrue(svcmgr.stop());
+
+        assertFalse(svcmgr.isAlive());
         verify(start1).stop();
     }
 
@@ -218,6 +240,28 @@ public class ServiceManagerTest {
         verify(stop1).run();
         verify(start2).start();
         verify(start2).stop();
+
+        assertFalse(svcmgr.isAlive());
+    }
+
+    @Test
+    public void testShutdown() throws Exception {
+        Startable start1 = mock(Startable.class);
+        svcmgr.addService("first stop", start1);
+
+        // cannot stop until started
+        assertThatIllegalStateException().isThrownBy(() -> svcmgr.shutdown()).withMessage(MY_NAME + " is not running");
+
+        // verify that it didn't try to stop the service
+        verify(start1, never()).stop();
+
+        // start it
+        svcmgr.start();
+
+        svcmgr.shutdown();
+
+        assertFalse(svcmgr.isAlive());
+        verify(start1).stop();
     }
 
     @Test
@@ -241,6 +285,8 @@ public class ServiceManagerTest {
         svcmgr.start();
 
         assertThatThrownBy(() -> svcmgr.stop()).isInstanceOf(ServiceManagerException.class).hasCause(exception);
+
+        assertFalse(svcmgr.isAlive());
 
         // all of them should have been stopped, in reverse order
         assertEquals(Arrays.asList("rewind5", "rewind4", "rewind3", "rewind2", "rewind1").toString(), lst.toString());

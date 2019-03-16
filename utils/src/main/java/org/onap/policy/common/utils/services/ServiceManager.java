@@ -31,8 +31,13 @@ import org.slf4j.LoggerFactory;
  * Manages a series of services. The services are started in order, and stopped in reverse
  * order.
  */
-public class ServiceManager {
+public class ServiceManager implements Startable {
     private static final Logger logger = LoggerFactory.getLogger(ServiceManager.class);
+
+    /**
+     * Manager name.
+     */
+    private final String name;
 
     /**
      * Services to be started/stopped.
@@ -45,6 +50,25 @@ public class ServiceManager {
     private boolean running;
 
     /**
+     * Constructs the object, with a default name.
+     */
+    public ServiceManager() {
+        this("service manager");
+    }
+
+    /**
+     * Constructs the object.
+     * @param name the manager's name, used for logging purposes
+     */
+    public ServiceManager(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    /**
      * Adds a pair of service actions to the manager.
      *
      * @param stepName name to be logged when the service is started/stopped
@@ -54,7 +78,7 @@ public class ServiceManager {
      */
     public synchronized ServiceManager addAction(String stepName, RunnableWithEx starter, RunnableWithEx stopper) {
         if (running) {
-            throw new IllegalStateException("services are already running; cannot add " + stepName);
+            throw new IllegalStateException(name + " is already running; cannot add " + stepName);
         }
 
         items.add(new Service(stepName, starter, stopper));
@@ -71,23 +95,25 @@ public class ServiceManager {
      */
     public synchronized ServiceManager addService(String stepName, Startable service) {
         if (running) {
-            throw new IllegalStateException("services are already running; cannot add " + stepName);
+            throw new IllegalStateException(name + " is already running; cannot add " + stepName);
         }
 
         items.add(new Service(stepName, () -> service.start(), () -> service.stop()));
         return this;
     }
 
-    /**
-     * Starts each service, in order. If a service throws an exception, then the
-     * previously started services are stopped, in reverse order.
-     *
-     * @throws ServiceManagerException if a service fails to start
-     */
-    public synchronized void start() throws ServiceManagerException {
+    @Override
+    public synchronized boolean isAlive() {
+        return running;
+    }
+
+    @Override
+    public synchronized boolean start() {
         if (running) {
-            throw new IllegalStateException("services are already running");
+            throw new IllegalStateException(name + " is already running");
         }
+
+        logger.info("{} starting", name);
 
         // tracks the services that have been started so far
         Deque<Service> started = new LinkedList<>();
@@ -95,20 +121,21 @@ public class ServiceManager {
 
         for (Service item : items) {
             try {
-                logger.info("starting {}", item.stepName);
+                logger.info("{} starting {}", name, item.stepName);
                 item.starter.run();
                 started.add(item);
 
             } catch (Exception e) {
-                logger.error("failed to start {}; rewinding steps", item.stepName);
+                logger.error("{} failed to start {}; rewinding steps", name, item.stepName);
                 ex = e;
                 break;
             }
         }
 
         if (ex == null) {
+            logger.info("{} started", name);
             running = true;
-            return;
+            return true;
         }
 
         // one of the services failed to start - rewind those we've previously started
@@ -116,26 +143,27 @@ public class ServiceManager {
             rewind(started);
 
         } catch (ServiceManagerException e) {
-            logger.error("rewind failed", e);
+            logger.error("{} rewind failed", name, e);
         }
 
         throw new ServiceManagerException(ex);
     }
 
-    /**
-     * Stops the services, in reverse order from which they were started. Stops all of the
-     * services, even if one of the "stop" functions throws an exception. Assumes that
-     * {@link #start()} has completed successfully.
-     *
-     * @throws ServiceManagerException if a service fails to stop
-     */
-    public synchronized void stop() throws ServiceManagerException {
+    @Override
+    public synchronized boolean stop() {
         if (!running) {
-            throw new IllegalStateException("services are not running");
+            throw new IllegalStateException(name + " is not running");
         }
 
         running = false;
         rewind(items);
+
+        return true;
+    }
+
+    @Override
+    public void shutdown() {
+        stop();
     }
 
     /**
@@ -148,20 +176,24 @@ public class ServiceManager {
     private void rewind(Deque<Service> running) throws ServiceManagerException {
         Exception ex = null;
 
+        logger.info("{} stopping", name);
+
         // stop everything, in reverse order
         Iterator<Service> it = running.descendingIterator();
         while (it.hasNext()) {
             Service item = it.next();
             try {
-                logger.info("stopping {}", item.stepName);
+                logger.info("{} stopping {}", name, item.stepName);
                 item.stopper.run();
             } catch (Exception e) {
-                logger.error("failed to stop {}", item.stepName);
+                logger.error("{} failed to stop {}", name, item.stepName);
                 ex = e;
 
                 // do NOT break or re-throw, as we must stop ALL remaining items
             }
         }
+
+        logger.info("{} stopped", name);
 
         if (ex != null) {
             throw new ServiceManagerException(ex);
@@ -185,6 +217,6 @@ public class ServiceManager {
 
     @FunctionalInterface
     public static interface RunnableWithEx {
-        public void run() throws Exception;
+        void run() throws Exception;
     }
 }
