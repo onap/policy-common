@@ -250,7 +250,9 @@ public class ResourceUtilsTest {
         assertNull(theString);
 
         theString = ResourceUtils.getResourceAsString("");
-        assertEquals("logback-test.xml\norg\ntestdir\n", theString);
+
+        assertEquals("logback-test.xml\nMETA-INF\norg\ntestdir\n", theString);
+
     }
 
     @Test

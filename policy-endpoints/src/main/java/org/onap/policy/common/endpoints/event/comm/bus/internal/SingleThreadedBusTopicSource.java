@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018-2019 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,8 +28,9 @@ import org.onap.policy.common.endpoints.event.comm.FilterableTopicSource;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.BusTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FilterableBusConsumer;
+import org.onap.policy.common.endpoints.utils.NetLoggerUtil;
+import org.onap.policy.common.endpoints.utils.NetLoggerUtil.EventType;
 import org.onap.policy.common.utils.network.NetworkUtil;
-import org.onap.policy.common.utils.slf4j.LoggerFactoryWrapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +46,6 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
      * that in a single file in a concise format.
      */
     private static Logger logger = LoggerFactory.getLogger(InlineBusTopicSink.class);
-    private static final Logger netLogger = LoggerFactoryWrapper.getNetworkLogger();
 
     /**
      * Bus consumer group.
@@ -228,8 +228,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
                         this.recentEvents.add(event);
                     }
 
-                    netLogger.info("[IN|{}|{}]{}{}", this.getTopicCommInfrastructure(), this.topic,
-                            System.lineSeparator(), event);
+                    NetLoggerUtil.log(EventType.IN, this.getTopicCommInfrastructure(), this.topic, event);
 
                     broadcast(event);
 
@@ -255,8 +254,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
             this.recentEvents.add(event);
         }
 
-        netLogger.info("[IN|{}|{}]{}{}", this.getTopicCommInfrastructure(), this.topic, System.lineSeparator(), event);
-
+        NetLoggerUtil.log(EventType.IN, this.getTopicCommInfrastructure(), this.topic, event);
 
         return broadcast(event);
     }
