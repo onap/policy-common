@@ -23,6 +23,7 @@ package org.onap.policy.common.endpoints.event.comm.client;
 
 import java.util.List;
 import lombok.Getter;
+import lombok.NonNull;
 import org.onap.policy.common.endpoints.event.comm.TopicEndpoint;
 import org.onap.policy.common.endpoints.event.comm.TopicSink;
 import org.onap.policy.common.utils.coder.Coder;
@@ -43,14 +44,9 @@ public class TopicSinkClient {
     private static final Coder CODER = new StandardCoder();
 
     /**
-     * Topic to which messages are published.
-     */
-    @Getter
-    private final String topic;
-
-    /**
      * Where messages are published.
      */
+    @Getter
     private final TopicSink sink;
 
     /**
@@ -60,14 +56,31 @@ public class TopicSinkClient {
      * @throws TopicSinkClientException if the topic does not exist
      */
     public TopicSinkClient(final String topic) throws TopicSinkClientException {
-        this.topic = topic;
-
         final List<TopicSink> lst = getTopicSinks(topic);
         if (lst.isEmpty()) {
             throw new TopicSinkClientException("no sinks for topic: " + topic);
         }
 
         this.sink = lst.get(0);
+    }
+
+    /**
+     * Constructs the client from a sink object.
+     *
+     * @param sink topic sink publisher
+     */
+    public TopicSinkClient(@NonNull TopicSink sink) {
+        this.sink = sink;
+    }
+
+
+    /**
+     * Gets the canonical topic name.
+     *
+     * @return topic name
+     */
+    public String getTopic() {
+        return this.sink.getTopic();
     }
 
     /**
@@ -82,7 +95,7 @@ public class TopicSinkClient {
             return sink.send(json);
 
         } catch (RuntimeException | CoderException e) {
-            logger.warn("send to {} failed because of {}", topic, e.getMessage(), e);
+            logger.warn("send to {} failed because of {}", sink.getTopic(), e.getMessage(), e);
             return false;
         }
     }
