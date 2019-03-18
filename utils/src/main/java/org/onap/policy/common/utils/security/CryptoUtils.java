@@ -64,36 +64,14 @@ public class CryptoUtils {
     private static final String RANDOM_NUMBER_GENERATOR = "SHA1PRNG";
 
     /**
-     * This method is used as the main entry point when testing.
-     *
-     */
-    public static void main(String[] args) {
-        if (args.length == 3) {
-            if (args[0].equals("enc")) {
-                String encryptedValue = encrypt(args[1], args[2]);
-                logger.info("original value: " + args[1] + " encrypted value: " + encryptedValue);
-            } else if (args[0].equals("dec")) {
-                String decryptedValue = decrypt(args[1], args[2]);
-                logger.info("original value: " + args[1] + " decrypted value: " + decryptedValue);
-            } else {
-                logger.info("Unknown request: " + args[0]);
-            }
-        } else {
-            logger.info("Usage  : CryptoUtils enc/dec password   secretKey");
-            logger.info("Example: CryptoUtils enc     HelloWorld 1234");
-            logger.info("Example: CryptoUtils dec     enc:112233 1234");
-        }
-    }
-
-    public CryptoUtils(SecretKeySpec secretKeySpec) {
-        this.secretKeySpec = secretKeySpec;
-    }
-
-    /**
      * CryptoUtils - encryption tool constructor.
      * @param secretKey
      *  AES supports 128, 192 or 256-bit long key size, it can be plain text or generated with key generator
      */
+    public CryptoUtils(SecretKeySpec secretKeySpec) {
+        this.secretKeySpec = secretKeySpec;
+    }
+
     public CryptoUtils(String secretKey) {
         this.secretKeySpec = readSecretKeySpec(secretKey);
     }
@@ -255,5 +233,27 @@ public class CryptoUtils {
      */
     public static Boolean isEncrypted(String value) {
         return (value != null && value.startsWith("enc:"));
+    }
+
+    /**
+     * This method is used as the main entry point when testing.
+     *
+     */
+    public static void main(String[] args) {
+        if (args.length == 3) {
+            if ("enc".equals(args[0])) {
+                String encryptedValue = encrypt(args[1], args[2]);
+                logger.info("original value: " + args[1] + " encrypted value: " + encryptedValue);
+            } else if ("dec".equals(args[0])) {
+                String decryptedValue = decrypt(args[1], args[2]);
+                logger.info("original value: " + args[1] + " decrypted value: " + decryptedValue);
+            } else {
+                logger.info("Unknown request: " + args[0]);
+            }
+        } else {
+            logger.info("Usage  : CryptoUtils enc/dec password   secretKey");
+            logger.info("Example: CryptoUtils enc     HelloWorld 1234");
+            logger.info("Example: CryptoUtils dec     enc:112233 1234");
+        }
     }
 }
