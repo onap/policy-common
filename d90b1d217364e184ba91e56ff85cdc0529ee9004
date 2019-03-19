@@ -22,6 +22,30 @@
       "revId": "d90b1d217364e184ba91e56ff85cdc0529ee9004",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f0b8e731_b3a33ab6",
+        "filename": "pdp-common/src/main/java/org/onap/policy/pdp/common/models/PdpMessage.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-03-19T16:29:33Z",
+      "side": 1,
+      "message": "and make it final?",
+      "parentUuid": "b311730c_a2a95712",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 28
+      },
+      "revId": "d90b1d217364e184ba91e56ff85cdc0529ee9004",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
