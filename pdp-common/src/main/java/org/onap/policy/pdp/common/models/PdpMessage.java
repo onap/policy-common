@@ -42,6 +42,12 @@ public class PdpMessage {
     private String requestId;
 
     /**
+     * Time-stamp, in milliseconds, when the message was created. Defaults to the current
+     * time.
+     */
+    private long timestampMs = System.currentTimeMillis();
+
+    /**
      * Constructor for instantiating PdpMessage class with message name.
      *
      * @param messageName the message name
