@@ -43,6 +43,15 @@ public interface TopicEndpoint extends Startable, Lockable {
     TopicEndpoint manager = new TopicEndpointProxy();
 
     /**
+     * Add topics configuration (sources and sinks) into a single list.
+     *
+     * @param properties topic configuration
+     * @return topic list
+     * @throws IllegalArgumentException when invalid arguments are provided
+     */
+    List<Topic> addTopics(Properties properties);
+
+    /**
      * Add Topic Sources to the communication infrastructure initialized per properties.
      *
      * @param properties properties for Topic Source construction

@@ -56,6 +56,13 @@ class TopicEndpointProxy implements TopicEndpoint {
     private volatile boolean alive = false;
 
     @Override
+    public List<Topic> addTopics(Properties properties) {
+        List<Topic> topics = new ArrayList<>(addTopicSources(properties));
+        topics.addAll(addTopicSinks(properties));
+        return topics;
+    }
+
+    @Override
     public List<TopicSource> addTopicSources(Properties properties) {
 
         // 1. Create UEB Sources
