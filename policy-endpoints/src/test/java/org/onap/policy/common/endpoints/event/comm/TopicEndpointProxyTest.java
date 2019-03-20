@@ -145,6 +145,17 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
+    public void addTopics() {
+        TopicEndpoint manager = new TopicEndpointProxy();
+
+        List<Topic>  topics = manager.addTopics(configuration);
+        assertSame(6, topics.size());
+
+        assertTrue(allSources(topics));
+        assertTrue(allSinks(topics));
+    }
+
+    @Test
     public void getTopicSources() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
