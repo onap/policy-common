@@ -16,6 +16,24 @@
       "revId": "b4d40eca12d68d33d20000ff36407283d608be4a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f8d0cdd_d8bd35d3",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/services/Registry.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-21T10:44:21Z",
+      "side": 1,
+      "message": "I have found it very useful to have it work this way for junit tests, as it clues me into the fact that the registry hasn\u0027t been cleared - something that could easily be lost in the log.  Would it be acceptable to add a \"registerOrReplace()\" method that logs a message and always replaces to value, if it exists?",
+      "parentUuid": "8b4cc020_348e6fb2",
+      "revId": "b4d40eca12d68d33d20000ff36407283d608be4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
