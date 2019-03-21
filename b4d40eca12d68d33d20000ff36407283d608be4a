@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8b4cc020_348e6fb2",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/services/Registry.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-21T02:47:29Z",
+      "side": 1,
+      "message": "throw exception or do nothing and just log the double registration?   I think there may be dynamic situations where simply just doing nothing is good ..",
+      "revId": "b4d40eca12d68d33d20000ff36407283d608be4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
