@@ -34,6 +34,24 @@
       "revId": "b4d40eca12d68d33d20000ff36407283d608be4a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "182315c2_c5839f00",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/services/Registry.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-03-21T12:59:32Z",
+      "side": 1,
+      "message": "Yeah, I can see it useful in junits.  \n\nThat would be nice if you can add a new method to support it.   Not sure if there are some \"suffix terminology\" such as the *IfAbsent as in the concurrent hashtable that could be reused to distinguish between the 2 flavors.   Whatever you decide is good with me.   Thank you!",
+      "parentUuid": "6f8d0cdd_d8bd35d3",
+      "revId": "b4d40eca12d68d33d20000ff36407283d608be4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
