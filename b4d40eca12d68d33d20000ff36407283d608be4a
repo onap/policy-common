@@ -52,6 +52,24 @@
       "revId": "b4d40eca12d68d33d20000ff36407283d608be4a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c6ffe5b4_502e2fed",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/services/Registry.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-03-21T14:19:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "182315c2_c5839f00",
+      "revId": "b4d40eca12d68d33d20000ff36407283d608be4a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
