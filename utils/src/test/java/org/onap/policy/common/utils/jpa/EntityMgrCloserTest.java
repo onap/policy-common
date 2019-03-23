@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Common Utils
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,24 +20,37 @@
 
 package org.onap.policy.common.utils.jpa;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertSame;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import javax.persistence.EntityManager;
-
+import javax.persistence.EntityTransaction;
 import org.junit.Before;
 import org.junit.Test;
 
 public class EntityMgrCloserTest {
 
     private EntityManager mgr;
+    private EntityTransaction trans;
 
 
+    /**
+     * Sets up.
+     */
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         mgr = mock(EntityManager.class);
+        trans = mock(EntityTransaction.class);
+
+        when(trans.isActive()).thenReturn(true);
+
+        when(mgr.getTransaction()).thenReturn(trans);
     }
 
 
@@ -72,10 +85,25 @@ public class EntityMgrCloserTest {
     public void testClose() {
         EntityMgrCloser entityMgrCloser = new EntityMgrCloser(mgr);
 
+        when(trans.isActive()).thenReturn(false);
+
         entityMgrCloser.close();
 
         // should be closed
         verify(mgr).close();
+        verify(trans, never()).rollback();
+    }
+
+    /**
+     * Verifies that the manager gets closed when close() is invoked.
+     */
+    @Test
+    public void testCloseWithRollback() {
+        new EntityMgrCloser(mgr).close();
+
+        // should be closed
+        verify(mgr).close();
+        verify(trans).rollback();
     }
 
     /**
@@ -88,6 +116,7 @@ public class EntityMgrCloserTest {
         }
 
         verify(mgr).close();
+        verify(trans).rollback();
     }
 
     /**
@@ -95,16 +124,39 @@ public class EntityMgrCloserTest {
      */
     @Test
     public void testClose_TryWithExcept() {
-        try {
+        assertThatThrownBy(() -> {
             try (EntityMgrCloser c = new EntityMgrCloser(mgr)) {
                 throw new Exception("expected exception");
             }
+        });
 
-        } catch (Exception exception) {
-            // Ignore the exception
-        }
+        verify(mgr).close();
+        verify(trans).rollback();
+    }
+
+    /**
+     * Ensures that the manager gets closed when the transaction throws an exception.
+     */
+    @Test
+    public void testClose_TryWithTransExcept() {
+        when(trans.isActive()).thenReturn(true);
+        doThrow(new RuntimeException("expected exception")).when(trans).rollback();
+
+        assertThatThrownBy(() -> {
+            try (EntityMgrCloser c = new EntityMgrCloser(mgr)) {
+                // do nothing
+            }
+        });
 
         verify(mgr).close();
     }
 
+    @Test
+    public void testBeginTransaction() {
+        EntityMgrCloser entityMgrCloser = new EntityMgrCloser(mgr);
+
+        assertSame(trans, entityMgrCloser.beginTransaction().getTransation());
+
+        entityMgrCloser.close();
+    }
 }
