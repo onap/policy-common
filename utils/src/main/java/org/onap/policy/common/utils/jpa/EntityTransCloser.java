@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Common Utils
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,12 +21,13 @@
 package org.onap.policy.common.utils.jpa;
 
 import javax.persistence.EntityTransaction;
+import org.onap.policy.common.utils.provider.Transaction;
 
 /**
  * Wrapper for an <i>EntityTransaction</i> that is auto-rolled back when closed. This is useful in
  * try-with-resources statements.
  */
-public class EntityTransCloser implements AutoCloseable {
+public class EntityTransCloser implements Transaction {
 
     /**
      * Transaction to be rolled back.
@@ -35,7 +36,7 @@ public class EntityTransCloser implements AutoCloseable {
 
     /**
      * Begins a transaction.
-     * 
+     *
      * @param et transaction to wrap/begin
      */
     public EntityTransCloser(EntityTransaction et) {
@@ -45,7 +46,7 @@ public class EntityTransCloser implements AutoCloseable {
 
     /**
      * Gets the wrapped transaction.
-     * 
+     *
      * @return the transaction
      */
     public EntityTransaction getTransation() {
