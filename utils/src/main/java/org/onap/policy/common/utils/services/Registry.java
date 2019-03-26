@@ -114,6 +114,23 @@ public class Registry {
      * Gets the object by the given name.
      *
      * @param name name of the object to get
+     * @return the object
+     * @throws IllegalArgumentException if no object is registered by the given name
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T get(String name) {
+        Object obj = instance.name2object.get(name);
+        if (obj == null) {
+            throw new IllegalArgumentException("not registered: " + name);
+        }
+
+        return (T) obj;
+    }
+
+    /**
+     * Gets the object by the given name.
+     *
+     * @param name name of the object to get
      * @param clazz object's class
      * @return the object
      * @throws IllegalArgumentException if no object is registered by the given name
