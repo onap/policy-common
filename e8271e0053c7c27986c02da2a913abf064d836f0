@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9552db48_b2e58d98",
+        "filename": "utils/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-04-04T11:56:13Z",
+      "side": 1,
+      "message": "why isn\u0027t slf4j sufficient?  rather not make a requirement that logback be required",
+      "revId": "e8271e0053c7c27986c02da2a913abf064d836f0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
