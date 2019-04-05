@@ -25,13 +25,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Version of an object within the model. Versions are assumed to be of the form: major or
- * major.minor.patch, where each component is numeric.
+ * Version of an object within the model. Versions are assumed to be of the form: major or major.minor.patch, where each
+ * component is numeric.
  */
 @Data
 @RequiredArgsConstructor
@@ -40,8 +41,7 @@ public class Version implements Comparable<Version> {
     private static final Logger logger = LoggerFactory.getLogger(Version.class);
 
     /**
-     * Pattern to match a version of the form, major or major.minor.patch, where all
-     * components are numeric.
+     * Pattern to match a version of the form, major or major.minor.patch, where all components are numeric.
      */
     private static final Pattern VERSION_PAT = Pattern.compile("(\\d+)([.](\\d+)[.](\\d+))?");
 
@@ -56,9 +56,8 @@ public class Version implements Comparable<Version> {
      * @param type type of object with which the version is associated, used when logging
      * @param name name with which the version is associated, used when logging
      * @param versionText the version, in textual form
-     * @return a new version, or {@code null} if the version cannot be created from the
-     *         key (e.g., the key has a version that does not match the major.minor.patch
-     *         form)
+     * @return a new version, or {@code null} if the version cannot be created from the key (e.g., the key has a version
+     *         that does not match the major.minor.patch form)
      */
     public static Version makeVersion(String type, String name, String versionText) {
         Matcher matcher = VERSION_PAT.matcher(versionText);
@@ -75,7 +74,7 @@ public class Version implements Comparable<Version> {
             } else {
                 // form: major.minor.patch
                 return new Version(Integer.parseInt(matcher.group(1)), Integer.parseInt(matcher.group(3)),
-                                Integer.parseInt(matcher.group(4)));
+                        Integer.parseInt(matcher.group(4)));
             }
 
         } catch (NumberFormatException e) {
@@ -85,10 +84,29 @@ public class Version implements Comparable<Version> {
     }
 
     /**
-     * Generates a new version from the current version.
+     * String constructor.
      *
-     * @return a new version, of the form major.0.0, where "major" is one more than "this"
-     *         version's major number
+     * @param versionString the version string
+     */
+    public Version(@NonNull final String versionString) {
+        Version newVersion = makeVersion("String", "constructor", versionString);
+
+        if (newVersion != null) {
+            this.major = newVersion.major;
+            this.minor = newVersion.minor;
+            this.patch = newVersion.patch;
+        }
+        else {
+            this.major = 0;
+            this.minor = 0;
+            this.patch = 0;
+        }
+    }
+
+    /**
+     * Generates a new version from a string.
+     *
+     * @return a new version, of the form major.0.0, where "major" is one more than "this" version's major number
      */
     public Version newVersion() {
         return new Version(major + 1, 0, 0);
