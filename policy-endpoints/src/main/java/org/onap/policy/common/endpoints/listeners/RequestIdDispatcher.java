@@ -116,13 +116,17 @@ public class RequestIdDispatcher<T> extends ScoListener<T> {
         // dispatch the message
         if (Strings.isNullOrEmpty(reqid)) {
             // it's an autonomous message - offer it to all autonomous listeners
+            if (listeners.isEmpty()) {
+                logger.info("no listeners for autonomous message of type {}", message.getClass().getSimpleName());
+            }
+
             for (TypedMessageListener<T> listener : listeners) {
-                offerToListener(infra, topic, message, listener);
+                offerToListener(infra, topic, message, reqid, listener);
             }
 
         } else {
             // it's a response to a particular request
-            offerToListener(infra, topic, message, req2listener.get(reqid));
+            offerToListener(infra, topic, message, reqid, req2listener.get(reqid));
         }
     }
 
@@ -132,11 +136,14 @@ public class RequestIdDispatcher<T> extends ScoListener<T> {
      * @param infra infrastructure on which the message was received
      * @param topic topic on which the message was received
      * @param msg message that was received
+     * @param reqid request id extracted from the message
      * @param listener listener to which the message should be offered, or {@code null}
      */
-    private void offerToListener(CommInfrastructure infra, String topic, T msg, TypedMessageListener<T> listener) {
+    private void offerToListener(CommInfrastructure infra, String topic, T msg, String reqid,
+                    TypedMessageListener<T> listener) {
 
         if (listener == null) {
+            logger.info("no listener for request id {}", reqid);
             return;
         }
 
