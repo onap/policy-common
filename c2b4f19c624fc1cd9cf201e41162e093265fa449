@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1e40e6bc_9fdf11bc",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/StandardCoderTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-04-11T13:06:41Z",
+      "side": 1,
+      "message": "this change doesn\u0027t impact encoding, per se: if you put an integer into a map and encode it, it will not have a decimal point in the resulting json, while a double WILL have a decimal point.  Thus, 10 is encoded as \"10\" and 10D as \"10.0\".\n\nWhen decoding either of those GSON, will convert them both to 10D, by default.  The result is, if you turn around and encode this back into a json string, then it will always be \"10.0\".  With this change, when the string is decoded, \"10.0\" will be converted to 10, while 10.5 will be converted to 10.5D.  Consequently, if it\u0027s encoded back into json, it will look the same as the original string.\n\nBTW: the json looks like:\n{\"props\":{\"plainString\":\"def\",\"doubleVal\":12.5,\"negInt\":-10,\"posLong\":100000000000}}",
+      "parentUuid": "ac925cac_d9f2cd1a",
+      "revId": "c2b4f19c624fc1cd9cf201e41162e093265fa449",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b55024c8_b77ba427",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/StandardCoderTest.java",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2019-04-11T12:00:09Z",
       "side": 1,
       "message": "it should be fine, but add another assert to get the plainString to be complete (or remove from 244.",
+      "revId": "c2b4f19c624fc1cd9cf201e41162e093265fa449",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c0b166e_28834fa5",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/StandardCoderTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-04-11T13:06:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b55024c8_b77ba427",
       "revId": "c2b4f19c624fc1cd9cf201e41162e093265fa449",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
