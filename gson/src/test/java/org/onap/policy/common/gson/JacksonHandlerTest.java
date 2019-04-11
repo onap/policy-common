@@ -34,7 +34,6 @@ import java.util.Map;
 import java.util.TreeMap;
 import javax.ws.rs.core.MediaType;
 import org.junit.Test;
-import org.onap.policy.common.gson.JacksonHandler;
 import org.onap.policy.common.gson.annotation.GsonJsonAnyGetter;
 import org.onap.policy.common.gson.annotation.GsonJsonAnySetter;
 
@@ -83,6 +82,30 @@ public class JacksonHandlerTest {
         assertEquals(data.toString(), data2.toString());
     }
 
+    @Test
+    public void testMapDouble() throws Exception {
+        MyMap map = new MyMap();
+        map.props = new HashMap<>();
+        map.props.put("plainString", "def");
+        map.props.put("negInt", -10);
+        map.props.put("doubleVal", 12.5);
+        map.props.put("posLong", 100000000000L);
+
+        JacksonHandler hdlr = new JacksonHandler();
+        ByteArrayOutputStream outstr = new ByteArrayOutputStream();
+        hdlr.writeTo(map, map.getClass(), map.getClass(), null, null, null, outstr);
+
+        Object obj2 = hdlr.readFrom(Object.class, map.getClass(), null, null, null,
+                        new ByteArrayInputStream(outstr.toByteArray()));
+        assertEquals(map.toString(), obj2.toString());
+
+        map = (MyMap) obj2;
+
+        assertEquals(-10, map.props.get("negInt"));
+        assertEquals(100000000000L, map.props.get("posLong"));
+        assertEquals(12.5, map.props.get("doubleVal"));
+    }
+
     /**
      * This class includes all policy-specific gson annotations.
      */
@@ -112,6 +135,7 @@ public class JacksonHandlerTest {
 
         /**
          * Sets a property.
+         *
          * @param name property name
          * @param value new value
          */
@@ -127,6 +151,25 @@ public class JacksonHandlerTest {
         @Override
         public String toString() {
             return "Data [id=" + id + ", value=" + value + ", props=" + props + "]";
+        }
+    }
+
+    private static class MyMap {
+        private Map<String, Object> props;
+
+        @Override
+        public String toString() {
+            return props.toString();
+        }
+
+        @SuppressWarnings("unused")
+        public Map<String, Object> getProps() {
+            return props;
+        }
+
+        @SuppressWarnings("unused")
+        public void setProps(Map<String, Object> props) {
+            this.props = props;
         }
     }
 }

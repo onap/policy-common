@@ -21,7 +21,7 @@
 package org.onap.policy.common.gson;
 
 import com.google.gson.Gson;
-
+import com.google.gson.GsonBuilder;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -37,9 +37,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
-
 import lombok.Getter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,10 +58,11 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
     private final Gson gson;
 
     /**
-     * Constructs the object, using a plain Gson object.
+     * Constructs the object, using a Gson object that translates Doubles inside of Maps
+     * into Integer/Long, where possible.
      */
     public GsonMessageBodyHandler() {
-        this(new Gson());
+        this(new GsonBuilder().registerTypeAdapterFactory(new MapDoubleAdapterFactory()).create());
 
         logger.info("Using GSON for REST calls");
     }
@@ -89,8 +88,7 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
 
     @Override
     public void writeTo(Object object, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-                    MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream)
-                    throws IOException {
+                    MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException {
 
         try (OutputStreamWriter writer = new OutputStreamWriter(entityStream, StandardCharsets.UTF_8)) {
             Type jsonType = (type.equals(genericType) ? type : genericType);
@@ -126,8 +124,7 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
 
     @Override
     public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations, MediaType mediaType,
-                    MultivaluedMap<String, String> httpHeaders, InputStream entityStream)
-                    throws IOException {
+                    MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException {
 
         try (InputStreamReader streamReader = new InputStreamReader(entityStream, StandardCharsets.UTF_8)) {
             Type jsonType = (type.equals(genericType) ? type : genericType);

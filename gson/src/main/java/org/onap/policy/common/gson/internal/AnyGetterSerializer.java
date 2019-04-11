@@ -39,7 +39,6 @@ public class AnyGetterSerializer extends Lifter implements Serializer {
      * Constructs the object.
      *
      * @param gson Gson object providing type adapters
-     * @param propName property name associated with the lifted field
      * @param unliftedProps property names that should not be lifted
      * @param getter method used to get the item from within an object
      */

@@ -43,7 +43,9 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -235,6 +237,25 @@ public class StandardCoderTest {
         assertThatThrownBy(() -> coder.fromJson(new StringReader("["), StandardCoderObject.class));
     }
 
+    @Test
+    public void testMapDouble() throws Exception {
+        MyMap map = new MyMap();
+        map.props = new HashMap<>();
+        map.props.put("plainString", "def");
+        map.props.put("negInt", -10);
+        map.props.put("doubleVal", 12.5);
+        map.props.put("posLong", 100000000000L);
+
+        String json = coder.encode(map);
+
+        map.props.clear();
+        map = coder.decode(json, MyMap.class);
+
+        assertEquals(-10, map.props.get("negInt"));
+        assertEquals(100000000000L, map.props.get("posLong"));
+        assertEquals(12.5, map.props.get("doubleVal"));
+    }
+
 
     private static class MyObject {
         private String abc;
@@ -243,5 +264,9 @@ public class StandardCoderTest {
         public String toString() {
             return "MyObject [abc=" + abc + "]";
         }
+    }
+
+    private static class MyMap {
+        private Map<String, Object> props;
     }
 }
