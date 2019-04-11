@@ -258,6 +258,7 @@ public class DataAdapterFactory implements TypeAdapterFactory {
             return data;
         }
     }
+
     /**
      * Adapter for "DerivedData".
      */
