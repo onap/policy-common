@@ -26,10 +26,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.HashMap;
+import java.util.Map;
 import javax.ws.rs.core.MediaType;
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.gson.GsonMessageBodyHandler;
 
 public class GsonMessageBodyHandlerTest {
     private static final String GEN_TYPE = "some-type";
@@ -136,6 +137,30 @@ public class GsonMessageBodyHandlerTest {
         assertEquals(obj1.toString(), obj2.toString());
     }
 
+    @Test
+    public void testMapDouble() throws Exception {
+        MyMap map = new MyMap();
+        map.props = new HashMap<>();
+        map.props.put("plainString", "def");
+        map.props.put("negInt", -10);
+        map.props.put("doubleVal", 12.5);
+        map.props.put("posLong", 100000000000L);
+
+        ByteArrayOutputStream outstr = new ByteArrayOutputStream();
+        hdlr.writeTo(map, map.getClass(), map.getClass(), null, null, null, outstr);
+
+        Object obj2 = hdlr.readFrom(Object.class, map.getClass(), null, null, null,
+                        new ByteArrayInputStream(outstr.toByteArray()));
+        assertEquals(map.toString(), obj2.toString());
+
+        map = (MyMap) obj2;
+
+        assertEquals(-10, map.props.get("negInt"));
+        assertEquals(100000000000L, map.props.get("posLong"));
+        assertEquals(12.5, map.props.get("doubleVal"));
+    }
+
+
     public static class MyObject {
         private int id;
 
@@ -153,4 +178,12 @@ public class GsonMessageBodyHandlerTest {
         }
     }
 
+    private static class MyMap {
+        private Map<String, Object> props;
+
+        @Override
+        public String toString() {
+            return props.toString();
+        }
+    }
 }

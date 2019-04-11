@@ -1,0 +1,152 @@
+/*
+ * ============LICENSE_START=======================================================
+ * ONAP
+ * ================================================================================
+ * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ============LICENSE_END=========================================================
+ */
+
+package org.onap.policy.common.gson;
+
+import com.google.gson.Gson;
+import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
+
+/**
+ * Adapter factory for Map&lt;String,Object&gt;. By default, GSON treats all Objects, that
+ * are numbers, as Double. This walks the map and converts Doubles to Integer or Long, if
+ * possible.
+ */
+public class MapDoubleAdapterFactory implements TypeAdapterFactory {
+
+    @Override
+    public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
+        if (type.getRawType() != Map.class) {
+            return null;
+        }
+
+        Type[] actualParams = ((ParameterizedType) type.getType()).getActualTypeArguments();
+
+        // only supports Map<String,Object>
+        if (actualParams[0] != String.class || actualParams[1] != Object.class) {
+            return null;
+        }
+
+        TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
+
+        return new MapAdapter<T>(delegate);
+    }
+
+    /**
+     * Type adapter that performs conversion from Double to Integer/Long.
+     *
+     * @param <T> type of object on which this works (always Map.class)
+     */
+    private static class MapAdapter<T> extends TypeAdapter<T> {
+
+        /**
+         * Used to perform conversion between JSON and Map&lt;String,Object&gt;.
+         */
+        private final TypeAdapter<T> delegate;
+
+        /**
+         * Constructs the object.
+         *
+         * @param delegate JSON/Map converter
+         */
+        public MapAdapter(TypeAdapter<T> delegate) {
+            this.delegate = delegate;
+        }
+
+        @Override
+        public void write(JsonWriter out, T value) throws IOException {
+            delegate.write(out, value);
+        }
+
+        @Override
+        public T read(JsonReader in) throws IOException {
+            T value = delegate.read(in);
+
+            @SuppressWarnings("rawtypes")
+            Map map = (Map) value;
+
+            convertFromDouble(map);
+
+            return value;
+        }
+
+        /**
+         * Performs conversion of all values in a map.
+         *
+         * @param map the map whose values are to be converted
+         */
+        @SuppressWarnings("rawtypes")
+        private void convertFromDouble(Map map) {
+
+            @SuppressWarnings("unchecked")
+            Set<Entry> set = map.entrySet();
+
+            for (Entry entry : set) {
+                convertFromDouble(entry);
+            }
+        }
+
+        /**
+         * Converts an entry's value. If the value is a Map, then it recursively converts
+         * the entries of the map.
+         *
+         * @param entry entry whose value is to be converted
+         */
+        @SuppressWarnings({"unchecked", "rawtypes"})
+        private void convertFromDouble(Entry entry) {
+            Object obj = entry.getValue();
+
+            if (obj instanceof Map) {
+                convertFromDouble((Map) obj);
+                return;
+            }
+
+            if (!(obj instanceof Double)) {
+                return;
+            }
+
+            Double num = (Double) obj;
+            long longval = num.longValue();
+
+            if (num.doubleValue() == longval) {
+                // it's integral - determine if it's an integer or a long
+                int intval = (int) longval;
+
+                if (intval == longval) {
+                    // it fits in an integer
+                    entry.setValue(intval);
+
+                } else {
+                    // doesn't fit in an integer - must be a long
+                    entry.setValue(longval);
+                }
+            }
+        }
+    }
+}
