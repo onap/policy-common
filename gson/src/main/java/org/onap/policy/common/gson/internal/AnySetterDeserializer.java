@@ -37,7 +37,7 @@ public class AnySetterDeserializer extends Lifter implements Deserializer {
      *
      * @param gson Gson object providing type adapters
      * @param unliftedProps property names that should not be lifted
-     * @param getter method used to get the item from within an object
+     * @param setter method used to set the item within an object
      */
     public AnySetterDeserializer(Gson gson, Set<String> unliftedProps, Method setter) {
         super(gson, unliftedProps, setter, setter.getGenericParameterTypes()[1]);
