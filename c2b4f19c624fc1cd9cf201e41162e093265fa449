@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac925cac_d9f2cd1a",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/StandardCoderTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-04-11T12:00:09Z",
+      "side": 1,
+      "message": "Just to make sure if you dump the \"json\" string here with a System.out.println(), what does it look like?   \n\nClients won\u0027t be using StandardCoder for decoding the string.",
+      "revId": "c2b4f19c624fc1cd9cf201e41162e093265fa449",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b55024c8_b77ba427",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/StandardCoderTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-04-11T12:00:09Z",
+      "side": 1,
+      "message": "it should be fine, but add another assert to get the plainString to be complete (or remove from 244.",
+      "revId": "c2b4f19c624fc1cd9cf201e41162e093265fa449",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
