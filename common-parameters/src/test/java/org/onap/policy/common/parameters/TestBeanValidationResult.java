@@ -1,0 +1,155 @@
+/*
+ * ============LICENSE_START=======================================================
+ * ONAP
+ * ================================================================================
+ * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * ================================================================================
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ============LICENSE_END=========================================================
+ */
+
+package org.onap.policy.common.parameters;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
+
+public class TestBeanValidationResult {
+    private static final String MY_LIST = "my-list";
+    private static final String OBJECT = "an object";
+    private static final String INITIAL_INDENT = "xx ";
+    private static final String NEXT_INDENT = "yy ";
+    private static final String MID_INDENT = "xx yy ";
+    private static final String NAME = "my-name";
+    private static final String BEAN_INVALID_MSG = requote("'my-name' INVALID, item has status INVALID\n");
+
+    private String cleanMsg;
+    private String invalidMsg;
+
+    private BeanValidationResult bean;
+    private ObjectValidationResult clean;
+    private ObjectValidationResult invalid;
+
+    /**
+     * Sets up.
+     */
+    @Before
+    public void setUp() {
+        clean = new ObjectValidationResult("abc", 10);
+        cleanMsg = clean.getResult("", "", true);
+
+        invalid = new ObjectValidationResult("def", 20);
+        invalid.setResult(ValidationStatus.INVALID, "invalid");
+        invalidMsg = invalid.getResult();
+
+        bean = new BeanValidationResult(NAME, OBJECT);
+    }
+
+    @Test
+    public void testBeanValidationResult() {
+        assertTrue(bean.isValid());
+        assertNull(bean.getResult());
+    }
+
+    @Test
+    public void testAddResult_testGetResult() {
+        // null should be ok
+        assertTrue(bean.addResult(null));
+
+        assertTrue(bean.addResult(clean));
+        assertTrue(bean.isValid());
+        assertNull(bean.getResult());
+
+        assertFalse(bean.addResult(invalid));
+        assertFalse(bean.isValid());
+        assertEquals(BEAN_INVALID_MSG + "  " + invalidMsg, bean.getResult());
+
+        assertEquals(INITIAL_INDENT + BEAN_INVALID_MSG + MID_INDENT + cleanMsg + MID_INDENT + invalidMsg,
+                        bean.getResult(INITIAL_INDENT, NEXT_INDENT, true));
+    }
+
+    @Test
+    public void testValidateNotNull() {
+        assertTrue(bean.validateNotNull("sub-name", "sub-object"));
+        assertTrue(bean.isValid());
+        assertNull(bean.getResult());
+
+        assertFalse(bean.validateNotNull("sub-name", null));
+        assertFalse(bean.isValid());
+        assertEquals(requote(BEAN_INVALID_MSG + "  item 'sub-name' value 'null' INVALID, is null\n"), bean.getResult());
+    }
+
+    @Test
+    public void testValidateNotNullList() {
+        List<ValidationResult> list = Arrays.asList(clean);
+        assertTrue(bean.validateNotNullList(MY_LIST, list, item -> item));
+        assertTrue(bean.isValid());
+        assertNull(bean.getResult());
+
+        list = Arrays.asList(invalid, invalid);
+        assertFalse(bean.validateNotNullList(MY_LIST, list, item -> item));
+        assertFalse(bean.isValid());
+        assertEquals(requote(BEAN_INVALID_MSG + "  'my-list' INVALID, item has status INVALID\n    " + invalidMsg
+                        + "    " + invalidMsg), bean.getResult());
+    }
+
+    @Test
+    public void testValidateNotNullList_NullList() {
+        List<ValidationResult> list = null;
+        assertFalse(bean.validateNotNullList("my-list", list, item -> item));
+        assertFalse(bean.isValid());
+        assertEquals(requote(BEAN_INVALID_MSG + "  item 'my-list' value 'null' INVALID, is null\n"), bean.getResult());
+
+    }
+
+    @Test
+    public void testValidateList() {
+        List<ValidationResult> list = null;
+        bean = new BeanValidationResult(NAME, OBJECT);
+        assertTrue(bean.validateList(MY_LIST, list, item -> item));
+        assertTrue(bean.isValid());
+        assertNull(bean.getResult());
+
+        list = Arrays.asList(clean);
+        bean = new BeanValidationResult(NAME, OBJECT);
+        assertTrue(bean.validateList(MY_LIST, list, item -> item));
+        assertTrue(bean.isValid());
+        assertNull(bean.getResult());
+
+        // null item in the list
+        list = Arrays.asList(clean, null);
+        bean = new BeanValidationResult(NAME, OBJECT);
+        assertFalse(bean.validateList(MY_LIST, list, item -> item));
+        assertFalse(bean.isValid());
+        assertEquals(requote(BEAN_INVALID_MSG + "  'my-list' INVALID, item has status INVALID\n    "
+                        + "item 'item' value 'null' INVALID, null\n"), bean.getResult());
+
+        list = Arrays.asList(invalid, invalid);
+        bean = new BeanValidationResult(NAME, OBJECT);
+        assertFalse(bean.validateList(MY_LIST, list, item -> item));
+        assertFalse(bean.isValid());
+        assertEquals(requote(BEAN_INVALID_MSG + "  'my-list' INVALID, item has status INVALID\n    " + invalidMsg
+                        + "    " + invalidMsg), bean.getResult());
+
+    }
+
+    private static String requote(String text) {
+        return text.replace('\'', '"');
+    }
+}
