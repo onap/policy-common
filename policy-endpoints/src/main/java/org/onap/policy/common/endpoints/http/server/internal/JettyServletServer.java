@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -123,12 +123,12 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     /**
      * Constructor.
-     * 
+     *
      * @param name server name
      * @param host server host
      * @param port server port
      * @param contextPath context path
-     * 
+     *
      * @throws IllegalArgumentException if invalid parameters are passed in
      */
     public JettyServletServer(String name, boolean https, String host, int port, String contextPath) {
@@ -200,7 +200,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     /**
      * Returns the https connector.
-     * 
+     *
      * @return the server connector
      */
     public ServerConnector httpsConnector() {
@@ -300,8 +300,8 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
             this.jettyServer.start();
 
-            if (logger.isInfoEnabled()) {
-                logger.info("{}: STARTED: {}", this, this.jettyServer.dump());
+            if (logger.isTraceEnabled()) {
+                logger.trace("{}: STARTED: {}", this, this.jettyServer.dump());
             }
 
             synchronized (this.startCondition) {
@@ -456,7 +456,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     /**
      * Get name.
-     * 
+     *
      * @return the name
      */
     public String getName() {
@@ -465,7 +465,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     /**
      * Get host.
-     * 
+     *
      * @return the host
      */
     public String getHost() {
@@ -474,7 +474,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     /**
      * Get user.
-     * 
+     *
      * @return the user
      */
     public String getUser() {
@@ -483,7 +483,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     /**
      * Get password.
-     * 
+     *
      * @return the password
      */
     @JsonIgnore
