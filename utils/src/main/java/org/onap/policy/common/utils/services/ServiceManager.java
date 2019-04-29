@@ -98,7 +98,7 @@ public class ServiceManager implements Startable {
             throw new IllegalStateException(name + " is already running; cannot add " + stepName);
         }
 
-        items.add(new Service(stepName, () -> service.start(), () -> service.stop()));
+        items.add(new Service(stepName, service::start, service::stop));
         return this;
     }
 
@@ -173,7 +173,7 @@ public class ServiceManager implements Startable {
      * @param running services that are running, in the order they were started
      * @throws ServiceManagerException if a service fails to stop
      */
-    private void rewind(Deque<Service> running) throws ServiceManagerException {
+    private void rewind(Deque<Service> running) {
         Exception ex = null;
 
         logger.info("{} stopping", name);

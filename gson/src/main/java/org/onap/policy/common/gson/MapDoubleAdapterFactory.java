@@ -55,7 +55,7 @@ public class MapDoubleAdapterFactory implements TypeAdapterFactory {
 
         TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
 
-        return new MapAdapter<T>(delegate);
+        return new MapAdapter<>(delegate);
     }
 
     /**
@@ -134,7 +134,7 @@ public class MapDoubleAdapterFactory implements TypeAdapterFactory {
             Double num = (Double) obj;
             long longval = num.longValue();
 
-            if (num.doubleValue() == longval) {
+            if (Double.compare(num.doubleValue(), longval) == 0) {
                 // it's integral - determine if it's an integer or a long
                 int intval = (int) longval;
 

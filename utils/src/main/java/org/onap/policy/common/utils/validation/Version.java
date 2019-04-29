@@ -51,6 +51,26 @@ public class Version implements Comparable<Version> {
 
 
     /**
+     * String constructor.
+     *
+     * @param versionString the version string
+     */
+    public Version(@NonNull final String versionString) {
+        Version newVersion = makeVersion("String", "constructor", versionString);
+
+        if (newVersion != null) {
+            this.major = newVersion.major;
+            this.minor = newVersion.minor;
+            this.patch = newVersion.patch;
+        }
+        else {
+            this.major = 0;
+            this.minor = 0;
+            this.patch = 0;
+        }
+    }
+
+    /**
      * Creates a version object.
      *
      * @param type type of object with which the version is associated, used when logging
@@ -80,26 +100,6 @@ public class Version implements Comparable<Version> {
         } catch (NumberFormatException e) {
             logger.info("invalid version for {} {}: {}", type, name, versionText, e);
             return null;
-        }
-    }
-
-    /**
-     * String constructor.
-     *
-     * @param versionString the version string
-     */
-    public Version(@NonNull final String versionString) {
-        Version newVersion = makeVersion("String", "constructor", versionString);
-
-        if (newVersion != null) {
-            this.major = newVersion.major;
-            this.minor = newVersion.minor;
-            this.patch = newVersion.patch;
-        }
-        else {
-            this.major = 0;
-            this.minor = 0;
-            this.patch = 0;
         }
     }
 
