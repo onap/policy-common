@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d9b2cef_99cf22bc",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-05-14T11:37:16Z",
+      "side": 1,
+      "message": "This isn\u0027t the latest - I have upgraded to 1.4.1-SNAPSHOT",
+      "range": {
+        "startLine": 33,
+        "startChar": 13,
+        "endLine": 33,
+        "endChar": 37
+      },
+      "revId": "52058b60633e00308824811466c30aaa9a4fa80f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
