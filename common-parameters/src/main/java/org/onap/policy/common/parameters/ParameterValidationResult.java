@@ -23,6 +23,7 @@ package org.onap.policy.common.parameters;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import org.onap.policy.common.parameters.annotations.Max;
 import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
@@ -63,6 +64,11 @@ public class ParameterValidationResult implements ValidationResult {
             Min minAnnot = field.getAnnotation(Min.class);
             if (minAnnot != null && ((Number) parameterValue).longValue() < minAnnot.value()) {
                 setResult(ValidationStatus.INVALID, "must be >= " + minAnnot.value());
+            }
+
+            Max maxAnnot = field.getAnnotation(Max.class);
+            if (maxAnnot != null && ((Number) parameterValue).longValue() > maxAnnot.value()) {
+                setResult(ValidationStatus.INVALID, "must be <= " + maxAnnot.value());
             }
         }
     }

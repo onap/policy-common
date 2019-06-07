@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.junit.Test;
+import org.onap.policy.common.parameters.annotations.Max;
 import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
@@ -50,6 +51,7 @@ public class TestValidation {
     private static final String NOT_NULL_OBJECT_NAME = "notNullObject";
     private static final String NOT_NULL_STRING_NAME = "notNullString";
     private static final String MIN_LONG_NAME = "minLong";
+    private static final String MAX_LONG_NAME = "maxLong";
 
     @NotNull
     private String notNullString;
@@ -65,6 +67,9 @@ public class TestValidation {
 
     @Min(value = 10)
     private long minLong;
+
+    @Max(value = 10)
+    private long maxLong;
 
     @Test
     public void testValidationOk() throws IOException {
@@ -359,6 +364,26 @@ public class TestValidation {
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
 
         result = new ParameterValidationResult(TestValidation.class.getDeclaredField(MIN_LONG_NAME), 11);
+        assertEquals(ValidationStatus.CLEAN, result.getStatus());
+    }
+
+    @Test
+    public void testParameterValidationResult_Max() throws Exception {
+        ParameterValidationResult result =
+                        new ParameterValidationResult(TestValidation.class.getDeclaredField(MAX_LONG_NAME), 11L);
+        assertEquals(ValidationStatus.INVALID, result.getStatus());
+        assertEquals("field 'maxLong' type 'long' value '11' INVALID, must be <= 10\n".replace('\'', '"'),
+                        result.getResult());
+
+        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(MAX_LONG_NAME), 20);
+        assertEquals(ValidationStatus.INVALID, result.getStatus());
+        assertEquals("field 'maxLong' type 'long' value '20' INVALID, must be <= 10\n".replace('\'', '"'),
+                        result.getResult());
+
+        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(MAX_LONG_NAME), 10L);
+        assertEquals(ValidationStatus.CLEAN, result.getStatus());
+
+        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(MAX_LONG_NAME), 9);
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
     }
 
