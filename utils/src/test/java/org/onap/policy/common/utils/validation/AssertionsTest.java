@@ -2,6 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2016-2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2019 Nordix Foundation.
+ *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@
 
 package org.onap.policy.common.utils.validation;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
@@ -32,67 +34,62 @@ import org.junit.Test;
  * @author Liam Fallon (liam.fallon@ericsson.com)
  */
 public class AssertionsTest {
+    private static final String HELLO = "Hello";
+    private static final String IT_IS_OK = "it is OK";
+    private static final String IT_IS_NULL = "it is null";
+    private static final String IT_IS_TRUE = "it is true";
+    private static final String IT_IS_FALSE = "it is false";
+
     @Test
     public void testAssertions() {
-        Assertions.argumentNotFalse(true, "it is true");
+        Assertions.argumentNotFalse(true, IT_IS_TRUE);
 
-        try {
-            Assertions.argumentNotFalse(false, "it is false");
-        } catch (IllegalArgumentException e) {
-            assertEquals("it is false", e.getMessage());
-        }
+        assertThatIllegalArgumentException().isThrownBy(() -> Assertions.argumentNotFalse(false, IT_IS_FALSE))
+                        .withMessage(IT_IS_FALSE);
 
-        Assertions.argumentOfClassNotFalse(true, ArithmeticException.class, "it is true");
 
-        try {
-            Assertions.argumentOfClassNotFalse(false, ArithmeticException.class, "it is false");
-        } catch (Exception e) {
-            assertEquals("it is false", e.getMessage());
-        }
+        Assertions.argumentOfClassNotFalse(true, ArithmeticException.class, IT_IS_TRUE);
 
-        Assertions.argumentNotNull("Hello", "it is OK");
+        assertThatIllegalArgumentException().isThrownBy(
+            () -> Assertions.argumentOfClassNotFalse(false, ArithmeticException.class, IT_IS_FALSE))
+            .withMessage(IT_IS_FALSE);
 
-        try {
-            Assertions.argumentNotNull(null, "it is null");
-        } catch (IllegalArgumentException e) {
-            assertEquals("it is null", e.getMessage());
-        }
 
-        Assertions.argumentOfClassNotNull(true, ArithmeticException.class, "it is OK");
+        Assertions.argumentNotNull(HELLO, IT_IS_OK);
 
-        try {
-            Assertions.argumentOfClassNotNull(null, ArithmeticException.class, "it is null");
-        } catch (Exception e) {
-            assertEquals("it is null", e.getMessage());
-        }
+        assertThatIllegalArgumentException().isThrownBy(() -> Assertions.argumentNotNull(null, IT_IS_NULL))
+                        .withMessage(IT_IS_NULL);
+
+
+        Assertions.argumentOfClassNotNull(true, ArithmeticException.class, IT_IS_OK);
+
+        assertThatIllegalArgumentException().isThrownBy(
+            () -> Assertions.argumentOfClassNotNull(null, ArithmeticException.class, IT_IS_NULL))
+            .withMessage(IT_IS_NULL);
+
 
         Assertions.assignableFrom(java.util.TreeMap.class, java.util.Map.class);
 
-        try {
-            Assertions.assignableFrom(java.util.Map.class, java.util.TreeMap.class);
-        } catch (IllegalArgumentException e) {
-            assertEquals("java.util.Map is not an instance of java.util.TreeMap", e.getMessage());
-        }
+        assertThatIllegalArgumentException()
+                        .isThrownBy(() -> Assertions.assignableFrom(java.util.Map.class, java.util.TreeMap.class))
+                        .withMessage("java.util.Map is not an instance of java.util.TreeMap");
 
-        Assertions.instanceOf("Hello", String.class);
 
-        try {
-            Assertions.instanceOf(100, String.class);
-        } catch (IllegalArgumentException e) {
-            assertEquals("java.lang.Integer is not an instance of java.lang.String", e.getMessage());
-        }
+        Assertions.instanceOf(HELLO, String.class);
+
+        assertThatIllegalArgumentException().isThrownBy(() -> Assertions.instanceOf(100, String.class))
+                        .withMessage("java.lang.Integer is not an instance of java.lang.String");
+
 
         Assertions.validateStringParameter("name", "MyName", "^M.*e$");
 
-        try {
-            Assertions.validateStringParameter("name", "MyName", "^M.*f$");
-        } catch (IllegalArgumentException e) {
-            assertEquals("parameter \"name\": value \"MyName\", does not match regular expression \"^M.*f$\"",
-                    e.getMessage());
-        }
+        assertThatIllegalArgumentException()
+            .isThrownBy(() -> Assertions.validateStringParameter("name", "MyName", "^M.*f$"))
+            .withMessage("parameter \"name\": value \"MyName\", does not match regular expression \"^M.*f$\"");
 
-        assertNull(Assertions.getStringParameterValidationMessage("Greeting", "Hello", "^H.*o$"));
+
+        assertNull(Assertions.getStringParameterValidationMessage("Greeting", HELLO, "^H.*o$"));
         assertEquals("parameter Greeting with value Hello does not match regular expression Goodbye",
-                Assertions.getStringParameterValidationMessage("Greeting", "Hello", "Goodbye"));
+                        Assertions.getStringParameterValidationMessage("Greeting", HELLO, "Goodbye"));
     }
 }

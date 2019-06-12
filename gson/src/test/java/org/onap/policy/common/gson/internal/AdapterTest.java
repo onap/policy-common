@@ -34,11 +34,12 @@ import java.util.List;
 import org.junit.Test;
 import org.onap.policy.common.gson.JacksonExclusionStrategy;
 import org.onap.policy.common.gson.annotation.GsonJsonProperty;
-import org.onap.policy.common.gson.internal.Adapter;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.Data;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.DerivedData;
 
 public class AdapterTest {
+    private static final String EMPTY_ALIAS = "emptyAlias";
+    private static final String GET_VALUE = ".getValue";
     private static final String GET_VALUE_NAME = "getValue";
     private static final String VALUE_NAME = "value";
     private static final String MY_NAME = AdapterTest.class.getName();
@@ -171,9 +172,9 @@ public class AdapterTest {
         adapter = new Adapter(gson, mget(GET_VALUE_NAME), String.class);
 
         assertEquals(VALUE_NAME, adapter.getPropName());
-        assertEquals(MY_NAME + ".getValue", adapter.getFullName());
+        assertEquals(MY_NAME + GET_VALUE, adapter.getFullName());
 
-        assertEquals("hello: " + MY_NAME + ".getValue", adapter.makeError("hello: "));
+        assertEquals("hello: " + MY_NAME + GET_VALUE, adapter.makeError("hello: "));
 
 
         // test setter
@@ -201,7 +202,7 @@ public class AdapterTest {
 
     @Test
     public void testDetmPropName() {
-        assertEquals("emptyAlias", Adapter.detmPropName(field("emptyAlias")));
+        assertEquals(EMPTY_ALIAS, Adapter.detmPropName(field(EMPTY_ALIAS)));
         assertEquals("name-with-alias", Adapter.detmPropName(field("nameWithAlias")));
         assertEquals("unaliased", Adapter.detmPropName(field("unaliased")));
         assertEquals(null, Adapter.detmPropName(field("$invalidFieldName")));
@@ -209,7 +210,7 @@ public class AdapterTest {
 
     @Test
     public void testDetmGetterPropName() {
-        assertEquals("emptyAlias", Adapter.detmGetterPropName(mget("getEmptyAlias")));
+        assertEquals(EMPTY_ALIAS, Adapter.detmGetterPropName(mget("getEmptyAlias")));
         assertEquals("get-with-alias", Adapter.detmGetterPropName(mget("getWithAlias")));
         assertEquals("plain", Adapter.detmGetterPropName(mget("getPlain")));
         assertEquals("primBool", Adapter.detmGetterPropName(mget("isPrimBool")));
@@ -222,7 +223,7 @@ public class AdapterTest {
 
     @Test
     public void testDetmSetterPropName() {
-        assertEquals("emptyAlias", Adapter.detmSetterPropName(mset("setEmptyAlias")));
+        assertEquals(EMPTY_ALIAS, Adapter.detmSetterPropName(mset("setEmptyAlias")));
         assertEquals("set-with-alias", Adapter.detmSetterPropName(mset("setWithAlias")));
         assertEquals("plain", Adapter.detmSetterPropName(mset("setPlain")));
         assertEquals(null, Adapter.detmSetterPropName(mset("noSet")));
@@ -236,8 +237,8 @@ public class AdapterTest {
     }
 
     @Test
-    public void testGetQualifiedNameMethod() throws Exception {
-        assertEquals(MY_NAME + ".getValue", Adapter.getQualifiedName(mget(GET_VALUE_NAME)));
+    public void testGetQualifiedNameMethod() {
+        assertEquals(MY_NAME + GET_VALUE, Adapter.getQualifiedName(mget(GET_VALUE_NAME)));
     }
 
     /**

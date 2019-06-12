@@ -28,6 +28,9 @@ import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
 
 public class TestParametersLGeneric extends ParameterGroupImpl {
+    private static final String LGENERIC_INT_FIELD = "lgenericIntField";
+    private static final String LGENERIC_STRING_FIELD = "lgenericStringField";
+
     private int lgenericIntField = 0;
 
     @NotNull @NotBlank
@@ -74,9 +77,6 @@ public class TestParametersLGeneric extends ParameterGroupImpl {
         if (level == 0) {
             return;
         }
-        else {
-            level--;
-        }
 
         switch (triggerStatus) {
             case CLEAN:
@@ -88,7 +88,7 @@ public class TestParametersLGeneric extends ParameterGroupImpl {
                 lgenericIntField = 2;
                 break;
             case WARNING:
-                lgenericStringField = "lgenericStringField";
+                lgenericStringField = LGENERIC_STRING_FIELD;
                 lgenericIntField = 3;
                 break;
             case INVALID:
@@ -105,22 +105,22 @@ public class TestParametersLGeneric extends ParameterGroupImpl {
     public GroupValidationResult validate() {
         GroupValidationResult validationResult = super.validate();
 
-        if ("lgenericStringField".equals(lgenericStringField)) {
-            validationResult.setResult("lgenericStringField", ValidationStatus.WARNING,
+        if (LGENERIC_STRING_FIELD.equals(lgenericStringField)) {
+            validationResult.setResult(LGENERIC_STRING_FIELD, ValidationStatus.WARNING,
                             "using the field name for the parameter value is dangerous");
         } else if ("aString".equals(lgenericStringField)) {
-            validationResult.setResult("lgenericStringField", ValidationStatus.OBSERVATION,
+            validationResult.setResult(LGENERIC_STRING_FIELD, ValidationStatus.OBSERVATION,
                             "this value for name is unhelpful");
         }
 
         if (lgenericIntField < 0) {
-            validationResult.setResult("lgenericIntField", ValidationStatus.INVALID,
+            validationResult.setResult(LGENERIC_INT_FIELD, ValidationStatus.INVALID,
                             "lgenericIntField must be a positive integer");
         } else if (lgenericIntField > 2) {
-            validationResult.setResult("lgenericIntField", ValidationStatus.WARNING,
+            validationResult.setResult(LGENERIC_INT_FIELD, ValidationStatus.WARNING,
                             "values greater than 2 are not recommended");
         } else if (lgenericIntField == 2) {
-            validationResult.setResult("lgenericIntField", ValidationStatus.OBSERVATION,
+            validationResult.setResult(LGENERIC_INT_FIELD, ValidationStatus.OBSERVATION,
                             "this field has been set to 2");
         }
 

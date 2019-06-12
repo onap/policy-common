@@ -35,6 +35,7 @@ import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams.T
 public class BusTopicParamsTest extends TopicTestBase {
 
     @Before
+    @Override
     public void setUp() {
         super.setUp();
     }
@@ -123,7 +124,7 @@ public class BusTopicParamsTest extends TopicTestBase {
      * Tests the boolean methods by applying a function, once with {@code false} and once
      * with {@code true}. Verifies that all of the boolean methods return the correct
      * value by concatenating them.
-     * 
+     *
      * @param expectedTrue the string that is expected when {@code true} is passed to the
      *        method
      * @param function function to be applied to the builder

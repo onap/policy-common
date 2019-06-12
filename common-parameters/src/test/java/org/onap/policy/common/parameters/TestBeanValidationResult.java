@@ -37,6 +37,7 @@ public class TestBeanValidationResult {
     private static final String NEXT_INDENT = "yy ";
     private static final String MID_INDENT = "xx yy ";
     private static final String NAME = "my-name";
+    private static final String MY_LIST_INVALID = "  'my-list' INVALID, item has status INVALID\n    ";
     private static final String BEAN_INVALID_MSG = requote("'my-name' INVALID, item has status INVALID\n");
 
     private String cleanMsg;
@@ -105,14 +106,14 @@ public class TestBeanValidationResult {
         list = Arrays.asList(invalid, invalid);
         assertFalse(bean.validateNotNullList(MY_LIST, list, item -> item));
         assertFalse(bean.isValid());
-        assertEquals(requote(BEAN_INVALID_MSG + "  'my-list' INVALID, item has status INVALID\n    " + invalidMsg
+        assertEquals(requote(BEAN_INVALID_MSG + MY_LIST_INVALID + invalidMsg
                         + "    " + invalidMsg), bean.getResult());
     }
 
     @Test
     public void testValidateNotNullList_NullList() {
         List<ValidationResult> list = null;
-        assertFalse(bean.validateNotNullList("my-list", list, item -> item));
+        assertFalse(bean.validateNotNullList(MY_LIST, list, item -> item));
         assertFalse(bean.isValid());
         assertEquals(requote(BEAN_INVALID_MSG + "  item 'my-list' value 'null' INVALID, is null\n"), bean.getResult());
 
@@ -137,14 +138,14 @@ public class TestBeanValidationResult {
         bean = new BeanValidationResult(NAME, OBJECT);
         assertFalse(bean.validateList(MY_LIST, list, item -> item));
         assertFalse(bean.isValid());
-        assertEquals(requote(BEAN_INVALID_MSG + "  'my-list' INVALID, item has status INVALID\n    "
+        assertEquals(requote(BEAN_INVALID_MSG + MY_LIST_INVALID
                         + "item 'item' value 'null' INVALID, null\n"), bean.getResult());
 
         list = Arrays.asList(invalid, invalid);
         bean = new BeanValidationResult(NAME, OBJECT);
         assertFalse(bean.validateList(MY_LIST, list, item -> item));
         assertFalse(bean.isValid());
-        assertEquals(requote(BEAN_INVALID_MSG + "  'my-list' INVALID, item has status INVALID\n    " + invalidMsg
+        assertEquals(requote(BEAN_INVALID_MSG + MY_LIST_INVALID + invalidMsg
                         + "    " + invalidMsg), bean.getResult());
 
     }

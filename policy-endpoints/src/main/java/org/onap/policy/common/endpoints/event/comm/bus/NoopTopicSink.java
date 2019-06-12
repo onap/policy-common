@@ -35,7 +35,7 @@ public class NoopTopicSink extends NoopTopicEndpoint implements TopicSink {
     public static final NoopTopicSinkFactory factory = new NoopTopicSinkFactory();
 
     /**
-     * {@inheritDoc}.
+     * Constructs the object.
      */
     public NoopTopicSink(List<String> servers, String topic) {
         super(servers, topic);

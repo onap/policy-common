@@ -34,7 +34,6 @@ import java.util.List;
 import org.junit.Test;
 import org.onap.policy.common.gson.JacksonExclusionStrategy;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.Data;
-import org.onap.policy.common.gson.internal.FieldDeserializer;
 
 public class FieldDeserializerTest {
     private static final String TEXT_FIELD_NAME = "text";

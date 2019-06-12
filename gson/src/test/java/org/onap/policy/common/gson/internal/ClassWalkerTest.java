@@ -42,10 +42,10 @@ import org.onap.policy.common.gson.annotation.GsonJsonAnyGetter;
 import org.onap.policy.common.gson.annotation.GsonJsonAnySetter;
 import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.onap.policy.common.gson.annotation.GsonJsonProperty;
-import org.onap.policy.common.gson.internal.Adapter;
-import org.onap.policy.common.gson.internal.ClassWalker;
 
 public class ClassWalkerTest {
+
+    private static final String SET_OVERRIDE = ".setOverride";
 
     private MyWalker walker;
 
@@ -63,12 +63,12 @@ public class ClassWalkerTest {
 
         assertEquals("[Intfc1, Intfc2, Intfc1, Intfc3, Bottom, DerivedFromBottom]", walker.classes.toString());
 
-        List<String> inFields = walker.getInProps(Field.class).stream().map(field -> field.getName())
+        List<String> inFields = walker.getInProps(Field.class).stream().map(Field::getName)
                         .collect(Collectors.toList());
         Collections.sort(inFields);
         assertEquals("[exposedField, overriddenValue, transField]", inFields.toString());
 
-        List<String> outFields = walker.getInProps(Field.class).stream().map(field -> field.getName())
+        List<String> outFields = walker.getInProps(Field.class).stream().map(Field::getName)
                         .collect(Collectors.toList());
         Collections.sort(outFields);
         assertEquals("[exposedField, overriddenValue, transField]", outFields.toString());
@@ -125,7 +125,7 @@ public class ClassWalkerTest {
         assertNotNull(walker.getAnyGetter());
         assertEquals("getTheMap", walker.getAnyGetter().getName());
 
-        List<String> getters = walker.getOutProps(Method.class).stream().map(method -> method.getName())
+        List<String> getters = walker.getOutProps(Method.class).stream().map(Method::getName)
                         .collect(Collectors.toList());
         Collections.sort(getters);
         assertEquals("[getId, getOnlyOut, getValue]", getters.toString());
@@ -133,7 +133,7 @@ public class ClassWalkerTest {
         assertNotNull(walker.getAnySetter());
         assertEquals("setMapValue", walker.getAnySetter().getName());
 
-        List<String> setters = walker.getInProps(Method.class).stream().map(method -> method.getName())
+        List<String> setters = walker.getInProps(Method.class).stream().map(Method::getName)
                         .collect(Collectors.toList());
         Collections.sort(setters);
         assertEquals("[setId, setOnlyIn, setValue]", setters.toString());
@@ -146,17 +146,17 @@ public class ClassWalkerTest {
         // setter with too few parameters
         assertThatThrownBy(() -> walker.walkClassHierarchy(AnySetterTooFewParams.class))
                         .isInstanceOf(JsonParseException.class).hasMessage(ClassWalker.ANY_SETTER_MISMATCH_ERR
-                                        + AnySetterTooFewParams.class.getName() + ".setOverride");
+                                        + AnySetterTooFewParams.class.getName() + SET_OVERRIDE);
 
         // setter with too many parameters
         assertThatThrownBy(() -> walker.walkClassHierarchy(AnySetterTooManyParams.class))
                         .isInstanceOf(JsonParseException.class).hasMessage(ClassWalker.ANY_SETTER_MISMATCH_ERR
-                                        + AnySetterTooManyParams.class.getName() + ".setOverride");
+                                        + AnySetterTooManyParams.class.getName() + SET_OVERRIDE);
 
         // setter with invalid parameter type
         assertThatThrownBy(() -> walker.walkClassHierarchy(AnySetterInvalidParam.class))
                         .isInstanceOf(JsonParseException.class).hasMessage(ClassWalker.ANY_SETTER_TYPE_ERR
-                                        + AnySetterInvalidParam.class.getName() + ".setOverride");
+                                        + AnySetterInvalidParam.class.getName() + SET_OVERRIDE);
     }
 
     @Test
@@ -317,10 +317,12 @@ public class ClassWalkerTest {
 
         private String value;
 
+        @Override
         public String getValue() {
             return value;
         }
 
+        @Override
         public void setValue(String value) {
             this.value = value;
         }

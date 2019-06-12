@@ -24,7 +24,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
 import java.security.GeneralSecurityException;
-
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,86 +34,88 @@ import org.slf4j.LoggerFactory;
 
 public class CryptoUtilsTest {
     private static Logger logger = LoggerFactory.getLogger(CryptoUtilsTest.class);
-    private final String pass = "HelloWorld";
-    private final String secretKey = "12345678901234567890123456789012";
-    private final String encryptedPass = "enc:8XxseP5W5ODxzPrReNKd9JBYLv0iiAzy9BHnMKau5yg=";
+    private static final String PASS = "HelloWorld";
+    private static final String SECRET_KEY = "MTIzNDU2Nzg5MDEyMzQ1Ng==";
+    private static final String ENCRYPTED_PASS = "enc:hcI2XVX+cxPz/6rlbebkWpCFF6WPbBtT7iJRr2VHUkA=";
+    private static final String DECRYPTED_MSG = "encrypted value: {}  decrypted value : {}";
+    private static final String ENCRYPTED_MSG = "original value : {}  encrypted value: {}";
 
     @Test
     public void testEncrypt() throws GeneralSecurityException {
         logger.info("testEncrypt:");
-        CryptoUtils cryptoUtils = new CryptoUtils(secretKey);
-        String encryptedValue = cryptoUtils.encrypt(pass);
-        logger.info("original value : " + pass + "  encrypted value: " + encryptedValue);
+        CryptoUtils cryptoUtils = new CryptoUtils(SECRET_KEY);
+        String encryptedValue = cryptoUtils.encrypt(PASS);
+        logger.info(ENCRYPTED_MSG, PASS, encryptedValue);
 
         String decryptedValue = cryptoUtils.decrypt(encryptedValue);
-        logger.info("encrypted value: " + encryptedValue + "  decrypted value : " + decryptedValue);
-        assertEquals(pass, decryptedValue);
+        logger.info(DECRYPTED_MSG, encryptedValue, decryptedValue);
+        assertEquals(PASS, decryptedValue);
     }
 
     @Test
     public void testDecrypt() throws GeneralSecurityException {
         logger.info("testDecrypt:");
-        CryptoUtils cryptoUtils = new CryptoUtils(secretKey);
-        String decryptedValue = cryptoUtils.decrypt(encryptedPass);
-        logger.info("encrypted value: " + encryptedPass + "  decrypted value : " + decryptedValue);
-        assertEquals(pass, decryptedValue);
+        CryptoUtils cryptoUtils = new CryptoUtils(SECRET_KEY);
+        String decryptedValue = cryptoUtils.decrypt(ENCRYPTED_PASS);
+        logger.info(DECRYPTED_MSG, ENCRYPTED_PASS, decryptedValue);
+        assertEquals(PASS, decryptedValue);
     }
 
     @Test
     public void testStaticEncrypt() {
         logger.info("testStaticEncrypt:");
-        String encryptedValue = CryptoUtils.encrypt(pass, secretKey);
-        logger.info("original value : " + pass + "  encrypted value: " + encryptedValue);
+        String encryptedValue = CryptoUtils.encrypt(PASS, SECRET_KEY);
+        logger.info(ENCRYPTED_MSG, PASS, encryptedValue);
 
-        String decryptedValue = CryptoUtils.decrypt(encryptedValue, secretKey);
-        logger.info("encrypted value: " + encryptedValue + "  decrypted value : " + decryptedValue);
-        assertEquals(pass, decryptedValue);
+        String decryptedValue = CryptoUtils.decrypt(encryptedValue, SECRET_KEY);
+        logger.info(DECRYPTED_MSG, encryptedValue, decryptedValue);
+        assertEquals(PASS, decryptedValue);
     }
 
     @Test
     public void testStaticDecrypt() {
         logger.info("testStaticDecrypt:");
-        String decryptedValue = CryptoUtils.decrypt(encryptedPass, secretKey);
-        logger.info("encrypted value: " + encryptedPass + "  decrypted value : " + decryptedValue);
-        assertEquals(pass, decryptedValue);
+        String decryptedValue = CryptoUtils.decrypt(ENCRYPTED_PASS, SECRET_KEY);
+        logger.info(DECRYPTED_MSG, ENCRYPTED_PASS, decryptedValue);
+        assertEquals(PASS, decryptedValue);
     }
 
     @Test
     public void testBadInputs() {
-        String badKey = CryptoUtils.encrypt(pass, "test");
-        assertEquals(pass, badKey);
+        String badKey = CryptoUtils.encrypt(PASS, "test");
+        assertEquals(PASS, badKey);
 
-        String badDecrypt = CryptoUtils.decrypt(encryptedPass, "");
-        assertEquals(encryptedPass, badDecrypt);
+        String badDecrypt = CryptoUtils.decrypt(ENCRYPTED_PASS, "");
+        assertEquals(ENCRYPTED_PASS, badDecrypt);
 
-        String emptyValue = CryptoUtils.encrypt(new String(), secretKey);
+        String emptyValue = CryptoUtils.encrypt("", SECRET_KEY);
         assertEquals("", emptyValue);
 
-        String emptyDecrypt = CryptoUtils.decrypt(new String(), secretKey);
+        String emptyDecrypt = CryptoUtils.decrypt("", SECRET_KEY);
         assertEquals("", emptyDecrypt);
 
-        String nullValue = CryptoUtils.encrypt(null, secretKey);
+        String nullValue = CryptoUtils.encrypt(null, SECRET_KEY);
         assertNull(nullValue);
 
-        String nullDecrypt = CryptoUtils.decrypt(null, secretKey);
+        String nullDecrypt = CryptoUtils.decrypt(null, SECRET_KEY);
         assertNull(nullDecrypt);
     }
 
     @Test
     public void testAll() {
         logger.info("testAll:");
-        String encryptedValue = CryptoUtils.encrypt(pass, secretKey);
-        logger.info("original value : " + pass + "  encrypted value: " + encryptedValue);
+        String encryptedValue = CryptoUtils.encrypt(PASS, SECRET_KEY);
+        logger.info(ENCRYPTED_MSG, PASS, encryptedValue);
 
-        String encryptedAgain = CryptoUtils.encrypt(encryptedValue, secretKey);
+        String encryptedAgain = CryptoUtils.encrypt(encryptedValue, SECRET_KEY);
 
         assertEquals(encryptedValue, encryptedAgain);
 
-        String decryptedValue = CryptoUtils.decrypt(encryptedAgain, secretKey);
-        logger.info("encrypted value: " + encryptedAgain + "  decrypted value : " + decryptedValue);
-        assertEquals(pass, decryptedValue);
+        String decryptedValue = CryptoUtils.decrypt(encryptedAgain, SECRET_KEY);
+        logger.info(DECRYPTED_MSG, encryptedAgain, decryptedValue);
+        assertEquals(PASS, decryptedValue);
 
-        String decryptedAgain = CryptoUtils.decrypt(decryptedValue, secretKey);
+        String decryptedAgain = CryptoUtils.decrypt(decryptedValue, SECRET_KEY);
         assertEquals(decryptedValue, decryptedAgain);
     }
 }

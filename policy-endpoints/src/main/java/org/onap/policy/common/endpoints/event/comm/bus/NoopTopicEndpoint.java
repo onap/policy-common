@@ -39,7 +39,7 @@ public abstract class NoopTopicEndpoint extends TopicBase {
     private static Logger logger = LoggerFactory.getLogger(NoopTopicEndpoint.class);
 
     /**
-     * {@inheritDoc}.
+     * Constructs the object.
      */
     public NoopTopicEndpoint(List<String> servers, String topic) {
         super(servers, topic);

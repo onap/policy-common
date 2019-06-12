@@ -39,6 +39,11 @@ import org.onap.policy.common.utils.properties.exception.PropertyMissingExceptio
  * Test class for PropertyConfiguration.
  */
 public class BeanConfiguratorTest {
+    private static final String EXPECTED_EXCEPTION = "expected exception";
+    private static final String FALSE_STRING = "false";
+    private static final String A_VALUE = "a.value";
+    private static final String NUMBER_STRING_LONG = "20000";
+    private static final String NUMBER_STRING = "200";
 
     /**
      * Property used for most of the simple configuration subclasses.
@@ -141,7 +146,7 @@ public class BeanConfiguratorTest {
         // now a different set of values
         props.setProperty(THE_VALUE, STRING_VALUE + "x");
         props.setProperty("parent.value", "50001");
-        props.setProperty("grandparent.value", "false");
+        props.setProperty("grandparent.value", FALSE_STRING);
         beancfg.configureFromProperties(cfg, props);
 
         assertEquals(STRING_VALUE + "x", cfg.value);
@@ -240,7 +245,7 @@ public class BeanConfiguratorTest {
         beancfg = new BeanConfigurator() {
             @Override
             protected Object getValue(Field field, Properties props, Property prop) {
-                throw new IllegalArgumentException("expected exception");
+                throw new IllegalArgumentException(EXPECTED_EXCEPTION);
             }
         };
 
@@ -253,7 +258,7 @@ public class BeanConfiguratorTest {
 
             @Override
             public void setValue(String value) {
-                throw new IllegalArgumentException("expected exception");
+                throw new IllegalArgumentException(EXPECTED_EXCEPTION);
             }
         }
 
@@ -384,11 +389,11 @@ public class BeanConfiguratorTest {
             }
         }
 
-        props.setProperty("string", "a string");
+        props.setProperty("string", STRING_VALUE);
         props.setProperty("boolean.true", "true");
-        props.setProperty("boolean.false", "false");
+        props.setProperty("boolean.false", FALSE_STRING);
         props.setProperty("primitive.boolean.true", "true");
-        props.setProperty("primitive.boolean.false", "false");
+        props.setProperty("primitive.boolean.false", FALSE_STRING);
         props.setProperty("integer", "100");
         props.setProperty("primitive.integer", "101");
         props.setProperty("long", "10000");
@@ -397,7 +402,7 @@ public class BeanConfiguratorTest {
         Config cfg = new Config();
         beancfg.configureFromProperties(cfg, props);
 
-        assertEquals("a string", cfg.stringValue);
+        assertEquals(STRING_VALUE, cfg.stringValue);
         assertEquals(true, cfg.boolTrueValue);
         assertEquals(false, cfg.boolFalseValue);
         assertEquals(true, cfg.primBoolTrueValue);
@@ -553,7 +558,7 @@ public class BeanConfiguratorTest {
         assertEquals(true, cfg.value);
 
         // try again, with the property defined as false
-        props.setProperty(THE_VALUE, "false");
+        props.setProperty(THE_VALUE, FALSE_STRING);
         cfg = new Config();
         beancfg.configureFromProperties(cfg, props);
         assertEquals(false, cfg.value);
@@ -563,7 +568,7 @@ public class BeanConfiguratorTest {
     public void testGetBooleanValue_ValidDefault_False() throws PropertyException {
         class Config {
 
-            @Property(name = THE_VALUE, defaultValue = "false")
+            @Property(name = THE_VALUE, defaultValue = FALSE_STRING)
             private Boolean value;
 
             @SuppressWarnings("unused")
@@ -584,7 +589,7 @@ public class BeanConfiguratorTest {
         assertEquals(true, cfg.value);
 
         // try again, with the property defined as false
-        props.setProperty(THE_VALUE, "false");
+        props.setProperty(THE_VALUE, FALSE_STRING);
         cfg = new Config();
         beancfg.configureFromProperties(cfg, props);
         assertEquals(false, cfg.value);
@@ -603,7 +608,7 @@ public class BeanConfiguratorTest {
             }
         }
 
-        props.setProperty(THE_VALUE, "200");
+        props.setProperty(THE_VALUE, NUMBER_STRING);
         Config cfg = new Config();
         beancfg.configureFromProperties(cfg, props);
 
@@ -623,7 +628,7 @@ public class BeanConfiguratorTest {
             }
         }
 
-        props.setProperty(THE_VALUE, "200");
+        props.setProperty(THE_VALUE, NUMBER_STRING);
         beancfg.configureFromProperties(new Config(), props);
     }
 
@@ -646,7 +651,7 @@ public class BeanConfiguratorTest {
         assertEquals(201, cfg.value.intValue());
 
         // try again, with the property defined
-        props.setProperty(THE_VALUE, "200");
+        props.setProperty(THE_VALUE, NUMBER_STRING);
         cfg = new Config();
         beancfg.configureFromProperties(cfg, props);
         assertEquals(200, cfg.value.intValue());
@@ -665,7 +670,7 @@ public class BeanConfiguratorTest {
             }
         }
 
-        props.setProperty(THE_VALUE, "20000");
+        props.setProperty(THE_VALUE, NUMBER_STRING_LONG);
         Config cfg = new Config();
         beancfg.configureFromProperties(cfg, props);
 
@@ -685,7 +690,7 @@ public class BeanConfiguratorTest {
             }
         }
 
-        props.setProperty(THE_VALUE, "20000");
+        props.setProperty(THE_VALUE, NUMBER_STRING_LONG);
         beancfg.configureFromProperties(new Config(), props);
     }
 
@@ -708,7 +713,7 @@ public class BeanConfiguratorTest {
         assertEquals(20001L, cfg.value.longValue());
 
         // try again, with the property defined
-        props.setProperty(THE_VALUE, "20000");
+        props.setProperty(THE_VALUE, NUMBER_STRING_LONG);
         cfg = new Config();
         beancfg.configureFromProperties(cfg, props);
         assertEquals(20000L, cfg.value.longValue());
@@ -869,7 +874,7 @@ public class BeanConfiguratorTest {
 
     @Test
     public void testMakeBoolean_False() throws PropertyException {
-        props.setProperty(THE_VALUE, "false");
+        props.setProperty(THE_VALUE, FALSE_STRING);
         PlainBooleanConfig cfg = new PlainBooleanConfig();
         beancfg.configureFromProperties(cfg, props);
 
@@ -1095,7 +1100,7 @@ public class BeanConfiguratorTest {
         beancfg.addToProperties(cfg, props, "the", "a");
 
         assertEquals("1010", props.getProperty("a.parent.value"));
-        assertEquals(STRING_VALUE, props.getProperty("a.value"));
+        assertEquals(STRING_VALUE, props.getProperty(A_VALUE));
         assertEquals("other", props.getProperty("a.other.value"));
 
         // original prefix is empty
@@ -1104,7 +1109,7 @@ public class BeanConfiguratorTest {
 
         // original prefix is ends with "."
         beancfg.addToProperties(cfg, props, "the.", "a");
-        assertEquals(STRING_VALUE, props.getProperty("a.value"));
+        assertEquals(STRING_VALUE, props.getProperty(A_VALUE));
 
         // new prefix is empty
         beancfg.addToProperties(cfg, props, "", "");
@@ -1162,7 +1167,7 @@ public class BeanConfiguratorTest {
         beancfg.addToProperties(cfg, props, "the", "a");
 
         assertFalse(props.contains("noAnnotation"));
-        assertEquals(STRING_VALUE, props.getProperty("a.value"));
+        assertEquals(STRING_VALUE, props.getProperty(A_VALUE));
         assertFalse(props.contains("a.null.value"));
         assertEquals("some other value", props.getProperty("some.other.prefix"));
     }
@@ -1232,8 +1237,8 @@ public class BeanConfiguratorTest {
         beancfg.addToProperties(cfg, props, "", "");
 
         assertEquals("true", props.getProperty("plain.bool"));
-        assertEquals("false", props.getProperty("prim.bool"));
-        assertEquals("false", props.getProperty("plain.bool.get"));
+        assertEquals(FALSE_STRING, props.getProperty("prim.bool"));
+        assertEquals(FALSE_STRING, props.getProperty("plain.bool.get"));
         assertEquals("true", props.getProperty("prim.bool.get"));
         assertEquals("1100", props.getProperty("int"));
         assertEquals(STRING_VALUE, props.getProperty("string"));
@@ -1301,8 +1306,8 @@ public class BeanConfiguratorTest {
 
         beancfg = new BeanConfigurator() {
             @Override
-            protected Method getGetter(Field field, String methodName) throws SecurityException {
-                throw new SecurityException("expected exception");
+            protected Method getGetter(Field field, String methodName) {
+                throw new SecurityException(EXPECTED_EXCEPTION);
             }
         };
 
@@ -1319,7 +1324,7 @@ public class BeanConfiguratorTest {
 
             @SuppressWarnings("unused")
             public String getValue() {
-                throw new RuntimeException("expected exception");
+                throw new RuntimeException(EXPECTED_EXCEPTION);
             }
         }
 
@@ -1411,7 +1416,7 @@ public class BeanConfiguratorTest {
         private String value;
 
         public static void setValue(String value) {
-
+            // do nothing
         }
     }
 

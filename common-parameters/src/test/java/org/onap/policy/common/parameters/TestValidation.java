@@ -38,6 +38,8 @@ import org.onap.policy.common.parameters.testclasses.TestParametersL00;
 import org.onap.policy.common.parameters.testclasses.TestParametersL10;
 
 public class TestValidation {
+    private static final String L0_PARAMETERS = "l0Parameters";
+
     private static final String NOT_BLANK_STRING_MESSAGE =
                     "field 'notBlankString' type 'java.lang.String' value '' INVALID, must be a non-blank string\n"
                                     .replace('\'', '"');
@@ -73,7 +75,7 @@ public class TestValidation {
 
     @Test
     public void testValidationOk() throws IOException {
-        TestParametersL00 l0Parameters = new TestParametersL00("l0Parameters");
+        TestParametersL00 l0Parameters = new TestParametersL00(L0_PARAMETERS);
 
         GroupValidationResult validationResult = l0Parameters.validate();
         assertTrue(validationResult.isValid());
@@ -90,7 +92,7 @@ public class TestValidation {
 
     @Test
     public void testValidationObservation() throws IOException {
-        TestParametersL00 l0Parameters = new TestParametersL00("l0Parameters");
+        TestParametersL00 l0Parameters = new TestParametersL00(L0_PARAMETERS);
 
         l0Parameters.triggerValidationStatus(ValidationStatus.OBSERVATION, 3);
 
@@ -135,7 +137,7 @@ public class TestValidation {
 
     @Test
     public void testValidationWarning() throws IOException {
-        TestParametersL00 l0Parameters = new TestParametersL00("l0Parameters");
+        TestParametersL00 l0Parameters = new TestParametersL00(L0_PARAMETERS);
 
         l0Parameters.triggerValidationStatus(ValidationStatus.WARNING, 3);
 
@@ -179,7 +181,7 @@ public class TestValidation {
 
     @Test
     public void testValidationInvalid() throws IOException {
-        TestParametersL00 l0Parameters = new TestParametersL00("l0Parameters");
+        TestParametersL00 l0Parameters = new TestParametersL00(L0_PARAMETERS);
 
         l0Parameters.triggerValidationStatus(ValidationStatus.INVALID, 3);
 
@@ -222,7 +224,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testValidationEmptySubGroup() throws IOException {
+    public void testValidationEmptySubGroup() {
         TestParametersL10 l10Parameters = new TestParametersL10("l10Parameters");
 
         l10Parameters.setL10LGenericNested0(null);
@@ -234,7 +236,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testGetValidationResult() throws Exception {
+    public void testGetValidationResult() {
         Contained item = new Contained();
         item.setName("item");
 

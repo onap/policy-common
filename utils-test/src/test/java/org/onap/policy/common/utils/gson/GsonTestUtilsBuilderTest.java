@@ -35,13 +35,11 @@ import org.junit.Test;
 
 public class GsonTestUtilsBuilderTest {
 
-    private GsonTestUtilsBuilder bldr;
     private GsonTestUtils utils;
 
     @Before
     public void setUp() {
-        bldr = new MyBuilder();
-        utils = bldr.build();
+        utils = new MyBuilder().build();
     }
 
     @Test

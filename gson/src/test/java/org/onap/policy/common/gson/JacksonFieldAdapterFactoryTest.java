@@ -32,8 +32,6 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-import org.onap.policy.common.gson.JacksonExclusionStrategy;
-import org.onap.policy.common.gson.JacksonFieldAdapterFactory;
 import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.onap.policy.common.gson.annotation.GsonJsonProperty;
 

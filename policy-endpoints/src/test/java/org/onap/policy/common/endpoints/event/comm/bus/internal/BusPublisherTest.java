@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,7 @@ import org.onap.policy.common.endpoints.event.comm.bus.internal.BusPublisher.Dma
 public class BusPublisherTest extends TopicTestBase {
 
     @Before
+    @Override
     public void setUp() {
         super.setUp();
     }
@@ -90,7 +91,7 @@ public class BusPublisherTest extends TopicTestBase {
     }
 
     @Test
-    public void testCambriaPublisherWrapperClose() throws Exception {
+    public void testCambriaPublisherWrapperClose() {
         CambriaBatchingPublisher pub = mock(CambriaBatchingPublisher.class);
         CambriaPublisherWrapper cambria = new CambriaPublisherWrapper(makeBuilder().build());
         cambria.publisher = pub;
@@ -146,7 +147,7 @@ public class BusPublisherTest extends TopicTestBase {
     }
 
     @Test
-    public void testDmaapPublisherWrapperSend() throws Exception {
+    public void testDmaapPublisherWrapperSend() {
         MRSimplerBatchPublisher pub = mock(MRSimplerBatchPublisher.class);
         DmaapPublisherWrapper dmaap = new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASSWD, true);
         dmaap.publisher = pub;
@@ -168,7 +169,7 @@ public class BusPublisherTest extends TopicTestBase {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testDmaapPublisherWrapperSend_NullMessage() throws Exception {
+    public void testDmaapPublisherWrapperSend_NullMessage() {
         MRSimplerBatchPublisher pub = mock(MRSimplerBatchPublisher.class);
         DmaapPublisherWrapper dmaap = new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASSWD, true);
         dmaap.publisher = pub;

@@ -35,7 +35,7 @@ public class NoopTopicSource extends NoopTopicEndpoint implements TopicSource {
     public static final NoopTopicSourceFactory factory = new NoopTopicSourceFactory();
 
     /**
-     * {@inheritDoc}.
+     * Constructs the object.
      */
     public NoopTopicSource(List<String> servers, String topic) {
         super(servers, topic);

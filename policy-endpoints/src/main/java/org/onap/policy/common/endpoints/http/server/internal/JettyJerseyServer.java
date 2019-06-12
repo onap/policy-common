@@ -145,14 +145,14 @@ public class JettyJerseyServer extends JettyServletServer {
      */
     protected synchronized ServletHolder getServlet(String servletPath) {
 
-        ServletHolder jerseyServlet = servlets.get(servletPath);
-        if (jerseyServlet == null) {
-            jerseyServlet = context.addServlet(org.glassfish.jersey.servlet.ServletContainer.class, servletPath);
-            jerseyServlet.setInitOrder(0);
-            servlets.put(servletPath, jerseyServlet);
-        }
+        return servlets.computeIfAbsent(servletPath, key -> {
 
-        return jerseyServlet;
+            ServletHolder jerseyServlet =
+                            context.addServlet(org.glassfish.jersey.servlet.ServletContainer.class, servletPath);
+            jerseyServlet.setInitOrder(0);
+
+            return jerseyServlet;
+        });
     }
 
     @Override
@@ -238,7 +238,7 @@ public class JettyJerseyServer extends JettyServletServer {
         }
 
         jerseyServlet.setInitParameter(ServerProperties.PROVIDER_CLASSNAMES, initClasses);
-        
+
         jerseyServlet.setInitParameter(ServerProperties.METAINF_SERVICES_LOOKUP_DISABLE, "true");
     }
 

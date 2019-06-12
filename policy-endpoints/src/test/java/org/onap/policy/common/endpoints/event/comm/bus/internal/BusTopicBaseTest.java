@@ -39,6 +39,7 @@ public class BusTopicBaseTest extends TopicTestBase {
      * Initializes the object to be tested.
      */
     @Before
+    @Override
     public void setUp() {
         super.setUp();
 

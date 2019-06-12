@@ -33,8 +33,6 @@ import com.google.gson.reflect.TypeToken;
 import java.util.Map;
 import java.util.TreeMap;
 import org.junit.Test;
-import org.onap.policy.common.gson.JacksonExclusionStrategy;
-import org.onap.policy.common.gson.JacksonMethodAdapterFactory;
 import org.onap.policy.common.gson.annotation.GsonJsonAnyGetter;
 import org.onap.policy.common.gson.annotation.GsonJsonAnySetter;
 import org.onap.policy.common.gson.annotation.GsonJsonIgnore;

@@ -47,6 +47,7 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
      * Creates the object to be tested.
      */
     @Before
+    @Override
     public void setUp() {
         super.setUp();
 

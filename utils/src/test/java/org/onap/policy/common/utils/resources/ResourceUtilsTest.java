@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
+ *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,11 +49,12 @@ public class ResourceUtilsTest {
     private String jarDirResource = null;
     private String jarFileResource = null;
 
-    private final String pathDirResource = "testdir";
-    private final String pathFileResource = "testdir/testfile.xml";
+    private static final String RESOURCES_PATH = "src/test/resources/";
+    private static final String PATH_DIR_RESOURCE = "testdir";
+    private static final String PATH_FILE_RESOURCE = "testdir/testfile.xml";
 
-    private final String nonExistantResource = "somewhere/over/the/rainbow";
-    private final String invalidResource = "@%%%\\\\_:::DESD";
+    private static final String NON_EXISTENT_RESOURCE = "somewhere/over/the/rainbow";
+    private static final String INVALID_RESOURCE = "@%%%\\\\_:::DESD";
 
     /**
      * Setup resource utils test.
@@ -68,9 +70,9 @@ public class ResourceUtilsTest {
         jarDirResource = "META-INF";
         jarFileResource = "META-INF/MANIFEST.MF";
 
-        final FileWriter fileWriter = new FileWriter(tmpUsedFile);
-        fileWriter.write("Bluebirds fly over the rainbow");
-        fileWriter.close();
+        try (final FileWriter fileWriter = new FileWriter(tmpUsedFile)) {
+            fileWriter.write("Bluebirds fly over the rainbow");
+        }
     }
 
     /**
@@ -93,25 +95,25 @@ public class ResourceUtilsTest {
         theUrl = ResourceUtils.getUrlResource(jarFileResource);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getUrlResource(pathDirResource);
+        theUrl = ResourceUtils.getUrlResource(PATH_DIR_RESOURCE);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getUrlResource(pathFileResource);
+        theUrl = ResourceUtils.getUrlResource(PATH_FILE_RESOURCE);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getUrlResource("file:///" + pathDirResource);
+        theUrl = ResourceUtils.getUrlResource("file:///" + PATH_DIR_RESOURCE);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getLocalFile("src/test/resources/" + pathDirResource);
+        theUrl = ResourceUtils.getLocalFile(RESOURCES_PATH + PATH_DIR_RESOURCE);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getLocalFile("src/test/resources/" + pathFileResource);
+        theUrl = ResourceUtils.getLocalFile(RESOURCES_PATH + PATH_FILE_RESOURCE);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getUrlResource(nonExistantResource);
+        theUrl = ResourceUtils.getUrlResource(NON_EXISTENT_RESOURCE);
         assertNull(theUrl);
 
-        theUrl = ResourceUtils.getUrlResource(invalidResource);
+        theUrl = ResourceUtils.getUrlResource(INVALID_RESOURCE);
         assertNull(theUrl);
 
         theUrl = ResourceUtils.getUrlResource(null);
@@ -138,22 +140,22 @@ public class ResourceUtilsTest {
         theUrl = ResourceUtils.getLocalFile(jarFileResource);
         assertNull(theUrl);
 
-        theUrl = ResourceUtils.getLocalFile(pathDirResource);
+        theUrl = ResourceUtils.getLocalFile(PATH_DIR_RESOURCE);
         assertNull(theUrl);
 
-        theUrl = ResourceUtils.getLocalFile(pathFileResource);
+        theUrl = ResourceUtils.getLocalFile(PATH_FILE_RESOURCE);
         assertNull(theUrl);
 
-        theUrl = ResourceUtils.getLocalFile("src/test/resources/" + pathDirResource);
+        theUrl = ResourceUtils.getLocalFile(RESOURCES_PATH + PATH_DIR_RESOURCE);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getLocalFile("src/test/resources/" + pathFileResource);
+        theUrl = ResourceUtils.getLocalFile(RESOURCES_PATH + PATH_FILE_RESOURCE);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getLocalFile(nonExistantResource);
+        theUrl = ResourceUtils.getLocalFile(NON_EXISTENT_RESOURCE);
         assertNull(theUrl);
 
-        theUrl = ResourceUtils.getLocalFile(invalidResource);
+        theUrl = ResourceUtils.getLocalFile(INVALID_RESOURCE);
         assertNull(theUrl);
 
         theUrl = ResourceUtils.getLocalFile("file:///");
@@ -186,29 +188,29 @@ public class ResourceUtilsTest {
         theStream = ResourceUtils.getResourceAsStream(jarFileResource);
         assertNotNull(theStream);
 
-        theStream = ResourceUtils.getResourceAsStream(pathDirResource);
+        theStream = ResourceUtils.getResourceAsStream(PATH_DIR_RESOURCE);
         assertNotNull(theStream);
 
-        theStream = ResourceUtils.getResourceAsStream(pathFileResource);
+        theStream = ResourceUtils.getResourceAsStream(PATH_FILE_RESOURCE);
         assertNotNull(theStream);
 
-        theStream = ResourceUtils.getResourceAsStream("src/test/resources/" + pathDirResource);
+        theStream = ResourceUtils.getResourceAsStream(RESOURCES_PATH + PATH_DIR_RESOURCE);
         assertNotNull(theStream);
 
-        theStream = ResourceUtils.getResourceAsStream("src/test/resources/" + pathFileResource);
+        theStream = ResourceUtils.getResourceAsStream(RESOURCES_PATH + PATH_FILE_RESOURCE);
         assertNotNull(theStream);
 
-        theStream = ResourceUtils.getResourceAsStream(nonExistantResource);
+        theStream = ResourceUtils.getResourceAsStream(NON_EXISTENT_RESOURCE);
         assertNull(theStream);
 
-        theStream = ResourceUtils.getResourceAsStream(invalidResource);
+        theStream = ResourceUtils.getResourceAsStream(INVALID_RESOURCE);
         assertNull(theStream);
 
         theStream = ResourceUtils.getResourceAsStream(null);
-        assertNull(null);
+        assertNull(theStream);
 
         theStream = ResourceUtils.getResourceAsStream("");
-        assertNull(null);
+        assertNotNull(theStream);
     }
 
     /**
@@ -228,22 +230,22 @@ public class ResourceUtilsTest {
         theString = ResourceUtils.getResourceAsString(jarFileResource);
         assertNotNull(theString);
 
-        theString = ResourceUtils.getResourceAsString(pathDirResource);
+        theString = ResourceUtils.getResourceAsString(PATH_DIR_RESOURCE);
         assertNotNull(theString);
 
-        theString = ResourceUtils.getResourceAsString(pathFileResource);
+        theString = ResourceUtils.getResourceAsString(PATH_FILE_RESOURCE);
         assertNotNull(theString);
 
-        theString = ResourceUtils.getResourceAsString("src/test/resources/" + pathDirResource);
+        theString = ResourceUtils.getResourceAsString(RESOURCES_PATH + PATH_DIR_RESOURCE);
         assertNotNull(theString);
 
-        theString = ResourceUtils.getResourceAsString("src/test/resources/" + pathFileResource);
+        theString = ResourceUtils.getResourceAsString(RESOURCES_PATH + PATH_FILE_RESOURCE);
         assertNotNull(theString);
 
-        theString = ResourceUtils.getResourceAsString(nonExistantResource);
+        theString = ResourceUtils.getResourceAsString(NON_EXISTENT_RESOURCE);
         assertNull(theString);
 
-        theString = ResourceUtils.getResourceAsString(invalidResource);
+        theString = ResourceUtils.getResourceAsString(INVALID_RESOURCE);
         assertNull(theString);
 
         theString = ResourceUtils.getResourceAsString(null);
@@ -272,22 +274,22 @@ public class ResourceUtilsTest {
         theUrl = ResourceUtils.getUrl4Resource(jarFileResource);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getUrl4Resource(pathDirResource);
+        theUrl = ResourceUtils.getUrl4Resource(PATH_DIR_RESOURCE);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getUrl4Resource(pathFileResource);
+        theUrl = ResourceUtils.getUrl4Resource(PATH_FILE_RESOURCE);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getUrl4Resource("src/test/resources/" + pathDirResource);
+        theUrl = ResourceUtils.getUrl4Resource(RESOURCES_PATH + PATH_DIR_RESOURCE);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getUrl4Resource("src/test/resources/" + pathFileResource);
+        theUrl = ResourceUtils.getUrl4Resource(RESOURCES_PATH + PATH_FILE_RESOURCE);
         assertNotNull(theUrl);
 
-        theUrl = ResourceUtils.getUrl4Resource(nonExistantResource);
+        theUrl = ResourceUtils.getUrl4Resource(NON_EXISTENT_RESOURCE);
         assertNull(theUrl);
 
-        theUrl = ResourceUtils.getUrl4Resource(invalidResource);
+        theUrl = ResourceUtils.getUrl4Resource(INVALID_RESOURCE);
         assertNull(theUrl);
     }
 

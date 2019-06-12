@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Common Utils-Test
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -71,7 +71,7 @@ public class ThrowablesTesterTest {
 
     @Test(expected = ConstructionError.class)
     public void testThrowInstantiationException() {
-        new ThrowablesTester().testAllThrowable(ThrowInstantiationException.class);
+        new ThrowablesTester().testAllThrowable(ThrowInstantiationThrowable.class);
     }
 
     /**
@@ -159,10 +159,10 @@ public class ThrowablesTesterTest {
     /**
      * Used to test a failure case - throws InstantiationException when constructed.
      */
-    public static class ThrowInstantiationException extends Throwable {
+    public static class ThrowInstantiationThrowable extends Throwable {
         private static final long serialVersionUID = 1L;
 
-        public ThrowInstantiationException(String message, Throwable cause, boolean enableSuppression,
+        public ThrowInstantiationThrowable(String message, Throwable cause, boolean enableSuppression,
                 boolean writableStackTrace) throws InstantiationException {
 
             throw new InstantiationException(ThrowablesTester.EXPECTED_EXCEPTION_MSG);

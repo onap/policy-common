@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-management
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ public class GsonTestUtils {
     /**
      * Engine used to interpolate strings before they're compared.
      */
-    private static volatile ScriptEngine engineInstance = null;
+    private static ScriptEngine engineInstance = null;
 
     /**
      * Used to encode and decode an object via gson.
@@ -258,7 +258,7 @@ public class GsonTestUtils {
      */
     public String gsonEncode(Object object) {
         String sgson = gson.toJson(object);
-        logger.debug("gson=" + sgson);
+        logger.debug("gson={}", sgson);
         return sgson;
     }
 

@@ -36,7 +36,6 @@ import java.util.TreeMap;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.gson.JacksonExclusionStrategy;
-import org.onap.policy.common.gson.internal.AnySetterDeserializer;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.Data;
 
 public class AnySetterDeserializerTest {
