@@ -47,6 +47,20 @@ import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.utils.network.NetworkUtil;
 
 public class HttpClientTest {
+    private static final String TEST_HTTP_NO_AUTH_CLIENT = "testHttpNoAuthClient";
+    private static final String TEST_HTTP_AUTH_CLIENT = "testHttpAuthClient";
+    private static final String LOCALHOST = "localhost";
+    private static final String JUNIT_ECHO = "junit/echo";
+    private static final String HELLO = "hello";
+    private static final String MY_VALUE = "myValue";
+    private static final String FALSE_STRING = "false";
+    private static final String ALPHA123 = "alpha123";
+    private static final String PUT_HELLO = "PUT:hello:{myParameter=myValue}";
+    private static final String DOT_GSON = "." + "GSON";
+    private static final String DOT_JACKSON = "." + "JACKSON";
+    private static final String DOT_PDP = "." + "PDP";
+    private static final String DOT_PAP = "." + "PAP";
+
     private static final HashMap<String, String> savedValuesMap = new HashMap<>();
 
     /**
@@ -60,11 +74,11 @@ public class HttpClientTest {
         /* echo server - http + no auth */
 
         final HttpServletServer echoServerNoAuth =
-                HttpServletServer.factory.build("echo", "localhost", 6666, "/", false, true);
+                HttpServletServer.factory.build("echo", LOCALHOST, 6666, "/", false, true);
         echoServerNoAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
         echoServerNoAuth.waitedStart(5000);
 
-        if (!NetworkUtil.isTcpPortOpen("localhost", echoServerNoAuth.getPort(), 5, 10000L)) {
+        if (!NetworkUtil.isTcpPortOpen(LOCALHOST, echoServerNoAuth.getPort(), 5, 10000L)) {
             throw new IllegalStateException("cannot connect to port " + echoServerNoAuth.getPort());
         }
 
@@ -101,7 +115,7 @@ public class HttpClientTest {
         /* echo server - https + basic auth */
 
         final HttpServletServer echoServerAuth =
-                HttpServletServer.factory.build("echo", true, "localhost", 6667, "/", false, true);
+                HttpServletServer.factory.build("echo", true, LOCALHOST, 6667, "/", false, true);
         echoServerAuth.setBasicAuthentication("x", "y", null);
         echoServerAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
         echoServerAuth.addFilterClass("/*", TestFilter.class.getCanonicalName());
@@ -110,7 +124,7 @@ public class HttpClientTest {
         echoServerAuth.addFilterClass("/*", TestAafGranularAuthFilter.class.getCanonicalName());
         echoServerAuth.waitedStart(5000);
 
-        if (!NetworkUtil.isTcpPortOpen("localhost", echoServerAuth.getPort(), 5, 10000L)) {
+        if (!NetworkUtil.isTcpPortOpen(LOCALHOST, echoServerAuth.getPort(), 5, 10000L)) {
             throw new IllegalStateException("cannot connect to port " + echoServerAuth.getPort());
         }
     }
@@ -171,34 +185,34 @@ public class HttpClientTest {
 
     @Test
     public void testHttpGetNoAuthClient() throws Exception {
-        final HttpClient client = getNoAuthHttpClient("testHttpNoAuthClient", false,
+        final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
             6666);
-        final Response response = client.get("hello");
+        final Response response = client.get(HELLO);
         final String body = HttpClient.getBody(response, String.class);
 
         assertEquals(200, response.getStatus());
-        assertEquals("hello", body);
+        assertEquals(HELLO, body);
     }
 
     @Test
     public void testHttpPutNoAuthClient() throws Exception {
-        final HttpClient client = getNoAuthHttpClient("testHttpNoAuthClient", false, 6666);
+        final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false, 6666);
 
-        Entity<MyEntity> entity = Entity.entity(new MyEntity("myValue"), MediaType.APPLICATION_JSON);
-        final Response response = client.put("hello", entity, Collections.emptyMap());
+        Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
+        final Response response = client.put(HELLO, entity, Collections.emptyMap());
         final String body = HttpClient.getBody(response, String.class);
 
         assertEquals(200, response.getStatus());
-        assertEquals("PUT:hello:{myParameter=myValue}", body);
+        assertEquals(PUT_HELLO, body);
     }
 
     @Test
     public void testHttpPostNoAuthClient() throws Exception {
-        final HttpClient client = getNoAuthHttpClient("testHttpNoAuthClient", false,
+        final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
             6666);
 
-        Entity<MyEntity> entity = Entity.entity(new MyEntity("myValue"), MediaType.APPLICATION_JSON);
-        final Response response = client.post("hello", entity, Collections.emptyMap());
+        Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
+        final Response response = client.post(HELLO, entity, Collections.emptyMap());
         final String body = HttpClient.getBody(response, String.class);
 
         assertEquals(200, response.getStatus());
@@ -207,10 +221,10 @@ public class HttpClientTest {
 
     @Test
     public void testHttpDeletetNoAuthClient() throws Exception {
-        final HttpClient client = getNoAuthHttpClient("testHttpNoAuthClient", false,
+        final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
             6666);
 
-        final Response response = client.delete("hello", Collections.emptyMap());
+        final Response response = client.delete(HELLO, Collections.emptyMap());
         final String body = HttpClient.getBody(response, String.class);
 
         assertEquals(200, response.getStatus());
@@ -221,38 +235,38 @@ public class HttpClientTest {
     public void testHttpGetAuthClient() throws Exception {
         final HttpClient client = getAuthHttpClient();
 
-        final Response response = client.get("hello");
+        final Response response = client.get(HELLO);
         final String body = HttpClient.getBody(response, String.class);
 
         assertEquals(200, response.getStatus());
-        assertEquals("hello", body);
+        assertEquals(HELLO, body);
     }
 
     @Test
     public void testHttpPutAuthClient() throws Exception {
         final HttpClient client = getAuthHttpClient();
 
-        Entity<MyEntity> entity = Entity.entity(new MyEntity("myValue"), MediaType.APPLICATION_JSON);
-        final Response response = client.put("hello", entity, Collections.emptyMap());
+        Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
+        final Response response = client.put(HELLO, entity, Collections.emptyMap());
         final String body = HttpClient.getBody(response, String.class);
 
         assertEquals(200, response.getStatus());
-        assertEquals("PUT:hello:{myParameter=myValue}", body);
+        assertEquals(PUT_HELLO, body);
     }
 
     @Test
     public void testHttpPutAuthClient_JacksonProvider() throws Exception {
-        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient")
-                        .useHttps(true).allowSelfSignedCerts(true).hostname("localhost").port(6667)
-                        .basePath("junit/echo").userName("x").password("y").managed(true)
+        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName(TEST_HTTP_AUTH_CLIENT)
+                        .useHttps(true).allowSelfSignedCerts(true).hostname(LOCALHOST).port(6667)
+                        .basePath(JUNIT_ECHO).userName("x").password("y").managed(true)
                         .serializationProvider(MyJacksonProvider.class.getCanonicalName()).build());
 
-        Entity<MyEntity> entity = Entity.entity(new MyEntity("myValue"), MediaType.APPLICATION_JSON);
-        final Response response = client.put("hello", entity, Collections.emptyMap());
+        Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
+        final Response response = client.put(HELLO, entity, Collections.emptyMap());
         final String body = HttpClient.getBody(response, String.class);
 
         assertEquals(200, response.getStatus());
-        assertEquals("PUT:hello:{myParameter=myValue}", body);
+        assertEquals(PUT_HELLO, body);
 
         assertTrue(MyJacksonProvider.hasWrittenSome());
 
@@ -261,17 +275,17 @@ public class HttpClientTest {
 
     @Test
     public void testHttpPutAuthClient_GsonProvider() throws Exception {
-        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient")
-                        .useHttps(true).allowSelfSignedCerts(true).hostname("localhost").port(6667)
-                        .basePath("junit/echo").userName("x").password("y").managed(true)
+        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName(TEST_HTTP_AUTH_CLIENT)
+                        .useHttps(true).allowSelfSignedCerts(true).hostname(LOCALHOST).port(6667)
+                        .basePath(JUNIT_ECHO).userName("x").password("y").managed(true)
                         .serializationProvider(MyGsonProvider.class.getCanonicalName()).build());
 
-        Entity<MyEntity> entity = Entity.entity(new MyEntity("myValue"), MediaType.APPLICATION_JSON);
-        final Response response = client.put("hello", entity, Collections.emptyMap());
+        Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
+        final Response response = client.put(HELLO, entity, Collections.emptyMap());
         final String body = HttpClient.getBody(response, String.class);
 
         assertEquals(200, response.getStatus());
-        assertEquals("PUT:hello:{myParameter=myValue}", body);
+        assertEquals(PUT_HELLO, body);
 
         assertTrue(MyGsonProvider.hasWrittenSome());
 
@@ -282,7 +296,7 @@ public class HttpClientTest {
     public void testHttpAuthClient401() throws Exception {
         final HttpClient client = getNoAuthHttpClient("testHttpAuthClient401", true,
             6667);
-        final Response response = client.get("hello");
+        final Response response = client.get(HELLO);
         assertEquals(401, response.getStatus());
     }
 
@@ -291,70 +305,70 @@ public class HttpClientTest {
         final Properties httpProperties = new Properties();
 
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES, "PAP,PDP");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, "localhost");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "7777");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, "testpap");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, "alpha123");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, LOCALHOST);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "7777");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, "testpap");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, ALPHA123);
         httpProperties.setProperty(
-                PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PAP"
-                        + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX,
-                RestMockHealthCheck.class.getName());
+                        PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
+                                        + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX,
+                        RestMockHealthCheck.class.getName());
         httpProperties.setProperty(
-            PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX,
-            TestFilter.class.getName());
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
+                        PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
+                                        + PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX,
+                        TestFilter.class.getName());
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
 
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PDP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, "localhost");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PDP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "7778");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PDP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, "testpdp");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PDP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, "alpha123");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PDP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, LOCALHOST);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PDP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "7778");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PDP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, "testpdp");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PDP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, ALPHA123);
         httpProperties.setProperty(
-                PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + "PDP"
-                        + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX,
-                RestMockHealthCheck.class.getName());
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
+                        PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PDP
+                                        + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX,
+                        RestMockHealthCheck.class.getName());
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
 
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES, "PAP,PDP");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, "localhost");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "7777");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX, "pap/test");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, "false");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, "testpap");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, "alpha123");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PAP"
-                + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, LOCALHOST);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "7777");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX, "pap/test");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, FALSE_STRING);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, "testpap");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, ALPHA123);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
 
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PDP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, "localhost");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PDP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "7778");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PDP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX, "pdp");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PDP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, "false");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PDP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, "testpdp");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PDP"
-                + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, "alpha123");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "PDP"
-                + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, LOCALHOST);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "7778");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX, "pdp");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, FALSE_STRING);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, "testpdp");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, ALPHA123);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
+                        + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
 
         final List<HttpServletServer> servers = HttpServletServer.factory.build(httpProperties);
         assertEquals(2, servers.size());
@@ -383,51 +397,51 @@ public class HttpClientTest {
         final Properties httpProperties = new Properties();
 
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES, "GSON,JACKSON");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "GSON"
-                + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, "localhost");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "GSON"
-                + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "6666");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "GSON"
-                + PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX, "junit/echo");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "GSON"
-                + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, "false");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "GSON"
-                + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_GSON
+                        + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, LOCALHOST);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_GSON
+                        + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "6666");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_GSON
+                        + PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX, JUNIT_ECHO);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_GSON
+                        + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, FALSE_STRING);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_GSON
+                        + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
         httpProperties.setProperty(
-                        PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "GSON"
+                        PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_GSON
                                         + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER,
                         MyGsonProvider.class.getCanonicalName());
 
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "JACKSON"
-                + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, "localhost");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "JACKSON"
-                + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "6666");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "JACKSON"
-                + PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX, "junit/echo");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "JACKSON"
-                + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, "false");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "JACKSON"
-                + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_JACKSON
+                        + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, LOCALHOST);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_JACKSON
+                        + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "6666");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_JACKSON
+                        + PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX, JUNIT_ECHO);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_JACKSON
+                        + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, FALSE_STRING);
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_JACKSON
+                        + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
         httpProperties.setProperty(
-                        PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + "JACKSON"
+                        PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_JACKSON
                                         + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER,
                         MyJacksonProvider.class.getCanonicalName());
 
         final List<HttpClient> clients = HttpClient.factory.build(httpProperties);
         assertEquals(2, clients.size());
 
-        Entity<MyEntity> entity = Entity.entity(new MyEntity("myValue"), MediaType.APPLICATION_JSON);
+        Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
 
         // use gson client
         MyGsonProvider.resetSome();
         MyJacksonProvider.resetSome();
         HttpClient client = HttpClient.factory.get("GSON");
 
-        Response response = client.put("hello", entity, Collections.emptyMap());
+        Response response = client.put(HELLO, entity, Collections.emptyMap());
         String body = HttpClient.getBody(response, String.class);
 
         assertEquals(200, response.getStatus());
-        assertEquals("PUT:hello:{myParameter=myValue}", body);
+        assertEquals(PUT_HELLO, body);
 
         assertTrue(MyGsonProvider.hasWrittenSome());
         assertFalse(MyJacksonProvider.hasWrittenSome());
@@ -437,11 +451,11 @@ public class HttpClientTest {
         MyJacksonProvider.resetSome();
         client = HttpClient.factory.get("JACKSON");
 
-        response = client.put("hello", entity, Collections.emptyMap());
+        response = client.put(HELLO, entity, Collections.emptyMap());
         body = HttpClient.getBody(response, String.class);
 
         assertEquals(200, response.getStatus());
-        assertEquals("PUT:hello:{myParameter=myValue}", body);
+        assertEquals(PUT_HELLO, body);
 
         assertTrue(MyJacksonProvider.hasWrittenSome());
         assertFalse(MyGsonProvider.hasWrittenSome());
@@ -449,15 +463,15 @@ public class HttpClientTest {
 
     private HttpClient getAuthHttpClient()
                     throws KeyManagementException, NoSuchAlgorithmException, ClassNotFoundException {
-        return HttpClient.factory.build(BusTopicParams.builder().clientName("testHttpAuthClient")
-            .useHttps(true).allowSelfSignedCerts(true).hostname("localhost").port(6667).basePath("junit/echo")
+        return HttpClient.factory.build(BusTopicParams.builder().clientName(TEST_HTTP_AUTH_CLIENT)
+            .useHttps(true).allowSelfSignedCerts(true).hostname(LOCALHOST).port(6667).basePath(JUNIT_ECHO)
             .userName("x").password("y").managed(true).build());
     }
 
     private HttpClient getNoAuthHttpClient(String clientName, boolean https, int port)
         throws KeyManagementException, NoSuchAlgorithmException, ClassNotFoundException {
         return HttpClient.factory.build(BusTopicParams.builder().clientName(clientName)
-            .useHttps(https).allowSelfSignedCerts(https).hostname("localhost").port(port).basePath("junit/echo")
+            .useHttps(https).allowSelfSignedCerts(https).hostname(LOCALHOST).port(port).basePath(JUNIT_ECHO)
             .userName(null).password(null).managed(true).build());
     }
 

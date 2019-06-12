@@ -34,7 +34,7 @@ import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperti
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.function.Function;
+import java.util.function.Predicate;
 import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 
@@ -192,7 +192,7 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
      * @param values the values to which the property should be set, defaults to
      *        {@code null} and ""
      */
-    protected void checkDefault(String builderName, Function<BusTopicParams, Boolean> validate, Object... values) {
+    protected void checkDefault(String builderName, Predicate<BusTopicParams> validate, Object... values) {
         Object[] values2 = (values.length > 0 ? values : new Object[] {null, ""});
 
         for (Object value : values2) {
@@ -209,7 +209,7 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
             }
 
             assertEquals("size for default " + value, 1, buildTopics(builder.build()).size());
-            assertTrue("default for " + value, validate.apply(getLastParams()));
+            assertTrue("default for " + value, validate.test(getLastParams()));
         }
     }
 

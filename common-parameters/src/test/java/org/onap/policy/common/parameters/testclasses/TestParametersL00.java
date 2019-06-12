@@ -30,6 +30,9 @@ import org.onap.policy.common.parameters.ParameterGroupImpl;
 import org.onap.policy.common.parameters.ValidationStatus;
 
 public class TestParametersL00 extends ParameterGroupImpl {
+    private static final String L00_INT_FIELD = "l00IntField";
+    private static final String L00_STRING_FIELD = "l00StringField";
+
     private static final String A_CONSTANT = "A Constant";
 
     private int l00IntField = 0;
@@ -136,7 +139,7 @@ public class TestParametersL00 extends ParameterGroupImpl {
                 l00IntField = 2;
                 break;
             case WARNING:
-                l00StringField = "l00StringField";
+                l00StringField = L00_STRING_FIELD;
                 l00IntField = 3;
                 break;
             case INVALID:
@@ -165,29 +168,29 @@ public class TestParametersL00 extends ParameterGroupImpl {
         }
 
         if (l00StringField == null || l00StringField.trim().length() == 0) {
-            validationResult.setResult("l00StringField", ValidationStatus.INVALID,
+            validationResult.setResult(L00_STRING_FIELD, ValidationStatus.INVALID,
                             "l00StringField must be a non-blank string");
-        } else if (l00StringField.equals("l00StringField")) {
-            validationResult.setResult("l00StringField", ValidationStatus.WARNING,
+        } else if (l00StringField.equals(L00_STRING_FIELD)) {
+            validationResult.setResult(L00_STRING_FIELD, ValidationStatus.WARNING,
                             "using the field name for the parameter value is dangerous");
         } else if (l00StringField.equals("aString")) {
-            validationResult.setResult("l00StringField", ValidationStatus.OBSERVATION,
+            validationResult.setResult(L00_STRING_FIELD, ValidationStatus.OBSERVATION,
                             "this value for name is unhelpful");
         } else {
-            validationResult.setResult("l00StringField", ValidationStatus.CLEAN,
+            validationResult.setResult(L00_STRING_FIELD, ValidationStatus.CLEAN,
                             ParameterConstants.PARAMETER_HAS_STATUS_MESSAGE + ValidationStatus.CLEAN.toString());
         }
 
         if (l00IntField < 0) {
-            validationResult.setResult("l00IntField", ValidationStatus.INVALID,
+            validationResult.setResult(L00_INT_FIELD, ValidationStatus.INVALID,
                             "l00IntField must be a positive integer");
         } else if (l00IntField > 2) {
-            validationResult.setResult("l00IntField", ValidationStatus.WARNING,
+            validationResult.setResult(L00_INT_FIELD, ValidationStatus.WARNING,
                             "values greater than 2 are not recommended");
         } else if (l00IntField == 2) {
-            validationResult.setResult("l00IntField", ValidationStatus.OBSERVATION, "this field has been set to 2");
+            validationResult.setResult(L00_INT_FIELD, ValidationStatus.OBSERVATION, "this field has been set to 2");
         } else {
-            validationResult.setResult("l00IntField", ValidationStatus.CLEAN,
+            validationResult.setResult(L00_INT_FIELD, ValidationStatus.CLEAN,
                             ParameterConstants.PARAMETER_HAS_STATUS_MESSAGE + ValidationStatus.CLEAN.toString());
         }
 

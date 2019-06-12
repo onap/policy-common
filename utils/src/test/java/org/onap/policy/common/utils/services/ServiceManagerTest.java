@@ -90,7 +90,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testAddStartable() throws Exception {
+    public void testAddStartable() {
         Startable start1 = mock(Startable.class);
         svcmgr.addService("first startable", start1);
 
@@ -115,7 +115,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testStart() throws Exception {
+    public void testStart() {
         Startable start1 = mock(Startable.class);
         svcmgr.addService("test start", start1);
 
@@ -201,7 +201,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testStop() throws Exception {
+    public void testStop() {
         Startable start1 = mock(Startable.class);
         svcmgr.addService("first stop", start1);
 
@@ -245,7 +245,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testShutdown() throws Exception {
+    public void testShutdown() {
         Startable start1 = mock(Startable.class);
         svcmgr.addService("first stop", start1);
 
@@ -265,7 +265,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testRewind() throws Exception {
+    public void testRewind() {
         RunnableWithEx starter = mock(RunnableWithEx.class);
         LinkedList<String> lst = new LinkedList<>();
 

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ import org.powermock.reflect.Whitebox;
 public class BusConsumerTest extends TopicTestBase {
 
     @Before
+    @Override
     public void setUp() {
         super.setUp();
     }
@@ -88,13 +89,17 @@ public class BusConsumerTest extends TopicTestBase {
             cons.fetch();
             fail("missing exception");
 
-        } catch (IOException | InterruptedException e) {
+        } catch (IOException e) {
+            assertEquals(ex, e);
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
             assertEquals(ex, e);
         }
     }
 
     @Test
-    public void testCambriaConsumerWrapperClose() throws Exception {
+    public void testCambriaConsumerWrapperClose() {
         CambriaConsumerWrapper cons = new CambriaConsumerWrapper(builder.build());
 
         // set filter several times to cause different branches of close() to be executed

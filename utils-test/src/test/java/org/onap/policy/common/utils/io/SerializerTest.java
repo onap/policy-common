@@ -44,6 +44,7 @@ import org.onap.policy.common.utils.io.Serializer.Factory;
 import org.powermock.reflect.Whitebox;
 
 public class SerializerTest {
+    private static final String FACTORY = "factory";
 
     /**
      * Saved and restored when tests complete. Also restored at the start of each test.
@@ -52,12 +53,12 @@ public class SerializerTest {
 
     @BeforeClass
     public static void setUpBeforeClass() {
-        saveFactory = Whitebox.getInternalState(Serializer.class, "factory");
+        saveFactory = Whitebox.getInternalState(Serializer.class, FACTORY);
     }
 
     @AfterClass
     public static void tearDownAfterClass() {
-        Whitebox.setInternalState(Serializer.class, "factory", saveFactory);
+        Whitebox.setInternalState(Serializer.class, FACTORY, saveFactory);
     }
 
     @Before
@@ -89,7 +90,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void testSerialize_ArrayCloseEx() throws Exception {
+    public void testSerialize_ArrayCloseEx() {
         IOException ex = new IOException("testSerialize_ArrayCloseEx");
 
         /*
@@ -123,7 +124,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void testSerialize_ObjectWriteEx() throws Exception {
+    public void testSerialize_ObjectWriteEx() {
         IOException ex = new IOException("testSerialize_ObjectWriteEx");
 
         /*
@@ -158,7 +159,7 @@ public class SerializerTest {
 
             @Override
             public void writeObject(Object object, ObjectOutputStream oos) throws IOException {
-                return;
+                // do nothing
             }
         });
 
@@ -205,7 +206,7 @@ public class SerializerTest {
 
             @Override
             public void writeObject(Object object, ObjectOutputStream oos) throws IOException {
-                return;
+                // do nothing
             }
         });
 
@@ -370,7 +371,7 @@ public class SerializerTest {
      * @param factory new factory to be set
      */
     private void setFactory(Factory factory) {
-        Whitebox.setInternalState(Serializer.class, "factory", factory);
+        Whitebox.setInternalState(Serializer.class, FACTORY, factory);
     }
 
     /**

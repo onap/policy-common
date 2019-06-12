@@ -28,7 +28,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.Test;
-import org.onap.policy.common.gson.internal.Lifter;
 
 public class LifterTest {
 

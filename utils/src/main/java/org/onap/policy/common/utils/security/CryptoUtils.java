@@ -20,16 +20,13 @@
 
 package org.onap.policy.common.utils.security;
 
-import com.google.common.base.Charsets;
-
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-
 import java.security.SecureRandom;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +62,7 @@ public class CryptoUtils {
 
     /**
      * CryptoUtils - encryption tool constructor.
-     * @param secretKey
+     * @param secretKeySpec
      *  AES supports 128, 192 or 256-bit long key size, it can be plain text or generated with key generator
      */
     public CryptoUtils(SecretKeySpec secretKeySpec) {
@@ -80,7 +77,7 @@ public class CryptoUtils {
      * Encrypt a value based on the Policy Encryption Key.
      * Equivalent openssl command: echo -n "123456" | openssl aes-128-cbc -e -K PrivateHexkey
      * -iv 16BytesIV | xxd -u -g100
-     * 
+     *
      * <p>Final result is to put in properties file is: IV + Outcome of openssl command
      *
      * @param value
@@ -123,7 +120,7 @@ public class CryptoUtils {
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivspec);
 
             return "enc:" + DatatypeConverter.printBase64Binary(
-                    ArrayUtils.addAll(iv, cipher.doFinal(value.getBytes(Charsets.UTF_8))));
+                    ArrayUtils.addAll(iv, cipher.doFinal(value.getBytes(StandardCharsets.UTF_8))));
         } catch (Exception e) {
             logger.error("Could not encrypt value - exception: ", e);
             return value;
@@ -181,7 +178,7 @@ public class CryptoUtils {
 
             cipher.init(Cipher.DECRYPT_MODE, keySpec, ivspec);
             byte[] decrypted = cipher.doFinal(realData);
-            return new String(decrypted, Charsets.UTF_8);
+            return new String(decrypted, StandardCharsets.UTF_8);
         } catch (Exception e) {
             logger.error("Could not decrypt value - exception: ", e);
         }
@@ -224,6 +221,7 @@ public class CryptoUtils {
             return null;
         }
     }
+
     /**
      * Check if string is encrypted by verify if string prefix with 'enc:'.
      *
@@ -243,12 +241,12 @@ public class CryptoUtils {
         if (args.length == 3) {
             if ("enc".equals(args[0])) {
                 String encryptedValue = encrypt(args[1], args[2]);
-                logger.info("original value: " + args[1] + " encrypted value: " + encryptedValue);
+                logger.info("original value: {} encrypted value: {}", args[1], encryptedValue);
             } else if ("dec".equals(args[0])) {
                 String decryptedValue = decrypt(args[1], args[2]);
-                logger.info("original value: " + args[1] + " decrypted value: " + decryptedValue);
+                logger.info("original value: {} decrypted value: {}", args[1], decryptedValue);
             } else {
-                logger.info("Unknown request: " + args[0]);
+                logger.info("Unknown request: {}", args[0]);
             }
         } else {
             logger.info("Usage  : CryptoUtils enc/dec password   secretKey");

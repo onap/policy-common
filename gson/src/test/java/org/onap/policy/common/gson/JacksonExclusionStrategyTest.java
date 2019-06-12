@@ -33,7 +33,6 @@ import java.util.LinkedList;
 import java.util.TreeMap;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.onap.policy.common.gson.JacksonExclusionStrategy;
 
 public class JacksonExclusionStrategyTest {
 

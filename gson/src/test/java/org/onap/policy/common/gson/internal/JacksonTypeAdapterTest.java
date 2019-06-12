@@ -135,7 +135,7 @@ public class JacksonTypeAdapterTest {
 
         String data = stringAdapter.read(new JsonReader(new StringReader("'read text'".replace('\'', '"'))));
 
-        assertEquals("read text", data.toString());
+        assertEquals("read text", data);
     }
 
     private static class Data {

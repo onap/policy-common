@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 public class Registry {
     private static final Logger logger = LoggerFactory.getLogger(Registry.class);
 
-    private static volatile Registry instance = new Registry();
+    private static Registry instance = new Registry();
 
     /**
      * Registry map.

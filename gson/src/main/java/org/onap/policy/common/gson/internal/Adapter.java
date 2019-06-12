@@ -59,7 +59,7 @@ public class Adapter {
     /**
      * Converter used when writing, allocated lazily, once an actual type is determined.
      */
-    private volatile ConvInfo writer = null;
+    private ConvInfo writer = null;
 
     /**
      * Name of the item being lifted - used when throwing exceptions.
@@ -318,7 +318,7 @@ public class Adapter {
          * Converter to use, initialized lazily.
          */
         @SuppressWarnings("rawtypes")
-        private volatile TypeAdapter conv = null;
+        private TypeAdapter conv = null;
 
         /**
          * Constructs the object.

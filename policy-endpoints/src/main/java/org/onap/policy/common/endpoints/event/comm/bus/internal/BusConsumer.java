@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,8 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Properties;
-
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.dmaap.mr.client.MRClientFactory;
 import org.onap.dmaap.mr.client.impl.MRConsumerImpl;
@@ -112,7 +113,7 @@ public interface BusConsumer {
         /**
          * close condition.
          */
-        protected Object closeCondition = new Object();
+        protected CountDownLatch closeCondition = new CountDownLatch(1);
 
         /**
          * Cambria Consumer Wrapper.
@@ -172,10 +173,9 @@ public interface BusConsumer {
                 return getCurrentConsumer().fetch();
             } catch (final IOException e) {
                 logger.error("{}: cannot fetch because of {} - backoff for {} ms.", this, e.getMessage(),
-                        this.fetchTimeout);
-                synchronized (this.closeCondition) {
-                    this.closeCondition.wait(this.fetchTimeout);
-                }
+                        this.fetchTimeout, e);
+
+                this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS);
 
                 throw e;
             }
@@ -183,10 +183,7 @@ public interface BusConsumer {
 
         @Override
         public void close() {
-            synchronized (closeCondition) {
-                closeCondition.notifyAll();
-            }
-
+            this.closeCondition.countDown();
             getCurrentConsumer().close();
         }
 
@@ -267,7 +264,7 @@ public interface BusConsumer {
         /**
          * close condition.
          */
-        protected Object closeCondition = new Object();
+        protected CountDownLatch closeCondition = new CountDownLatch(1);
 
         /**
          * MR Consumer.
@@ -276,7 +273,7 @@ public interface BusConsumer {
 
         /**
          * MR Consumer Wrapper.
-         * 
+         *
          * <p>servers          messaging bus hosts
          * topic            topic
          * apiKey           API Key
@@ -314,12 +311,10 @@ public interface BusConsumer {
             if (response == null) {
                 logger.warn("{}: DMaaP NULL response received", this);
 
-                synchronized (closeCondition) {
-                    closeCondition.wait(fetchTimeout);
-                }
+                closeCondition.await(fetchTimeout, TimeUnit.MILLISECONDS);
                 return new ArrayList<>();
             } else {
-                logger.debug("DMaaP consumer received {} : {}" + response.getResponseCode(),
+                logger.debug("DMaaP consumer received {} : {}", response.getResponseCode(),
                         response.getResponseMessage());
 
                 if (!"200".equals(response.getResponseCode())) {
@@ -327,9 +322,7 @@ public interface BusConsumer {
                     logger.error("DMaaP consumer received: {} : {}", response.getResponseCode(),
                             response.getResponseMessage());
 
-                    synchronized (closeCondition) {
-                        closeCondition.wait(fetchTimeout);
-                    }
+                    closeCondition.await(fetchTimeout, TimeUnit.MILLISECONDS);
 
                     /* fall through */
                 }
@@ -344,10 +337,7 @@ public interface BusConsumer {
 
         @Override
         public void close() {
-            synchronized (closeCondition) {
-                closeCondition.notifyAll();
-            }
-
+            this.closeCondition.countDown();
             this.consumer.close();
         }
 
@@ -372,7 +362,7 @@ public interface BusConsumer {
         /**
          * BusTopicParams contain the following parameters.
          * MR Consumer Wrapper.
-         * 
+         *
          * <p>servers messaging bus hosts
          * topic topic
          * apiKey API Key
@@ -432,9 +422,9 @@ public interface BusConsumer {
 
         /**
          * Constructor.
-         * 
+         *
          * @param busTopicParams topic paramters
-         * 
+         *
          * @throws MalformedURLException must provide a valid URL
          */
         public DmaapDmeConsumerWrapper(BusTopicParams busTopicParams) throws MalformedURLException {

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ public class DmaapTopicSinkFactoryTest extends DmaapTopicFactoryTestBase<DmaapTo
      * Creates the object to be tested.
      */
     @Before
+    @Override
     public void setUp() {
         super.setUp();
 
@@ -53,17 +54,20 @@ public class DmaapTopicSinkFactoryTest extends DmaapTopicFactoryTestBase<DmaapTo
     }
 
     @Test
+    @Override
     public void testBuildBusTopicParams() {
         super.testBuildBusTopicParams();
         super.testBuildBusTopicParams_Ex();
     }
 
     @Test
+    @Override
     public void testBuildListOfStringString() {
         super.testBuildListOfStringString();
     }
 
     @Test
+    @Override
     public void testBuildProperties() {
         super.testBuildProperties();
         super.testBuildProperties_Variations();
@@ -75,12 +79,14 @@ public class DmaapTopicSinkFactoryTest extends DmaapTopicFactoryTestBase<DmaapTo
     }
 
     @Test
+    @Override
     public void testDestroyString_testGet_testInventory() {
         super.testDestroyString_testGet_testInventory();
         super.testDestroyString_Ex();
     }
 
     @Test
+    @Override
     public void testDestroy() {
         super.testDestroy();
     }

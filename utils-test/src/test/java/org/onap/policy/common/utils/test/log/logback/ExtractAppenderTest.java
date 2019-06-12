@@ -40,6 +40,16 @@ import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
 public class ExtractAppenderTest {
+    private static final String ABC_DIGIT = "abc[0-9]";
+    private static final String ABC_DIGIT1 = "abc[1-9]";
+    private static final String DEF_DIGIT = "def[0-9]";
+    private static final String HELLO = "hello";
+    private static final String HELLO_ABC = "hello abc";
+    private static final String HELLO_ABC1_WORLD = "hello abc1 world";
+    private static final String HELLO_ABC3 = "hello abc3";
+    private static final String WORLD = "world";
+    private static final String WORLD_ABC = "world abc";
+    private static final String WORLD_GHI2_WORLD = "world ghi2 world";
 
     /**
      * Milliseconds to wait for a thread to terminate.
@@ -51,13 +61,13 @@ public class ExtractAppenderTest {
     private List<Thread> threads;
 
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() {
         logger = (Logger) LoggerFactory.getLogger(ExtractAppenderTest.class);
         logger.setLevel(Level.INFO);
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         threads = new LinkedList<>();
     }
 
@@ -88,31 +98,31 @@ public class ExtractAppenderTest {
 
         addAppender(appender);
 
-        logger.info("hello");
-        logger.info("world");
+        logger.info(HELLO);
+        logger.info(WORLD);
 
         // "append" should always be called
         assertEquals(2, count.get());
 
         // appender with no patterns - everything should match
-        assertEquals(strList("hello", "world"), appender.getExtracted());
+        assertEquals(strList(HELLO, WORLD), appender.getExtracted());
 
         // add a pattern and verify match
-        appender.setPattern("abc[0-9]");
+        appender.setPattern(ABC_DIGIT);
         logger.info("hello abc1");
 
         // this should not match
         logger.info("hello def2");
 
         assertEquals(4, count.get());
-        assertEquals(strList("hello", "world", "abc1"), appender.getExtracted());
+        assertEquals(strList(HELLO, WORLD, "abc1"), appender.getExtracted());
     }
 
     @Test
     public void testExtractAppenderStringArray() {
         AtomicInteger count = new AtomicInteger(0);
 
-        ExtractAppender appender = new ExtractAppender("abc[0-9]", "def[0-9]") {
+        ExtractAppender appender = new ExtractAppender(ABC_DIGIT, DEF_DIGIT) {
             @Override
             protected void append(ILoggingEvent event) {
                 count.incrementAndGet();
@@ -122,8 +132,8 @@ public class ExtractAppenderTest {
 
         addAppender(appender);
 
-        logger.info("hello abc1 world");
-        logger.info("world ghi2 world"); // no match
+        logger.info(HELLO_ABC1_WORLD);
+        logger.info(WORLD_GHI2_WORLD); // no match
         logger.info("world def3 world");
         logger.info("hello abc4");
         logger.info("abc5 world");
@@ -168,7 +178,7 @@ public class ExtractAppenderTest {
             }
         };
 
-        ExtractAppender appender = new ExtractAppender(queue, "abc[0-9]");
+        ExtractAppender appender = new ExtractAppender(queue, ABC_DIGIT);
         addAppender(appender);
 
         // these shouldn't match
@@ -182,7 +192,7 @@ public class ExtractAppenderTest {
 
         for (int x = 0; x < nmatches; ++x) {
             String msg = "abc" + x;
-            logger.info(msg + " world");
+            logger.info("{} world", msg);
 
             if (x < nallowed) {
                 expected.add(msg);
@@ -199,10 +209,10 @@ public class ExtractAppenderTest {
     public void testAppendILoggingEvent_NoPatterns() {
         ExtractAppender appender = makeAppender();
 
-        logger.info("hello");
-        logger.info("world");
+        logger.info(HELLO);
+        logger.info(WORLD);
 
-        assertEquals(strList("hello", "world"), appender.getExtracted());
+        assertEquals(strList(HELLO, WORLD), appender.getExtracted());
     }
 
     @Test
@@ -216,7 +226,7 @@ public class ExtractAppenderTest {
 
     @Test
     public void testAppendILoggingEvent_MatchFirstPattern() {
-        ExtractAppender appender = makeAppender("abc[0-9]", "def[0-9]");
+        ExtractAppender appender = makeAppender(ABC_DIGIT, DEF_DIGIT);
 
         logger.info("hello abc1");
         logger.info("world xyz2");
@@ -226,7 +236,7 @@ public class ExtractAppenderTest {
 
     @Test
     public void testAppendILoggingEvent_MatchLastPattern() {
-        ExtractAppender appender = makeAppender("abc[0-9]", "def[0-9]");
+        ExtractAppender appender = makeAppender(ABC_DIGIT, DEF_DIGIT);
 
         logger.info("hello def1");
         logger.info("world xyz2");
@@ -236,41 +246,41 @@ public class ExtractAppenderTest {
 
     @Test
     public void testAppendILoggingEvent_Group1() {
-        ExtractAppender appender = makeAppender("hello (abc)|(xyz)", "def[0-9]");
+        ExtractAppender appender = makeAppender("hello (abc)|(xyz)", DEF_DIGIT);
 
         logger.info("hello abc, world!");
-        logger.info("world abc");
+        logger.info(WORLD_ABC);
 
         assertEquals(strList("abc"), appender.getExtracted());
     }
 
     @Test
     public void testAppendILoggingEvent_Group3() {
-        ExtractAppender appender = makeAppender("hello (abc)|(pdq)|(xyz)", "def[0-9]");
+        ExtractAppender appender = makeAppender("hello (abc)|(pdq)|(xyz)", DEF_DIGIT);
 
         logger.info("say hello xyz, world!");
-        logger.info("world abc");
+        logger.info(WORLD_ABC);
 
         assertEquals(strList("xyz"), appender.getExtracted());
     }
 
     @Test
     public void testAppendILoggingEvent_NoGroup() {
-        ExtractAppender appender = makeAppender("hello abc");
+        ExtractAppender appender = makeAppender(HELLO_ABC);
 
         logger.info("say hello abc, world!");
-        logger.info("world abc");
+        logger.info(WORLD_ABC);
 
-        assertEquals(strList("hello abc"), appender.getExtracted());
+        assertEquals(strList(HELLO_ABC), appender.getExtracted());
     }
 
     @Test
     public void testGetExtracted() {
-        ExtractAppender appender = makeAppender("abc[1-9]");
+        ExtractAppender appender = makeAppender(ABC_DIGIT1);
 
-        logger.info("hello abc1 world");
-        logger.info("world ghi2 world"); // no match
-        logger.info("hello abc3");
+        logger.info(HELLO_ABC1_WORLD);
+        logger.info(WORLD_GHI2_WORLD); // no match
+        logger.info(HELLO_ABC3);
 
         List<String> oldlst = appender.getExtracted();
         assertEquals(strList("abc1", "abc3"), oldlst);
@@ -282,11 +292,11 @@ public class ExtractAppenderTest {
 
     @Test
     public void testClearExtractions() {
-        final ExtractAppender appender = makeAppender("abc[1-9]");
+        final ExtractAppender appender = makeAppender(ABC_DIGIT1);
 
-        logger.info("hello abc1 world");
-        logger.info("world ghi2 world");
-        logger.info("hello abc3");
+        logger.info(HELLO_ABC1_WORLD);
+        logger.info(WORLD_GHI2_WORLD);
+        logger.info(HELLO_ABC3);
 
         assertEquals(strList("abc1", "abc3"), appender.getExtracted());
 
@@ -305,11 +315,11 @@ public class ExtractAppenderTest {
 
     @Test
     public void testSetPattern() {
-        final ExtractAppender appender = makeAppender("abc[1-9]");
+        final ExtractAppender appender = makeAppender(ABC_DIGIT1);
 
-        logger.info("hello abc1 world");
-        logger.info("world ghi2 world"); // no match
-        logger.info("hello abc3");
+        logger.info(HELLO_ABC1_WORLD);
+        logger.info(WORLD_GHI2_WORLD); // no match
+        logger.info(HELLO_ABC3);
 
         assertEquals(strList("abc1", "abc3"), appender.getExtracted());
 
@@ -351,28 +361,20 @@ public class ExtractAppenderTest {
             }
         };
 
-        ExtractAppender app = new ExtractAppender(queue, "abc[1-9]");
+        ExtractAppender app = new ExtractAppender(queue, ABC_DIGIT1);
         addAppender(app);
 
         // create some threads to add another pattern
-        addThread(tend, err, xtxt -> {
-            app.setPattern("def[0-9]");
-        });
+        addThread(tend, err, xtxt -> app.setPattern(DEF_DIGIT));
 
         // create some threads to log "abc" messages
-        addThread(tend, err, xtxt -> {
-            logger.info("hello abc" + xtxt + "world!");
-        });
+        addThread(tend, err, xtxt -> logger.info("{}{}world!", HELLO_ABC, xtxt));
 
         // create some threads to log "def" messages
-        addThread(tend, err, xtxt -> {
-            logger.info("hello def" + xtxt + "world!");
-        });
+        addThread(tend, err, xtxt -> logger.info("hello def{}world!", xtxt));
 
         // create some threads to get extractions
-        addThread(tend, err, xtxt -> {
-            app.getExtracted();
-        });
+        addThread(tend, err, xtxt -> app.getExtracted());
 
         // create some threads to clear extractions
         addThread(tend, err, xtxt -> {
@@ -381,7 +383,7 @@ public class ExtractAppenderTest {
             // don't want to clear the list too frequently
             // so sleep a bit in between
             try {
-                Thread.sleep(10 + Integer.valueOf(xtxt));
+                Thread.sleep(10L + Integer.valueOf(xtxt));
 
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();

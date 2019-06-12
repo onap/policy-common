@@ -36,7 +36,6 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.gson.JacksonExclusionStrategy;
-import org.onap.policy.common.gson.internal.AnyGetterSerializer;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.Data;
 
 public class AnyGetterSerializerTest {
@@ -61,7 +60,7 @@ public class AnyGetterSerializerTest {
     }
 
     @Test
-    public void testAddToTree_testCopyLiftedItems() throws Exception {
+    public void testAddToTree_testCopyLiftedItems() {
         JsonObject tree = new JsonObject();
         tree.addProperty("hello", "world");
 
@@ -84,7 +83,7 @@ public class AnyGetterSerializerTest {
     }
 
     @Test
-    public void testAddToTree_NullMap() throws Exception {
+    public void testAddToTree_NullMap() {
         JsonObject tree = new JsonObject();
         tree.addProperty("hello", "world");
 
