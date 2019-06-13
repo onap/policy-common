@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -132,6 +132,10 @@ public class PolicyLogger {
         }
     }
 
+    private PolicyLogger() {
+
+    }
+
     public static Level getDebugLevel() {
         return debugLevel;
     }
@@ -238,7 +242,7 @@ public class PolicyLogger {
 
     /**
      * Populates MDC info.
-     * 
+     *
      * @param transId the transaction ID
      * @return String
      */
@@ -301,7 +305,7 @@ public class PolicyLogger {
 
     /**
      * Populate MDC Info using the passed in mdcInfo.
-     * 
+     *
      * @param transId the transaction ID
      * @param mdcInfo the MDC info
      * @return String
@@ -345,7 +349,7 @@ public class PolicyLogger {
 
     /**
      * Sets transaction Id to MDC.
-     * 
+     *
      * @param eventObject event object
      */
     public static void postMDCInfoForEvent(Object eventObject) {
@@ -383,7 +387,7 @@ public class PolicyLogger {
 
     /**
      * Sets transaction Id to MDC.
-     * 
+     *
      * @param transId the transaction ID
      */
     public static void setTransId(String transId) {
@@ -393,7 +397,7 @@ public class PolicyLogger {
 
     /**
      * Returns current transaction Id used in MDC.
-     * 
+     *
      * @return transId
      */
     public static String getTransId() {
@@ -403,7 +407,7 @@ public class PolicyLogger {
 
     /**
      * Resets transaction Id in MDC for the rule triggered by this event.
-     * 
+     *
      * @param transId the transaction ID
      * @return String
      */
@@ -436,7 +440,7 @@ public class PolicyLogger {
 
     /**
      * Resets transaction Id in MDC for the rule triggered by this event.
-     * 
+     *
      * @param obj object
      */
     public static void postMDCUUIDForTriggeredRule(Object obj) {
@@ -448,7 +452,7 @@ public class PolicyLogger {
     // ************************************************************************************************
     /**
      * Records the Info event with String [] arguments.
-     * 
+     *
      * @param msg the message code
      * @param className the class name
      * @param arguments the messages
@@ -460,7 +464,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message with its class name.
-     * 
+     *
      * @param className the class name
      * @param arg0 the message
      */
@@ -472,7 +476,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message.
-     * 
+     *
      * @param arg0 the message
      */
     public static void info(Object arg0) {
@@ -482,7 +486,7 @@ public class PolicyLogger {
 
     /**
      * Records a message with passed in message code, Throwable object, a list of string values.
-     * 
+     *
      * @param msg the message code
      * @param arg0 the throwable
      * @param arguments the messages
@@ -496,7 +500,7 @@ public class PolicyLogger {
     /**
      * Records a message with passed in message code, class name, Throwable object, a list of string
      * values.
-     * 
+     *
      * @param msg the message code
      * @param className the class name
      * @param arg0 the throwable
@@ -510,7 +514,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message with its class name.
-     * 
+     *
      * @param arg0 log message
      * @param className class name
      */
@@ -521,7 +525,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message.
-     * 
+     *
      * @param arg0 the message
      */
     public static void warn(Object arg0) {
@@ -531,7 +535,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message without its class name passed in.
-     * 
+     *
      * @param arg0 the message
      */
     public static void warn(String arg0) {
@@ -541,7 +545,7 @@ public class PolicyLogger {
 
     /**
      * Records a message with passed in message code, class name and a list of string values.
-     * 
+     *
      * @param msg the message code
      * @param className the class name
      * @param arguments the messages
@@ -553,7 +557,7 @@ public class PolicyLogger {
 
     /**
      * Records a message with passed in message code, Throwable object, a list of string values.
-     * 
+     *
      * @param msg the message code
      * @param arg0 the throwable
      * @param arguments the messages
@@ -566,7 +570,7 @@ public class PolicyLogger {
 
     /**
      * Records a message with passed in message code, Throwable object, a list of string values.
-     * 
+     *
      * @param msg the message code
      * @param className the class name
      * @param arg0 the throwable
@@ -580,7 +584,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message with its class name.
-     * 
+     *
      * @param className class name
      * @param arg0 log message
      */
@@ -596,7 +600,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message.
-     * 
+     *
      * @param arg0 the message
      */
     public static void error(String arg0) {
@@ -613,7 +617,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message.
-     * 
+     *
      * @param arg0 the message
      */
     public static void error(Object arg0) {
@@ -630,7 +634,7 @@ public class PolicyLogger {
 
     /**
      * Records a message with passed in message code, Throwable object, a list of string values.
-     * 
+     *
      * @param msg the message code
      * @param arg0 the throwable
      * @param arguments the messages
@@ -651,7 +655,7 @@ public class PolicyLogger {
     /**
      * Records a message with passed in message code, class name, Throwable object, a list of string
      * values.
-     * 
+     *
      * @param msg the message code
      * @param className the class name
      * @param arg0 the throwable
@@ -672,7 +676,7 @@ public class PolicyLogger {
 
     /**
      * Records a message with passed in message code and a list of string values.
-     * 
+     *
      * @param msg the message code
      * @param arguments the messages
      */
@@ -690,7 +694,7 @@ public class PolicyLogger {
 
     /**
      * Records a message with passed in message code and a list of string values.
-     * 
+     *
      * @param msg the message code
      * @param arguments the messages
      */
@@ -701,7 +705,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message with its class name.
-     * 
+     *
      * @param className the class name
      * @param arg0 the message
      */
@@ -712,7 +716,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message.
-     * 
+     *
      * @param arg0 the message
      */
     public static void debug(String arg0) {
@@ -722,7 +726,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message.
-     * 
+     *
      * @param arg0 the message
      */
     public static void debug(Object arg0) {
@@ -733,7 +737,7 @@ public class PolicyLogger {
 
     /**
      * Records a message with passed in message code, hrowable object, a list of string values.
-     * 
+     *
      * @param msg the message code
      * @param arg0 the throwable
      * @param arguments the messages
@@ -747,7 +751,7 @@ public class PolicyLogger {
     /**
      * Records a message with passed in message code, class name, Throwable object, a list of
      * string. values
-     * 
+     *
      * @param msg the message code
      * @param className the class name
      * @param arg0 the throwable
@@ -761,7 +765,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message with its class name.
-     * 
+     *
      * @param className the class name
      * @param arg0 the message
      */
@@ -773,7 +777,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message.
-     * 
+     *
      * @param arg0 the message
      */
     public static void audit(Object arg0) {
@@ -832,7 +836,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message with its class name.
-     * 
+     *
      * @param className the class name
      * @param arg0 the message
      */
@@ -843,7 +847,7 @@ public class PolicyLogger {
 
     /**
      * Records only one String message.
-     * 
+     *
      * @param arg0 the message
      */
     public static void trace(Object arg0) {
@@ -854,7 +858,7 @@ public class PolicyLogger {
 
     /**
      * Records the starting time of the event with its request Id as the key.
-     * 
+     *
      * @param eventId the event ID
      */
     public static void recordAuditEventStart(String eventId) {
@@ -895,7 +899,7 @@ public class PolicyLogger {
 
     /**
      * Records the starting time of the event with its request Id as the key.
-     * 
+     *
      * @param eventId the event ID
      */
     public static void recordAuditEventStart(UUID eventId) {
@@ -914,7 +918,7 @@ public class PolicyLogger {
 
     /**
      * Records the ending time of the event with its request Id as the key.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      */
@@ -933,7 +937,7 @@ public class PolicyLogger {
 
     /**
      * Records the ending time of the event with its request Id as the key.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      * @param policyVersion the policy version
@@ -953,7 +957,7 @@ public class PolicyLogger {
 
     /**
      * Records the ending time of the event with its request Id as the key.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      * @param policyVersion the policy version
@@ -971,7 +975,7 @@ public class PolicyLogger {
 
     /**
      * Records the ending time of the event with its request Id as the key.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      */
@@ -987,7 +991,7 @@ public class PolicyLogger {
 
     /**
      * Records the ending time of the event with its request Id as the key.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      * @param policyVersion the policy version
@@ -1012,7 +1016,7 @@ public class PolicyLogger {
 
     /**
      * Records the ending time of the event with its request Id as the key.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      */
@@ -1044,7 +1048,7 @@ public class PolicyLogger {
 
     /**
      * Records the audit with an event starting and ending times.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      * @param startTime the start time
@@ -1091,7 +1095,7 @@ public class PolicyLogger {
 
     /**
      * Records the metrics with an event Id and log message.
-     * 
+     *
      * @param eventId the event ID
      * @param arg1 the message
      */
@@ -1107,7 +1111,7 @@ public class PolicyLogger {
 
     /**
      * Records the metrics with an event Id, class name and log message.
-     * 
+     *
      * @param eventId the event ID
      * @param className the class name
      * @param arg1 the message
@@ -1124,7 +1128,7 @@ public class PolicyLogger {
 
     /**
      * Records the metrics with an event Id and log message.
-     * 
+     *
      * @param eventId the event ID
      * @param arg1 the message
      */
@@ -1140,7 +1144,7 @@ public class PolicyLogger {
 
     /**
      * Records a String message for metrics logs.
-     * 
+     *
      * @param arg0 the message
      */
     public static void recordMetricEvent(String arg0) {
@@ -1152,7 +1156,7 @@ public class PolicyLogger {
 
     /**
      * Records the metrics event with a String message.
-     * 
+     *
      * @param arg0 the message
      */
     public static void metrics(String arg0) {
@@ -1162,7 +1166,7 @@ public class PolicyLogger {
 
     /**
      * Records the metrics event with a class name and a String message.
-     * 
+     *
      * @param arg0 the message
      */
     public static void metrics(String className, Object arg0) {
@@ -1174,7 +1178,7 @@ public class PolicyLogger {
 
     /**
      * Records the metrics event with a String message.
-     * 
+     *
      * @param arg0 the message
      */
     public static void metrics(Object arg0) {
@@ -1186,7 +1190,7 @@ public class PolicyLogger {
 
     /**
      * Records the metrics event with a String message.
-     * 
+     *
      * @param arg0 the message
      */
     public static void metricsPrintln(String arg0) {
@@ -1196,7 +1200,7 @@ public class PolicyLogger {
 
     /**
      * Removes all the return lines from the printStackTrace.
-     * 
+     *
      * @param throwable the throwable
      * @param arguments the messages
      */

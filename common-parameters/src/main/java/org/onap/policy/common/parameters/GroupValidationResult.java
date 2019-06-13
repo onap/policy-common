@@ -1,4 +1,4 @@
-/*
+/*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
@@ -27,26 +27,17 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * This class holds the result of the validation of a parameter group.
  */
-public class GroupValidationResult implements ValidationResult {
+public class GroupValidationResult extends CommonGroupValidationResult {
     // The parameter group which the validation result applies
     private final ParameterGroup parameterGroup;
-
-    // Validation status for the entire parameter class
-    private ValidationStatus status = ValidationStatus.CLEAN;
-    private String message = ParameterConstants.PARAMETER_GROUP_HAS_STATUS_MESSAGE + status.toString();
-
-    // Validation results for each parameter in the group
-    private final Map<String, ValidationResult> validationResultMap = new LinkedHashMap<>();
 
     /**
      * Constructor, create the field validation result with default arguments.
@@ -54,6 +45,8 @@ public class GroupValidationResult implements ValidationResult {
      * @param parameterGroup the parameter group being validated
      */
     public GroupValidationResult(final ParameterGroup parameterGroup) {
+        super(ParameterConstants.PARAMETER_GROUP_HAS_STATUS_MESSAGE);
+
         this.parameterGroup = parameterGroup;
 
         // Parameter group definitions may be optional
@@ -245,42 +238,6 @@ public class GroupValidationResult implements ValidationResult {
     }
 
     /**
-     * Gets the status of validation.
-     *
-     * @return the status
-     */
-    @Override
-    public ValidationStatus getStatus() {
-        return status;
-    }
-
-    /**
-     * Set the validation result on a parameter group.
-     *
-     * @param status The validation status the parameter group is receiving
-     * @param message The validation message explaining the validation status
-     */
-    @Override
-    public void setResult(ValidationStatus status, String message) {
-        setResult(status);
-        this.message = message;
-    }
-
-    /**
-     * Set the validation result on a parameter group. On a sequence of calls, the most serious validation status is
-     * recorded, assuming the status enum ordinal increase in order of severity
-     *
-     * @param status The validation status the parameter group is receiving
-     */
-    public void setResult(final ValidationStatus status) {
-        //
-        if (this.status.ordinal() < status.ordinal()) {
-            this.status = status;
-            this.message = ParameterConstants.PARAMETER_GROUP_HAS_STATUS_MESSAGE + status.toString();
-        }
-    }
-
-    /**
      * Set the validation result on a parameter in a parameter group.
      *
      * @param parameterName The name of the parameter
@@ -375,47 +332,19 @@ public class GroupValidationResult implements ValidationResult {
         this.setResult(status);
     }
 
-    /**
-     * Gets the validation result.
-     *
-     * @param initialIndentation the indentation to use on the main result output
-     * @param subIndentation the indentation to use on sub parts of the result output
-     * @param showClean output information on clean fields
-     * @return the result
-     */
     @Override
-    public String getResult(final String initialIndentation, final String subIndentation, final boolean showClean) {
-        if (status == ValidationStatus.CLEAN && !showClean) {
-            return null;
-        }
-
-        StringBuilder validationResultBuilder = new StringBuilder();
-
-        validationResultBuilder.append(initialIndentation);
-        validationResultBuilder.append("parameter group \"");
+    protected void addGroupTypeName(StringBuilder result) {
+        result.append("parameter group \"");
 
         if (parameterGroup != null) {
-            validationResultBuilder.append(parameterGroup.getName());
-            validationResultBuilder.append("\" type \"");
-            validationResultBuilder.append(parameterGroup.getClass().getCanonicalName());
+            result.append(parameterGroup.getName());
+            result.append("\" type \"");
+            result.append(parameterGroup.getClass().getCanonicalName());
         } else {
-            validationResultBuilder.append("UNDEFINED");
-        }
-        validationResultBuilder.append("\" ");
-        validationResultBuilder.append(status);
-        validationResultBuilder.append(", ");
-        validationResultBuilder.append(message);
-        validationResultBuilder.append('\n');
-
-        for (ValidationResult fieldResult : validationResultMap.values()) {
-            String fieldResultMessage = fieldResult.getResult(initialIndentation + subIndentation, subIndentation,
-                showClean);
-            if (fieldResultMessage != null) {
-                validationResultBuilder.append(fieldResultMessage);
-            }
+            result.append("UNDEFINED");
         }
 
-        return validationResultBuilder.toString();
+        result.append("\" ");
     }
 
 
