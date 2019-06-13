@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,15 +23,11 @@ package org.onap.policy.common.im.jmx;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
 import javax.management.MBeanServerConnection;
-import javax.management.Notification;
-import javax.management.NotificationListener;
 import javax.management.remote.JMXConnectionNotification;
 import javax.management.remote.JMXConnector;
 import javax.management.remote.JMXConnectorFactory;
 import javax.management.remote.JMXServiceURL;
-
 import org.onap.policy.common.im.IntegrityMonitorException;
 import org.onap.policy.common.logging.flexlogger.FlexLogger;
 import org.onap.policy.common.logging.flexlogger.Logger;
@@ -66,7 +62,7 @@ public final class JmxAgentConnection {
 
     /**
      * Generate jmxAgent url. service:jmx:rmi:///jndi/rmi://host.domain:9999/jmxAgent
-     * 
+     *
      * @param host host.domain
      * @param port 9999
      * @return jmxAgent url.
@@ -78,7 +74,7 @@ public final class JmxAgentConnection {
 
     /**
      * Get a connection to the jmxAgent MBeanServer.
-     * 
+     *
      * @return the connection
      * @throws IntegrityMonitorException on error
      */
@@ -95,14 +91,10 @@ public final class JmxAgentConnection {
 
             connector = JMXConnectorFactory.newJMXConnector(url, env);
             connector.connect();
-            connector.addConnectionNotificationListener(new NotificationListener() {
-
-                @Override
-                public void handleNotification(Notification notification, Object handback) {
-                    if (notification.getType().equals(JMXConnectionNotification.FAILED)) {
-                        // handle disconnect
-                        disconnect();
-                    }
+            connector.addConnectionNotificationListener((notification, handback) -> {
+                if (notification.getType().equals(JMXConnectionNotification.FAILED)) {
+                    // handle disconnect
+                    disconnect();
                 }
             }, null, null);
 

@@ -61,15 +61,34 @@ public class ParameterValidationResult implements ValidationResult {
             }
 
         } else if (parameterValue instanceof Number) {
-            Min minAnnot = field.getAnnotation(Min.class);
-            if (minAnnot != null && ((Number) parameterValue).longValue() < minAnnot.value()) {
-                setResult(ValidationStatus.INVALID, "must be >= " + minAnnot.value());
-            }
+            checkMinValue(field, parameterValue);
+            checkMaxValue(field, parameterValue);
+        }
+    }
 
-            Max maxAnnot = field.getAnnotation(Max.class);
-            if (maxAnnot != null && ((Number) parameterValue).longValue() > maxAnnot.value()) {
-                setResult(ValidationStatus.INVALID, "must be <= " + maxAnnot.value());
-            }
+    /**
+     * Checks the minimum value of a field, if it has the "@Min" annotation.
+     *
+     * @param field field whose value is being validated
+     * @param parameterValue field's value
+     */
+    private void checkMinValue(final Field field, final Object parameterValue) {
+        Min minAnnot = field.getAnnotation(Min.class);
+        if (minAnnot != null && ((Number) parameterValue).longValue() < minAnnot.value()) {
+            setResult(ValidationStatus.INVALID, "must be >= " + minAnnot.value());
+        }
+    }
+
+    /**
+     * Checks the maximum value of a field, if it has the "@Max" annotation.
+     *
+     * @param field field whose value is being validated
+     * @param parameterValue field's value
+     */
+    private void checkMaxValue(final Field field, final Object parameterValue) {
+        Max maxAnnot = field.getAnnotation(Max.class);
+        if (maxAnnot != null && ((Number) parameterValue).longValue() > maxAnnot.value()) {
+            setResult(ValidationStatus.INVALID, "must be <= " + maxAnnot.value());
         }
     }
 

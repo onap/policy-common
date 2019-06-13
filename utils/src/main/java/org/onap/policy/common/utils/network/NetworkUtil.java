@@ -21,7 +21,6 @@
 package org.onap.policy.common.utils.network;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -132,13 +131,13 @@ public class NetworkUtil {
      * @throws InterruptedException if execution has been interrupted
      */
     public static boolean isTcpPortOpen(String host, int port, int retries, long interval)
-            throws InterruptedException, IOException {
+            throws InterruptedException {
         int retry = 0;
         while (retry < retries) {
             try (Socket s = new Socket(host, port)) {
                 logger.debug("{}:{} connected - retries={} interval={}", host, port, retries, interval);
                 return true;
-            } catch (final ConnectException e) {
+            } catch (final IOException e) {
                 retry++;
                 logger.trace("{}:{} connected - retries={} interval={}", host, port, retries, interval, e);
                 Thread.sleep(interval);

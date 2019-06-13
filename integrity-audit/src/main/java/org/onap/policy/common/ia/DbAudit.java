@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -46,6 +46,8 @@ public class DbAudit {
 
     private static final Logger logger = FlexLogger.getLogger(DbAudit.class);
 
+    private static final String COMMA_RESOURCE_NAME = ", resourceName=";
+
     private static final long DB_AUDIT_UPDATE_MS = 5000L;
     private static final long DB_AUDIT_SLEEP_MS = 2000L;
 
@@ -53,7 +55,7 @@ public class DbAudit {
 
     /**
      * Construct an instance with the given DbDao.
-     * 
+     *
      * @param dbDao the DbDao
      */
     public DbAudit(DbDao dbDao) {
@@ -72,7 +74,7 @@ public class DbAudit {
 
     /**
      * dbAudit actually does the audit.
-     * 
+     *
      * @param resourceName the resource name
      * @param persistenceUnit the persistence unit
      * @param nodeType the node type
@@ -165,12 +167,12 @@ public class DbAudit {
             for (IntegrityAuditEntity iae : iaeList) {
                 if (iae.getId() == myIae.getId()) {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("dbAudit: My Id=" + iae.getId() + ", resourceName=" + iae.getResourceName());
+                        logger.debug("dbAudit: My Id=" + iae.getId() + COMMA_RESOURCE_NAME + iae.getResourceName());
                     }
                     continue; // no need to compare with self
                 } else {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("dbAudit: Id=" + iae.getId() + ", resourceName=" + iae.getResourceName());
+                        logger.debug("dbAudit: Id=" + iae.getId() + COMMA_RESOURCE_NAME + iae.getResourceName());
                     }
                 }
                 // Create properties for the other db node
@@ -268,13 +270,13 @@ public class DbAudit {
             for (IntegrityAuditEntity iae : iaeList) {
                 if (iae.getId() == myIae.getId()) {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("dbAudit: Second comparison; My Id=" + iae.getId() + ", resourceName="
+                        logger.debug("dbAudit: Second comparison; My Id=" + iae.getId() + COMMA_RESOURCE_NAME
                                 + iae.getResourceName());
                     }
                     continue; // no need to compare with self
                 } else {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("dbAudit: Second comparison; Id=" + iae.getId() + ", resourceName="
+                        logger.debug("dbAudit: Second comparison; Id=" + iae.getId() + COMMA_RESOURCE_NAME
                                 + iae.getResourceName());
                     }
                 }
@@ -345,7 +347,7 @@ public class DbAudit {
 
     /**
      * Sleeps a bit.
-     * 
+     *
      * @throws IntegrityAuditException if interrupted
      */
     private void sleep() throws IntegrityAuditException {
@@ -360,7 +362,7 @@ public class DbAudit {
 
     /**
      * compareEntries() will compare the lists of entries from the DB.
-     * 
+     *
      * @param myEntries the entries
      * @param theirEntries the entries to compare against myEntries
      * @return the set of differences
@@ -372,10 +374,10 @@ public class DbAudit {
          * audit will walk the local repository hash map comparing to the remote cluster hashmap and
          * then turn it around and walk the remote hashmap and look for any entries that are not
          * present in the local cluster hashmap.
-         * 
+         *
          * If the objects are not identical, the audit will put the object IDs on a list to try
          * after completing the audit of the table it is currently working on.
-         * 
+         *
          */
         HashSet<Object> misMatchedKeySet = new HashSet<>();
         for (Entry<Object, Object> ent : myEntries.entrySet()) {
@@ -409,7 +411,7 @@ public class DbAudit {
 
     /**
      * writeAuditDebugLog() writes the mismatched entry details to the debug log.
-     * 
+     *
      * @param clazzName the class name
      * @param resourceName1 resource name 1
      * @param resourceName2 resource name 2
@@ -441,7 +443,7 @@ public class DbAudit {
 
     /**
      * writeAuditSummaryLog() writes a summary of the DB mismatches to the error log.
-     * 
+     *
      * @param clazzName the name of the class
      * @param resourceName1 resource name 1
      * @param resourceName2 resource name 2
