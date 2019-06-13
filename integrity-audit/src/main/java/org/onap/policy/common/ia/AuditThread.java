@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -32,7 +32,7 @@ import org.onap.policy.common.logging.flexlogger.Logger;
 
 /**
  * AuditThread is the main thread for the IntegrityAudit.
- * 
+ *
  */
 public class AuditThread extends Thread {
 
@@ -55,7 +55,7 @@ public class AuditThread extends Thread {
      * May be modified by JUnit tests.
      */
     private static final long AUDIT_THREAD_SLEEP_INTERVAL_MS = 5000L;
-    
+
     /*
      * String constants.
      */
@@ -102,16 +102,11 @@ public class AuditThread extends Thread {
     /*
      * Used to create a list that is sorted lexicographically by resourceName.
      */
-    Comparator<IntegrityAuditEntity> comparator = new Comparator<IntegrityAuditEntity>() {
-        @Override
-        public int compare(final IntegrityAuditEntity r1, final IntegrityAuditEntity r2) {
-            return r1.getResourceName().compareTo(r2.getResourceName());
-        }
-    };
+    Comparator<IntegrityAuditEntity> comparator = (r1, r2) -> r1.getResourceName().compareTo(r2.getResourceName());
 
     /**
      * AuditThread constructor.
-     * 
+     *
      * @param resourceName the resource name
      * @param persistenceUnit the persistence unit
      * @param properties the properties
@@ -121,7 +116,7 @@ public class AuditThread extends Thread {
      */
     public AuditThread(String resourceName, String persistenceUnit, Properties properties,
             int integrityAuditPeriodSeconds, IntegrityAudit integrityAudit) throws IntegrityAuditException {
-        
+
         this.resourceName = resourceName;
         this.persistenceUnit = persistenceUnit;
         this.properties = properties;
@@ -307,7 +302,7 @@ public class AuditThread extends Thread {
     /**
      * Determines if an exception is an InterruptedException or was caused by an
      * InterruptedException.
-     * 
+     *
      * @param ex exception to be examined
      * @return {@code true} if it's an InterruptedException, {@code false} otherwise
      */
@@ -472,7 +467,7 @@ public class AuditThread extends Thread {
 
     /**
      * getEntityCurrentlyDesignated() Returns entity that is currently designated.
-     * 
+     *
      * @param integrityAuditEntityList the integrity audit entity list
      * @return the currently designated integrity audit entity
      */
@@ -514,7 +509,7 @@ public class AuditThread extends Thread {
 
     /**
      * getIntegrityAuditEnityList gets the list of IntegrityAuditEntity.
-     * 
+     *
      * @return the list of IntegrityAuditEntity
      * @throws DbDaoTransactionException if an error occurs getting the list of IntegrityAuditEntity
      */
@@ -550,7 +545,7 @@ public class AuditThread extends Thread {
 
     /**
      * Returns the IntegrityAuditEntity for this entity.
-     * 
+     *
      * @param integrityAuditEntityList the list of IntegrityAuditEntity
      * @return the IntegrityAuditEntity for this entity
      */
@@ -593,7 +588,7 @@ public class AuditThread extends Thread {
      * auditCompletionIntervalMillis seconds ago. During an audit, lastUpdated is updated every five
      * seconds or so, but when an audit finishes, the node doing the audit stops updating
      * lastUpdated.
-     * 
+     *
      * @param integrityAuditEntity the integrityAuditEntity
      * @return false if the lastUpdated time for the record in question is more than
      *         auditCompletionIntervalMillis seconds ago
@@ -645,11 +640,11 @@ public class AuditThread extends Thread {
     /*
      * If more than (auditCompletionIntervalMillis * 2) milliseconds have elapsed since we last ran
      * the audit, reset auditCompleted, so
-     * 
+     *
      * 1) we'll eventually re-run the audit, if no other node picks up the designation.
-     * 
+     *
      * or
-     * 
+     *
      * 2) We'll run the audit when the round robin comes back to us.
      */
     private boolean resetAuditCompleted(boolean auditCompleted, IntegrityAuditEntity thisEntity) {
@@ -716,7 +711,7 @@ public class AuditThread extends Thread {
     /**
      * Indicates that the {@link #run()} method has started. This method simply returns,
      * and may overridden by junit tests.
-     * 
+     *
      * @throws InterruptedException can be interrupted
      */
     public void runStarted() throws InterruptedException {
@@ -726,7 +721,7 @@ public class AuditThread extends Thread {
     /**
      * Indicates that an audit has completed. This method simply returns, and may
      * overridden by junit tests.
-     * 
+     *
      * @throws InterruptedException can be interrupted
      */
     public void auditCompleted() throws InterruptedException {

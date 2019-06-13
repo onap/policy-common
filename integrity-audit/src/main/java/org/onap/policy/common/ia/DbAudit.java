@@ -45,6 +45,8 @@ import org.onap.policy.common.logging.flexlogger.Logger;
 public class DbAudit {
 
     private static final Logger logger = FlexLogger.getLogger(DbAudit.class);
+    
+    private static final String COMMA_RESOURCE_NAME = ", resourceName=";
 
     private static final long DB_AUDIT_UPDATE_MS = 5000L;
     private static final long DB_AUDIT_SLEEP_MS = 2000L;
@@ -165,12 +167,12 @@ public class DbAudit {
             for (IntegrityAuditEntity iae : iaeList) {
                 if (iae.getId() == myIae.getId()) {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("dbAudit: My Id=" + iae.getId() + ", resourceName=" + iae.getResourceName());
+                        logger.debug("dbAudit: My Id=" + iae.getId() + COMMA_RESOURCE_NAME + iae.getResourceName());
                     }
                     continue; // no need to compare with self
                 } else {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("dbAudit: Id=" + iae.getId() + ", resourceName=" + iae.getResourceName());
+                        logger.debug("dbAudit: Id=" + iae.getId() + COMMA_RESOURCE_NAME + iae.getResourceName());
                     }
                 }
                 // Create properties for the other db node
@@ -268,13 +270,13 @@ public class DbAudit {
             for (IntegrityAuditEntity iae : iaeList) {
                 if (iae.getId() == myIae.getId()) {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("dbAudit: Second comparison; My Id=" + iae.getId() + ", resourceName="
+                        logger.debug("dbAudit: Second comparison; My Id=" + iae.getId() + COMMA_RESOURCE_NAME
                                 + iae.getResourceName());
                     }
                     continue; // no need to compare with self
                 } else {
                     if (logger.isDebugEnabled()) {
-                        logger.debug("dbAudit: Second comparison; Id=" + iae.getId() + ", resourceName="
+                        logger.debug("dbAudit: Second comparison; Id=" + iae.getId() + COMMA_RESOURCE_NAME
                                 + iae.getResourceName());
                     }
                 }

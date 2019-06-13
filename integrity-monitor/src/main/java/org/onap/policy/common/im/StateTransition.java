@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,7 +20,10 @@
 
 package org.onap.policy.common.im;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -39,7 +42,7 @@ public class StateTransition {
     public static final String AVAILABLE_STATUS = "availStatus";
     public static final String STANDBY_STATUS = "standbyStatus";
     public static final String ACTOIN_NAME = "actionName";
-    
+
     /*
      * Common strings.
      */
@@ -49,33 +52,39 @@ public class StateTransition {
     private static final String STANDBY_STRING = "], standbyStatus=[";
     private static final String ACTION_STRING = "], actionName=[";
 
-    private HashMap<String, String> stateTable = new HashMap<>();
+    /*
+     * Valid values for each type.
+     */
+    private static final Set<String> VALID_ADMIN_STATE = Collections
+                    .unmodifiableSet(new HashSet<>(Arrays.asList(StateManagement.LOCKED, StateManagement.UNLOCKED)));
+
+    private static final Set<String> VALID_OP_STATE = Collections
+                    .unmodifiableSet(new HashSet<>(Arrays.asList(StateManagement.ENABLED, StateManagement.DISABLED)));
+
+    private static final Set<String> VALID_STANDBY_STATUS = Collections.unmodifiableSet(
+                    new HashSet<>(Arrays.asList(StateManagement.NULL_VALUE, StateManagement.COLD_STANDBY,
+                                    StateManagement.HOT_STANDBY, StateManagement.PROVIDING_SERVICE)));
+
+    private static final Set<String> VALID_AVAIL_STATUS = Collections
+                    .unmodifiableSet(new HashSet<>(Arrays.asList(StateManagement.NULL_VALUE, StateManagement.DEPENDENCY,
+                                    StateManagement.DEPENDENCY_FAILED, StateManagement.FAILED)));
+
+    private static final Set<String> VALID_ACTION_NAME =
+                    Collections.unmodifiableSet(new HashSet<>(Arrays.asList(StateManagement.DEMOTE,
+                                    StateManagement.DISABLE_DEPENDENCY, StateManagement.DISABLE_FAILED,
+                                    StateManagement.ENABLE_NO_DEPENDENCY, StateManagement.ENABLE_NOT_FAILED,
+                                    StateManagement.LOCK, StateManagement.PROMOTE, StateManagement.UNLOCK)));
+
 
     /**
-     * StateTransition constructor.
-     * 
-     * @throws StateTransitionException if an error occurs
+     * State-transition table.
      */
-    public StateTransition() throws StateTransitionException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("StateTransition constructor");
-        }
+    private static final Map<String, String> STATE_TABLE = Collections.unmodifiableMap(makeStateTable());
 
-        try {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Load StateTable started");
-            }
-
-            setupStateTable();
-        } catch (Exception ex) {
-            logger.error("StateTransition threw exception.", ex);
-            throw new StateTransitionException("StateTransition Exception: " + ex.toString());
-        }
-    }
 
     /**
      * Calculates the state transition and returns the end state.
-     * 
+     *
      * @param adminState the administration state
      * @param opState the operational state
      * @param availStatus the availability status
@@ -86,53 +95,29 @@ public class StateTransition {
      */
     public StateElement getEndingState(String adminState, String opState, String availStatus, String standbyStatus,
             String actionName) throws StateTransitionException {
-        if (logger.isDebugEnabled()) {
-            logger.debug("getEndingState");
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug("adminState=[{}], opState=[{}], availStatus=[{}], standbyStatus=[{}], actionName[{}]",
-                    adminState, opState, availStatus, standbyStatus, actionName);
-        }
+        logger.debug("getEndingState");
+        logger.debug("adminState=[{}], opState=[{}], availStatus=[{}], standbyStatus=[{}], actionName[{}]",
+                        adminState, opState, availStatus, standbyStatus, actionName);
         if (availStatus == null) {
-            availStatus = "null";
+            availStatus = StateManagement.NULL_VALUE;
         }
         if (standbyStatus == null) {
-            standbyStatus = "null";
+            standbyStatus = StateManagement.NULL_VALUE;
         }
-        if (adminState == null || opState == null || actionName == null) {
-            throw new StateTransitionException(EXCEPTION_STRING
-                    + adminState + OPSTATE_STRING + opState + AVAILSTATUS_STRING + availStatus + STANDBY_STRING
-                    + standbyStatus + ACTION_STRING + actionName + "]");
-        } else if (!(adminState.equals(StateManagement.LOCKED) || adminState.equals(StateManagement.UNLOCKED))) {
-            throw new StateTransitionException(EXCEPTION_STRING
-                    + adminState + OPSTATE_STRING + opState + AVAILSTATUS_STRING + availStatus + STANDBY_STRING
-                    + standbyStatus + ACTION_STRING + actionName + "]");
-        } else if (!(opState.equals(StateManagement.ENABLED) || opState.equals(StateManagement.DISABLED))) {
-            throw new StateTransitionException(EXCEPTION_STRING
-                    + adminState + OPSTATE_STRING + opState + AVAILSTATUS_STRING + availStatus + STANDBY_STRING
-                    + standbyStatus + ACTION_STRING + actionName + "]");
-        } else if (!(standbyStatus.equals(StateManagement.NULL_VALUE)
-                || standbyStatus.equals(StateManagement.COLD_STANDBY)
-                || standbyStatus.equals(StateManagement.HOT_STANDBY)
-                || standbyStatus.equals(StateManagement.PROVIDING_SERVICE))) {
-            throw new StateTransitionException(EXCEPTION_STRING
-                    + adminState + OPSTATE_STRING + opState + AVAILSTATUS_STRING + availStatus + STANDBY_STRING
-                    + standbyStatus + ACTION_STRING + actionName + "]");
-        } else if (!(availStatus.equals(StateManagement.NULL_VALUE) || availStatus.equals(StateManagement.DEPENDENCY)
-                || availStatus.equals(StateManagement.DEPENDENCY_FAILED)
-                || availStatus.equals(StateManagement.FAILED))) {
-            throw new StateTransitionException(EXCEPTION_STRING
-                    + adminState + OPSTATE_STRING + opState + AVAILSTATUS_STRING + availStatus + STANDBY_STRING
-                    + standbyStatus + ACTION_STRING + actionName + "]");
-        } else if (!(actionName.equals(StateManagement.DEMOTE) || actionName.equals(StateManagement.DISABLE_DEPENDENCY)
-                || actionName.equals(StateManagement.DISABLE_FAILED)
-                || actionName.equals(StateManagement.ENABLE_NO_DEPENDENCY)
-                || actionName.equals(StateManagement.ENABLE_NOT_FAILED) || actionName.equals(StateManagement.LOCK)
-                || actionName.equals(StateManagement.PROMOTE) || actionName.equals(StateManagement.UNLOCK))) {
-            throw new StateTransitionException(EXCEPTION_STRING
-                    + adminState + OPSTATE_STRING + opState + AVAILSTATUS_STRING + availStatus + STANDBY_STRING
-                    + standbyStatus + ACTION_STRING + actionName + "]");
+
+        if (!VALID_ADMIN_STATE.contains(adminState) || !VALID_OP_STATE.contains(opState)
+                        || !VALID_STANDBY_STATUS.contains(standbyStatus)) {
+            throw new StateTransitionException(
+                            EXCEPTION_STRING + adminState + OPSTATE_STRING + opState + AVAILSTATUS_STRING + availStatus
+                                            + STANDBY_STRING + standbyStatus + ACTION_STRING + actionName + "]");
         }
+
+        if (!VALID_AVAIL_STATUS.contains(availStatus) || !VALID_ACTION_NAME.contains(actionName)) {
+            throw new StateTransitionException(
+                            EXCEPTION_STRING + adminState + OPSTATE_STRING + opState + AVAILSTATUS_STRING + availStatus
+                                            + STANDBY_STRING + standbyStatus + ACTION_STRING + actionName + "]");
+        }
+
 
         StateElement stateElement = new StateElement();
         try {
@@ -145,7 +130,7 @@ public class StateTransition {
             if (logger.isDebugEnabled()) {
                 logger.debug("Ending State search key: {}", key);
             }
-            String value = stateTable.get(key);
+            String value = STATE_TABLE.get(key);
 
             if (value != null) {
                 try {
@@ -189,7 +174,7 @@ public class StateTransition {
      * endingAdminState,endingOpState,endingAvailStatus,endingStandbyStatus,exception Note : Use
      * period instead of comma as seperator when store multi-value endingStandbyStatus (convert to
      * comma during retrieval)
-     * 
+     *
      * <p>Note on illegal state/status combinations: This table has many state/status combinations
      * that should never occur. However, they *may* occur due to corruption or manual manipulation
      * of the DB. So, in each case of an illegal combination, the state/status is first corrected
@@ -199,18 +184,18 @@ public class StateTransition {
      * availability status is left null until a disabledfailed or disableddependency action is
      * received. Or, if a enableNotFailed or enableNoDependency is received while the availability
      * status is null, it will remain null, but the Operational state will change to enabled.
-     * 
+     *
      * <p>If the standby status is not in agreement with the administrative and/or operational
      * states, it is brought into agreement. For example, if the administrative state is locked and
      * the standby status is providingservice, the standby status is changed to coldstandby.
-     * 
+     *
      * <p>After bringing the states/status attributes into agreement, *then* the action is applied
      * to them. For example, if the administrative state is locked, the operational state is
      * enabled, the availability status is null, the standby status is providingservice and the
      * action is unlock, the standby status is changed to coldstandby and then the unlock action is
      * applied. This will change the final state/status to administrative state = unlocked,
      * operational state = disabled, availability status = null and standby status = hotstandby.
-     * 
+     *
      * <p>Note on standby status: If the starting state of standby status is null and either a
      * promote or demote action is made, the assumption is that standbystatus is supported and
      * therefore, the standby status will be changed to providingservice, hotstandby or coldstandby
@@ -221,9 +206,13 @@ public class StateTransition {
      * operational state such that they are unlocked and enabled, the standby status is
      * automatically transitioned to hotstandby since it is only those two states that can hold the
      * statndby status in the coldstandby value.
+     *
+     * @return a new state-transaction table
      */
 
-    private void setupStateTable() {
+    private static Map<String, String> makeStateTable() {
+        Map<String,String> stateTable = new HashMap<>();
+
         stateTable.put("unlocked,enabled,null,null,lock", "locked,enabled,null,null,");
         stateTable.put("unlocked,enabled,null,null,unlock", "unlocked,enabled,null,null,");
         stateTable.put("unlocked,enabled,null,null,disableFailed", "unlocked,disabled,failed,null,");
@@ -934,13 +923,15 @@ public class StateTransition {
                 "locked,disabled,dependency.failed,coldstandby,StandbyStatusException");
         stateTable.put("locked,disabled,dependency.failed,providingservice,demote",
                 "locked,disabled,dependency.failed,coldstandby,");
+
+        return stateTable;
     }
 
     /**
      * Display the state table.
      */
     public void displayStateTable() {
-        Set<?> set = stateTable.entrySet();
+        Set<?> set = STATE_TABLE.entrySet();
         Iterator<?> iter = set.iterator();
 
         while (iter.hasNext()) {
