@@ -28,7 +28,6 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -40,6 +39,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
+import org.onap.policy.common.utils.network.NetworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -105,7 +105,7 @@ public class HttpServerTest {
         request.setText(SOME_TEXT);
         String reqText = gson.toJson(request);
 
-        String response = http(HttpServletServer.factory.get(port), portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
         assertEquals(reqText, response);
     }
 
@@ -127,7 +127,7 @@ public class HttpServerTest {
         request.setText(SOME_TEXT);
         String reqText = gson.toJson(request);
 
-        String response = http(HttpServletServer.factory.get(port), portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
         assertEquals(reqText, response);
 
         assertTrue(MyJacksonProvider.hasReadSome());
@@ -155,7 +155,7 @@ public class HttpServerTest {
         request.setText(SOME_TEXT);
         String reqText = gson.toJson(request);
 
-        String response = http(HttpServletServer.factory.get(port), portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
         assertEquals(reqText, response);
 
         assertTrue(MyGsonProvider.hasReadSome());
@@ -181,7 +181,7 @@ public class HttpServerTest {
         request.setText(SOME_TEXT);
         String reqText = gson.toJson(request);
 
-        String response = http(HttpServletServer.factory.get(port), portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
         assertEquals(reqText, response);
     }
 
@@ -202,7 +202,7 @@ public class HttpServerTest {
         request.setText(SOME_TEXT);
         String reqText = gson.toJson(request);
 
-        String response = http(HttpServletServer.factory.get(port), portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
         assertEquals(reqText, response);
 
         assertTrue(MyJacksonProvider.hasReadSome());
@@ -229,7 +229,7 @@ public class HttpServerTest {
         request.setText(SOME_TEXT);
         String reqText = gson.toJson(request);
 
-        String response = http(HttpServletServer.factory.get(port), portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
         assertEquals(reqText, response);
 
         assertTrue(MyGsonProvider.hasReadSome());
@@ -261,18 +261,18 @@ public class HttpServerTest {
         assertTrue(HttpServletServer.factory.get(port).isAlive());
         assertFalse(HttpServletServer.factory.get(port).isAaf());
 
-        String response = http(HttpServletServer.factory.get(port), portUrl + JUNIT_ECHO_HELLO);
+        String response = http(portUrl + JUNIT_ECHO_HELLO);
         assertEquals(HELLO, response);
 
         response = null;
         try {
-            response = http(HttpServletServer.factory.get(port), portUrl + SWAGGER_JSON);
+            response = http(portUrl + SWAGGER_JSON);
         } catch (IOException e) {
             // Expected
         }
         assertTrue(response == null);
 
-        response = http(HttpServletServer.factory.get(port), portUrl + "/junit/echo/hello?block=true");
+        response = http(portUrl + "/junit/echo/hello?block=true");
         assertEquals("FILTERED", response);
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());
@@ -302,18 +302,18 @@ public class HttpServerTest {
         assertTrue(HttpServletServer.factory.get(port).isAlive());
         assertTrue(HttpServletServer.factory.get(port2).isAlive());
 
-        String response = http(HttpServletServer.factory.get(port), portUrl + JUNIT_ECHO_HELLO);
+        String response = http(portUrl + JUNIT_ECHO_HELLO);
         assertTrue(HELLO.equals(response));
 
-        response = http(HttpServletServer.factory.get(port), portUrl + SWAGGER_JSON);
+        response = http(portUrl + SWAGGER_JSON);
         assertTrue(response != null);
 
-        response = http(HttpServletServer.factory.get(port2), LOCALHOST_PREFIX + port2 + JUNIT_ECHO_HELLO);
+        response = http(LOCALHOST_PREFIX + port2 + JUNIT_ECHO_HELLO);
         assertTrue(HELLO.equals(response));
 
         response = null;
         try {
-            response = http(HttpServletServer.factory.get(port2), LOCALHOST_PREFIX + port2 + SWAGGER_JSON);
+            response = http(LOCALHOST_PREFIX + port2 + SWAGGER_JSON);
         } catch (IOException e) {
             // Expected
         }
@@ -335,10 +335,10 @@ public class HttpServerTest {
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());
 
-        String response = http(HttpServletServer.factory.get(port), portUrl + JUNIT_ECHO_HELLO);
+        String response = http(portUrl + JUNIT_ECHO_HELLO);
         assertTrue(HELLO.equals(response));
 
-        response = http(HttpServletServer.factory.get(port), portUrl + "/junit/endpoints/http/servers");
+        response = http(portUrl + "/junit/endpoints/http/servers");
         assertTrue(response.contains(randomName));
 
         HttpServletServer.factory.destroy();
@@ -356,7 +356,7 @@ public class HttpServerTest {
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());
 
-        String response = http(HttpServletServer.factory.get(port), portUrl + JUNIT_ECHO_HELLO);
+        String response = http(portUrl + JUNIT_ECHO_HELLO);
         assertTrue(HELLO.equals(response));
 
         HttpServletServer.factory.destroy();
@@ -376,10 +376,10 @@ public class HttpServerTest {
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());
 
-        String response = http(HttpServletServer.factory.get(port), portUrl + JUNIT_ECHO_HELLO);
+        String response = http(portUrl + JUNIT_ECHO_HELLO);
         assertTrue(HELLO.equals(response));
 
-        response = http(HttpServletServer.factory.get(port), portUrl + "/junit/endpoints/http/servers");
+        response = http(portUrl + "/junit/endpoints/http/servers");
         assertTrue(response.contains(randomName));
 
         HttpServletServer.factory.destroy();
@@ -393,27 +393,13 @@ public class HttpServerTest {
      * @throws IOException thrown is IO exception occurs
      * @throws InterruptedException thrown if thread interrupted occurs
      */
-    protected String http(HttpServletServer server, String urlString)
+    protected String http(String urlString)
             throws IOException, InterruptedException {
         URL url = new URL(urlString);
-        String response = null;
-        int numRetries = 1;
-        int maxNumberRetries = 5;
-        while (numRetries <= maxNumberRetries) {
-            try {
-                URLConnection conn = url.openConnection();
-                response = response(conn);
-                break;
-            } catch (ConnectException e) {
-                logger.warn("http server {} @ {} ({}) - cannot connect yet ..", server, urlString, numRetries, e);
-                numRetries++;
-                Thread.sleep(10000L);
-            } catch (Exception e) {
-                throw e;
-            }
+        if (!NetworkUtil.isTcpPortOpen(url.getHost(), url.getPort(), 25, 2)) {
+            throw new IllegalStateException("port never opened: " + url);
         }
-
-        return response;
+        return response(url.openConnection());
     }
 
     /**
@@ -423,32 +409,18 @@ public class HttpServerTest {
      * @throws IOException thrown is IO exception occurs
      * @throws InterruptedException thrown if thread interrupted occurs
      */
-    protected String http(HttpServletServer server, String urlString, String post)
+    protected String http(String urlString, String post)
             throws IOException, InterruptedException {
         URL url = new URL(urlString);
-        String response = null;
-        int numRetries = 1;
-        int maxNumberRetries = 5;
-        while (numRetries <= maxNumberRetries) {
-            try {
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setDoOutput(true);
-                conn.setRequestProperty("Content-Type", "application/json");
-                IOUtils.write(post, conn.getOutputStream());
-                response = response(conn);
-                break;
-            } catch (ConnectException e) {
-                logger.warn("http server {} @ {} ({}) - cannot connect yet ..", server, urlString, numRetries, e);
-                numRetries++;
-                Thread.sleep(10000L);
-            } catch (Exception e) {
-                logger.error("http error", e);
-                throw e;
-            }
+        if (!NetworkUtil.isTcpPortOpen(url.getHost(), url.getPort(), 25, 2)) {
+            throw new IllegalStateException("port never opened: " + url);
         }
-
-        return response;
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("POST");
+        conn.setDoOutput(true);
+        conn.setRequestProperty("Content-Type", "application/json");
+        IOUtils.write(post, conn.getOutputStream());
+        return response(conn);
     }
 
     /**
