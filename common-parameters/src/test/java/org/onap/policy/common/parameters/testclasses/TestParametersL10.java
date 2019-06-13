@@ -24,6 +24,7 @@ package org.onap.policy.common.parameters.testclasses;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.parameters.ParameterConstants;
 import org.onap.policy.common.parameters.ParameterGroupImpl;
@@ -146,7 +147,7 @@ public class TestParametersL10 extends ParameterGroupImpl {
     public GroupValidationResult validate() {
         GroupValidationResult validationResult = super.validate();
 
-        if (l10StringField == null || l10StringField.trim().length() == 0) {
+        if (StringUtils.isBlank(l10StringField)) {
             validationResult.setResult(L10_STRING_FIELD, ValidationStatus.INVALID,
                             "l10StringField must be a non-blank string");
         } else if (l10StringField.equals(L10_STRING_FIELD)) {
