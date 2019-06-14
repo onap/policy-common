@@ -339,7 +339,7 @@ public class GroupValidationResult extends CommonGroupValidationResult {
         if (parameterGroup != null) {
             result.append(parameterGroup.getName());
             result.append("\" type \"");
-            result.append(parameterGroup.getClass().getCanonicalName());
+            result.append(parameterGroup.getClass().getName());
         } else {
             result.append("UNDEFINED");
         }

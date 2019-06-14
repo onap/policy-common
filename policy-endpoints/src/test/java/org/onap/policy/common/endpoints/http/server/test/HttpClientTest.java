@@ -118,10 +118,10 @@ public class HttpClientTest {
                 HttpServletServer.factory.build("echo", true, LOCALHOST, 6667, "/", false, true);
         echoServerAuth.setBasicAuthentication("x", "y", null);
         echoServerAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
-        echoServerAuth.addFilterClass("/*", TestFilter.class.getCanonicalName());
-        echoServerAuth.addFilterClass("/*", TestAuthorizationFilter.class.getCanonicalName());
-        echoServerAuth.addFilterClass("/*", TestAafAuthFilter.class.getCanonicalName());
-        echoServerAuth.addFilterClass("/*", TestAafGranularAuthFilter.class.getCanonicalName());
+        echoServerAuth.addFilterClass("/*", TestFilter.class.getName());
+        echoServerAuth.addFilterClass("/*", TestAuthorizationFilter.class.getName());
+        echoServerAuth.addFilterClass("/*", TestAafAuthFilter.class.getName());
+        echoServerAuth.addFilterClass("/*", TestAafGranularAuthFilter.class.getName());
         echoServerAuth.waitedStart(5000);
 
         if (!NetworkUtil.isTcpPortOpen(LOCALHOST, echoServerAuth.getPort(), 5, 10000L)) {
@@ -259,7 +259,7 @@ public class HttpClientTest {
         final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName(TEST_HTTP_AUTH_CLIENT)
                         .useHttps(true).allowSelfSignedCerts(true).hostname(LOCALHOST).port(6667)
                         .basePath(JUNIT_ECHO).userName("x").password("y").managed(true)
-                        .serializationProvider(MyJacksonProvider.class.getCanonicalName()).build());
+                        .serializationProvider(MyJacksonProvider.class.getName()).build());
 
         Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
         final Response response = client.put(HELLO, entity, Collections.emptyMap());
@@ -278,7 +278,7 @@ public class HttpClientTest {
         final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName(TEST_HTTP_AUTH_CLIENT)
                         .useHttps(true).allowSelfSignedCerts(true).hostname(LOCALHOST).port(6667)
                         .basePath(JUNIT_ECHO).userName("x").password("y").managed(true)
-                        .serializationProvider(MyGsonProvider.class.getCanonicalName()).build());
+                        .serializationProvider(MyGsonProvider.class.getName()).build());
 
         Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
         final Response response = client.put(HELLO, entity, Collections.emptyMap());
@@ -410,7 +410,7 @@ public class HttpClientTest {
         httpProperties.setProperty(
                         PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_GSON
                                         + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER,
-                        MyGsonProvider.class.getCanonicalName());
+                        MyGsonProvider.class.getName());
 
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_JACKSON
                         + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, LOCALHOST);
@@ -425,7 +425,7 @@ public class HttpClientTest {
         httpProperties.setProperty(
                         PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_JACKSON
                                         + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER,
-                        MyJacksonProvider.class.getCanonicalName());
+                        MyJacksonProvider.class.getName());
 
         final List<HttpClient> clients = HttpClient.factory.build(httpProperties);
         assertEquals(2, clients.size());

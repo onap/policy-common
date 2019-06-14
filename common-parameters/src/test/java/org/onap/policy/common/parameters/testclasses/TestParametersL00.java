@@ -37,7 +37,7 @@ public class TestParametersL00 extends ParameterGroupImpl {
     private static final String A_CONSTANT = "A Constant";
 
     private int l00IntField = 0;
-    private String l00StringField = "Legal " + this.getClass().getCanonicalName();
+    private String l00StringField = "Legal " + this.getClass().getName();
     private TestParametersL10 l00L10Nested = new TestParametersL10("l00L10Nested");
     private TestParametersLGeneric l00LGenericNested = new TestParametersLGeneric("l00LGenericNested");
     private Map<String, TestParametersLGeneric> l00LGenericNestedMap = new LinkedHashMap<>();
@@ -132,7 +132,7 @@ public class TestParametersL00 extends ParameterGroupImpl {
 
         switch (triggerStatus) {
             case CLEAN:
-                l00StringField = "Legal " + this.getClass().getCanonicalName();
+                l00StringField = "Legal " + this.getClass().getName();
                 l00IntField = 0;
                 break;
             case OBSERVATION:

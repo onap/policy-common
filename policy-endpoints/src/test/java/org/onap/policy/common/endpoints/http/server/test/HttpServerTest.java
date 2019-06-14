@@ -95,7 +95,7 @@ public class HttpServerTest {
 
         HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
-        server.addFilterClass("/*", TestFilter.class.getCanonicalName());
+        server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());
@@ -115,9 +115,9 @@ public class HttpServerTest {
 
         HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
 
-        server.setSerializationProvider(MyJacksonProvider.class.getCanonicalName());
+        server.setSerializationProvider(MyJacksonProvider.class.getName());
         server.addServletPackage("/*", this.getClass().getPackage().getName());
-        server.addFilterClass("/*", TestFilter.class.getCanonicalName());
+        server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());
@@ -143,9 +143,9 @@ public class HttpServerTest {
 
         HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
 
-        server.setSerializationProvider(MyGsonProvider.class.getCanonicalName());
+        server.setSerializationProvider(MyGsonProvider.class.getName());
         server.addServletPackage("/*", this.getClass().getPackage().getName());
-        server.addFilterClass("/*", TestFilter.class.getCanonicalName());
+        server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());
@@ -170,8 +170,8 @@ public class HttpServerTest {
         logger.info("-- testDefaultClassServer() --");
 
         HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
-        server.addServletClass("/*", RestEchoService.class.getCanonicalName());
-        server.addFilterClass("/*", TestFilter.class.getCanonicalName());
+        server.addServletClass("/*", RestEchoService.class.getName());
+        server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());
@@ -190,9 +190,9 @@ public class HttpServerTest {
         logger.info("-- testJacksonClassServer() --");
 
         HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
-        server.setSerializationProvider(MyJacksonProvider.class.getCanonicalName());
-        server.addServletClass("/*", RestEchoService.class.getCanonicalName());
-        server.addFilterClass("/*", TestFilter.class.getCanonicalName());
+        server.setSerializationProvider(MyJacksonProvider.class.getName());
+        server.addServletClass("/*", RestEchoService.class.getName());
+        server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());
@@ -217,9 +217,9 @@ public class HttpServerTest {
         logger.info("-- testGsonClassServer() --");
 
         HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
-        server.setSerializationProvider(MyGsonProvider.class.getCanonicalName());
-        server.addServletClass("/*", RestEchoService.class.getCanonicalName());
-        server.addFilterClass("/*", TestFilter.class.getCanonicalName());
+        server.setSerializationProvider(MyGsonProvider.class.getName());
+        server.addServletClass("/*", RestEchoService.class.getName());
+        server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());
@@ -243,7 +243,7 @@ public class HttpServerTest {
     public void testSerialize() {
         HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
-        server.addFilterClass("/*", TestFilter.class.getCanonicalName());
+        server.addFilterClass("/*", TestFilter.class.getName());
 
         // ensure we can serialize the server
         new GsonTestUtils().compareGson(server, HttpServerTest.class);
@@ -255,7 +255,7 @@ public class HttpServerTest {
 
         HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
-        server.addFilterClass("/*", TestFilter.class.getCanonicalName());
+        server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());
@@ -351,7 +351,7 @@ public class HttpServerTest {
         String randomName = UUID.randomUUID().toString();
 
         HttpServletServer server = HttpServletServer.factory.build(randomName, LOCALHOST, port, "/", false, true);
-        server.addServletClass("/*", RestEchoService.class.getCanonicalName());
+        server.addServletClass("/*", RestEchoService.class.getName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());
@@ -370,8 +370,8 @@ public class HttpServerTest {
         String randomName = UUID.randomUUID().toString();
 
         HttpServletServer server = HttpServletServer.factory.build(randomName, LOCALHOST, port, "/", false, true);
-        server.addServletClass("/*", RestEchoService.class.getCanonicalName());
-        server.addServletClass("/*", RestEndpoints.class.getCanonicalName());
+        server.addServletClass("/*", RestEchoService.class.getName());
+        server.addServletClass("/*", RestEndpoints.class.getName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServer.factory.get(port).isAlive());

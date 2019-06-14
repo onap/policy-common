@@ -238,13 +238,13 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     @Override
     public void setAafAuthentication(String filterPath) {
-        this.addFilterClass(filterPath, CadiFilter.class.getCanonicalName());
+        this.addFilterClass(filterPath, CadiFilter.class.getName());
     }
 
     @Override
     public boolean isAaf() {
         for (FilterHolder filter : context.getServletHandler().getFilters()) {
-            if (CadiFilter.class.getCanonicalName().equals(filter.getClassName())) {
+            if (CadiFilter.class.getName().equals(filter.getClassName())) {
                 return true;
             }
         }

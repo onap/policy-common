@@ -34,7 +34,7 @@ public class TestParametersLGeneric extends ParameterGroupImpl {
     private int lgenericIntField = 0;
 
     @NotNull @NotBlank
-    private String lgenericStringField = "Legal " + this.getClass().getCanonicalName();
+    private String lgenericStringField = "Legal " + this.getClass().getName();
 
     /**
      * Default constructor.
@@ -80,7 +80,7 @@ public class TestParametersLGeneric extends ParameterGroupImpl {
 
         switch (triggerStatus) {
             case CLEAN:
-                lgenericStringField = "Legal " + this.getClass().getCanonicalName();
+                lgenericStringField = "Legal " + this.getClass().getName();
                 lgenericIntField = 0;
                 break;
             case OBSERVATION:

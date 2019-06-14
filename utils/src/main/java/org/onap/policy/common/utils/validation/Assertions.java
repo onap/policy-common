@@ -2,6 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2016-2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2019 Nordix Foundation.
+ *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -167,8 +168,8 @@ public final class Assertions {
      */
     public static <T> void instanceOf(final Object objectInstance, final Class<T> requiredClass) {
         if (!requiredClass.isAssignableFrom(objectInstance.getClass())) {
-            throw new IllegalArgumentException(objectInstance.getClass().getCanonicalName() + " is not an instance of "
-                            + requiredClass.getCanonicalName());
+            throw new IllegalArgumentException(objectInstance.getClass().getName() + " is not an instance of "
+                            + requiredClass.getName());
         }
     }
 
@@ -183,8 +184,8 @@ public final class Assertions {
      */
     public static <T> void assignableFrom(final Class<?> checkClass, final Class<T> requiredClass) {
         if (!requiredClass.isAssignableFrom(checkClass)) {
-            throw new IllegalArgumentException(checkClass.getCanonicalName() + " is not an instance of "
-                            + requiredClass.getCanonicalName());
+            throw new IllegalArgumentException(checkClass.getName() + " is not an instance of "
+                            + requiredClass.getName());
         }
     }
 }

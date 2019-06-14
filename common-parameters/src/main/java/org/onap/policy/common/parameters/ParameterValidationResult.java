@@ -163,7 +163,7 @@ public class ParameterValidationResult implements ValidationResult {
         validationResultBuilder.append("field \"");
         validationResultBuilder.append(getName());
         validationResultBuilder.append("\" type \"");
-        validationResultBuilder.append(field.getType().getCanonicalName());
+        validationResultBuilder.append(field.getType().getName());
         validationResultBuilder.append("\" value \"");
         validationResultBuilder.append(parameterValue);
         validationResultBuilder.append("\" ");
