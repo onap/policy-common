@@ -147,146 +147,7 @@ public class AuditThread extends Thread {
             /*
              * Triggers change in designation, unless no other viable candidate.
              */
-            boolean auditCompleted = false;
-
-            DbAudit dbAudit = new DbAudit(dbDao);
-
-            IntegrityAuditEntity entityCurrentlyDesignated;
-            IntegrityAuditEntity thisEntity;
-            integrityAudit.setThreadInitialized(true); // An exception will set it to false
-
-            while (true) {
-                try {
-                    /*
-                     * It may have been awhile since we last cycled through this loop, so refresh
-                     * the list of IntegrityAuditEntities.
-                     */
-                    List<IntegrityAuditEntity> integrityAuditEntityList = getIntegrityAuditEntityList();
-
-                    /*
-                     * We could've set entityCurrentlyDesignated as a side effect of
-                     * getIntegrityAuditEntityList(), but then we would've had to make
-                     * entityCurrentlyDesignated a class level attribute. Using this approach, we
-                     * can keep it local to the run() method.
-                     */
-                    entityCurrentlyDesignated = getEntityCurrentlyDesignated(integrityAuditEntityList);
-
-                    /*
-                     * Need to refresh thisEntity each time through loop, because we need a fresh
-                     * version of lastUpdated.
-                     */
-                    thisEntity = getThisEntity(integrityAuditEntityList);
-
-                    /*
-                     * If we haven't done the audit yet, note that we're current and see if we're
-                     * designated.
-                     */
-                    if (!auditCompleted) {
-                        dbDao.setLastUpdated();
-
-                        /*
-                         * If no current designation or currently designated node is stale, see if
-                         * we're the next node to be designated.
-                         */
-                        if (entityCurrentlyDesignated == null || isStale(entityCurrentlyDesignated)) {
-                            IntegrityAuditEntity designationCandidate =
-                                    getDesignationCandidate(integrityAuditEntityList);
-
-                            /*
-                             * If we're the next node to be designated, run the audit.
-                             */
-                            if (designationCandidate.getResourceName().equals(this.resourceName)) {
-                                runAudit(dbAudit);
-                                auditCompleted = true;
-                            } else {
-                                if (logger.isDebugEnabled()) {
-                                    logger.debug("AuditThread.run: designationCandidate, "
-                                            + designationCandidate.getResourceName() + ", not this entity, "
-                                            + thisEntity.getResourceName());
-                                }
-                            }
-
-                            /*
-                             * Application may have been stopped and restarted, in which case we
-                             * might be designated but auditCompleted will have been reset to false,
-                             * so account for this.
-                             */
-                        } else if (thisEntity.getResourceName().equals(entityCurrentlyDesignated.getResourceName())) {
-
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("AuditThread.run: Re-running audit for " + thisEntity.getResourceName());
-                            }
-                            runAudit(dbAudit);
-                            auditCompleted = true;
-
-                        } else {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("AuditThread.run: Currently designated node, "
-                                        + entityCurrentlyDesignated.getResourceName()
-                                        + ", not yet stale and not this node");
-                            }
-                        }
-
-
-                        /*
-                         * Audit already completed on this node, so allow the node to go stale until
-                         * twice the AUDIT_COMPLETION_PERIOD has elapsed. This should give plenty of
-                         * time for another node (if another node is out there) to pick up
-                         * designation.
-                         */
-                    } else {
-
-                        auditCompleted = resetAuditCompleted(auditCompleted, thisEntity);
-
-                    }
-
-                    /*
-                     * If we've just run audit, sleep per the integrity_audit_period_seconds
-                     * property, otherwise just sleep the normal interval.
-                     */
-                    if (auditCompleted) {
-                        // for junit testing: indicate that an audit has completed
-                        auditCompleted();
-
-                        if (logger.isDebugEnabled()) {
-                            logger.debug("AuditThread.run: Audit completed; resourceName=" + this.resourceName
-                                    + " sleeping " + integrityAuditPeriodSeconds + "s");
-                        }
-                        AuditorTime.getInstance().sleep(integrityAuditPeriodSeconds * 1000L);
-                        if (logger.isDebugEnabled()) {
-                            logger.debug(AUDIT_THREAD_MESSAGE + this.resourceName + " awaking from "
-                                    + integrityAuditPeriodSeconds + "s sleep");
-                        }
-
-                    } else {
-
-                        if (logger.isDebugEnabled()) {
-                            logger.debug(AUDIT_THREAD_MESSAGE + this.resourceName + ": Sleeping "
-                                    + AuditThread.AUDIT_THREAD_SLEEP_INTERVAL_MS + "ms");
-                        }
-                        AuditorTime.getInstance().sleep(AuditThread.AUDIT_THREAD_SLEEP_INTERVAL_MS);
-                        if (logger.isDebugEnabled()) {
-                            logger.debug(AUDIT_THREAD_MESSAGE + this.resourceName + ": Awaking from "
-                                    + AuditThread.AUDIT_THREAD_SLEEP_INTERVAL_MS + "ms sleep");
-                        }
-
-                    }
-
-                } catch (Exception e) {
-                    if (isInterruptedException(e)) {
-                        String msg = "AuditThread.run loop - Exception thrown: " + e.getMessage() + "; Stopping.";
-                        logger.error(MessageCodes.EXCEPTION_ERROR, e, msg);
-                        break;
-                    }
-
-                    String msg = "AuditThread.run loop - Exception thrown: " + e.getMessage()
-                            + "; Will try audit again in " + integrityAuditPeriodSeconds + " seconds";
-                    logger.error(MessageCodes.EXCEPTION_ERROR, e, msg);
-                    // Sleep and try again later
-                    AuditorTime.getInstance().sleep(integrityAuditPeriodSeconds * 1000L);
-                }
-
-            }
+            runUntilInterrupted();
 
         } catch (Exception e) {
             String msg = "AuditThread.run: Could not start audit loop. Exception thrown; message=" + e.getMessage();
@@ -297,6 +158,156 @@ public class AuditThread extends Thread {
         dbDao.destroy();
 
         logger.info("AuditThread.run: Exiting");
+    }
+
+    private void runUntilInterrupted() throws InterruptedException {
+        boolean auditCompleted = false;
+
+        DbAudit dbAudit = new DbAudit(dbDao);
+
+        IntegrityAuditEntity entityCurrentlyDesignated;
+        IntegrityAuditEntity thisEntity;
+        integrityAudit.setThreadInitialized(true); // An exception will set it to false
+
+        while (true) {
+            try {
+                /*
+                 * It may have been awhile since we last cycled through this loop, so refresh
+                 * the list of IntegrityAuditEntities.
+                 */
+                List<IntegrityAuditEntity> integrityAuditEntityList = getIntegrityAuditEntityList();
+
+                /*
+                 * We could've set entityCurrentlyDesignated as a side effect of
+                 * getIntegrityAuditEntityList(), but then we would've had to make
+                 * entityCurrentlyDesignated a class level attribute. Using this approach, we
+                 * can keep it local to the run() method.
+                 */
+                entityCurrentlyDesignated = getEntityCurrentlyDesignated(integrityAuditEntityList);
+
+                /*
+                 * Need to refresh thisEntity each time through loop, because we need a fresh
+                 * version of lastUpdated.
+                 */
+                thisEntity = getThisEntity(integrityAuditEntityList);
+
+                /*
+                 * If we haven't done the audit yet, note that we're current and see if we're
+                 * designated.
+                 */
+                auditCompleted = doAudit(auditCompleted, dbAudit, entityCurrentlyDesignated, thisEntity,
+                                integrityAuditEntityList);
+
+                /*
+                 * If we've just run audit, sleep per the integrity_audit_period_seconds
+                 * property, otherwise just sleep the normal interval.
+                 */
+                sleepAfterAudit(auditCompleted);
+
+            } catch (Exception e) {
+                if (isInterruptedException(e)) {
+                    String msg = "AuditThread.run loop - Exception thrown: " + e.getMessage() + "; Stopping.";
+                    logger.error(MessageCodes.EXCEPTION_ERROR, e, msg);
+                    break;
+                }
+
+                String msg = "AuditThread.run loop - Exception thrown: " + e.getMessage()
+                        + "; Will try audit again in " + integrityAuditPeriodSeconds + " seconds";
+                logger.error(MessageCodes.EXCEPTION_ERROR, e, msg);
+                // Sleep and try again later
+                AuditorTime.getInstance().sleep(integrityAuditPeriodSeconds * 1000L);
+            }
+
+        }
+    }
+
+    private boolean doAudit(boolean auditCompleted, DbAudit dbAudit, IntegrityAuditEntity entityCurrentlyDesignated,
+                    IntegrityAuditEntity thisEntity, List<IntegrityAuditEntity> integrityAuditEntityList)
+                    throws IntegrityAuditException {
+
+        if (!auditCompleted) {
+            dbDao.setLastUpdated();
+
+            /*
+             * If no current designation or currently designated node is stale, see if
+             * we're the next node to be designated.
+             */
+            if (entityCurrentlyDesignated == null || isStale(entityCurrentlyDesignated)) {
+                IntegrityAuditEntity designationCandidate =
+                        getDesignationCandidate(integrityAuditEntityList);
+
+                /*
+                 * If we're the next node to be designated, run the audit.
+                 */
+                if (designationCandidate.getResourceName().equals(this.resourceName)) {
+                    runAudit(dbAudit);
+                    auditCompleted = true;
+                } else if (logger.isDebugEnabled()) {
+                    logger.debug("AuditThread.run: designationCandidate, " + designationCandidate.getResourceName()
+                                    + ", not this entity, " + thisEntity.getResourceName());
+                }
+
+                /*
+                 * Application may have been stopped and restarted, in which case we
+                 * might be designated but auditCompleted will have been reset to false,
+                 * so account for this.
+                 */
+            } else if (thisEntity.getResourceName().equals(entityCurrentlyDesignated.getResourceName())) {
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("AuditThread.run: Re-running audit for " + thisEntity.getResourceName());
+                }
+                runAudit(dbAudit);
+                auditCompleted = true;
+
+            } else if (logger.isDebugEnabled()) {
+                logger.debug("AuditThread.run: Currently designated node, "
+                                + entityCurrentlyDesignated.getResourceName() + ", not yet stale and not this node");
+            }
+
+
+            /*
+             * Audit already completed on this node, so allow the node to go stale until
+             * twice the AUDIT_COMPLETION_PERIOD has elapsed. This should give plenty of
+             * time for another node (if another node is out there) to pick up
+             * designation.
+             */
+        } else {
+
+            auditCompleted = resetAuditCompleted(auditCompleted, thisEntity);
+
+        }
+        return auditCompleted;
+    }
+
+    private void sleepAfterAudit(boolean auditCompleted) throws InterruptedException {
+        if (auditCompleted) {
+            // for junit testing: indicate that an audit has completed
+            auditCompleted();
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("AuditThread.run: Audit completed; resourceName=" + this.resourceName
+                        + " sleeping " + integrityAuditPeriodSeconds + "s");
+            }
+            AuditorTime.getInstance().sleep(integrityAuditPeriodSeconds * 1000L);
+            if (logger.isDebugEnabled()) {
+                logger.debug(AUDIT_THREAD_MESSAGE + this.resourceName + " awaking from "
+                        + integrityAuditPeriodSeconds + "s sleep");
+            }
+
+        } else {
+
+            if (logger.isDebugEnabled()) {
+                logger.debug(AUDIT_THREAD_MESSAGE + this.resourceName + ": Sleeping "
+                        + AuditThread.AUDIT_THREAD_SLEEP_INTERVAL_MS + "ms");
+            }
+            AuditorTime.getInstance().sleep(AuditThread.AUDIT_THREAD_SLEEP_INTERVAL_MS);
+            if (logger.isDebugEnabled()) {
+                logger.debug(AUDIT_THREAD_MESSAGE + this.resourceName + ": Awaking from "
+                        + AuditThread.AUDIT_THREAD_SLEEP_INTERVAL_MS + "ms sleep");
+            }
+
+        }
     }
 
     /**
@@ -332,7 +343,6 @@ public class AuditThread extends Thread {
                     + integrityAuditEntityList.size());
         }
 
-        IntegrityAuditEntity designationCandidate;
         IntegrityAuditEntity thisEntity = null;
 
         int designatedEntityIndex = -1;
@@ -346,94 +356,112 @@ public class AuditThread extends Thread {
                 logIntegrityAuditEntity(integrityAuditEntity);
             }
 
-            if (integrityAuditEntity.getResourceName().equals(this.resourceName)) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("getDesignationCandidate: thisEntity=" + integrityAuditEntity.getResourceName());
-                }
-                thisEntity = integrityAuditEntity;
-            }
+            thisEntity = detmEntity(integrityAuditEntity, thisEntity);
 
             if (integrityAuditEntity.isDesignated()) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("getDesignationCandidate: Currently designated entity resourceName="
-                            + integrityAuditEntity.getResourceName() + PERSISTENCE_MESSAGE
-                            + integrityAuditEntity.getPersistenceUnit() + LAST_UPDATED_MESSAGE
-                            + integrityAuditEntity.getLastUpdated() + ENTITY_INDEX_MESSAGE + entityIndex);
+                                    + integrityAuditEntity.getResourceName() + PERSISTENCE_MESSAGE
+                                    + integrityAuditEntity.getPersistenceUnit() + LAST_UPDATED_MESSAGE
+                                    + integrityAuditEntity.getLastUpdated() + ENTITY_INDEX_MESSAGE + entityIndex);
                 }
                 designatedEntityIndex = entityIndex;
 
                 /*
                  * Entity not currently designated
                  */
-            } else {
+            } else if (isStale(integrityAuditEntity)) {
+                /*
+                 * Non-designated entity is stale.
+                 */
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("getDesignationCandidate: Entity is stale; resourceName="
+                                    + integrityAuditEntity.getResourceName() + PERSISTENCE_MESSAGE
+                                    + integrityAuditEntity.getPersistenceUnit() + LAST_UPDATED_MESSAGE
+                                    + integrityAuditEntity.getLastUpdated() + ENTITY_INDEX_MESSAGE + entityIndex);
+                }
 
                 /*
-                 * See if non-designated entity is stale.
+                 * Entity is current.
                  */
-                if (isStale(integrityAuditEntity)) {
+            } else if (designatedEntityIndex == -1) {
+                priorCandidateIndex = detmPriorCandidate(entityIndex, integrityAuditEntity, priorCandidateIndex);
 
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("getDesignationCandidate: Entity is stale; resourceName="
-                                + integrityAuditEntity.getResourceName() + PERSISTENCE_MESSAGE
-                                + integrityAuditEntity.getPersistenceUnit() + LAST_UPDATED_MESSAGE
-                                + integrityAuditEntity.getLastUpdated() + ENTITY_INDEX_MESSAGE + entityIndex);
-                    }
-
-                    /*
-                     * Entity is current.
-                     */
-                } else {
-
-                    if (designatedEntityIndex == -1) {
-
-                        if (priorCandidateIndex == -1) {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("getDesignationCandidate: Prior candidate found, resourceName="
-                                        + integrityAuditEntity.getResourceName() + PERSISTENCE_MESSAGE
-                                        + integrityAuditEntity.getPersistenceUnit() + LAST_UPDATED_MESSAGE
-                                        + integrityAuditEntity.getLastUpdated() + ENTITY_INDEX_MESSAGE + entityIndex);
-                            }
-                            priorCandidateIndex = entityIndex;
-                        } else {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug(
-                                        "getDesignationCandidate: Prior entity current but prior candidate already "
-                                                + "found; resourceName=" + integrityAuditEntity.getResourceName()
-                                                + PERSISTENCE_MESSAGE + integrityAuditEntity.getPersistenceUnit()
-                                                + LAST_UPDATED_MESSAGE + integrityAuditEntity.getLastUpdated()
-                                                + ENTITY_INDEX_MESSAGE + entityIndex);
-                            }
-                        }
-                    } else {
-                        if (subsequentCandidateIndex == -1) {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("getDesignationCandidate: Subsequent candidate found, resourceName="
-                                        + integrityAuditEntity.getResourceName() + PERSISTENCE_MESSAGE
-                                        + integrityAuditEntity.getPersistenceUnit() + LAST_UPDATED_MESSAGE
-                                        + integrityAuditEntity.getLastUpdated() + ENTITY_INDEX_MESSAGE + entityIndex);
-                            }
-                            subsequentCandidateIndex = entityIndex;
-                        } else {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug(
-                                        "getDesignationCandidate: Subsequent entity current but subsequent candidate "
-                                                + "already found; resourceName="
-                                                + integrityAuditEntity.getResourceName() + PERSISTENCE_MESSAGE
-                                                + integrityAuditEntity.getPersistenceUnit() + LAST_UPDATED_MESSAGE
-                                                + integrityAuditEntity.getLastUpdated() + ENTITY_INDEX_MESSAGE
-                                                + entityIndex);
-                            }
-                        }
-                    }
-
-                } // end entity is current
-
-            } // end entity not currently designated
+            } else {
+                subsequentCandidateIndex =
+                                detmSubsequentCandidate(entityIndex, integrityAuditEntity, subsequentCandidateIndex);
+            }
 
             entityIndex++;
 
         } // end for loop
 
+        return detmDesignationCandidate(integrityAuditEntityList, thisEntity, priorCandidateIndex,
+                        subsequentCandidateIndex);
+    }
+
+    private IntegrityAuditEntity detmEntity(IntegrityAuditEntity integrityAuditEntity,
+                    IntegrityAuditEntity thisEntity) {
+        if (integrityAuditEntity.getResourceName().equals(this.resourceName)) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("getDesignationCandidate: thisEntity=" + integrityAuditEntity.getResourceName());
+            }
+            thisEntity = integrityAuditEntity;
+        }
+        return thisEntity;
+    }
+
+    private int detmPriorCandidate(int entityIndex, IntegrityAuditEntity integrityAuditEntity,
+                    int priorCandidateIndex) {
+        if (priorCandidateIndex == -1) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("getDesignationCandidate: Prior candidate found, resourceName="
+                        + integrityAuditEntity.getResourceName() + PERSISTENCE_MESSAGE
+                        + integrityAuditEntity.getPersistenceUnit() + LAST_UPDATED_MESSAGE
+                        + integrityAuditEntity.getLastUpdated() + ENTITY_INDEX_MESSAGE + entityIndex);
+            }
+            priorCandidateIndex = entityIndex;
+        } else {
+            if (logger.isDebugEnabled()) {
+                logger.debug(
+                        "getDesignationCandidate: Prior entity current but prior candidate already "
+                                + "found; resourceName=" + integrityAuditEntity.getResourceName()
+                                + PERSISTENCE_MESSAGE + integrityAuditEntity.getPersistenceUnit()
+                                + LAST_UPDATED_MESSAGE + integrityAuditEntity.getLastUpdated()
+                                + ENTITY_INDEX_MESSAGE + entityIndex);
+            }
+        }
+        return priorCandidateIndex;
+    }
+
+    private int detmSubsequentCandidate(int entityIndex, IntegrityAuditEntity integrityAuditEntity,
+                    int subsequentCandidateIndex) {
+        if (subsequentCandidateIndex == -1) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("getDesignationCandidate: Subsequent candidate found, resourceName="
+                        + integrityAuditEntity.getResourceName() + PERSISTENCE_MESSAGE
+                        + integrityAuditEntity.getPersistenceUnit() + LAST_UPDATED_MESSAGE
+                        + integrityAuditEntity.getLastUpdated() + ENTITY_INDEX_MESSAGE + entityIndex);
+            }
+            subsequentCandidateIndex = entityIndex;
+        } else {
+            if (logger.isDebugEnabled()) {
+                logger.debug(
+                        "getDesignationCandidate: Subsequent entity current but subsequent candidate "
+                                + "already found; resourceName="
+                                + integrityAuditEntity.getResourceName() + PERSISTENCE_MESSAGE
+                                + integrityAuditEntity.getPersistenceUnit() + LAST_UPDATED_MESSAGE
+                                + integrityAuditEntity.getLastUpdated() + ENTITY_INDEX_MESSAGE
+                                + entityIndex);
+            }
+        }
+        return subsequentCandidateIndex;
+    }
+
+    private IntegrityAuditEntity detmDesignationCandidate(List<IntegrityAuditEntity> integrityAuditEntityList,
+                    IntegrityAuditEntity thisEntity, int priorCandidateIndex, int subsequentCandidateIndex) {
+        IntegrityAuditEntity designationCandidate;
         /*
          * Per round robin algorithm, if a current entity is found that is lexicographically after
          * the currently designated entity, this entity becomes the designation candidate. If no
@@ -454,15 +482,18 @@ public class AuditThread extends Thread {
                     logger.debug("getDesignationCandidate: Exiting and returning prior designationCandidate="
                             + designationCandidate.getResourceName());
                 }
-            } else {
+            } else if (thisEntity != null) {
                 logger.debug("getDesignationCandidate: No subsequent or prior candidate found; designating thisEntity, "
-                        + "resourceName=" + thisEntity.getResourceName());
+                                + "resourceName=" + thisEntity.getResourceName());
                 designationCandidate = thisEntity;
+            } else {
+                // this shouldn't happen, but adding it to make sonar happy
+                logger.debug("getDesignationCandidate: No entities available");
+                designationCandidate = null;
             }
         }
 
         return designationCandidate;
-
     }
 
     /**

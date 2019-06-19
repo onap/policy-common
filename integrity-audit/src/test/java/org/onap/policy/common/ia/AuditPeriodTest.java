@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,9 +25,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -100,7 +97,7 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
 
         /*
          * Sleep long enough to allow
-         * 
+         *
          * 1) audit to immediately terminate.
          */
         waitThread(integrityAudit);
@@ -129,7 +126,7 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
 
         /*
          * Wait for
-         * 
+         *
          * 1) audit to generate a bunch of sleep wake sequences.
          */
         String[] awakings = new String[10];
@@ -170,12 +167,12 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
     /**
      * Verifies that audits actually take as long as expected, even with multiple auditors running
      * simultaneously.
-     * 
+     *
      * @param periodSec audit period, in seconds
      * @throws Exception if an error occurs
      * @throws InterruptedException if the thread is interrupted
      */
-    private void testAuditPeriod(long periodSec) throws Exception, InterruptedException {
+    private void testAuditPeriod(long periodSec) throws Exception {
 
         properties.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, String.valueOf(periodSec));
 
@@ -207,7 +204,7 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
 
     /**
      * Runs simultaneous audits on several auditors.
-     * 
+     *
      * @param auditors the auditors
      * @return the minimum time, in milliseconds, elapsed for any given auditor
      * @throws InterruptedException if the thread is interrupted
@@ -226,13 +223,13 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
                         long tbegin = p.getTimeInMillis();
                         runAudit(p);
                         long elapsed = p.getTimeInMillis() - tbegin;
-                        
+
                         synchronized (tmin) {
                             tmin.set(Math.min(tmin.get(), elapsed));
                         }
 
                     } catch (InterruptedException e) {
-                        ;
+                        Thread.currentThread().interrupt();
                     }
                 }
             };
