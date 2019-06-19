@@ -144,6 +144,23 @@ public class DbAudit {
          */
         Map<String, Set<Object>> misMatchedMap = new HashMap<>();
 
+        compareList(persistenceUnit, iaeList, myIae, classNameSet, misMatchedMap);
+
+        // If misMatchedMap is not empty, retrieve the entries in each misMatched list and compare
+        // again
+        recompareList(resourceName, persistenceUnit, iaeList, myIae, misMatchedMap);
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("dbAudit: Exiting");
+        }
+
+        return; // all done
+    }
+
+    private void compareList(String persistenceUnit, List<IntegrityAuditEntity> iaeList, IntegrityAuditEntity myIae,
+                    Set<String> classNameSet, Map<String, Set<Object>> misMatchedMap)
+                    throws IntegrityAuditException {
+
         // We need to keep track of how long the audit is taking
         long startTime = AuditorTime.getInstance().getMillis();
 
@@ -161,52 +178,7 @@ public class DbAudit {
             Map<Object, Object> myEntries = dbDao.getAllMyEntries(clazzName);
             // get a map of the objects indexed by id. Does not necessarily have any entries
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("dbAudit: Traversing iaeList, size=" + iaeList.size());
-            }
-            for (IntegrityAuditEntity iae : iaeList) {
-                if (iae.getId() == myIae.getId()) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("dbAudit: My Id=" + iae.getId() + COMMA_RESOURCE_NAME + iae.getResourceName());
-                    }
-                    continue; // no need to compare with self
-                } else {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("dbAudit: Id=" + iae.getId() + COMMA_RESOURCE_NAME + iae.getResourceName());
-                    }
-                }
-                // Create properties for the other db node
-                Properties theirProperties = new Properties();
-                theirProperties.put(IntegrityAuditProperties.DB_DRIVER, iae.getJdbcDriver());
-                theirProperties.put(IntegrityAuditProperties.DB_URL, iae.getJdbcUrl());
-                theirProperties.put(IntegrityAuditProperties.DB_USER, iae.getJdbcUser());
-                theirProperties.put(IntegrityAuditProperties.DB_PWD, iae.getJdbcPassword());
-                theirProperties.put(IntegrityAuditProperties.SITE_NAME, iae.getSite());
-                theirProperties.put(IntegrityAuditProperties.NODE_TYPE, iae.getNodeType());
-
-                // get a map of the instances for their iae indexed by id
-                Map<Object, Object> theirEntries = dbDao.getAllEntries(persistenceUnit, theirProperties, clazzName);
-                if (logger.isDebugEnabled()) {
-                    logger.debug("dbAudit: For persistenceUnit=" + persistenceUnit + ", clazzName=" + clazzName
-                            + ", theirEntries.size()=" + theirEntries.size());
-                }
-
-                /*
-                 * Compare myEntries with theirEntries and get back a set of mismatched IDs. Collect
-                 * the IDs for the class where a mismatch occurred. We will check them again for all
-                 * nodes later.
-                 */
-                Set<Object> misMatchedKeySet = compareEntries(myEntries, theirEntries);
-                if (!misMatchedKeySet.isEmpty()) {
-                    Set<Object> misMatchedEntry = misMatchedMap.get(clazzName);
-                    if (misMatchedEntry == null) {
-                        misMatchedMap.put(clazzName, misMatchedKeySet);
-                    } else {
-                        misMatchedEntry.addAll(misMatchedKeySet);
-                        misMatchedMap.put(clazzName, misMatchedEntry);
-                    }
-                }
-            } // end for (IntegrityAuditEntity iae : iaeList)
+            compareMineWithTheirs(persistenceUnit, iaeList, myIae, misMatchedMap, clazzName, myEntries);
 
             // Time check
             if ((AuditorTime.getInstance().getMillis() - startTime) >= DB_AUDIT_UPDATE_MS) {
@@ -239,9 +211,84 @@ public class DbAudit {
                 logger.debug("dbAudit: Doing another comparison; misMatchedMap.size()=" + misMatchedMap.size());
             }
         }
+    }
 
-        // If misMatchedMap is not empty, retrieve the entries in each misMatched list and compare
-        // again
+    private void compareMineWithTheirs(String persistenceUnit, List<IntegrityAuditEntity> iaeList,
+                    IntegrityAuditEntity myIae, Map<String, Set<Object>> misMatchedMap, String clazzName,
+                    Map<Object, Object> myEntries) {
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("dbAudit: Traversing iaeList, size=" + iaeList.size());
+        }
+        for (IntegrityAuditEntity iae : iaeList) {
+            if (iae.getId() == myIae.getId()) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("dbAudit: My Id=" + iae.getId() + COMMA_RESOURCE_NAME + iae.getResourceName());
+                }
+                continue; // no need to compare with self
+            }
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("dbAudit: Id=" + iae.getId() + COMMA_RESOURCE_NAME + iae.getResourceName());
+            }
+
+            // get a map of the instances for their iae indexed by id
+            Map<Object, Object> theirEntries =
+                            dbDao.getAllEntries(persistenceUnit, getTheirDaoProperties(iae), clazzName);
+            if (logger.isDebugEnabled()) {
+                logger.debug("dbAudit: For persistenceUnit=" + persistenceUnit + ", clazzName=" + clazzName
+                                + ", theirEntries.size()=" + theirEntries.size());
+            }
+
+            /*
+             * Compare myEntries with theirEntries and get back a set of mismatched IDs.
+             * Collect the IDs for the class where a mismatch occurred. We will check them
+             * again for all nodes later.
+             */
+            compareMineWithTheirs(myEntries, theirEntries, clazzName, misMatchedMap);
+        } // end for (IntegrityAuditEntity iae : iaeList)
+    }
+
+    private void compareMineWithTheirs(Map<Object, Object> myEntries, Map<Object, Object> theirEntries,
+                    String clazzName, Map<String, Set<Object>> misMatchedMap) {
+
+        Set<Object> misMatchedKeySet = compareEntries(myEntries, theirEntries);
+        if (misMatchedKeySet.isEmpty()) {
+            return;
+        }
+
+        Set<Object> misMatchedEntry = misMatchedMap.get(clazzName);
+        if (misMatchedEntry == null) {
+            misMatchedMap.put(clazzName, misMatchedKeySet);
+        } else {
+            misMatchedEntry.addAll(misMatchedKeySet);
+        }
+    }
+
+    /**
+     * Creates properties for the other db node.
+     * @param iae target DB node
+     * @return DAO properties for the given DB node
+     */
+    private Properties getTheirDaoProperties(IntegrityAuditEntity iae) {
+        Properties theirProperties = new Properties();
+
+        theirProperties.put(IntegrityAuditProperties.DB_DRIVER, iae.getJdbcDriver());
+        theirProperties.put(IntegrityAuditProperties.DB_URL, iae.getJdbcUrl());
+        theirProperties.put(IntegrityAuditProperties.DB_USER, iae.getJdbcUser());
+        theirProperties.put(IntegrityAuditProperties.DB_PWD, iae.getJdbcPassword());
+        theirProperties.put(IntegrityAuditProperties.SITE_NAME, iae.getSite());
+        theirProperties.put(IntegrityAuditProperties.NODE_TYPE, iae.getNodeType());
+
+        return theirProperties;
+    }
+
+    private void recompareList(String resourceName, String persistenceUnit, List<IntegrityAuditEntity> iaeList,
+                    IntegrityAuditEntity myIae, Map<String, Set<Object>> misMatchedMap)
+                    throws IntegrityAuditException {
+
+        Set<String> classNameSet;
+        long startTime;
         classNameSet = new HashSet<>(misMatchedMap.keySet());
         // We need to keep track of how long the audit is taking
         startTime = AuditorTime.getInstance().getMillis();
@@ -267,53 +314,8 @@ public class DbAudit {
             if (logger.isDebugEnabled()) {
                 logger.debug("dbAudit: Second comparison; traversing iaeList, size=" + iaeList.size());
             }
-            for (IntegrityAuditEntity iae : iaeList) {
-                if (iae.getId() == myIae.getId()) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("dbAudit: Second comparison; My Id=" + iae.getId() + COMMA_RESOURCE_NAME
-                                + iae.getResourceName());
-                    }
-                    continue; // no need to compare with self
-                } else {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("dbAudit: Second comparison; Id=" + iae.getId() + COMMA_RESOURCE_NAME
-                                + iae.getResourceName());
-                    }
-                }
-                // Create properties for the other db node
-                Properties theirProperties = new Properties();
-                theirProperties.put(IntegrityAuditProperties.DB_DRIVER, iae.getJdbcDriver());
-                theirProperties.put(IntegrityAuditProperties.DB_URL, iae.getJdbcUrl());
-                theirProperties.put(IntegrityAuditProperties.DB_USER, iae.getJdbcUser());
-                theirProperties.put(IntegrityAuditProperties.DB_PWD, iae.getJdbcPassword());
-                theirProperties.put(IntegrityAuditProperties.SITE_NAME, iae.getSite());
-                theirProperties.put(IntegrityAuditProperties.NODE_TYPE, iae.getNodeType());
-
-                // get a map of the instances for their iae indexed by id
-                Map<Object, Object> theirEntries =
-                        dbDao.getAllEntries(persistenceUnit, theirProperties, clazzName, keySet);
-
-                /*
-                 * Compare myEntries with theirEntries and get back a set of mismatched IDs. Collect
-                 * the IDs for the class where a mismatch occurred. We will now write an error log
-                 * for each.
-                 */
-                Set<Object> misMatchedKeySet = compareEntries(myEntries, theirEntries);
-                if (!misMatchedKeySet.isEmpty()) {
-                    String keysString = "";
-                    for (Object key : misMatchedKeySet) {
-                        keysString = keysString.concat(key.toString() + ", ");
-                        errorCount++;
-                    }
-                    writeAuditSummaryLog(clazzName, resourceName, iae.getResourceName(), keysString);
-                    if (logger.isDebugEnabled()) {
-                        for (Object key : misMatchedKeySet) {
-                            writeAuditDebugLog(clazzName, resourceName, iae.getResourceName(), myEntries.get(key),
-                                    theirEntries.get(key));
-                        }
-                    }
-                }
-            }
+            errorCount += recompareMineWithTheirs(resourceName, persistenceUnit, iaeList, myIae, clazzName,
+                            keySet, myEntries);
             // Time check
             if ((AuditorTime.getInstance().getMillis() - startTime) >= DB_AUDIT_UPDATE_MS) {
                 // update the timestamp
@@ -337,12 +339,61 @@ public class DbAudit {
                     + " errors found. A large number of errors may indicate DB replication has stopped";
             logger.error(MessageCodes.ERROR_AUDIT, msg);
         }
+    }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("dbAudit: Exiting");
+    private int recompareMineWithTheirs(String resourceName, String persistenceUnit, List<IntegrityAuditEntity> iaeList,
+                    IntegrityAuditEntity myIae, String clazzName, Set<Object> keySet, Map<Object, Object> myEntries)
+                    throws IntegrityAuditException {
+
+        int errorCount = 0;
+        for (IntegrityAuditEntity iae : iaeList) {
+            if (iae.getId() == myIae.getId()) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("dbAudit: Second comparison; My Id=" + iae.getId() + COMMA_RESOURCE_NAME
+                                    + iae.getResourceName());
+                }
+                continue; // no need to compare with self
+            }
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("dbAudit: Second comparison; Id=" + iae.getId() + COMMA_RESOURCE_NAME
+                                + iae.getResourceName());
+            }
+
+            // get a map of the instances for their iae indexed by id
+            Map<Object, Object> theirEntries =
+                            dbDao.getAllEntries(persistenceUnit, getTheirDaoProperties(iae), clazzName, keySet);
+
+            /*
+             * Compare myEntries with theirEntries and get back a set of mismatched IDs.
+             * Collect the IDs for the class where a mismatch occurred. We will now write
+             * an error log for each.
+             */
+            errorCount += recompareMineWithTheirs(resourceName, clazzName, myEntries, iae, theirEntries);
+        }
+        return errorCount;
+    }
+
+    private int recompareMineWithTheirs(String resourceName, String clazzName, Map<Object, Object> myEntries,
+                    IntegrityAuditEntity iae, Map<Object, Object> theirEntries) throws IntegrityAuditException {
+        Set<Object> misMatchedKeySet = compareEntries(myEntries, theirEntries);
+        if (misMatchedKeySet.isEmpty()) {
+            return 0;
         }
 
-        return; // all done
+        StringBuilder keyBuilder = new StringBuilder();
+        for (Object key : misMatchedKeySet) {
+            keyBuilder.append(key.toString());
+            keyBuilder.append(", ");
+        }
+        writeAuditSummaryLog(clazzName, resourceName, iae.getResourceName(), keyBuilder.toString());
+        if (logger.isDebugEnabled()) {
+            for (Object key : misMatchedKeySet) {
+                writeAuditDebugLog(clazzName, resourceName, iae.getResourceName(), myEntries.get(key),
+                                theirEntries.get(key));
+            }
+        }
+        return misMatchedKeySet.size();
     }
 
     /**
