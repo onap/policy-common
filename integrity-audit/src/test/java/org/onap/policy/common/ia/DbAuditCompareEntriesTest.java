@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,6 +49,7 @@ import org.onap.policy.common.logging.flexlogger.Logger;
  * tasks.
  */
 public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
+    private static final String ZAPHOD = "Zaphod";
 
     private static Logger logger = FlexLogger.getLogger(DbAuditCompareEntriesTest.class);
 
@@ -113,7 +114,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
         // anyway
         Set<String> classNameSet = dbDao.getPersistenceClassNames();
         for (String c : classNameSet) {
-            if (c.equals("org.onap.policy.common.ia.jpa.IntegrityAuditEntity")) {
+            if ("org.onap.policy.common.ia.jpa.IntegrityAuditEntity".equals(c)) {
                 className = c;
             }
         }
@@ -129,7 +130,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
          */
         entry1.setDesignated(false);
         entry1.setJdbcDriver(dbDriver);
-        entry1.setJdbcPassword(dbPwd);
+        entry1.setJdbcPassword(dbPass);
         entry1.setJdbcUrl(dbUrl);
         entry1.setJdbcUser(dbUser);
         entry1.setLastUpdated(date);
@@ -140,7 +141,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
 
         entry2.setDesignated(false);
         entry2.setJdbcDriver(dbDriver);
-        entry2.setJdbcPassword(dbPwd);
+        entry2.setJdbcPassword(dbPass);
         entry2.setJdbcUrl(dbUrl);
         entry2.setJdbcUser(dbUser);
         entry2.setLastUpdated(date);
@@ -151,8 +152,8 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
 
         dbAudit.writeAuditDebugLog(className, resourceName1, resourceName2, entry1, entry2);
 
-        HashMap<Object, Object> myEntries = new HashMap<Object, Object>();
-        HashMap<Object, Object> theirEntries = new HashMap<Object, Object>();
+        HashMap<Object, Object> myEntries = new HashMap<>();
+        HashMap<Object, Object> theirEntries = new HashMap<>();
 
         myEntries.put("pdp1", entry1);
         theirEntries.put("pdp1", entry2);
@@ -190,7 +191,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
          */
         entry1.setDesignated(false);
         entry1.setJdbcDriver(dbDriver);
-        entry1.setJdbcPassword(dbPwd);
+        entry1.setJdbcPassword(dbPass);
         entry1.setJdbcUrl(dbUrl);
         entry1.setJdbcUser(dbUser);
         entry1.setLastUpdated(date);
@@ -201,7 +202,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
 
         entry2.setDesignated(true);
         entry2.setJdbcDriver(dbDriver);
-        entry2.setJdbcPassword(dbPwd);
+        entry2.setJdbcPassword(dbPass);
         entry2.setJdbcUrl(dbUrl);
         entry2.setJdbcUser(dbUser);
         entry2.setLastUpdated(date);
@@ -210,8 +211,8 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
         entry2.setResourceName(resourceName2);
         entry2.setSite(siteName);
 
-        HashMap<Object, Object> myEntries = new HashMap<Object, Object>();
-        HashMap<Object, Object> theirEntries = new HashMap<Object, Object>();
+        HashMap<Object, Object> myEntries = new HashMap<>();
+        HashMap<Object, Object> theirEntries = new HashMap<>();
 
         myEntries.put("pdp1", entry1);
         theirEntries.put("pdp1", entry2);
@@ -253,7 +254,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
          */
         entry1.setDesignated(false);
         entry1.setJdbcDriver(dbDriver);
-        entry1.setJdbcPassword(dbPwd);
+        entry1.setJdbcPassword(dbPass);
         entry1.setJdbcUrl(dbUrl);
         entry1.setJdbcUser(dbUser);
         entry1.setLastUpdated(date);
@@ -264,7 +265,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
 
         entry2.setDesignated(true);
         entry2.setJdbcDriver(dbDriver);
-        entry2.setJdbcPassword(dbPwd);
+        entry2.setJdbcPassword(dbPass);
         entry2.setJdbcUrl(dbUrl);
         entry2.setJdbcUser(dbUser);
         entry2.setLastUpdated(date);
@@ -275,7 +276,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
 
         entry3.setDesignated(false);
         entry3.setJdbcDriver(dbDriver);
-        entry3.setJdbcPassword(dbPwd);
+        entry3.setJdbcPassword(dbPass);
         entry3.setJdbcUrl(dbUrl);
         entry3.setJdbcUser(dbUser);
         entry3.setLastUpdated(date);
@@ -286,7 +287,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
 
         entry4.setDesignated(false);
         entry4.setJdbcDriver(dbDriver);
-        entry4.setJdbcPassword(dbPwd);
+        entry4.setJdbcPassword(dbPass);
         entry4.setJdbcUrl(dbUrl);
         entry4.setJdbcUser(dbUser);
         entry4.setLastUpdated(date);
@@ -295,8 +296,8 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
         entry4.setResourceName(resourceName2);
         entry4.setSite("SiteB");
 
-        HashMap<Object, Object> myEntries = new HashMap<Object, Object>();
-        HashMap<Object, Object> theirEntries = new HashMap<Object, Object>();
+        HashMap<Object, Object> myEntries = new HashMap<>();
+        HashMap<Object, Object> theirEntries = new HashMap<>();
 
         myEntries.put("0", entry1);
         myEntries.put("1", entry3);
@@ -325,9 +326,8 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
         DbAudit dbAudit = new DbAudit(dbDao);
 
         Set<String> classNameSet = dbDao.getPersistenceClassNames();
-        Set<Object> mismatchResult = new HashSet<Object>();
         for (String className : classNameSet) {
-            if (className.equals("org.onap.policy.common.ia.jpa.IntegrityAuditEntity")) {
+            if ("org.onap.policy.common.ia.jpa.IntegrityAuditEntity".equals(className)) {
                 final String resourceName1 = resourceName;
                 final String resourceName2 = resourceName;
 
@@ -340,7 +340,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
                  */
                 entry1.setDesignated(false);
                 entry1.setJdbcDriver(dbDriver);
-                entry1.setJdbcPassword(dbPwd);
+                entry1.setJdbcPassword(dbPass);
                 entry1.setJdbcUrl(dbUrl);
                 entry1.setJdbcUser(dbUser);
                 entry1.setLastUpdated(date);
@@ -351,7 +351,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
 
                 entry2.setDesignated(false);
                 entry2.setJdbcDriver(dbDriver);
-                entry2.setJdbcPassword(dbPwd);
+                entry2.setJdbcPassword(dbPass);
                 entry2.setJdbcUrl(dbUrl);
                 entry2.setJdbcUser(dbUser);
                 entry2.setLastUpdated(date);
@@ -360,19 +360,17 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
                 entry2.setResourceName(resourceName2);
                 entry2.setSite(siteName);
 
-                HashMap<Object, Object> myEntries = new HashMap<Object, Object>();
-                HashMap<Object, Object> theirEntries = new HashMap<Object, Object>();
+                HashMap<Object, Object> myEntries = new HashMap<>();
+                HashMap<Object, Object> theirEntries = new HashMap<>();
 
                 myEntries.put("pdp1", entry1);
                 theirEntries.put("pdp1", entry2);
 
-                mismatchResult = dbAudit.compareEntries(myEntries, theirEntries);
-
                 /*
                  * Assert there was no mismatches
                  */
-                assertTrue(mismatchResult.isEmpty());
-            } else if (className.equals("org.onap.policy.common.ia.jpa.IaTestEntity")) {
+                assertTrue(dbAudit.compareEntries(myEntries, theirEntries).isEmpty());
+            } else if ("org.onap.policy.common.ia.jpa.IaTestEntity".equals(className)) {
                 final IaTestEntity iate = new IaTestEntity();
                 final IaTestEntity iate2 = new IaTestEntity();
                 final IaTestEntity iate3 = new IaTestEntity();
@@ -388,10 +386,10 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
                 iate.setModifiedDate(date);
 
                 iate2.setCreatedBy("Ford");
-                iate2.setModifiedBy("Zaphod");
+                iate2.setModifiedBy(ZAPHOD);
                 iate2.setModifiedDate(date);
 
-                iate3.setCreatedBy("Zaphod");
+                iate3.setCreatedBy(ZAPHOD);
                 iate3.setModifiedBy("Ford");
                 iate3.setModifiedDate(date);
 
@@ -399,20 +397,19 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
                 iate4.setModifiedBy("Ford");
                 iate4.setModifiedDate(date);
 
-                HashMap<Object, Object> myEntries = new HashMap<Object, Object>();
-                HashMap<Object, Object> theirEntries = new HashMap<Object, Object>();
+                HashMap<Object, Object> myEntries = new HashMap<>();
+                HashMap<Object, Object> theirEntries = new HashMap<>();
 
                 myEntries.put("0", iate);
                 myEntries.put("1", iate2);
                 theirEntries.put("0", iate3);
                 theirEntries.put("1", iate4);
 
-                mismatchResult = dbAudit.compareEntries(myEntries, theirEntries);
 
                 /*
                  * Assert that there is 2 mismatches
                  */
-                assertEquals(2, mismatchResult.size());
+                assertEquals(2, dbAudit.compareEntries(myEntries, theirEntries).size());
             }
         }
 
@@ -454,7 +451,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
         Set<String> classNameSet = dbDao.getPersistenceClassNames();
         Map<Object, Object> myEntries;
         Map<Object, Object> theirEntries;
-        Set<Object> mismatchResult = new HashSet<Object>();
+        Set<Object> mismatchResult = new HashSet<>();
         for (String className : classNameSet) {
             logger.info("classNameSet entry = " + className);
             myEntries = dbDao.getAllEntries(A_SEQ_PU, properties, className);
@@ -475,7 +472,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
 
     /**
      * Truncate the tables.
-     * 
+     *
      * @param properties the properties
      */
     private void truncateTables(Properties properties) {
@@ -499,7 +496,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
         // anyway
         Set<String> classNameSet = dbDao.getPersistenceClassNames();
         for (String classNameInClassNameSet : classNameSet) {
-            if (classNameInClassNameSet.equals("org.onap.policy.common.ia.jpa.IaTestEntity")) {
+            if ("org.onap.policy.common.ia.jpa.IaTestEntity".equals(classNameInClassNameSet)) {
                 className = classNameInClassNameSet;
             }
         }
@@ -510,7 +507,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
         final Date date = new Date();
 
         PersonSample person = new PersonSample("Ford", "Prefect", 21);
-        PersonSample person2 = new PersonSample("Zaphod", "Beeblebrox", 25);
+        PersonSample person2 = new PersonSample(ZAPHOD, "Beeblebrox", 25);
 
         /*
          * Silly tests to bump coverage stats, not sure why they are counting PersonSample to begin
@@ -527,19 +524,19 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
          * Two entries, 1 mismatch
          */
         iate.setCreatedBy("Ford");
-        iate.setModifiedBy("Zaphod");
+        iate.setModifiedBy(ZAPHOD);
         iate.setModifiedDate(date);
         iate.setPersonTest(person);
 
         iate2.setCreatedBy("Ford");
-        iate2.setModifiedBy("Zaphod");
+        iate2.setModifiedBy(ZAPHOD);
         iate2.setModifiedDate(date);
         iate2.setPersonTest(person2);
 
         dbAudit.writeAuditDebugLog(className, "resource1", "resource2", iate, iate2);
 
-        HashMap<Object, Object> myEntries = new HashMap<Object, Object>();
-        HashMap<Object, Object> theirEntries = new HashMap<Object, Object>();
+        HashMap<Object, Object> myEntries = new HashMap<>();
+        HashMap<Object, Object> theirEntries = new HashMap<>();
 
         myEntries.put("0", iate);
         theirEntries.put("0", iate2);

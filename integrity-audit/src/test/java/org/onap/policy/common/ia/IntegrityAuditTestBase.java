@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -52,12 +52,12 @@ import org.slf4j.LoggerFactory;
 /**
  * All JUnits are designed to run in the local development environment where they have write
  * privileges and can execute time-sensitive tasks.
- * 
+ *
  * <p>Many of the test verification steps are performed by scanning for items written to the log
  * file. Rather than actually scan the log file, an {@link ExtractAppender} is used to monitor
  * events that are logged and extract relevant items. In order to attach the appender to the debug
  * log, it assumes that the debug log is a <i>logback</i> Logger configured per EELF.
- * 
+ *
  * <p>These tests use a temporary, in-memory DB, which is dropped once the tests complete.
  */
 public class IntegrityAuditTestBase {
@@ -77,7 +77,7 @@ public class IntegrityAuditTestBase {
      */
     private static final String LOG_DIR = "testingLogs/common-modules/integrity-audit";
 
-    
+
     /**
      * Name of the field within the AuditorTime class that supplies the time.
      */
@@ -88,7 +88,7 @@ public class IntegrityAuditTestBase {
      * Max time, in milliseconds, to wait for a semaphore.
      */
     protected static final long WAIT_MS = 5000L;
-    
+
     /**
      * Number of seconds in an audit period.
      */
@@ -98,7 +98,7 @@ public class IntegrityAuditTestBase {
 
     protected static final String dbDriver = "org.h2.Driver";
     protected static final String dbUser = "testu";
-    protected static final String dbPwd = "testp";
+    protected static final String dbPass = "testp";
     protected static final String siteName = "SiteA";
     protected static final String nodeType = "pdp_xacml";
 
@@ -173,7 +173,7 @@ public class IntegrityAuditTestBase {
 
     /**
      * Saves current configuration information and then sets new values.
-     * 
+     *
      * @param dbDriver the name of the DB Driver class
      * @param dbUrl the URL to the DB
      * @throws IOException if an IO error occurs
@@ -199,7 +199,7 @@ public class IntegrityAuditTestBase {
         properties.put(IntegrityAuditProperties.DB_DRIVER, dbDriver);
         properties.put(IntegrityAuditProperties.DB_URL, dbUrl);
         properties.put(IntegrityAuditProperties.DB_USER, dbUser);
-        properties.put(IntegrityAuditProperties.DB_PWD, dbPwd);
+        properties.put(IntegrityAuditProperties.DB_PWD, dbPass);
         properties.put(IntegrityAuditProperties.SITE_NAME, siteName);
         properties.put(IntegrityAuditProperties.NODE_TYPE, nodeType);
 
@@ -218,7 +218,7 @@ public class IntegrityAuditTestBase {
      * Restores the configuration to what it was before the test.
      */
     protected static void tearDownAfterClass() {
-        
+
         IntegrityAudit.setUnitTesting(false);
 
         Whitebox.setInternalState(AuditorTime.class, TIME_SUPPLY_FIELD, savedTime);
@@ -238,7 +238,7 @@ public class IntegrityAuditTestBase {
         appenders = new LinkedList<>();
 
         properties.put(IntegrityAuditProperties.AUDIT_PERIOD_SECONDS, String.valueOf(AUDIT_PERIOD_SEC));
-        
+
         TestTime time = new TestTime();
         testTime.set(time);
 
@@ -269,7 +269,7 @@ public class IntegrityAuditTestBase {
 
     /**
      * Get the test time.
-     * 
+     *
      * @return the {@link TestTime} in use by this thread
      */
     public static TestTime getTestTime() {
@@ -278,7 +278,7 @@ public class IntegrityAuditTestBase {
 
     /**
      * Truncate the table.
-     * 
+     *
      * @param properties the properties
      * @param persistenceUnit the persistence unit
      * @param tableName the name of the table
@@ -290,21 +290,21 @@ public class IntegrityAuditTestBase {
                 EntityMgrCloser emc = new EntityMgrCloser(emfc.getFactory().createEntityManager());
                 EntityTransCloser etc = new EntityTransCloser(emc.getManager().getTransaction())) {
 
-            EntityManager em = emc.getManager();
-            EntityTransaction et = etc.getTransation();
+            EntityManager entmgr = emc.getManager();
+            EntityTransaction entrans = etc.getTransation();
 
             // Clean up the DB
-            em.createQuery("Delete from " + tableName).executeUpdate();
+            entmgr.createQuery("Delete from " + tableName).executeUpdate();
 
             // commit transaction
-            et.commit();
+            entrans.commit();
         }
     }
 
     /**
      * Verifies that items appear within the log, in order. A given item may appear more than once.
      * In addition, the log may contain extra items; those are ignored.
-     * 
+     *
      * @param textre regular expression used to extract an item from a line in the log. The first
      *        "capture" group of the regular expression is assumed to contain the extracted item
      * @param items items that should be matched by the items extracted from the log, in order
@@ -343,7 +343,7 @@ public class IntegrityAuditTestBase {
 
     /**
      * Gets the remaining items from an iterator.
-     * 
+     *
      * @param current the current item, to be included within the list
      * @param it iterator from which to get the remaining items
      * @return a list of the remaining items
@@ -361,7 +361,7 @@ public class IntegrityAuditTestBase {
     /**
      * Waits for a thread to stop. If the thread doesn't complete in the allotted time, then it
      * interrupts it and waits again.
-     * 
+     *
      * @param auditor the thread for which to wait
      * @return {@code true} if the thread stopped, {@code false} otherwise
      */
@@ -371,7 +371,7 @@ public class IntegrityAuditTestBase {
                 auditor.interrupt();
 
                 if (!auditor.joinAuditThread(WAIT_MS)) {
-                    System.out.println("failed to stop audit thread");
+                    errorLogger.error("failed to stop audit thread");
                     return false;
                 }
 
@@ -385,7 +385,7 @@ public class IntegrityAuditTestBase {
 
     /**
      * Makes a new auditor.
-     * 
+     *
      * @param resourceName2 the name of the resource
      * @param persistenceUnit2 the persistence unit
      * @return a new auditor
@@ -394,16 +394,16 @@ public class IntegrityAuditTestBase {
     protected MyIntegrityAudit makeAuditor(String resourceName2, String persistenceUnit2) throws Exception {
         // each auditor gets its own notion of time
         TestTime time = new TestTime();
-        
+
         // use the auditor-specific time while this thread constructs things
         testTime.set(time);
-        
+
         return new MyIntegrityAudit(resourceName2, persistenceUnit2, makeProperties(), time);
     }
 
     /**
      * Watches for patterns in a logger by attaching a ExtractAppender to it.
-     * 
+     *
      * @param logger the logger to watch
      * @param regex regular expression used to extract relevant text
      * @return a new appender
@@ -417,7 +417,7 @@ public class IntegrityAuditTestBase {
 
     /**
      * Makes a new Property set that's a clone of {@link #properties}.
-     * 
+     *
      * @return a new Property set containing all of a copy of all of the {@link #properties}
      */
     protected static Properties makeProperties() {
@@ -428,7 +428,7 @@ public class IntegrityAuditTestBase {
 
     /**
      * Waits for data to become stale and then runs an audit on several auditors in parallel.
-     * 
+     *
      * @param auditors the auditors
      * @throws InterruptedException if a thread is interrupted
      */
@@ -439,7 +439,7 @@ public class IntegrityAuditTestBase {
 
     /**
      * Runs an audit on several auditors in parallel.
-     * 
+     *
      * @param auditors the auditors
      * @throws InterruptedException if a thread is interrupted
      */
@@ -459,7 +459,7 @@ public class IntegrityAuditTestBase {
 
     /**
      * Waits for a semaphore to be released.
-     * 
+     *
      * @param sem the semaphore for which to wait
      * @throws InterruptedException if the thread is interrupted
      * @throws AssertionError if the semaphore did not reach zero in the allotted time
@@ -467,10 +467,10 @@ public class IntegrityAuditTestBase {
     protected void waitSem(Semaphore sem) throws InterruptedException {
         assertTrue(sem.tryAcquire(WAIT_MS, TimeUnit.MILLISECONDS));
     }
-    
+
     /**
      * Sleep a bit so that the currently designated pdp becomes stale.
-     * 
+     *
      * @throws InterruptedException if the thread is interrupted
      */
     protected void waitStale() throws InterruptedException {
@@ -505,14 +505,14 @@ public class IntegrityAuditTestBase {
      * Manages audits by inserting semaphores into a queue for the AuditThread to count.
      */
     protected class MyIntegrityAudit extends IntegrityAudit {
-        
+
         private final TestTime myTime;
-        
+
         /**
          * Semaphore on which the audit thread should wait.
          */
         private Semaphore auditSem = null;
-        
+
         /**
          * Semaphore on which the junit management thread should wait.
          */
@@ -520,17 +520,17 @@ public class IntegrityAuditTestBase {
 
         /**
          * Constructs an auditor and starts the AuditThread.
-         * 
+         *
          * @param resourceName the resource name
          * @param persistenceUnit the persistence unit
          * @param properties the properties
          * @param time the time
          * @throws Exception if an error occurs
          */
-        public MyIntegrityAudit(String resourceName, String persistenceUnit, 
+        public MyIntegrityAudit(String resourceName, String persistenceUnit,
                         Properties properties, TestTime time) throws Exception {
             super(resourceName, persistenceUnit, properties);
-            
+
             myTime = time;
             testTime.set(myTime);
 
@@ -538,10 +538,10 @@ public class IntegrityAuditTestBase {
 
             startAuditThread();
         }
-        
+
         /**
          * Get time in milliseconds.
-         * 
+         *
          * @return the "current" time for the auditor
          */
         public long getTimeInMillis() {
@@ -550,7 +550,7 @@ public class IntegrityAuditTestBase {
 
         /**
          * Sleeps for a period of time.
-         * 
+         *
          * @param sleepMs time to sleep
          * @throws InterruptedException can be interrupted
          */
@@ -567,7 +567,7 @@ public class IntegrityAuditTestBase {
 
         /**
          * Triggers an audit by releasing the audit thread's semaphore.
-         * 
+         *
          * @return the semaphore on which to wait
          * @throws InterruptedException if the thread is interrupted
          */
@@ -586,10 +586,10 @@ public class IntegrityAuditTestBase {
                 // release a bunch of semaphores, in case a thread is still running
                 auditSem.release(1000);
             }
-            
+
             auditSem = new Semaphore(0);
             junitSem = new Semaphore(0);
-            
+
             super.startAuditThread();
 
             if (haveAuditThread()) {
@@ -609,7 +609,7 @@ public class IntegrityAuditTestBase {
 
         /**
          * Stops the AuditThread and waits for it to stop.
-         * 
+         *
          * @throws AssertionError if the thread is still running
          */
         @Override
@@ -641,7 +641,7 @@ public class IntegrityAuditTestBase {
                 @Override
                 public void runStarted() throws InterruptedException {
                     auditSem.acquire();
-                    
+
                     junitSem.release();
                     auditSem.acquire();
                 }
@@ -651,7 +651,7 @@ public class IntegrityAuditTestBase {
                     junitSem.release();
                     auditSem.acquire();
                 }
-                
+
             };
         }
     }

@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -28,6 +28,9 @@ import java.util.Properties;
 import org.junit.Test;
 
 public class IntegrityAuditTest {
+    private static final String PROPERTIES = "properties";
+    private static final String RESOURCE_NAME = "resourceName";
+    private static final String SOMETHING = "something";
 
     @Test
     /**
@@ -36,33 +39,33 @@ public class IntegrityAuditTest {
     public void parmsAreBadTest() {
         // Try with 2 null params
         StringBuilder badParams = new StringBuilder();
-        IntegrityAudit.parmsAreBad(null, "something", null, badParams);
+        IntegrityAudit.parmsAreBad(null, SOMETHING, null, badParams);
 
         assertFalse("".equals(badParams.toString()));
-        assertTrue(badParams.toString().contains("resourceName"));
-        assertTrue(badParams.toString().contains("properties"));
+        assertTrue(badParams.toString().contains(RESOURCE_NAME));
+        assertTrue(badParams.toString().contains(PROPERTIES));
 
         // Try with 1 null params
         badParams = new StringBuilder();
         Properties props = new Properties();
         props.put(IntegrityAuditProperties.DB_DRIVER, "test_db_driver");
-        IntegrityAudit.parmsAreBad(null, "something", props, badParams);
+        IntegrityAudit.parmsAreBad(null, SOMETHING, props, badParams);
 
         assertFalse("".equals(badParams.toString()));
-        assertTrue(badParams.toString().contains("resourceName"));
-        assertFalse(badParams.toString().contains("properties"));
+        assertTrue(badParams.toString().contains(RESOURCE_NAME));
+        assertFalse(badParams.toString().contains(PROPERTIES));
 
         // Try with 0 null params
         badParams = new StringBuilder();
-        IntegrityAudit.parmsAreBad("someting", "something", props, badParams);
+        IntegrityAudit.parmsAreBad("someting", SOMETHING, props, badParams);
         assertFalse("".equals(badParams.toString()));
-        assertFalse(badParams.toString().contains("resourceName"));
-        assertFalse(badParams.toString().contains("properties"));
+        assertFalse(badParams.toString().contains(RESOURCE_NAME));
+        assertFalse(badParams.toString().contains(PROPERTIES));
 
         // Try with invalid node type
         props.put(IntegrityAuditProperties.NODE_TYPE, "bogus");
         badParams = new StringBuilder();
-        IntegrityAudit.parmsAreBad("someting", "something", props, badParams);
+        IntegrityAudit.parmsAreBad("someting", SOMETHING, props, badParams);
         assertFalse("".equals(badParams.toString()));
         assertTrue(badParams.toString().contains("nodeType"));
 

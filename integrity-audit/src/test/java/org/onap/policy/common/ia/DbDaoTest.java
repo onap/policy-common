@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -60,6 +60,11 @@ import org.onap.policy.common.utils.time.TestTime;
  * tasks.
  */
 public class DbDaoTest extends IntegrityAuditTestBase {
+    private static final String SELECT_ENTITIES =
+                    "Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu";
+    private static final String SITE_B = "SiteB";
+    private static final String ENTITY_CLASS_NAME = "org.onap.policy.common.ia.jpa.IntegrityAuditEntity";
+
     private static String resourceName = "pdp0";
 
     private DbDao dbDao;
@@ -103,8 +108,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
             dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
 
             // Find the proper entry in the database
-            Query iaequery = em.createQuery(
-                    "Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu");
+            Query iaequery = em.createQuery(SELECT_ENTITIES);
             iaequery.setParameter("rn", DbDaoTest.resourceName);
             iaequery.setParameter("pu", DbDaoTest.A_SEQ_PU);
 
@@ -131,13 +135,12 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
         // Change site_name in properties to test that an update was made to
         // an existing entry in the table
-        properties.put(IntegrityAuditProperties.SITE_NAME, "SiteB");
+        properties.put(IntegrityAuditProperties.SITE_NAME, SITE_B);
         dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
 
         try (EntityTransCloser et = new EntityTransCloser(em.getTransaction())) {
             // Find the proper entry in the database
-            Query iaequery = em.createQuery(
-                    "Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu");
+            Query iaequery = em.createQuery(SELECT_ENTITIES);
             iaequery.setParameter("rn", DbDaoTest.resourceName);
             iaequery.setParameter("pu", DbDaoTest.A_SEQ_PU);
 
@@ -158,7 +161,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
                 et.commit();
 
                 // Assert that the site_name for the existing entry was updated
-                assertEquals("SiteB", iae.getSite());
+                assertEquals(SITE_B, iae.getSite());
             }
         }
     }
@@ -187,7 +190,6 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
         dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
         IntegrityAuditEntity iae = dbDao.getMyIntegrityAuditEntity();
-        // assertEquals("integrityAuditPU", iae.getPersistenceUnit());
         assertEquals(A_SEQ_PU, iae.getPersistenceUnit());
     }
 
@@ -200,8 +202,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
         dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
 
         // Find the proper database entry
-        Query iaequery = em
-                .createQuery("Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu");
+        Query iaequery = em.createQuery(SELECT_ENTITIES);
         iaequery.setParameter("rn", DbDaoTest.resourceName);
         iaequery.setParameter("pu", DbDaoTest.A_SEQ_PU);
 
@@ -239,8 +240,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
             dbDao.setDesignated(resourceName, A_SEQ_PU, true);
 
             // Find the proper entry in the database
-            Query iaequery = em.createQuery(
-                    "Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu");
+            Query iaequery = em.createQuery(SELECT_ENTITIES);
             iaequery.setParameter("rn", resourceName);
             iaequery.setParameter("pu", A_SEQ_PU);
 
@@ -275,13 +275,12 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
         try (EntityTransCloser et = new EntityTransCloser(em.getTransaction())) {
             TestTime testTime = getTestTime();
-            
+
             // Create an entry
             dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
 
             // Find the proper entry in the database
-            Query iaequery = em.createQuery(
-                    "Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu");
+            Query iaequery = em.createQuery(SELECT_ENTITIES);
             iaequery.setParameter("rn", resourceName);
             iaequery.setParameter("pu", A_SEQ_PU);
 
@@ -301,7 +300,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
                 // ensure dates are different by sleeping for a bit
                 testTime.sleep(1);
 
-                iae.setSite("SiteB");
+                iae.setSite(SITE_B);
                 iae.setLastUpdated(testTime.getDate());
                 final Date newDate = iae.getLastUpdated();
 
@@ -328,7 +327,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
         new DbDao("pdp2", A_SEQ_PU, properties).destroy();
 
         // Obtain a hash with the persisted objects
-        Map<Object, Object> entries = dbDao.getAllMyEntries("org.onap.policy.common.ia.jpa.IntegrityAuditEntity");
+        Map<Object, Object> entries = dbDao.getAllMyEntries(ENTITY_CLASS_NAME);
 
         // Assert there were 3 entries for that class
         assertEquals(3, entries.size());
@@ -349,11 +348,11 @@ public class DbDaoTest extends IntegrityAuditTestBase {
         // Obtain all entity keys
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Object> cq = cb.createQuery();
-        Root<?> rootEntry = cq.from(Class.forName("org.onap.policy.common.ia.jpa.IntegrityAuditEntity"));
+        Root<?> rootEntry = cq.from(Class.forName(ENTITY_CLASS_NAME));
         CriteriaQuery<Object> all = cq.select(rootEntry);
         TypedQuery<Object> allQuery = em.createQuery(all);
         List<Object> objectList = allQuery.getResultList();
-        HashSet<Object> resultSet = new HashSet<Object>();
+        HashSet<Object> resultSet = new HashSet<>();
         PersistenceUnitUtil util = emf.getPersistenceUnitUtil();
         for (Object o : objectList) {
             Object key = util.getIdentifier(o);
@@ -362,7 +361,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
         // Obtain a hash with the persisted objects
         Map<Object, Object> entries =
-                dbDao.getAllMyEntries("org.onap.policy.common.ia.jpa.IntegrityAuditEntity", resultSet);
+                dbDao.getAllMyEntries(ENTITY_CLASS_NAME, resultSet);
 
         // Assert there were 3 entries for that class
         assertEquals(3, entries.size());
@@ -383,7 +382,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
         // Obtain a hash with the persisted objects
         Map<Object, Object> entries = dbDao.getAllEntries("integrityAuditPU", properties,
-                "org.onap.policy.common.ia.jpa.IntegrityAuditEntity");
+                ENTITY_CLASS_NAME);
 
         // Assert there were 3 entries for that class
         assertEquals(3, entries.size());
@@ -405,11 +404,11 @@ public class DbDaoTest extends IntegrityAuditTestBase {
         // Obtain all entity keys
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Object> cq = cb.createQuery();
-        Root<?> rootEntry = cq.from(Class.forName("org.onap.policy.common.ia.jpa.IntegrityAuditEntity"));
+        Root<?> rootEntry = cq.from(Class.forName(ENTITY_CLASS_NAME));
         CriteriaQuery<Object> all = cq.select(rootEntry);
         TypedQuery<Object> allQuery = em.createQuery(all);
         List<Object> objectList = allQuery.getResultList();
-        HashSet<Object> resultSet = new HashSet<Object>();
+        HashSet<Object> resultSet = new HashSet<>();
         PersistenceUnitUtil util = emf.getPersistenceUnitUtil();
         for (Object o : objectList) {
             Object key = util.getIdentifier(o);
@@ -418,7 +417,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
         // Obtain a hash with the persisted objects
         Map<Object, Object> entries = dbDao.getAllEntries("integrityAuditPU", properties,
-                "org.onap.policy.common.ia.jpa.IntegrityAuditEntity", resultSet);
+                ENTITY_CLASS_NAME, resultSet);
 
         // Assert there were 3 entries for that class
         assertEquals(3, entries.size());
@@ -439,7 +438,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
         // Obtain a hash with the persisted objects
         Map<Object, Object> entries =
-                dbDao.getAllEntries(A_SEQ_PU, properties, "org.onap.policy.common.ia.jpa.IntegrityAuditEntity");
+                dbDao.getAllEntries(A_SEQ_PU, properties, ENTITY_CLASS_NAME);
 
         // Assert there were 3 entries for that class
         assertEquals(3, entries.size());

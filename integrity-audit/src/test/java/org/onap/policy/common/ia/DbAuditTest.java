@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,17 +20,15 @@
 
 package org.onap.policy.common.ia;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.fail;
 
 import java.util.List;
 import java.util.Properties;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-//import org.apache.commons.logging.Log;
-//import org.apache.commons.logging.LogFactory;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -45,7 +43,7 @@ import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
  * All JUnits are designed to run in the local development environment
  * where they have write privileges and can execute time-sensitive
  * tasks.
- * 
+ *
  * If any have been ignored (@Ignore) they will not run at the same time
  * as others. You should run them as JUnits by themselves.
  */
@@ -53,7 +51,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
 
     private static Logger logger = FlexLogger.getLogger(DbAuditTest.class);
 
-    private static final String resourceName = "pdp1";
+    private static final String RESOURCE_NAME = "pdp1";
 
     private EntityManagerFactory emf2;
     private EntityManager em2;
@@ -135,16 +133,13 @@ public class DbAuditTest extends IntegrityAuditTestBase {
 
         logger.info("noEntitiesTest: Entering");
 
-        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
+        dbDao = new DbDao(RESOURCE_NAME, A_SEQ_PU, properties);
         dbDao.deleteAllIntegrityAuditEntities();
-        try {
-            DbAudit dbAudit = new DbAudit(dbDao);
-            dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
-            fail("found unexpected entities");
 
-        } catch (DbAuditException e) {
-            // Ignore expected exception
-        }
+        assertThatThrownBy(() -> {
+            DbAudit dbAudit = new DbAudit(dbDao);
+            dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, nodeType);
+        }).isInstanceOf(DbAuditException.class);
 
         logger.info("noEntitiesTest: Exit");
     }
@@ -161,9 +156,9 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         final ExtractAppender log = watch(debugLogger, "DbAudit: Found only (one) IntegrityAuditEntity entry:");
 
         // Add one entry in the database
-        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
+        dbDao = new DbDao(RESOURCE_NAME, A_SEQ_PU, properties);
         DbAudit dbAudit = new DbAudit(dbDao);
-        dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
+        dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, nodeType);
 
         List<IntegrityAuditEntity> iaeList = dbDao.getIntegrityAuditEntities(A_SEQ_PU, nodeType);
         logger.info("List size: " + iaeList.size());
@@ -206,9 +201,9 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         /*
          * Create entries in DB1 & DB2 for the resource of interest
          */
-        dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
+        dbDao = new DbDao(RESOURCE_NAME, A_SEQ_PU, properties);
 
-        new DbDao(resourceName, A_SEQ_PU, properties2).destroy();
+        new DbDao(RESOURCE_NAME, A_SEQ_PU, properties2).destroy();
 
         /*
          * Entries in DB1, pointing to DB2, except for pdp3
@@ -230,7 +225,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
          * as DB2 it can be confirmed that the mismatch is resolved
          */
         DbAudit dbAudit = new DbAudit(dbDao);
-        dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
+        dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, nodeType);
 
         // update pdp3 entry in DB1 to point to DB2
         new DbDao("pdp3", A_SEQ_PU, properties, dbUrl2).destroy();
@@ -239,7 +234,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
          * Run the audit again and correct the mismatch, the result should be one entry in the
          * mismatchKeySet because of the missing entry from the beginning of the test
          */
-        dbAudit.dbAudit(resourceName, A_SEQ_PU, nodeType);
+        dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, nodeType);
 
         assertFalse(dbglog.getExtracted().isEmpty());
 
@@ -267,7 +262,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
 
     /**
      * Re-creates DB1, using the specified properties.
-     * 
+     *
      * @param properties the properties
      */
     private void recreateDb1(Properties properties) {
