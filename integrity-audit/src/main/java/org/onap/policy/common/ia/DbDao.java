@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,7 +29,6 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-import javax.persistence.LockTimeoutException;
 import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.Query;
@@ -45,11 +44,11 @@ import org.onap.policy.common.logging.flexlogger.Logger;
 
 /**
  * class DbDao provides the inteface to the DBs for the purpose of audits.
- * 
+ *
  */
 public class DbDao {
     private static final Logger logger = FlexLogger.getLogger(DbDao.class.getName());
-    
+
     private String resourceName;
     private String persistenceUnit;
     private String dbDriver;
@@ -65,7 +64,7 @@ public class DbDao {
      * Supports designation serialization.
      */
     private static final Object lock = new Object();
-    
+
     /*
      * Common strings.
      */
@@ -73,7 +72,7 @@ public class DbDao {
     private static final String WITH_PERSISTENCE_MESSAGE = " with PersistenceUnit: ";
     private static final String DBDAO_MESSAGE = "DbDao: ";
     private static final String ENCOUNTERED_MESSAGE = "ecountered a problem in execution: ";
-    
+
     /*
      * DB SELECT String.
      */
@@ -82,7 +81,7 @@ public class DbDao {
 
     /**
      * DbDao Constructor.
-     * 
+     *
      * @param resourceName the resource name
      * @param persistenceUnit the persistence unit
      * @param properties the properties
@@ -94,7 +93,7 @@ public class DbDao {
 
     /**
      * DbDao Constructor.
-     * 
+     *
      * @param resourceName the resource name
      * @param persistenceUnit the persistence unit
      * @param properties the properties
@@ -124,7 +123,7 @@ public class DbDao {
 
     /**
      * validateProperties will validate the properties.
-     * 
+     *
      * @param resourceName the rseource name
      * @param persistenceUnit the persistence unit
      * @param properties the properties
@@ -151,7 +150,7 @@ public class DbDao {
 
     /**
      * getAllMyEntries gets all the DB entries for a particular class.
-     * 
+     *
      * @param className the class name
      * @return all the DB entries for the given class
      */
@@ -183,7 +182,7 @@ public class DbDao {
 
     /**
      * getAllMyEntries gets all entries for a class.
-     * 
+     *
      * @param className the name of the class
      * @param keySet the keys to get the entries for
      * @return the map of requested entries
@@ -210,7 +209,7 @@ public class DbDao {
 
     /**
      * getAllEntries gets all entriesfor a particular persistence unit adn className.
-     * 
+     *
      * @param persistenceUnit the persistence unit
      * @param properties the properties
      * @param className the class name
@@ -250,7 +249,7 @@ public class DbDao {
 
     /**
      * getAllEntries gets all entries for a persistence unit.
-     * 
+     *
      * @param persistenceUnit the persistence unit
      * @param properties the properties
      * @param className the class name
@@ -284,7 +283,7 @@ public class DbDao {
     /**
      * getIntegrityAuditEntities() Get all the IntegrityAuditEntities for a particular persistence
      * unit and node type.
-     * 
+     *
      * @param persistenceUnit the persistence unit
      * @param nodeType the node type
      * @return the list of IntegrityAuditEntity
@@ -326,7 +325,7 @@ public class DbDao {
 
     /**
      * getMyIntegrityAuditEntity() gets my IntegrityAuditEntity.
-     * 
+     *
      * @return the IntegrityAuditEntity
      * @throws DbDaoTransactionException if an error occurs
      */
@@ -378,7 +377,7 @@ public class DbDao {
 
     /**
      * getIntegrityAuditEntity() gets the IntegrityAuditEntity with a particular ID.
-     * 
+     *
      * @param id the ID
      * @return the IntegrityAuditEntity
      * @throws DbDaoTransactionException if an error occurs
@@ -407,7 +406,7 @@ public class DbDao {
 
     /**
      * getPersistenceClassNames() gets all the persistence class names.
-     * 
+     *
      * @return the persistence class names
      */
     public Set<String> getPersistenceClassNames() {
@@ -426,7 +425,7 @@ public class DbDao {
 
     /**
      * Register the IntegrityAudit instance.
-     * 
+     *
      * @param altDbUrl alternate DB URL to be placed into the record, or {@code null} to use the
      *        default
      */
@@ -497,7 +496,7 @@ public class DbDao {
 
     /**
      * Set designated.
-     * 
+     *
      * @param resourceName the resource name
      * @param persistenceUnit the persistence unit
      * @param desig true if is designated
@@ -559,7 +558,7 @@ public class DbDao {
 
     /**
      * Set last updated.
-     * 
+     *
      * @throws DbDaoTransactionException if an error occurs
      */
     public void setLastUpdated() throws DbDaoTransactionException {
@@ -659,20 +658,20 @@ public class DbDao {
 
     /**
      * Changes designation to specified resourceName
-     * 
+     *
      * <p>static lock object in conjunction with synchronized keyword ensures that designation
      * changes are done serially within a resource. I.e. static lock ensures that multiple
      * instantiations of DbDao don't interleave changeDesignated() invocations and potentially
      * produce simultaneous designations.
-     * 
+     *
      * <p>Optimistic locking (the default, versus pessimistic) is sufficient to avoid simultaneous
      * designations from interleaved changeDesignated() invocations from different resources
      * (entities), because it prevents "dirty" and "non-repeatable" reads.
-     * 
+     *
      * <p>See http://www.objectdb.com/api/java/jpa/LockModeType
-     * 
+     *
      * <p>and
-     * 
+     *
      * <p>http://stackoverflow.com/questions/2120248/how-to-synchronize-a-static-
      * variable-among-threads-running-different-instances-o
      */
@@ -706,26 +705,7 @@ public class DbDao {
                  * Execute query using pessimistic write lock. This ensures that if anyone else is
                  * currently reading the records we'll throw a LockTimeoutException.
                  */
-                @SuppressWarnings("unchecked")
-                List<IntegrityAuditEntity> integrityAuditEntityList = query.getResultList();
-                for (Object o : integrityAuditEntityList) {
-                    if (o instanceof IntegrityAuditEntity) {
-                        IntegrityAuditEntity integrityAuditEntity = (IntegrityAuditEntity) o;
-                        if (integrityAuditEntity.getResourceName().equals(resourceName)) {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("changeDesignated: Designating resourceName="
-                                        + integrityAuditEntity.getResourceName());
-                            }
-                            integrityAuditEntity.setDesignated(true);
-                        } else {
-                            if (logger.isDebugEnabled()) {
-                                logger.debug("changeDesignated: Removing designation from resourceName="
-                                        + integrityAuditEntity.getResourceName());
-                            }
-                            integrityAuditEntity.setDesignated(false);
-                        }
-                    }
-                }
+                setDesignatedEntity(resourceName, query);
 
                 if (logger.isDebugEnabled()) {
                     logger.debug("changeDesignated: Committing designation to resourceName=" + resourceName);
@@ -739,20 +719,6 @@ public class DbDao {
                  * read/update are pretty slim (we're only in this method for two or three
                  * milliseconds)
                  */
-            } catch (LockTimeoutException e) {
-                if (em != null) {
-                    em.getTransaction().rollback();
-
-                    String msg = "DbDao: changeDesignated() caught LockTimeoutException, message="
-                            + e.getMessage();
-                    logger.error(msg + e);
-                    throw new DbDaoTransactionException(msg, e);
-                } else {
-                    String msg = "DbDao: changeDesignated() caught LockTimeoutException, message="
-                            + e.getMessage() + ". Error rolling back transaction.";
-                    logger.error(msg + e);
-                    throw new DbDaoTransactionException(msg, e);
-                }
             } catch (Exception e) {
                 if (em != null) {
                     em.getTransaction().rollback();
@@ -775,6 +741,31 @@ public class DbDao {
                             + (AuditorTime.getInstance().getMillis() - startTime) + "ms");
         }
 
+    }
+
+    private void setDesignatedEntity(String resourceName, Query query) {
+        @SuppressWarnings("unchecked")
+        List<IntegrityAuditEntity> integrityAuditEntityList = query.getResultList();
+        for (Object o : integrityAuditEntityList) {
+            if (!(o instanceof IntegrityAuditEntity)) {
+                continue;
+            }
+
+            IntegrityAuditEntity integrityAuditEntity = (IntegrityAuditEntity) o;
+            if (integrityAuditEntity.getResourceName().equals(resourceName)) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("changeDesignated: Designating resourceName="
+                            + integrityAuditEntity.getResourceName());
+                }
+                integrityAuditEntity.setDesignated(true);
+            } else {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("changeDesignated: Removing designation from resourceName="
+                            + integrityAuditEntity.getResourceName());
+                }
+                integrityAuditEntity.setDesignated(false);
+            }
+        }
     }
 
 }

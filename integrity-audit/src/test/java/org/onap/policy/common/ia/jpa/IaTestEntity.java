@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -66,7 +66,9 @@ public class IaTestEntity implements Serializable {
     @Column(name = "modified_date", nullable = false)
     private Date modifiedDate;
 
-    public IaTestEntity() {}
+    public IaTestEntity() {
+        super();
+    }
 
     /**
      * PrePersist call back method.
@@ -85,7 +87,7 @@ public class IaTestEntity implements Serializable {
 
     /**
      * The the Im test Id.
-     * 
+     *
      * @return the Id
      */
     public long getImTestId() {
@@ -94,7 +96,7 @@ public class IaTestEntity implements Serializable {
 
     /**
      * Get the createdBy.
-     * 
+     *
      * @return the createdBy
      */
     public String getCreatedBy() {
@@ -103,7 +105,7 @@ public class IaTestEntity implements Serializable {
 
     /**
      * Set the createdBy.
-     * 
+     *
      * @param createdBy the createdBy to set
      */
     public void setCreatedBy(String createdBy) {
@@ -112,7 +114,7 @@ public class IaTestEntity implements Serializable {
 
     /**
      * Get the modifiedBy.
-     * 
+     *
      * @return the modifiedBy
      */
     public String getModifiedBy() {
@@ -121,7 +123,7 @@ public class IaTestEntity implements Serializable {
 
     /**
      * Set the ModifiedBy.
-     * 
+     *
      * @param modifiedBy the modifiedBy to set
      */
     public void setModifiedBy(String modifiedBy) {
@@ -130,7 +132,7 @@ public class IaTestEntity implements Serializable {
 
     /**
      * Get the ModifiedDate.
-     * 
+     *
      * @return the modifiedDate
      */
     public Date getModifiedDate() {
@@ -139,7 +141,7 @@ public class IaTestEntity implements Serializable {
 
     /**
      * Set the ModifiedDate.
-     * 
+     *
      * @param modifiedDate the modifiedDate to set
      */
     public void setModifiedDate(Date modifiedDate) {
@@ -148,7 +150,7 @@ public class IaTestEntity implements Serializable {
 
     /**
      * Get the CreatedDate.
-     * 
+     *
      * @return the createdDate
      */
     public Date getCreatedDate() {
@@ -157,7 +159,7 @@ public class IaTestEntity implements Serializable {
 
     /**
      * Set the person.
-     * 
+     *
      * @param person the person to set
      */
     public void setPersonTest(PersonSample person) {
@@ -166,7 +168,7 @@ public class IaTestEntity implements Serializable {
 
     /**
      * Get the person.
-     * 
+     *
      * @return the person
      */
     public PersonSample getPersonTest() {
