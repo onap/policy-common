@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -83,19 +83,19 @@ public class StateManagement extends Observable {
     /*
      * Guarantees single-threadedness of all actions. Only one action can execute at a time. That
      * avoids race conditions between actions being called from different places.
-     * 
+     *
      * Some actions can take significant time to complete and, if another conflicting action is
      * called during its execution, it could put the system in an inconsistent state. This very
      * thing happened when demote was called and the active/standby algorithm, seeing the state
      * attempted to promote the PDP-D.
-     * 
+     *
      */
     private static final Object SYNCLOCK = new Object();
     private static final Object FLUSHLOCK = new Object();
 
     /**
      * StateManagement constructor.
-     * 
+     *
      * @param entityManagerFactory the entity manager factory
      * @param resourceName the resource name
      * @throws StateManagementException if an error occurs
@@ -189,7 +189,7 @@ public class StateManagement extends Observable {
 
     /**
      * lock() changes the administrative state to locked.
-     * 
+     *
      * @throws StateManagementException if an error occurs
      */
     public void lock() throws StateManagementException {
@@ -232,7 +232,7 @@ public class StateManagement extends Observable {
 
     /**
      * unlock() changes the administrative state to unlocked.
-     * 
+     *
      * @throws StateManagementException if an error occurs
      */
     public void unlock() throws StateManagementException {
@@ -276,7 +276,7 @@ public class StateManagement extends Observable {
     /**
      * enableNotFailed() removes the "failed" availability status and changes the operational state
      * to enabled if no dependency is also failed.
-     * 
+     *
      * @throws StateManagementException if an error occurs
      */
     public void enableNotFailed() throws StateManagementException {
@@ -323,7 +323,7 @@ public class StateManagement extends Observable {
     /**
      * disableFailed() changes the operational state to disabled and adds availability status of
      * "failed".
-     * 
+     *
      * @throws StateManagementException if an error occurs
      */
     public void disableFailed() throws StateManagementException {
@@ -369,7 +369,7 @@ public class StateManagement extends Observable {
     /**
      * This version of disableFailed is to be used to manipulate the state of a remote resource in
      * the event that remote resource has failed but its state is still showing that it is viable.
-     * 
+     *
      * @throws StateManagementException if an error occurs
      */
     public void disableFailed(final String otherResourceName) throws StateManagementException {
@@ -421,7 +421,7 @@ public class StateManagement extends Observable {
     /**
      * disableDependency() changes operational state to disabled and adds availability status of
      * "dependency".
-     * 
+     *
      * @throws StateManagementException if an error occurs
      */
     public void disableDependency() throws StateManagementException {
@@ -467,7 +467,7 @@ public class StateManagement extends Observable {
     /**
      * enableNoDependency() removes the availability status of "dependency " and will change the
      * operational state to enabled if not otherwise failed.
-     * 
+     *
      * @throws StateManagementException if an error occurs
      */
     public void enableNoDependency() throws StateManagementException {
@@ -512,11 +512,11 @@ public class StateManagement extends Observable {
 
     /**
      * promote() changes the standby status to providingservice if not otherwise failed.
-     * 
+     *
      * @throws StandbyStatusException if the status fails to change
      * @throws StateManagementException if an error occurs when promoting the status
      */
-    public void promote() throws StandbyStatusException, StateManagementException {
+    public void promote() throws IntegrityMonitorException {
         synchronized (SYNCLOCK) {
             if (logger.isDebugEnabled()) {
                 logger.debug("\nStateManagement: SYNCLOCK promote() operation for resourceName = {}\n",
@@ -564,15 +564,15 @@ public class StateManagement extends Observable {
 
     /**
      * demote() changes standbystatus to hotstandby or, if failed, coldstandby.
-     * 
+     *
      * @throws StateManagementException if an error occurs
      */
     public void demote() throws StateManagementException {
         synchronized (SYNCLOCK) {
             if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK demote() operation for resourceName = {}\n", 
+                logger.debug("\nStateManagement: SYNCLOCK demote() operation for resourceName = {}\n",
                         this.resourceName);
-                logger.debug("StateManagement: demote() operation started, resourceName = {}", 
+                logger.debug("StateManagement: demote() operation started, resourceName = {}",
                         this.resourceName);
             }
             final EntityManager em = emf.createEntityManager();
@@ -611,7 +611,7 @@ public class StateManagement extends Observable {
      * the remote resource has failed is such a way that it cannot update its own states. In
      * particular this is observed by PDP-D DroolsPdpsElectionHandler when it is trying to determine
      * which PDP-D should be designated as the lead.
-     * 
+     *
      * @param otherResourceName the resouce name
      * @throws StateManagementException if an error occurs
      */
@@ -660,7 +660,7 @@ public class StateManagement extends Observable {
 
     /**
      * Get the administration state.
-     * 
+     *
      * @return the administration state
      */
     public String getAdminState() {
@@ -696,7 +696,7 @@ public class StateManagement extends Observable {
 
     /**
      * Get the operational state.
-     * 
+     *
      * @return the operational state
      */
     public String getOpState() {
@@ -732,7 +732,7 @@ public class StateManagement extends Observable {
 
     /**
      * Get the availability status.
-     * 
+     *
      * @return the availability status
      */
     public String getAvailStatus() {
@@ -768,7 +768,7 @@ public class StateManagement extends Observable {
 
     /**
      * Get the standy status.
-     * 
+     *
      * @return the standby status
      */
     public String getStandbyStatus() {
@@ -804,7 +804,7 @@ public class StateManagement extends Observable {
 
     /**
      * Get the standbystatus of a particular resource.
-     * 
+     *
      * @param otherResourceName the resource
      * @return the standby status
      */
@@ -855,7 +855,7 @@ public class StateManagement extends Observable {
 
     /**
      * Find a StateManagementEntity.
-     * 
+     *
      * @param em the entity manager
      * @param otherResourceName the resource name
      * @return the StateManagementEntity
@@ -944,7 +944,7 @@ public class StateManagement extends Observable {
 
         /**
          * Create an instance.
-         * 
+         *
          * @param em the entity manager
          */
         public MyTransaction(final EntityManager em) {

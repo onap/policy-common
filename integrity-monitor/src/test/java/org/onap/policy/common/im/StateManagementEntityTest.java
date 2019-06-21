@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -53,7 +53,7 @@ public class StateManagementEntityTest extends IntegrityMonitorTestBase {
      * Tear down after the test class.
      */
     @AfterClass
-    public static void tearDownClass() throws Exception {
+    public static void tearDownClass() {
         IntegrityMonitorTestBase.tearDownAfterClass();
     }
 
@@ -113,29 +113,25 @@ public class StateManagementEntityTest extends IntegrityMonitorTestBase {
             logger.debug("??? after commit");
         }
 
-        try {
-            Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
+        Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
 
-            query.setParameter("resource", resourceName);
+        query.setParameter("resource", resourceName);
 
-            // Just test that we are retrieving the right object
-            @SuppressWarnings("rawtypes")
-            List resourceList = query.getResultList();
-            if (!resourceList.isEmpty()) {
-                // exist
-                StateManagementEntity sme2 = (StateManagementEntity) resourceList.get(0);
+        // Just test that we are retrieving the right object
+        @SuppressWarnings("rawtypes")
+        List resourceList = query.getResultList();
+        if (!resourceList.isEmpty()) {
+            // exist
+            StateManagementEntity sme2 = (StateManagementEntity) resourceList.get(0);
 
-                assertEquals(sme.getResourceName(), sme2.getResourceName());
-                assertEquals(sme.getAdminState(), sme2.getAdminState());
-                assertEquals(sme.getOpState(), sme2.getOpState());
-                assertEquals(sme.getAvailStatus(), sme2.getAvailStatus());
-                assertEquals(sme.getStandbyStatus(), sme2.getStandbyStatus());
-                logger.debug("--");
-            } else {
-                logger.debug("Record not found, resourceName: {}", resourceName);
-            }
-        } catch (Exception ex) {
-            logger.error("Exception on select query: " + ex.toString());
+            assertEquals(sme.getResourceName(), sme2.getResourceName());
+            assertEquals(sme.getAdminState(), sme2.getAdminState());
+            assertEquals(sme.getOpState(), sme2.getOpState());
+            assertEquals(sme.getAvailStatus(), sme2.getAvailStatus());
+            assertEquals(sme.getStandbyStatus(), sme2.getStandbyStatus());
+            logger.debug("--");
+        } else {
+            logger.debug("Record not found, resourceName: {}", resourceName);
         }
 
         logger.debug("\n\nJpaTest: Exit\n\n");
