@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,10 +20,12 @@
 
 package org.onap.policy.common.im;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.Semaphore;
 import org.junit.After;
@@ -36,6 +38,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class AllSeemsWellTest extends IntegrityMonitorTestBase {
+    private static final String ALL_SEEMS_WELL_MSG = "'AllSeemsWellTest - ALLSEEMSWELL'";
+
     private static Logger logger = LoggerFactory.getLogger(AllSeemsWellTest.class);
 
     private static Properties myProp;
@@ -51,11 +55,11 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
     public static void setUpClass() throws Exception {
         IntegrityMonitorTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + AllSeemsWellTest.class.getSimpleName());
 
-        resourceName = IntegrityMonitorTestBase.siteName + "." + IntegrityMonitorTestBase.nodeType;
+        resourceName = IntegrityMonitorTestBase.SITE_NAME + "." + IntegrityMonitorTestBase.NODE_TYPE;
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
+    public static void tearDownClass() {
         IntegrityMonitorTestBase.tearDownAfterClass();
     }
 
@@ -73,11 +77,11 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
         junitSem = new Semaphore(0);
 
         IntegrityMonitor im = new IntegrityMonitor(resourceName, myProp) {
-            
+
             @Override
             protected void runStarted() throws InterruptedException {
                 monitorSem.acquire();
-                
+
                 junitSem.release();
                 monitorSem.acquire();
             }
@@ -86,7 +90,7 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
             protected void monitorCompleted() throws InterruptedException {
                 junitSem.release();
                 monitorSem.acquire();
-            }            
+            }
         };
 
         Whitebox.setInternalState(IntegrityMonitor.class, IM_INSTANCE_FIELD, im);
@@ -137,20 +141,19 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
                         + "{}\nStandbyStatus = {}\n",
                 sm.getAdminState(), sm.getOpState(), sm.getAvailStatus(), sm.getStandbyStatus());
 
-        // assertEquals(StateManagement.DISABLED, sm.getOpState());
-
         Map<String, String> allNotWellMap = im.getAllNotWellMap();
-        for (String key : allNotWellMap.keySet()) {
-            logger.debug("AllSeemsWellTest: allNotWellMap: key = {}  msg = {}", key, allNotWellMap.get(key));
+        if (logger.isDebugEnabled()) {
+            for (Entry<String, String> ent : allNotWellMap.entrySet()) {
+                logger.debug("AllSeemsWellTest: allNotWellMap: key = {}  msg = {}", ent.getKey(), ent.getValue());
+            }
         }
-        // assertEquals(1, allNotWellMap.size());
+        assertEquals(1, allNotWellMap.size());
 
-        im.getAllSeemsWellMap();
-        // assertTrue(allSeemsWellMap.isEmpty());
+        assertTrue(im.getAllSeemsWellMap().isEmpty());
 
         // Return to normal
         im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLSEEMSWELL,
-                "'AllSeemsWellTest - ALLSEEMSWELL'");
+                ALL_SEEMS_WELL_MSG);
 
         // Wait for the state to change due to ALLNOTWELL
         waitStateChange();
@@ -160,44 +163,38 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
                         + "{}\nStandbyStatus = {}\n",
                 sm.getAdminState(), sm.getOpState(), sm.getAvailStatus(), sm.getStandbyStatus());
 
-        // assertEquals(StateManagement.ENABLED, sm.getOpState());
+        assertEquals(StateManagement.ENABLED, sm.getOpState());
 
         allNotWellMap = im.getAllNotWellMap();
         assertTrue(allNotWellMap.isEmpty());
 
         Map<String, String> allSeemsWellMap = im.getAllSeemsWellMap();
         assertEquals(1, allSeemsWellMap.size());
-        for (String key : allSeemsWellMap.keySet()) {
-            logger.debug("AllSeemsWellTest: allSeemsWellMap: key = {}  msg = {}", key, allSeemsWellMap.get(key));
+        if (logger.isDebugEnabled()) {
+            for (Entry<String, String> ent : allSeemsWellMap.entrySet()) {
+                logger.debug("AllSeemsWellTest: allSeemsWellMap: key = {}  msg = {}", ent.getKey(), ent.getValue());
+            }
         }
 
         // Check for null parameters
-        assertException(im, imx -> {
-            imx.allSeemsWell(null, IntegrityMonitorProperties.ALLSEEMSWELL, "'AllSeemsWellTest - ALLSEEMSWELL'");
-        });
+        assertThatThrownBy(() -> im.allSeemsWell(null, IntegrityMonitorProperties.ALLSEEMSWELL, ALL_SEEMS_WELL_MSG));
 
-        assertException(im, imx -> {
-            im.allSeemsWell("", IntegrityMonitorProperties.ALLSEEMSWELL, "'AllSeemsWellTest - ALLSEEMSWELL'");
-        });
+        assertThatThrownBy(() -> im.allSeemsWell("", IntegrityMonitorProperties.ALLSEEMSWELL, ALL_SEEMS_WELL_MSG));
 
-        assertException(im, imx -> {
-            im.allSeemsWell(this.getClass().getName(), null, "'AllSeemsWellTest - ALLSEEMSWELL'");
-        });
+        assertThatThrownBy(() -> im.allSeemsWell(this.getClass().getName(), null, ALL_SEEMS_WELL_MSG));
 
-        assertException(im, imx -> {
-            im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLSEEMSWELL, null);
-        });
+        assertThatThrownBy(() -> im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLSEEMSWELL,
+                        null));
 
-        assertException(im, imx -> {
-            im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLSEEMSWELL, "");
-        });
+        assertThatThrownBy(
+            () -> im.allSeemsWell(this.getClass().getName(), IntegrityMonitorProperties.ALLSEEMSWELL, ""));
 
         logger.debug("\n\ntestAllSeemsWell: Exit\n\n");
     }
 
     /**
      * Waits for the state to change.
-     * 
+     *
      * @throws InterruptedException if the thread is interrupted
      */
     private void waitStateChange() throws InterruptedException {

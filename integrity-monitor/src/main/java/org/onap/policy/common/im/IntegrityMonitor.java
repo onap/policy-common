@@ -1,8 +1,8 @@
-/*
+/*-
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.function.Consumer;
 import javax.management.JMX;
 import javax.management.MBeanServerConnection;
 import javax.persistence.EntityManager;
@@ -38,6 +39,7 @@ import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.im.jmx.ComponentAdmin;
 import org.onap.policy.common.im.jmx.ComponentAdminMBean;
 import org.onap.policy.common.im.jmx.JmxAgentConnection;
@@ -95,7 +97,10 @@ public class IntegrityMonitor {
 
     private StateManagement stateManager = null;
 
-    private FpManager fpManager = null;
+    /**
+     * Set to {@code null} if to stop running.
+     */
+    private volatile Thread fpManager = null;
 
     // The forward progress counter is incremented as the
     // process being monitored makes forward progress
@@ -226,7 +231,7 @@ public class IntegrityMonitor {
         // Did it get created?
         //
         if (emf == null) {
-            logger.error("Error creating IM entity manager factory with persistence unit: {}", 
+            logger.error("Error creating IM entity manager factory with persistence unit: {}",
                             getPersistenceUnit());
             throw new IntegrityMonitorException("Unable to create IM Entity Manager Factory");
         }
@@ -343,7 +348,10 @@ public class IntegrityMonitor {
             logger.error("ComponentAdmin constructor exception: {}", e.toString(), e);
         }
 
-        fpManager = new FpManager();
+        // set now as the last time the refreshStateAudit ran
+        IntegrityMonitor.this.refreshStateAuditLastRunDate = MonitorTime.getInstance().getDate();
+
+        fpManager = new Thread(this::runFpManager);
         fpManager.start();
 
     }
@@ -399,11 +407,11 @@ public class IntegrityMonitor {
     public static void deleteInstance() throws IntegrityMonitorException {
         logger.debug("deleteInstance() called");
         synchronized (getInstanceLock) {
-            if (isUnitTesting() && instance != null && instance.getFpManager() != null) {
-                FpManager fpm = instance.getFpManager();
-
+            if (isUnitTesting() && instance != null && instance.fpManager != null) {
                 // Stop the FPManager thread
-                fpm.stopAndExit();
+                Thread fpm = instance.fpManager;
+                instance.fpManager = null;
+                fpm.interrupt();
 
                 try {
                     // Make sure it has exited
@@ -423,10 +431,6 @@ public class IntegrityMonitor {
             }
         }
         logger.debug("deleteInstance() exit");
-    }
-
-    private FpManager getFpManager() {
-        return fpManager;
     }
 
     private static String getJmxUrl() throws IntegrityMonitorException {
@@ -598,66 +602,70 @@ public class IntegrityMonitor {
 
         // verify that the ForwardProgress is current (check last_updated)
         if (errorMsg == null) {
-            if (forwardProgressEntity != null && stateManagementEntity != null) {
-                Date date = MonitorTime.getInstance().getDate();
-                long diffMs = date.getTime() - forwardProgressEntity.getLastUpdated().getTime();
-                logger.debug("IntegrityMonitor.stateCheck(): diffMs = {}", diffMs);
-
-                // Threshold for a stale entry
-                long staleMs = maxFpcUpdateIntervalMs;
-                logger.debug("IntegrityMonitor.stateCheck(): staleMs = {}", staleMs);
-
-                if (diffMs > staleMs) {
-                    // ForwardProgress is stale. Disable it
-                    try {
-                        if (!stateManagementEntity.getOpState().equals(StateManagement.DISABLED)) {
-                            logger.debug("IntegrityMonitor.stateCheck(): Changing OpStat = disabled for {}", dep);
-                            stateManager.disableFailed(dep);
-                        }
-                    } catch (Exception e) {
-                        String msg = STATE_CHECK_STRING + dep
-                                + "; " + e.getMessage();
-                        logger.error("{}", msg, e);
-                    }
-                }
-            } else {
-
-                if (forwardProgressEntity == null) {
-                    String msg = STATE_CHECK_STRING + dep
-                            + "; " + " forwardProgressEntity == null.";
-                    logger.error("{}", msg);
-                } else {
-                    String msg = STATE_CHECK_STRING + dep
-                            + "; " + " stateManagementEntity == null.";
-                    logger.error("{}", msg);
-                }
-            }
+            checkForwardProgress(dep, forwardProgressEntity, stateManagementEntity);
         }
 
         // check operation, admin and standby states of dependent resource
         if (errorMsg == null) {
-            if (stateManagementEntity != null) {
-                if ((stateManager.getAdminState() != null)
-                        && stateManagementEntity.getAdminState().equals(StateManagement.LOCKED)) {
-                    errorMsg = dep + ": resource is administratively locked";
-                    logger.error("{}", errorMsg);
-                } else if ((stateManager.getOpState() != null)
-                        && stateManagementEntity.getOpState().equals(StateManagement.DISABLED)) {
-                    errorMsg = dep + ": resource is operationally disabled";
-                    logger.error("{}", errorMsg);
-                } else if ((stateManager.getStandbyStatus() != null)
-                        && stateManagementEntity.getStandbyStatus().equals(StateManagement.COLD_STANDBY)) {
-                    errorMsg = dep + ": resource is cold standby";
-                    logger.error("{}", errorMsg);
-                }
-            } else {
-                errorMsg = dep + ": could not check standy state of resource. stateManagementEntity == null.";
-                logger.error("{}", errorMsg);
-            }
+            errorMsg = checkDependentStates(dep, stateManagementEntity);
         }
 
         String returnMsg = "IntegrityMonitor.stateCheck(): returned error_msg: " + errorMsg;
         logger.debug("{}", returnMsg);
+        return errorMsg;
+    }
+
+    private void checkForwardProgress(String dep, ForwardProgressEntity forwardProgressEntity,
+                    StateManagementEntity stateManagementEntity) {
+        if (forwardProgressEntity != null && stateManagementEntity != null) {
+            Date date = MonitorTime.getInstance().getDate();
+            long diffMs = date.getTime() - forwardProgressEntity.getLastUpdated().getTime();
+            logger.debug("IntegrityMonitor.stateCheck(): diffMs = {}", diffMs);
+
+            // Threshold for a stale entry
+            long staleMs = maxFpcUpdateIntervalMs;
+            logger.debug("IntegrityMonitor.stateCheck(): staleMs = {}", staleMs);
+
+            if (diffMs > staleMs) {
+                // ForwardProgress is stale. Disable it
+                disableEntity(dep, stateManagementEntity);
+            }
+        } else {
+
+            if (forwardProgressEntity == null) {
+                String msg = STATE_CHECK_STRING + dep
+                        + "; " + " forwardProgressEntity == null.";
+                logger.error("{}", msg);
+            } else {
+                String msg = STATE_CHECK_STRING + dep
+                        + "; " + " stateManagementEntity == null.";
+                logger.error("{}", msg);
+            }
+        }
+    }
+
+    private String checkDependentStates(String dep, StateManagementEntity stateManagementEntity) {
+        String errorMsg = null;
+
+        if (stateManagementEntity != null) {
+            if ((stateManager.getAdminState() != null)
+                    && stateManagementEntity.getAdminState().equals(StateManagement.LOCKED)) {
+                errorMsg = dep + ": resource is administratively locked";
+                logger.error("{}", errorMsg);
+            } else if ((stateManager.getOpState() != null)
+                    && stateManagementEntity.getOpState().equals(StateManagement.DISABLED)) {
+                errorMsg = dep + ": resource is operationally disabled";
+                logger.error("{}", errorMsg);
+            } else if ((stateManager.getStandbyStatus() != null)
+                    && stateManagementEntity.getStandbyStatus().equals(StateManagement.COLD_STANDBY)) {
+                errorMsg = dep + ": resource is cold standby";
+                logger.error("{}", errorMsg);
+            }
+        } else {
+            errorMsg = dep + ": could not check standy state of resource. stateManagementEntity == null.";
+            logger.error("{}", errorMsg);
+        }
+
         return errorMsg;
     }
 
@@ -694,18 +702,7 @@ public class IntegrityMonitor {
                 if ((currTime - fpx.getLastUpdated().getTime()) > maxFpcUpdateIntervalMs) {
                     errorMsg = dep + ": FP count has not been updated in the last " + maxFpcUpdateIntervalMs + "ms";
                     logger.error("{}", errorMsg);
-                    try {
-                        // create instance of StateMangement class for dependent
-                        StateManagement depStateManager = new StateManagement(emf, dep);
-                        if (!depStateManager.getOpState().equals(StateManagement.DISABLED)) {
-                            logger.debug("Forward progress not detected for dependent resource {}. Setting dependent's "
-                                    + "state to disable failed.", dep);
-                            depStateManager.disableFailed();
-                        }
-                    } catch (Exception e) {
-                        // ignore errors
-                        logger.error("Update dependent state failed with exception: ", e);
-                    }
+                    disableEntity(dep);
                 }
             } else {
                 // resource entry not found in FPC table
@@ -748,14 +745,12 @@ public class IntegrityMonitor {
                 et.commit();
             }
             logger.debug("getAllForwardProgressEntity: myList.size(): {}", myList.size());
-            if (!myList.isEmpty()) {
-                for (int i = 0; i < myList.size(); i++) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("getAllForwardProgressEntity: myList.get({}).getResourceName(): {}", i,
-                                ((ForwardProgressEntity) myList.get(i)).getResourceName());
-                    }
-                    fpList.add((ForwardProgressEntity) myList.get(i));
+            for (int i = 0; i < myList.size(); i++) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("getAllForwardProgressEntity: myList.get({}).getResourceName(): {}", i,
+                            ((ForwardProgressEntity) myList.get(i)).getResourceName());
                 }
+                fpList.add((ForwardProgressEntity) myList.get(i));
             }
             synchronized (imFlushLock) {
                 if (et.isActive()) {
@@ -856,171 +851,236 @@ public class IntegrityMonitor {
         synchronized (dependencyCheckLock) {
 
             // Start with the error message empty
-            String errorMsg = "";
-            boolean dependencyFailure = false;
+            StringBuilder errorMsg = new StringBuilder();
 
             /*
              * Before we check dependency groups we need to check subsystemTest.
              */
-            try {
-                // Test any subsystems that are not covered under the dependency
-                // relationship
-                subsystemTest();
-            } catch (Exception e) {
-                logger.error("IntegrityMonitor threw exception", e);
-                dependencyFailure = true;
-                // This indicates a subsystemTest failure
-                try {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug(
-                                "{}: There has been a subsystemTest failure with error:{} Updating this resource's "
-                                        + "state to disableDependency",
-                                resourceName, e.getMessage());
-                    }
-                    // Capture the subsystemTest failure info
-                    if (!errorMsg.isEmpty()) {
-                        errorMsg = errorMsg.concat(",");
-                    }
-                    errorMsg = errorMsg.concat(resourceName + ": " + e.getMessage());
-                    this.stateManager.disableDependency();
-                } catch (Exception ex) {
-                    logger.error(EXCEPTION_STRING, ex);
-                    if (!errorMsg.isEmpty()) {
-                        errorMsg = errorMsg.concat(",");
-                    }
-                    errorMsg = errorMsg.concat("\n" + resourceName
-                            + ": Failed to disable dependency after subsystemTest failure due to: " + ex.getMessage());
-                }
-            }
+            boolean dependencyOk = checkSubsystems(errorMsg);
 
             // Check the sanity of dependents for lead subcomponents
             if (depGroups != null && depGroups.length > 0) {
-                // check state of resources in dependency groups
-                for (String group : depGroups) {
-                    group = group.trim();
-                    if (group.isEmpty()) {
-                        // ignore empty group
-                        continue;
-                    }
-                    String[] dependencies = group.split(",");
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("group dependencies = {}", Arrays.toString(dependencies));
-                    }
-                    int realDepCount = 0;
-                    int failDepCount = 0;
-                    for (String dep : dependencies) {
-                        dep = dep.trim();
-                        if (dep.isEmpty()) {
-                            // ignore empty dependency
-                            continue;
-                        }
-                        realDepCount++; // this is a valid dependency whose state is tracked
-                        // if a resource is down, its FP count will not be incremented
-                        String failMsg = fpCheck(dep);
-                        if (failMsg == null) {
-                            if (testViaJmx) {
-                                failMsg = jmxCheck(dep);
-                            } else {
-                                failMsg = stateCheck(dep);
-                            }
-                        }
-                        if (failMsg != null) {
-                            failDepCount++;
-                            if (!errorMsg.isEmpty()) {
-                                errorMsg = errorMsg.concat(", ");
-                            }
-                            errorMsg = errorMsg.concat(failMsg);
-                        }
-                    } // end for (String dep : dependencies)
-
-                    // if all dependencies in a group are failed, set this
-                    // resource's state to disable dependency
-                    if ((realDepCount > 0) && (failDepCount == realDepCount)) {
-                        dependencyFailure = true;
-                        try {
-                            logger.debug("All dependents in group {} have failed their health check. Updating this "
-                                    + "resource's state to disableDependency", group);
-                            if (stateManager.getAvailStatus() == null || !((stateManager.getAvailStatus())
-                                    .equals(StateManagement.DEPENDENCY)
-                                    || (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED))) {
-                                // Note: redundant calls are made by
-                                // refreshStateAudit
-                                this.stateManager.disableDependency();
-                            }
-                        } catch (Exception e) {
-                            logger.error(EXCEPTION_STRING, e);
-                            if (!errorMsg.isEmpty()) {
-                                errorMsg = errorMsg.concat(",");
-                            }
-                            errorMsg = errorMsg.concat(resourceName + ": Failed to disable dependency");
-                            break; // break out on failure and skip checking other groups
-                        }
-                    }
-                    // check the next group
-
-                } // end for (String group : depGroups)
+                dependencyOk = checkDependencies(errorMsg) && dependencyOk;
 
                 /*
                  * We have checked all the dependency groups. If all are ok and subsystemTest
                  * passed, dependencyFailure == false
                  */
-                if (!dependencyFailure) {
-                    try {
-                        logger.debug(
-                                "All dependency groups have at least one viable member. Updating this resource's state"
-                                        + " to enableNoDependency");
-                        if (stateManager.getAvailStatus() != null
-                                && ((stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY)
-                                || (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED))) {
-                            // Note: redundant calls are made by
-                            // refreshStateAudit
-                            this.stateManager.enableNoDependency();
-                        }
-                        // The refreshStateAudit will catch the case where it is disabled but
-                        // availStatus != failed
-                    } catch (Exception e) {
-                        logger.error(EXCEPTION_STRING, e);
-                        if (!errorMsg.isEmpty()) {
-                            errorMsg = errorMsg.concat(",");
-                        }
-                        errorMsg = errorMsg.concat(resourceName + ": Failed to enable no dependency");
-                    }
+                if (dependencyOk) {
+                    dependenciesGood(errorMsg);
                 }
-            } else if (!dependencyFailure) {
+            } else if (dependencyOk) {
                 /*
                  * This is put here to clean up when no dependency group should exist, but one was
                  * erroneously added which caused the state to be disabled/dependency/coldstandby
                  * and later removed. We saw this happen in the lab, but is not very likely in a
                  * production environment...but you never know.
                  */
-                try {
-                    logger.debug("There are no dependents. Updating this resource's state to enableNoDependency");
-                    if (stateManager.getAvailStatus() != null
-                            && ((stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY)
-                            || (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED))) {
-                        // Note: redundant calls are made by refreshStateAudit
-                        this.stateManager.enableNoDependency();
-                    }
-                    // The refreshStateAudit will catch the case where it is disabled but
-                    // availStatus != failed
-                } catch (Exception e) {
-                    logger.error(EXCEPTION_STRING, e);
-                    if (!errorMsg.isEmpty()) {
-                        errorMsg = errorMsg.concat(",");
-                    }
-                    errorMsg = errorMsg.concat(resourceName + ": Failed to enable no dependency");
-                }
+                noDependencyGroups(errorMsg);
             }
 
-            if (!errorMsg.isEmpty()) {
+            dependencyCheckErrorMsg = errorMsg.toString();
+            lastDependencyCheckTime = MonitorTime.getInstance().getMillis();
+
+            if (!dependencyCheckErrorMsg.isEmpty()) {
                 logger.error("Sanity failure detected in a dependent resource: {}", errorMsg);
 
             }
 
-            dependencyCheckErrorMsg = errorMsg;
-            lastDependencyCheckTime = MonitorTime.getInstance().getMillis();
             logger.debug("dependencyCheck: exit");
-            return errorMsg;
+            return dependencyCheckErrorMsg;
+        }
+    }
+
+    /**
+     * Checks the subsystems.
+     *
+     * @param errorMsg error messages are appended to this
+     * @return {@code true} if the test succeeds, {@code false} otherwise
+     */
+    private boolean checkSubsystems(StringBuilder errorMsg) {
+        try {
+            // Test any subsystems that are not covered under the dependency
+            // relationship
+            subsystemTest();
+            return true;
+
+        } catch (Exception e) {
+            logger.error("IntegrityMonitor threw exception", e);
+            // This indicates a subsystemTest failure
+            try {
+                if (logger.isDebugEnabled()) {
+                    logger.debug(
+                            "{}: There has been a subsystemTest failure with error:{} Updating this resource's "
+                                    + "state to disableDependency",
+                            resourceName, e.getMessage());
+                }
+                // Capture the subsystemTest failure info
+                appendSeparator(errorMsg);
+                errorMsg.append(resourceName);
+                errorMsg.append(": ");
+                errorMsg.append(e.getMessage());
+                this.stateManager.disableDependency();
+            } catch (Exception ex) {
+                logger.error(EXCEPTION_STRING, ex);
+                appendSeparator(errorMsg);
+                errorMsg.append('\n');
+                errorMsg.append(resourceName);
+                errorMsg.append(": Failed to disable dependency after subsystemTest failure due to: ");
+                errorMsg.append(ex.getMessage());
+            }
+
+            return false;
+        }
+    }
+
+    /**
+     * Checks the dependencies.
+     *
+     * @param errorMsg error messages are appended to this
+     * @return {@code true} if the dependencies are OK, {@code false} otherwise
+     */
+    private boolean checkDependencies(StringBuilder errorMsg) {
+        boolean dependencyOk = true;
+
+        // check state of resources in dependency groups
+        for (String group : depGroups) {
+            group = group.trim();
+            if (group.isEmpty()) {
+                // ignore empty group
+                continue;
+            }
+            String[] dependencies = group.split(",");
+            if (logger.isDebugEnabled()) {
+                logger.debug("group dependencies = {}", Arrays.toString(dependencies));
+            }
+            int realDepCount = 0;
+            int failDepCount = 0;
+            for (String dep : dependencies) {
+                dep = dep.trim();
+                if (dep.isEmpty()) {
+                    // ignore empty dependency
+                    continue;
+                }
+                realDepCount++; // this is a valid dependency whose state is tracked
+                // if a resource is down, its FP count will not be incremented
+                String failMsg = doDependencyChecks(dep);
+                if (failMsg != null) {
+                    failDepCount++;
+                    appendSeparator(errorMsg);
+                    errorMsg.append(failMsg);
+                }
+            } // end for (String dep : dependencies)
+
+            // if all dependencies in a group are failed, set this
+            // resource's state to disable dependency
+            if ((realDepCount > 0) && (failDepCount == realDepCount)) {
+                dependencyOk = false;
+                if (!disableDependency(errorMsg, group)) {
+                    break; // break out on failure and skip checking other groups
+                }
+            }
+            // check the next group
+
+        } // end for (String group : depGroups)
+
+        return dependencyOk;
+    }
+
+    /**
+     * Checks a single dependency.
+     *
+     * @param dep dependency to be checked
+     * @return the failure message, or {@code null} if all checks passed
+     */
+    private String doDependencyChecks(String dep) {
+        String failMsg = fpCheck(dep);
+
+        if (failMsg == null) {
+            if (testViaJmx) {
+                failMsg = jmxCheck(dep);
+            } else {
+                failMsg = stateCheck(dep);
+            }
+        }
+
+        return failMsg;
+    }
+
+    /**
+     * Disables the dependency group.
+     *
+     * @param errorMsg error messages are appended to this
+     * @param group group of interest
+     * @return {@code true} if it was successfully disabled, {@code false} otherwise
+     */
+    private boolean disableDependency(StringBuilder errorMsg, String group) {
+        try {
+            logger.debug("All dependents in group {} have failed their health check. Updating this "
+                    + "resource's state to disableDependency", group);
+            if (stateManager.getAvailStatus() == null || !((stateManager.getAvailStatus())
+                    .equals(StateManagement.DEPENDENCY)
+                    || (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED))) {
+                // Note: redundant calls are made by
+                // refreshStateAudit
+                this.stateManager.disableDependency();
+            }
+
+            return true;
+
+        } catch (Exception e) {
+            logger.error(EXCEPTION_STRING, e);
+            appendSeparator(errorMsg);
+            errorMsg.append(resourceName);
+            errorMsg.append(": Failed to disable dependency");
+            return false;
+        }
+    }
+
+    private void dependenciesGood(StringBuilder errorMsg) {
+        try {
+            logger.debug(
+                    "All dependency groups have at least one viable member. Updating this resource's state"
+                            + " to enableNoDependency");
+            if (stateManager.getAvailStatus() != null
+                    && ((stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY)
+                    || (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED))) {
+                // Note: redundant calls are made by
+                // refreshStateAudit
+                this.stateManager.enableNoDependency();
+            }
+            // The refreshStateAudit will catch the case where it is disabled but
+            // availStatus != failed
+        } catch (Exception e) {
+            logger.error(EXCEPTION_STRING, e);
+            appendSeparator(errorMsg);
+            errorMsg.append(resourceName);
+            errorMsg.append(": Failed to enable no dependency");
+        }
+    }
+
+    private void noDependencyGroups(StringBuilder errorMsg) {
+        try {
+            logger.debug("There are no dependents. Updating this resource's state to enableNoDependency");
+            if (stateManager.getAvailStatus() != null
+                    && ((stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY)
+                    || (stateManager.getAvailStatus()).equals(StateManagement.DEPENDENCY_FAILED))) {
+                // Note: redundant calls are made by refreshStateAudit
+                this.stateManager.enableNoDependency();
+            }
+            // The refreshStateAudit will catch the case where it is disabled but
+            // availStatus != failed
+        } catch (Exception e) {
+            logger.error(EXCEPTION_STRING, e);
+            appendSeparator(errorMsg);
+            errorMsg.append(resourceName);
+            errorMsg.append(": Failed to enable no dependency");
+        }
+    }
+
+    private void appendSeparator(StringBuilder errorMsg) {
+        if (errorMsg.length() != 0) {
+            errorMsg.append(',');
         }
     }
 
@@ -1044,6 +1104,8 @@ public class IntegrityMonitor {
     /**
      * Additional testing for subsystems that do not have a /test interface (for ex. 3rd party processes like elk). This
      * method would be overridden by the subsystem.
+     *
+     * @throws IntegrityMonitorException if an error occurs
      */
     public void subsystemTest() throws IntegrityMonitorException {
         // Testing provided by subsystem
@@ -1056,7 +1118,7 @@ public class IntegrityMonitor {
      * @throws AdministrativeStateException throws admin state exception if resource is locked
      * @throws StandbyStatusException if resource is in standby
      */
-    public void startTransaction() throws AdministrativeStateException, StandbyStatusException {
+    public void startTransaction() throws IntegrityMonitorException {
 
         synchronized (startTransactionLock) {
             // check admin state and throw exception if locked
@@ -1099,16 +1161,16 @@ public class IntegrityMonitor {
                     logger.error("endTransaction: allNotWellMap is NOT EMPTY.  Not advancing forward"
                             + "progress counter. \n{}\n", msg);
                     return;
-                } else {
-                    if (logger.isDebugEnabled() && getAllSeemsWellMap() != null && !(getAllSeemsWellMap().isEmpty())) {
-                        String msg = "allSeemsWellMap:";
-                        for (Entry<String, String> entry : allSeemsWellMap.entrySet()) {
-                            msg = msg.concat("\nkey = " + entry.getKey() + " msg = " + entry.getValue());
-                        }
-                        logger.debug(
-                                "endTransaction: allNotWellMap IS EMPTY and allSeemsWellMap is NOT EMPTY.  "
-                                        + "Advancing forward progress counter. \n{}\n", msg);
+                }
+
+                if (logger.isDebugEnabled() && getAllSeemsWellMap() != null && !(getAllSeemsWellMap().isEmpty())) {
+                    String msg = "allSeemsWellMap:";
+                    for (Entry<String, String> entry : allSeemsWellMap.entrySet()) {
+                        msg = msg.concat("\nkey = " + entry.getKey() + " msg = " + entry.getValue());
                     }
+                    logger.debug(
+                            "endTransaction: allNotWellMap IS EMPTY and allSeemsWellMap is NOT EMPTY.  "
+                                    + "Advancing forward progress counter. \n{}\n", msg);
                 }
             }
             // increment local FPC
@@ -1181,155 +1243,109 @@ public class IntegrityMonitor {
      */
     private static void validateProperties(Properties prop) throws IntegrityMonitorPropertiesException {
 
-        if (prop.getProperty(IntegrityMonitorProperties.DB_DRIVER) == null) {
-            String msg = IntegrityMonitorProperties.DB_DRIVER + NULL_PROPERTY_STRING;
-            logger.error("{}", msg);
-            throw new IntegrityMonitorPropertiesException(PROPERTY_EXCEPTION_STRING + msg);
-        }
+        checkNonNull(prop, IntegrityMonitorProperties.DB_DRIVER);
+        checkNonNull(prop, IntegrityMonitorProperties.DB_URL);
+        checkNonNull(prop, IntegrityMonitorProperties.DB_USER);
+        checkNonNull(prop, IntegrityMonitorProperties.DB_PWD);
 
-        if (prop.getProperty(IntegrityMonitorProperties.DB_URL) == null) {
-            String msg = IntegrityMonitorProperties.DB_URL + NULL_PROPERTY_STRING;
-            logger.error("{}", msg);
-            throw new IntegrityMonitorPropertiesException(PROPERTY_EXCEPTION_STRING + msg);
-        }
+        setLong(prop, IntegrityMonitorProperties.FP_MONITOR_INTERVAL,
+            value -> monitorIntervalMs = toMillis(value));
 
-        if (prop.getProperty(IntegrityMonitorProperties.DB_USER) == null) {
-            String msg = IntegrityMonitorProperties.DB_USER + NULL_PROPERTY_STRING;
-            logger.error("{}", msg);
-            throw new IntegrityMonitorPropertiesException(PROPERTY_EXCEPTION_STRING + msg);
-        }
+        setInt(prop, IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD,
+            value -> failedCounterThreshold = value);
 
-        if (prop.getProperty(IntegrityMonitorProperties.DB_PWD) == null) {
-            String msg = IntegrityMonitorProperties.DB_PWD + NULL_PROPERTY_STRING;
-            logger.error("{}", msg);
-            throw new IntegrityMonitorPropertiesException(PROPERTY_EXCEPTION_STRING + msg);
-        }
+        setLong(prop, IntegrityMonitorProperties.TEST_TRANS_INTERVAL,
+            value -> testTransIntervalMs = toMillis(value));
 
-        if (prop.getProperty(IntegrityMonitorProperties.FP_MONITOR_INTERVAL) != null) {
-            try {
-                monitorIntervalMs = toMillis(
-                        Integer.parseInt(prop.getProperty(IntegrityMonitorProperties.FP_MONITOR_INTERVAL).trim()));
-            } catch (NumberFormatException e) {
-                logger.warn(IGNORE_INVALID_PROPERTY_STRING, IntegrityMonitorProperties.FP_MONITOR_INTERVAL, e);
-            }
-        }
+        setLong(prop, IntegrityMonitorProperties.WRITE_FPC_INTERVAL,
+            value -> writeFpcIntervalMs = toMillis(value));
 
-        if (prop.getProperty(IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD) != null) {
-            try {
-                failedCounterThreshold =
-                        Integer.parseInt(prop.getProperty(IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD).trim());
-            } catch (NumberFormatException e) {
-                logger.warn(IGNORE_INVALID_PROPERTY_STRING, IntegrityMonitorProperties.FAILED_COUNTER_THRESHOLD, e);
-            }
-        }
-
-        if (prop.getProperty(IntegrityMonitorProperties.TEST_TRANS_INTERVAL) != null) {
-            try {
-                testTransIntervalMs = toMillis(
-                        Integer.parseInt(prop.getProperty(IntegrityMonitorProperties.TEST_TRANS_INTERVAL).trim()));
-            } catch (NumberFormatException e) {
-                logger.warn(IGNORE_INVALID_PROPERTY_STRING, IntegrityMonitorProperties.TEST_TRANS_INTERVAL, e);
-            }
-        }
-
-        if (prop.getProperty(IntegrityMonitorProperties.WRITE_FPC_INTERVAL) != null) {
-            try {
-                writeFpcIntervalMs = toMillis(
-                        Integer.parseInt(prop.getProperty(IntegrityMonitorProperties.WRITE_FPC_INTERVAL).trim()));
-            } catch (NumberFormatException e) {
-                logger.warn(IGNORE_INVALID_PROPERTY_STRING, IntegrityMonitorProperties.WRITE_FPC_INTERVAL, e);
-            }
-        }
-
-        if (prop.getProperty(IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL) != null) {
-            try {
-                checkDependencyIntervalMs = toMillis(Integer
-                        .parseInt(prop.getProperty(IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL).trim()));
-            } catch (NumberFormatException e) {
-                logger.warn(IGNORE_INVALID_PROPERTY_STRING, IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL, e);
-            }
-        }
+        setLong(prop, IntegrityMonitorProperties.CHECK_DEPENDENCY_INTERVAL,
+            value -> checkDependencyIntervalMs = toMillis(value));
 
         // dependency_groups are a semi-colon separated list of groups
         // each group is a comma separated list of resource names
         // For ex. dependency_groups = site_1.pap_1,site_1.pap_2 ; site_1.pdp_1,
         // site_1.pdp_2
-        if (prop.getProperty(IntegrityMonitorProperties.DEPENDENCY_GROUPS) != null) {
-            try {
-                depGroups = prop.getProperty(IntegrityMonitorProperties.DEPENDENCY_GROUPS).split(";");
-                if (logger.isDebugEnabled()) {
-                    logger.debug("dependency groups property = {}", Arrays.toString(depGroups));
-                }
-            } catch (Exception e) {
-                logger.warn(IGNORE_INVALID_PROPERTY_STRING, IntegrityMonitorProperties.DEPENDENCY_GROUPS, e);
+        String depGroupsValue = prop.getProperty(IntegrityMonitorProperties.DEPENDENCY_GROUPS);
+        if (!StringUtils.isBlank(depGroupsValue)) {
+            depGroups = depGroupsValue.split(";");
+            if (logger.isDebugEnabled()) {
+                logger.debug("dependency groups property = {}", Arrays.toString(depGroups));
             }
         }
 
-        siteName = prop.getProperty(IntegrityMonitorProperties.SITE_NAME);
-        if (siteName == null) {
-            String msg = IntegrityMonitorProperties.SITE_NAME + NULL_PROPERTY_STRING;
+        siteName = checkNonNull(prop, IntegrityMonitorProperties.SITE_NAME);
+
+        nodeType = checkNonNull(prop, IntegrityMonitorProperties.NODE_TYPE);
+        if (!isNodeTypeEnum(nodeType)) {
+            String msg = IntegrityMonitorProperties.NODE_TYPE + " property " + nodeType + " is invalid";
             logger.error("{}", msg);
             throw new IntegrityMonitorPropertiesException(PROPERTY_EXCEPTION_STRING + msg);
-        } else {
-            siteName = siteName.trim();
         }
 
-        nodeType = prop.getProperty(IntegrityMonitorProperties.NODE_TYPE);
-        if (nodeType == null) {
-            String msg = IntegrityMonitorProperties.NODE_TYPE + NULL_PROPERTY_STRING;
-            logger.error("{}", msg);
-            throw new IntegrityMonitorPropertiesException(PROPERTY_EXCEPTION_STRING + msg);
-        } else {
-            nodeType = nodeType.trim();
-            if (!isNodeTypeEnum(nodeType)) {
-                String msg = IntegrityMonitorProperties.NODE_TYPE + " property " + nodeType + " is invalid";
-                logger.error("{}", msg);
-                throw new IntegrityMonitorPropertiesException(PROPERTY_EXCEPTION_STRING + msg);
-            }
-        }
+        setBoolean(prop, IntegrityMonitorProperties.TEST_VIA_JMX, value -> testViaJmx = value);
 
-        if (prop.getProperty(IntegrityMonitorProperties.TEST_VIA_JMX) != null) {
-            String jmxTest = prop.getProperty(IntegrityMonitorProperties.TEST_VIA_JMX).trim();
-            testViaJmx = Boolean.parseBoolean(jmxTest);
-        }
+        String jmxFqdnValue = prop.getProperty(IntegrityMonitorProperties.JMX_FQDN);
+        jmxFqdn = StringUtils.isBlank(jmxFqdnValue) ? null : jmxFqdnValue.trim();
 
-        if (prop.getProperty(IntegrityMonitorProperties.JMX_FQDN) != null) {
-            jmxFqdn = prop.getProperty(IntegrityMonitorProperties.JMX_FQDN).trim();
-            if (jmxFqdn.isEmpty()) {
-                jmxFqdn = null;
-            }
-        }
+        setLong(prop, IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL,
+            value -> maxFpcUpdateIntervalMs = toMillis(value));
 
-        if (prop.getProperty(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL) != null) {
-            try {
-                maxFpcUpdateIntervalMs = toMillis(
-                        Integer.parseInt(prop.getProperty(IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL).trim()));
-            } catch (NumberFormatException e) {
-                logger.warn(IGNORE_INVALID_PROPERTY_STRING, IntegrityMonitorProperties.MAX_FPC_UPDATE_INTERVAL, e);
-            }
-        }
+        setLong(prop, IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS,
+            value -> stateAuditIntervalMs = value);
 
-        if (prop.getProperty(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS) != null) {
-            try {
-                stateAuditIntervalMs =
-                        Long.parseLong(prop.getProperty(IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS));
-            } catch (NumberFormatException e) {
-                logger.warn(IGNORE_INVALID_PROPERTY_STRING, IntegrityMonitorProperties.STATE_AUDIT_INTERVAL_MS, e);
-            }
-        }
-
-        if (prop.getProperty(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS) != null) {
-            try {
-                refreshStateAuditIntervalMs =
-                        Long.parseLong(prop.getProperty(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS));
-            } catch (NumberFormatException e) {
-                logger.warn(IGNORE_INVALID_PROPERTY_STRING, IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS,
-                        e);
-            }
-        }
+        setLong(prop, IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS,
+            value -> refreshStateAuditIntervalMs = value);
 
         logger.debug("IntegrityMonitor.validateProperties(): Property values \nmaxFpcUpdateIntervalMs = {}\n",
                 maxFpcUpdateIntervalMs);
+    }
+
+    private static void setBoolean(Properties props, String propName, Consumer<Boolean> setter) {
+        String propValue = props.getProperty(propName);
+        if (propValue != null) {
+            setter.accept(Boolean.parseBoolean(propValue.trim()));
+        }
+    }
+
+    private static String checkNonNull(Properties props, String propName)
+                    throws IntegrityMonitorPropertiesException {
+
+        String propValue = props.getProperty(propName);
+        if (propValue == null) {
+            String msg = propName + NULL_PROPERTY_STRING;
+            logger.error("{}", msg);
+            throw new IntegrityMonitorPropertiesException(PROPERTY_EXCEPTION_STRING + msg);
+        }
+
+        return propValue.trim();
+    }
+
+    private static void setInt(Properties props, String propName, Consumer<Integer> setter) {
+        String propValue = props.getProperty(propName);
+        if (StringUtils.isBlank(propValue)) {
+            return;
+        }
+
+        try {
+            setter.accept(Integer.parseInt(propValue.trim()));
+        } catch (NumberFormatException e) {
+            logger.warn(IGNORE_INVALID_PROPERTY_STRING, propName, e);
+        }
+    }
+
+    private static void setLong(Properties props, String propName, Consumer<Long> setter) {
+        String propValue = props.getProperty(propName);
+        if (StringUtils.isBlank(propValue)) {
+            return;
+        }
+
+        try {
+            setter.accept(Long.parseLong(propValue.trim()));
+        } catch (NumberFormatException e) {
+            logger.warn(IGNORE_INVALID_PROPERTY_STRING, propName, e);
+        }
     }
 
     /**
@@ -1383,33 +1399,10 @@ public class IntegrityMonitor {
             try {
                 if (fpCounter == lastFpCounter) {
                     // no forward progress
-                    missedCycles += 1;
-                    if (missedCycles >= failedCounterThreshold && !alarmExists) {
-                        logger.debug("Forward progress not detected for resource {}. Setting state to disable failed.",
-                                resourceName);
-                        if (!(stateManager.getOpState()).equals(StateManagement.DISABLED)) {
-                            // Note: The refreshStateAudit will make redundant
-                            // calls
-                            stateManager.disableFailed();
-                        }
-                        // The refreshStateAudit will catch the case where opStat = disabled and
-                        // availState ! failed/dependency.failed
-                        alarmExists = true;
-                    }
+                    noForwardProgress();
                 } else {
                     // forward progress has occurred
-                    lastFpCounter = fpCounter;
-                    missedCycles = 0;
-                    // set op state to enabled
-                    logger.debug("Forward progress detected for resource {}. Setting state to enable not failed.",
-                            resourceName);
-                    if (!(stateManager.getOpState()).equals(StateManagement.ENABLED)) {
-                        // Note: The refreshStateAudit will make redundant calls
-                        stateManager.enableNotFailed();
-                    }
-                    // The refreshStateAudit will catch the case where opState=enabled and
-                    // availStatus != null
-                    alarmExists = false;
+                    forwardProgress();
                 }
             } catch (Exception e) {
                 // log error
@@ -1417,6 +1410,37 @@ public class IntegrityMonitor {
             }
         }
         logger.debug("fpMonitorCycle(): exit");
+    }
+
+    private void noForwardProgress() throws StateManagementException {
+        missedCycles += 1;
+        if (missedCycles >= failedCounterThreshold && !alarmExists) {
+            logger.debug("Forward progress not detected for resource {}. Setting state to disable failed.",
+                    resourceName);
+            if (!(stateManager.getOpState()).equals(StateManagement.DISABLED)) {
+                // Note: The refreshStateAudit will make redundant
+                // calls
+                stateManager.disableFailed();
+            }
+            // The refreshStateAudit will catch the case where opStat = disabled and
+            // availState ! failed/dependency.failed
+            alarmExists = true;
+        }
+    }
+
+    private void forwardProgress() throws StateManagementException {
+        lastFpCounter = fpCounter;
+        missedCycles = 0;
+        // set op state to enabled
+        logger.debug("Forward progress detected for resource {}. Setting state to enable not failed.",
+                resourceName);
+        if (!(stateManager.getOpState()).equals(StateManagement.ENABLED)) {
+            // Note: The refreshStateAudit will make redundant calls
+            stateManager.enableNotFailed();
+        }
+        // The refreshStateAudit will catch the case where opState=enabled and
+        // availStatus != null
+        alarmExists = false;
     }
 
     /**
@@ -1498,62 +1522,111 @@ public class IntegrityMonitor {
                         fpe.getResourceName());
                 EntityTransaction et = em.getTransaction();
                 et.begin();
-                StateManagementEntity sme = null;
-                try {
-                    // query if StateManagement entry exists for fpe resource
-                    Query query =
-                            em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
-                    query.setParameter(LC_RESOURCE_STRING, fpe.getResourceName());
-
-                    @SuppressWarnings("rawtypes")
-                    List smList =
-                            query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
-                    if (!smList.isEmpty()) {
-                        // exists
-                        sme = (StateManagementEntity) smList.get(0);
-                        // refresh the object from DB in case cached data was
-                        // returned
-                        em.refresh(sme);
-                        if (logger.isDebugEnabled()) {
-                            logger.debug(
-                                    "IntegrityMonitor.executeStateAudit(): Found entry in StateManagementEntity table "
-                                            + "for Resource={}",
-                                    sme.getResourceName());
-                        }
-                    } else {
-                        String msg = "IntegrityMonitor.executeStateAudit(): " + fpe.getResourceName()
-                                + ": resource not found in state management entity database table";
-                        logger.error("{}", msg);
-                    }
-                    synchronized (imFlushLock) {
-                        et.commit();
-                    }
-                } catch (Exception e) {
-                    // log an error
-                    logger.error("IntegrityMonitor.executeStateAudit(): {}: StateManagementEntity DB read failed with "
-                            + "exception: ", fpe.getResourceName(), e);
-                    synchronized (imFlushLock) {
-                        if (et.isActive()) {
-                            et.rollback();
-                        }
-                    }
-                }
+                StateManagementEntity sme = disableEntity(et, fpe);
 
                 if (sme != null && !sme.getOpState().equals(StateManagement.DISABLED)) {
-                    if (logger.isDebugEnabled()) {
-                        logger.debug("IntegrityMonitor.executeStateAudit(): Changing OpStat = disabled for {}",
-                                sme.getResourceName());
-                    }
-                    try {
-                        stateManager.disableFailed(sme.getResourceName());
-                    } catch (Exception e) {
-                        String msg = "IntegrityMonitor.executeStateAudit(): Failed to disable " + sme.getResourceName();
-                        logger.error("{}", msg, e);
-                    }
+                    disableFailed(sme);
                 }
             } // end if(diffMs > staleMs)
         } // end for(ForwardProgressEntity fpe : fpList)
         logger.debug("IntegrityMonitor.executeStateAudit(): exit");
+    }
+
+    private void disableEntity(String dep, StateManagementEntity sme) {
+        try {
+            if (!sme.getOpState().equals(StateManagement.DISABLED)) {
+                logger.debug("IntegrityMonitor.stateCheck(): Changing OpStat = disabled for {}", dep);
+                stateManager.disableFailed(dep);
+            }
+        } catch (Exception e) {
+            String msg = STATE_CHECK_STRING + dep
+                    + "; " + e.getMessage();
+            logger.error("{}", msg, e);
+        }
+    }
+
+    private void disableEntity(String dep) {
+        try {
+            // create instance of StateMangement class for dependent
+            StateManagement depStateManager = new StateManagement(emf, dep);
+            if (!depStateManager.getOpState().equals(StateManagement.DISABLED)) {
+                logger.debug("Forward progress not detected for dependent resource {}. Setting dependent's "
+                        + "state to disable failed.", dep);
+                depStateManager.disableFailed();
+            }
+        } catch (Exception e) {
+            // ignore errors
+            logger.error("Update dependent state failed with exception: ", e);
+        }
+    }
+
+    /**
+     * Disables the entity.
+     * @param entrans entity transaction
+     * @param fpe entity of interest
+     * @return the corresponding state management entity
+     */
+    private StateManagementEntity disableEntity(EntityTransaction entrans, ForwardProgressEntity fpe) {
+        StateManagementEntity sme = null;
+
+        try {
+            // query if StateManagement entry exists for fpe resource
+            Query query =
+                    em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
+            query.setParameter(LC_RESOURCE_STRING, fpe.getResourceName());
+
+            @SuppressWarnings("rawtypes")
+            List smList =
+                    query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+            if (!smList.isEmpty()) {
+                // exists
+                sme = (StateManagementEntity) smList.get(0);
+                // refresh the object from DB in case cached data was
+                // returned
+                em.refresh(sme);
+                if (logger.isDebugEnabled()) {
+                    logger.debug(
+                            "IntegrityMonitor.executeStateAudit(): Found entry in StateManagementEntity table "
+                                    + "for Resource={}",
+                            sme.getResourceName());
+                }
+            } else {
+                String msg = "IntegrityMonitor.executeStateAudit(): " + fpe.getResourceName()
+                        + ": resource not found in state management entity database table";
+                logger.error("{}", msg);
+            }
+            synchronized (imFlushLock) {
+                entrans.commit();
+            }
+        } catch (Exception e) {
+            // log an error
+            logger.error("IntegrityMonitor.executeStateAudit(): {}: StateManagementEntity DB read failed with "
+                    + "exception: ", fpe.getResourceName(), e);
+            synchronized (imFlushLock) {
+                if (entrans.isActive()) {
+                    entrans.rollback();
+                }
+            }
+        }
+
+        return sme;
+    }
+
+    /**
+     * Indicates a failure to disable an entity.
+     * @param sme entity of interest
+     */
+    private void disableFailed(StateManagementEntity sme) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("IntegrityMonitor.executeStateAudit(): Changing OpStat = disabled for {}",
+                    sme.getResourceName());
+        }
+        try {
+            stateManager.disableFailed(sme.getResourceName());
+        } catch (Exception e) {
+            String msg = "IntegrityMonitor.executeStateAudit(): Failed to disable " + sme.getResourceName();
+            logger.error("{}", msg, e);
+        }
     }
 
     /**
@@ -1692,74 +1765,53 @@ public class IntegrityMonitor {
         logger.debug("executeRefreshStateAudit(): exit");
     }
 
-    /**
-     * The following nested class periodically performs the forward progress check, checks dependencies, does a refresh
-     * state audit and runs the stateAudit.
-     */
-    class FpManager extends Thread {
+    private void runFpManager() {
+        logger.debug("FPManager thread running");
 
-        private volatile boolean stopRequested = false;
+        try {
+            runStarted();
 
-        // Constructor - start FP manager thread
-        FpManager() {
-            // set now as the last time the refreshStateAudit ran
-            IntegrityMonitor.this.refreshStateAuditLastRunDate = MonitorTime.getInstance().getDate();
-        }
+            while (fpManager != null) {
+                MonitorTime.getInstance().sleep(CYCLE_INTERVAL_MILLIS);
 
-        @Override
-        public void run() {
-            logger.debug("FPManager thread running");
-
-            try {
-                runStarted();
-
-                while (!stopRequested) {
-                    MonitorTime.getInstance().sleep(CYCLE_INTERVAL_MILLIS);
-                    
-                    runOnce();
-                    monitorCompleted();
-                }
-
-            } catch (InterruptedException e) {
-                logger.debug(EXCEPTION_STRING, e);
-                Thread.currentThread().interrupt();
+                runOnce();
+                monitorCompleted();
             }
+
+        } catch (InterruptedException e) {
+            logger.debug(EXCEPTION_STRING, e);
+            Thread.currentThread().interrupt();
         }
+    }
 
-        void stopAndExit() {
-            stopRequested = true;
-            this.interrupt();
-        }
+    private void runOnce() {
+        try {
+            logger.debug("FPManager calling fpMonitorCycle()");
+            // check forward progress timer
+            fpMonitorCycle();
 
-        private void runOnce() {
-            try {
-                logger.debug("FPManager calling fpMonitorCycle()");
-                // check forward progress timer
-                fpMonitorCycle();
+            logger.debug("FPManager calling checkTestTransaction()");
+            // check test transaction timer
+            checkTestTransaction();
 
-                logger.debug("FPManager calling checkTestTransaction()");
-                // check test transaction timer
-                checkTestTransaction();
+            logger.debug("FPManager calling checkWriteFpc()");
+            // check write Fpc timer
+            checkWriteFpc();
 
-                logger.debug("FPManager calling checkWriteFpc()");
-                // check write Fpc timer
-                checkWriteFpc();
+            logger.debug("FPManager calling checkDependentHealth()");
+            // check dependency health
+            checkDependentHealth();
 
-                logger.debug("FPManager calling checkDependentHealth()");
-                // check dependency health
-                checkDependentHealth();
+            logger.debug("FPManager calling refreshStateAudit()");
+            // check if it is time to run the refreshStateAudit
+            refreshStateAudit();
 
-                logger.debug("FPManager calling refreshStateAudit()");
-                // check if it is time to run the refreshStateAudit
-                refreshStateAudit();
+            logger.debug("FPManager calling stateAudit()");
+            // check if it is time to run the stateAudit
+            stateAudit();
 
-                logger.debug("FPManager calling stateAudit()");
-                // check if it is time to run the stateAudit
-                stateAudit();
-
-            } catch (Exception e) {
-                logger.error("Ignore FPManager thread processing timer(s) exception: ", e);
-            }
+        } catch (Exception e) {
+            logger.error("Ignore FPManager thread processing timer(s) exception: ", e);
         }
     }
 
@@ -1775,7 +1827,7 @@ public class IntegrityMonitor {
             throws AllSeemsWellException {
 
         logger.debug("allSeemsWell entry: key = {}, asw = {}, msg = {}", key, asw, msg);
-        if (key == null || key.isEmpty()) {
+        if (StringUtils.isEmpty(key)) {
             logger.error("allSeemsWell: 'key' has no visible content");
             throw new IllegalArgumentException("allSeemsWell: 'key' has no visible content");
         }
@@ -1783,7 +1835,7 @@ public class IntegrityMonitor {
             logger.error("allSeemsWell: 'asw' is null");
             throw new IllegalArgumentException("allSeemsWell: 'asw' is null");
         }
-        if (msg == null || msg.isEmpty()) {
+        if (StringUtils.isEmpty(msg)) {
             logger.error("allSeemsWell: 'msg' has no visible content");
             throw new IllegalArgumentException("allSeemsWell: 'msg' has no visible content");
         }
@@ -1798,40 +1850,13 @@ public class IntegrityMonitor {
 
         if (asw) {
             logger.info("allSeemsWell: ALL SEEMS WELL: key = {}, msg = {}", key, msg);
-            try {
-                allSeemsWellMap.put(key, msg);
-            } catch (Exception e) {
-                String exceptMsg =
-                        "allSeemsWell: encountered an exception with allSeemsWellMap.put(" + key + "," + msg + ")";
-                logger.error(exceptMsg);
-                throw new AllSeemsWellException(exceptMsg, e);
-            }
-
-            try {
-                allNotWellMap.remove(key);
-            } catch (Exception e) {
-                String exceptMsg = "allSeemsWell: encountered an exception with allNotWellMap.delete(" + key + ")";
-                logger.error(exceptMsg);
-                throw new AllSeemsWellException(exceptMsg, e);
-            }
+            allSeemsWellMap.put(key, msg);
+            allNotWellMap.remove(key);
 
         } else {
             logger.error("allSeemsWell: ALL NOT WELL: key = {}, msg = {}", key, msg);
-            try {
-                allSeemsWellMap.remove(key);
-            } catch (Exception e) {
-                String exceptMsg = "allSeemsWell: encountered an exception with allSeemsWellMap.remove(" + key + ")";
-                logger.error(exceptMsg);
-                throw new AllSeemsWellException(exceptMsg, e);
-            }
-
-            try {
-                allNotWellMap.put(key, msg);
-            } catch (Exception e) {
-                String exceptMsg = "allSeemsWell: encountered an exception with allNotWellMap.put(" + key + msg + ")";
-                logger.error(exceptMsg);
-                throw new AllSeemsWellException(exceptMsg, e);
-            }
+            allSeemsWellMap.remove(key);
+            allNotWellMap.put(key, msg);
         }
 
         if (logger.isDebugEnabled()) {
@@ -1862,13 +1887,13 @@ public class IntegrityMonitor {
     public Map<String, String> getAllNotWellMap() {
         return allNotWellMap;
     }
-    
+
     // these methods may be overridden by junit tests
 
     /**
      * Indicates that the {@link FpManager#run()} method has started. This method
      * simply returns.
-     * 
+     *
      * @throws InterruptedException can be interrupted
      */
     protected void runStarted() throws InterruptedException {
@@ -1877,7 +1902,7 @@ public class IntegrityMonitor {
 
     /**
      * Indicates that a monitor activity has completed. This method simply returns.
-     * 
+     *
      * @throws InterruptedException can be interrupted
      */
     protected void monitorCompleted() throws InterruptedException {
@@ -1886,7 +1911,7 @@ public class IntegrityMonitor {
 
     /**
      * Get persistence unit.
-     * 
+     *
      * @return the persistence unit to be used
      */
     protected String getPersistenceUnit() {
