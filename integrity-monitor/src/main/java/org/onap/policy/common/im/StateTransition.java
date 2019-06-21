@@ -97,6 +97,7 @@ public class StateTransition {
         logger.debug("getEndingState");
         logger.debug("adminState=[{}], opState=[{}], availStatus=[{}], standbyStatus=[{}], actionName[{}]",
                         adminState, opState, availStatus, standbyStatus, actionName);
+
         if (availStatus == null) {
             availStatus = StateManagement.NULL_VALUE;
         }
@@ -119,49 +120,37 @@ public class StateTransition {
 
 
         StateElement stateElement = new StateElement();
-        try {
-            // dependency,failed is stored as dependency.failed in StateTable
-            String availStatus2 = availStatus;
-            if (availStatus2 != null) {
-                availStatus2 = availStatus.replace(",", ".");
-            }
-            String key = adminState + "," + opState + "," + availStatus2 + "," + standbyStatus + "," + actionName;
-            if (logger.isDebugEnabled()) {
-                logger.debug("Ending State search key: {}", key);
-            }
-            String value = STATE_TABLE.get(key);
 
-            if (value != null) {
-                try {
-                    String[] parts = value.split(",", 5);
-                    stateElement.setEndingAdminState(parts[0].trim());
-                    stateElement.setEndingOpState(parts[1].trim());
-                    stateElement.setEndingAvailStatus(parts[2].trim().replace(".", ","));
-                    stateElement.setEndingStandbyStatus(parts[3].trim());
-                    stateElement.setException(parts[4].trim());
-                    stateElement.setAdminState(adminState);
-                    stateElement.setOpState(opState);
-                    stateElement.setAvailStatus(availStatus);
-                    stateElement.setStandbyStatus(standbyStatus);
-                    stateElement.setActionName(actionName);
+        // dependency,failed is stored as dependency.failed in StateTable
+        String availStatus2 = availStatus;
+        if (availStatus2 != null) {
+            availStatus2 = availStatus.replace(",", ".");
+        }
+        String key = adminState + "," + opState + "," + availStatus2 + "," + standbyStatus + "," + actionName;
+        logger.debug("Ending State search key: {}", key);
+        String value = STATE_TABLE.get(key);
 
-                    stateElement.displayStateElement();
-                } catch (Exception ex) {
-                    logger.error("String split exception: {}", ex.toString(), ex);
-                }
+        if (value != null) {
+            String[] parts = value.split(",", 5);
+            stateElement.setEndingAdminState(parts[0].trim());
+            stateElement.setEndingOpState(parts[1].trim());
+            stateElement.setEndingAvailStatus(parts[2].trim().replace(".", ","));
+            stateElement.setEndingStandbyStatus(parts[3].trim());
+            stateElement.setException(parts[4].trim());
+            stateElement.setAdminState(adminState);
+            stateElement.setOpState(opState);
+            stateElement.setAvailStatus(availStatus);
+            stateElement.setStandbyStatus(standbyStatus);
+            stateElement.setActionName(actionName);
 
-            } else {
-                String msg = "Ending state not found, adminState=[" + adminState + OPSTATE_STRING + opState
-                        + AVAILSTATUS_STRING + availStatus + STANDBY_STRING + standbyStatus + ACTION_STRING
-                        + actionName + "]";
-                logger.error("{}", msg);
-                throw new StateTransitionException(msg);
-            }
-        } catch (Exception ex) {
-            logger.error("StateTransition threw exception.", ex);
-            throw new StateTransitionException("Exception: " + ex.toString() + ", adminState=[" + adminState
-                    + OPSTATE_STRING + opState + AVAILSTATUS_STRING + availStatus + STANDBY_STRING + standbyStatus
-                    + ACTION_STRING + actionName + "]");
+            stateElement.displayStateElement();
+
+        } else {
+            String msg = "Ending state not found, adminState=[" + adminState + OPSTATE_STRING + opState
+                    + AVAILSTATUS_STRING + availStatus + STANDBY_STRING + standbyStatus + ACTION_STRING
+                    + actionName + "]";
+            logger.error("{}", msg);
+            throw new StateTransitionException(msg);
         }
 
         return stateElement;
