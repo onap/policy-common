@@ -1,0 +1,9 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Ram Krishna Verma <ram.krishna.verma@est.tech>
+Code-Review+1: Jim Hahn <jrh3@att.com>
+Code-Review+2: Liam Fallon <liam.fallon@est.tech>
+Submitted-by: Liam Fallon <liam.fallon@est.tech>
+Submitted-at: Fri, 21 Jun 2019 13:39:13 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/policy/common/+/90303
+Project: policy/common
+Branch: refs/heads/master
