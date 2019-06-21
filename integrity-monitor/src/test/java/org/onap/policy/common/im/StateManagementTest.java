@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.im;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.anyString;
@@ -49,8 +50,13 @@ import org.slf4j.LoggerFactory;
  * privileges and can execute time-sensitive tasks.
  */
 public class StateManagementTest extends IntegrityMonitorTestBase {
-
+    private static final String LOCKED_DISABLED_FAILED_COLDSTANDBY = "locked,disabled,failed,coldstandby";
+    private static final String UNLOCKED_DISABLED_FAILED_COLDSTANDBY = "unlocked,disabled,failed,coldstandby";
+    private static final String UNLOCKED_ENABLED_NULL_HOTSTANDBY = "unlocked,enabled,null,hotstandby";
+    private static final String UNLOCKED_ENABLED_NULL_NULL = "unlocked,enabled,null,null";
+    private static final String UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE = "unlocked,enabled,null,providingservice";
     private static final String TEST_RESOURCE_NAME = "test_resource1";
+
     private static Logger logger = LoggerFactory.getLogger(StateManagementTest.class);
     //
 
@@ -61,7 +67,7 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
     }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {
+    public static void tearDownClass() {
         IntegrityMonitorTestBase.tearDownAfterClass();
     }
 
@@ -85,7 +91,7 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
             final StateManagement sm = new StateManagement(emf, resourceName);
 
             logger.info("\n??? initial state");
-            assertEquals("unlocked,enabled,null,null", makeString(sm));
+            assertEquals(UNLOCKED_ENABLED_NULL_NULL, makeString(sm));
 
             logger.info("\n??? test lock()");
             sm.lock();
@@ -93,11 +99,11 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
 
             logger.info("\n??? test unlock()");
             sm.unlock();
-            assertEquals("unlocked,enabled,null,null", makeString(sm));
+            assertEquals(UNLOCKED_ENABLED_NULL_NULL, makeString(sm));
 
             logger.info("\n??? test enableNotFailed()");
             sm.enableNotFailed();
-            assertEquals("unlocked,enabled,null,null", makeString(sm));
+            assertEquals(UNLOCKED_ENABLED_NULL_NULL, makeString(sm));
 
             logger.info("\n??? test disableFailed()");
             sm.disableFailed();
@@ -108,22 +114,20 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
             // the standbystatus shall transition to coldstandby and a
             // StandbyStatusException shall be thrown
             logger.info("\n??? promote() test case P4");
-            assertException(sm, smx -> {
+            assertThatThrownBy(() -> {
                 sm.disableFailed();
                 sm.lock();
 
                 sm.promote();
             });
-            assertEquals("locked,disabled,failed,coldstandby", makeString(sm));
+            assertEquals(LOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(sm));
 
             // P3 If promote() is called while standbyStatus is coldstandby, the
             // state shall not transition
             // and a StandbyStatusException shall be thrown
             logger.info("\n??? promote() test case P3");
-            assertException(sm, smx -> {
-                sm.promote();
-            });
-            assertEquals("locked,disabled,failed,coldstandby", makeString(sm));
+            assertThatThrownBy(sm::promote);
+            assertEquals(LOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(sm));
 
             // P2 If promote() is called while the standbyStatus is null and the
             // opState is enabled and adminState is unlocked,
@@ -133,27 +137,27 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
             final StateManagement sm2 = new StateManagement(emf, resourceName);
             sm2.enableNotFailed();
             sm2.unlock();
-            assertEquals("unlocked,enabled,null,null", makeString(sm2));
+            assertEquals(UNLOCKED_ENABLED_NULL_NULL, makeString(sm2));
             sm2.promote();
-            assertEquals("unlocked,enabled,null,providingservice", makeString(sm2));
+            assertEquals(UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE, makeString(sm2));
 
             // P5 If promote() is called while standbyStatus is
             // providingservice, no action is taken
             logger.info("\n??? promote() test case P5");
             sm2.promote();
-            assertEquals("unlocked,enabled,null,providingservice", makeString(sm2));
+            assertEquals(UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE, makeString(sm2));
 
             // D1 If demote() is called while standbyStatus is providingservice,
             // the state shall transition to hotstandby
             logger.info("\n??? demote() test case D1");
             sm2.demote();
-            assertEquals("unlocked,enabled,null,hotstandby", makeString(sm2));
+            assertEquals(UNLOCKED_ENABLED_NULL_HOTSTANDBY, makeString(sm2));
 
             // D4 If demote() is called while standbyStatus is hotstandby, no
             // action is taken
             logger.info("\n??? demote() test case D4");
             sm2.demote();
-            assertEquals("unlocked,enabled,null,hotstandby", makeString(sm2));
+            assertEquals(UNLOCKED_ENABLED_NULL_HOTSTANDBY, makeString(sm2));
 
             // D3 If demote() is called while standbyStatus is null and
             // adminState is locked or opState is disabled,
@@ -164,13 +168,13 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
             sm3.lock();
             sm3.disableFailed();
             sm3.demote();
-            assertEquals("locked,disabled,failed,coldstandby", makeString(sm3));
+            assertEquals(LOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(sm3));
 
             // D5 If demote() is called while standbyStatus is coldstandby, no
             // action is taken
             logger.info("\n??? demote() test case D5");
             sm3.demote();
-            assertEquals("locked,disabled,failed,coldstandby", makeString(sm3));
+            assertEquals(LOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(sm3));
 
             // D2 If demote() is called while standbyStatus is null and
             // adminState is unlocked and opState is enabled,
@@ -180,44 +184,42 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
             final StateManagement sm4 = new StateManagement(emf, resourceName);
             sm4.unlock();
             sm4.enableNotFailed();
-            assertEquals("unlocked,enabled,null,null", makeString(sm4));
+            assertEquals(UNLOCKED_ENABLED_NULL_NULL, makeString(sm4));
             sm4.demote();
-            assertEquals("unlocked,enabled,null,hotstandby", makeString(sm4));
+            assertEquals(UNLOCKED_ENABLED_NULL_HOTSTANDBY, makeString(sm4));
 
             // P1 If promote() is called while standbyStatus is hotstandby, the
             // state shall transition to providingservice.
             logger.info("\n??? promote() test case P1");
             sm4.promote();
-            assertEquals("unlocked,enabled,null,providingservice", makeString(sm4));
+            assertEquals(UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE, makeString(sm4));
 
             // State change notification
             logger.info("\n??? State change notification test case 1 - lock()");
             final StateChangeNotifier stateChangeNotifier = new StateChangeNotifier();
             sm.addObserver(stateChangeNotifier);
             sm.lock();
-            assertEquals("locked,disabled,failed,coldstandby", makeString(stateChangeNotifier.getStateManagement()));
+            assertEquals(LOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(stateChangeNotifier.getStateManagement()));
 
             logger.info("\n??? State change notification test case 2 - unlock()");
             sm.unlock();
-            assertEquals("unlocked,disabled,failed,coldstandby", makeString(stateChangeNotifier.getStateManagement()));
+            assertEquals(UNLOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(stateChangeNotifier.getStateManagement()));
 
             logger.info("\n??? State change notification test case 3 - enabled()");
             sm.enableNotFailed();
-            assertEquals("unlocked,enabled,null,hotstandby", makeString(stateChangeNotifier.getStateManagement()));
+            assertEquals(UNLOCKED_ENABLED_NULL_HOTSTANDBY, makeString(stateChangeNotifier.getStateManagement()));
 
             logger.info("\n??? State change notification test case 4 - disableFailed()");
             sm.disableFailed();
-            assertEquals("unlocked,disabled,failed,coldstandby", makeString(stateChangeNotifier.getStateManagement()));
+            assertEquals(UNLOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(stateChangeNotifier.getStateManagement()));
 
             logger.info("\n??? State change notification test case 5 - demote()");
             sm.demote();
-            assertEquals("unlocked,disabled,failed,coldstandby", makeString(stateChangeNotifier.getStateManagement()));
+            assertEquals(UNLOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(stateChangeNotifier.getStateManagement()));
 
             logger.info("\n??? State change notification test case 6 - promote()");
-            assertException(sm, smx -> {
-                sm.promote();
-            });
-            assertEquals("unlocked,disabled,failed,coldstandby", makeString(sm));
+            assertThatThrownBy(sm::promote);
+            assertEquals(UNLOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(sm));
 
         } catch (final Exception ex) {
             logger.error("Exception: {}", ex.toString());

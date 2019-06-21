@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,7 +21,6 @@
 package org.onap.policy.common.im;
 
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -50,12 +49,12 @@ import org.slf4j.LoggerFactory;
  */
 public class IntegrityMonitorTestBase {
     private static Logger logger = LoggerFactory.getLogger(IntegrityMonitorTestBase.class);
-    
+
     /**
      * Name of the instance field within the IntegrityMonitor class.
      */
     public static final String IM_INSTANCE_FIELD = "instance";
-    
+
     /**
      * Name of the instance field within the MonitorTime class.
      */
@@ -80,11 +79,11 @@ public class IntegrityMonitorTestBase {
 
     public static final String DEFAULT_DB_URL_PREFIX = "jdbc:h2:mem:";
 
-    protected static final String dbDriver = "org.h2.Driver";
-    protected static final String dbUser = "testu";
-    protected static final String dbPwd = "testp";
-    protected static final String siteName = "SiteA";
-    protected static final String nodeType = "pap";
+    protected static final String DB_DRIVER = "org.h2.Driver";
+    protected static final String DB_USER = "testu";
+    protected static final String DB_PASS = "testp";
+    protected static final String SITE_NAME = "SiteA";
+    protected static final String NODE_TYPE = "pap";
 
     // will be defined by the test *Classes*
     protected static String dbUrl;
@@ -108,7 +107,7 @@ public class IntegrityMonitorTestBase {
      * Entity manager factory pointing to the in-memory DB associated with emf.
      */
     protected static EntityManager em;
-    
+
     /**
      * Test time used by tests in lieu of CurrentTime.
      */
@@ -127,7 +126,7 @@ public class IntegrityMonitorTestBase {
 
     /**
      * Saves current configuration information and then sets new values.
-     * 
+     *
      * @param dbUrl the URL to the DB
      * @throws IOException if an IO error occurs
      */
@@ -151,17 +150,17 @@ public class IntegrityMonitorTestBase {
         systemProps.put(JMX_PORT_PROP, "9797");
 
         IntegrityMonitor.setUnitTesting(true);
-        
+
         testTime = new TestTime();
         Whitebox.setInternalState(MonitorTime.class, TIME_INSTANCE_FIELD, testTime);
-        
+
         properties = new Properties();
-        properties.put(IntegrityMonitorProperties.DB_DRIVER, dbDriver);
+        properties.put(IntegrityMonitorProperties.DB_DRIVER, DB_DRIVER);
         properties.put(IntegrityMonitorProperties.DB_URL, dbUrl);
-        properties.put(IntegrityMonitorProperties.DB_USER, dbUser);
-        properties.put(IntegrityMonitorProperties.DB_PWD, dbPwd);
-        properties.put(IntegrityMonitorProperties.SITE_NAME, siteName);
-        properties.put(IntegrityMonitorProperties.NODE_TYPE, nodeType);
+        properties.put(IntegrityMonitorProperties.DB_USER, DB_USER);
+        properties.put(IntegrityMonitorProperties.DB_PWD, DB_PASS);
+        properties.put(IntegrityMonitorProperties.SITE_NAME, SITE_NAME);
+        properties.put(IntegrityMonitorProperties.NODE_TYPE, NODE_TYPE);
         properties.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS,
                 String.valueOf(REFRESH_INTERVAL_MS));
 
@@ -231,12 +230,13 @@ public class IntegrityMonitorTestBase {
 
         } catch (IntegrityMonitorException e) {
             // no need to log, as exception was already logged
+            logger.debug("stopMonitor failed", e);
         }
     }
-    
+
     /**
      * Get current test time.
-     * 
+     *
      * @return the "current" time, in milliseconds
      */
     protected static long getCurrentTestTime() {
@@ -245,7 +245,7 @@ public class IntegrityMonitorTestBase {
 
     /**
      * Makes a new Property set that's a clone of {@link #properties}.
-     * 
+     *
      * @return a new Property set containing all of a copy of all of the {@link #properties}
      */
     protected static Properties makeProperties() {
@@ -256,52 +256,12 @@ public class IntegrityMonitorTestBase {
 
     /**
      * Waits for a semaphore to be acquired.
-     * 
+     *
      * @param sem semaphore to wait on
      * @throws InterruptedException if the thread is interrupted
      * @throws AssertionError if the semaphore was not acquired within the allotted time
      */
     protected void waitSem(Semaphore sem) throws InterruptedException {
         assertTrue(sem.tryAcquire(WAIT_MS, TimeUnit.MILLISECONDS));
-    }
-
-    /**
-     * Applies a function on an object, expecting it to succeed. Catches any exceptions thrown by
-     * the function.
-     * 
-     * @param arg the object to apply the function on
-     * @param func the function
-     * @throws AssertionError if an exception is thrown by the function
-     */
-    protected <T> void assertNoException(T arg, VoidFunction<T> func) {
-        try {
-            func.apply(arg);
-
-        } catch (Exception e) {
-            System.out.println("startTransaction exception: " + e);
-            fail("action failed");
-        }
-    }
-
-    /**
-     * Applies a function on an object, expecting it to fail. Catches any exceptions thrown by the
-     * function.
-     * 
-     * @param arg the object to apply the function on
-     * @param func the function
-     * @throws AssertionError if no exception is thrown by the function
-     */
-    protected <T> void assertException(T arg, VoidFunction<T> func) {
-        try {
-            func.apply(arg);
-            fail("missing exception");
-        } catch (Exception e) {
-            System.out.println("action found expected exception: " + e);
-        }
-    }
-
-    @FunctionalInterface
-    protected static interface VoidFunction<T> {
-        public void apply(T arg) throws Exception;
     }
 }
