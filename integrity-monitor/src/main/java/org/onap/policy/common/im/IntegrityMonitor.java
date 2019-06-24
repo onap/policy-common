@@ -29,7 +29,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import javax.management.JMX;
 import javax.management.MBeanServerConnection;
 import javax.persistence.EntityManager;
@@ -221,7 +223,7 @@ public class IntegrityMonitor {
         validateProperties(properties);
 
         // construct jmx url
-        String jmxUrl = getJmxUrl();
+        String jmxUrl = getJmxUrlFromProps();
 
         //
         // Create the entity manager factory
@@ -433,7 +435,7 @@ public class IntegrityMonitor {
         logger.debug("deleteInstance() exit");
     }
 
-    private static String getJmxUrl() throws IntegrityMonitorException {
+    private static String getJmxUrlFromProps() throws IntegrityMonitorException {
 
         // get the jmx remote port and construct the JMX URL
         Properties systemProps = System.getProperties();
@@ -520,53 +522,40 @@ public class IntegrityMonitor {
      * message is set then the evaluateSanity will return an error.
      *
      * @param dep the dependency
+     * @return {@code null} if success, an error message otherwise
      */
     public String stateCheck(String dep) {
         logger.debug("checking state of dependent resource: {}", dep);
-        String errorMsg = null;
-        ForwardProgressEntity forwardProgressEntity = null;
-        StateManagementEntity stateManagementEntity = null;
+        AtomicReference<ForwardProgressEntity> forwardProgressEntity = new AtomicReference<>();
+        AtomicReference<StateManagementEntity> stateManagementEntity = new AtomicReference<>();
 
-        // Start a transaction
-        EntityTransaction et = em.getTransaction();
-        et.begin();
+        String errorMsg =
+            withinTransaction(dep + ": ForwardProgressEntity DB operation failed with exception: ", () -> {
+                Query query = em.createQuery(
+                                "Select p from ForwardProgressEntity p where p.resourceName=:resource");
+                query.setParameter(LC_RESOURCE_STRING, dep);
 
-        try {
-            Query query = em.createQuery("Select p from ForwardProgressEntity p where p.resourceName=:resource");
-            query.setParameter(LC_RESOURCE_STRING, dep);
+                @SuppressWarnings("rawtypes")
+                List fpList = query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT)
+                                .getResultList();
 
-            @SuppressWarnings("rawtypes")
-            List fpList = query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+                if (!fpList.isEmpty()) {
+                    // exists
+                    forwardProgressEntity.set((ForwardProgressEntity) fpList.get(0));
+                    // refresh the object from DB in case cached data was
+                    // returned
+                    em.refresh(forwardProgressEntity.get());
+                    logger.debug("Found entry in ForwardProgressEntity table for dependent Resource={}", dep);
+                    return null;
 
-            if (!fpList.isEmpty()) {
-                // exists
-                forwardProgressEntity = (ForwardProgressEntity) fpList.get(0);
-                // refresh the object from DB in case cached data was returned
-                em.refresh(forwardProgressEntity);
-                logger.debug("Found entry in ForwardProgressEntity table for dependent Resource={}", dep);
-            } else {
-                errorMsg = dep + ": resource not found in ForwardProgressEntity database table";
-                logger.error("{}", errorMsg);
-            }
-            synchronized (imFlushLock) {
-                et.commit();
-            }
-        } catch (Exception ex) {
-            // log an error
-            errorMsg = dep + ": ForwardProgressEntity DB operation failed with exception: ";
-            logger.error("{}", errorMsg, ex);
-            synchronized (imFlushLock) {
-                if (et.isActive()) {
-                    et.rollback();
+                } else {
+                    return dep + ": resource not found in ForwardProgressEntity database table";
                 }
-            }
-        }
+            });
 
         if (errorMsg == null) {
-            // Start a transaction
-            et = em.getTransaction();
-            et.begin();
-            try {
+            errorMsg = withinTransaction(dep + ": StateManagementEntity DB read failed with exception: ", () -> {
+
                 // query if StateManagement entry exists for dependent resource
                 Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
                 query.setParameter(LC_RESOURCE_STRING, dep);
@@ -575,43 +564,68 @@ public class IntegrityMonitor {
                 List smList = query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
                 if (!smList.isEmpty()) {
                     // exist
-                    stateManagementEntity = (StateManagementEntity) smList.get(0);
+                    stateManagementEntity.set((StateManagementEntity) smList.get(0));
                     // refresh the object from DB in case cached data was
                     // returned
-                    em.refresh(stateManagementEntity);
+                    em.refresh(stateManagementEntity.get());
                     logger.debug("Found entry in StateManagementEntity table for dependent Resource={}", dep);
+                    return null;
                 } else {
-                    errorMsg = dep + ": resource not found in state management entity database table";
-                    logger.error("{}", errorMsg);
+                    return dep + ": resource not found in state management entity database table";
                 }
-
-                synchronized (imFlushLock) {
-                    et.commit();
-                }
-            } catch (Exception e) {
-                // log an error
-                errorMsg = dep + ": StateManagementEntity DB read failed with exception: ";
-                logger.error("{}", errorMsg, e);
-                synchronized (imFlushLock) {
-                    if (et.isActive()) {
-                        et.rollback();
-                    }
-                }
-            }
+            });
         }
 
         // verify that the ForwardProgress is current (check last_updated)
         if (errorMsg == null) {
-            checkForwardProgress(dep, forwardProgressEntity, stateManagementEntity);
+            checkForwardProgress(dep, forwardProgressEntity.get(), stateManagementEntity.get());
         }
 
         // check operation, admin and standby states of dependent resource
         if (errorMsg == null) {
-            errorMsg = checkDependentStates(dep, stateManagementEntity);
+            errorMsg = checkDependentStates(dep, stateManagementEntity.get());
         }
 
         String returnMsg = "IntegrityMonitor.stateCheck(): returned error_msg: " + errorMsg;
         logger.debug("{}", returnMsg);
+        return errorMsg;
+    }
+
+    /**
+     * Runs an action within a transaction.
+     *
+     * @param exMsg message to log and return if an exception occurs
+     * @param action action to apply; returns non-null if an error occurs
+     * @return {@code null} if success, or an error message otherwise
+     */
+    private String withinTransaction(String exMsg, Supplier<String> action) {
+        String errorMsg = null;
+
+        // Start a transaction
+        EntityTransaction et = em.getTransaction();
+        et.begin();
+
+        try {
+            errorMsg = action.get();
+            if (errorMsg != null) {
+                logger.error("{}", errorMsg);
+            }
+
+            synchronized (imFlushLock) {
+                et.commit();
+            }
+
+        } catch (RuntimeException ex) {
+            // log an error
+            errorMsg = exMsg;
+            logger.error("{}", errorMsg, ex);
+            synchronized (imFlushLock) {
+                if (et.isActive()) {
+                    et.rollback();
+                }
+            }
+        }
+
         return errorMsg;
     }
 
@@ -672,58 +686,39 @@ public class IntegrityMonitor {
     private String fpCheck(String dep) {
         logger.debug("checking forward progress count of dependent resource: {}", dep);
 
-        String errorMsg = null;
+        return withinTransaction(dep + ": ForwardProgressEntity DB read failed with exception: ", () -> fpCheck2(dep));
+    }
 
-        // check FPC count - a changing FPC count indicates the resource JVM is
-        // running
+    private String fpCheck2(String dep) {
+        Query fquery = em.createQuery(QUERY_STRING);
+        fquery.setParameter("rn", dep);
 
-        // Start a transaction
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        try {
-            Query fquery = em.createQuery(QUERY_STRING);
-            fquery.setParameter("rn", dep);
+        @SuppressWarnings("rawtypes")
+        List fpList = fquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+        ForwardProgressEntity fpx;
+        if (!fpList.isEmpty()) {
+            // ignores multiple results
+            fpx = (ForwardProgressEntity) fpList.get(0);
+            // refresh the object from DB in case cached data was returned
+            em.refresh(fpx);
+            if (logger.isDebugEnabled()) {
+                logger.debug("Dependent resource {} - fpc= {}, lastUpdated={}", dep, fpx.getFpcCount(),
+                                fpx.getLastUpdated());
+            }
+            long currTime = MonitorTime.getInstance().getMillis();
+            // if dependent resource FPC has not been updated, consider it
+            // an error
+            if ((currTime - fpx.getLastUpdated().getTime()) > maxFpcUpdateIntervalMs) {
+                disableEntity(dep);
+                return dep + ": FP count has not been updated in the last " + maxFpcUpdateIntervalMs + "ms";
+            }
 
-            @SuppressWarnings("rawtypes")
-            List fpList = fquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
-            ForwardProgressEntity fpx;
-            if (!fpList.isEmpty()) {
-                // ignores multiple results
-                fpx = (ForwardProgressEntity) fpList.get(0);
-                // refresh the object from DB in case cached data was returned
-                em.refresh(fpx);
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Dependent resource {} - fpc= {}, lastUpdated={}", dep, fpx.getFpcCount(),
-                            fpx.getLastUpdated());
-                }
-                long currTime = MonitorTime.getInstance().getMillis();
-                // if dependent resource FPC has not been updated, consider it
-                // an error
-                if ((currTime - fpx.getLastUpdated().getTime()) > maxFpcUpdateIntervalMs) {
-                    errorMsg = dep + ": FP count has not been updated in the last " + maxFpcUpdateIntervalMs + "ms";
-                    logger.error("{}", errorMsg);
-                    disableEntity(dep);
-                }
-            } else {
-                // resource entry not found in FPC table
-                errorMsg = dep + ": resource not found in ForwardProgressEntity table in the DB";
-                logger.error("{}", errorMsg);
-            }
-            synchronized (imFlushLock) {
-                et.commit();
-            }
-        } catch (Exception e) {
-            // log an error and continue
-            errorMsg = dep + ": ForwardProgressEntity DB read failed with exception: ";
-            logger.error("{}", errorMsg, e);
-            synchronized (imFlushLock) {
-                if (et.isActive()) {
-                    et.rollback();
-                }
-            }
+            return null;
+
+        } else {
+            // resource entry not found in FPC table
+            return dep + ": resource not found in ForwardProgressEntity table in the DB";
         }
-
-        return errorMsg;
     }
 
     /**
@@ -731,113 +726,101 @@ public class IntegrityMonitor {
      *
      * @return list of all forward progress entities
      */
+    @SuppressWarnings("unchecked")
     public List<ForwardProgressEntity> getAllForwardProgressEntity() {
         logger.debug("getAllForwardProgressEntity: entry");
+
         ArrayList<ForwardProgressEntity> fpList = new ArrayList<>();
-        // Start a transaction
-        EntityTransaction et = em.getTransaction();
-        et.begin();
-        try {
+
+        withinTransaction("getAllForwardProgessEntity DB read failed with exception: ", () -> {
             Query fquery = em.createQuery("Select e from ForwardProgressEntity e");
-            @SuppressWarnings("rawtypes")
-            List myList = fquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
-            synchronized (imFlushLock) {
-                et.commit();
-            }
-            logger.debug("getAllForwardProgressEntity: myList.size(): {}", myList.size());
-            for (int i = 0; i < myList.size(); i++) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("getAllForwardProgressEntity: myList.get({}).getResourceName(): {}", i,
-                            ((ForwardProgressEntity) myList.get(i)).getResourceName());
-                }
-                fpList.add((ForwardProgressEntity) myList.get(i));
-            }
-            synchronized (imFlushLock) {
-                if (et.isActive()) {
-                    et.commit();
-                }
-            }
-        } catch (Exception e) {
-            // log an error and continue
-            String msg = "getAllForwardProgessEntity DB read failed with exception: ";
-            logger.error("{}", msg, e);
-            synchronized (imFlushLock) {
-                if (et.isActive()) {
-                    et.rollback();
-                }
-            }
+            fquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList()
+                            .forEach(obj -> fpList.add((ForwardProgressEntity) obj));
+            return null;
+        });
+
+        if (!logger.isDebugEnabled()) {
+            return fpList;
         }
+
+        logger.debug("getAllForwardProgressEntity: fpList.size(): {}", fpList.size());
+        int index = 0;
+        for (ForwardProgressEntity fpe : fpList) {
+            logger.debug("getAllForwardProgressEntity: fpList.get({}).getResourceName(): {}", index++,
+                            fpe.getResourceName());
+        }
+
         return fpList;
     }
 
     private String jmxCheck(String dep) {
         logger.debug("checking health of dependent by calling test() via JMX on resource: {}", dep);
 
-        String errorMsg = null;
-
         // get the JMX URL from the database
-        String jmxUrl = null;
-        // Start a transaction
-        EntityTransaction et = em.getTransaction();
-        et.begin();
+        AtomicReference<String> jmxUrl = new AtomicReference<>();
+
+        String errorMsg =
+            withinTransaction(dep + ": ResourceRegistrationEntity DB read failed with exception: ",
+                () -> getJmxUrlFromDb(dep, jmxUrl));
+
+        if (jmxUrl.get() != null) {
+            errorMsg = jmxCheck2(dep, jmxUrl.get(), errorMsg);
+        }
+
+        return errorMsg;
+    }
+
+    private String getJmxUrlFromDb(String dep, AtomicReference<String> jmxUrl) {
+        // query if ResourceRegistration entry exists for resourceName
+        Query rquery = em.createQuery(
+                        "Select r from ResourceRegistrationEntity r where r.resourceName=:rn");
+        rquery.setParameter("rn", dep);
+
+        @SuppressWarnings("rawtypes")
+        List rrList = rquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT)
+                        .getResultList();
+        ResourceRegistrationEntity rrx = null;
+
+        if (!rrList.isEmpty()) {
+            // ignores multiple results
+            rrx = (ResourceRegistrationEntity) rrList.get(0);
+            // refresh the object from DB in case cached data was
+            // returned
+            em.refresh(rrx);
+            jmxUrl.set(rrx.getResourceUrl());
+            if (logger.isDebugEnabled()) {
+                logger.debug("Dependent Resource={}, url={}, createdDate={}", dep, jmxUrl.get(),
+                                rrx.getCreatedDate());
+            }
+
+            return null;
+
+        } else {
+            return dep + ": resource not found in ResourceRegistrationEntity table in the DB";
+        }
+    }
+
+    private String jmxCheck2(String dep, String jmxUrl, String errorMsg) {
+        JmxAgentConnection jmxAgentConnection = null;
         try {
-            // query if ResourceRegistration entry exists for resourceName
-            Query rquery = em.createQuery("Select r from ResourceRegistrationEntity r where r.resourceName=:rn");
-            rquery.setParameter("rn", dep);
+            jmxAgentConnection = new JmxAgentConnection(jmxUrl);
+            MBeanServerConnection mbeanServer = jmxAgentConnection.getMBeanConnection();
+            ComponentAdminMBean admin =
+                    JMX.newMXBeanProxy(mbeanServer, ComponentAdmin.getObjectName(dep), ComponentAdminMBean.class);
 
-            @SuppressWarnings("rawtypes")
-            List rrList = rquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
-            ResourceRegistrationEntity rrx = null;
-
-            if (!rrList.isEmpty()) {
-                // ignores multiple results
-                rrx = (ResourceRegistrationEntity) rrList.get(0);
-                // refresh the object from DB in case cached data was returned
-                em.refresh(rrx);
-                jmxUrl = rrx.getResourceUrl();
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Dependent Resource={}, url={}, createdDate={}", dep, jmxUrl, rrx.getCreatedDate());
-                }
-            } else {
-                errorMsg = dep + ": resource not found in ResourceRegistrationEntity table in the DB";
-                logger.error("{}", errorMsg);
-            }
-
-            synchronized (imFlushLock) {
-                et.commit();
-            }
+            // invoke the test method via the jmx proxy
+            admin.test();
+            logger.debug("Dependent resource {} sanity test passed", dep);
         } catch (Exception e) {
-            errorMsg = dep + ": ResourceRegistrationEntity DB read failed with exception: ";
-            logger.error("{}", errorMsg, e);
-            synchronized (imFlushLock) {
-                if (et.isActive()) {
-                    et.rollback();
-                }
+            String errorMsg2 = dep + ": resource sanity test failed with exception: ";
+            logger.error("{}", errorMsg2, e);
+            return errorMsg2;
+        } finally {
+            // close the JMX connector
+            if (jmxAgentConnection != null) {
+                jmxAgentConnection.disconnect();
             }
         }
-
-        if (jmxUrl != null) {
-            JmxAgentConnection jmxAgentConnection = null;
-            try {
-                jmxAgentConnection = new JmxAgentConnection(jmxUrl);
-                MBeanServerConnection mbeanServer = jmxAgentConnection.getMBeanConnection();
-                ComponentAdminMBean admin =
-                        JMX.newMXBeanProxy(mbeanServer, ComponentAdmin.getObjectName(dep), ComponentAdminMBean.class);
-
-                // invoke the test method via the jmx proxy
-                admin.test();
-                logger.debug("Dependent resource {} sanity test passed", dep);
-            } catch (Exception e) {
-                errorMsg = dep + ": resource sanity test failed with exception: ";
-                logger.error("{}", errorMsg, e);
-            } finally {
-                // close the JMX connector
-                if (jmxAgentConnection != null) {
-                    jmxAgentConnection.disconnect();
-                }
-            }
-        }
-
         return errorMsg;
     }
 

@@ -63,6 +63,11 @@
             <artifactId>eclipselink</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.onap.policy.common</groupId>
             <artifactId>utils</artifactId>
             <version>${project.version}</version>

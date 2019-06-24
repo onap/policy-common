@@ -22,6 +22,8 @@ package org.onap.policy.common.im;
 
 import java.util.List;
 import java.util.Observable;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.FlushModeType;
@@ -103,44 +105,14 @@ public class StateManagement extends Observable {
     public StateManagement(final EntityManagerFactory entityManagerFactory, final String resourceName)
             throws StateManagementException {
         emf = entityManagerFactory;
-        if (logger.isDebugEnabled()) {
-            logger.debug("StateManagement: constructor, resourceName: {}", resourceName);
-        }
+        logger.debug("StateManagement: constructor, resourceName: {}", resourceName);
 
-        final EntityManager em = emf.createEntityManager();
-        try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
+        this.resourceName = resourceName;
 
-            this.resourceName = resourceName;
-            if (logger.isDebugEnabled()) {
-                logger.debug("resourceName = {}", this.resourceName);
-            }
+        setState("StateManagement", this.resourceName, sm -> null);
 
-
-            try {
-                // Create a StateManagementEntity object
-                if (logger.isDebugEnabled()) {
-                    logger.debug(FIND_MESSAGE, this.resourceName);
-                }
-                final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
-
-                // persist the administrative state
-                if (logger.isDebugEnabled()) {
-                    logger.debug("Persist adminstrative state, resourceName = {}", this.resourceName);
-                }
-                em.persist(sm);
-                et.commit();
-
-                // Load the StateTransition hash table
-                st = new StateTransition();
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("StateManagement: constructor end, resourceName: {}", this.resourceName);
-                }
-            } catch (final Exception ex) {
-                logger.error("StateManagement: constructor caught unexpected exception: ", ex);
-                throw new StateManagementException("StateManagement: Exception: " + ex.toString(), ex);
-            }
-        }
+        // Load the StateTransition hash table
+        st = new StateTransition();
     }
 
     /**
@@ -150,41 +122,72 @@ public class StateManagement extends Observable {
      * and the owning application will set the StandbyStatus.
      */
     public void initializeState() throws StateManagementException {
+        setState("initializeState", this.resourceName, sm -> {
+            sm.setAdminState(sm.getAdminState()); // preserve the Admin state
+            sm.setOpState(StateManagement.ENABLED);
+            sm.setAvailStatus(StateManagement.NULL_VALUE);
+            sm.setStandbyStatus(StateManagement.NULL_VALUE);
+            return ADMIN_STATE;
+        });
+    }
+
+    /**
+     * Sets the management entity state.
+     *
+     * @param methodName name of the method that invoked this
+     * @param resourceName resource name of the desired entity
+     * @param updateState function to update the state; returns a string indicating which item
+     *        was updated, {@code null} if no change was made
+     * @throws StateManagementException if an error occurs
+     */
+    private void setState(String methodName, String resourceName, ExFunction<StateManagementEntity,String> updateState)
+                    throws StateManagementException {
+
         synchronized (SYNCLOCK) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK initializeState() operation for resourceName = {}\n",
-                        this.resourceName);
-                logger.debug("StateManagement: initializeState() operation started, resourceName = {}",
-                        this.resourceName);
-            }
+            logger.debug("\nStateManagement: SYNCLOCK {}() operation for resourceName = {}\n", methodName,
+                            resourceName);
+            logger.debug("StateManagement: {}() operation started, resourceName = {}", methodName, resourceName);
+
             final EntityManager em = emf.createEntityManager();
 
             try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug(FIND_MESSAGE, this.resourceName);
-                }
-                final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
-                // set state
-                sm.setAdminState(sm.getAdminState()); // preserve the Admin state
-                sm.setOpState(StateManagement.ENABLED);
-                sm.setAvailStatus(StateManagement.NULL_VALUE);
-                sm.setStandbyStatus(StateManagement.NULL_VALUE);
+                logger.debug(FIND_MESSAGE, resourceName);
+
+                final StateManagementEntity sm = findStateManagementEntity(em, resourceName);
+                String changed = updateState.update(sm);
 
                 em.persist(sm);
                 et.commit();
-                setChanged();
-                notifyObservers(ADMIN_STATE);
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug("StateManagement: initializeState() operation completed, resourceName = {}",
-                            this.resourceName);
+                if (changed != null) {
+                    setChanged();
+                    notifyObservers(changed);
                 }
+
+                logger.debug("StateManagement: {}() operation completed, resourceName = {}",
+                                methodName, resourceName);
             } catch (final Exception ex) {
-                logger.error("StateManagement.initializeState() caught unexpected exception: ", ex);
-                throw new StateManagementException("StateManagement.initializeState() Exception: " + ex);
+                logger.error("StateManagement.{}() caught unexpected exception: ", methodName, ex);
+                throw new StateManagementException("StateManagement." + methodName + "() Exception: " + ex);
             }
         }
+    }
+
+    private void setStateUsingTable(String actionName, String resourceName, String changeName)
+                    throws StateManagementException {
+
+        setState(actionName, resourceName, sm -> {
+            final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
+                            sm.getAvailStatus(), sm.getStandbyStatus(), actionName);
+
+            sm.setAdminState(stateElement.getEndingAdminState());
+            sm.setOpState(stateElement.getEndingOpState());
+            sm.setAvailStatus(stateElement.getEndingAvailStatus());
+            sm.setStandbyStatus(stateElement.getEndingStandbyStatus());
+
+            return changeName;
+        });
     }
 
     /**
@@ -193,41 +196,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void lock() throws StateManagementException {
-        synchronized (SYNCLOCK) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK lock() operation for resourceName = {}\n", this.resourceName);
-                logger.debug("StateManagement: lock() operation started, resourceName = {}", this.resourceName);
-            }
-            final EntityManager em = emf.createEntityManager();
-
-            try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug(FIND_MESSAGE, this.resourceName);
-                }
-                final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
-
-                final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
-                        sm.getAvailStatus(), sm.getStandbyStatus(), LOCK);
-
-                sm.setAdminState(stateElement.getEndingAdminState());
-                sm.setOpState(stateElement.getEndingOpState());
-                sm.setAvailStatus(stateElement.getEndingAvailStatus());
-                sm.setStandbyStatus(stateElement.getEndingStandbyStatus());
-
-                em.persist(sm);
-                et.commit();
-                setChanged();
-                notifyObservers(ADMIN_STATE);
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("StateManagement: lock() operation completed, resourceName = {}", this.resourceName);
-                }
-            } catch (final Exception ex) {
-                logger.error("StateManagement.lock() caught unexpected exception: ", ex);
-                throw new StateManagementException("StateManagement.lock() Exception: " + ex.toString());
-            }
-        }
+        setStateUsingTable(LOCK, this.resourceName, ADMIN_STATE);
     }
 
     /**
@@ -236,41 +205,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void unlock() throws StateManagementException {
-        synchronized (SYNCLOCK) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK unlock() operation for resourceName = {}\n",
-                        this.resourceName);
-                logger.debug("StateManagement: unlock() operation started, resourceName = {}", this.resourceName);
-            }
-            final EntityManager em = emf.createEntityManager();
-
-            try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug(FIND_MESSAGE, this.resourceName);
-                }
-                final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
-                final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
-                        sm.getAvailStatus(), sm.getStandbyStatus(), UNLOCK);
-                // set transition state
-                sm.setAdminState(stateElement.getEndingAdminState());
-                sm.setOpState(stateElement.getEndingOpState());
-                sm.setAvailStatus(stateElement.getEndingAvailStatus());
-                sm.setStandbyStatus(stateElement.getEndingStandbyStatus());
-
-                em.persist(sm);
-                et.commit();
-                setChanged();
-                notifyObservers(ADMIN_STATE);
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("StateManagement: unlock() operation completed, resourceName = {}", this.resourceName);
-                }
-            } catch (final Exception ex) {
-                logger.error("StateManagement.unlock() caught unexpected exception: ", ex);
-                throw new StateManagementException("StateManagement.unlock() Exception: " + ex);
-            }
-        }
+        setStateUsingTable(UNLOCK, this.resourceName, ADMIN_STATE);
     }
 
     /**
@@ -280,44 +215,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void enableNotFailed() throws StateManagementException {
-        synchronized (SYNCLOCK) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK enabledNotFailed() operation for resourceName = {}\n",
-                        this.resourceName);
-                logger.debug("StateManagement: enableNotFailed() operation started, resourceName = {}",
-                        this.resourceName);
-            }
-            final EntityManager em = emf.createEntityManager();
-
-            try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug(FIND_MESSAGE, this.resourceName);
-                }
-                final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
-                final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
-                        sm.getAvailStatus(), sm.getStandbyStatus(), ENABLE_NOT_FAILED);
-                // set transition state
-                sm.setAdminState(stateElement.getEndingAdminState());
-                sm.setOpState(stateElement.getEndingOpState());
-                sm.setAvailStatus(stateElement.getEndingAvailStatus());
-                sm.setStandbyStatus(stateElement.getEndingStandbyStatus());
-
-                em.persist(sm);
-                et.commit();
-
-                setChanged();
-                notifyObservers(OPERATION_STATE);
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("StateManagement enableNotFailed() operation completed, resourceName = {}",
-                            this.resourceName);
-                }
-            } catch (final Exception ex) {
-                logger.error("StateManagement.enableNotFailed() caught unexpected exception: ", ex);
-                throw new StateManagementException("StateManagement.enableNotFailed() Exception: " + ex);
-            }
-        }
+        setStateUsingTable(ENABLE_NOT_FAILED, this.resourceName, OPERATION_STATE);
     }
 
     /**
@@ -327,43 +225,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void disableFailed() throws StateManagementException {
-        synchronized (SYNCLOCK) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK disabledFailed() operation for resourceName = {}\n",
-                        this.resourceName);
-                logger.debug("StateManagement: disableFailed() operation started, resourceName = {}",
-                        this.resourceName);
-            }
-            final EntityManager em = emf.createEntityManager();
-
-            try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug(FIND_MESSAGE, this.resourceName);
-                }
-                final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
-                final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
-                        sm.getAvailStatus(), sm.getStandbyStatus(), DISABLE_FAILED);
-                // set transition state
-                sm.setAdminState(stateElement.getEndingAdminState());
-                sm.setOpState(stateElement.getEndingOpState());
-                sm.setAvailStatus(stateElement.getEndingAvailStatus());
-                sm.setStandbyStatus(stateElement.getEndingStandbyStatus());
-
-                em.persist(sm);
-                et.commit();
-                setChanged();
-                notifyObservers(OPERATION_STATE);
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("StateManagement: disableFailed() operation completed, resourceName = {}",
-                            this.resourceName);
-                }
-            } catch (final Exception ex) {
-                logger.error("StateManagement.disableFailed() caught unexpected exception: ", ex);
-                throw new StateManagementException("StateManagement.disableFailed() Exception: " + ex);
-            }
-        }
+        setStateUsingTable(DISABLE_FAILED, this.resourceName, OPERATION_STATE);
     }
 
     /**
@@ -373,49 +235,13 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void disableFailed(final String otherResourceName) throws StateManagementException {
-        synchronized (SYNCLOCK) {
-            if (otherResourceName == null) {
-                logger.error("\nStateManagement: SYNCLOCK disableFailed(otherResourceName) operation: resourceName is "
-                        + "NULL.\n");
-                return;
-            }
-            if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK disabledFailed(otherResourceName) operation for resourceName "
-                        + "= {}\n", otherResourceName);
-                logger.debug("StateManagement: disableFailed(otherResourceName) operation started, resourceName = {}",
-                        otherResourceName);
-            }
-            final EntityManager em = emf.createEntityManager();
-
-            try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug(FIND_MESSAGE, otherResourceName);
-                }
-                final StateManagementEntity sm = findStateManagementEntity(em, otherResourceName);
-                final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
-                        sm.getAvailStatus(), sm.getStandbyStatus(), DISABLE_FAILED);
-                // set transition state
-                sm.setAdminState(stateElement.getEndingAdminState());
-                sm.setOpState(stateElement.getEndingOpState());
-                sm.setAvailStatus(stateElement.getEndingAvailStatus());
-                sm.setStandbyStatus(stateElement.getEndingStandbyStatus());
-
-                em.persist(sm);
-                et.commit();
-                setChanged();
-                notifyObservers(OPERATION_STATE);
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug(
-                            "StateManagement: disableFailed(otherResourceName) operation completed, resourceName = {}",
-                            otherResourceName);
-                }
-            } catch (final Exception ex) {
-                logger.error("StateManagement.disableFailed(otherResourceName) caught unexpected exception: ", ex);
-                throw new StateManagementException("StateManagement.disableFailed(otherResourceName) Exception: " + ex);
-            }
+        if (otherResourceName == null) {
+            logger.error(
+                "\nStateManagement: SYNCLOCK disableFailed(otherResourceName) operation: resourceName is NULL.\n");
+            return;
         }
+
+        setStateUsingTable(DISABLE_FAILED, otherResourceName, OPERATION_STATE);
     }
 
     /**
@@ -425,43 +251,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void disableDependency() throws StateManagementException {
-        synchronized (SYNCLOCK) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK disableDependency() operation for resourceName = {}\n",
-                        this.resourceName);
-                logger.debug("StateManagement: disableDependency() operation started, resourceName = {}",
-                        this.resourceName);
-            }
-            final EntityManager em = emf.createEntityManager();
-
-            try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug(FIND_MESSAGE, this.resourceName);
-                }
-                final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
-                final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
-                        sm.getAvailStatus(), sm.getStandbyStatus(), DISABLE_DEPENDENCY);
-                // set transition state
-                sm.setAdminState(stateElement.getEndingAdminState());
-                sm.setOpState(stateElement.getEndingOpState());
-                sm.setAvailStatus(stateElement.getEndingAvailStatus());
-                sm.setStandbyStatus(stateElement.getEndingStandbyStatus());
-
-                em.persist(sm);
-                et.commit();
-                setChanged();
-                notifyObservers(OPERATION_STATE);
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("StateManagement: disableDependency() operation completed, resourceName = {}",
-                            this.resourceName);
-                }
-            } catch (final Exception ex) {
-                logger.error("StateManagement.disableDependency() caught unexpected exception: ", ex);
-                throw new StateManagementException("StateManagement.disableDependency() Exception: " + ex);
-            }
-        }
+        setStateUsingTable(DISABLE_DEPENDENCY, this.resourceName, OPERATION_STATE);
     }
 
     /**
@@ -471,43 +261,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void enableNoDependency() throws StateManagementException {
-        synchronized (SYNCLOCK) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK enableNoDependency() operation for resourceName = {}\n",
-                        this.resourceName);
-                logger.debug("StateManagement: enableNoDependency() operation started, resourceName = {}",
-                        this.resourceName);
-            }
-            final EntityManager em = emf.createEntityManager();
-
-            try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug(FIND_MESSAGE, this.resourceName);
-                }
-                final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
-                final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
-                        sm.getAvailStatus(), sm.getStandbyStatus(), ENABLE_NO_DEPENDENCY);
-                // set transition state
-                sm.setAdminState(stateElement.getEndingAdminState());
-                sm.setOpState(stateElement.getEndingOpState());
-                sm.setAvailStatus(stateElement.getEndingAvailStatus());
-                sm.setStandbyStatus(stateElement.getEndingStandbyStatus());
-
-                em.persist(sm);
-                et.commit();
-                setChanged();
-                notifyObservers(OPERATION_STATE);
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("StateManagement: enableNoDependency() operation completed, resourceName = {}",
-                            this.resourceName);
-                }
-            } catch (final Exception ex) {
-                logger.error("StateManagement.enableNoDependency() caught unexpected exception: ", ex);
-                throw new StateManagementException("StateManagement.enableNoDependency() Exception: " + ex);
-            }
-        }
+        setStateUsingTable(ENABLE_NO_DEPENDENCY, this.resourceName, OPERATION_STATE);
     }
 
     /**
@@ -516,48 +270,26 @@ public class StateManagement extends Observable {
      * @throws IntegrityMonitorException if the status fails to change
      */
     public void promote() throws IntegrityMonitorException {
-        synchronized (SYNCLOCK) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK promote() operation for resourceName = {}\n",
-                        this.resourceName);
-                logger.debug("StateManagement: promote() operation started, resourceName = {}", this.resourceName);
-            }
+        AtomicReference<String> newStatus = new AtomicReference<>();
 
-            StateManagementEntity sm;
+        setState(PROMOTE, resourceName, sm -> {
+            final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
+                            sm.getAvailStatus(), sm.getStandbyStatus(), PROMOTE);
 
-            final EntityManager em = emf.createEntityManager();
+            sm.setAdminState(stateElement.getEndingAdminState());
+            sm.setOpState(stateElement.getEndingOpState());
+            sm.setAvailStatus(stateElement.getEndingAvailStatus());
+            sm.setStandbyStatus(stateElement.getEndingStandbyStatus());
 
-            try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
+            newStatus.set(sm.getStandbyStatus());
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug(FIND_MESSAGE, this.resourceName);
-                }
-                sm = findStateManagementEntity(em, this.resourceName);
-                final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
-                        sm.getAvailStatus(), sm.getStandbyStatus(), PROMOTE);
-                // set transition state
-                sm.setAdminState(stateElement.getEndingAdminState());
-                sm.setOpState(stateElement.getEndingOpState());
-                sm.setAvailStatus(stateElement.getEndingAvailStatus());
-                sm.setStandbyStatus(stateElement.getEndingStandbyStatus());
+            return STANDBY_STATUS;
+        });
 
-                em.persist(sm);
-                et.commit();
-                setChanged();
-                notifyObservers(STANDBY_STATUS);
-            } catch (final Exception ex) {
-                logger.error("StateManagement.promote() caught unexpected exception: ", ex);
-                throw new StateManagementException("StateManagement.promote() Exception: " + ex);
-            }
-
-            if (logger.isDebugEnabled()) {
-                logger.debug("StateManagement: promote() operation completed, resourceName = {}", this.resourceName);
-            }
-            if (sm.getStandbyStatus().equals(StateManagement.COLD_STANDBY)) {
-                final String msg =
-                        "Failure to promote " + this.resourceName + " StandbyStatus = " + StateManagement.COLD_STANDBY;
-                throw new StandbyStatusException(msg);
-            }
+        if (StateManagement.COLD_STANDBY.equals(newStatus.get())) {
+            final String msg =
+                    "Failure to promote " + this.resourceName + " StandbyStatus = " + StateManagement.COLD_STANDBY;
+            throw new StandbyStatusException(msg);
         }
     }
 
@@ -567,42 +299,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void demote() throws StateManagementException {
-        synchronized (SYNCLOCK) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK demote() operation for resourceName = {}\n",
-                        this.resourceName);
-                logger.debug("StateManagement: demote() operation started, resourceName = {}",
-                        this.resourceName);
-            }
-            final EntityManager em = emf.createEntityManager();
-
-            try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug(FIND_MESSAGE, this.resourceName);
-                }
-                final StateManagementEntity sm = findStateManagementEntity(em, this.resourceName);
-                final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
-                        sm.getAvailStatus(), sm.getStandbyStatus(), DEMOTE);
-                // set transition state
-                sm.setAdminState(stateElement.getEndingAdminState());
-                sm.setOpState(stateElement.getEndingOpState());
-                sm.setAvailStatus(stateElement.getEndingAvailStatus());
-                sm.setStandbyStatus(stateElement.getEndingStandbyStatus());
-
-                em.persist(sm);
-                et.commit();
-                setChanged();
-                notifyObservers(STANDBY_STATUS);
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("StateManagement: demote() operation completed, resourceName = {}", this.resourceName);
-                }
-            } catch (final Exception ex) {
-                logger.error("StateManagement.demote() caught unexpected exception: ", ex);
-                throw new StateManagementException("StateManagement.demote() Exception: " + ex);
-            }
-        }
+        setStateUsingTable(DEMOTE, this.resourceName, STANDBY_STATUS);
     }
 
     /**
@@ -615,46 +312,13 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void demote(final String otherResourceName) throws StateManagementException {
-        synchronized (SYNCLOCK) {
-            if (otherResourceName == null) {
-                logger.error(
-                        "\nStateManagement: SYNCLOCK demote(otherResourceName) operation: resourceName is NULL.\n");
-                return;
-            }
-            if (logger.isDebugEnabled()) {
-                logger.debug("\nStateManagement: SYNCLOCK demote(otherResourceName) operation for resourceName = {}\n",
-                        otherResourceName);
-            }
-            final EntityManager em = emf.createEntityManager();
-
-            try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("StateManagement: SYNCLOCK demote(otherResourceName) findStateManagementEntity for {}",
-                            otherResourceName);
-                }
-                final StateManagementEntity sm = findStateManagementEntity(em, otherResourceName);
-                final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
-                        sm.getAvailStatus(), sm.getStandbyStatus(), DEMOTE);
-                // set transition state
-                sm.setAdminState(stateElement.getEndingAdminState());
-                sm.setOpState(stateElement.getEndingOpState());
-                sm.setAvailStatus(stateElement.getEndingAvailStatus());
-                sm.setStandbyStatus(stateElement.getEndingStandbyStatus());
-
-                em.persist(sm);
-                et.commit();
-                // We don't notify observers because this is assumed to be a remote resource
-
-                if (logger.isDebugEnabled()) {
-                    logger.debug("StateManagement: demote(otherResourceName) operation completed, resourceName = {}",
-                            otherResourceName);
-                }
-            } catch (final Exception ex) {
-                logger.error("StateManagement.demote(otherResourceName) caught unexpected exception: ", ex);
-                throw new StateManagementException("StateManagement.demote(otherResourceName) Exception: " + ex);
-            }
+        if (otherResourceName == null) {
+            logger.error(
+                    "\nStateManagement: SYNCLOCK demote(otherResourceName) operation: resourceName is NULL.\n");
+            return;
         }
+
+        setStateUsingTable(DEMOTE, otherResourceName, null);
     }
 
     /**
@@ -663,9 +327,16 @@ public class StateManagement extends Observable {
      * @return the administration state
      */
     public String getAdminState() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("StateManagement(6/1/16): getAdminState for resourceName {}", this.resourceName);
-        }
+        getEntityState("getAdminState", this.resourceName,
+            sm -> this.adminState = sm.getAdminState(),
+            () -> this.adminState = null);
+        return this.adminState;
+    }
+
+    private void getEntityState(String methodName, String resourceName, Consumer<StateManagementEntity> function,
+                    Runnable notFound) {
+
+        logger.debug("StateManagement(6/1/16): {} for resourceName {}", methodName, resourceName);
 
         final EntityManager em = emf.createEntityManager();
         try (final EntityMgrCloser emc = new EntityMgrCloser(em)) {
@@ -682,15 +353,14 @@ public class StateManagement extends Observable {
                 final StateManagementEntity stateManagementEntity = resourceList.get(0);
                 // refresh the object from DB in case cached data was returned
                 em.refresh(stateManagementEntity);
-                this.adminState = stateManagementEntity.getAdminState();
+                function.accept(stateManagementEntity);
             } else {
-                this.adminState = null;
+                notFound.run();
             }
         } catch (final Exception ex) {
-            logger.error("StateManagement: getAdminState exception: {}", ex.toString(), ex);
+            logger.error("StateManagement: {} exception: {}", methodName, ex.toString(), ex);
         }
 
-        return this.adminState;
     }
 
     /**
@@ -699,33 +369,9 @@ public class StateManagement extends Observable {
      * @return the operational state
      */
     public String getOpState() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("StateManagement(6/1/16): getOpState for resourceName {}", this.resourceName);
-        }
-
-        final EntityManager em = emf.createEntityManager();
-        try (EntityMgrCloser emc = new EntityMgrCloser(em)) {
-            final TypedQuery<StateManagementEntity> query =
-                    em.createQuery(GET_STATE_MANAGEMENT_ENTITY_QUERY, StateManagementEntity.class);
-
-            query.setParameter(RESOURCE_NAME, this.resourceName);
-
-            // Just test that we are retrieving the right object
-            final List<StateManagementEntity> resourceList =
-                    query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
-            if (!resourceList.isEmpty()) {
-                // exist
-                final StateManagementEntity stateManagementEntity = resourceList.get(0);
-                // refresh the object from DB in case cached data was returned
-                em.refresh(stateManagementEntity);
-                this.opState = stateManagementEntity.getOpState();
-            } else {
-                this.opState = null;
-            }
-        } catch (final Exception ex) {
-            logger.error("StateManagement: getOpState exception: {}", ex.toString(), ex);
-        }
-
+        getEntityState("getOpState", this.resourceName,
+            sm -> this.opState = sm.getOpState(),
+            () -> this.opState = null);
         return this.opState;
     }
 
@@ -735,33 +381,9 @@ public class StateManagement extends Observable {
      * @return the availability status
      */
     public String getAvailStatus() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("StateManagement(6/1/16): getAvailStatus for resourceName {}", this.resourceName);
-        }
-
-        final EntityManager em = emf.createEntityManager();
-        try (EntityMgrCloser emc = new EntityMgrCloser(em)) {
-            final TypedQuery<StateManagementEntity> query =
-                    em.createQuery(GET_STATE_MANAGEMENT_ENTITY_QUERY, StateManagementEntity.class);
-
-            query.setParameter(RESOURCE_NAME, this.resourceName);
-
-            // Just test that we are retrieving the right object
-            final List<StateManagementEntity> resourceList =
-                    query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
-            if (!resourceList.isEmpty()) {
-                // exist
-                final StateManagementEntity stateManagementEntity = resourceList.get(0);
-                // refresh the object from DB in case cached data was returned
-                em.refresh(stateManagementEntity);
-                this.availStatus = stateManagementEntity.getAvailStatus();
-            } else {
-                this.availStatus = null;
-            }
-        } catch (final Exception ex) {
-            logger.error("StateManagement: getAvailStatus exception: {}", ex.toString(), ex);
-        }
-
+        getEntityState("getAvailStatus", this.resourceName,
+            sm -> this.availStatus = sm.getAvailStatus(),
+            () -> this.availStatus = null);
         return this.availStatus;
     }
 
@@ -771,33 +393,9 @@ public class StateManagement extends Observable {
      * @return the standby status
      */
     public String getStandbyStatus() {
-        if (logger.isDebugEnabled()) {
-            logger.debug("StateManagement(6/1/16): getStandbyStatus for resourceName {}", this.resourceName);
-        }
-
-        final EntityManager em = emf.createEntityManager();
-        try (EntityMgrCloser emc = new EntityMgrCloser(em)) {
-            final TypedQuery<StateManagementEntity> query =
-                    em.createQuery(GET_STATE_MANAGEMENT_ENTITY_QUERY, StateManagementEntity.class);
-
-            query.setParameter(RESOURCE_NAME, this.resourceName);
-
-            // Just test that we are retrieving the right object
-            final List<StateManagementEntity> resourceList =
-                    query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
-            if (!resourceList.isEmpty()) {
-                // exist
-                final StateManagementEntity stateManagementEntity = resourceList.get(0);
-                // refresh the object from DB in case cached data was returned
-                em.refresh(stateManagementEntity);
-                this.standbyStatus = stateManagementEntity.getStandbyStatus();
-            } else {
-                this.standbyStatus = null;
-            }
-        } catch (final Exception ex) {
-            logger.error("StateManagement: getStandbyStatus exception: {}", ex.toString(), ex);
-        }
-
+        getEntityState("getStandbyStatus", this.resourceName,
+            sm -> this.standbyStatus = sm.getStandbyStatus(),
+            () -> this.standbyStatus = null);
         return this.standbyStatus;
     }
 
@@ -808,48 +406,16 @@ public class StateManagement extends Observable {
      * @return the standby status
      */
     public String getStandbyStatus(final String otherResourceName) {
+        AtomicReference<String> tempStandbyStatus = new AtomicReference<>();
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("StateManagement: getStandbyStatus: Entering, resourceName='{}'", otherResourceName);
-        }
+        getEntityState("getStandbyStatus", otherResourceName,
+            sm -> tempStandbyStatus.set(sm.getStandbyStatus()),
+            () -> logger.error("getStandbyStatus: resourceName ={} not found in statemanagemententity table",
+                                    otherResourceName));
 
-        String tempStandbyStatus = null;
+        logger.debug("getStandbyStatus: Returning standbyStatus={}", tempStandbyStatus.get());
 
-        // The transaction is required for the LockModeType
-        final EntityManager em = emf.createEntityManager();
-
-        try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
-
-            final TypedQuery<StateManagementEntity> stateManagementListQuery =
-                    em.createQuery(GET_STATE_MANAGEMENT_ENTITY_QUERY, StateManagementEntity.class);
-            stateManagementListQuery.setParameter(RESOURCE_NAME, otherResourceName);
-            final List<StateManagementEntity> stateManagementList = stateManagementListQuery
-                    .setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
-            if (!stateManagementList.isEmpty()) {
-                final StateManagementEntity stateManagementEntity = stateManagementList.get(0);
-                // refresh the object from DB in case cached data was returned
-                em.refresh(stateManagementEntity);
-                tempStandbyStatus = stateManagementEntity.getStandbyStatus();
-                if (logger.isDebugEnabled()) {
-                    logger.debug("getStandbyStatus: resourceName ={} has standbyStatus={}", otherResourceName,
-                            tempStandbyStatus);
-                }
-            } else {
-                logger.error("getStandbyStatus: resourceName ={} not found in statemanagemententity table",
-                        otherResourceName);
-            }
-
-            et.commit();
-        } catch (final Exception e) {
-            logger.error(
-                    "getStandbyStatus: Caught Exception attempting to get statemanagemententity record, message='{}'",
-                    e.getMessage(), e);
-        }
-        if (logger.isDebugEnabled()) {
-            logger.debug("getStandbyStatus: Returning standbyStatus={}", tempStandbyStatus);
-        }
-
-        return tempStandbyStatus;
+        return tempStandbyStatus.get();
     }
 
     /**
@@ -861,9 +427,7 @@ public class StateManagement extends Observable {
      */
     private static StateManagementEntity findStateManagementEntity(final EntityManager em,
             final String otherResourceName) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("StateManagementEntity: findStateManagementEntity: Entry");
-        }
+        logger.debug("StateManagementEntity: findStateManagementEntity: Entry");
         try {
             final TypedQuery<StateManagementEntity> query =
                     em.createQuery(GET_STATE_MANAGEMENT_ENTITY_QUERY, StateManagementEntity.class);
@@ -902,9 +466,7 @@ public class StateManagement extends Observable {
      */
     public void deleteAllStateManagementEntities() {
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("StateManagement: deleteAllStateManagementEntities: Entering");
-        }
+        logger.debug("StateManagement: deleteAllStateManagementEntities: Entering");
 
         /*
          * Start transaction
@@ -916,17 +478,12 @@ public class StateManagement extends Observable {
                     em.createQuery("SELECT p FROM StateManagementEntity p", StateManagementEntity.class);
             final List<StateManagementEntity> stateManagementEntityList = stateManagementEntityListQuery
                     .setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
-            if (logger.isDebugEnabled()) {
-                logger.debug("deleteAllStateManagementEntities: Deleting {} StateManagementEntity records",
-                        stateManagementEntityList.size());
-            }
+            logger.debug("deleteAllStateManagementEntities: Deleting {} StateManagementEntity records",
+                            stateManagementEntityList.size());
             for (final StateManagementEntity stateManagementEntity : stateManagementEntityList) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug(
-                            "deleteAllStateManagementEntities: Deleting statemanagemententity with resourceName={} and"
-                                    + " standbyStatus={}",
-                            stateManagementEntity.getResourceName(), stateManagementEntity.getStandbyStatus());
-                }
+                logger.debug("deleteAllStateManagementEntities: Deleting statemanagemententity with resourceName={} and"
+                                + " standbyStatus={}", stateManagementEntity.getResourceName(),
+                                stateManagementEntity.getStandbyStatus());
                 em.remove(stateManagementEntity);
             }
 
@@ -934,9 +491,12 @@ public class StateManagement extends Observable {
         } catch (final Exception ex) {
             logger.error("StateManagement.deleteAllStateManagementEntities() caught Exception: ", ex);
         }
-        if (logger.isDebugEnabled()) {
-            logger.debug("deleteAllStateManagementEntities: Exiting");
-        }
+        logger.debug("deleteAllStateManagementEntities: Exiting");
+    }
+
+    @FunctionalInterface
+    private static interface ExFunction<T,R> {
+        public R update(T object) throws IntegrityMonitorException;
     }
 
     private static class MyTransaction extends EntityTransCloser {
