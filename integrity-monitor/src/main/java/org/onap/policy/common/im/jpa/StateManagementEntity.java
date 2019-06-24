@@ -34,12 +34,18 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.Setter;
 import org.onap.policy.common.im.MonitorTime;
 
 @Entity
 @Table(name = "StateManagementEntity")
 @NamedQuery(name = "StateManagementEntity.findAll", query = "SELECT e FROM StateManagementEntity e")
 // @SequenceGenerator(name="seqSM", initialValue=1, allocationSize=1)
+
+@Getter
+@Setter
 
 public class StateManagementEntity implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -48,6 +54,8 @@ public class StateManagementEntity implements Serializable {
     // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seqSM")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
+    @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private long id;
 
     @Column(name = "resourceName", nullable = false, length = 100, unique = true)
@@ -67,6 +75,7 @@ public class StateManagementEntity implements Serializable {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_Date", updatable = false)
+    @Setter(AccessLevel.NONE)
     private Date createdDate;
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -86,51 +95,6 @@ public class StateManagementEntity implements Serializable {
     @PreUpdate
     public void preUpdate() {
         this.modifiedDate = MonitorTime.getInstance().getDate();
-    }
-
-    public String getResourceName() {
-        return this.resourceName;
-    }
-
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
-    }
-
-    public String getAdminState() {
-        return this.adminState;
-    }
-
-    public void setAdminState(String adminState) {
-        this.adminState = adminState;
-    }
-
-    public String getOpState() {
-        return this.opState;
-    }
-
-    public void setOpState(String opState) {
-        this.opState = opState;
-
-    }
-
-    public String getAvailStatus() {
-        return this.availStatus;
-    }
-
-    public void setAvailStatus(String availStatus) {
-        this.availStatus = availStatus;
-    }
-
-    public String getStandbyStatus() {
-        return this.standbyStatus;
-    }
-
-    public void setStandbyStatus(String standbyStatus) {
-        this.standbyStatus = standbyStatus;
-    }
-
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
     }
 
     /**

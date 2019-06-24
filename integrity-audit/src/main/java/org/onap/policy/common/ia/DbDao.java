@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -330,27 +331,10 @@ public class DbDao {
      * @throws DbDaoTransactionException if an error occurs
      */
     public IntegrityAuditEntity getMyIntegrityAuditEntity() throws DbDaoTransactionException {
-        try {
-            EntityManager em = emf.createEntityManager();
 
-            // Start a transaction
-            EntityTransaction et = em.getTransaction();
+        return updateIae("getMyIntegrityAuditEntity", this.resourceName, this.persistenceUnit, (em,iae) -> {
 
-            et.begin();
-
-            // if IntegrityAuditEntity entry exists for resourceName and PU, retrieve it
-            Query iaequery = em.createQuery(
-                    SELECT_STRING);
-            iaequery.setParameter("rn", this.resourceName);
-            iaequery.setParameter("pu", this.persistenceUnit);
-
-            @SuppressWarnings("rawtypes")
-            List iaeList = iaequery.getResultList();
-            IntegrityAuditEntity iae = null;
-
-            if (!iaeList.isEmpty()) {
-                // ignores multiple results
-                iae = (IntegrityAuditEntity) iaeList.get(0);
+            if (iae != null) {
                 // refresh the object from DB in case cached data was returned
                 em.refresh(iae);
                 logger.info(RESOURCE_MESSAGE + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit
@@ -360,18 +344,7 @@ public class DbDao {
                 logger.error("Attempting to setLastUpdated" + " on an entry that does not exist: resource "
                         + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit);
             }
-
-            // close the transaction
-            et.commit();
-            // close the EntityManager
-            em.close();
-
-            return iae;
-        } catch (Exception e) {
-            String msg = DBDAO_MESSAGE + "setLastUpdated() " + ENCOUNTERED_MESSAGE;
-            logger.error(msg + e);
-            throw new DbDaoTransactionException(e);
-        }
+        });
     }
 
 
@@ -430,29 +403,11 @@ public class DbDao {
      *        default
      */
     private void register(String altDbUrl) throws DbDaoTransactionException {
-        try {
-            EntityManager em = emf.createEntityManager();
 
-            // Start a transaction
-            EntityTransaction et = em.getTransaction();
-
-            et.begin();
-
-            // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
-            // found, create a new entry
-            Query iaequery = em.createQuery(
-                    SELECT_STRING);
-            iaequery.setParameter("rn", this.resourceName);
-            iaequery.setParameter("pu", this.persistenceUnit);
-
-            @SuppressWarnings("rawtypes")
-            List iaeList = iaequery.getResultList();
-            IntegrityAuditEntity iae;
+        updateIae("register", this.resourceName, this.persistenceUnit, (em,iae) -> {
 
             // If it already exists, we just want to update the properties and lastUpdated date
-            if (!iaeList.isEmpty()) {
-                // ignores multiple results
-                iae = (IntegrityAuditEntity) iaeList.get(0);
+            if (iae != null) {
                 // refresh the object from DB in case cached data was returned
                 em.refresh(iae);
                 logger.info(RESOURCE_MESSAGE + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit
@@ -467,27 +422,24 @@ public class DbDao {
                 iae.setPersistenceUnit(this.persistenceUnit);
                 iae.setDesignated(false);
             }
+
             // update/set properties in entry
-            iae.setSite(this.siteName);
-            iae.setNodeType(this.nodeType);
-            iae.setJdbcDriver(this.dbDriver);
-            iae.setJdbcPassword(properties.getProperty(IntegrityAuditProperties.DB_PWD).trim());
-            iae.setJdbcUrl(altDbUrl == null ? this.dbUrl : altDbUrl);
-            iae.setJdbcUser(dbUser);
+            setNewIaeData(altDbUrl, iae);
 
             em.persist(iae);
             // flush to the DB
             em.flush();
+        });
 
-            // commit transaction
-            et.commit();
-            em.close();
-        } catch (Exception e) {
-            String msg = DBDAO_MESSAGE + "register() " + "encountered a problem in execution: ";
-            logger.error(msg + e);
-            throw new DbDaoTransactionException(e);
-        }
+    }
 
+    private void setNewIaeData(String altDbUrl, IntegrityAuditEntity iae) {
+        iae.setSite(this.siteName);
+        iae.setNodeType(this.nodeType);
+        iae.setJdbcDriver(this.dbDriver);
+        iae.setJdbcPassword(properties.getProperty(IntegrityAuditProperties.DB_PWD).trim());
+        iae.setJdbcUrl(altDbUrl == null ? this.dbUrl : altDbUrl);
+        iae.setJdbcUser(dbUser);
     }
 
     public void setDesignated(boolean designated) throws DbDaoTransactionException {
@@ -506,29 +458,10 @@ public class DbDao {
             throws DbDaoTransactionException {
         logger.debug("setDesignated: enter, resourceName: " + resourceName + ", persistenceUnit: " + persistenceUnit
                 + ", designated: " + desig);
-        try {
 
-            EntityManager em = emf.createEntityManager();
+        updateIae("setDesignated", resourceName, persistenceUnit, (em,iae) -> {
 
-            // Start a transaction
-            EntityTransaction et = em.getTransaction();
-
-            et.begin();
-
-            // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
-            // found, create a new entry
-            Query iaequery = em.createQuery(
-                    SELECT_STRING);
-            iaequery.setParameter("rn", resourceName);
-            iaequery.setParameter("pu", persistenceUnit);
-
-            @SuppressWarnings("rawtypes")
-            List iaeList = iaequery.getResultList();
-            IntegrityAuditEntity iae;
-
-            if (!iaeList.isEmpty()) {
-                // ignores multiple results
-                iae = (IntegrityAuditEntity) iaeList.get(0);
+            if (iae != null) {
                 // refresh the object from DB in case cached data was returned
                 em.refresh(iae);
                 logger.info(RESOURCE_MESSAGE + resourceName + WITH_PERSISTENCE_MESSAGE + persistenceUnit
@@ -543,13 +476,62 @@ public class DbDao {
                 logger.error("Attempting to setDesignated(" + desig + ") on an entry that does not exist:"
                         + " resource " + resourceName + WITH_PERSISTENCE_MESSAGE + persistenceUnit);
             }
+        });
+
+    }
+
+    /**
+     * Queries for an audit entity and then updates it using an "updater" function.
+     *
+     * @param methodName name of the method that invoked this
+     * @param resourceName the resource name
+     * @param persistenceUnit the persistence unit
+     * @param updater function to update the entity; the argument will be the entity to be
+     *        updated, or {@code null} if the entity is not found
+     * @return the entity that was found, or {@code null} if the entity is not found
+     * @throws DbDaoTransactionException if an error occurs
+     */
+    private IntegrityAuditEntity updateIae(String methodName, String resourceName, String persistenceUnit,
+                    BiConsumer<EntityManager,IntegrityAuditEntity> updater) throws DbDaoTransactionException {
+        try {
+
+            EntityManager em = emf.createEntityManager();
+
+            // Start a transaction
+            EntityTransaction et = em.getTransaction();
+
+            et.begin();
+
+            // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
+            // found, create a new entry
+            Query iaequery = em.createQuery(SELECT_STRING);
+            iaequery.setParameter("rn", resourceName);
+            iaequery.setParameter("pu", persistenceUnit);
+
+            @SuppressWarnings("rawtypes")
+            List iaeList = iaequery.getResultList();
+            IntegrityAuditEntity iae;
+
+            if (!iaeList.isEmpty()) {
+                // ignores multiple results
+                iae = (IntegrityAuditEntity) iaeList.get(0);
+
+            } else {
+                // If it does not exist
+                iae = null;
+            }
+
+            updater.accept(em, iae);
 
             // close the transaction
             et.commit();
             // close the EntityManager
             em.close();
+
+            return iae;
+
         } catch (Exception e) {
-            String msg = DBDAO_MESSAGE + "setDesignated() " + ENCOUNTERED_MESSAGE;
+            String msg = DBDAO_MESSAGE + methodName + "() " + ENCOUNTERED_MESSAGE;
             logger.error(msg + e);
             throw new DbDaoTransactionException(e);
         }
@@ -564,28 +546,10 @@ public class DbDao {
     public void setLastUpdated() throws DbDaoTransactionException {
         logger.debug("setLastUpdated: enter, resourceName: " + this.resourceName + ", persistenceUnit: "
                 + this.persistenceUnit);
-        try {
-            EntityManager em = emf.createEntityManager();
 
-            // Start a transaction
-            EntityTransaction et = em.getTransaction();
+        updateIae("setLastUpdated", this.resourceName, this.persistenceUnit, (em,iae) -> {
 
-            et.begin();
-
-            // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
-            // found, create a new entry
-            Query iaequery = em.createQuery(
-                    SELECT_STRING);
-            iaequery.setParameter("rn", this.resourceName);
-            iaequery.setParameter("pu", this.persistenceUnit);
-
-            @SuppressWarnings("rawtypes")
-            List iaeList = iaequery.getResultList();
-            IntegrityAuditEntity iae;
-
-            if (!iaeList.isEmpty()) {
-                // ignores multiple results
-                iae = (IntegrityAuditEntity) iaeList.get(0);
+            if (iae != null) {
                 // refresh the object from DB in case cached data was returned
                 em.refresh(iae);
                 logger.info(RESOURCE_MESSAGE + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit
@@ -600,17 +564,7 @@ public class DbDao {
                 logger.error("Attempting to setLastUpdated" + " on an entry that does not exist:" + " resource "
                         + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit);
             }
-
-            // close the transaction
-            et.commit();
-            // close the EntityManager
-            em.close();
-        } catch (Exception e) {
-            String msg = DBDAO_MESSAGE + "setLastUpdated() " + ENCOUNTERED_MESSAGE;
-            logger.error(msg + e);
-            throw new DbDaoTransactionException(e);
-        }
-
+        });
     }
 
     /**
