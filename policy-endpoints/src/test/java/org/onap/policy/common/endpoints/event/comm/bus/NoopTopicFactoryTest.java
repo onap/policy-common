@@ -52,6 +52,7 @@ public abstract class NoopTopicFactoryTest<F extends NoopTopicFactory<T>, T exte
      * Creates the object to be tested.
      */
     @Before
+    @Override
     public void setUp() {
         super.setUp();
         initFactory();
@@ -164,12 +165,14 @@ public abstract class NoopTopicFactoryTest<F extends NoopTopicFactory<T>, T exte
     }
 
     @Test
+    @Override
     public void testDestroyString_testGet_testInventory() {
         super.testDestroyString_testGet_testInventory();
         super.testDestroyString_Ex();
     }
 
     @Test
+    @Override
     public void testDestroy() {
         super.testDestroy();
     }

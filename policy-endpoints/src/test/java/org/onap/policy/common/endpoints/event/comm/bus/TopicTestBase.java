@@ -46,7 +46,7 @@ public class TopicTestBase {
     public static final String MY_LAT = "my-lat";
     public static final String MY_LONG = "my-long";
     public static final String MY_PARTNER = "my-partner";
-    public static final String MY_PASSWD = "my-pass";
+    public static final String MY_PASS = "my-pass";
     public static final int MY_PORT = 102;
     public static final String MY_TOPIC = "my-topic";
     public static final String MY_EFFECTIVE_TOPIC = "my-effective-topic";
@@ -116,7 +116,7 @@ public class TopicTestBase {
                         .consumerGroup(MY_CONS_GROUP).consumerInstance(MY_CONS_INST).environment(MY_ENV)
                         .fetchLimit(MY_FETCH_LIMIT).fetchTimeout(MY_FETCH_TIMEOUT).hostname(MY_HOST).latitude(MY_LAT)
                         .longitude(MY_LONG).managed(true).partitionId(MY_PARTITION).partner(MY_PARTNER)
-                        .password(MY_PASSWD).port(MY_PORT).servers(servers).topic(MY_TOPIC)
+                        .password(MY_PASS).port(MY_PORT).servers(servers).topic(MY_TOPIC)
                         .effectiveTopic(MY_EFFECTIVE_TOPIC).useHttps(true).userName(MY_USERNAME);
     }
 }

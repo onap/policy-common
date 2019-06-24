@@ -32,12 +32,14 @@ import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 
 public class SingleThreadedDmaapTopicSourceTest extends TopicTestBase {
+    private static final String SOURCE_NAME = "SingleThreadedDmaapTopicSource [";
     private SingleThreadedDmaapTopicSource source;
 
     /**
      * Creates the object to be tested.
      */
     @Before
+    @Override
     public void setUp() {
         super.setUp();
 
@@ -56,17 +58,17 @@ public class SingleThreadedDmaapTopicSourceTest extends TopicTestBase {
 
     @Test
     public void testToString() {
-        assertTrue(source.toString().startsWith("SingleThreadedDmaapTopicSource ["));
+        assertTrue(source.toString().startsWith(SOURCE_NAME));
         source.shutdown();
 
         // try with null password
         source = new SingleThreadedDmaapTopicSource(makeBuilder().password(null).build());
-        assertTrue(source.toString().startsWith("SingleThreadedDmaapTopicSource ["));
+        assertTrue(source.toString().startsWith(SOURCE_NAME));
         source.shutdown();
 
         // try with empty password
         source = new SingleThreadedDmaapTopicSource(makeBuilder().password("").build());
-        assertTrue(source.toString().startsWith("SingleThreadedDmaapTopicSource ["));
+        assertTrue(source.toString().startsWith(SOURCE_NAME));
         source.shutdown();
     }
 

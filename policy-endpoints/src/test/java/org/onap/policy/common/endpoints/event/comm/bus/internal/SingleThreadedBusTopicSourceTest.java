@@ -55,6 +55,7 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
      * Creates the object to be tested, as well as various mocks.
      */
     @Before
+    @Override
     public void setUp() {
         super.setUp();
 

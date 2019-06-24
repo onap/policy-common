@@ -33,6 +33,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.core.Response;
+import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
@@ -84,8 +85,6 @@ public class JerseyClient implements HttpClient {
     public JerseyClient(BusTopicParams busTopicParams)
                     throws KeyManagementException, NoSuchAlgorithmException, ClassNotFoundException {
 
-        super();
-
         if (busTopicParams.isClientNameInvalid()) {
             throw new IllegalArgumentException("Name must be provided");
         }
@@ -106,10 +105,23 @@ public class JerseyClient implements HttpClient {
         this.userName = busTopicParams.getUserName();
         this.password = busTopicParams.getPassword();
         this.selfSignedCerts = busTopicParams.isAllowSelfSignedCerts();
+        this.client = detmClient();
 
-        StringBuilder tmpBaseUrl = new StringBuilder();
+        if (!StringUtils.isBlank(this.userName) && !StringUtils.isBlank(this.password)) {
+            HttpAuthenticationFeature authFeature = HttpAuthenticationFeature.basic(userName, password);
+            this.client.register(authFeature);
+        }
+
+        this.client.property(ClientProperties.METAINF_SERVICES_LOOKUP_DISABLE, "true");
+
+        registerSerProviders(busTopicParams.getSerializationProvider());
+
+        this.baseUrl = (this.https ? "https://" : "http://") + this.hostname + ":" + this.port + "/"
+                        + (this.basePath == null ? "" : this.basePath);
+    }
+
+    private Client detmClient() throws NoSuchAlgorithmException, KeyManagementException {
         if (this.https) {
-            tmpBaseUrl.append("https://");
             ClientBuilder clientBuilder;
             SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
             if (this.selfSignedCerts) {
@@ -120,23 +132,11 @@ public class JerseyClient implements HttpClient {
                 sslContext.init(null, null, null);
                 clientBuilder = ClientBuilder.newBuilder().sslContext(sslContext);
             }
-            this.client = clientBuilder.build();
+            return clientBuilder.build();
+
         } else {
-            tmpBaseUrl.append("http://");
-            this.client = ClientBuilder.newClient();
+            return ClientBuilder.newClient();
         }
-
-        if (this.userName != null && !this.userName.isEmpty() && this.password != null && !this.password.isEmpty()) {
-            HttpAuthenticationFeature authFeature = HttpAuthenticationFeature.basic(userName, password);
-            this.client.register(authFeature);
-        }
-
-        registerSerProviders(busTopicParams.getSerializationProvider());
-
-        this.client.property(ClientProperties.METAINF_SERVICES_LOOKUP_DISABLE, "true");
-
-        this.baseUrl = tmpBaseUrl.append(this.hostname).append(":").append(this.port).append("/")
-                .append((this.basePath == null) ? "" : this.basePath).toString();
     }
 
     /**
@@ -146,7 +146,7 @@ public class JerseyClient implements HttpClient {
      * @throws ClassNotFoundException if the serialization provider cannot be found
      */
     private void registerSerProviders(String serializationProvider) throws ClassNotFoundException {
-        String providers = (serializationProvider == null || serializationProvider.isEmpty()
+        String providers = (StringUtils.isBlank(serializationProvider)
                         ? JERSEY_DEFAULT_SERIALIZATION_PROVIDER : serializationProvider);
         for (String prov : providers.split(",")) {
             this.client.register(Class.forName(prov));
@@ -155,7 +155,7 @@ public class JerseyClient implements HttpClient {
 
     @Override
     public Response get(String path) {
-        if (path != null && !path.isEmpty()) {
+        if (!StringUtils.isBlank(path)) {
             return this.client.target(this.baseUrl).path(path).request().get();
         } else {
             return this.client.target(this.baseUrl).request().get();

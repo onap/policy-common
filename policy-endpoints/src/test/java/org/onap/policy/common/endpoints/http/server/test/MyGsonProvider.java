@@ -27,13 +27,19 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
+import lombok.AccessLevel;
+import lombok.Setter;
 import org.onap.policy.common.gson.GsonMessageBodyHandler;
 
 /**
  * GsonMessageBodyHandler that tracks activities.
  */
 public class MyGsonProvider extends GsonMessageBodyHandler {
+
+    @Setter(AccessLevel.PRIVATE)
     private static boolean readSome = false;
+
+    @Setter(AccessLevel.PRIVATE)
     private static boolean wroteSome = false;
 
     /**
@@ -48,7 +54,7 @@ public class MyGsonProvider extends GsonMessageBodyHandler {
     public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations, MediaType mediaType,
                     MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException {
 
-        readSome = true;
+        setReadSome(true);
         return super.readFrom(type, genericType, annotations, mediaType, httpHeaders, entityStream);
     }
 
@@ -56,7 +62,7 @@ public class MyGsonProvider extends GsonMessageBodyHandler {
     public void writeTo(Object object, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
                     MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException {
 
-        wroteSome = true;
+        setWroteSome(true);
         super.writeTo(object, type, genericType, annotations, mediaType, httpHeaders, entityStream);
     }
 

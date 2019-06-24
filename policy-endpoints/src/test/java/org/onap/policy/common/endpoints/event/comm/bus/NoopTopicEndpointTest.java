@@ -40,13 +40,14 @@ public abstract class NoopTopicEndpointTest<F extends NoopTopicFactory<T>, T ext
     protected final F factory;
     protected T endpoint;
 
-    protected abstract boolean io(String message);
-
     public NoopTopicEndpointTest(F factory) {
         this.factory = factory;
     }
 
+    protected abstract boolean io(String message);
+
     @Before
+    @Override
     public void setUp() {
         super.setUp();
         this.endpoint = this.factory.build(servers, MY_TOPIC);

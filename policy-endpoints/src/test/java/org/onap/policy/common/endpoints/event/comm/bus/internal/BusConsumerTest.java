@@ -27,12 +27,12 @@ import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import com.att.aft.dme2.internal.apache.commons.collections.IteratorUtils;
 import com.att.nsa.cambria.client.CambriaConsumer;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.apache.commons.collections4.IteratorUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.dmaap.mr.client.impl.MRConsumerImpl;

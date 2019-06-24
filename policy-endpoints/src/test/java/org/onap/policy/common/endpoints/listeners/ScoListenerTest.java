@@ -93,7 +93,9 @@ public class ScoListenerTest {
         primary = new ScoListener<MyMessage>(MyMessage.class) {
             @Override
             public void onTopicEvent(CommInfrastructure infra, String topic, StandardCoderObject sco,
-                            MyMessage message) {}
+                            MyMessage message) {
+                // do nothing
+            }
         };
     }
 

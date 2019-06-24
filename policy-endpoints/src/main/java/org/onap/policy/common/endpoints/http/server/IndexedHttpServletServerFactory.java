@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,12 +21,13 @@
 package org.onap.policy.common.endpoints.http.server;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
+import org.onap.policy.common.endpoints.utils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -75,132 +76,111 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
         ArrayList<HttpServletServer> serviceList = new ArrayList<>();
 
         String serviceNames = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES);
-        if (serviceNames == null || serviceNames.isEmpty()) {
+        if (StringUtils.isBlank(serviceNames)) {
             logger.warn("No topic for HTTP Service: {}", properties);
             return serviceList;
         }
 
-        List<String> serviceNameList = Arrays.asList(serviceNames.split(SPACES_COMMA_SPACES));
-
-        for (String serviceName : serviceNameList) {
-            String servicePortString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
-                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX);
-
-            int servicePort;
-            try {
-                if (servicePortString == null || servicePortString.isEmpty()) {
-                    if (logger.isWarnEnabled()) {
-                        logger.warn("No HTTP port for service in {}", serviceName);
-                    }
-                    continue;
-                }
-                servicePort = Integer.parseInt(servicePortString);
-            } catch (NumberFormatException nfe) {
-                if (logger.isWarnEnabled()) {
-                    logger.warn("No HTTP port for service in {}", serviceName);
-                }
-                continue;
-            }
-
-            final String hostName = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX);
-
-            final String contextUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
-                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_CONTEXT_URIPATH_SUFFIX);
-
-            final String userName = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX);
-
-            final String password = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX);
-
-            final String authUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
-                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_URIPATH_SUFFIX);
-
-            final String restClasses = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
-                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX);
-
-            final String filterClasses = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
-                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX);
-
-            final String restPackages = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
-                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_PACKAGES_SUFFIX);
-
-            final String restUriPath = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
-                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_REST_URIPATH_SUFFIX);
-
-            final String classProv = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
-                + "." + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER);
-            
-            final String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES
-                + "." + serviceName + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
-            boolean managed = true;
-            if (managedString != null && !managedString.isEmpty()) {
-                managed = Boolean.parseBoolean(managedString);
-            }
-
-            String swaggerString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX);
-            boolean swagger = false;
-            if (swaggerString != null && !swaggerString.isEmpty()) {
-                swagger = Boolean.parseBoolean(swaggerString);
-            }
-
-            String httpsString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                + serviceName + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX);
-            boolean https = false;
-            if (httpsString != null && !httpsString.isEmpty()) {
-                https = Boolean.parseBoolean(httpsString);
-            }
-
-            String aafString = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
-                + serviceName + PolicyEndPointProperties.PROPERTY_AAF_SUFFIX);
-            boolean aaf = false;
-            if (aafString != null && !aafString.isEmpty()) {
-                aaf = Boolean.parseBoolean(aafString);
-            }
-
-            
-            HttpServletServer service = build(serviceName, https, hostName, servicePort, contextUriPath, swagger,
-                managed);
-
-            if (classProv != null && !classProv.isEmpty()) {
-                service.setSerializationProvider(classProv);
-            }
-
-            /* authentication method either AAF or HTTP Basic Auth */
-
-            if (aaf) {
-                service.setAafAuthentication(contextUriPath);
-            } else if (userName != null && !userName.isEmpty() && password != null && !password.isEmpty()) {
-                service.setBasicAuthentication(userName, password, authUriPath);
-            }
-
-            if (filterClasses != null && !filterClasses.isEmpty()) {
-                List<String> filterClassesList = Arrays.asList(filterClasses.split(SPACES_COMMA_SPACES));
-                for (String filterClass : filterClassesList) {
-                    service.addFilterClass(restUriPath, filterClass);
-                }
-            }
-
-            if (restClasses != null && !restClasses.isEmpty()) {
-                List<String> restClassesList = Arrays.asList(restClasses.split(SPACES_COMMA_SPACES));
-                for (String restClass : restClassesList) {
-                    service.addServletClass(restUriPath, restClass);
-                }
-            }
-
-            if (restPackages != null && !restPackages.isEmpty()) {
-                List<String> restPackageList = Arrays.asList(restPackages.split(SPACES_COMMA_SPACES));
-                for (String restPackage : restPackageList) {
-                    service.addServletPackage(restUriPath, restPackage);
-                }
-            }
-
-            serviceList.add(service);
+        for (String serviceName : serviceNames.split(SPACES_COMMA_SPACES)) {
+            addService(serviceList, serviceName, properties);
         }
 
         return serviceList;
+    }
+
+    private void addService(ArrayList<HttpServletServer> serviceList, String serviceName, Properties properties) {
+
+        String servicePrefix = PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + serviceName;
+
+        PropertyUtils props = new PropertyUtils(properties, servicePrefix,
+            (name, value, ex) -> logger
+                        .warn("{}: {} {} is in invalid format for http service {} ", this, name, value, serviceName));
+
+        int servicePort = props.getInteger(PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, -1);
+        if (servicePort < 0) {
+            logger.warn("No HTTP port for service in {}", serviceName);
+            return;
+        }
+
+        final String hostName = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, null);
+        final String contextUriPath =
+                        props.getString(PolicyEndPointProperties.PROPERTY_HTTP_CONTEXT_URIPATH_SUFFIX, null);
+        boolean managed = props.getBoolean(PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, true);
+        boolean swagger = props.getBoolean(PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX, false);
+        boolean https = props.getBoolean(PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, false);
+
+        // create the service
+        HttpServletServer service = build(serviceName, https, hostName, servicePort, contextUriPath, swagger, managed);
+
+        // configure the service
+        setSerializationProvider(props, service);
+        setAuthentication(props, service, contextUriPath);
+
+        final String restUriPath = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_REST_URIPATH_SUFFIX, null);
+
+        addFilterClasses(props, service, restUriPath);
+        addServletClasses(props, service, restUriPath);
+        addServletPackages(props, service, restUriPath);
+
+        serviceList.add(service);
+    }
+
+    private void setSerializationProvider(PropertyUtils props, HttpServletServer service) {
+
+        final String classProv = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER, null);
+
+        if (!StringUtils.isBlank(classProv)) {
+            service.setSerializationProvider(classProv);
+        }
+    }
+
+    private void setAuthentication(PropertyUtils props, HttpServletServer service, final String contextUriPath) {
+        /* authentication method either AAF or HTTP Basic Auth */
+
+        boolean aaf = props.getBoolean(PolicyEndPointProperties.PROPERTY_AAF_SUFFIX, false);
+        final String userName = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, null);
+        final String password = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, null);
+        final String authUriPath = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_AUTH_URIPATH_SUFFIX, null);
+
+        if (aaf) {
+            service.setAafAuthentication(contextUriPath);
+        } else if (!StringUtils.isBlank(userName) && !StringUtils.isBlank(password)) {
+            service.setBasicAuthentication(userName, password, authUriPath);
+        }
+    }
+
+    private void addFilterClasses(PropertyUtils props, HttpServletServer service, final String restUriPath) {
+
+        final String filterClasses =
+                        props.getString(PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX, null);
+
+        if (!StringUtils.isBlank(filterClasses)) {
+            for (String filterClass : filterClasses.split(SPACES_COMMA_SPACES)) {
+                service.addFilterClass(restUriPath, filterClass);
+            }
+        }
+    }
+
+    private void addServletClasses(PropertyUtils props, HttpServletServer service, final String restUriPath) {
+
+        final String restClasses = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX, null);
+
+        if (!StringUtils.isBlank(restClasses)) {
+            for (String restClass : restClasses.split(SPACES_COMMA_SPACES)) {
+                service.addServletClass(restUriPath, restClass);
+            }
+        }
+    }
+
+    private void addServletPackages(PropertyUtils props, HttpServletServer service, final String restUriPath) {
+
+        final String restPackages = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_REST_PACKAGES_SUFFIX, null);
+
+        if (!StringUtils.isBlank(restPackages)) {
+            for (String restPackage : restPackages.split(SPACES_COMMA_SPACES)) {
+                service.addServletPackage(restUriPath, restPackage);
+            }
+        }
     }
 
     @Override

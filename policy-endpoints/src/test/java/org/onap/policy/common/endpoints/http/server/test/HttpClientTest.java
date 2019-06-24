@@ -25,7 +25,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
@@ -67,10 +66,9 @@ public class HttpClientTest {
      * Setup before class method.
      *
      * @throws InterruptedException can be interrupted
-     * @throws IOException can have an IO exception
      */
     @BeforeClass
-    public static void setUpBeforeClass() throws InterruptedException, IOException {
+    public static void setUpBeforeClass() throws InterruptedException {
         /* echo server - http + no auth */
 
         final HttpServletServer echoServerNoAuth =
