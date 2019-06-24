@@ -107,35 +107,35 @@ public class BusPublisherTest extends TopicTestBase {
     @Test
     public void testDmaapPublisherWrapper() {
         // verify with different constructor arguments
-        new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASSWD, true);
-        new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASSWD, false);
-        new DmaapPublisherWrapper(ProtocolTypeConstants.DME2, servers, MY_TOPIC, MY_USERNAME, MY_PASSWD, true) {};
+        new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASS, true);
+        new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASS, false);
+        new DmaapPublisherWrapper(ProtocolTypeConstants.DME2, servers, MY_TOPIC, MY_USERNAME, MY_PASS, true) {};
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testDmaapPublisherWrapper_InvalidTopic() {
-        new DmaapPublisherWrapper(ProtocolTypeConstants.DME2, servers, "", MY_USERNAME, MY_PASSWD, true) {};
+        new DmaapPublisherWrapper(ProtocolTypeConstants.DME2, servers, "", MY_USERNAME, MY_PASS, true) {};
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testDmaapPublisherWrapper_Aaf_NullServers() {
-        new DmaapAafPublisherWrapper(null, MY_TOPIC, MY_USERNAME, MY_PASSWD, true);
+        new DmaapAafPublisherWrapper(null, MY_TOPIC, MY_USERNAME, MY_PASS, true);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testDmaapPublisherWrapper_Aaf_NoServers() {
-        new DmaapAafPublisherWrapper(Collections.emptyList(), MY_TOPIC, MY_USERNAME, MY_PASSWD, true);
+        new DmaapAafPublisherWrapper(Collections.emptyList(), MY_TOPIC, MY_USERNAME, MY_PASS, true);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void testDmaapPublisherWrapper_InvalidProtocol() {
-        new DmaapPublisherWrapper(ProtocolTypeConstants.HTTPNOAUTH, servers, MY_TOPIC, MY_USERNAME, MY_PASSWD, true) {};
+        new DmaapPublisherWrapper(ProtocolTypeConstants.HTTPNOAUTH, servers, MY_TOPIC, MY_USERNAME, MY_PASS, true) {};
     }
 
     @Test
     public void testDmaapPublisherWrapperClose() throws Exception {
         MRSimplerBatchPublisher pub = mock(MRSimplerBatchPublisher.class);
-        DmaapPublisherWrapper dmaap = new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASSWD, true);
+        DmaapPublisherWrapper dmaap = new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASS, true);
         dmaap.publisher = pub;
 
         dmaap.close();
@@ -149,7 +149,7 @@ public class BusPublisherTest extends TopicTestBase {
     @Test
     public void testDmaapPublisherWrapperSend() {
         MRSimplerBatchPublisher pub = mock(MRSimplerBatchPublisher.class);
-        DmaapPublisherWrapper dmaap = new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASSWD, true);
+        DmaapPublisherWrapper dmaap = new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASS, true);
         dmaap.publisher = pub;
 
         // null response
@@ -171,7 +171,7 @@ public class BusPublisherTest extends TopicTestBase {
     @Test(expected = IllegalArgumentException.class)
     public void testDmaapPublisherWrapperSend_NullMessage() {
         MRSimplerBatchPublisher pub = mock(MRSimplerBatchPublisher.class);
-        DmaapPublisherWrapper dmaap = new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASSWD, true);
+        DmaapPublisherWrapper dmaap = new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASS, true);
         dmaap.publisher = pub;
 
         dmaap.send(MY_PARTITION, null);

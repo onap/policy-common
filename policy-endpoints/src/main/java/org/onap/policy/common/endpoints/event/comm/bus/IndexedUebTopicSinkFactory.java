@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,14 +21,15 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-
+import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.InlineUebTopicSink;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
+import org.onap.policy.common.endpoints.utils.PropertyUtils;
+import org.onap.policy.common.endpoints.utils.UebPropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,7 +56,7 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
             throw new IllegalArgumentException("UEB Server(s) must be provided");
         }
 
-        if (busTopicParams.getTopic() == null || busTopicParams.getTopic().isEmpty()) {
+        if (StringUtils.isBlank(busTopicParams.getTopic())) {
             throw new IllegalArgumentException(MISSING_TOPIC);
         }
 
@@ -91,80 +92,41 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
     public List<UebTopicSink> build(Properties properties) {
 
         String writeTopics = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS);
-        if (writeTopics == null || writeTopics.isEmpty()) {
+        if (StringUtils.isBlank(writeTopics)) {
             logger.info("{}: no topic for UEB Sink", this);
             return new ArrayList<>();
         }
 
-        List<String> writeTopicList = new ArrayList<>(Arrays.asList(writeTopics.split("\\s*,\\s*")));
         List<UebTopicSink> newUebTopicSinks = new ArrayList<>();
         synchronized (this) {
-            for (String topic : writeTopicList) {
-                if (this.uebTopicSinks.containsKey(topic)) {
-                    newUebTopicSinks.add(this.uebTopicSinks.get(topic));
-                    continue;
-                }
-
-                String servers = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS + "." + topic
-                        + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX);
-                if (servers == null || servers.isEmpty()) {
-                    logger.error("{}: no UEB servers configured for sink {}", this, topic);
-                    continue;
-                }
-
-                final List<String> serverList = new ArrayList<>(Arrays.asList(servers.split("\\s*,\\s*")));
-
-                final String effectiveTopic = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS
-                                + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX, topic);
-                final String apiKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS
-                                + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_KEY_SUFFIX);
-                final String apiSecret = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS 
-                                + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_SECRET_SUFFIX);
-                final String partitionKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS 
-                                + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX);
-
-                String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS + "."
-                        + topic + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
-                boolean managed = true;
-                if (managedString != null && !managedString.isEmpty()) {
-                    managed = Boolean.parseBoolean(managedString);
-                }
-
-                String useHttpsString = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS + "."
-                        + topic + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX);
-
-                // default is to use HTTP if no https property exists
-                boolean useHttps = false;
-                if (useHttpsString != null && !useHttpsString.isEmpty()) {
-                    useHttps = Boolean.parseBoolean(useHttpsString);
-                }
-
-
-                String allowSelfSignedCertsString =
-                        properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS + "." + topic
-                                + PolicyEndPointProperties.PROPERTY_ALLOW_SELF_SIGNED_CERTIFICATES_SUFFIX);
-
-                // default is to disallow self-signed certs
-                boolean allowSelfSignedCerts = false;
-                if (allowSelfSignedCertsString != null && !allowSelfSignedCertsString.isEmpty()) {
-                    allowSelfSignedCerts = Boolean.parseBoolean(allowSelfSignedCertsString);
-                }
-
-                UebTopicSink uebTopicWriter = this.build(BusTopicParams.builder()
-                        .servers(serverList)
-                        .topic(topic)
-                        .effectiveTopic(effectiveTopic)
-                        .apiKey(apiKey)
-                        .apiSecret(apiSecret)
-                        .partitionId(partitionKey)
-                        .managed(managed)
-                        .useHttps(useHttps)
-                        .allowSelfSignedCerts(allowSelfSignedCerts)
-                        .build());
-                newUebTopicSinks.add(uebTopicWriter);
+            for (String topic : writeTopics.split("\\s*,\\s*")) {
+                addTopic(newUebTopicSinks, topic, properties);
             }
             return newUebTopicSinks;
         }
+    }
+
+    private void addTopic(List<UebTopicSink> newUebTopicSinks, String topic, Properties properties) {
+        if (this.uebTopicSinks.containsKey(topic)) {
+            newUebTopicSinks.add(this.uebTopicSinks.get(topic));
+            return;
+        }
+
+        String topicPrefix = PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS + "." + topic;
+
+        PropertyUtils props = new PropertyUtils(properties, topicPrefix,
+            (name, value, ex) -> logger.warn("{}: {} {} is in invalid format for topic {} ", this, name, value, topic));
+
+        String servers = properties.getProperty(topicPrefix + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX);
+        if (StringUtils.isBlank(servers)) {
+            logger.error("{}: no UEB servers configured for sink {}", this, topic);
+            return;
+        }
+
+        UebTopicSink uebTopicWriter = this.build(UebPropertyUtils.makeBuilder(props, topic, servers)
+                .partitionId(props.getString(PolicyEndPointProperties.PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX, null))
+                .build());
+        newUebTopicSinks.add(uebTopicWriter);
     }
 
     @Override
@@ -221,7 +183,7 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
 
     /**
      * Makes a new sink.
-     * 
+     *
      * @param busTopicParams parameters to use to configure the sink
      * @return a new sink
      */

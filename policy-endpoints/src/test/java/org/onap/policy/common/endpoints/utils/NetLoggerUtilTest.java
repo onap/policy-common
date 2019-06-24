@@ -39,6 +39,7 @@ import org.slf4j.Logger;
  */
 public class NetLoggerUtilTest {
 
+    private static final String TEST_TOPIC = "test-topic";
     private static final String MESSAGE = "hello world!";
     /**
      * Test feature used for junits.
@@ -76,7 +77,7 @@ public class NetLoggerUtilTest {
      */
     @Test
     public void logTest() {
-        NetLoggerUtil.log(EventType.IN, CommInfrastructure.NOOP, "test-topic", MESSAGE);
+        NetLoggerUtil.log(EventType.IN, CommInfrastructure.NOOP, TEST_TOPIC, MESSAGE);
         assertEquals(3, TestAppender.events.size());
     }
 
@@ -85,7 +86,7 @@ public class NetLoggerUtilTest {
      */
     @Test
     public void logDefaultTest() {
-        NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, "test-topic", MESSAGE);
+        NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, TEST_TOPIC, MESSAGE);
         assertEquals(3, TestAppender.events.size());
         assertEquals("network", TestAppender.events.get(0).getLoggerName());
     }
@@ -96,7 +97,7 @@ public class NetLoggerUtilTest {
     @Test
     public void beforeLogReturnTrueTest() {
         netLoggerFeature.setReturnValue(true, false);
-        NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, "test-topic", MESSAGE);
+        NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, TEST_TOPIC, MESSAGE);
         assertEquals(1, TestAppender.events.size());
     }
 
@@ -106,7 +107,7 @@ public class NetLoggerUtilTest {
     @Test
     public void afterLogReturnTrueTest() {
         netLoggerFeature.setReturnValue(false, true);
-        NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, "test-topic", MESSAGE);
+        NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, TEST_TOPIC, MESSAGE);
         assertEquals(3, TestAppender.events.size());
     }
 
@@ -116,7 +117,7 @@ public class NetLoggerUtilTest {
     @Test
     public void beforeLogExceptionTest() {
         netLoggerFeature.setExceptions(true, false);
-        NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, "test-topic", MESSAGE);
+        NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, TEST_TOPIC, MESSAGE);
         assertEquals(2, TestAppender.events.size());
     }
 
@@ -126,7 +127,7 @@ public class NetLoggerUtilTest {
     @Test
     public void afterLogExceptionTest() {
         netLoggerFeature.setExceptions(false, true);
-        NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, "test-topic", MESSAGE);
+        NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, TEST_TOPIC, MESSAGE);
         assertEquals(2, TestAppender.events.size());
     }
 
@@ -139,7 +140,7 @@ public class NetLoggerUtilTest {
         /**
          * List of logged events.
          */
-        public static List<ILoggingEvent> events = new ArrayList<>();
+        private static final List<ILoggingEvent> events = new ArrayList<>();
 
         /**
          * Called after every unit test to clear list of events.
