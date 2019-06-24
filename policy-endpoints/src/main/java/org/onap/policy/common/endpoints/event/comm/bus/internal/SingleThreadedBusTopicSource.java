@@ -21,6 +21,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.UUID;
 
@@ -223,25 +224,29 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
     public void run() {
         while (this.alive) {
             try {
-                for (String event : this.consumer.fetch()) {
-                    synchronized (this) {
-                        this.recentEvents.add(event);
-                    }
-
-                    NetLoggerUtil.log(EventType.IN, this.getTopicCommInfrastructure(), this.topic, event);
-
-                    broadcast(event);
-
-                    if (!this.alive) {
-                        break;
-                    }
-                }
+                fetchAllMessages();
             } catch (Exception e) {
                 logger.error("{}: cannot fetch because of ", this, e.getMessage(), e);
             }
         }
 
         logger.info("{}: exiting thread", this);
+    }
+
+    private void fetchAllMessages() throws InterruptedException, IOException {
+        for (String event : this.consumer.fetch()) {
+            synchronized (this) {
+                this.recentEvents.add(event);
+            }
+
+            NetLoggerUtil.log(EventType.IN, this.getTopicCommInfrastructure(), this.topic, event);
+
+            broadcast(event);
+
+            if (!this.alive) {
+                return;
+            }
+        }
     }
 
     @Override

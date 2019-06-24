@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,14 +21,15 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-
+import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.SingleThreadedUebTopicSource;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
+import org.onap.policy.common.endpoints.utils.PropertyUtils;
+import org.onap.policy.common.endpoints.utils.UebPropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,110 +78,15 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
     public List<UebTopicSource> build(Properties properties) {
 
         String readTopics = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS);
-        if (readTopics == null || readTopics.isEmpty()) {
+        if (StringUtils.isBlank(readTopics)) {
             logger.info("{}: no topic for UEB Source", this);
             return new ArrayList<>();
         }
-        List<String> readTopicList = new ArrayList<>(Arrays.asList(readTopics.split("\\s*,\\s*")));
 
         List<UebTopicSource> newUebTopicSources = new ArrayList<>();
         synchronized (this) {
-            for (String topic : readTopicList) {
-                if (this.uebTopicSources.containsKey(topic)) {
-                    newUebTopicSources.add(this.uebTopicSources.get(topic));
-                    continue;
-                }
-
-                String servers = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS + "."
-                        + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX);
-
-                if (servers == null || servers.isEmpty()) {
-                    logger.error("{}: no UEB servers configured for sink {}", this, topic);
-                    continue;
-                }
-
-                final List<String> serverList = new ArrayList<>(Arrays.asList(servers.split("\\s*,\\s*")));
-
-                final String effectiveTopic = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS
-                    + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX, topic);
-
-                final String apiKey = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS
-                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_KEY_SUFFIX);
-
-                final String apiSecret = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS 
-                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_API_SECRET_SUFFIX);
-
-                final String consumerGroup = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS 
-                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_GROUP_SUFFIX);
-
-                final String consumerInstance = properties.getProperty(
-                        PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS
-                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_INSTANCE_SUFFIX);
-
-                String fetchTimeoutString = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS
-                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX);
-                int fetchTimeout = UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH;
-                if (fetchTimeoutString != null && !fetchTimeoutString.isEmpty()) {
-                    try {
-                        fetchTimeout = Integer.parseInt(fetchTimeoutString);
-                    } catch (NumberFormatException nfe) {
-                        logger.warn("{}: fetch timeout {} is in invalid format for topic {} ", this, fetchTimeoutString,
-                                topic);
-                    }
-                }
-
-                String fetchLimitString = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS
-                        + "." + topic + PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_LIMIT_SUFFIX);
-                int fetchLimit = UebTopicSource.DEFAULT_LIMIT_FETCH;
-                if (fetchLimitString != null && !fetchLimitString.isEmpty()) {
-                    try {
-                        fetchLimit = Integer.parseInt(fetchLimitString);
-                    } catch (NumberFormatException nfe) {
-                        logger.warn("{}: fetch limit {} is in invalid format for topic {} ", this, fetchLimitString,
-                                topic);
-                    }
-                }
-
-                String managedString = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS + "."
-                        + topic + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
-                boolean managed = true;
-                if (managedString != null && !managedString.isEmpty()) {
-                    managed = Boolean.parseBoolean(managedString);
-                }
-
-                String useHttpsString = properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS + "."
-                        + topic + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX);
-
-                // default is to use HTTP if no https property exists
-                boolean useHttps = false;
-                if (useHttpsString != null && !useHttpsString.isEmpty()) {
-                    useHttps = Boolean.parseBoolean(useHttpsString);
-                }
-
-                String allowSelfSignedCertsString =
-                        properties.getProperty(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS + "." + topic
-                                + PolicyEndPointProperties.PROPERTY_ALLOW_SELF_SIGNED_CERTIFICATES_SUFFIX);
-
-                // default is to disallow self-signed certs
-                boolean allowSelfSignedCerts = false;
-                if (allowSelfSignedCertsString != null && !allowSelfSignedCertsString.isEmpty()) {
-                    allowSelfSignedCerts = Boolean.parseBoolean(allowSelfSignedCertsString);
-                }
-
-                UebTopicSource uebTopicSource = this.build(BusTopicParams.builder()
-                        .servers(serverList)
-                        .topic(topic)
-                        .effectiveTopic(effectiveTopic)
-                        .apiKey(apiKey)
-                        .apiSecret(apiSecret)
-                        .consumerGroup(consumerGroup)
-                        .consumerInstance(consumerInstance)
-                        .fetchTimeout(fetchTimeout)
-                        .fetchLimit(fetchLimit)
-                        .managed(managed)
-                        .useHttps(useHttps)
-                        .allowSelfSignedCerts(allowSelfSignedCerts).build());
-                newUebTopicSources.add(uebTopicSource);
+            for (String topic : readTopics.split("\\s*,\\s*")) {
+                addTopic(newUebTopicSources, topic, properties);
             }
         }
         return newUebTopicSources;
@@ -206,9 +112,41 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
         return this.build(servers, topic, null, null);
     }
 
+    private void addTopic(List<UebTopicSource> newUebTopicSources, String topic, Properties properties) {
+        if (this.uebTopicSources.containsKey(topic)) {
+            newUebTopicSources.add(this.uebTopicSources.get(topic));
+            return;
+        }
+
+        String topicPrefix = PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS + "." + topic;
+
+        PropertyUtils props = new PropertyUtils(properties, topicPrefix,
+            (name, value) -> logger.warn("{}: {} {} is in invalid format for topic {} ", this, name, value, topic));
+
+        String servers = properties.getProperty(topicPrefix + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX);
+        if (StringUtils.isBlank(servers)) {
+            logger.error("{}: no UEB servers configured for sink {}", this, topic);
+            return;
+        }
+
+        UebTopicSource uebTopicSource = this.build(UebPropertyUtils.makeBuilder(props, topic, servers)
+                .consumerGroup(props.getString(
+                                PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_GROUP_SUFFIX, null))
+                .consumerInstance(props.getString(
+                                PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_INSTANCE_SUFFIX, null))
+                .fetchTimeout(props.getInteger(
+                                PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX,
+                                UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH))
+                .fetchLimit(props.getInteger(PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_LIMIT_SUFFIX,
+                                UebTopicSource.DEFAULT_LIMIT_FETCH))
+                .build());
+
+        newUebTopicSources.add(uebTopicSource);
+    }
+
     /**
      * Makes a new source.
-     * 
+     *
      * @param busTopicParams parameters to use to configure the source
      * @return a new source
      */

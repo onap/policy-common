@@ -178,37 +178,7 @@ public interface BusPublisher {
             }
 
 
-            if (protocol == ProtocolTypeConstants.AAF_AUTH) {
-                if (servers == null || servers.isEmpty()) {
-                    throw new IllegalArgumentException("No DMaaP servers or DME2 partner provided");
-                }
-
-                ArrayList<String> dmaapServers = new ArrayList<>();
-                if (useHttps) {
-                    for (String server : servers) {
-                        dmaapServers.add(server + ":3905");
-                    }
-
-                } else {
-                    for (String server : servers) {
-                        dmaapServers.add(server + ":3904");
-                    }
-                }
-
-
-                this.publisher = new MRSimplerBatchPublisher.Builder().againstUrls(dmaapServers).onTopic(topic).build();
-
-                this.publisher.setProtocolFlag(ProtocolTypeConstants.AAF_AUTH.getValue());
-            } else if (protocol == ProtocolTypeConstants.DME2) {
-                ArrayList<String> dmaapServers = new ArrayList<>();
-                dmaapServers.add("0.0.0.0:3904");
-
-                this.publisher = new MRSimplerBatchPublisher.Builder().againstUrls(dmaapServers).onTopic(topic).build();
-
-                this.publisher.setProtocolFlag(ProtocolTypeConstants.DME2.getValue());
-            } else {
-                throw new IllegalArgumentException("Invalid DMaaP protocol " + protocol);
-            }
+            configureProtocol(topic, protocol, servers, useHttps);
 
             this.publisher.logTo(LoggerFactory.getLogger(MRSimplerBatchPublisher.class.getName()));
 
@@ -217,12 +187,7 @@ public interface BusPublisher {
 
             props = new Properties();
 
-            if (useHttps) {
-                props.setProperty("Protocol", "https");
-            } else {
-                props.setProperty("Protocol", "http");
-            }
-
+            props.setProperty("Protocol", (useHttps ? "https" : "http"));
             props.setProperty("contenttype", "application/json");
             props.setProperty("username", username);
             props.setProperty("password", password);
@@ -236,6 +201,38 @@ public interface BusPublisher {
             }
 
             logger.info("{}: CREATION: using protocol {}", this, protocol.getValue());
+        }
+
+        private void configureProtocol(String topic, ProtocolTypeConstants protocol, List<String> servers,
+                        boolean useHttps) {
+
+            if (protocol == ProtocolTypeConstants.AAF_AUTH) {
+                if (servers == null || servers.isEmpty()) {
+                    throw new IllegalArgumentException("No DMaaP servers or DME2 partner provided");
+                }
+
+                ArrayList<String> dmaapServers = new ArrayList<>();
+                String port = useHttps ? ":3905" : ":3904";
+                for (String server : servers) {
+                    dmaapServers.add(server + port);
+                }
+
+
+                this.publisher = new MRSimplerBatchPublisher.Builder().againstUrls(dmaapServers).onTopic(topic).build();
+
+                this.publisher.setProtocolFlag(ProtocolTypeConstants.AAF_AUTH.getValue());
+
+            } else if (protocol == ProtocolTypeConstants.DME2) {
+                ArrayList<String> dmaapServers = new ArrayList<>();
+                dmaapServers.add("0.0.0.0:3904");
+
+                this.publisher = new MRSimplerBatchPublisher.Builder().againstUrls(dmaapServers).onTopic(topic).build();
+
+                this.publisher.setProtocolFlag(ProtocolTypeConstants.DME2.getValue());
+
+            } else {
+                throw new IllegalArgumentException("Invalid DMaaP protocol " + protocol);
+            }
         }
 
         @Override
@@ -300,38 +297,12 @@ public interface BusPublisher {
 
             super(ProtocolTypeConstants.DME2, busTopicParams.getServers(),busTopicParams.getTopic(),
                     busTopicParams.getUserName(),busTopicParams.getPassword(),busTopicParams.isUseHttps());
-            String dme2RouteOffer = null;
-            if (busTopicParams.isAdditionalPropsValid()) {
-                dme2RouteOffer = busTopicParams.getAdditionalProps().get(
-                        DmaapTopicSinkFactory.DME2_ROUTE_OFFER_PROPERTY);
-            }
 
-            if (busTopicParams.isEnvironmentInvalid()) {
-                throw parmException(busTopicParams.getTopic(),
-                        PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ENVIRONMENT_SUFFIX);
-            }
-            if (busTopicParams.isAftEnvironmentInvalid()) {
-                throw parmException(busTopicParams.getTopic(),
-                        PolicyEndPointProperties.PROPERTY_DMAAP_DME2_AFT_ENVIRONMENT_SUFFIX);
-            }
-            if (busTopicParams.isLatitudeInvalid()) {
-                throw parmException(busTopicParams.getTopic(),
-                        PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LATITUDE_SUFFIX);
-            }
-            if (busTopicParams.isLongitudeInvalid()) {
-                throw parmException(busTopicParams.getTopic(),
-                        PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LONGITUDE_SUFFIX);
-            }
+            String dme2RouteOffer = busTopicParams.isAdditionalPropsValid()
+                            ? busTopicParams.getAdditionalProps().get(DmaapTopicSinkFactory.DME2_ROUTE_OFFER_PROPERTY)
+                            : null;
 
-            if ((busTopicParams.isPartnerInvalid())
-                    && StringUtils.isBlank(dme2RouteOffer)) {
-                throw new IllegalArgumentException(
-                        "Must provide at least " + PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
-                                + busTopicParams.getTopic()
-                                + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_PARTNER_SUFFIX + " or "
-                                + PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS + "." + busTopicParams.getTopic()
-                                + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ROUTE_OFFER_SUFFIX + " for DME2");
-            }
+            validateParams(busTopicParams, dme2RouteOffer);
 
             String serviceName = busTopicParams.getServers().get(0);
 
@@ -366,17 +337,50 @@ public interface BusPublisher {
             props.setProperty("MethodType", "POST");
 
             if (busTopicParams.isAdditionalPropsValid()) {
-                for (Map.Entry<String, String> entry : busTopicParams.getAdditionalProps().entrySet()) {
-                    String key = entry.getKey();
-                    String value = entry.getValue();
-
-                    if (value != null) {
-                        props.setProperty(key, value);
-                    }
-                }
+                addAdditionalProps(busTopicParams);
             }
 
             this.publisher.setProps(props);
+        }
+
+        private void validateParams(BusTopicParams busTopicParams, String dme2RouteOffer) {
+            if (busTopicParams.isEnvironmentInvalid()) {
+                throw parmException(busTopicParams.getTopic(),
+                        PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ENVIRONMENT_SUFFIX);
+            }
+            if (busTopicParams.isAftEnvironmentInvalid()) {
+                throw parmException(busTopicParams.getTopic(),
+                        PolicyEndPointProperties.PROPERTY_DMAAP_DME2_AFT_ENVIRONMENT_SUFFIX);
+            }
+            if (busTopicParams.isLatitudeInvalid()) {
+                throw parmException(busTopicParams.getTopic(),
+                        PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LATITUDE_SUFFIX);
+            }
+            if (busTopicParams.isLongitudeInvalid()) {
+                throw parmException(busTopicParams.getTopic(),
+                        PolicyEndPointProperties.PROPERTY_DMAAP_DME2_LONGITUDE_SUFFIX);
+            }
+
+            if ((busTopicParams.isPartnerInvalid())
+                    && StringUtils.isBlank(dme2RouteOffer)) {
+                throw new IllegalArgumentException(
+                        "Must provide at least " + PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "."
+                                + busTopicParams.getTopic()
+                                + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_PARTNER_SUFFIX + " or "
+                                + PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS + "." + busTopicParams.getTopic()
+                                + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ROUTE_OFFER_SUFFIX + " for DME2");
+            }
+        }
+
+        private void addAdditionalProps(BusTopicParams busTopicParams) {
+            for (Map.Entry<String, String> entry : busTopicParams.getAdditionalProps().entrySet()) {
+                String key = entry.getKey();
+                String value = entry.getValue();
+
+                if (value != null) {
+                    props.setProperty(key, value);
+                }
+            }
         }
 
         private IllegalArgumentException parmException(String topic, String propnm) {

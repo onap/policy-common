@@ -62,7 +62,7 @@ public class BusTopicParamsTest extends TopicTestBase {
         assertEquals(true, params.isManaged());
         assertEquals(MY_PARTITION, params.getPartitionId());
         assertEquals(MY_PARTNER, params.getPartner());
-        assertEquals(MY_PASSWD, params.getPassword());
+        assertEquals(MY_PASS, params.getPassword());
         assertEquals(MY_PORT, params.getPort());
         assertEquals(servers, params.getServers());
         assertEquals(MY_TOPIC, params.getTopic());

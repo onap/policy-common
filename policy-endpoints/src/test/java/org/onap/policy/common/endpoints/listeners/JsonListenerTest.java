@@ -86,7 +86,9 @@ public class JsonListenerTest {
 
         primary = new JsonListener() {
             @Override
-            public void onTopicEvent(CommInfrastructure infra, String topic, StandardCoderObject sco) {}
+            public void onTopicEvent(CommInfrastructure infra, String topic, StandardCoderObject sco) {
+                // do nothing
+            }
         };
     }
 

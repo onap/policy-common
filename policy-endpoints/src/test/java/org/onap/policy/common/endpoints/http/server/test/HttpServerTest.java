@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.http.server.test;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -75,13 +76,17 @@ public class HttpServerTest {
      */
     @Before
     public void setUp() {
-        port += 10;
+        incrementPort();
         portUrl = LOCALHOST_PREFIX + port;
 
         HttpServletServer.factory.destroy();
 
         MyJacksonProvider.resetSome();
         MyGsonProvider.resetSome();
+    }
+
+    private static void incrementPort() {
+        port += 10;
     }
 
     @AfterClass
@@ -264,13 +269,7 @@ public class HttpServerTest {
         String response = http(portUrl + JUNIT_ECHO_HELLO);
         assertEquals(HELLO, response);
 
-        response = null;
-        try {
-            response = http(portUrl + SWAGGER_JSON);
-        } catch (IOException e) {
-            // Expected
-        }
-        assertTrue(response == null);
+        assertThatThrownBy(() -> http(portUrl + SWAGGER_JSON)).isInstanceOf(IOException.class);
 
         response = http(portUrl + "/junit/echo/hello?block=true");
         assertEquals("FILTERED", response);
@@ -311,13 +310,7 @@ public class HttpServerTest {
         response = http(LOCALHOST_PREFIX + port2 + JUNIT_ECHO_HELLO);
         assertTrue(HELLO.equals(response));
 
-        response = null;
-        try {
-            response = http(LOCALHOST_PREFIX + port2 + SWAGGER_JSON);
-        } catch (IOException e) {
-            // Expected
-        }
-        assertTrue(response == null);
+        assertThatThrownBy(() -> http(LOCALHOST_PREFIX + port2 + SWAGGER_JSON)).isInstanceOf(IOException.class);
 
         HttpServletServer.factory.destroy();
         assertTrue(HttpServletServer.factory.inventory().isEmpty());

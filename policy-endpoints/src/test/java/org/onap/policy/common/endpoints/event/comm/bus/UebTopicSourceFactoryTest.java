@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ public class UebTopicSourceFactoryTest extends UebTopicFactoryTestBase<UebTopicS
      * Creates the object to be tested.
      */
     @Before
+    @Override
     public void setUp() {
         super.setUp();
 
@@ -56,14 +57,16 @@ public class UebTopicSourceFactoryTest extends UebTopicFactoryTestBase<UebTopicS
     }
 
     @Test
+    @Override
     public void testBuildBusTopicParams() {
         super.testBuildBusTopicParams();
         super.testBuildBusTopicParams_Ex();
     }
 
     @Test
+    @Override
     public void testBuildProperties() {
-        
+
         super.testBuildProperties();
 
         // check source-specific parameters that were used
@@ -72,7 +75,7 @@ public class UebTopicSourceFactoryTest extends UebTopicFactoryTestBase<UebTopicS
         assertEquals(MY_CONS_INST, params.getConsumerInstance());
         assertEquals(MY_FETCH_LIMIT, params.getFetchLimit());
         assertEquals(MY_FETCH_TIMEOUT, params.getFetchTimeout());
-        
+
         super.testBuildProperties_Variations();
         super.testBuildProperties_Multiple();
 
@@ -80,7 +83,7 @@ public class UebTopicSourceFactoryTest extends UebTopicFactoryTestBase<UebTopicS
         checkDefault(PROPERTY_TOPIC_SOURCE_FETCH_LIMIT_SUFFIX,
             params2 -> params2.getFetchLimit() == UebTopicSource.DEFAULT_LIMIT_FETCH,
             null, "", "invalid-limit-number");
-        
+
         checkDefault(PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX,
             params2 -> params2.getFetchTimeout() == UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH,
             null, "", "invalid-timeout-number");
@@ -100,6 +103,7 @@ public class UebTopicSourceFactoryTest extends UebTopicFactoryTestBase<UebTopicS
     }
 
     @Test
+    @Override
     public void testBuildListOfStringString() {
         super.testBuildListOfStringString();
 
@@ -114,12 +118,14 @@ public class UebTopicSourceFactoryTest extends UebTopicFactoryTestBase<UebTopicS
     }
 
     @Test
+    @Override
     public void testDestroyString_testGet_testInventory() {
         super.testDestroyString_testGet_testInventory();
         super.testDestroyString_Ex();
     }
 
     @Test
+    @Override
     public void testDestroy() {
         super.testDestroy();
     }

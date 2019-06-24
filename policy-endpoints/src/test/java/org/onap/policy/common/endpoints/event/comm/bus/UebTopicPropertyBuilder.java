@@ -51,7 +51,7 @@ public class UebTopicPropertyBuilder extends TopicPropertyBuilder {
     public static final String TOPIC2 = "my-topic-2";
 
     public static final String MY_AAF_MECHID = "my-aaf-mechid";
-    public static final String MY_AAF_PASSWD = "my-aaf-passwd";
+    public static final String MY_AAF_PASS = "my-aaf-passwd";
 
     /**
      * Constructs the object.
@@ -77,7 +77,7 @@ public class UebTopicPropertyBuilder extends TopicPropertyBuilder {
         setTopicProperty(PROPERTY_MANAGED_SUFFIX, "true");
         setTopicProperty(PROPERTY_HTTP_HTTPS_SUFFIX, "true");
         setTopicProperty(PROPERTY_TOPIC_AAF_MECHID_SUFFIX, MY_AAF_MECHID);
-        setTopicProperty(PROPERTY_TOPIC_AAF_PASSWORD_SUFFIX, MY_AAF_PASSWD);
+        setTopicProperty(PROPERTY_TOPIC_AAF_PASSWORD_SUFFIX, MY_AAF_PASS);
         setTopicProperty(PROPERTY_DMAAP_DME2_AFT_ENVIRONMENT_SUFFIX, MY_AFT_ENV);
         setTopicProperty(PROPERTY_ALLOW_SELF_SIGNED_CERTIFICATES_SUFFIX, "true");
         setTopicProperty(PROPERTY_TOPIC_API_KEY_SUFFIX, MY_API_KEY);
