@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "0c7dd17f_bcd681e3",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/parameters/ParameterUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-06-25T19:11:04Z",
+      "side": 1,
+      "message": "looks like adding some local variables (e.g., \"propKey\") might make this a little clearer.  Or even better, maybe extract a method such as: appendValue(props, name, additionalValue)\n\nsame comment for both loops",
+      "revId": "fa9d84317b60b6520ccc61282f03147d33b56c63",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e37538ee_0fd9db4c",
         "filename": "utils/src/main/java/org/onap/policy/common/utils/parameters/RestServerParameters.java",
         "patchSetId": 1
@@ -30,6 +47,40 @@
       "writtenOn": "2019-06-25T17:44:23Z",
       "side": 1,
       "message": "Question: In general, these classes have a tight coupling (duplicates) the data of the object is trying to provision, there\u0027s a maintenance cost, as will need to be kept in sync with exposed configurable data, wondering if there\u0027s a way to avoid duplication?",
+      "revId": "fa9d84317b60b6520ccc61282f03147d33b56c63",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "882a1091_5e9d590b",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/parameters/CommonTestData.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-06-25T19:11:04Z",
+      "side": 1,
+      "message": "checkstyle: need a blank line here",
+      "revId": "fa9d84317b60b6520ccc61282f03147d33b56c63",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "26dee065_c25ed3fe",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/parameters/RestServerParametersTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-06-25T19:11:04Z",
+      "side": 1,
+      "message": "maybe test a couple of error cases, too?",
       "revId": "fa9d84317b60b6520ccc61282f03147d33b56c63",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
