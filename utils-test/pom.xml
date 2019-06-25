@@ -65,6 +65,11 @@
             <artifactId>powermock-api-mockito</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.openpojo</groupId>
+            <artifactId>openpojo</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
