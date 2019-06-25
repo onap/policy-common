@@ -16,6 +16,23 @@
       "revId": "fa9d84317b60b6520ccc61282f03147d33b56c63",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e37538ee_0fd9db4c",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/parameters/RestServerParameters.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-06-25T17:44:23Z",
+      "side": 1,
+      "message": "Question: In general, these classes have a tight coupling (duplicates) the data of the object is trying to provision, there\u0027s a maintenance cost, as will need to be kept in sync with exposed configurable data, wondering if there\u0027s a way to avoid duplication?",
+      "revId": "fa9d84317b60b6520ccc61282f03147d33b56c63",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
