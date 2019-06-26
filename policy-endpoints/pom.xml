@@ -64,6 +64,12 @@
         </dependency>
 
         <dependency>
+            <groupId>org.onap.policy.common</groupId>
+            <artifactId>common-parameters</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.att.nsa</groupId>
             <artifactId>cambriaClient</artifactId>
             <exclusions>
