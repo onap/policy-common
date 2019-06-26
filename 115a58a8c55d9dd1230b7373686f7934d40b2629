@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae273a73_837079d8",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-06-26T15:27:39Z",
+      "side": 1,
+      "message": "I\u0027m looking at the transitive dependencies on common-parameters since added here.   It introduces one with \"snakeyaml\" 1.21.   \n\nI also see in policy/models/pom.xml snakeyaml 1.18, and\n\n./models/models-interactions/model-yaml/pom.xml snakeyaml 1.17.\n\nAt runtime, the one that seems to \"win\" in the pdp-d is 1.18.\n\nWe should open a JIRA to clean out all these multiple versions of dependencies, fix them in policy/parent and do some regression tests.   I think Jim had some issue to migrate to 1.21 if I recall correctly in common-parameters, but it does not seem to get carried to runtime, at least in the pdp-d with all the versions.\n\nAgreement on open a JIRA on this?",
+      "revId": "115a58a8c55d9dd1230b7373686f7934d40b2629",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cef20fd1_c3d69272",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/parameters/RestServerParameters.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-06-26T15:27:39Z",
+      "side": 1,
+      "message": "FYI - there are some other provisionable parameters that may want to incorporate at some point, ie.  uri, swagger, fliters, .. probably you don\u0027t need them now, but are provisionable as well.",
+      "revId": "115a58a8c55d9dd1230b7373686f7934d40b2629",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "470b9af6_be413b67",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/ParameterUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-06-26T15:27:39Z",
+      "side": 1,
+      "message": "Here, Ajith and I had a discussion on externalizing property key creation into its own utilities to be reused by all components.",
+      "revId": "115a58a8c55d9dd1230b7373686f7934d40b2629",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
