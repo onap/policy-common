@@ -22,7 +22,7 @@ package org.onap.policy.common.utils.security;
 
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
+import java.util.Random;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
@@ -54,11 +54,18 @@ public class CryptoUtils {
      */
     private static final int IV_BLOCK_SIZE_IN_BYTES = IV_BLOCK_SIZE_IN_BITS / 8;
 
-    private static int validSize = (2 * IV_BLOCK_SIZE_IN_BYTES) + 4;
+    /**
+     * Minimum length of an encrypted value.
+     */
+    private static final int MIN_VALUE_SIZE = (2 * IV_BLOCK_SIZE_IN_BYTES) + 4;
 
     private SecretKeySpec secretKeySpec;
 
-    private static final String RANDOM_NUMBER_GENERATOR = "SHA1PRNG";
+    /**
+     * Used to generate a random "iv". Strong randomness is not needed, as this is only
+     * used as a "salt".
+     */
+    private static final Random RANDOM = new Random();
 
     /**
      * CryptoUtils - encryption tool constructor.
@@ -115,7 +122,7 @@ public class CryptoUtils {
         try {
             Cipher cipher = Cipher.getInstance(ALGORITHM_DETAILS);
             byte[] iv = new byte[IV_BLOCK_SIZE_IN_BYTES];
-            SecureRandom.getInstance(RANDOM_NUMBER_GENERATOR).nextBytes(iv);
+            RANDOM.nextBytes(iv);
             IvParameterSpec ivspec = new IvParameterSpec(iv);
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivspec);
 
@@ -164,7 +171,7 @@ public class CryptoUtils {
         if (value == null || value.isEmpty() || !isEncrypted(value)) {
             return value;
         }
-        if (value.length() < validSize) {
+        if (value.length() < MIN_VALUE_SIZE) {
             throw new IllegalArgumentException("Invalid size on input value");
         }
         try {
