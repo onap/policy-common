@@ -39,6 +39,23 @@
       "revId": "6e8235af892826a9f53f16d85c8bd21a159d0cc0",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8fb5247a_0bbd8c49",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/ParameterUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-06-26T18:58:29Z",
+      "side": 1,
+      "message": "It could use:\n\nPolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX\n\nfor \".servers\".\n\nNot sure if there are some other strings that could be reused or centralized somewhere in one single place so we could all reuse.\n\nPolicyEnpointProperties could also be made a class if it gives sonars.   But would be a good place to place all constants (perhaps also this utility functions to have it all together, a thought).\n\nhttps://git.onap.org/policy/common/tree/policy-endpoints/src/main/java/org/onap/policy/common/endpoints/properties/PolicyEndPointProperties.java",
+      "revId": "6e8235af892826a9f53f16d85c8bd21a159d0cc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
