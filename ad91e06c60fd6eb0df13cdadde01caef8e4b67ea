@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "757c1276_5b07ea60",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/client/IndexedHttpClientFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-06-26T11:58:04Z",
+      "side": 1,
+      "message": "Are we sure we wanted this StringUtils from dme2?? I think you wanted:\nimport org.apache.commons.lang3.StringUtils;\n\nI think I have a JIRA to get rid of dme2 library asap.",
+      "range": {
+        "startLine": 23,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 66
+      },
+      "revId": "ad91e06c60fd6eb0df13cdadde01caef8e4b67ea",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
