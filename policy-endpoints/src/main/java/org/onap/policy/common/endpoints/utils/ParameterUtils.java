@@ -54,24 +54,34 @@ public abstract class ParameterUtils {
         // for each topicCommInfrastructure, there could be multiple topics (specified as comma separated string)
         // for each such topics, there could be multiple servers (specified as comma separated string)
         for (TopicParameters source : topicSources) {
-            addTopicProperties(topicProperties, ".source.topics", source);
+            updateTopicProperties(topicProperties, "source", source.getTopicCommInfrastructure(), source.getTopic(),
+                    source.getServers());
         }
         for (TopicParameters sink : topicSinks) {
-            addTopicProperties(topicProperties, ".sink.topics", sink);
+            updateTopicProperties(topicProperties, "sink", sink.getTopicCommInfrastructure(), sink.getTopic(),
+                    sink.getServers());
         }
 
         return topicProperties;
     }
 
-    private static void addTopicProperties(Properties topicProperties, String keyName, TopicParameters topicParameter) {
-        String propKey = topicParameter.getTopicCommInfrastructure() + keyName;
+    /**
+     * Common method to update topic properties object using the parameters passed.
+     *
+     * @param topicProperties the topic properties object which is to be updated
+     * @param keyName either it is source or sink
+     * @param topicCommInfra the infra such as  dmaap, ueb or noop
+     * @param topicName the topic
+     * @param servers the list of server names for the topic
+     */
+    public static void updateTopicProperties(Properties topicProperties, String keyName, String topicCommInfra,
+            String topicName, List<String> servers) {
+        String propKey = topicCommInfra + "." + keyName + ".topics";
         if (topicProperties.containsKey(propKey)) {
-            topicProperties.setProperty(propKey,
-                    topicProperties.getProperty(propKey) + "," + topicParameter.getTopic());
+            topicProperties.setProperty(propKey, topicProperties.getProperty(propKey) + "," + topicName);
         } else {
-            topicProperties.setProperty(propKey, topicParameter.getTopic());
+            topicProperties.setProperty(propKey, topicName);
         }
-        topicProperties.setProperty(propKey + "." + topicParameter.getTopic() + ".servers",
-                String.join(",", topicParameter.getServers()));
+        topicProperties.setProperty(propKey + "." + topicName + ".servers", String.join(",", servers));
     }
 }
