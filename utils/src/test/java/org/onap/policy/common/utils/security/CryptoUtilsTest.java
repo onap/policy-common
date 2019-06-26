@@ -22,6 +22,7 @@ package org.onap.policy.common.utils.security;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertTrue;
 
 import java.security.GeneralSecurityException;
 import org.junit.Test;
@@ -46,6 +47,7 @@ public class CryptoUtilsTest {
         CryptoUtils cryptoUtils = new CryptoUtils(SECRET_KEY);
         String encryptedValue = cryptoUtils.encrypt(PASS);
         logger.info(ENCRYPTED_MSG, PASS, encryptedValue);
+        assertTrue(encryptedValue.startsWith("enc:"));
 
         String decryptedValue = cryptoUtils.decrypt(encryptedValue);
         logger.info(DECRYPTED_MSG, encryptedValue, decryptedValue);
