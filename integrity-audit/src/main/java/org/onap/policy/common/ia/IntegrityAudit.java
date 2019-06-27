@@ -152,8 +152,10 @@ public class IntegrityAudit {
                         || parmsAreBad;
         parmsAreBad = checkEmpty(badparams, "dbUser", properties.getProperty(IntegrityAuditProperties.DB_USER))
                         || parmsAreBad;
-        parmsAreBad = checkEmpty(badparams, "dbPwd", properties.getProperty(IntegrityAuditProperties.DB_PWD))
-                        || parmsAreBad;
+
+        // dbPwd may be empty
+        checkEmpty(badparams, "dbPwd", properties.getProperty(IntegrityAuditProperties.DB_PWD));
+
         parmsAreBad = checkEmpty(badparams, "siteName", properties.getProperty(IntegrityAuditProperties.SITE_NAME))
                         || parmsAreBad;
         parmsAreBad = checkNodeType(properties, badparams) || parmsAreBad;
