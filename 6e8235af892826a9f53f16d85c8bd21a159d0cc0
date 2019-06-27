@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e69c032f_b3e9f47d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/ParameterUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-06-27T08:08:40Z",
+      "side": 1,
+      "message": "I think 5 is OK.",
+      "parentUuid": "84bb91ab_67b73623",
+      "range": {
+        "startLine": 77,
+        "startChar": 4,
+        "endLine": 78,
+        "endChar": 52
+      },
+      "revId": "6e8235af892826a9f53f16d85c8bd21a159d0cc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9c2d9d6c_2675a222",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/ParameterUtils.java",
         "patchSetId": 1
