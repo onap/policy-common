@@ -25,6 +25,7 @@ public interface PolicyEndPointProperties {
     /* Generic property suffixes */
 
     String PROPERTY_TOPIC_SERVERS_SUFFIX = ".servers";
+    String PROPERTY_TOPIC_TOPICS_SUFFIX = ".topics";
     String PROPERTY_TOPIC_API_KEY_SUFFIX = ".apiKey";
     String PROPERTY_TOPIC_API_SECRET_SUFFIX = ".apiSecret";
     String PROPERTY_TOPIC_AAF_MECHID_SUFFIX = ".aafMechId";

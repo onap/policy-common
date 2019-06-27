@@ -22,6 +22,7 @@ package org.onap.policy.common.endpoints.utils;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Arrays;
 import java.util.Properties;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.parameters.CommonTestData;
@@ -49,6 +50,23 @@ public class ParameterUtilsTest {
             topicProperties.getProperty(CommonTestData.TOPIC_INFRA + ".sink.topics"));
         assertEquals(CommonTestData.TOPIC_SERVER, topicProperties
             .getProperty(CommonTestData.TOPIC_INFRA + ".source.topics." + CommonTestData.TOPIC_NAME + ".servers"));
+        assertEquals(CommonTestData.TOPIC_SERVER, topicProperties
+            .getProperty(CommonTestData.TOPIC_INFRA + ".sink.topics." + CommonTestData.TOPIC_NAME + ".servers"));
+    }
+
+    @Test
+    public void testUpdateTopicProperties() {
+        Properties topicProperties = new Properties();
+        ParameterUtils.updateTopicProperties(topicProperties, "source", CommonTestData.TOPIC_INFRA,
+            CommonTestData.TOPIC_NAME, Arrays.asList(CommonTestData.TOPIC_SERVER));
+        assertEquals(CommonTestData.TOPIC_NAME,
+            topicProperties.getProperty(CommonTestData.TOPIC_INFRA + ".source.topics"));
+        assertEquals(CommonTestData.TOPIC_SERVER, topicProperties
+            .getProperty(CommonTestData.TOPIC_INFRA + ".source.topics." + CommonTestData.TOPIC_NAME + ".servers"));
+        ParameterUtils.updateTopicProperties(topicProperties, "sink", CommonTestData.TOPIC_INFRA,
+            CommonTestData.TOPIC_NAME, Arrays.asList(CommonTestData.TOPIC_SERVER));
+        assertEquals(CommonTestData.TOPIC_NAME,
+            topicProperties.getProperty(CommonTestData.TOPIC_INFRA + ".sink.topics"));
         assertEquals(CommonTestData.TOPIC_SERVER, topicProperties
             .getProperty(CommonTestData.TOPIC_INFRA + ".sink.topics." + CommonTestData.TOPIC_NAME + ".servers"));
     }
