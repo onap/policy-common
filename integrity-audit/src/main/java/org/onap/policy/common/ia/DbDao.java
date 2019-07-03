@@ -143,7 +143,7 @@ public class DbDao {
         this.dbUrl = properties.getProperty(IntegrityAuditProperties.DB_URL).trim();
         this.dbUser = properties.getProperty(IntegrityAuditProperties.DB_USER).trim();
         this.siteName = properties.getProperty(IntegrityAuditProperties.SITE_NAME).trim();
-        this.nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE).trim();
+        this.nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE).trim().toLowerCase();
         this.properties = properties;
         logger.debug("DbDao.assignProperties: exit:" + "\nresourceName: " + this.resourceName + "\npersistenceUnit: "
                 + this.persistenceUnit + "\nproperties: " + this.properties);

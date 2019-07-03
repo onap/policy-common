@@ -129,26 +129,26 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
          * Two entries with the same field values
          */
         entry1.setDesignated(false);
-        entry1.setJdbcDriver(dbDriver);
-        entry1.setJdbcPassword(dbPass);
+        entry1.setJdbcDriver(DB_DRIVER);
+        entry1.setJdbcPassword(DB_PASS);
         entry1.setJdbcUrl(dbUrl);
-        entry1.setJdbcUser(dbUser);
+        entry1.setJdbcUser(DB_USER);
         entry1.setLastUpdated(date);
-        entry1.setNodeType(nodeType);
+        entry1.setNodeType(NODE_TYPE);
         entry1.setPersistenceUnit(A_SEQ_PU);
         entry1.setResourceName(resourceName1);
-        entry1.setSite(siteName);
+        entry1.setSite(SITE_NAME);
 
         entry2.setDesignated(false);
-        entry2.setJdbcDriver(dbDriver);
-        entry2.setJdbcPassword(dbPass);
+        entry2.setJdbcDriver(DB_DRIVER);
+        entry2.setJdbcPassword(DB_PASS);
         entry2.setJdbcUrl(dbUrl);
-        entry2.setJdbcUser(dbUser);
+        entry2.setJdbcUser(DB_USER);
         entry2.setLastUpdated(date);
-        entry2.setNodeType(nodeType);
+        entry2.setNodeType(NODE_TYPE);
         entry2.setPersistenceUnit(A_SEQ_PU);
         entry2.setResourceName(resourceName2);
-        entry2.setSite(siteName);
+        entry2.setSite(SITE_NAME);
 
         dbAudit.writeAuditDebugLog(className, resourceName1, resourceName2, entry1, entry2);
 
@@ -190,26 +190,26 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
          * Create two entries with different designated values
          */
         entry1.setDesignated(false);
-        entry1.setJdbcDriver(dbDriver);
-        entry1.setJdbcPassword(dbPass);
+        entry1.setJdbcDriver(DB_DRIVER);
+        entry1.setJdbcPassword(DB_PASS);
         entry1.setJdbcUrl(dbUrl);
-        entry1.setJdbcUser(dbUser);
+        entry1.setJdbcUser(DB_USER);
         entry1.setLastUpdated(date);
-        entry1.setNodeType(nodeType);
+        entry1.setNodeType(NODE_TYPE);
         entry1.setPersistenceUnit(A_SEQ_PU);
         entry1.setResourceName(resourceName1);
-        entry1.setSite(siteName);
+        entry1.setSite(SITE_NAME);
 
         entry2.setDesignated(true);
-        entry2.setJdbcDriver(dbDriver);
-        entry2.setJdbcPassword(dbPass);
+        entry2.setJdbcDriver(DB_DRIVER);
+        entry2.setJdbcPassword(DB_PASS);
         entry2.setJdbcUrl(dbUrl);
-        entry2.setJdbcUser(dbUser);
+        entry2.setJdbcUser(DB_USER);
         entry2.setLastUpdated(date);
-        entry2.setNodeType(nodeType);
+        entry2.setNodeType(NODE_TYPE);
         entry2.setPersistenceUnit(A_SEQ_PU);
         entry2.setResourceName(resourceName2);
-        entry2.setSite(siteName);
+        entry2.setSite(SITE_NAME);
 
         HashMap<Object, Object> myEntries = new HashMap<>();
         HashMap<Object, Object> theirEntries = new HashMap<>();
@@ -253,45 +253,45 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
          * 4 entries, one mismatch, two miss entries
          */
         entry1.setDesignated(false);
-        entry1.setJdbcDriver(dbDriver);
-        entry1.setJdbcPassword(dbPass);
+        entry1.setJdbcDriver(DB_DRIVER);
+        entry1.setJdbcPassword(DB_PASS);
         entry1.setJdbcUrl(dbUrl);
-        entry1.setJdbcUser(dbUser);
+        entry1.setJdbcUser(DB_USER);
         entry1.setLastUpdated(date);
-        entry1.setNodeType(nodeType);
+        entry1.setNodeType(NODE_TYPE);
         entry1.setPersistenceUnit(A_SEQ_PU);
         entry1.setResourceName(resourceName1);
-        entry1.setSite(siteName);
+        entry1.setSite(SITE_NAME);
 
         entry2.setDesignated(true);
-        entry2.setJdbcDriver(dbDriver);
-        entry2.setJdbcPassword(dbPass);
+        entry2.setJdbcDriver(DB_DRIVER);
+        entry2.setJdbcPassword(DB_PASS);
         entry2.setJdbcUrl(dbUrl);
-        entry2.setJdbcUser(dbUser);
+        entry2.setJdbcUser(DB_USER);
         entry2.setLastUpdated(date);
-        entry2.setNodeType(nodeType);
+        entry2.setNodeType(NODE_TYPE);
         entry2.setPersistenceUnit(A_SEQ_PU);
         entry2.setResourceName(resourceName2);
-        entry2.setSite(siteName);
+        entry2.setSite(SITE_NAME);
 
         entry3.setDesignated(false);
-        entry3.setJdbcDriver(dbDriver);
-        entry3.setJdbcPassword(dbPass);
+        entry3.setJdbcDriver(DB_DRIVER);
+        entry3.setJdbcPassword(DB_PASS);
         entry3.setJdbcUrl(dbUrl);
-        entry3.setJdbcUser(dbUser);
+        entry3.setJdbcUser(DB_USER);
         entry3.setLastUpdated(date);
-        entry3.setNodeType(nodeType);
+        entry3.setNodeType(NODE_TYPE);
         entry3.setPersistenceUnit(A_SEQ_PU);
         entry3.setResourceName(resourceName2);
         entry3.setSite("SiteB");
 
         entry4.setDesignated(false);
-        entry4.setJdbcDriver(dbDriver);
-        entry4.setJdbcPassword(dbPass);
+        entry4.setJdbcDriver(DB_DRIVER);
+        entry4.setJdbcPassword(DB_PASS);
         entry4.setJdbcUrl(dbUrl);
-        entry4.setJdbcUser(dbUser);
+        entry4.setJdbcUser(DB_USER);
         entry4.setLastUpdated(date);
-        entry4.setNodeType(nodeType);
+        entry4.setNodeType(NODE_TYPE);
         entry4.setPersistenceUnit(A_SEQ_PU);
         entry4.setResourceName(resourceName2);
         entry4.setSite("SiteB");
@@ -339,26 +339,26 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
                  * Two entries with the same field values
                  */
                 entry1.setDesignated(false);
-                entry1.setJdbcDriver(dbDriver);
-                entry1.setJdbcPassword(dbPass);
+                entry1.setJdbcDriver(DB_DRIVER);
+                entry1.setJdbcPassword(DB_PASS);
                 entry1.setJdbcUrl(dbUrl);
-                entry1.setJdbcUser(dbUser);
+                entry1.setJdbcUser(DB_USER);
                 entry1.setLastUpdated(date);
-                entry1.setNodeType(nodeType);
+                entry1.setNodeType(NODE_TYPE);
                 entry1.setPersistenceUnit(A_SEQ_PU);
                 entry1.setResourceName(resourceName1);
-                entry1.setSite(siteName);
+                entry1.setSite(SITE_NAME);
 
                 entry2.setDesignated(false);
-                entry2.setJdbcDriver(dbDriver);
-                entry2.setJdbcPassword(dbPass);
+                entry2.setJdbcDriver(DB_DRIVER);
+                entry2.setJdbcPassword(DB_PASS);
                 entry2.setJdbcUrl(dbUrl);
-                entry2.setJdbcUser(dbUser);
+                entry2.setJdbcUser(DB_USER);
                 entry2.setLastUpdated(date);
-                entry2.setNodeType(nodeType);
+                entry2.setNodeType(NODE_TYPE);
                 entry2.setPersistenceUnit(A_SEQ_PU);
                 entry2.setResourceName(resourceName2);
-                entry2.setSite(siteName);
+                entry2.setSite(SITE_NAME);
 
                 HashMap<Object, Object> myEntries = new HashMap<>();
                 HashMap<Object, Object> theirEntries = new HashMap<>();

@@ -96,11 +96,11 @@ public class IntegrityAuditTestBase {
 
     public static final String DEFAULT_DB_URL_PREFIX = "jdbc:h2:mem:";
 
-    protected static final String dbDriver = "org.h2.Driver";
-    protected static final String dbUser = "testu";
-    protected static final String dbPass = "testp";
-    protected static final String siteName = "SiteA";
-    protected static final String nodeType = "pdp_xacml";
+    protected static final String DB_DRIVER = "org.h2.Driver";
+    protected static final String DB_USER = "testu";
+    protected static final String DB_PASS = "testp";
+    protected static final String SITE_NAME = "SiteA";
+    protected static final String NODE_TYPE = "pdp_xacml";
 
     // will be defined by the test *Classes*
     protected static String dbUrl;
@@ -174,7 +174,6 @@ public class IntegrityAuditTestBase {
     /**
      * Saves current configuration information and then sets new values.
      *
-     * @param dbDriver the name of the DB Driver class
      * @param dbUrl the URL to the DB
      * @throws IOException if an IO error occurs
      */
@@ -196,12 +195,12 @@ public class IntegrityAuditTestBase {
         IntegrityAudit.setUnitTesting(true);
 
         properties = new Properties();
-        properties.put(IntegrityAuditProperties.DB_DRIVER, dbDriver);
+        properties.put(IntegrityAuditProperties.DB_DRIVER, DB_DRIVER);
         properties.put(IntegrityAuditProperties.DB_URL, dbUrl);
-        properties.put(IntegrityAuditProperties.DB_USER, dbUser);
-        properties.put(IntegrityAuditProperties.DB_PWD, dbPass);
-        properties.put(IntegrityAuditProperties.SITE_NAME, siteName);
-        properties.put(IntegrityAuditProperties.NODE_TYPE, nodeType);
+        properties.put(IntegrityAuditProperties.DB_USER, DB_USER);
+        properties.put(IntegrityAuditProperties.DB_PWD, DB_PASS);
+        properties.put(IntegrityAuditProperties.SITE_NAME, SITE_NAME);
+        properties.put(IntegrityAuditProperties.NODE_TYPE, NODE_TYPE);
 
         emf = Persistence.createEntityManagerFactory(A_SEQ_PU, makeProperties());
 

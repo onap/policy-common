@@ -35,7 +35,7 @@ public class IntegrityAuditProperties {
     public static final String NODE_TYPE = "node_type";
 
     public enum NodeTypeEnum {
-        pdp_xacml, pdp_drools, pap, pap_admin, logparser, brms_gateway, astra_gateway, elk_server, pypdp
+        PDP_XACML, PDP_DROOLS, PAP, PAP_ADMIN, LOGPARSER, BRMS_GATEWAY, ASTRA_GATEWAY, ELK_SERVER, PYPDP
 
     }
 

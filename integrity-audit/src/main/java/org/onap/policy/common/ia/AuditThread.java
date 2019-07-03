@@ -131,7 +131,7 @@ public class AuditThread extends Thread {
          * other nodes of similar type.
          */
         dbDao = new DbDao(this.resourceName, this.persistenceUnit, this.properties);
-        this.nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE);
+        this.nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE).toLowerCase();
 
     }
 
