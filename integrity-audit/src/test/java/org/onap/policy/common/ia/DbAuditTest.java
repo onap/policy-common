@@ -138,7 +138,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
 
         assertThatThrownBy(() -> {
             DbAudit dbAudit = new DbAudit(dbDao);
-            dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, nodeType);
+            dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, NODE_TYPE);
         }).isInstanceOf(DbAuditException.class);
 
         logger.info("noEntitiesTest: Exit");
@@ -158,9 +158,9 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         // Add one entry in the database
         dbDao = new DbDao(RESOURCE_NAME, A_SEQ_PU, properties);
         DbAudit dbAudit = new DbAudit(dbDao);
-        dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, nodeType);
+        dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, NODE_TYPE);
 
-        List<IntegrityAuditEntity> iaeList = dbDao.getIntegrityAuditEntities(A_SEQ_PU, nodeType);
+        List<IntegrityAuditEntity> iaeList = dbDao.getIntegrityAuditEntities(A_SEQ_PU, NODE_TYPE);
         logger.info("List size: " + iaeList.size());
 
         verifyItemsInLog(log, "one");
@@ -225,7 +225,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
          * as DB2 it can be confirmed that the mismatch is resolved
          */
         DbAudit dbAudit = new DbAudit(dbDao);
-        dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, nodeType);
+        dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, NODE_TYPE);
 
         // update pdp3 entry in DB1 to point to DB2
         new DbDao("pdp3", A_SEQ_PU, properties, dbUrl2).destroy();
@@ -234,7 +234,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
          * Run the audit again and correct the mismatch, the result should be one entry in the
          * mismatchKeySet because of the missing entry from the beginning of the test
          */
-        dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, nodeType);
+        dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, NODE_TYPE);
 
         assertFalse(dbglog.getExtracted().isEmpty());
 
