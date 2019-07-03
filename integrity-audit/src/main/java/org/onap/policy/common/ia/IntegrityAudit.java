@@ -105,7 +105,7 @@ public class IntegrityAudit {
      */
     public static boolean isNodeTypeEnum(String nt) {
         for (NodeTypeEnum n : NodeTypeEnum.values()) {
-            if (n.toString().equals(nt)) {
+            if (n.toString().equalsIgnoreCase(nt)) {
                 return true;
             }
         }
@@ -171,11 +171,12 @@ public class IntegrityAudit {
         } else {
             nodeType = nodeType.trim();
             if (!isNodeTypeEnum(nodeType)) {
-                String nodetypes = "nodeType must be one of[";
+                badparams.append("nodeType must be one of[");
                 for (NodeTypeEnum n : NodeTypeEnum.values()) {
-                    nodetypes = nodetypes.concat(n.toString() + " ");
+                    badparams.append(n.toString());
+                    badparams.append(' ');
                 }
-                badparams.append(nodetypes + "] ");
+                badparams.append("] ");
                 return true;
             }
         }
