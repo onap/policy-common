@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,8 @@
  */
 
 package org.onap.policy.common.logging.flexlogger;
+
+import static org.onap.policy.common.logging.flexlogger.DisplayUtils.displayMessage;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -49,12 +51,12 @@ public class FlexLogger extends SecurityManager {
 
     /**
      * Returns an instance of Logger.
-     * 
+     *
      * @param clazz the class
      */
     public static Logger getLogger(Class<?> clazz) {
         Logger logger = null;
-        System.out.println(GET_LOGGER_PREFIX + loggerType);
+        displayMessage(GET_LOGGER_PREFIX + loggerType);
         switch (loggerType) {
 
             case EELF:
@@ -75,12 +77,12 @@ public class FlexLogger extends SecurityManager {
 
     /**
      * Returns an instance of Logger.
-     * 
+     *
      * @param name the name of the logger
      */
     public static Logger getLogger(String name) {
         Logger logger = null;
-        System.out.println(GET_LOGGER_PREFIX + loggerType);
+        displayMessage(GET_LOGGER_PREFIX + loggerType);
         switch (loggerType) {
 
             case EELF:
@@ -101,13 +103,13 @@ public class FlexLogger extends SecurityManager {
 
     /**
      * Returns an instance of Logger.
-     * 
+     *
      * @param clazz the class
      * @param isNewTransaction is a new transaction
      */
     public static Logger getLogger(Class<?> clazz, boolean isNewTransaction) {
         Logger logger = null;
-        System.out.println(GET_LOGGER_PREFIX + loggerType);
+        displayMessage(GET_LOGGER_PREFIX + loggerType);
         switch (loggerType) {
 
             case EELF:
@@ -128,13 +130,13 @@ public class FlexLogger extends SecurityManager {
 
     /**
      * Returns an instance of Logger.
-     * 
+     *
      * @param name the name of the logger
      * @param isNewTransaction is a new transaction
      */
     public static Logger getLogger(String name, boolean isNewTransaction) {
         Logger logger = null;
-        System.out.println(GET_LOGGER_PREFIX + loggerType);
+        displayMessage(GET_LOGGER_PREFIX + loggerType);
         switch (loggerType) {
 
             case EELF:
@@ -156,7 +158,7 @@ public class FlexLogger extends SecurityManager {
      * Returns the calling class name.
      */
     public String getClassName() {
-        System.out.println("getClassContext()[3].getName() " + getClassContext()[3].getName());
+        displayMessage("getClassContext()[3].getName() " + getClassContext()[3].getName());
         return getClassContext()[3].getName();
     }
 
@@ -177,7 +179,7 @@ public class FlexLogger extends SecurityManager {
 
     /**
      * Returns an instance of Logger4J.
-     * 
+     *
      * @param name the name of the logger
      */
     private static Logger4J getLog4JLogger(String name) {
@@ -193,7 +195,7 @@ public class FlexLogger extends SecurityManager {
 
     /**
      * Returns an instance of EelfLogger.
-     * 
+     *
      * @param clazz the class
      * @param isNewTransaction is a new transaction
      */
@@ -218,11 +220,11 @@ public class FlexLogger extends SecurityManager {
             }
             // installl already created but it is new transaction
             if (isNewTransaction) {
-                String transId = PolicyLogger.postMDCInfoForEvent(null);
+                String transId = PolicyLogger.postMdcInfoForEvent(null);
                 logger.setTransId(transId);
             }
         }
-        System.out.println("eelfLoggerMap size : " + eelfLoggerMap.size() + " class name: " + className);
+        displayMessage("eelfLoggerMap size : " + eelfLoggerMap.size() + " class name: " + className);
         return logger;
     }
 
@@ -246,37 +248,24 @@ public class FlexLogger extends SecurityManager {
      */
     private static LoggerType initlogger() {
         LoggerType loggerType = LoggerType.EELF;
-        String overrideLogbackLevel = "FALSE";
-        String loggerTypeString = "";
         Properties properties = null;
 
         try {
             properties = PropertyUtil.getProperties("config/policyLogger.properties");
-            System.out.println("FlexLogger:properties => " + properties);
+            displayMessage("FlexLogger:properties => " + properties);
 
             if (properties != null) {
-                overrideLogbackLevel = properties.getProperty("override.logback.level.setup");
-                System.out.println("FlexLogger:overrideLogbackLevel => " + overrideLogbackLevel);
-                loggerTypeString = properties.getProperty("logger.type");
-                if (loggerTypeString != null) {
-                    if ("EELF".equalsIgnoreCase(loggerTypeString)) {
-                        loggerType = LoggerType.EELF;
-                        if ("TRUE".equalsIgnoreCase(overrideLogbackLevel)) {
-                            System.out.println("FlexLogger: start listener.");
-                            properties = PropertyUtil.getProperties("config/policyLogger.properties",
-                                    new PropertiesCallBack("FlexLogger-CallBack"));
-                        }
-                    } else if ("LOG4J".equalsIgnoreCase(loggerTypeString)) {
-                        loggerType = LoggerType.LOG4J;
-                    } else if ("SYSTEMOUT".equalsIgnoreCase(loggerTypeString)) {
-                        loggerType = LoggerType.SYSTEMOUT;
-                    }
-
-                    System.out.println("FlexLogger.logger_Type value: " + loggerTypeString);
+                String overrideLogbackLevel = properties.getProperty("override.logback.level.setup");
+                displayMessage("FlexLogger:overrideLogbackLevel => " + overrideLogbackLevel);
+                String loggerTypeString = properties.getProperty("logger.type");
+                if ("EELF".equalsIgnoreCase(loggerTypeString) && "TRUE".equalsIgnoreCase(overrideLogbackLevel)) {
+                    displayMessage("FlexLogger: start listener.");
+                    properties = PropertyUtil.getProperties("config/policyLogger.properties",
+                            new PropertiesCallBack("FlexLogger-CallBack"));
                 }
             }
         } catch (IOException e1) {
-            System.out.println("initlogger" + e1);
+            displayMessage("initlogger" + e1);
         } finally {
             // OK to pass no properties (null)
             loggerType = PolicyLogger.init(properties);
@@ -309,8 +298,8 @@ public class FlexLogger extends SecurityManager {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS+00:00");
             Instant startTime = Instant.now();
             String formatedTime = sdf.format(Date.from(startTime));
-            System.out.println("FlexLogger.propertiesChanged : called at time : " + formatedTime);
-            System.out.println("FlexLogger.propertiesChanged : debugLevel : " + debugLevel);
+            displayMessage("FlexLogger.propertiesChanged : called at time : " + formatedTime);
+            displayMessage("FlexLogger.propertiesChanged : debugLevel : " + debugLevel);
 
             if (changedKeys != null) {
 
@@ -332,5 +321,4 @@ public class FlexLogger extends SecurityManager {
             }
         }
     }
-
 }

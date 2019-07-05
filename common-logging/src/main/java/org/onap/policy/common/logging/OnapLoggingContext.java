@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +40,7 @@ import org.slf4j.MDC;
  * creates). Example: log4j.appender.auditAppender.layout=org.apache.log4j.EnhancedPatternLayout
  * log4j.appender.auditAppender.layout.ConversionPattern=%d|%X{requestId}|%X{serviceInstanceId}|...|%m%n
  * where "requestId" and "serviceInstanceId" are entries in the MDC hashmap.
- * 
+ *
  * <p>The notable functionality the SharedLoggingContext adds over MDC is that it maintains its own
  * copy of the MDC data items in a hashmap (not in ThreadLocal storage), which allows more control
  * of the data. The ONAPLoggingContext constructor that takes another ONAPLoggingContext object as a
@@ -49,7 +49,7 @@ import org.slf4j.MDC;
  * requests, and for each request, create a new logging context with that base context as a
  * parameter; this will create a new logging context with those initial values and none of the
  * request-specific values from the previous request such as a request ID.
- * 
+ *
  * <p>The setter methods in this class set corresponding items in the SharedLoggingContext/MDC
  * hashmaps. These items correspond to the fields defined in the "ONAP platform application logging
  * guidelines" document. In addition, there is a pair of convenience functions, transactionStarted()
@@ -57,7 +57,7 @@ import org.slf4j.MDC;
  * calculate the duration of the transaction and record that value in the "timer" item.
  *
  */
-public class ONAPLoggingContext {
+public class OnapLoggingContext {
 
     private static final String REQUEST_ID = "requestId";
     private static final String SERVICE_INSTANCE_ID = "serviceInstanceId";
@@ -98,7 +98,7 @@ public class ONAPLoggingContext {
     /**
      * Create a new ONAPLoggingContext with no base context.
      */
-    public ONAPLoggingContext() {
+    public OnapLoggingContext() {
         context = (SharedLoggingContext) loggingContextBuilder.forSharing().build();
     }
 
@@ -109,10 +109,10 @@ public class ONAPLoggingContext {
      * unchanging and common to all the threads. That constant data can be populated in a base
      * context, and then each request handler creates new context passing that base context to
      * populate the common data in the new one.
-     * 
+     *
      * @param baseContext onap logging context
      */
-    public ONAPLoggingContext(ONAPLoggingContext baseContext) {
+    public OnapLoggingContext(OnapLoggingContext baseContext) {
         context = (SharedLoggingContext) loggingContextBuilder.forSharing().build();
         // a logging context could be passed into a thread (e.g. one that is servicing a queue)
         // that already had a logging context established, so the MDC hashmap could contain
@@ -174,16 +174,16 @@ public class ONAPLoggingContext {
      *
      * @param id request identifier
      */
-    public void setRequestID(String id) {
+    public void setRequestId(String id) {
         context.put(REQUEST_ID, id);
     }
 
     /**
      * Get the value for the data item with key "requestId".
-     * 
+     *
      * @return current value, or empty string if not set
      */
-    public String getRequestID() {
+    public String getRequestId() {
         return context.get(REQUEST_ID, EMPTY_STRING);
     }
 
@@ -192,16 +192,16 @@ public class ONAPLoggingContext {
      *
      * @param id service identifier
      */
-    public void setServiceInstanceID(String id) {
+    public void setServiceInstanceId(String id) {
         context.put(SERVICE_INSTANCE_ID, id);
     }
 
     /**
      * Get the value for the data item with key "serviceInstanceId".
-     * 
+     *
      * @return current value, or empty string if not set
      */
-    public String getServiceInstanceID() {
+    public String getServiceInstanceId() {
         return context.get(SERVICE_INSTANCE_ID, EMPTY_STRING);
     }
 
@@ -211,16 +211,16 @@ public class ONAPLoggingContext {
      *
      * @param id thread identifier
      */
-    public void setThreadID(String id) {
+    public void setThreadId(String id) {
         context.put(THREAD_ID, id);
     }
 
     /**
      * Get the value for the data item with key "threadId".
-     * 
+     *
      * @return current value, or empty string if not set
      */
-    public String getThreadID() {
+    public String getThreadId() {
         return context.get(THREAD_ID, EMPTY_STRING);
     }
 
@@ -235,7 +235,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "serverName".
-     * 
+     *
      * @return current value, or empty string if not set
      */
     public String getServerName() {
@@ -253,7 +253,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "serviceName".
-     * 
+     *
      * @return current value, or empty string if not set
      */
     public String getServiceName() {
@@ -271,7 +271,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "partnerName".
-     * 
+     *
      * @return current value, or empty string if not set
      */
     public String getPartnerName() {
@@ -289,7 +289,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "statusCode".
-     * 
+     *
      * @return current value, or empty string if not set
      */
     public String getStatusCode() {
@@ -307,7 +307,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "targetEntity".
-     * 
+     *
      * @return current value, or empty string if not set
      */
     public String getTargetEntity() {
@@ -325,7 +325,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "targetServiceName".
-     * 
+     *
      * @return current value, or empty string if not set
      */
     public String getTargetServiceName() {
@@ -337,16 +337,16 @@ public class ONAPLoggingContext {
      *
      * @param uuid instance uuid
      */
-    public void setInstanceUUID(String uuid) {
+    public void setInstanceUuid(String uuid) {
         context.put(INSTANCE_UUID, uuid);
     }
 
     /**
      * Get the value for the data item with key "instanceUuid".
-     * 
+     *
      * @return current value, or empty string if not set
      */
-    public String getInstanceUUID() {
+    public String getInstanceUuid() {
         return context.get(INSTANCE_UUID, EMPTY_STRING);
     }
 
@@ -361,7 +361,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "severity".
-     * 
+     *
      * @return current value, or empty string if not set
      */
     public String getSeverity() {
@@ -371,18 +371,18 @@ public class ONAPLoggingContext {
     /**
      * Set the value for the data item with key "serverIp".
      *
-     * @param serverIP server ip address
+     * @param serverIp server ip address
      */
-    public void setServerIPAddress(String serverIP) {
-        context.put(SERVER_IP_ADDRESS, serverIP);
+    public void setServerIpAddress(String serverIp) {
+        context.put(SERVER_IP_ADDRESS, serverIp);
     }
 
     /**
      * Get the value for the data item with key "serverIp".
-     * 
+     *
      * @return current value, or empty string if not set
      */
-    public String getServerIPAddress() {
+    public String getServerIpAddress() {
         return context.get(SERVER_IP_ADDRESS, EMPTY_STRING);
     }
 
@@ -397,7 +397,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "server".
-     * 
+     *
      * @return current value, or empty string if not set
      */
     public String getServer() {
@@ -407,18 +407,18 @@ public class ONAPLoggingContext {
     /**
      * Set the value for the data item with key "clientIp".
      *
-     * @param clientIP client ip address
+     * @param clientIp client ip address
      */
-    public void setClientIPAddress(String clientIP) {
-        context.put(CLIENT_IP_ADDRESS, clientIP);
+    public void setClientIpAddress(String clientIp) {
+        context.put(CLIENT_IP_ADDRESS, clientIp);
     }
 
     /**
      * Get the value for the data item with key "clientIp".
-     * 
+     *
      * @return current value, or empty string if not set
      */
-    public String getClientIPAddress() {
+    public String getClientIpAddress() {
         return context.get(CLIENT_IP_ADDRESS, EMPTY_STRING);
     }
 
@@ -437,7 +437,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "classname".
-     * 
+     *
      * @return current value, or empty string if not set
      */
     public String getClassname() {
@@ -456,7 +456,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "TransactionBeginTimestamp".
-     * 
+     *
      * @return current value, or 0 if not set
      */
     public long getTransactionBeginTimestamp() {
@@ -475,7 +475,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "TransactionEndTimestamp".
-     * 
+     *
      * @return current value, or 0 if not set
      */
     public long getTransactionEndTimestamp() {
@@ -498,7 +498,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "TransactionElapsedTime".
-     * 
+     *
      * @return current value, or 0 if not set
      */
     public long getTransactionElapsedTime() {
@@ -517,7 +517,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "MetricBeginTimestamp".
-     * 
+     *
      * @return current value, or 0 if not set
      */
     public long getMetricBeginTimestamp() {
@@ -536,7 +536,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "MetricEndTimestamp".
-     * 
+     *
      * @return current value, or 0 if not set
      */
     public long getMetricEndTimestamp() {
@@ -559,7 +559,7 @@ public class ONAPLoggingContext {
 
     /**
      * Get the value for the data item with key "MetricElapsedTime".
-     * 
+     *
      * @return current value, or 0 if not set
      */
     public long getMetricElapsedTime() {

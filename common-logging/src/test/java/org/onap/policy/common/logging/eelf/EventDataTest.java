@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -42,7 +42,7 @@ public class EventDataTest {
         EventData eventData = new EventData();
 
         assertNull(eventData.getEndTime());
-        assertNull(eventData.getRequestID());
+        assertNull(eventData.getRequestId());
         assertNull(eventData.getStartTime());
     }
 
@@ -53,24 +53,24 @@ public class EventDataTest {
     public void testEventDataStringInstantInstant() {
         EventData eventData = new EventData("myreq", istart, iend);
 
-        assertEquals("myreq", eventData.getRequestID());
+        assertEquals("myreq", eventData.getRequestId());
         assertEquals(istart, eventData.getStartTime());
         assertEquals(iend, eventData.getEndTime());
     }
 
     /**
-     * Test method for {@link EventData#getRequestID()} and {@link EventData#setRequestID(String)}.
+     * Test method for {@link EventData#getRequestId()} and {@link EventData#setRequestId(String)}.
      */
     @Test
     public void testGetSetRequestId() {
         EventData eventData = new EventData();
-        assertNull(eventData.getRequestID());
+        assertNull(eventData.getRequestId());
 
-        eventData.setRequestID("abc");
-        assertEquals("abc", eventData.getRequestID());
+        eventData.setRequestId("abc");
+        assertEquals("abc", eventData.getRequestId());
 
-        eventData.setRequestID("def");
-        assertEquals("def", eventData.getRequestID());
+        eventData.setRequestId("def");
+        assertEquals("def", eventData.getRequestId());
     }
 
     /**
