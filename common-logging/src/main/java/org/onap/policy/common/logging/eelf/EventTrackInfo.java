@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -45,23 +45,23 @@ public class EventTrackInfo {
 
     /**
      * Returns an instance of EventData associated to this requestID.
-     * 
-     * @param requestID request id
+     *
+     * @param requestId request id
      * @return EventData
      */
-    public EventData getEventDataByRequestID(String requestID) {
-        return eventInfo.get(requestID);
+    public EventData getEventDataByRequestId(String requestId) {
+        return eventInfo.get(requestId);
     }
 
     /**
      * Stores an EventData object in a ConcurrentHashMap using its requestID as key.
-     * 
+     *
      * @param event event data
      */
     public void storeEventData(EventData event) {
 
         if (event != null) {
-            String id = event.getRequestID();
+            String id = event.getRequestId();
             if (id == null || id.isEmpty()) {
                 return;
             }
@@ -74,7 +74,7 @@ public class EventTrackInfo {
 
     /**
      * Removes an EventData object from a ConcurrentHashMap using the eventId as key.
-     * 
+     *
      * @param eventId event id
      */
     public void remove(String eventId) {

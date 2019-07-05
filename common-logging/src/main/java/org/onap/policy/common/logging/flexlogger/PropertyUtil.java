@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,8 @@
  */
 
 package org.onap.policy.common.logging.flexlogger;
+
+import static org.onap.policy.common.logging.flexlogger.DisplayUtils.displayErrorMessage;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -36,7 +38,7 @@ import java.util.TimerTask;
  * notifications of future changes.
  */
 public class PropertyUtil {
-    
+
     protected static class LazyHolder {
         /**
          * Timer thread.  Will not be allocated by the JVM until it is first referenced.
@@ -50,7 +52,7 @@ public class PropertyUtil {
 
     /**
      * Read in a properties file.
-     * 
+     *
      * @param file the properties file
      * @return a Properties object, containing the associated properties
      * @throws IOException - subclass 'FileNotFoundException' if the file does not exist or can't be
@@ -74,7 +76,7 @@ public class PropertyUtil {
 
     /**
      * Read in a properties file.
-     * 
+     *
      * @param fileName the properties file
      * @return a Properties object, containing the associated properties
      * @throws IOException - subclass 'FileNotFoundException' if the file does not exist or can't be
@@ -94,7 +96,7 @@ public class PropertyUtil {
     public interface Listener {
         /**
          * Notification of a properties file change.
-         * 
+         *
          * @param properties the new properties
          * @param changedKeys the set of property names that have changed, including additions and
          *        removals
@@ -150,7 +152,7 @@ public class PropertyUtil {
                     try {
                         poll();
                     } catch (Exception e) {
-                        System.err.println(e);
+                        displayErrorMessage(e);
                     }
                 }
             };
@@ -159,7 +161,7 @@ public class PropertyUtil {
 
         /**
          * Add a listener to the notification list.
-         * 
+         *
          * @param listener this is the listener to add to the list
          * @return the properties at the moment the listener was added to the list
          */
@@ -170,7 +172,7 @@ public class PropertyUtil {
 
         /**
          * Remove a listener from the notification list.
-         * 
+         *
          * @param listener this is the listener to remove
          */
         synchronized void removeListener(Listener listener) {
@@ -190,7 +192,7 @@ public class PropertyUtil {
 
         /**
          * This method is periodically called to check for property list updates.
-         * 
+         *
          * @throws IOException if there is an error in reading the properties file
          */
         synchronized void poll() throws IOException {
@@ -308,7 +310,7 @@ public class PropertyUtil {
 
     /**
      * Stop listenening for updates.
-     * 
+     *
      * @param file the properties file
      * @param listener notify if not null, this is a callback interface that was used for
      *        notifications of changes
@@ -325,7 +327,7 @@ public class PropertyUtil {
 
     /**
      * Stop listenening for updates.
-     * 
+     *
      * @param fileName the properties file
      * @param listener notify if not null, this is a callback interface that was used for
      *        notifications of changes

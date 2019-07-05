@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,8 @@
  */
 
 package org.onap.policy.common.logging.flexlogger;
+
+import static org.onap.policy.common.logging.flexlogger.DisplayUtils.displayMessage;
 
 import com.att.eelf.configuration.EELFLogger.Level;
 
@@ -47,11 +49,11 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Constructor.
-     * 
+     *
      * @param clazz the class
      */
     public Logger4J(Class<?> clazz) {
-        System.out.println("create instance of Logger4J");
+        displayMessage("create instance of Logger4J");
         if (clazz != null) {
             log = Logger.getLogger(clazz);
             className = clazz.getName();
@@ -60,12 +62,12 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Constructor.
-     * 
+     *
      * @param name the name of the logger
      * @param className the name of the class
      */
     public Logger4J(String name, String className) {
-        System.out.println("create instance of Logger4J");
+        displayMessage("create instance of Logger4J");
         if (name != null) {
             log = Logger.getLogger(name);
         }
@@ -91,7 +93,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -103,7 +105,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
@@ -114,7 +116,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records an error message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -124,7 +126,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records an error message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
@@ -135,7 +137,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records an error message.
-     * 
+     *
      * @param msg the message code
      * @param throwable the throwable
      * @param arguments the messages
@@ -148,7 +150,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records an error message.
-     * 
+     *
      * @param msg the message code
      * @param arguments the messages
      */
@@ -159,7 +161,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -169,7 +171,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
@@ -180,7 +182,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -190,7 +192,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
@@ -201,7 +203,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a message.
-     * 
+     *
      * @param msg the message code
      * @param arguments the messages
      */
@@ -212,7 +214,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a message.
-     * 
+     *
      * @param msg the message code
      * @param throwable the throwable
      * @param arguments the messages
@@ -224,7 +226,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -234,7 +236,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
@@ -245,7 +247,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Returns true for debug enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -255,7 +257,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Returns true for error enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @SuppressWarnings("deprecation")
@@ -266,7 +268,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Returns true for info enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -276,7 +278,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Returns true for warn enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @SuppressWarnings("deprecation")
@@ -288,7 +290,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Returns true for audit enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -298,7 +300,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Returns true for metrics enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -308,7 +310,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -318,7 +320,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
@@ -330,7 +332,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      */
     @Override
@@ -340,7 +342,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      */
     @Override
@@ -352,7 +354,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      * @param policyVersion the policy version
@@ -364,7 +366,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      * @param policyVersion the policy version
@@ -380,7 +382,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      */
@@ -391,7 +393,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      */
@@ -406,7 +408,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a metrics message.
-     * 
+     *
      * @param eventId the event ID
      * @param message the message
      */
@@ -418,7 +420,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a metrics message.
-     * 
+     *
      * @param eventId the event ID
      * @param message the message
      */
@@ -433,7 +435,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records a metrics message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -443,11 +445,11 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Returns transaction Id.
-     * 
+     *
      * @param transId the transaction ID
      */
     @Override
-    public String postMDCInfoForEvent(String transId) {
+    public String postMdcInfoForEvent(String transId) {
         String transactionId = transId;
         if (transactionId == null || transactionId.isEmpty()) {
             transactionId = UUID.randomUUID().toString();
@@ -458,17 +460,17 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records transaction Id.
-     * 
+     *
      * @param message the message
      */
     @Override
-    public void postMDCInfoForEvent(Object message) {
+    public void postMdcInfoForEvent(Object message) {
         log.info(message);
     }
 
     /**
      * Returns true for trace enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -478,11 +480,11 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     /**
      * Records transaction Id.
-     * 
+     *
      * @param transId the transaction ID
      */
     @Override
-    public void postMDCInfoForTriggeredRule(String transId) {
+    public void postMdcInfoForTriggeredRule(String transId) {
         log.info(transId);
     }
 

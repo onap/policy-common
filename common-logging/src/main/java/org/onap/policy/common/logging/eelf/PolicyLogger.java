@@ -28,24 +28,24 @@ import static com.att.eelf.configuration.Configuration.MDC_SERVER_FQDN;
 import static com.att.eelf.configuration.Configuration.MDC_SERVER_IP_ADDRESS;
 import static com.att.eelf.configuration.Configuration.MDC_SERVICE_INSTANCE_ID;
 import static com.att.eelf.configuration.Configuration.MDC_SERVICE_NAME;
-import static org.onap.policy.common.logging.eelf.Configuration.BEGIN_TIME_STAMP;
-import static org.onap.policy.common.logging.eelf.Configuration.ELAPSED_TIME;
-import static org.onap.policy.common.logging.eelf.Configuration.END_TIME_STAMP;
-import static org.onap.policy.common.logging.eelf.Configuration.ERROR_CATEGORY;
-import static org.onap.policy.common.logging.eelf.Configuration.ERROR_CODE;
-import static org.onap.policy.common.logging.eelf.Configuration.ERROR_DESCRIPTION;
-import static org.onap.policy.common.logging.eelf.Configuration.PARTNER_NAME;
-import static org.onap.policy.common.logging.eelf.Configuration.RESPONSE_CODE;
-import static org.onap.policy.common.logging.eelf.Configuration.RESPONSE_DESCRIPTION;
-import static org.onap.policy.common.logging.eelf.Configuration.SERVER_NAME;
-import static org.onap.policy.common.logging.eelf.Configuration.STATUS_CODE;
-import static org.onap.policy.common.logging.eelf.Configuration.TARGET_ENTITY;
-import static org.onap.policy.common.logging.eelf.Configuration.TARGET_SERVICE_NAME;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.BEGIN_TIME_STAMP;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.ELAPSED_TIME;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.END_TIME_STAMP;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.ERROR_CATEGORY;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.ERROR_CODE;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.ERROR_DESCRIPTION;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.PARTNER_NAME;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.RESPONSE_CODE;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.RESPONSE_DESCRIPTION;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.SERVER_NAME;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.STATUS_CODE;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.TARGET_ENTITY;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.TARGET_SERVICE_NAME;
+import static org.onap.policy.common.logging.flexlogger.DisplayUtils.displayErrorMessage;
 
 import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFLogger.Level;
 import com.att.eelf.configuration.EELFManager;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
@@ -60,7 +60,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
-
+import java.util.function.Consumer;
+import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.logging.flexlogger.LoggerType;
 import org.slf4j.MDC;
 
@@ -246,7 +247,7 @@ public class PolicyLogger {
      * @param transId the transaction ID
      * @return String
      */
-    public static String postMDCInfoForEvent(String transId) {
+    public static String postMdcInfoForEvent(String transId) {
         MDC.clear();
 
         String transactionId = transId;
@@ -258,7 +259,7 @@ public class PolicyLogger {
         if ("DROOLS".equalsIgnoreCase(component)) {
             MDC.put(TARGET_ENTITY, "POLICY");
             MDC.put(TARGET_SERVICE_NAME, "drools evaluate rule");
-            return postMDCInfoForEvent(transactionId, new DroolsPDPMDCInfo());
+            return postMdcInfoForEvent(transactionId, new DroolsPdpMdcInfo());
         } else {
             // For Xacml
             MDC.put(TARGET_ENTITY, "POLICY");
@@ -310,12 +311,12 @@ public class PolicyLogger {
      * @param mdcInfo the MDC info
      * @return String
      */
-    private static String postMDCInfoForEvent(String transId, MDCInfo mdcInfo) {
+    private static String postMdcInfoForEvent(String transId, MdcInfo mdcInfo) {
 
         MDC.put(MDC_KEY_REQUEST_ID, transId);
-        if (mdcInfo != null && mdcInfo.getMDCInfo() != null && !mdcInfo.getMDCInfo().isEmpty()) {
+        if (mdcInfo != null && mdcInfo.getMdcInfo() != null && !mdcInfo.getMdcInfo().isEmpty()) {
 
-            ConcurrentMap<String, String> mdcMap = mdcInfo.getMDCInfo();
+            ConcurrentMap<String, String> mdcMap = mdcInfo.getMdcInfo();
             Iterator<String> keyIterator = mdcMap.keySet().iterator();
             String key;
 
@@ -352,8 +353,8 @@ public class PolicyLogger {
      *
      * @param eventObject event object
      */
-    public static void postMDCInfoForEvent(Object eventObject) {
-        postMDCInfoForEvent("" + eventObject);
+    public static void postMdcInfoForEvent(Object eventObject) {
+        postMdcInfoForEvent("" + eventObject);
     }
 
     /**
@@ -411,7 +412,7 @@ public class PolicyLogger {
      * @param transId the transaction ID
      * @return String
      */
-    public static String postMDCInfoForTriggeredRule(String transId) {
+    public static String postMdcInfoForTriggeredRule(String transId) {
 
         String transactionId = transId;
 
@@ -443,9 +444,9 @@ public class PolicyLogger {
      *
      * @param obj object
      */
-    public static void postMDCUUIDForTriggeredRule(Object obj) {
+    public static void postMdcUuidForTriggeredRule(Object obj) {
 
-        postMDCInfoForTriggeredRule("" + obj);
+        postMdcInfoForTriggeredRule("" + obj);
 
     }
 
@@ -864,13 +865,13 @@ public class PolicyLogger {
     public static void recordAuditEventStart(String eventId) {
 
         MDC.put(STATUS_CODE, COMPLETE_STATUS);
-        postMDCInfoForEvent(eventId);
+        postMdcInfoForEvent(eventId);
 
         if (eventTracker == null) {
             eventTracker = new EventTrackInfo();
         }
         EventData event = new EventData();
-        event.setRequestID(eventId);
+        event.setRequestId(eventId);
         event.setStartTime(Instant.now());
         eventTracker.storeEventData(event);
         MDC.put(MDC_KEY_REQUEST_ID, eventId);
@@ -1002,7 +1003,7 @@ public class PolicyLogger {
             return;
         }
 
-        EventData event = eventTracker.getEventDataByRequestID(eventId);
+        EventData event = eventTracker.getEventDataByRequestId(eventId);
 
         if (event != null) {
             Instant endTime = event.getEndTime();
@@ -1030,7 +1031,7 @@ public class PolicyLogger {
             return;
         }
 
-        EventData event = eventTracker.getEventDataByRequestID(eventId.toString());
+        EventData event = eventTracker.getEventDataByRequestId(eventId.toString());
 
         if (event != null) {
             Instant endTime = event.getEndTime();
@@ -1085,7 +1086,7 @@ public class PolicyLogger {
                 endTime.toString(), Long.toString(ns), policyVersion);
 
         // --- remove the record from the concurrentHashMap
-        if (eventTracker != null && eventTracker.getEventDataByRequestID(eventId) != null) {
+        if (eventTracker != null && eventTracker.getEventDataByRequestId(eventId) != null) {
 
             eventTracker.remove(eventId);
             debugLogger.info("eventTracker.remove(" + eventId + ")");
@@ -1258,213 +1259,31 @@ public class PolicyLogger {
      */
     public static LoggerType init(Properties properties) {
 
-        Properties loggerProperties;
-        if (properties != null) {
-            loggerProperties = properties;
-        } else {
-            System.err.println("PolicyLogger cannot find its configuration - continue");
-            loggerProperties = new Properties();
-        }
-
-        LoggerType loggerType = LoggerType.EELF;
+        Properties loggerProperties = getLoggerProperties(properties);
 
         // fetch and verify definitions of some properties
         try {
+            setLoggerLevel(loggerProperties, "debugLogger.level", "INFO", level -> debugLevel = level);
 
-            final int timerDelayTimeProp =
-                    Integer.parseInt(loggerProperties.getProperty("timer.delay.time", Integer.toString(1000)));
-            final int checkIntervalProp =
-                    Integer.parseInt(loggerProperties.getProperty("check.interval", Integer.toString(30000)));
-            final int expiredDateProp =
-                    Integer.parseInt(loggerProperties.getProperty("event.expired.time", Integer.toString(86400)));
-            final int concurrentHashMapLimitProp =
-                    Integer.parseInt(loggerProperties.getProperty("concurrentHashMap.limit", Integer.toString(5000)));
-            final int stopCheckPointProp =
-                    Integer.parseInt(loggerProperties.getProperty("stop.check.point", Integer.toString(2500)));
-            final String loggerTypeProp = loggerProperties.getProperty("logger.type", loggerType.toString());
-
-            final String debugLevelProp = loggerProperties.getProperty("debugLogger.level", "INFO");
-            final String metricsLevelProp = loggerProperties.getProperty("metricsLogger.level", "ON");
-            final String auditLevelProp = loggerProperties.getProperty("audit.level", "ON");
-            final String errorLevelProp = loggerProperties.getProperty("error.level", "ON");
-            component = loggerProperties.getProperty("policy.component", "DROOLS");
-            final String overrideLogbackLevel = loggerProperties.getProperty("override.logback.level.setup");
-
-            if (overrideLogbackLevel != null && !overrideLogbackLevel.isEmpty()) {
-                if ("TRUE".equalsIgnoreCase(overrideLogbackLevel)) {
-                    isOverrideLogbackLevel = true;
-                } else {
-                    isOverrideLogbackLevel = false;
-                }
-            }
-
-
-            if (debugLevelProp != null && !debugLevelProp.isEmpty()) {
-
-                PolicyLogger.setDebugLevel(Level.valueOf(debugLevelProp));
-
-            }
             // Only check if it is to turn off or not
-            if (errorLevelProp != null && errorLevelProp.equalsIgnoreCase(Level.OFF.toString())) {
+            setLoggerOnOff(loggerProperties, "metricsLogger.level", level -> metricsLevel = level);
+            setLoggerOnOff(loggerProperties, "audit.level", level -> auditLevel = level);
+            setLoggerOnOff(loggerProperties, "error.level", level -> errorLevel = level);
 
-                PolicyLogger.setErrorLevel(Level.valueOf(errorLevelProp));
+            overrideLogbackLevels(loggerProperties);
 
-            }
-            // Only check if it is to turn off or not
-            if (metricsLevelProp != null && metricsLevelProp.equalsIgnoreCase(Level.OFF.toString())) {
-
-                PolicyLogger.setMetricsLevel(Level.valueOf(metricsLevelProp));
-
-            }
-            // Only check if it is to turn off or not
-            if (auditLevelProp != null && auditLevelProp.equalsIgnoreCase(Level.OFF.toString())) {
-
-                PolicyLogger.setAuditLevel(Level.valueOf(auditLevelProp));
-
-            }
-
-            if (isOverrideLogbackLevel) {
-
-                debugLogger.setLevel(debugLevel);
-                metricsLogger.setLevel(metricsLevel);
-                auditLogger.setLevel(auditLevel);
-                errorLogger.setLevel(errorLevel);
-
-            }
             isEventTrackerRunning = false;
 
-            debugLogger.info("timerDelayTime value: " + timerDelayTimeProp);
+            timerDelayTime = getIntProp(loggerProperties, "timer.delay.time", timerDelayTime);
+            checkInterval = getIntProp(loggerProperties, "check.interval", checkInterval);
+            expiredTime = getIntProp(loggerProperties, "event.expired.time", expiredTime);
+            concurrentHashMapLimit = getIntProp(loggerProperties, "concurrentHashMap.limit", concurrentHashMapLimit);
+            stopCheckPoint = getIntProp(loggerProperties, "stop.check.point", stopCheckPoint);
 
-            debugLogger.info("checkInterval value: " + checkIntervalProp);
-
-            debugLogger.info("expiredDate value: " + expiredDateProp);
-
-            debugLogger.info("concurrentHashMapLimit value: " + concurrentHashMapLimitProp);
-
-            debugLogger.info("loggerType value: " + loggerTypeProp);
-
-            debugLogger.info("debugLogger level: " + debugLevelProp);
-
+            component = loggerProperties.getProperty("policy.component", "DROOLS");
             debugLogger.info("component: " + component);
 
-            if (timerDelayTimeProp > 0) {
-
-                timerDelayTime = timerDelayTimeProp;
-
-            } else {
-                MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
-                if (ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null) {
-                    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
-                    MDC.put(ERROR_DESCRIPTION,
-                            ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
-
-                }
-                errorLogger.error("failed to get the timer.delay.time, so use its default value: " + timerDelayTime);
-            }
-
-            if (checkIntervalProp > 0) {
-
-                checkInterval = checkIntervalProp;
-
-            } else {
-                MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
-                if (ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null) {
-                    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
-                    MDC.put(ERROR_DESCRIPTION,
-                            ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
-
-                }
-                errorLogger.error("failed to get the check.interval, so use its default value: " + checkInterval);
-            }
-
-            if (expiredDateProp > 0) {
-
-                expiredTime = expiredDateProp;
-
-            } else {
-                MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
-
-                if (ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null) {
-                    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
-                    MDC.put(ERROR_DESCRIPTION,
-                            ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
-
-                }
-                errorLogger.error("failed to get the event.expired.time, so use its default value: " + expiredTime);
-            }
-
-            if (concurrentHashMapLimitProp > 0) {
-
-                concurrentHashMapLimit = concurrentHashMapLimitProp;
-
-            } else {
-                MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
-                if (ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null) {
-                    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
-                    MDC.put(ERROR_DESCRIPTION,
-                            ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
-
-                }
-                errorLogger.error("failed to get the concurrentHashMap.limit, so use its default value: "
-                        + concurrentHashMapLimit);
-            }
-
-            if (stopCheckPointProp > 0) {
-
-                stopCheckPoint = stopCheckPointProp;
-
-            } else {
-                MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
-                if (ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null) {
-                    MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
-                    MDC.put(ERROR_DESCRIPTION,
-                            ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
-
-                }
-                errorLogger.error("failed to get the stop.check.point, so use its default value: " + stopCheckPoint);
-            }
-
-            if (loggerTypeProp != null) {
-
-                if ("EELF".equalsIgnoreCase(loggerTypeProp)) {
-
-                    loggerType = LoggerType.EELF;
-
-                } else if ("LOG4J".equalsIgnoreCase(loggerTypeProp)) {
-
-                    loggerType = LoggerType.LOG4J;
-
-                } else if ("SYSTEMOUT".equalsIgnoreCase(loggerTypeProp)) {
-
-                    loggerType = LoggerType.SYSTEMOUT;
-
-                }
-
-            }
-
-            if (debugLevelProp != null && !debugLevelProp.isEmpty()) {
-
-                debugLevel = Level.valueOf(debugLevelProp);
-
-            }
-            // Only check if it is to turn off or not
-            if (errorLevelProp != null && errorLevelProp.equalsIgnoreCase(Level.OFF.toString())) {
-
-                errorLevel = Level.valueOf(errorLevelProp);
-
-            }
-            // Only check if it is to turn off or not
-            if (metricsLevelProp != null && metricsLevelProp.equalsIgnoreCase(Level.OFF.toString())) {
-
-                metricsLevel = Level.valueOf(metricsLevelProp);
-
-            }
-            // Only check if it is to turn off or not
-            if (auditLevelProp != null && auditLevelProp.equalsIgnoreCase(Level.OFF.toString())) {
-
-                auditLevel = Level.valueOf(auditLevelProp);
-
-            }
+            return detmLoggerType(loggerProperties);
 
         } catch (Exception e) {
             MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
@@ -1475,10 +1294,94 @@ public class PolicyLogger {
 
             }
             errorLogger.error("failed to get the policyLogger.properties, so use their default values", e);
+
+            return LoggerType.EELF;
         }
 
-        return loggerType;
+    }
 
+    private static int getIntProp(Properties properties, String propName, int defaultValue) {
+        final int propValue = Integer.parseInt(properties.getProperty(propName, String.valueOf(defaultValue)));
+
+        debugLogger.info(propName + " value: " + propValue);
+
+        if (propValue > 0) {
+            return propValue;
+
+        } else {
+            MDC.put(ERROR_CATEGORY, ERROR_CATEGORY_VALUE);
+            if (ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR) != null) {
+                MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
+                MDC.put(ERROR_DESCRIPTION,
+                        ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
+
+            }
+            errorLogger.error("failed to get the " + propName + ", so use its default value: " + defaultValue);
+            return defaultValue;
+        }
+    }
+
+    private static Properties getLoggerProperties(Properties properties) {
+        if (properties != null) {
+            return properties;
+        } else {
+            displayErrorMessage("PolicyLogger cannot find its configuration - continue");
+            return new Properties();
+        }
+    }
+
+    private static void setLoggerLevel(Properties properties, String propName, String defaultValue,
+                    Consumer<Level> setter) {
+
+        final String propValue = properties.getProperty(propName, defaultValue);
+
+        if (!StringUtils.isBlank(propValue)) {
+            debugLogger.info(propName + " level: " + propValue);
+            setter.accept(Level.valueOf(propValue));
+        }
+    }
+
+    private static void setLoggerOnOff(Properties properties, String propName, Consumer<Level> setter) {
+        final String propValue = properties.getProperty(propName, "ON");
+
+        if (Level.OFF.toString().equalsIgnoreCase(propValue)) {
+            debugLogger.info(propName + " level: " + propValue);
+            setter.accept(Level.OFF);
+        }
+    }
+
+    private static void overrideLogbackLevels(Properties loggerProperties) {
+        final String overrideLogbackLevel = loggerProperties.getProperty("override.logback.level.setup");
+
+        if (!StringUtils.isBlank(overrideLogbackLevel)) {
+            isOverrideLogbackLevel = "TRUE".equalsIgnoreCase(overrideLogbackLevel);
+        }
+
+        if (isOverrideLogbackLevel) {
+            debugLogger.setLevel(debugLevel);
+            metricsLogger.setLevel(metricsLevel);
+            auditLogger.setLevel(auditLevel);
+            errorLogger.setLevel(errorLevel);
+        }
+    }
+
+    private static LoggerType detmLoggerType(Properties loggerProperties) {
+        final String loggerTypeProp = loggerProperties.getProperty("logger.type", LoggerType.EELF.toString());
+        debugLogger.info("loggerType value: " + loggerTypeProp);
+
+        switch (loggerTypeProp.toUpperCase()) {
+            case "EELF":
+                return LoggerType.EELF;
+
+            case "LOG4J":
+                return LoggerType.LOG4J;
+
+            case "SYSTEMOUT":
+                return LoggerType.SYSTEMOUT;
+
+            default:
+                return LoggerType.EELF;
+        }
     }
 
 
@@ -1505,5 +1408,4 @@ public class PolicyLogger {
     public static void setServerInfo(String serverHost, String serverPort) {
         MDC.put(SERVER_NAME, serverHost + ":" + serverPort);
     }
-
 }

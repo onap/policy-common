@@ -3,13 +3,14 @@
  * ONAP-Logging
  * ================================================================================
  * Copyright (C) 2018 Ericsson. All rights reserved.
+ * Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,12 +35,11 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.onap.policy.common.logging.eelf.Configuration.PARTNER_NAME;
-import static org.onap.policy.common.logging.eelf.Configuration.RESPONSE_CODE;
-import static org.onap.policy.common.logging.eelf.Configuration.RESPONSE_DESCRIPTION;
-import static org.onap.policy.common.logging.eelf.Configuration.SERVER_NAME;
-import static org.onap.policy.common.logging.eelf.Configuration.STATUS_CODE;
-import static org.onap.policy.common.logging.util.TestUtils.overrideStaticField;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.PARTNER_NAME;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.RESPONSE_CODE;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.RESPONSE_DESCRIPTION;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.SERVER_NAME;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.STATUS_CODE;
 
 import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFLogger.Level;
@@ -51,6 +51,7 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.powermock.reflect.Whitebox;
 import org.slf4j.MDC;
 
 public class PolicyLoggerTest {
@@ -105,8 +106,8 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testPostMDCInfoForEventString() {
-        PolicyLogger.postMDCInfoForEvent("transactionId");
+    public void testPostMdcInfoForEventString() {
+        PolicyLogger.postMdcInfoForEvent("transactionId");
 
         assertEquals("", MDC.get(MDC_REMOTE_HOST));
         assertEquals("transactionId", MDC.get(MDC_KEY_REQUEST_ID));
@@ -121,12 +122,12 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testPostMDCInfoForEventStringDrools() {
+    public void testPostMdcInfoForEventStringDrools() {
         Properties properties = new Properties();
         properties.setProperty("policy.component", "DROOLS");
         PolicyLogger.init(properties);
 
-        PolicyLogger.postMDCInfoForEvent("transactionId");
+        PolicyLogger.postMdcInfoForEvent("transactionId");
 
         assertEquals("transactionId", MDC.get(MDC_KEY_REQUEST_ID));
         assertEquals("Policy.droolsPdp", MDC.get(MDC_SERVICE_NAME));
@@ -140,8 +141,8 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testPostMDCInfoForEventObject() {
-        PolicyLogger.postMDCInfoForEvent(1);
+    public void testPostMdcInfoForEventObject() {
+        PolicyLogger.postMdcInfoForEvent(1);
 
         assertEquals("", MDC.get(MDC_REMOTE_HOST));
         assertEquals("1", MDC.get(MDC_KEY_REQUEST_ID));
@@ -156,8 +157,8 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testPostMDCInfoForTriggeredRule() {
-        PolicyLogger.postMDCInfoForTriggeredRule("transactionId");
+    public void testPostMdcInfoForTriggeredRule() {
+        PolicyLogger.postMdcInfoForTriggeredRule("transactionId");
 
         assertEquals("", MDC.get(MDC_REMOTE_HOST));
         assertEquals("transactionId", MDC.get(MDC_KEY_REQUEST_ID));
@@ -171,8 +172,8 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testPostMDCUUIDForTriggeredRule() {
-        PolicyLogger.postMDCUUIDForTriggeredRule(1);
+    public void testPostMdcUuidForTriggeredRule() {
+        PolicyLogger.postMdcUuidForTriggeredRule(1);
 
         assertEquals("", MDC.get(MDC_REMOTE_HOST));
         assertEquals("1", MDC.get(MDC_KEY_REQUEST_ID));
@@ -188,7 +189,7 @@ public class PolicyLoggerTest {
     @Test
     public void testInfoMessageCodesStringStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.info(MessageCodes.ERROR_DATA_ISSUE, "str1", "str2");
         Mockito.verify(mockLogger).info(MessageCodes.ERROR_DATA_ISSUE, "str2");
     }
@@ -196,7 +197,7 @@ public class PolicyLoggerTest {
     @Test
     public void testInfoStringString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.info("str1", "str2");
         Mockito.verify(mockLogger).info(MessageCodes.GENERAL_INFO, "str2");
     }
@@ -204,7 +205,7 @@ public class PolicyLoggerTest {
     @Test
     public void testInfoObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.info("str1");
         Mockito.verify(mockLogger).info(MessageCodes.GENERAL_INFO, "str1");
     }
@@ -212,7 +213,7 @@ public class PolicyLoggerTest {
     @Test
     public void testInfoMessageCodesThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.info(MessageCodes.ERROR_DATA_ISSUE, new NullPointerException(), "str1", "str2");
         Mockito.verify(mockLogger).info((MessageCodes) Mockito.any(),
                 Mockito.startsWith("str1:str2:java.lang.NullPointerException"));
@@ -221,7 +222,7 @@ public class PolicyLoggerTest {
     @Test
     public void testInfoMessageCodesStringThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.info(MessageCodes.ERROR_DATA_ISSUE, "PolicyLoggerTest", new NullPointerException(), "str1",
                 "str2");
         Mockito.verify(mockLogger).info((MessageCodes) Mockito.any(),
@@ -231,7 +232,7 @@ public class PolicyLoggerTest {
     @Test
     public void testWarnMessageCodesStringStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn(MessageCodes.ERROR_DATA_ISSUE, "str1");
         Mockito.verify(mockLogger).warn(MessageCodes.ERROR_DATA_ISSUE);
     }
@@ -239,7 +240,7 @@ public class PolicyLoggerTest {
     @Test
     public void testWarnStringString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn("str1", "str2");
         Mockito.verify(mockLogger).warn(MessageCodes.GENERAL_INFO, "str2");
     }
@@ -247,7 +248,7 @@ public class PolicyLoggerTest {
     @Test
     public void testWarnObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn(1);
         Mockito.verify(mockLogger).warn(MessageCodes.GENERAL_WARNING, "1");
     }
@@ -255,7 +256,7 @@ public class PolicyLoggerTest {
     @Test
     public void testWarnMessageCodesThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn(MessageCodes.ERROR_DATA_ISSUE, new NullPointerException(), "str1", "str2");
         Mockito.verify(mockLogger).warn((MessageCodes) Mockito.any(),
                 Mockito.startsWith("str1:str2:java.lang.NullPointerException"));
@@ -264,7 +265,7 @@ public class PolicyLoggerTest {
     @Test
     public void testWarnMessageCodesStringThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn(MessageCodes.ERROR_DATA_ISSUE, "PolicyLoggerTest", new NullPointerException(), "str1",
                 "str2");
         Mockito.verify(mockLogger).warn((MessageCodes) Mockito.any(),
@@ -274,7 +275,7 @@ public class PolicyLoggerTest {
     @Test
     public void testWarnString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn("str1");
         Mockito.verify(mockLogger).warn(MessageCodes.GENERAL_WARNING, "str1");
     }
@@ -282,7 +283,7 @@ public class PolicyLoggerTest {
     @Test
     public void testErrorStringString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "errorLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
         PolicyLogger.error("str1", "str2");
         Mockito.verify(mockLogger).error(MessageCodes.GENERAL_ERROR, "str2");
         assertEquals("POLICY-515E", MDC.get("ErrorCode"));
@@ -293,7 +294,7 @@ public class PolicyLoggerTest {
     @Test
     public void testErrorString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "errorLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
         PolicyLogger.error("str1");
         Mockito.verify(mockLogger).error(MessageCodes.GENERAL_ERROR, "str1");
         assertEquals("ERROR", MDC.get("ErrorCategory"));
@@ -305,7 +306,7 @@ public class PolicyLoggerTest {
     @Test
     public void testErrorObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "errorLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
         PolicyLogger.error(1);
         Mockito.verify(mockLogger).error(MessageCodes.GENERAL_ERROR, "1");
         assertEquals("ERROR", MDC.get("ErrorCategory"));
@@ -317,7 +318,7 @@ public class PolicyLoggerTest {
     @Test
     public void testErrorMessageCodesThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "errorLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
         PolicyLogger.error(MessageCodes.ERROR_DATA_ISSUE, new NullPointerException(), "str1", "str2");
         Mockito.verify(mockLogger).error((MessageCodes) Mockito.any(),
                 Mockito.startsWith("str1:str2:java.lang.NullPointerException"));
@@ -326,7 +327,7 @@ public class PolicyLoggerTest {
     @Test
     public void testErrorMessageCodesStringThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "errorLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
         PolicyLogger.error(MessageCodes.ERROR_DATA_ISSUE, "PolicyLoggerTest", new NullPointerException(), "str1",
                 "str2");
         Mockito.verify(mockLogger).error((MessageCodes) Mockito.any(),
@@ -336,7 +337,7 @@ public class PolicyLoggerTest {
     @Test
     public void testErrorMessageCodesStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "errorLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
         PolicyLogger.error(MessageCodes.ERROR_DATA_ISSUE, "str1", "str2");
         Mockito.verify(mockLogger).error(MessageCodes.ERROR_DATA_ISSUE, "str1", "str2");
     }
@@ -344,7 +345,7 @@ public class PolicyLoggerTest {
     @Test
     public void testDebugMessageCodesStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.debug(MessageCodes.ERROR_DATA_ISSUE, "str1", "str2");
         Mockito.verify(mockLogger).debug(MessageCodes.ERROR_DATA_ISSUE, "str1", "str2");
     }
@@ -352,7 +353,7 @@ public class PolicyLoggerTest {
     @Test
     public void testDebugStringString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.debug("str1", "str2");
         Mockito.verify(mockLogger).debug(MessageCodes.GENERAL_INFO, "str2");
     }
@@ -360,7 +361,7 @@ public class PolicyLoggerTest {
     @Test
     public void testDebugString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.debug("str1");
         Mockito.verify(mockLogger).debug("str1");
     }
@@ -368,7 +369,7 @@ public class PolicyLoggerTest {
     @Test
     public void testDebugObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.debug(1);
         Mockito.verify(mockLogger).debug("1");
     }
@@ -376,7 +377,7 @@ public class PolicyLoggerTest {
     @Test
     public void testAuditStringObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "auditLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "auditLogger", mockLogger);
         PolicyLogger.audit("PolicyLoggerTest", 1);
         assertEquals("PolicyLoggerTest", MDC.get("ClassName"));
         assertEquals("COMPLETE", MDC.get("StatusCode"));
@@ -386,7 +387,7 @@ public class PolicyLoggerTest {
     @Test
     public void testAuditObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "auditLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "auditLogger", mockLogger);
         PolicyLogger.audit(1);
         assertEquals("", MDC.get("ClassName"));
         assertEquals("COMPLETE", MDC.get("StatusCode"));
@@ -396,7 +397,7 @@ public class PolicyLoggerTest {
     @Test
     public void testDebugMessageCodesThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.debug(MessageCodes.ERROR_DATA_ISSUE, new NullPointerException(), "str1", "str2");
         Mockito.verify(mockLogger).debug((MessageCodes) Mockito.any(),
                 Mockito.startsWith("str1:str2:java.lang.NullPointerException"));
@@ -405,7 +406,7 @@ public class PolicyLoggerTest {
     @Test
     public void testDebugMessageCodesStringThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.debug(MessageCodes.ERROR_DATA_ISSUE, "PolicyLoggerTest", new NullPointerException(), "str1",
                 "str2");
         Mockito.verify(mockLogger).debug((MessageCodes) Mockito.any(),
@@ -415,7 +416,7 @@ public class PolicyLoggerTest {
     @Test
     public void testIsDebugEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isDebugEnabled()).thenReturn(false).thenReturn(true);
         assertFalse(PolicyLogger.isDebugEnabled());
         assertTrue(PolicyLogger.isDebugEnabled());
@@ -424,7 +425,7 @@ public class PolicyLoggerTest {
     @Test
     public void testIsErrorEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "errorLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
         Mockito.when(mockLogger.isErrorEnabled()).thenReturn(false).thenReturn(true);
         assertFalse(PolicyLogger.isErrorEnabled());
         assertTrue(PolicyLogger.isErrorEnabled());
@@ -433,7 +434,7 @@ public class PolicyLoggerTest {
     @Test
     public void testIsWarnEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isWarnEnabled()).thenReturn(false).thenReturn(true);
         assertFalse(PolicyLogger.isWarnEnabled());
         assertTrue(PolicyLogger.isWarnEnabled());
@@ -442,7 +443,7 @@ public class PolicyLoggerTest {
     @Test
     public void testIsInfoEnabled1() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isInfoEnabled()).thenReturn(false).thenReturn(true);
         assertFalse(PolicyLogger.isInfoEnabled1());
         assertTrue(PolicyLogger.isInfoEnabled1());
@@ -451,7 +452,7 @@ public class PolicyLoggerTest {
     @Test
     public void testIsAuditEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isInfoEnabled()).thenReturn(false).thenReturn(true);
         assertFalse(PolicyLogger.isAuditEnabled());
         assertTrue(PolicyLogger.isAuditEnabled());
@@ -460,7 +461,7 @@ public class PolicyLoggerTest {
     @Test
     public void testIsInfoEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isInfoEnabled()).thenReturn(false).thenReturn(true);
         assertFalse(PolicyLogger.isInfoEnabled());
         assertTrue(PolicyLogger.isInfoEnabled());
@@ -469,7 +470,7 @@ public class PolicyLoggerTest {
     @Test
     public void testTraceStringString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.trace("str1", "str2");
         Mockito.verify(mockLogger).trace(MessageCodes.GENERAL_INFO, "str2");
     }
@@ -477,7 +478,7 @@ public class PolicyLoggerTest {
     @Test
     public void testTraceObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "debugLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.trace(1);
         Mockito.verify(mockLogger).trace("1");
     }
@@ -492,7 +493,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testRecordAuditEventStartAndEndUUID() {
+    public void testRecordAuditEventStartAndEndUuid() {
         UUID uuid = UUID.randomUUID();
         PolicyLogger.recordAuditEventStart(uuid);;
         assertNotNull(PolicyLogger.getEventTracker().getEventInfo().get(uuid.toString()));
@@ -512,7 +513,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testRecordAuditEventEndUUIDStringString() {
+    public void testRecordAuditEventEndUuidStringString() {
         UUID uuid = UUID.randomUUID();
         PolicyLogger.recordAuditEventStart(uuid);;
         assertNotNull(PolicyLogger.getEventTracker().getEventInfo().get(uuid.toString()));
@@ -532,7 +533,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testCreatAuditEventTrackingRecordUUIDString() {
+    public void testCreatAuditEventTrackingRecordUuidString() {
         UUID uuid = UUID.randomUUID();
         PolicyLogger.recordAuditEventStart(uuid);;
         assertNotNull(PolicyLogger.getEventTracker().getEventInfo().get(uuid.toString()));
@@ -560,7 +561,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testRecordMetricEventUUIDString() {
+    public void testRecordMetricEventUuidString() {
         UUID uuid = UUID.randomUUID();
         PolicyLogger.recordMetricEvent(uuid, "str1");
         assertEquals(uuid.toString(), MDC.get(MDC_KEY_REQUEST_ID));
@@ -569,7 +570,7 @@ public class PolicyLoggerTest {
     @Test
     public void testRecordMetricEventString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "metricsLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "metricsLogger", mockLogger);
         PolicyLogger.recordMetricEvent("eventId");
         Mockito.verify(mockLogger).info(Mockito.eq(MessageCodes.RULE_METRICS_INFO), Mockito.anyString(),
                 Mockito.eq("eventId"));
@@ -578,7 +579,7 @@ public class PolicyLoggerTest {
     @Test
     public void testMetricsString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "metricsLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "metricsLogger", mockLogger);
         PolicyLogger.metrics("str1");
         Mockito.verify(mockLogger).info(Mockito.eq(MessageCodes.RULE_METRICS_INFO), Mockito.anyString(),
                 Mockito.eq("str1"));
@@ -587,7 +588,7 @@ public class PolicyLoggerTest {
     @Test
     public void testMetricsStringObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "metricsLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "metricsLogger", mockLogger);
         PolicyLogger.metrics("PolicyLoggerTest", 1);
         Mockito.verify(mockLogger).info(Mockito.eq(MessageCodes.RULE_METRICS_INFO), Mockito.anyString(),
                 Mockito.eq("1"));
@@ -596,7 +597,7 @@ public class PolicyLoggerTest {
     @Test
     public void testMetricsObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "metricsLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "metricsLogger", mockLogger);
         PolicyLogger.metrics(1);
         Mockito.verify(mockLogger).info(Mockito.eq(MessageCodes.RULE_METRICS_INFO), Mockito.anyString(),
                 Mockito.eq("1"));
@@ -605,7 +606,7 @@ public class PolicyLoggerTest {
     @Test
     public void testMetricsPrintln() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        overrideStaticField(PolicyLogger.class, "metricsLogger", mockLogger);
+        Whitebox.setInternalState(PolicyLogger.class, "metricsLogger", mockLogger);
         PolicyLogger.metricsPrintln("str1");
         Mockito.verify(mockLogger).info("str1");
     }
