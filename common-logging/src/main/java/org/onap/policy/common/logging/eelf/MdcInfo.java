@@ -1,4 +1,4 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * 
  *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,37 +18,20 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.logging.nsa;
+package org.onap.policy.common.logging.eelf;
 
-import org.onap.policy.common.logging.nsa.impl.SharedContext;
-import org.onap.policy.common.logging.nsa.impl.Slf4jLoggingContext;
+import java.util.concurrent.ConcurrentMap;
 
 /**
- * A factory for setting up a LoggingContext.
- *
+ * Interface needs to be implemented by DroolsPDPMDCInfo.
  */
-public class LoggingContextFactory {
-    public static class Builder {
+@FunctionalInterface
+public interface MdcInfo {
 
-        private LoggingContext baseContext = null;
-        private boolean forShared = false;
-
-        public Builder withBaseContext(LoggingContext lc) {
-            baseContext = lc;
-            return this;
-        }
-
-        public Builder forSharing() {
-            forShared = true;
-            return this;
-        }
-
-        public LoggingContext build() {
-            return forShared ? new SharedContext(baseContext) : new Slf4jLoggingContext(baseContext);
-        }
-    }
-
-    private LoggingContextFactory() {
-        // do nothing
-    }
+    /**
+     * Returns MDC info.
+     * 
+     * @return MDC info
+     */
+    ConcurrentMap<String, String> getMdcInfo();
 }

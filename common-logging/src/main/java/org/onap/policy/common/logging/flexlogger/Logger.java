@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -195,12 +195,12 @@ public interface Logger {
     /**
      * Populates MDC info.
      */
-    public String postMDCInfoForEvent(String transId);
+    public String postMdcInfoForEvent(String transId);
 
     /**
      * Populates MDC Info.
      */
-    public void postMDCInfoForEvent(Object obj);
+    public void postMdcInfoForEvent(Object obj);
 
     /**
      * Sets transaction Id.
@@ -215,6 +215,6 @@ public interface Logger {
     /**
      * Populates MDC Info for the rule triggered.
      */
-    public void postMDCInfoForTriggeredRule(String transId);
+    public void postMdcInfoForTriggeredRule(String transId);
 
 }

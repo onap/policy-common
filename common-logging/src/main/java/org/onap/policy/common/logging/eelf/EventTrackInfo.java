@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,11 +46,11 @@ public class EventTrackInfo {
     /**
      * Returns an instance of EventData associated to this requestID.
      * 
-     * @param requestID request id
+     * @param requestId request id
      * @return EventData
      */
-    public EventData getEventDataByRequestID(String requestID) {
-        return eventInfo.get(requestID);
+    public EventData getEventDataByRequestId(String requestId) {
+        return eventInfo.get(requestId);
     }
 
     /**
@@ -61,7 +61,7 @@ public class EventTrackInfo {
     public void storeEventData(EventData event) {
 
         if (event != null) {
-            String id = event.getRequestID();
+            String id = event.getRequestId();
             if (id == null || id.isEmpty()) {
                 return;
             }

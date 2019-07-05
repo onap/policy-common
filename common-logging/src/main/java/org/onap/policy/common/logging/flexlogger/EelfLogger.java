@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ public class EelfLogger implements Logger, Serializable {
         if (clazz != null) {
             className = clazz.getName();
         }
-        PolicyLogger.postMDCInfoForEvent(null);
+        PolicyLogger.postMdcInfoForEvent(null);
     }
 
     /**
@@ -59,7 +59,7 @@ public class EelfLogger implements Logger, Serializable {
         if (className != null) {
             this.className = className;
         }
-        PolicyLogger.postMDCInfoForEvent(null);
+        PolicyLogger.postMdcInfoForEvent(null);
     }
 
     /**
@@ -73,7 +73,7 @@ public class EelfLogger implements Logger, Serializable {
             className = clazz.getName();
         }
         if (isNewTransaction) {
-            transId = PolicyLogger.postMDCInfoForEvent(null);
+            transId = PolicyLogger.postMdcInfoForEvent(null);
         } else {
             transId = PolicyLogger.getTransId();
         }
@@ -90,7 +90,7 @@ public class EelfLogger implements Logger, Serializable {
             this.className = className;
         }
         if (isNewTransaction) {
-            transId = PolicyLogger.postMDCInfoForEvent(null);
+            transId = PolicyLogger.postMdcInfoForEvent(null);
         } else {
             transId = PolicyLogger.getTransId();
         }
@@ -106,7 +106,7 @@ public class EelfLogger implements Logger, Serializable {
         if (clazz != null) {
             className = clazz.getName();
         }
-        PolicyLogger.postMDCInfoForEvent(transId);
+        PolicyLogger.postMdcInfoForEvent(transId);
         this.transId = transId;
     }
 
@@ -120,7 +120,7 @@ public class EelfLogger implements Logger, Serializable {
         if (className != null) {
             this.className = className;
         }
-        PolicyLogger.postMDCInfoForEvent(transId);
+        PolicyLogger.postMdcInfoForEvent(transId);
         this.transId = transId;
     }
 
@@ -490,8 +490,8 @@ public class EelfLogger implements Logger, Serializable {
      * @param transId the transaction ID
      */
     @Override
-    public String postMDCInfoForEvent(String transId) {
-        return PolicyLogger.postMDCInfoForEvent(transId);
+    public String postMdcInfoForEvent(String transId) {
+        return PolicyLogger.postMdcInfoForEvent(transId);
     }
 
     /**
@@ -500,8 +500,8 @@ public class EelfLogger implements Logger, Serializable {
      * @param obj the object
      */
     @Override
-    public void postMDCInfoForEvent(Object obj) {
-        PolicyLogger.postMDCInfoForEvent(obj);
+    public void postMdcInfoForEvent(Object obj) {
+        PolicyLogger.postMdcInfoForEvent(obj);
     }
 
     /**
@@ -510,8 +510,8 @@ public class EelfLogger implements Logger, Serializable {
      * @param transId the transaction ID
      */
     @Override
-    public void postMDCInfoForTriggeredRule(String transId) {
-        PolicyLogger.postMDCInfoForTriggeredRule(transId);
+    public void postMdcInfoForTriggeredRule(String transId) {
+        PolicyLogger.postMdcInfoForTriggeredRule(transId);
     }
 
 }
