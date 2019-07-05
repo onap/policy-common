@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,10 +20,11 @@
 
 package org.onap.policy.common.logging.eelf;
 
+import com.att.eelf.configuration.Configuration;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-public class DroolsPDPMDCInfo implements MDCInfo {
+public class DroolsPdpMdcInfo implements MdcInfo {
 
     private static ConcurrentHashMap<String, String> mdcMap = new ConcurrentHashMap<>();
 
@@ -34,19 +35,19 @@ public class DroolsPDPMDCInfo implements MDCInfo {
         mdcMap.put(Configuration.MDC_SERVICE_INSTANCE_ID, "Policy.droolsPdp.event");
         mdcMap.put(Configuration.MDC_INSTANCE_UUID, "");
         mdcMap.put(Configuration.MDC_ALERT_SEVERITY, "");
-        mdcMap.put(Configuration.PARTNER_NAME, "N/A");
-        mdcMap.put(Configuration.STATUS_CODE, "N/A");
-        mdcMap.put(Configuration.RESPONSE_CODE, "N/A");
-        mdcMap.put(Configuration.RESPONSE_DESCRIPTION, "N/A");
+        mdcMap.put(OnapConfigProperties.PARTNER_NAME, "N/A");
+        mdcMap.put(OnapConfigProperties.STATUS_CODE, "N/A");
+        mdcMap.put(OnapConfigProperties.RESPONSE_CODE, "N/A");
+        mdcMap.put(OnapConfigProperties.RESPONSE_DESCRIPTION, "N/A");
     }
 
     /**
      * Get the MMDC Info.
-     * 
+     *
      * @return the instance of ConcurrentHashMap.
      */
     @Override
-    public ConcurrentMap<String, String> getMDCInfo() {
+    public ConcurrentMap<String, String> getMdcInfo() {
         return mdcMap;
     }
 }

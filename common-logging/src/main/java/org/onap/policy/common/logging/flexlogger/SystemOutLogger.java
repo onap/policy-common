@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,6 +19,8 @@
  */
 
 package org.onap.policy.common.logging.flexlogger;
+
+import static org.onap.policy.common.logging.flexlogger.DisplayUtils.displayMessage;
 
 import com.att.eelf.configuration.EELFLogger.Level;
 
@@ -46,11 +48,11 @@ public class SystemOutLogger implements Logger, Serializable {
 
     /**
      * Constructor.
-     * 
+     *
      * @param clazz the class
      */
     public SystemOutLogger(Class<?> clazz) {
-        System.out.println("create instance of SystemOutLogger");
+        displayMessage("create instance of SystemOutLogger");
         if (clazz != null) {
             className = clazz.getName();
         }
@@ -59,11 +61,11 @@ public class SystemOutLogger implements Logger, Serializable {
 
     /**
      * Constructor.
-     * 
+     *
      * @param className the class name
      */
     public SystemOutLogger(String className) {
-        System.out.println("create instance of SystemOutLogger");
+        displayMessage("create instance of SystemOutLogger");
         if (className != null) {
             this.className = className;
         }
@@ -114,7 +116,7 @@ public class SystemOutLogger implements Logger, Serializable {
     @Override
     public void setTransId(String transId) {
 
-        System.out.println(transId);
+        displayMessage(transId);
         this.transId = transId;
     }
 
@@ -129,129 +131,129 @@ public class SystemOutLogger implements Logger, Serializable {
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      */
     @Override
     public void debug(Object message) {
 
-        System.out.println(transId + "|" + className + " : " + message);
+        displayMessage(transId + "|" + className + " : " + message);
     }
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
     @Override
     public void debug(Object message, Throwable throwable) {
-        System.out.println(transId + "|" + className + " : " + message + ":" + throwable);
+        displayMessage(transId + "|" + className + " : " + message + ":" + throwable);
     }
 
     /**
      * Records an error message.
-     * 
+     *
      * @param message the message
      */
     @Override
     public void error(Object message) {
 
-        System.out.println(transId + "|" + className + " : " + message);
+        displayMessage(transId + "|" + className + " : " + message);
     }
 
     /**
      * Records an error message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
     @Override
     public void error(Object message, Throwable throwable) {
-        System.out.println(transId + "|" + className + " : " + message + ":" + throwable);
+        displayMessage(transId + "|" + className + " : " + message + ":" + throwable);
     }
 
     /**
      * Records an error message.
-     * 
+     *
      * @param msg the message code
      * @param throwable the throwable
      * @param arguments the messages
      */
     @Override
     public void error(MessageCodes msg, Throwable throwable, String... arguments) {
-        System.out.println(className + " : " + "MessageCodes :" + msg + Arrays.asList(arguments));
+        displayMessage(className + " : " + "MessageCodes :" + msg + Arrays.asList(arguments));
     }
 
     /**
      * Records an error message.
-     * 
+     *
      * @param msg the message code
      * @param arguments the messages
      */
     @Override
     public void error(MessageCodes msg, String... arguments) {
 
-        System.out.println(transId + "|" + className + " : " + "MessageCode:" + msg + Arrays.asList(arguments));
+        displayMessage(transId + "|" + className + " : " + "MessageCode:" + msg + Arrays.asList(arguments));
     }
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      */
     @Override
     public void info(Object message) {
-        System.out.println(transId + "|" + className + " : " + message);
+        displayMessage(transId + "|" + className + " : " + message);
     }
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
     @Override
     public void info(Object message, Throwable throwable) {
-        System.out.println(transId + "|" + className + " : " + message + ":" + throwable);
+        displayMessage(transId + "|" + className + " : " + message + ":" + throwable);
     }
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      */
     @Override
     public void warn(Object message) {
-        System.out.println(transId + "|" + className + " : " + message);
+        displayMessage(transId + "|" + className + " : " + message);
     }
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
     @Override
     public void warn(Object message, Throwable throwable) {
-        System.out.println(transId + "|" + className + " : " + message + ":" + throwable);
+        displayMessage(transId + "|" + className + " : " + message + ":" + throwable);
     }
 
     /**
      * Records a message.
-     * 
+     *
      * @param msg the message code
      * @param arguments the messages
      */
     @Override
     public void warn(MessageCodes msg, String... arguments) {
 
-        System.out.println(transId + "|" + className + " : " + "MessageCodes:" + msg + Arrays.asList(arguments));
+        displayMessage(transId + "|" + className + " : " + "MessageCodes:" + msg + Arrays.asList(arguments));
     }
 
     /**
      * Records a message.
-     * 
+     *
      * @param msg the message code
      * @param throwable the throwable
      * @param arguments the messages
@@ -259,34 +261,34 @@ public class SystemOutLogger implements Logger, Serializable {
     @Override
     public void warn(MessageCodes msg, Throwable throwable, String... arguments) {
 
-        System.out.println(transId + "|" + className + " : " + "MessageCodes:" + msg + Arrays.asList(arguments));
+        displayMessage(transId + "|" + className + " : " + "MessageCodes:" + msg + Arrays.asList(arguments));
 
     }
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      */
     @Override
     public void trace(Object message) {
-        System.out.println(transId + "|" + className + " : " + message);
+        displayMessage(transId + "|" + className + " : " + message);
     }
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
     @Override
     public void trace(Object message, Throwable throwable) {
-        System.out.println(transId + "|" + className + " : " + message + ":" + throwable);
+        displayMessage(transId + "|" + className + " : " + message + ":" + throwable);
     }
 
     /**
      * Returns true for debug enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -296,7 +298,7 @@ public class SystemOutLogger implements Logger, Serializable {
 
     /**
      * Returns true for warn enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -306,7 +308,7 @@ public class SystemOutLogger implements Logger, Serializable {
 
     /**
      * Returns true for info enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -316,7 +318,7 @@ public class SystemOutLogger implements Logger, Serializable {
 
     /**
      * Returns true for error enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -326,7 +328,7 @@ public class SystemOutLogger implements Logger, Serializable {
 
     /**
      * Returns true for audit enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -337,7 +339,7 @@ public class SystemOutLogger implements Logger, Serializable {
 
     /**
      * Returns true for metrics enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -348,52 +350,52 @@ public class SystemOutLogger implements Logger, Serializable {
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param message the message
      */
     @Override
     public void audit(Object message) {
 
-        System.out.println(transId + "|" + className + " : " + message);
+        displayMessage(transId + "|" + className + " : " + message);
     }
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
     @Override
     public void audit(Object message, Throwable throwable) {
-        System.out.println(transId + "|" + className + " : " + message + ":" + throwable);
+        displayMessage(transId + "|" + className + " : " + message + ":" + throwable);
     }
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      */
     @Override
     public void recordAuditEventStart(String eventId) {
 
-        System.out.println(transId + "|" + className + " : " + eventId);
+        displayMessage(transId + "|" + className + " : " + eventId);
 
     }
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      */
     @Override
     public void recordAuditEventStart(UUID eventId) {
 
-        System.out.println(eventId);
+        displayMessage(eventId);
     }
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      * @param policyVersion the policy version
@@ -401,12 +403,12 @@ public class SystemOutLogger implements Logger, Serializable {
     @Override
     public void recordAuditEventEnd(String eventId, String rule, String policyVersion) {
 
-        System.out.println(className + " : " + eventId + ":" + rule + ":" + policyVersion);
+        displayMessage(className + " : " + eventId + ":" + rule + ":" + policyVersion);
     }
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      * @param policyVersion the policy version
@@ -414,76 +416,76 @@ public class SystemOutLogger implements Logger, Serializable {
     @Override
     public void recordAuditEventEnd(UUID eventId, String rule, String policyVersion) {
 
-        System.out.println(className + " : " + eventId + ":" + rule + ":" + policyVersion);
+        displayMessage(className + " : " + eventId + ":" + rule + ":" + policyVersion);
     }
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      */
     @Override
     public void recordAuditEventEnd(String eventId, String rule) {
 
-        System.out.println(className + " : " + eventId + ":" + rule);
+        displayMessage(className + " : " + eventId + ":" + rule);
     }
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      */
     @Override
     public void recordAuditEventEnd(UUID eventId, String rule) {
 
-        System.out.println(className + " : " + eventId + ":" + rule);
+        displayMessage(className + " : " + eventId + ":" + rule);
     }
 
     /**
      * Records a metrics message.
-     * 
+     *
      * @param eventId the event ID
      * @param message the message
      */
     @Override
     public void recordMetricEvent(String eventId, String message) {
 
-        System.out.println(className + " : " + "eventId:" + eventId + "message:" + message);
+        displayMessage(className + " : " + "eventId:" + eventId + "message:" + message);
 
     }
 
     /**
      * Records a metrics message.
-     * 
+     *
      * @param eventId the event ID
      * @param message the message
      */
     @Override
     public void recordMetricEvent(UUID eventId, String message) {
 
-        System.out.println(className + " : " + eventId + ":" + message);
+        displayMessage(className + " : " + eventId + ":" + message);
     }
 
     /**
      * Records a metrics message.
-     * 
+     *
      * @param message the message
      */
     @Override
     public void metrics(Object message) {
 
-        System.out.println(className + " : " + message);
+        displayMessage(className + " : " + message);
     }
 
     /**
      * Returns transaction Id.
-     * 
+     *
      * @param transId the transaction ID
      */
     @Override
-    public String postMDCInfoForEvent(String transId) {
+    public String postMdcInfoForEvent(String transId) {
 
         String transactionId = transId;
         if (transactionId == null || transactionId.isEmpty()) {
@@ -495,18 +497,18 @@ public class SystemOutLogger implements Logger, Serializable {
 
     /**
      * Records transaction Id.
-     * 
+     *
      * @param message the message
      */
     @Override
-    public void postMDCInfoForEvent(Object message) {
-        System.out.println(message);
+    public void postMdcInfoForEvent(Object message) {
+        displayMessage(message);
     }
 
 
     /**
      * Returns true for trace enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -517,13 +519,12 @@ public class SystemOutLogger implements Logger, Serializable {
 
     /**
      * Records transaction Id.
-     * 
+     *
      * @param transId the transaction ID
      */
     @Override
-    public void postMDCInfoForTriggeredRule(String transId) {
+    public void postMdcInfoForTriggeredRule(String transId) {
 
-        System.out.println(transId);
+        displayMessage(transId);
     }
-
 }
