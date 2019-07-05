@@ -29,6 +29,7 @@ import org.onap.policy.common.endpoints.event.comm.FilterableTopicSource;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.BusTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FilterableBusConsumer;
+import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.endpoints.utils.NetLoggerUtil;
 import org.onap.policy.common.endpoints.utils.NetLoggerUtil.EventType;
 import org.onap.policy.common.utils.network.NetworkUtil;
@@ -103,13 +104,13 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
         }
 
         if (busTopicParams.getFetchTimeout() <= 0) {
-            this.fetchTimeout = NO_TIMEOUT_MS_FETCH;
+            this.fetchTimeout = PolicyEndPointProperties.NO_TIMEOUT_MS_FETCH;
         } else {
             this.fetchTimeout = busTopicParams.getFetchTimeout();
         }
 
         if (busTopicParams.getFetchLimit() <= 0) {
-            this.fetchLimit = NO_LIMIT_FETCH;
+            this.fetchLimit = PolicyEndPointProperties.NO_LIMIT_FETCH;
         } else {
             this.fetchLimit = busTopicParams.getFetchLimit();
         }
@@ -225,7 +226,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
         while (this.alive) {
             try {
                 fetchAllMessages();
-            } catch (Exception e) {
+            } catch (IOException | RuntimeException e) {
                 logger.error("{}: cannot fetch because of ", this, e.getMessage(), e);
             }
         }
@@ -233,7 +234,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
         logger.info("{}: exiting thread", this);
     }
 
-    private void fetchAllMessages() throws InterruptedException, IOException {
+    private void fetchAllMessages() throws IOException {
         for (String event : this.consumer.fetch()) {
             synchronized (this) {
                 this.recentEvents.add(event);

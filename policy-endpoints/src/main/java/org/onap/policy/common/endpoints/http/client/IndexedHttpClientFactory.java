@@ -47,14 +47,17 @@ class IndexedHttpClientFactory implements HttpClientFactory {
     protected HashMap<String, HttpClient> clients = new HashMap<>();
 
     @Override
-    public synchronized HttpClient build(BusTopicParams busTopicParams)
-            throws KeyManagementException, NoSuchAlgorithmException, ClassNotFoundException {
+    public synchronized HttpClient build(BusTopicParams busTopicParams) throws HttpClientConfigException {
         if (clients.containsKey(busTopicParams.getClientName())) {
             return clients.get(busTopicParams.getClientName());
         }
 
-        JerseyClient client =
-                new JerseyClient(busTopicParams);
+        JerseyClient client;
+        try {
+            client = new JerseyClient(busTopicParams);
+        } catch (KeyManagementException | NoSuchAlgorithmException | ClassNotFoundException e) {
+            throw new HttpClientConfigException(e);
+        }
 
         if (busTopicParams.isManaged()) {
             clients.put(busTopicParams.getClientName(), client);
@@ -64,8 +67,7 @@ class IndexedHttpClientFactory implements HttpClientFactory {
     }
 
     @Override
-    public synchronized List<HttpClient> build(Properties properties)
-            throws KeyManagementException, NoSuchAlgorithmException {
+    public synchronized List<HttpClient> build(Properties properties) throws HttpClientConfigException {
         ArrayList<HttpClient> clientList = new ArrayList<>();
 
         String clientNames = properties.getProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES);

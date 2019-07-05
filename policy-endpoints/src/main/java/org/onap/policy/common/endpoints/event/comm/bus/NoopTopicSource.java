@@ -30,11 +30,6 @@ import org.onap.policy.common.endpoints.utils.NetLoggerUtil.EventType;
 public class NoopTopicSource extends NoopTopicEndpoint implements TopicSource {
 
     /**
-     * Factory.
-     */
-    public static final NoopTopicSourceFactory factory = new NoopTopicSourceFactory();
-
-    /**
      * Constructs the object.
      */
     public NoopTopicSource(List<String> servers, String topic) {

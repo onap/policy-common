@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.endpoints.event.comm.TopicEndpoint;
+import org.onap.policy.common.endpoints.event.comm.TopicEndpointManager;
 import org.onap.policy.common.endpoints.event.comm.TopicSink;
 
 public class TopicSinkClientTest {
@@ -66,14 +66,14 @@ public class TopicSinkClientTest {
         props.setProperty("noop.sink.topics", TOPIC);
 
         // clear all topics and then configure one topic
-        TopicEndpoint.manager.shutdown();
-        TopicEndpoint.manager.addTopicSinks(props);
+        TopicEndpointManager.getManager().shutdown();
+        TopicEndpointManager.getManager().addTopicSinks(props);
     }
 
     @AfterClass
     public static void tearDown() {
         // clear all topics after the tests
-        TopicEndpoint.manager.shutdown();
+        TopicEndpointManager.getManager().shutdown();
     }
 
     /**
@@ -82,7 +82,7 @@ public class TopicSinkClientTest {
     @Test
     public void testGetTopicSinks() throws Exception {
 
-        sink = TopicEndpoint.manager.getNoopTopicSink(TOPIC);
+        sink = TopicEndpointManager.getManager().getNoopTopicSink(TOPIC);
         assertNotNull(sink);
 
         final AtomicReference<String> evref = new AtomicReference<>(null);
@@ -106,7 +106,7 @@ public class TopicSinkClientTest {
 
     @Test
     public void testTopicSinkClient_GetTopic() throws TopicSinkClientException {
-        assertEquals(TOPIC, new TopicSinkClient(TopicEndpoint.manager.getNoopTopicSink(TOPIC)).getTopic());
+        assertEquals(TOPIC, new TopicSinkClient(TopicEndpointManager.getManager().getNoopTopicSink(TOPIC)).getTopic());
         assertEquals(TOPIC, new TopicSinkClient(TOPIC).getTopic());
 
         assertThatThrownBy(() -> new TopicSinkClient((TopicSink) null)).isInstanceOf(IllegalArgumentException.class);

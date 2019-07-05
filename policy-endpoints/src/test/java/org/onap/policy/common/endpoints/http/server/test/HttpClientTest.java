@@ -25,8 +25,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +38,10 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.http.client.HttpClient;
+import org.onap.policy.common.endpoints.http.client.HttpClientConfigException;
+import org.onap.policy.common.endpoints.http.client.HttpClientFactoryInstance;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
+import org.onap.policy.common.endpoints.http.server.HttpServletServerFactoryInstance;
 import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.utils.network.NetworkUtil;
@@ -72,7 +73,7 @@ public class HttpClientTest {
         /* echo server - http + no auth */
 
         final HttpServletServer echoServerNoAuth =
-                HttpServletServer.factory.build("echo", LOCALHOST, 6666, "/", false, true);
+                HttpServletServerFactoryInstance.getServerFactory().build("echo", LOCALHOST, 6666, "/", false, true);
         echoServerNoAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
         echoServerNoAuth.waitedStart(5000);
 
@@ -112,8 +113,8 @@ public class HttpClientTest {
 
         /* echo server - https + basic auth */
 
-        final HttpServletServer echoServerAuth =
-                HttpServletServer.factory.build("echo", true, LOCALHOST, 6667, "/", false, true);
+        final HttpServletServer echoServerAuth = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo", true, LOCALHOST, 6667, "/", false, true);
         echoServerAuth.setBasicAuthentication("x", "y", null);
         echoServerAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
         echoServerAuth.addFilterClass("/*", TestFilter.class.getName());
@@ -132,7 +133,7 @@ public class HttpClientTest {
      */
     @Before
     public void setUp() {
-        HttpClient.factory.destroy();
+        HttpClientFactoryInstance.getClientFactory().destroy();
 
         MyGsonProvider.resetSome();
         MyJacksonProvider.resetSome();
@@ -143,8 +144,8 @@ public class HttpClientTest {
      */
     @AfterClass
     public static void tearDownAfterClass() {
-        HttpServletServer.factory.destroy();
-        HttpClient.factory.destroy();
+        HttpServletServerFactoryInstance.getServerFactory().destroy();
+        HttpClientFactoryInstance.getClientFactory().destroy();
 
         if (savedValuesMap.containsKey(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME)) {
             System.setProperty(JettyJerseyServer.SYSTEM_KEYSTORE_PROPERTY_NAME,
@@ -254,10 +255,11 @@ public class HttpClientTest {
 
     @Test
     public void testHttpPutAuthClient_JacksonProvider() throws Exception {
-        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName(TEST_HTTP_AUTH_CLIENT)
-                        .useHttps(true).allowSelfSignedCerts(true).hostname(LOCALHOST).port(6667)
-                        .basePath(JUNIT_ECHO).userName("x").password("y").managed(true)
-                        .serializationProvider(MyJacksonProvider.class.getName()).build());
+        final HttpClient client = HttpClientFactoryInstance.getClientFactory()
+                        .build(BusTopicParams.builder().clientName(TEST_HTTP_AUTH_CLIENT).useHttps(true)
+                                        .allowSelfSignedCerts(true).hostname(LOCALHOST).port(6667).basePath(JUNIT_ECHO)
+                                        .userName("x").password("y").managed(true)
+                                        .serializationProvider(MyJacksonProvider.class.getName()).build());
 
         Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
         final Response response = client.put(HELLO, entity, Collections.emptyMap());
@@ -273,10 +275,11 @@ public class HttpClientTest {
 
     @Test
     public void testHttpPutAuthClient_GsonProvider() throws Exception {
-        final HttpClient client = HttpClient.factory.build(BusTopicParams.builder().clientName(TEST_HTTP_AUTH_CLIENT)
-                        .useHttps(true).allowSelfSignedCerts(true).hostname(LOCALHOST).port(6667)
-                        .basePath(JUNIT_ECHO).userName("x").password("y").managed(true)
-                        .serializationProvider(MyGsonProvider.class.getName()).build());
+        final HttpClient client = HttpClientFactoryInstance.getClientFactory()
+                        .build(BusTopicParams.builder().clientName(TEST_HTTP_AUTH_CLIENT).useHttps(true)
+                                        .allowSelfSignedCerts(true).hostname(LOCALHOST).port(6667).basePath(JUNIT_ECHO)
+                                        .userName("x").password("y").managed(true)
+                                        .serializationProvider(MyGsonProvider.class.getName()).build());
 
         Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
         final Response response = client.put(HELLO, entity, Collections.emptyMap());
@@ -368,21 +371,22 @@ public class HttpClientTest {
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
                         + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
 
-        final List<HttpServletServer> servers = HttpServletServer.factory.build(httpProperties);
+        final List<HttpServletServer> servers =
+                        HttpServletServerFactoryInstance.getServerFactory().build(httpProperties);
         assertEquals(2, servers.size());
 
-        final List<HttpClient> clients = HttpClient.factory.build(httpProperties);
+        final List<HttpClient> clients = HttpClientFactoryInstance.getClientFactory().build(httpProperties);
         assertEquals(2, clients.size());
 
         for (final HttpServletServer server : servers) {
             server.waitedStart(10000);
         }
 
-        final HttpClient clientPap = HttpClient.factory.get("PAP");
+        final HttpClient clientPap = HttpClientFactoryInstance.getClientFactory().get("PAP");
         final Response response = clientPap.get();
         assertEquals(200, response.getStatus());
 
-        final HttpClient clientPdp = HttpClient.factory.get("PDP");
+        final HttpClient clientPdp = HttpClientFactoryInstance.getClientFactory().get("PDP");
         final Response response2 = clientPdp.get("test");
         assertEquals(500, response2.getStatus());
 
@@ -425,7 +429,7 @@ public class HttpClientTest {
                                         + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER,
                         MyJacksonProvider.class.getName());
 
-        final List<HttpClient> clients = HttpClient.factory.build(httpProperties);
+        final List<HttpClient> clients = HttpClientFactoryInstance.getClientFactory().build(httpProperties);
         assertEquals(2, clients.size());
 
         Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
@@ -433,7 +437,7 @@ public class HttpClientTest {
         // use gson client
         MyGsonProvider.resetSome();
         MyJacksonProvider.resetSome();
-        HttpClient client = HttpClient.factory.get("GSON");
+        HttpClient client = HttpClientFactoryInstance.getClientFactory().get("GSON");
 
         Response response = client.put(HELLO, entity, Collections.emptyMap());
         String body = HttpClient.getBody(response, String.class);
@@ -447,7 +451,7 @@ public class HttpClientTest {
         // use jackson client
         MyGsonProvider.resetSome();
         MyJacksonProvider.resetSome();
-        client = HttpClient.factory.get("JACKSON");
+        client = HttpClientFactoryInstance.getClientFactory().get("JACKSON");
 
         response = client.put(HELLO, entity, Collections.emptyMap());
         body = HttpClient.getBody(response, String.class);
@@ -459,18 +463,19 @@ public class HttpClientTest {
         assertFalse(MyGsonProvider.hasWrittenSome());
     }
 
-    private HttpClient getAuthHttpClient()
-                    throws KeyManagementException, NoSuchAlgorithmException, ClassNotFoundException {
-        return HttpClient.factory.build(BusTopicParams.builder().clientName(TEST_HTTP_AUTH_CLIENT)
-            .useHttps(true).allowSelfSignedCerts(true).hostname(LOCALHOST).port(6667).basePath(JUNIT_ECHO)
-            .userName("x").password("y").managed(true).build());
+    private HttpClient getAuthHttpClient() throws HttpClientConfigException {
+        return HttpClientFactoryInstance.getClientFactory()
+                        .build(BusTopicParams.builder().clientName(TEST_HTTP_AUTH_CLIENT).useHttps(true)
+                                        .allowSelfSignedCerts(true).hostname(LOCALHOST).port(6667).basePath(JUNIT_ECHO)
+                                        .userName("x").password("y").managed(true).build());
     }
 
     private HttpClient getNoAuthHttpClient(String clientName, boolean https, int port)
-        throws KeyManagementException, NoSuchAlgorithmException, ClassNotFoundException {
-        return HttpClient.factory.build(BusTopicParams.builder().clientName(clientName)
-            .useHttps(https).allowSelfSignedCerts(https).hostname(LOCALHOST).port(port).basePath(JUNIT_ECHO)
-            .userName(null).password(null).managed(true).build());
+                    throws HttpClientConfigException {
+        return HttpClientFactoryInstance.getClientFactory()
+                        .build(BusTopicParams.builder().clientName(clientName).useHttps(https)
+                                        .allowSelfSignedCerts(https).hostname(LOCALHOST).port(port).basePath(JUNIT_ECHO)
+                                        .userName(null).password(null).managed(true).build());
     }
 
 

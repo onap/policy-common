@@ -38,11 +38,6 @@ import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSource;
 public interface TopicEndpoint extends Startable, Lockable {
 
     /**
-     * singleton for global access.
-     */
-    TopicEndpoint manager = new TopicEndpointProxy();
-
-    /**
      * Add topics configuration (sources and sinks) into a single list.
      *
      * @param properties topic configuration

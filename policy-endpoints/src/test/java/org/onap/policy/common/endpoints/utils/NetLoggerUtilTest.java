@@ -31,6 +31,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.features.NetLoggerFeatureApi;
+import org.onap.policy.common.endpoints.features.NetLoggerFeatureProviders;
 import org.onap.policy.common.endpoints.utils.NetLoggerUtil.EventType;
 import org.slf4j.Logger;
 
@@ -51,7 +52,7 @@ public class NetLoggerUtilTest {
      */
     @BeforeClass
     public static void setUp() {
-        netLoggerFeature = (NetLoggerFeature) NetLoggerFeatureApi.providers.getList().get(0);
+        netLoggerFeature = (NetLoggerFeature) NetLoggerFeatureProviders.getProviders().getList().get(0);
     }
 
     /**

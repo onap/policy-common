@@ -39,6 +39,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
+import org.onap.policy.common.endpoints.http.server.HttpServletServerFactoryInstance;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 import org.onap.policy.common.utils.network.NetworkUtil;
 import org.slf4j.Logger;
@@ -79,7 +80,7 @@ public class HttpServerTest {
         incrementPort();
         portUrl = LOCALHOST_PREFIX + port;
 
-        HttpServletServer.factory.destroy();
+        HttpServletServerFactoryInstance.getServerFactory().destroy();
 
         MyJacksonProvider.resetSome();
         MyGsonProvider.resetSome();
@@ -91,19 +92,20 @@ public class HttpServerTest {
 
     @AfterClass
     public static void tearDownAfterClass() {
-        HttpServletServer.factory.destroy();
+        HttpServletServerFactoryInstance.getServerFactory().destroy();
     }
 
     @Test
     public void testDefaultPackageServer() throws Exception {
         logger.info("-- testDefaultPackageServer() --");
 
-        HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo", LOCALHOST, port, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
         server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
-        assertTrue(HttpServletServer.factory.get(port).isAlive());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
 
         RestEchoReqResp request = new RestEchoReqResp();
         request.setRequestId(100);
@@ -118,14 +120,15 @@ public class HttpServerTest {
     public void testJacksonPackageServer() throws Exception {
         logger.info("-- testJacksonPackageServer() --");
 
-        HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo", LOCALHOST, port, "/", false, true);
 
         server.setSerializationProvider(MyJacksonProvider.class.getName());
         server.addServletPackage("/*", this.getClass().getPackage().getName());
         server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
-        assertTrue(HttpServletServer.factory.get(port).isAlive());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
 
         RestEchoReqResp request = new RestEchoReqResp();
         request.setRequestId(100);
@@ -146,14 +149,15 @@ public class HttpServerTest {
     public void testGsonPackageServer() throws Exception {
         logger.info("-- testGsonPackageServer() --");
 
-        HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo", LOCALHOST, port, "/", false, true);
 
         server.setSerializationProvider(MyGsonProvider.class.getName());
         server.addServletPackage("/*", this.getClass().getPackage().getName());
         server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
-        assertTrue(HttpServletServer.factory.get(port).isAlive());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
 
         RestEchoReqResp request = new RestEchoReqResp();
         request.setRequestId(100);
@@ -174,12 +178,13 @@ public class HttpServerTest {
     public void testDefaultClassServer() throws Exception {
         logger.info("-- testDefaultClassServer() --");
 
-        HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo", LOCALHOST, port, "/", false, true);
         server.addServletClass("/*", RestEchoService.class.getName());
         server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
-        assertTrue(HttpServletServer.factory.get(port).isAlive());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
 
         RestEchoReqResp request = new RestEchoReqResp();
         request.setRequestId(100);
@@ -194,13 +199,14 @@ public class HttpServerTest {
     public void testJacksonClassServer() throws Exception {
         logger.info("-- testJacksonClassServer() --");
 
-        HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo", LOCALHOST, port, "/", false, true);
         server.setSerializationProvider(MyJacksonProvider.class.getName());
         server.addServletClass("/*", RestEchoService.class.getName());
         server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
-        assertTrue(HttpServletServer.factory.get(port).isAlive());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
 
         RestEchoReqResp request = new RestEchoReqResp();
         request.setRequestId(100);
@@ -221,13 +227,14 @@ public class HttpServerTest {
     public void testGsonClassServer() throws Exception {
         logger.info("-- testGsonClassServer() --");
 
-        HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo", LOCALHOST, port, "/", false, true);
         server.setSerializationProvider(MyGsonProvider.class.getName());
         server.addServletClass("/*", RestEchoService.class.getName());
         server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
-        assertTrue(HttpServletServer.factory.get(port).isAlive());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
 
         RestEchoReqResp request = new RestEchoReqResp();
         request.setRequestId(100);
@@ -246,7 +253,8 @@ public class HttpServerTest {
 
     @Test
     public void testSerialize() {
-        HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo", LOCALHOST, port, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
         server.addFilterClass("/*", TestFilter.class.getName());
 
@@ -258,13 +266,14 @@ public class HttpServerTest {
     public void testSingleServer() throws Exception {
         logger.info("-- testSingleServer() --");
 
-        HttpServletServer server = HttpServletServer.factory.build("echo", LOCALHOST, port, "/", false, true);
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo", LOCALHOST, port, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
         server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
 
-        assertTrue(HttpServletServer.factory.get(port).isAlive());
-        assertFalse(HttpServletServer.factory.get(port).isAaf());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+        assertFalse(HttpServletServerFactoryInstance.getServerFactory().get(port).isAaf());
 
         String response = http(portUrl + JUNIT_ECHO_HELLO);
         assertEquals(HELLO, response);
@@ -274,32 +283,34 @@ public class HttpServerTest {
         response = http(portUrl + "/junit/echo/hello?block=true");
         assertEquals("FILTERED", response);
 
-        assertTrue(HttpServletServer.factory.get(port).isAlive());
-        assertEquals(1, HttpServletServer.factory.inventory().size());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+        assertEquals(1, HttpServletServerFactoryInstance.getServerFactory().inventory().size());
 
         server.setAafAuthentication("/*");
-        assertTrue(HttpServletServer.factory.get(port).isAaf());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAaf());
 
-        HttpServletServer.factory.destroy(port);
-        assertEquals(0, HttpServletServer.factory.inventory().size());
+        HttpServletServerFactoryInstance.getServerFactory().destroy(port);
+        assertEquals(0, HttpServletServerFactoryInstance.getServerFactory().inventory().size());
     }
 
     @Test
     public void testMultipleServers() throws Exception {
         logger.info("-- testMultipleServers() --");
 
-        HttpServletServer server1 = HttpServletServer.factory.build("echo-1", false,LOCALHOST, port, "/", true, true);
+        HttpServletServer server1 = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo-1", false,LOCALHOST, port, "/", true, true);
         server1.addServletPackage("/*", this.getClass().getPackage().getName());
         server1.waitedStart(5000);
 
         int port2 = port + 1;
 
-        HttpServletServer server2 = HttpServletServer.factory.build("echo-2", LOCALHOST, port2, "/", false, true);
+        HttpServletServer server2 = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo-2", LOCALHOST, port2, "/", false, true);
         server2.addServletPackage("/*", this.getClass().getPackage().getName());
         server2.waitedStart(5000);
 
-        assertTrue(HttpServletServer.factory.get(port).isAlive());
-        assertTrue(HttpServletServer.factory.get(port2).isAlive());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port2).isAlive());
 
         String response = http(portUrl + JUNIT_ECHO_HELLO);
         assertTrue(HELLO.equals(response));
@@ -312,8 +323,8 @@ public class HttpServerTest {
 
         assertThatThrownBy(() -> http(LOCALHOST_PREFIX + port2 + SWAGGER_JSON)).isInstanceOf(IOException.class);
 
-        HttpServletServer.factory.destroy();
-        assertTrue(HttpServletServer.factory.inventory().isEmpty());
+        HttpServletServerFactoryInstance.getServerFactory().destroy();
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().inventory().isEmpty());
     }
 
     @Test
@@ -322,11 +333,12 @@ public class HttpServerTest {
 
         String randomName = UUID.randomUUID().toString();
 
-        HttpServletServer server = HttpServletServer.factory.build(randomName, LOCALHOST, port, "/", false, true);
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build(randomName, LOCALHOST, port, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
         server.waitedStart(5000);
 
-        assertTrue(HttpServletServer.factory.get(port).isAlive());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
 
         String response = http(portUrl + JUNIT_ECHO_HELLO);
         assertTrue(HELLO.equals(response));
@@ -334,8 +346,8 @@ public class HttpServerTest {
         response = http(portUrl + "/junit/endpoints/http/servers");
         assertTrue(response.contains(randomName));
 
-        HttpServletServer.factory.destroy();
-        assertTrue(HttpServletServer.factory.inventory().isEmpty());
+        HttpServletServerFactoryInstance.getServerFactory().destroy();
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().inventory().isEmpty());
     }
 
     @Test
@@ -343,17 +355,18 @@ public class HttpServerTest {
         logger.info("-- testServiceClass() --");
         String randomName = UUID.randomUUID().toString();
 
-        HttpServletServer server = HttpServletServer.factory.build(randomName, LOCALHOST, port, "/", false, true);
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build(randomName, LOCALHOST, port, "/", false, true);
         server.addServletClass("/*", RestEchoService.class.getName());
         server.waitedStart(5000);
 
-        assertTrue(HttpServletServer.factory.get(port).isAlive());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
 
         String response = http(portUrl + JUNIT_ECHO_HELLO);
         assertTrue(HELLO.equals(response));
 
-        HttpServletServer.factory.destroy();
-        assertTrue(HttpServletServer.factory.inventory().isEmpty());
+        HttpServletServerFactoryInstance.getServerFactory().destroy();
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().inventory().isEmpty());
     }
 
     @Test
@@ -362,12 +375,13 @@ public class HttpServerTest {
 
         String randomName = UUID.randomUUID().toString();
 
-        HttpServletServer server = HttpServletServer.factory.build(randomName, LOCALHOST, port, "/", false, true);
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build(randomName, LOCALHOST, port, "/", false, true);
         server.addServletClass("/*", RestEchoService.class.getName());
         server.addServletClass("/*", RestEndpoints.class.getName());
         server.waitedStart(5000);
 
-        assertTrue(HttpServletServer.factory.get(port).isAlive());
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
 
         String response = http(portUrl + JUNIT_ECHO_HELLO);
         assertTrue(HELLO.equals(response));
@@ -375,8 +389,8 @@ public class HttpServerTest {
         response = http(portUrl + "/junit/endpoints/http/servers");
         assertTrue(response.contains(randomName));
 
-        HttpServletServer.factory.destroy();
-        assertTrue(HttpServletServer.factory.inventory().isEmpty());
+        HttpServletServerFactoryInstance.getServerFactory().destroy();
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().inventory().isEmpty());
     }
 
     /**

@@ -24,7 +24,7 @@ package org.onap.policy.common.endpoints.event.comm.client;
 import java.util.List;
 import lombok.Getter;
 import lombok.NonNull;
-import org.onap.policy.common.endpoints.event.comm.TopicEndpoint;
+import org.onap.policy.common.endpoints.event.comm.TopicEndpointManager;
 import org.onap.policy.common.endpoints.event.comm.TopicSink;
 import org.onap.policy.common.utils.coder.Coder;
 import org.onap.policy.common.utils.coder.CoderException;
@@ -109,6 +109,6 @@ public class TopicSinkClient {
      * @return the sinks for the topic
      */
     protected List<TopicSink> getTopicSinks(final String topic) {
-        return TopicEndpoint.manager.getTopicSinks(topic);
+        return TopicEndpointManager.getManager().getTopicSinks(topic);
     }
 }
