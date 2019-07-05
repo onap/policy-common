@@ -70,10 +70,10 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
      */
     private static final int DEPENDENCY_CHECK_CYCLES = 6;
 
-    private static Properties myProp;
-    private static EntityTransaction et;
     private static String resourceName;
 
+    private Properties myProp;
+    private EntityTransaction et;
     private Semaphore monitorSem;
     private Semaphore junitSem;
 
