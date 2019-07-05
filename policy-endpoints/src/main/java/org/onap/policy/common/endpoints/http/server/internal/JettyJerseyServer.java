@@ -22,6 +22,7 @@ package org.onap.policy.common.endpoints.http.server.internal;
 
 import io.swagger.jersey.config.JerseyJaxrsConfig;
 import java.util.HashMap;
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ServerProperties;
 import org.onap.policy.common.utils.network.NetworkUtil;
@@ -119,7 +120,7 @@ public class JettyJerseyServer extends JettyServletServer {
         ServletHolder swaggerServlet = context.addServlet(JerseyJaxrsConfig.class, "/");
 
         String hostname = this.connector.getHost();
-        if (hostname == null || hostname.isEmpty() || hostname.equals(NetworkUtil.IPv4_WILDCARD_ADDRESS)) {
+        if (StringUtils.isBlank(hostname) || hostname.equals(NetworkUtil.IPV4_WILDCARD_ADDRESS)) {
             hostname = NetworkUtil.getHostname();
         }
 
