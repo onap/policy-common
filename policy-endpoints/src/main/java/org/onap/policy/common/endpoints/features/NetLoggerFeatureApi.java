@@ -23,19 +23,12 @@ package org.onap.policy.common.endpoints.features;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.utils.NetLoggerUtil.EventType;
 import org.onap.policy.common.utils.services.OrderedService;
-import org.onap.policy.common.utils.services.OrderedServiceImpl;
 import org.slf4j.Logger;
 
 /**
  * Logging Feature API. Provides interception points before and after logging a message.
  */
 public interface NetLoggerFeatureApi extends OrderedService {
-
-    /**
-     * Feature providers implementing this interface.
-     */
-    OrderedServiceImpl<NetLoggerFeatureApi> providers =
-                    new OrderedServiceImpl<>(NetLoggerFeatureApi.class);
 
     /**
      * Intercepts a message before it is logged.

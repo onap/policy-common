@@ -1,6 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
+ *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +36,7 @@ import org.onap.policy.common.endpoints.parameters.TopicParameterGroup;
  * @author Ajith Sreekumar (ajith.sreekumar@est.tech)
  */
 public class ParameterUtilsTest {
+    private static final String SERVERS = ".servers";
 
     /**
      * Test getTopicProperties from TopicParameterGroup.
@@ -49,9 +52,9 @@ public class ParameterUtilsTest {
         assertEquals(CommonTestData.TOPIC_NAME,
             topicProperties.getProperty(CommonTestData.TOPIC_INFRA + ".sink.topics"));
         assertEquals(CommonTestData.TOPIC_SERVER, topicProperties
-            .getProperty(CommonTestData.TOPIC_INFRA + ".source.topics." + CommonTestData.TOPIC_NAME + ".servers"));
+            .getProperty(CommonTestData.TOPIC_INFRA + ".source.topics." + CommonTestData.TOPIC_NAME + SERVERS));
         assertEquals(CommonTestData.TOPIC_SERVER, topicProperties
-            .getProperty(CommonTestData.TOPIC_INFRA + ".sink.topics." + CommonTestData.TOPIC_NAME + ".servers"));
+            .getProperty(CommonTestData.TOPIC_INFRA + ".sink.topics." + CommonTestData.TOPIC_NAME + SERVERS));
     }
 
     @Test
@@ -62,12 +65,12 @@ public class ParameterUtilsTest {
         assertEquals(CommonTestData.TOPIC_NAME,
             topicProperties.getProperty(CommonTestData.TOPIC_INFRA + ".source.topics"));
         assertEquals(CommonTestData.TOPIC_SERVER, topicProperties
-            .getProperty(CommonTestData.TOPIC_INFRA + ".source.topics." + CommonTestData.TOPIC_NAME + ".servers"));
+            .getProperty(CommonTestData.TOPIC_INFRA + ".source.topics." + CommonTestData.TOPIC_NAME + SERVERS));
         ParameterUtils.updateTopicProperties(topicProperties, "sink", CommonTestData.TOPIC_INFRA,
             CommonTestData.TOPIC_NAME, Arrays.asList(CommonTestData.TOPIC_SERVER));
         assertEquals(CommonTestData.TOPIC_NAME,
             topicProperties.getProperty(CommonTestData.TOPIC_INFRA + ".sink.topics"));
         assertEquals(CommonTestData.TOPIC_SERVER, topicProperties
-            .getProperty(CommonTestData.TOPIC_INFRA + ".sink.topics." + CommonTestData.TOPIC_NAME + ".servers"));
+            .getProperty(CommonTestData.TOPIC_INFRA + ".sink.topics." + CommonTestData.TOPIC_NAME + SERVERS));
     }
 }

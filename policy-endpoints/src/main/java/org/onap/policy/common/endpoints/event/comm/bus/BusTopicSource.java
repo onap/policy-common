@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,49 +29,29 @@ import org.onap.policy.common.endpoints.event.comm.TopicSource;
 public interface BusTopicSource extends ApiKeyEnabled, TopicSource {
 
     /**
-     * Default Timeout fetching in milliseconds.
-     */
-    public static int DEFAULT_TIMEOUT_MS_FETCH = 15000;
-
-    /**
-     * Default maximum number of messages fetch at the time.
-     */
-    public static int DEFAULT_LIMIT_FETCH = 100;
-
-    /**
-     * Definition of No Timeout fetching.
-     */
-    public static int NO_TIMEOUT_MS_FETCH = -1;
-
-    /**
-     * Definition of No limit fetching.
-     */
-    public static int NO_LIMIT_FETCH = -1;
-
-    /**
      * Gets the consumer group.
-     * 
+     *
      * @return consumer group
      */
     public String getConsumerGroup();
 
     /**
      * Gets the consumer instance.
-     * 
+     *
      * @return consumer instance
      */
     public String getConsumerInstance();
 
     /**
      * Gets the fetch timeout.
-     * 
+     *
      * @return fetch timeout
      */
     public int getFetchTimeout();
 
     /**
      * Gets the fetch limit.
-     * 
+     *
      * @return fetch limit
      */
     public int getFetchLimit();

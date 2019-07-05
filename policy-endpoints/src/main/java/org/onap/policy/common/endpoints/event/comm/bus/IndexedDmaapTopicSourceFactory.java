@@ -96,8 +96,8 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
                 .topic(topic)
                 .apiKey(apiKey)
                 .apiSecret(apiSecret)
-                .fetchTimeout(DmaapTopicSource.DEFAULT_TIMEOUT_MS_FETCH)
-                .fetchLimit(DmaapTopicSource.DEFAULT_LIMIT_FETCH)
+                .fetchTimeout(PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH)
+                .fetchLimit(PolicyEndPointProperties.DEFAULT_LIMIT_FETCH)
                 .managed(true)
                 .useHttps(false)
                 .allowSelfSignedCerts(false)
@@ -133,9 +133,9 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
                                 PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_INSTANCE_SUFFIX, null))
                 .fetchTimeout(props.getInteger(
                                 PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX,
-                                DmaapTopicSource.DEFAULT_TIMEOUT_MS_FETCH))
+                                PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH))
                 .fetchLimit(props.getInteger(PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_LIMIT_SUFFIX,
-                                DmaapTopicSource.DEFAULT_LIMIT_FETCH))
+                                PolicyEndPointProperties.DEFAULT_LIMIT_FETCH))
                 .build());
 
         dmaapTopicSourceLst.add(uebTopicSource);

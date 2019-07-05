@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017, 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,23 +28,23 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
+import org.onap.policy.common.endpoints.http.server.HttpServletServerFactoryInstance;
 
 @Path("/junit/endpoints")
 public class RestEndpoints {
 
     /**
      * Returns the http servers.
-     * 
+     *
      * @return the list of servers as a string
      */
     @GET
     @Path("http/servers")
     @Produces(MediaType.TEXT_PLAIN)
-    public String httpServers() {   
-        List<HttpServletServer> servers = 
-                        HttpServletServer.factory.inventory();
+    public String httpServers() {
+        List<HttpServletServer> servers = HttpServletServerFactoryInstance.getServerFactory().inventory();
         return servers.toString();
     }
-    
-    
+
+
 }
