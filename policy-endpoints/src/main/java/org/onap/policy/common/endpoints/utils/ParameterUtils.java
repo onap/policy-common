@@ -32,7 +32,7 @@ import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
  *
  * @author Ajith Sreekumar (ajith.sreekumar@est.tech)
  */
-public abstract class ParameterUtils {
+public class ParameterUtils {
 
     /**
      * Private constructor used to prevent sub class instantiation.

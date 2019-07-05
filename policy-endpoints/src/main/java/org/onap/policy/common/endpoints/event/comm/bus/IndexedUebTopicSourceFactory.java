@@ -100,8 +100,8 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
                 .topic(topic)
                 .apiKey(apiKey)
                 .apiSecret(apiSecret)
-                .fetchTimeout(UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH)
-                .fetchLimit(UebTopicSource.DEFAULT_LIMIT_FETCH)
+                .fetchTimeout(PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH)
+                .fetchLimit(PolicyEndPointProperties.DEFAULT_LIMIT_FETCH)
                 .managed(true)
                 .useHttps(false)
                 .allowSelfSignedCerts(true).build());
@@ -136,9 +136,9 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
                                 PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_INSTANCE_SUFFIX, null))
                 .fetchTimeout(props.getInteger(
                                 PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX,
-                                UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH))
+                                PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH))
                 .fetchLimit(props.getInteger(PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_LIMIT_SUFFIX,
-                                UebTopicSource.DEFAULT_LIMIT_FETCH))
+                                PolicyEndPointProperties.DEFAULT_LIMIT_FETCH))
                 .build());
 
         newUebTopicSources.add(uebTopicSource);

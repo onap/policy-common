@@ -30,15 +30,6 @@ import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
  */
 public interface DmaapTopicSinkFactory {
 
-    String DME2_READ_TIMEOUT_PROPERTY = "AFT_DME2_EP_READ_TIMEOUT_MS";
-    String DME2_EP_CONN_TIMEOUT_PROPERTY = "AFT_DME2_EP_CONN_TIMEOUT";
-    String DME2_ROUNDTRIP_TIMEOUT_PROPERTY = "AFT_DME2_ROUNDTRIP_TIMEOUT_MS";
-    String DME2_VERSION_PROPERTY = "Version";
-    String DME2_ROUTE_OFFER_PROPERTY = "routeOffer";
-    String DME2_SERVICE_NAME_PROPERTY = "ServiceName";
-    String DME2_SUBCONTEXT_PATH_PROPERTY = "SubContextPath";
-    String DME2_SESSION_STICKINESS_REQUIRED_PROPERTY = "sessionstickinessrequired";
-
     /**
      * <pre>
      * Instantiate a new DMAAP Topic Sink, with following params.

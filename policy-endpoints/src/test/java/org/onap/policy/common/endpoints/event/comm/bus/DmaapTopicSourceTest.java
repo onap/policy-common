@@ -28,7 +28,7 @@ public class DmaapTopicSourceTest {
 
     @Test
     public void test() {
-        assertNotNull(DmaapTopicSource.factory);
+        assertNotNull(DmaapTopicFactories.getSourceFactory());
     }
 
 }

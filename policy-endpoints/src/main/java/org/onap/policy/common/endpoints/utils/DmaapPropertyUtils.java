@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
-import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSourceFactory;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams.TopicParamsBuilder;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
@@ -43,25 +42,25 @@ public class DmaapPropertyUtils {
         Map<String,String> map = new HashMap<>();
 
         map.put(PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ROUTE_OFFER_SUFFIX,
-                        DmaapTopicSourceFactory.DME2_ROUTE_OFFER_PROPERTY);
+                        PolicyEndPointProperties.DME2_ROUTE_OFFER_PROPERTY);
 
         map.put(PolicyEndPointProperties.PROPERTY_DMAAP_DME2_EP_READ_TIMEOUT_MS_SUFFIX,
-                        DmaapTopicSourceFactory.DME2_READ_TIMEOUT_PROPERTY);
+                        PolicyEndPointProperties.DME2_READ_TIMEOUT_PROPERTY);
 
         map.put(PolicyEndPointProperties.PROPERTY_DMAAP_DME2_EP_CONN_TIMEOUT_SUFFIX,
-                        DmaapTopicSourceFactory.DME2_EP_CONN_TIMEOUT_PROPERTY);
+                        PolicyEndPointProperties.DME2_EP_CONN_TIMEOUT_PROPERTY);
 
         map.put(PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ROUNDTRIP_TIMEOUT_MS_SUFFIX,
-                        DmaapTopicSourceFactory.DME2_ROUNDTRIP_TIMEOUT_PROPERTY);
+                        PolicyEndPointProperties.DME2_ROUNDTRIP_TIMEOUT_PROPERTY);
 
         map.put(PolicyEndPointProperties.PROPERTY_DMAAP_DME2_VERSION_SUFFIX,
-                        DmaapTopicSourceFactory.DME2_VERSION_PROPERTY);
+                        PolicyEndPointProperties.DME2_VERSION_PROPERTY);
 
         map.put(PolicyEndPointProperties.PROPERTY_DMAAP_DME2_SUB_CONTEXT_PATH_SUFFIX,
-                        DmaapTopicSourceFactory.DME2_SUBCONTEXT_PATH_PROPERTY);
+                        PolicyEndPointProperties.DME2_SUBCONTEXT_PATH_PROPERTY);
 
         map.put(PolicyEndPointProperties.PROPERTY_DMAAP_DME2_SESSION_STICKINESS_REQUIRED_SUFFIX,
-                        DmaapTopicSourceFactory.DME2_SESSION_STICKINESS_REQUIRED_PROPERTY);
+                        PolicyEndPointProperties.DME2_SESSION_STICKINESS_REQUIRED_PROPERTY);
 
         PROP_TO_DME = Collections.unmodifiableMap(map);
     }

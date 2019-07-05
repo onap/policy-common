@@ -28,7 +28,7 @@ public class DmaapTopicSinkTest {
 
     @Test
     public void test() {
-        assertNotNull(DmaapTopicSink.factory);
+        assertNotNull(DmaapTopicFactories.getSinkFactory());
     }
 
 }

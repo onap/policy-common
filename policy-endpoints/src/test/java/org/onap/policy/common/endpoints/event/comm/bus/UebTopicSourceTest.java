@@ -28,7 +28,7 @@ public class UebTopicSourceTest {
 
     @Test
     public void test() {
-        assertNotNull(UebTopicSource.factory);
+        assertNotNull(UebTopicFactories.getSourceFactory());
     }
 
 }

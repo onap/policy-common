@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP Policy Engine - Common Modules
+ * ONAP
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,21 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.endpoints.event.comm.bus;
+package org.onap.policy.common.endpoints.http.server;
 
-import static org.junit.Assert.assertNotNull;
+import lombok.Getter;
 
-import org.junit.Test;
+public class HttpServletServerFactoryInstance {
 
-public class UebTopicSinkTest {
+    /**
+     * The servlet factory.
+     */
+    @Getter
+    private static HttpServletServerFactory serverFactory = new IndexedHttpServletServerFactory();
 
-    @Test
-    public void test() {
-        assertNotNull(UebTopicFactories.getSinkFactory());
+
+    private HttpServletServerFactoryInstance() {
+        // do nothing
     }
 
 }

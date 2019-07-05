@@ -40,7 +40,7 @@ import org.onap.policy.common.utils.coder.StandardCoder;
  */
 public class CommonTestData {
 
-    public static final String REST_SERVER_PASSWORD = "zb!XztG34";
+    public static final String REST_SERVER_PASS = "zb!XztG34";
     public static final String REST_SERVER_USER = "healthcheck";
     public static final int REST_SERVER_PORT = 6969;
     public static final String REST_SERVER_HOST = "0.0.0.0";
@@ -50,9 +50,11 @@ public class CommonTestData {
     public static final String TOPIC_NAME = "POLICY-PDP-PAP";
     public static final String TOPIC_INFRA = "dmaap";
     public static final String TOPIC_SERVER = "message-router";
-    public static final List<TopicParameters> TOPIC_PARAMS =
+
+    protected static final List<TopicParameters> TOPIC_PARAMS =
         Arrays.asList(getTopicParameters(TOPIC_NAME, TOPIC_INFRA, TOPIC_SERVER));
-    public static final Coder coder = new StandardCoder();
+
+    protected static final Coder coder = new StandardCoder();
 
     /**
      * Create topic parameters for test cases.
@@ -102,7 +104,7 @@ public class CommonTestData {
             map.put("host", REST_SERVER_HOST);
             map.put("port", REST_SERVER_PORT);
             map.put("userName", REST_SERVER_USER);
-            map.put("password", REST_SERVER_PASSWORD);
+            map.put("password", REST_SERVER_PASS);
         }
 
         return map;
@@ -133,7 +135,6 @@ public class CommonTestData {
      */
     public String getParameterGroupAsString(String filePath) throws IOException {
         File file = new File(filePath);
-        String json = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
-        return json;
+        return new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
     }
 }

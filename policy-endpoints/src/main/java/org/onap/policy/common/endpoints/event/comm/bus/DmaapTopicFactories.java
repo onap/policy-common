@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP Policy Engine - Common Modules
+ * ONAP
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,24 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
-import static org.junit.Assert.assertNotNull;
+import lombok.Getter;
 
-import org.junit.Test;
+public class DmaapTopicFactories {
 
-public class UebTopicSinkTest {
+    /**
+     * Factory for instantiation and management of sinks.
+     */
+    @Getter
+    private static final DmaapTopicSinkFactory sinkFactory = new IndexedDmaapTopicSinkFactory();
 
-    @Test
-    public void test() {
-        assertNotNull(UebTopicFactories.getSinkFactory());
+    /**
+     * Factory for instantiation and management of sources.
+     */
+    @Getter
+    private static final DmaapTopicSourceFactory sourceFactory = new IndexedDmaapTopicSourceFactory();
+
+
+    private DmaapTopicFactories() {
+        // do nothing
     }
-
 }

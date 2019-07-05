@@ -25,10 +25,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import org.onap.policy.common.capabilities.Startable;
+import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSource;
+import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSource;
+import org.onap.policy.common.endpoints.event.comm.bus.UebTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSource;
 import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
@@ -71,9 +74,9 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         List<TopicSource> sources = new ArrayList<>();
 
-        sources.addAll(UebTopicSource.factory.build(properties));
-        sources.addAll(DmaapTopicSource.factory.build(properties));
-        sources.addAll(NoopTopicSource.factory.build(properties));
+        sources.addAll(UebTopicFactories.getSourceFactory().build(properties));
+        sources.addAll(DmaapTopicFactories.getSourceFactory().build(properties));
+        sources.addAll(NoopTopicFactories.getSourceFactory().build(properties));
 
         if (this.isLocked()) {
             for (final TopicSource source : sources) {
@@ -92,9 +95,9 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         final List<TopicSink> sinks = new ArrayList<>();
 
-        sinks.addAll(UebTopicSink.factory.build(properties));
-        sinks.addAll(DmaapTopicSink.factory.build(properties));
-        sinks.addAll(NoopTopicSink.factory.build(properties));
+        sinks.addAll(UebTopicFactories.getSinkFactory().build(properties));
+        sinks.addAll(DmaapTopicFactories.getSinkFactory().build(properties));
+        sinks.addAll(NoopTopicFactories.getSinkFactory().build(properties));
 
         if (this.isLocked()) {
             for (final TopicSink sink : sinks) {
@@ -110,9 +113,9 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         final List<TopicSource> sources = new ArrayList<>();
 
-        sources.addAll(UebTopicSource.factory.inventory());
-        sources.addAll(DmaapTopicSource.factory.inventory());
-        sources.addAll(NoopTopicSource.factory.inventory());
+        sources.addAll(UebTopicFactories.getSourceFactory().inventory());
+        sources.addAll(DmaapTopicFactories.getSourceFactory().inventory());
+        sources.addAll(NoopTopicFactories.getSourceFactory().inventory());
 
         return sources;
     }
@@ -161,9 +164,9 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         final List<TopicSink> sinks = new ArrayList<>();
 
-        sinks.addAll(UebTopicSink.factory.inventory());
-        sinks.addAll(DmaapTopicSink.factory.inventory());
-        sinks.addAll(NoopTopicSink.factory.inventory());
+        sinks.addAll(UebTopicFactories.getSinkFactory().inventory());
+        sinks.addAll(DmaapTopicFactories.getSinkFactory().inventory());
+        sinks.addAll(NoopTopicFactories.getSinkFactory().inventory());
 
         return sinks;
     }
@@ -240,42 +243,42 @@ class TopicEndpointProxy implements TopicEndpoint {
     @GsonJsonIgnore
     @Override
     public List<UebTopicSource> getUebTopicSources() {
-        return UebTopicSource.factory.inventory();
+        return UebTopicFactories.getSourceFactory().inventory();
     }
 
     @JsonIgnore
     @GsonJsonIgnore
     @Override
     public List<DmaapTopicSource> getDmaapTopicSources() {
-        return DmaapTopicSource.factory.inventory();
+        return DmaapTopicFactories.getSourceFactory().inventory();
     }
 
     @JsonIgnore
     @GsonJsonIgnore
     @Override
     public List<NoopTopicSource> getNoopTopicSources() {
-        return NoopTopicSource.factory.inventory();
+        return NoopTopicFactories.getSourceFactory().inventory();
     }
 
     @JsonIgnore
     @GsonJsonIgnore
     @Override
     public List<UebTopicSink> getUebTopicSinks() {
-        return UebTopicSink.factory.inventory();
+        return UebTopicFactories.getSinkFactory().inventory();
     }
 
     @JsonIgnore
     @GsonJsonIgnore
     @Override
     public List<DmaapTopicSink> getDmaapTopicSinks() {
-        return DmaapTopicSink.factory.inventory();
+        return DmaapTopicFactories.getSinkFactory().inventory();
     }
 
     @JsonIgnore
     @GsonJsonIgnore
     @Override
     public List<NoopTopicSink> getNoopTopicSinks() {
-        return NoopTopicSink.factory.inventory();
+        return NoopTopicFactories.getSinkFactory().inventory();
     }
 
     @Override
@@ -354,14 +357,14 @@ class TopicEndpointProxy implements TopicEndpoint {
     public void shutdown() {
         this.stop();
 
-        UebTopicSource.factory.destroy();
-        UebTopicSink.factory.destroy();
+        UebTopicFactories.getSourceFactory().destroy();
+        UebTopicFactories.getSinkFactory().destroy();
 
-        DmaapTopicSource.factory.destroy();
-        DmaapTopicSink.factory.destroy();
+        DmaapTopicFactories.getSourceFactory().destroy();
+        DmaapTopicFactories.getSinkFactory().destroy();
 
-        NoopTopicSink.factory.destroy();
-        NoopTopicSource.factory.destroy();
+        NoopTopicFactories.getSinkFactory().destroy();
+        NoopTopicFactories.getSourceFactory().destroy();
 
     }
 
@@ -465,32 +468,32 @@ class TopicEndpointProxy implements TopicEndpoint {
 
     @Override
     public UebTopicSource getUebTopicSource(String topicName) {
-        return UebTopicSource.factory.get(topicName);
+        return UebTopicFactories.getSourceFactory().get(topicName);
     }
 
     @Override
     public UebTopicSink getUebTopicSink(String topicName) {
-        return UebTopicSink.factory.get(topicName);
+        return UebTopicFactories.getSinkFactory().get(topicName);
     }
 
     @Override
     public DmaapTopicSource getDmaapTopicSource(String topicName) {
-        return DmaapTopicSource.factory.get(topicName);
+        return DmaapTopicFactories.getSourceFactory().get(topicName);
     }
 
     @Override
     public NoopTopicSource getNoopTopicSource(String topicName) {
-        return NoopTopicSource.factory.get(topicName);
+        return NoopTopicFactories.getSourceFactory().get(topicName);
     }
 
     @Override
     public DmaapTopicSink getDmaapTopicSink(String topicName) {
-        return DmaapTopicSink.factory.get(topicName);
+        return DmaapTopicFactories.getSinkFactory().get(topicName);
     }
 
     @Override
     public NoopTopicSink getNoopTopicSink(String topicName) {
-        return NoopTopicSink.factory.get(topicName);
+        return NoopTopicFactories.getSinkFactory().get(topicName);
     }
 
     private IllegalArgumentException parmException(String topicName) {

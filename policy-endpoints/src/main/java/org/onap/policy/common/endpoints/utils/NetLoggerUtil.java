@@ -22,6 +22,7 @@ package org.onap.policy.common.endpoints.utils;
 
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.features.NetLoggerFeatureApi;
+import org.onap.policy.common.endpoints.features.NetLoggerFeatureProviders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,7 +111,7 @@ public class NetLoggerUtil {
      */
     private static boolean featureBeforeLog(Logger eventLogger, EventType type, CommInfrastructure protocol,
                     String topic, String message) {
-        for (NetLoggerFeatureApi feature : NetLoggerFeatureApi.providers.getList()) {
+        for (NetLoggerFeatureApi feature : NetLoggerFeatureProviders.getProviders().getList()) {
             try {
                 if (feature.beforeLog(eventLogger, type, protocol, topic, message)) {
                     return true;
@@ -137,7 +138,7 @@ public class NetLoggerUtil {
      */
     private static boolean featureAfterLog(Logger eventLogger, EventType type, CommInfrastructure protocol,
                     String topic, String message) {
-        for (NetLoggerFeatureApi feature : NetLoggerFeatureApi.providers.getList()) {
+        for (NetLoggerFeatureApi feature : NetLoggerFeatureProviders.getProviders().getList()) {
             try {
                 if (feature.afterLog(eventLogger, type, protocol, topic, message)) {
                     return true;

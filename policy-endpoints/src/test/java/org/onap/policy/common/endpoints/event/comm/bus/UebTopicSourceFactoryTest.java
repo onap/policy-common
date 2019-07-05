@@ -35,6 +35,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
+import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 
 public class UebTopicSourceFactoryTest extends UebTopicFactoryTestBase<UebTopicSource> {
 
@@ -81,11 +82,11 @@ public class UebTopicSourceFactoryTest extends UebTopicFactoryTestBase<UebTopicS
 
         // check default values for source-specific parameters
         checkDefault(PROPERTY_TOPIC_SOURCE_FETCH_LIMIT_SUFFIX,
-            params2 -> params2.getFetchLimit() == UebTopicSource.DEFAULT_LIMIT_FETCH,
+            params2 -> params2.getFetchLimit() == PolicyEndPointProperties.DEFAULT_LIMIT_FETCH,
             null, "", "invalid-limit-number");
 
         checkDefault(PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX,
-            params2 -> params2.getFetchTimeout() == UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH,
+            params2 -> params2.getFetchTimeout() == PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH,
             null, "", "invalid-timeout-number");
     }
 
@@ -98,8 +99,8 @@ public class UebTopicSourceFactoryTest extends UebTopicFactoryTestBase<UebTopicS
         BusTopicParams params = factory.params.getFirst();
         assertEquals(MY_API_KEY, params.getApiKey());
         assertEquals(MY_API_SECRET, params.getApiSecret());
-        assertEquals(UebTopicSource.DEFAULT_LIMIT_FETCH, params.getFetchLimit());
-        assertEquals(UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH, params.getFetchTimeout());
+        assertEquals(PolicyEndPointProperties.DEFAULT_LIMIT_FETCH, params.getFetchLimit());
+        assertEquals(PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH, params.getFetchTimeout());
     }
 
     @Test
@@ -111,8 +112,8 @@ public class UebTopicSourceFactoryTest extends UebTopicFactoryTestBase<UebTopicS
         BusTopicParams params = factory.params.getFirst();
         assertEquals(null, params.getApiKey());
         assertEquals(null, params.getApiSecret());
-        assertEquals(UebTopicSource.DEFAULT_LIMIT_FETCH, params.getFetchLimit());
-        assertEquals(UebTopicSource.DEFAULT_TIMEOUT_MS_FETCH, params.getFetchTimeout());
+        assertEquals(PolicyEndPointProperties.DEFAULT_LIMIT_FETCH, params.getFetchLimit());
+        assertEquals(PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH, params.getFetchTimeout());
 
         assertEquals(true, params.isAllowSelfSignedCerts());
     }

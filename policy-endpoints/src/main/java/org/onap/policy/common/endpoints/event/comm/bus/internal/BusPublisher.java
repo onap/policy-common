@@ -26,7 +26,6 @@ import com.att.nsa.cambria.client.CambriaBatchingPublisher;
 import com.att.nsa.cambria.client.CambriaClientBuilders;
 import com.att.nsa.cambria.client.CambriaClientBuilders.PublisherBuilder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -34,12 +33,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
 import org.apache.commons.lang3.StringUtils;
 import org.onap.dmaap.mr.client.impl.MRSimplerBatchPublisher;
 import org.onap.dmaap.mr.client.response.MRPublisherResponse;
 import org.onap.dmaap.mr.test.clients.ProtocolTypeConstants;
-import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSinkFactory;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.slf4j.Logger;
@@ -299,7 +296,8 @@ public interface BusPublisher {
                     busTopicParams.getUserName(),busTopicParams.getPassword(),busTopicParams.isUseHttps());
 
             String dme2RouteOffer = busTopicParams.isAdditionalPropsValid()
-                            ? busTopicParams.getAdditionalProps().get(DmaapTopicSinkFactory.DME2_ROUTE_OFFER_PROPERTY)
+                            ? busTopicParams.getAdditionalProps().get(
+                                            PolicyEndPointProperties.DME2_ROUTE_OFFER_PROPERTY)
                             : null;
 
             validateParams(busTopicParams, dme2RouteOffer);
@@ -310,13 +308,13 @@ public interface BusPublisher {
             props.setProperty("Environment", busTopicParams.getEnvironment());
             props.setProperty("AFT_ENVIRONMENT", busTopicParams.getAftEnvironment());
 
-            props.setProperty(DmaapTopicSinkFactory.DME2_SERVICE_NAME_PROPERTY, serviceName);
+            props.setProperty(PolicyEndPointProperties.DME2_SERVICE_NAME_PROPERTY, serviceName);
 
             if (busTopicParams.getPartner() != null) {
                 props.setProperty("Partner", busTopicParams.getPartner());
             }
             if (dme2RouteOffer != null) {
-                props.setProperty(DmaapTopicSinkFactory.DME2_ROUTE_OFFER_PROPERTY, dme2RouteOffer);
+                props.setProperty(PolicyEndPointProperties.DME2_ROUTE_OFFER_PROPERTY, dme2RouteOffer);
             }
 
             props.setProperty("Latitude", busTopicParams.getLatitude());

@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP Policy Engine - Common Modules
+ * ONAP
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,16 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.endpoints.event.comm.bus;
-
-import static org.junit.Assert.assertNotNull;
+package org.onap.policy.common.endpoints.http.server.test;
 
 import org.junit.Test;
+import org.onap.policy.common.endpoints.http.client.HttpClientConfigException;
+import org.onap.policy.common.utils.test.ExceptionsTester;
 
-public class UebTopicSinkTest {
+public class HttpExceptionsTest extends ExceptionsTester {
 
     @Test
-    public void test() {
-        assertNotNull(UebTopicFactories.getSinkFactory());
+    public void testHttpClientConfigException() {
+        test(HttpClientConfigException.class);
     }
-
 }
