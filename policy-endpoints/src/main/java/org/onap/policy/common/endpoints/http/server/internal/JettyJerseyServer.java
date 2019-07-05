@@ -119,7 +119,7 @@ public class JettyJerseyServer extends JettyServletServer {
         ServletHolder swaggerServlet = context.addServlet(JerseyJaxrsConfig.class, "/");
 
         String hostname = this.connector.getHost();
-        if (hostname == null || hostname.isEmpty() || hostname.equals(NetworkUtil.IPv4_WILDCARD_ADDRESS)) {
+        if (hostname == null || hostname.isEmpty() || hostname.equals(NetworkUtil.IPV4_WILDCARD_ADDRESS)) {
             hostname = NetworkUtil.getHostname();
         }
 

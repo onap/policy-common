@@ -42,7 +42,7 @@ public class NetworkUtil {
     /**
      * IPv4 Wildcard IP address.
      */
-    public static final String IPv4_WILDCARD_ADDRESS = "0.0.0.0";
+    public static final String IPV4_WILDCARD_ADDRESS = "0.0.0.0";
 
 
     /**
