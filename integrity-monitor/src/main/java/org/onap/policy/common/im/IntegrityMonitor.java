@@ -928,36 +928,7 @@ public class IntegrityMonitor {
 
         // check state of resources in dependency groups
         for (String group : depGroups) {
-            group = group.trim();
-            if (group.isEmpty()) {
-                // ignore empty group
-                continue;
-            }
-            String[] dependencies = group.split(",");
-            if (logger.isDebugEnabled()) {
-                logger.debug("group dependencies = {}", Arrays.toString(dependencies));
-            }
-            int realDepCount = 0;
-            int failDepCount = 0;
-            for (String dep : dependencies) {
-                dep = dep.trim();
-                if (dep.isEmpty()) {
-                    // ignore empty dependency
-                    continue;
-                }
-                realDepCount++; // this is a valid dependency whose state is tracked
-                // if a resource is down, its FP count will not be incremented
-                String failMsg = doDependencyChecks(dep);
-                if (failMsg != null) {
-                    failDepCount++;
-                    appendSeparator(errorMsg);
-                    errorMsg.append(failMsg);
-                }
-            } // end for (String dep : dependencies)
-
-            // if all dependencies in a group are failed, set this
-            // resource's state to disable dependency
-            if ((realDepCount > 0) && (failDepCount == realDepCount)) {
+            if (checkDependencyGroupHasError(group, errorMsg)) {
                 dependencyOk = false;
                 if (!disableDependency(errorMsg, group)) {
                     break; // break out on failure and skip checking other groups
@@ -968,6 +939,46 @@ public class IntegrityMonitor {
         } // end for (String group : depGroups)
 
         return dependencyOk;
+    }
+
+    /**
+     * Checks if a dependency group has an error.
+     *
+     * @param group group to be checked
+     * @param errorMsg error messages are appended here
+     * @return {@code true} if the group has an error, {@code false} otherwise
+     */
+    private boolean checkDependencyGroupHasError(String group, StringBuilder errorMsg) {
+        group = group.trim();
+        if (group.isEmpty()) {
+            // ignore empty group
+            return false;
+        }
+        String[] dependencies = group.split(",");
+        if (logger.isDebugEnabled()) {
+            logger.debug("group dependencies = {}", Arrays.toString(dependencies));
+        }
+        int realDepCount = 0;
+        int failDepCount = 0;
+        for (String dep : dependencies) {
+            dep = dep.trim();
+            if (dep.isEmpty()) {
+                // ignore empty dependency
+                continue;
+            }
+            realDepCount++; // this is a valid dependency whose state is tracked
+            // if a resource is down, its FP count will not be incremented
+            String failMsg = doDependencyChecks(dep);
+            if (failMsg != null) {
+                failDepCount++;
+                appendSeparator(errorMsg);
+                errorMsg.append(failMsg);
+            }
+        } // end for (String dep : dependencies)
+
+        // if all dependencies in a group are failed, set this
+        // resource's state to disable dependency
+        return (realDepCount > 0) && (failDepCount == realDepCount);
     }
 
     /**

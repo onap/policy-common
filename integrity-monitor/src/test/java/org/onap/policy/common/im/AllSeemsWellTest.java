@@ -42,9 +42,9 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
 
     private static Logger logger = LoggerFactory.getLogger(AllSeemsWellTest.class);
 
-    private static Properties myProp;
     private static String resourceName;
 
+    private Properties myProp;
     private Semaphore monitorSem;
     private Semaphore junitSem;
 

@@ -53,18 +53,19 @@ public class StateManagement extends Observable {
     public static final String UNLOCKED = "unlocked";
     public static final String ENABLED = "enabled";
     public static final String DISABLED = "disabled";
-    public static final String ENABLE_NOT_FAILED = "enableNotFailed";
-    public static final String DISABLE_FAILED = "disableFailed";
+    public static final String ENABLE_NOT_FAILED_ACTION = "enableNotFailed";
+    public static final String DISABLE_FAILED_ACTION = "disableFailed";
     public static final String FAILED = "failed";
     public static final String DEPENDENCY = "dependency";
     public static final String DEPENDENCY_FAILED = "dependency,failed";
-    public static final String DISABLE_DEPENDENCY = "disableDependency";
-    public static final String ENABLE_NO_DEPENDENCY = "enableNoDependency";
+    public static final String DISABLE_DEPENDENCY_ACTION = "disableDependency";
+    public static final String ENABLE_NO_DEPENDENCY_ACTION = "enableNoDependency";
     public static final String NULL_VALUE = "null";
-    public static final String LOCK = "lock";
-    public static final String UNLOCK = "unlock";
-    public static final String PROMOTE = "promote";
-    public static final String DEMOTE = "demote";
+
+    public static final String LOCK_ACTION = "lock";
+    public static final String UNLOCK_ACTION = "unlock";
+    public static final String PROMOTE_ACTION = "promote";
+    public static final String DEMOTE_ACTION = "demote";
     public static final String HOT_STANDBY = "hotstandby";
     public static final String COLD_STANDBY = "coldstandby";
     public static final String PROVIDING_SERVICE = "providingservice";
@@ -196,7 +197,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void lock() throws StateManagementException {
-        setStateUsingTable(LOCK, this.resourceName, ADMIN_STATE);
+        setStateUsingTable(LOCK_ACTION, this.resourceName, ADMIN_STATE);
     }
 
     /**
@@ -205,7 +206,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void unlock() throws StateManagementException {
-        setStateUsingTable(UNLOCK, this.resourceName, ADMIN_STATE);
+        setStateUsingTable(UNLOCK_ACTION, this.resourceName, ADMIN_STATE);
     }
 
     /**
@@ -215,7 +216,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void enableNotFailed() throws StateManagementException {
-        setStateUsingTable(ENABLE_NOT_FAILED, this.resourceName, OPERATION_STATE);
+        setStateUsingTable(ENABLE_NOT_FAILED_ACTION, this.resourceName, OPERATION_STATE);
     }
 
     /**
@@ -225,7 +226,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void disableFailed() throws StateManagementException {
-        setStateUsingTable(DISABLE_FAILED, this.resourceName, OPERATION_STATE);
+        setStateUsingTable(DISABLE_FAILED_ACTION, this.resourceName, OPERATION_STATE);
     }
 
     /**
@@ -241,7 +242,7 @@ public class StateManagement extends Observable {
             return;
         }
 
-        setStateUsingTable(DISABLE_FAILED, otherResourceName, OPERATION_STATE);
+        setStateUsingTable(DISABLE_FAILED_ACTION, otherResourceName, OPERATION_STATE);
     }
 
     /**
@@ -251,7 +252,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void disableDependency() throws StateManagementException {
-        setStateUsingTable(DISABLE_DEPENDENCY, this.resourceName, OPERATION_STATE);
+        setStateUsingTable(DISABLE_DEPENDENCY_ACTION, this.resourceName, OPERATION_STATE);
     }
 
     /**
@@ -261,7 +262,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void enableNoDependency() throws StateManagementException {
-        setStateUsingTable(ENABLE_NO_DEPENDENCY, this.resourceName, OPERATION_STATE);
+        setStateUsingTable(ENABLE_NO_DEPENDENCY_ACTION, this.resourceName, OPERATION_STATE);
     }
 
     /**
@@ -272,9 +273,9 @@ public class StateManagement extends Observable {
     public void promote() throws IntegrityMonitorException {
         AtomicReference<String> newStatus = new AtomicReference<>();
 
-        setState(PROMOTE, resourceName, sm -> {
+        setState(PROMOTE_ACTION, resourceName, sm -> {
             final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
-                            sm.getAvailStatus(), sm.getStandbyStatus(), PROMOTE);
+                            sm.getAvailStatus(), sm.getStandbyStatus(), PROMOTE_ACTION);
 
             sm.setAdminState(stateElement.getEndingAdminState());
             sm.setOpState(stateElement.getEndingOpState());
@@ -299,7 +300,7 @@ public class StateManagement extends Observable {
      * @throws StateManagementException if an error occurs
      */
     public void demote() throws StateManagementException {
-        setStateUsingTable(DEMOTE, this.resourceName, STANDBY_STATUS);
+        setStateUsingTable(DEMOTE_ACTION, this.resourceName, STANDBY_STATUS);
     }
 
     /**
@@ -318,7 +319,7 @@ public class StateManagement extends Observable {
             return;
         }
 
-        setStateUsingTable(DEMOTE, otherResourceName, null);
+        setStateUsingTable(DEMOTE_ACTION, otherResourceName, null);
     }
 
     /**
