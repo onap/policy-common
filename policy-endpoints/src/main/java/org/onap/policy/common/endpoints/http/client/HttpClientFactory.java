@@ -8,9 +8,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,8 +21,6 @@
 
 package org.onap.policy.common.endpoints.http.client;
 
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.Properties;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
@@ -35,17 +33,16 @@ public interface HttpClientFactory {
     /**
      * Build and http client with the following parameters.
      */
-    HttpClient build(BusTopicParams busTopicParams)
-            throws KeyManagementException, NoSuchAlgorithmException, ClassNotFoundException;
+    HttpClient build(BusTopicParams busTopicParams) throws HttpClientConfigException;
 
     /**
      * Build http client from properties.
      */
-    List<HttpClient> build(Properties properties) throws KeyManagementException, NoSuchAlgorithmException;
+    List<HttpClient> build(Properties properties) throws HttpClientConfigException;
 
     /**
      * Get http client.
-     * 
+     *
      * @param name the name
      * @return the http client
      */
@@ -53,14 +50,14 @@ public interface HttpClientFactory {
 
     /**
      * List of http clients.
-     * 
+     *
      * @return http clients
      */
     List<HttpClient> inventory();
 
     /**
      * Destroy by name.
-     * 
+     *
      * @param name name
      */
     void destroy(String name);

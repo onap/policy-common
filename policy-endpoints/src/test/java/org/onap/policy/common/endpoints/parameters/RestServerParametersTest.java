@@ -1,6 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
+ *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +43,7 @@ public class RestServerParametersTest {
     private static final Coder coder = new StandardCoder();
 
     @Test
-    public void test() throws Exception {
+    public void test() {
         final RestServerParameters restServerParameters =
                 testData.toObject(testData.getRestServerParametersMap(false), RestServerParameters.class);
         final GroupValidationResult validationResult = restServerParameters.validate();
@@ -49,13 +51,13 @@ public class RestServerParametersTest {
         assertEquals(CommonTestData.REST_SERVER_HOST, restServerParameters.getHost());
         assertEquals(CommonTestData.REST_SERVER_PORT, restServerParameters.getPort());
         assertEquals(CommonTestData.REST_SERVER_USER, restServerParameters.getUserName());
-        assertEquals(CommonTestData.REST_SERVER_PASSWORD, restServerParameters.getPassword());
+        assertEquals(CommonTestData.REST_SERVER_PASS, restServerParameters.getPassword());
         assertEquals(CommonTestData.REST_SERVER_HTTPS, restServerParameters.isHttps());
         assertEquals(CommonTestData.REST_SERVER_AAF, restServerParameters.isAaf());
     }
 
     @Test
-    public void testValidate() throws Exception {
+    public void testValidate() {
         final RestServerParameters restServerParameters =
             testData.toObject(testData.getRestServerParametersMap(false), RestServerParameters.class);
         final GroupValidationResult result = restServerParameters.validate();

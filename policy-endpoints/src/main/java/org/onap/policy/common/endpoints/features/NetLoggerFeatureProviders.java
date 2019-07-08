@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP Policy Engine - Common Modules
+ * ONAP
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,24 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.endpoints.event.comm.bus;
+package org.onap.policy.common.endpoints.features;
 
-import static org.junit.Assert.assertNotNull;
+import lombok.Getter;
+import org.onap.policy.common.utils.services.OrderedServiceImpl;
 
-import org.junit.Test;
+/**
+ * Providers for network logging feature.
+ */
+public class NetLoggerFeatureProviders {
 
-public class DmaapTopicSourceTest {
+    /**
+     * Feature providers implementing this interface.
+     */
+    @Getter
+    private static OrderedServiceImpl<NetLoggerFeatureApi> providers =
+                    new OrderedServiceImpl<>(NetLoggerFeatureApi.class);
 
-    @Test
-    public void test() {
-        assertNotNull(DmaapTopicFactories.getSourceFactory());
+    private NetLoggerFeatureProviders() {
+        // do nothing
     }
-
 }

@@ -34,6 +34,7 @@ import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperti
 import java.util.Map;
 import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
+import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 
 /**
  * Base class for DmaapTopicXxxFactory tests.
@@ -51,9 +52,9 @@ public abstract class DmaapTopicFactoryTestBase<T extends Topic> extends BusTopi
 
     @Override
     public void testBuildProperties() {
-        
+
         super.testBuildProperties();
-        
+
         // check properties specific to DMaaP/DME2
         initFactory();
 
@@ -66,13 +67,13 @@ public abstract class DmaapTopicFactoryTestBase<T extends Topic> extends BusTopi
         assertEquals(MY_PARTNER, params.getPartner());
 
         Map<String, String> add = params.getAdditionalProps();
-        assertEquals(MY_CONN_TIMEOUT, add.get(DmaapTopicSinkFactory.DME2_EP_CONN_TIMEOUT_PROPERTY));
-        assertEquals(MY_READ_TIMEOUT, add.get(DmaapTopicSinkFactory.DME2_READ_TIMEOUT_PROPERTY));
-        assertEquals(MY_ROUNDTRIP_TIMEOUT, add.get(DmaapTopicSinkFactory.DME2_ROUNDTRIP_TIMEOUT_PROPERTY));
-        assertEquals(MY_ROUTE, add.get(DmaapTopicSinkFactory.DME2_ROUTE_OFFER_PROPERTY));
-        assertEquals(MY_STICKINESS, add.get(DmaapTopicSinkFactory.DME2_SESSION_STICKINESS_REQUIRED_PROPERTY));
-        assertEquals(MY_SUBCONTEXT, add.get(DmaapTopicSinkFactory.DME2_SUBCONTEXT_PATH_PROPERTY));
-        assertEquals(MY_DME_VERSION, add.get(DmaapTopicSinkFactory.DME2_VERSION_PROPERTY));
+        assertEquals(MY_CONN_TIMEOUT, add.get(PolicyEndPointProperties.DME2_EP_CONN_TIMEOUT_PROPERTY));
+        assertEquals(MY_READ_TIMEOUT, add.get(PolicyEndPointProperties.DME2_READ_TIMEOUT_PROPERTY));
+        assertEquals(MY_ROUNDTRIP_TIMEOUT, add.get(PolicyEndPointProperties.DME2_ROUNDTRIP_TIMEOUT_PROPERTY));
+        assertEquals(MY_ROUTE, add.get(PolicyEndPointProperties.DME2_ROUTE_OFFER_PROPERTY));
+        assertEquals(MY_STICKINESS, add.get(PolicyEndPointProperties.DME2_SESSION_STICKINESS_REQUIRED_PROPERTY));
+        assertEquals(MY_SUBCONTEXT, add.get(PolicyEndPointProperties.DME2_SUBCONTEXT_PATH_PROPERTY));
+        assertEquals(MY_DME_VERSION, add.get(PolicyEndPointProperties.DME2_VERSION_PROPERTY));
     }
 
     @Override
@@ -81,23 +82,23 @@ public abstract class DmaapTopicFactoryTestBase<T extends Topic> extends BusTopi
 
         // check "additional" properties
         expectNullAddProp(PROPERTY_DMAAP_DME2_EP_CONN_TIMEOUT_SUFFIX,
-                        DmaapTopicSinkFactory.DME2_EP_CONN_TIMEOUT_PROPERTY);
+                        PolicyEndPointProperties.DME2_EP_CONN_TIMEOUT_PROPERTY);
 
         expectNullAddProp(PROPERTY_DMAAP_DME2_EP_READ_TIMEOUT_MS_SUFFIX,
-                        DmaapTopicSinkFactory.DME2_READ_TIMEOUT_PROPERTY);
+                        PolicyEndPointProperties.DME2_READ_TIMEOUT_PROPERTY);
 
         expectNullAddProp(PROPERTY_DMAAP_DME2_ROUNDTRIP_TIMEOUT_MS_SUFFIX,
-                        DmaapTopicSinkFactory.DME2_ROUNDTRIP_TIMEOUT_PROPERTY);
+                        PolicyEndPointProperties.DME2_ROUNDTRIP_TIMEOUT_PROPERTY);
 
-        expectNullAddProp(PROPERTY_DMAAP_DME2_ROUTE_OFFER_SUFFIX, DmaapTopicSinkFactory.DME2_ROUTE_OFFER_PROPERTY);
+        expectNullAddProp(PROPERTY_DMAAP_DME2_ROUTE_OFFER_SUFFIX, PolicyEndPointProperties.DME2_ROUTE_OFFER_PROPERTY);
 
         expectNullAddProp(PROPERTY_DMAAP_DME2_SESSION_STICKINESS_REQUIRED_SUFFIX,
-                        DmaapTopicSinkFactory.DME2_SESSION_STICKINESS_REQUIRED_PROPERTY);
+                        PolicyEndPointProperties.DME2_SESSION_STICKINESS_REQUIRED_PROPERTY);
 
         expectNullAddProp(PROPERTY_DMAAP_DME2_SUB_CONTEXT_PATH_SUFFIX,
-                        DmaapTopicSinkFactory.DME2_SUBCONTEXT_PATH_PROPERTY);
+                        PolicyEndPointProperties.DME2_SUBCONTEXT_PATH_PROPERTY);
 
-        expectNullAddProp(PROPERTY_DMAAP_DME2_VERSION_SUFFIX, DmaapTopicSinkFactory.DME2_VERSION_PROPERTY);
+        expectNullAddProp(PROPERTY_DMAAP_DME2_VERSION_SUFFIX, PolicyEndPointProperties.DME2_VERSION_PROPERTY);
     }
 
     @Override

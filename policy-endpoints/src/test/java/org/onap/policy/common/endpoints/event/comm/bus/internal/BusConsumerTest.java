@@ -91,10 +91,6 @@ public class BusConsumerTest extends TopicTestBase {
 
         } catch (IOException e) {
             assertEquals(ex, e);
-
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            assertEquals(ex, e);
         }
     }
 

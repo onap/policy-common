@@ -30,11 +30,6 @@ import org.onap.policy.common.endpoints.utils.NetLoggerUtil.EventType;
 public class NoopTopicSink extends NoopTopicEndpoint implements TopicSink {
 
     /**
-     * Factory.
-     */
-    public static final NoopTopicSinkFactory factory = new NoopTopicSinkFactory();
-
-    /**
      * Constructs the object.
      */
     public NoopTopicSink(List<String> servers, String topic) {
