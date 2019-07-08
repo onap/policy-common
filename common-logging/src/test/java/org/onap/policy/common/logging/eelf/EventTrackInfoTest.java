@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,16 +55,16 @@ public class EventTrackInfoTest {
     }
 
     /**
-     * Test method for {@link EventTrackInfo#getEventDataByRequestID(String)}.
+     * Test method for {@link EventTrackInfo#getEventDataByRequestId(String)}.
      */
     @Test
-    public void testGetEventDataByRequestID() {
+    public void testGetEventDataByRequestId() {
         info.storeEventData(data1);
         info.storeEventData(data2);
 
-        assertTrue(data1 == info.getEventDataByRequestID("abc"));
-        assertTrue(data2 == info.getEventDataByRequestID("def"));
-        assertNull(info.getEventDataByRequestID("hello"));
+        assertTrue(data1 == info.getEventDataByRequestId("abc"));
+        assertTrue(data2 == info.getEventDataByRequestId("def"));
+        assertNull(info.getEventDataByRequestId("hello"));
     }
 
     /**
@@ -86,14 +86,14 @@ public class EventTrackInfoTest {
         assertEquals(2, info.getEventInfo().size());
 
         // look-up by request id
-        assertTrue(data1 == info.getEventDataByRequestID("abc"));
-        assertTrue(data2 == info.getEventDataByRequestID("def"));
+        assertTrue(data1 == info.getEventDataByRequestId("abc"));
+        assertTrue(data2 == info.getEventDataByRequestId("def"));
 
         // doesn't replace existing value
         info.storeEventData(new EventData("abc", iend, istart));
         assertEquals(2, info.getEventInfo().size());
-        assertTrue(data1 == info.getEventDataByRequestID("abc"));
-        assertTrue(data2 == info.getEventDataByRequestID("def"));
+        assertTrue(data1 == info.getEventDataByRequestId("abc"));
+        assertTrue(data2 == info.getEventDataByRequestId("def"));
     }
 
     /**
@@ -110,8 +110,8 @@ public class EventTrackInfoTest {
         assertEquals(1, info.getEventInfo().size());
 
         // look-up by request id
-        assertNull(info.getEventDataByRequestID("abc"));
-        assertTrue(data2 == info.getEventDataByRequestID("def"));
+        assertNull(info.getEventDataByRequestId("abc"));
+        assertTrue(data2 == info.getEventDataByRequestId("def"));
     }
 
     /**

@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,31 +40,31 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Constructor.
-     * 
+     *
      * @param clazz the class
      */
     public EelfLogger(Class<?> clazz) {
         if (clazz != null) {
             className = clazz.getName();
         }
-        PolicyLogger.postMDCInfoForEvent(null);
+        PolicyLogger.postMdcInfoForEvent(null);
     }
 
     /**
      * Constructor.
-     * 
+     *
      * @param className the class name
      */
     public EelfLogger(String className) {
         if (className != null) {
             this.className = className;
         }
-        PolicyLogger.postMDCInfoForEvent(null);
+        PolicyLogger.postMdcInfoForEvent(null);
     }
 
     /**
      * Constructor.
-     * 
+     *
      * @param clazz the class
      * @param isNewTransaction is a new transaction
      */
@@ -73,7 +73,7 @@ public class EelfLogger implements Logger, Serializable {
             className = clazz.getName();
         }
         if (isNewTransaction) {
-            transId = PolicyLogger.postMDCInfoForEvent(null);
+            transId = PolicyLogger.postMdcInfoForEvent(null);
         } else {
             transId = PolicyLogger.getTransId();
         }
@@ -81,7 +81,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Constructor.
-     * 
+     *
      * @param className the class name
      * @param isNewTransaction is a new transaction
      */
@@ -90,7 +90,7 @@ public class EelfLogger implements Logger, Serializable {
             this.className = className;
         }
         if (isNewTransaction) {
-            transId = PolicyLogger.postMDCInfoForEvent(null);
+            transId = PolicyLogger.postMdcInfoForEvent(null);
         } else {
             transId = PolicyLogger.getTransId();
         }
@@ -98,7 +98,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Constructor.
-     * 
+     *
      * @param clazz the class
      * @param transId the transaction ID
      */
@@ -106,13 +106,13 @@ public class EelfLogger implements Logger, Serializable {
         if (clazz != null) {
             className = clazz.getName();
         }
-        PolicyLogger.postMDCInfoForEvent(transId);
+        PolicyLogger.postMdcInfoForEvent(transId);
         this.transId = transId;
     }
 
     /**
      * Constructor.
-     * 
+     *
      * @param className the class name
      * @param transId the transaction ID
      */
@@ -120,13 +120,13 @@ public class EelfLogger implements Logger, Serializable {
         if (className != null) {
             this.className = className;
         }
-        PolicyLogger.postMDCInfoForEvent(transId);
+        PolicyLogger.postMdcInfoForEvent(transId);
         this.transId = transId;
     }
 
     /**
      * Sets transaction Id for logging.
-     * 
+     *
      * @param transId the transaction ID
      */
     @Override
@@ -146,7 +146,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -156,7 +156,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
@@ -167,7 +167,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records an error message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -177,7 +177,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records an error message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
@@ -188,7 +188,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records an error message.
-     * 
+     *
      * @param msg the message code
      * @param throwable the throwable
      * @param arguments the messages
@@ -200,7 +200,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records an error message.
-     * 
+     *
      * @param msg the message code
      * @param arguments the messages
      */
@@ -211,7 +211,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -221,7 +221,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
@@ -232,7 +232,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -242,7 +242,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
@@ -253,7 +253,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a message.
-     * 
+     *
      * @param msg the message codes
      * @param arguments the messages
      */
@@ -264,7 +264,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a message.
-     * 
+     *
      * @param msg the message
      * @param throwable the throwable
      * @param arguments the messages
@@ -276,7 +276,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -286,7 +286,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
@@ -297,7 +297,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Returns true for debug enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -307,7 +307,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Returns true for info enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -317,7 +317,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Returns true for warn enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -327,7 +327,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Returns true for error enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -337,7 +337,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Returns true for audit enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -347,7 +347,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Returns true for metrics enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -357,7 +357,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Returns true for trace enabled, or false for not.
-     * 
+     *
      * @return boolean
      */
     @Override
@@ -367,7 +367,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param arg0 the message
      */
     @Override
@@ -377,7 +377,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param message the message
      * @param throwable the throwable
      */
@@ -388,7 +388,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      */
     @Override
@@ -398,7 +398,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      */
     @Override
@@ -408,7 +408,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      * @param policyVersion the policy cersion
@@ -420,7 +420,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      * @param policyVersion the policy version
@@ -432,7 +432,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      */
@@ -443,7 +443,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records an audit message.
-     * 
+     *
      * @param eventId the event ID
      * @param rule the rule
      */
@@ -454,7 +454,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a metrics message.
-     * 
+     *
      * @param eventId the event ID
      * @param message the message
      */
@@ -465,7 +465,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a metrics message.
-     * 
+     *
      * @param eventId the event ID
      * @param message the message
      */
@@ -476,7 +476,7 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Records a metrics message.
-     * 
+     *
      * @param message the message
      */
     @Override
@@ -486,32 +486,32 @@ public class EelfLogger implements Logger, Serializable {
 
     /**
      * Populates MDC Info.
-     * 
+     *
      * @param transId the transaction ID
      */
     @Override
-    public String postMDCInfoForEvent(String transId) {
-        return PolicyLogger.postMDCInfoForEvent(transId);
+    public String postMdcInfoForEvent(String transId) {
+        return PolicyLogger.postMdcInfoForEvent(transId);
     }
 
     /**
      * Populates MDC Info.
-     * 
+     *
      * @param obj the object
      */
     @Override
-    public void postMDCInfoForEvent(Object obj) {
-        PolicyLogger.postMDCInfoForEvent(obj);
+    public void postMdcInfoForEvent(Object obj) {
+        PolicyLogger.postMdcInfoForEvent(obj);
     }
 
     /**
      * Populates MDC Info for the rule triggered.
-     * 
+     *
      * @param transId the transaction ID
      */
     @Override
-    public void postMDCInfoForTriggeredRule(String transId) {
-        PolicyLogger.postMDCInfoForTriggeredRule(transId);
+    public void postMdcInfoForTriggeredRule(String transId) {
+        PolicyLogger.postMdcInfoForTriggeredRule(transId);
     }
 
 }
