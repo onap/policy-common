@@ -20,13 +20,16 @@
 
 package org.onap.policy.common.im;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,18 +37,32 @@ import org.slf4j.LoggerFactory;
  * The StateTransition class coordinates all state transitions.
  */
 public class StateTransition {
+    private static final String DEPENDENCY_FAILED = "dependency.failed";
+
+    private static final String ANY_DISABLED_ANY_COLDSTANDBY = "${1},disabled,${3},coldstandby,";
+    private static final String UNLOCKED_DISABLED_NULL_COLDSTANDBY = "unlocked,disabled,null,coldstandby,";
+    private static final String ANY_DISABLED_ANY_COLDSTANDBY_STANDBY_STATUS_EXCEPTION =
+                    "${1},disabled,${3},coldstandby,StandbyStatusException";
+    private static final String LOCKED_ENABLED_NULL_COLDSTANDBY_STANDBY_STATUS_EXCEPTION =
+                    "locked,enabled,null,coldstandby,StandbyStatusException";
     private static final String UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE = "unlocked,enabled,null,providingservice,";
+    private static final String UNLOCKED_DISABLED_DEPENDENCY_HOTSTANDBY = "unlocked,disabled,dependency,hotstandby,";
+    private static final String ANY_DISABLED_DEPENDENCY_NULL = "${1},disabled,dependency,null,";
+    private static final String ANY_DISABLED_DEPENDENCY_COLDSTANDBY = "${1},disabled,dependency,coldstandby,";
+    private static final String ANY_DISABLED_DEPENDENCY_FAILED_NULL = "${1},disabled,dependency.failed,null,";
+    private static final String ANY_DISABLED_DEPENDENCY_FAILED_COLDSTANDBY =
+                    "${1},disabled,dependency.failed,coldstandby,";
+    private static final String ANY_DISABLED_FAILED_NULL = "${1},disabled,failed,null,";
+    private static final String ANY_DISABLED_FAILED_COLDSTANDBY = "${1},disabled,failed,coldstandby,";
+    private static final String UNLOCKED_DISABLED_ANY_NULL = "unlocked,disabled,${3},null,";
+    private static final String UNLOCKED_DISABLED_ANY_COLDSTANDBY = "unlocked,disabled,${3},coldstandby,";
     private static final String UNLOCKED_ENABLED_NULL_NULL = "unlocked,enabled,null,null,";
+    private static final String LOCKED_DISABLED_ANY_NULL = "locked,disabled,${3},null,";
+    private static final String LOCKED_DISABLED_ANY_COLDSTANDBY = "locked,disabled,${3},coldstandby,";
     private static final String UNLOCKED_ENABLED_NULL_HOTSTANDBY = "unlocked,enabled,null,hotstandby,";
-    private static final String UNLOCKED_DISABLED_FAILED_NULL = "unlocked,disabled,failed,null,";
-    private static final String UNLOCKED_DISABLED_DEPENDENCY_NULL = "unlocked,disabled,dependency,null,";
+    private static final String UNLOCKED_ENABLED_NULL_ANY = "unlocked,enabled,null,${4},";
     private static final String LOCKED_ENABLED_NULL_NULL = "locked,enabled,null,null,";
     private static final String LOCKED_ENABLED_NULL_COLDSTANDBY = "locked,enabled,null,coldstandby,";
-    private static final String LOCKED_DISABLED_DEPENDENCY_FAILED_COLDSTANDBY_STANDBY_STATUS_EXCEPTION =
-                    "locked,disabled,dependency.failed,coldstandby,StandbyStatusException";
-    private static final String LOCKED_DISABLED_DEPENDENCY_COLDSTANDBY_STANDBY_STATUS_EXCEPTION =
-                    "locked,disabled,dependency,coldstandby,StandbyStatusException";
-
     private static final Logger logger = LoggerFactory.getLogger(StateTransition.class);
 
     public static final String ADMIN_STATE = "adminState";
@@ -96,11 +113,19 @@ public class StateTransition {
                     StateManagement.PROMOTE_ACTION,
                     StateManagement.UNLOCK_ACTION)));
 
+    /**
+     * This is only used while populating {@link #STATE_TABLE}.
+     */
+    private static final List<Pair<String, String[]>> TRANSITION_ITEMS = new ArrayList<>(10);
 
     /**
      * State-transition table.
      */
-    private static final Map<String, String> STATE_TABLE = Collections.unmodifiableMap(makeStateTable());
+    private static final Map<String, String> STATE_TABLE = new HashMap<>();
+
+    static {
+        populateStateTable();
+    }
 
 
     /**
@@ -215,726 +240,148 @@ public class StateTransition {
      * the standby status is coldstandby and a transition occurs on the administrative or
      * operational state such that they are unlocked and enabled, the standby status is
      * automatically transitioned to hotstandby since it is only those two states that can hold the
-     * statndby status in the coldstandby value.
-     *
-     * @return a new state-transaction table
+     * standby status in the coldstandby value.
      */
 
-    private static Map<String, String> makeStateTable() {
-        Map<String,String> stateTable = new HashMap<>();
+    private static void populateStateTable() {
+        /*
+         * These are the items we'll be using while populating the state transition table.
+         */
+        TRANSITION_ITEMS.clear();
+        TRANSITION_ITEMS.add(Pair.of("${1}", new String[] {"unlocked", "locked"}));
+        TRANSITION_ITEMS.add(Pair.of("${2}", new String[] {"enabled", "disabled"}));
+        TRANSITION_ITEMS.add(Pair.of("${3}", new String[] {"null", "failed", "dependency", DEPENDENCY_FAILED}));
+        TRANSITION_ITEMS.add(Pair.of("${3:fail}", new String[] {"failed", DEPENDENCY_FAILED}));
+        TRANSITION_ITEMS.add(Pair.of("${3:dep}", new String[] {"dependency", DEPENDENCY_FAILED}));
+        TRANSITION_ITEMS.add(Pair.of("${4}", new String[] {"null", "coldstandby", "hotstandby", "providingservice"}));
 
-        stateTable.put("unlocked,enabled,null,null,lock", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,null,null,unlock", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,null,null,disableFailed", UNLOCKED_DISABLED_FAILED_NULL);
-        stateTable.put("unlocked,enabled,null,null,enableNotFailed", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,null,null,disableDependency", UNLOCKED_DISABLED_DEPENDENCY_NULL);
-        stateTable.put("unlocked,enabled,null,null,enableNoDependency", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,null,null,promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,null,null,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,null,coldstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("unlocked,enabled,null,coldstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,null,coldstandby,disableFailed", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,enabled,null,coldstandby,enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,null,coldstandby,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,enabled,null,coldstandby,enableNoDependency", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,null,coldstandby,promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,null,coldstandby,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,null,hotstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("unlocked,enabled,null,hotstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,null,hotstandby,disableFailed", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,enabled,null,hotstandby,enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,null,hotstandby,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,enabled,null,hotstandby,enableNoDependency", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,null,hotstandby,promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,null,hotstandby,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,null,providingservice,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("unlocked,enabled,null,providingservice,unlock", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,null,providingservice,disableFailed", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,enabled,null,providingservice,enableNotFailed",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,null,providingservice,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,enabled,null,providingservice,enableNoDependency",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,null,providingservice,promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,null,providingservice,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,failed,null,lock", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,failed,null,unlock", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,failed,null,disableFailed", UNLOCKED_DISABLED_FAILED_NULL);
-        stateTable.put("unlocked,enabled,failed,null,enableNotFailed", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,failed,null,disableDependency", UNLOCKED_DISABLED_DEPENDENCY_NULL);
-        stateTable.put("unlocked,enabled,failed,null,enableNoDependency", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,failed,null,promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,failed,null,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,failed,coldstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("unlocked,enabled,failed,coldstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,failed,coldstandby,disableFailed", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,enabled,failed,coldstandby,enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,failed,coldstandby,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,enabled,failed,coldstandby,enableNoDependency", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,failed,coldstandby,promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,failed,coldstandby,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,failed,hotstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("unlocked,enabled,failed,hotstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,failed,hotstandby,disableFailed", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,enabled,failed,hotstandby,enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,failed,hotstandby,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,enabled,failed,hotstandby,enableNoDependency", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,failed,hotstandby,promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,failed,hotstandby,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,failed,providingservice,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("unlocked,enabled,failed,providingservice,unlock", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,failed,providingservice,disableFailed",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,enabled,failed,providingservice,enableNotFailed",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,failed,providingservice,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,enabled,failed,providingservice,enableNoDependency",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,failed,providingservice,promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,failed,providingservice,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,null,lock", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,dependency,null,unlock", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,dependency,null,disableFailed", UNLOCKED_DISABLED_FAILED_NULL);
-        stateTable.put("unlocked,enabled,dependency,null,enableNotFailed", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,dependency,null,disableDependency", UNLOCKED_DISABLED_DEPENDENCY_NULL);
-        stateTable.put("unlocked,enabled,dependency,null,enableNoDependency", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,dependency,null,promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency,null,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,coldstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,coldstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,coldstandby,disableFailed",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,enabled,dependency,coldstandby,enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,coldstandby,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,enabled,dependency,coldstandby,enableNoDependency",
-                UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,coldstandby,promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency,coldstandby,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,hotstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,hotstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,hotstandby,disableFailed", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,enabled,dependency,hotstandby,enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,hotstandby,disableDependency",
-                "unlocked,disabled,dependency,hotstandby,");
-        stateTable.put("unlocked,enabled,dependency,hotstandby,enableNoDependency",
-                UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,hotstandby,promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency,hotstandby,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,providingservice,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("unlocked,enabled,dependency,providingservice,unlock",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency,providingservice,disableFailed",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,enabled,dependency,providingservice,enableNotFailed",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency,providingservice,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,enabled,dependency,providingservice,enableNoDependency",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency,providingservice,promote",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency,providingservice,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,null,lock", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,dependency.failed,null,unlock", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,dependency.failed,null,disableFailed", UNLOCKED_DISABLED_FAILED_NULL);
-        stateTable.put("unlocked,enabled,dependency.failed,null,enableNotFailed", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,dependency.failed,null,disableDependency",
-                UNLOCKED_DISABLED_DEPENDENCY_NULL);
-        stateTable.put("unlocked,enabled,dependency.failed,null,enableNoDependency", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,enabled,dependency.failed,null,promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency.failed,null,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,coldstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,coldstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,coldstandby,disableFailed",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,enabled,dependency.failed,coldstandby,enableNotFailed",
-                UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,coldstandby,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,enabled,dependency.failed,coldstandby,enableNoDependency",
-                UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,coldstandby,promote",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency.failed,coldstandby,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,hotstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,hotstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,hotstandby,disableFailed",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,enabled,dependency.failed,hotstandby,enableNotFailed",
-                UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,hotstandby,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,enabled,dependency.failed,hotstandby,enableNoDependency",
-                UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,hotstandby,promote",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency.failed,hotstandby,demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,providingservice,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("unlocked,enabled,dependency.failed,providingservice,unlock",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency.failed,providingservice,disableFailed",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,enabled,dependency.failed,providingservice,enableNotFailed",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency.failed,providingservice,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,enabled,dependency.failed,providingservice,enableNoDependency",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency.failed,providingservice,promote",
-                UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
-        stateTable.put("unlocked,enabled,dependency.failed,providingservice,demote",
-                UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,null,null,lock", "locked,disabled,null,null,");
-        stateTable.put("unlocked,disabled,null,null,unlock", "unlocked,disabled,null,null,");
-        stateTable.put("unlocked,disabled,null,null,disableFailed", UNLOCKED_DISABLED_FAILED_NULL);
-        stateTable.put("unlocked,disabled,null,null,enableNotFailed", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,disabled,null,null,disableDependency", UNLOCKED_DISABLED_DEPENDENCY_NULL);
-        stateTable.put("unlocked,disabled,null,null,enableNoDependency", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,disabled,null,null,promote",
-                "unlocked,disabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,null,null,demote", "unlocked,disabled,null,coldstandby,");
-        stateTable.put("unlocked,disabled,null,coldstandby,lock", "locked,disabled,null,coldstandby,");
-        stateTable.put("unlocked,disabled,null,coldstandby,unlock", "unlocked,disabled,null,coldstandby,");
-        stateTable.put("unlocked,disabled,null,coldstandby,disableFailed", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,null,coldstandby,enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,null,coldstandby,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,null,coldstandby,enableNoDependency", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,null,coldstandby,promote",
-                "unlocked,disabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,null,coldstandby,demote", "unlocked,disabled,null,coldstandby,");
-        stateTable.put("unlocked,disabled,null,hotstandby,lock", "locked,disabled,null,coldstandby,");
-        stateTable.put("unlocked,disabled,null,hotstandby,unlock", "unlocked,disabled,null,coldstandby,");
-        stateTable.put("unlocked,disabled,null,hotstandby,disableFailed", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,null,hotstandby,enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,null,hotstandby,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,null,hotstandby,enableNoDependency", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,null,hotstandby,promote",
-                "unlocked,disabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,null,hotstandby,demote", "unlocked,disabled,null,coldstandby,");
-        stateTable.put("unlocked,disabled,null,providingservice,lock", "locked,disabled,null,coldstandby,");
-        stateTable.put("unlocked,disabled,null,providingservice,unlock", "unlocked,disabled,null,coldstandby,");
-        stateTable.put("unlocked,disabled,null,providingservice,disableFailed",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,null,providingservice,enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,null,providingservice,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,null,providingservice,enableNoDependency",
-                UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,null,providingservice,promote",
-                "unlocked,disabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,null,providingservice,demote", "unlocked,disabled,null,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,null,lock", "locked,disabled,failed,null,");
-        stateTable.put("unlocked,disabled,failed,null,unlock", UNLOCKED_DISABLED_FAILED_NULL);
-        stateTable.put("unlocked,disabled,failed,null,disableFailed", UNLOCKED_DISABLED_FAILED_NULL);
-        stateTable.put("unlocked,disabled,failed,null,enableNotFailed", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,disabled,failed,null,disableDependency", "unlocked,disabled,dependency.failed,null,");
-        stateTable.put("unlocked,disabled,failed,null,enableNoDependency", UNLOCKED_DISABLED_FAILED_NULL);
-        stateTable.put("unlocked,disabled,failed,null,promote",
-                "unlocked,disabled,failed,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,failed,null,demote", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,coldstandby,lock", "locked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,coldstandby,unlock", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,coldstandby,disableFailed", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,coldstandby,enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,failed,coldstandby,disableDependency",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,coldstandby,enableNoDependency",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,coldstandby,promote",
-                "unlocked,disabled,failed,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,failed,coldstandby,demote", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,hotstandby,lock", "locked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,hotstandby,unlock", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,hotstandby,disableFailed", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,hotstandby,enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,failed,hotstandby,disableDependency",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,hotstandby,enableNoDependency",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,hotstandby,promote",
-                "unlocked,disabled,failed,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,failed,hotstandby,demote", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,providingservice,lock", "locked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,providingservice,unlock", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,providingservice,disableFailed",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,providingservice,enableNotFailed",
-                UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,failed,providingservice,disableDependency",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,providingservice,enableNoDependency",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,failed,providingservice,promote",
-                "unlocked,disabled,failed,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,failed,providingservice,demote", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,null,lock", "locked,disabled,dependency,null,");
-        stateTable.put("unlocked,disabled,dependency,null,unlock", UNLOCKED_DISABLED_DEPENDENCY_NULL);
-        stateTable.put("unlocked,disabled,dependency,null,disableFailed", "unlocked,disabled,dependency.failed,null,");
-        stateTable.put("unlocked,disabled,dependency,null,enableNotFailed", UNLOCKED_DISABLED_DEPENDENCY_NULL);
-        stateTable.put("unlocked,disabled,dependency,null,disableDependency", UNLOCKED_DISABLED_DEPENDENCY_NULL);
-        stateTable.put("unlocked,disabled,dependency,null,enableNoDependency", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("unlocked,disabled,dependency,null,promote",
-                "unlocked,disabled,dependency,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,dependency,null,demote", "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,coldstandby,lock", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,coldstandby,unlock", "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,coldstandby,disableFailed",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,coldstandby,enableNotFailed",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,coldstandby,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,coldstandby,enableNoDependency",
-                UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,dependency,coldstandby,promote",
-                "unlocked,disabled,dependency,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,dependency,coldstandby,demote", "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,hotstandby,lock", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,hotstandby,unlock", "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,hotstandby,disableFailed",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,hotstandby,enableNotFailed",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,hotstandby,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,hotstandby,enableNoDependency",
-                UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,dependency,hotstandby,promote",
-                "unlocked,disabled,dependency,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,dependency,hotstandby,demote", "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,providingservice,lock", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,providingservice,unlock",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,providingservice,disableFailed",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,providingservice,enableNotFailed",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,providingservice,disableDependency",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency,providingservice,enableNoDependency",
-                UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("unlocked,disabled,dependency,providingservice,promote",
-                "unlocked,disabled,dependency,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,dependency,providingservice,demote",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,null,lock", "locked,disabled,dependency.failed,null,");
-        stateTable.put("unlocked,disabled,dependency.failed,null,unlock", "unlocked,disabled,dependency.failed,null,");
-        stateTable.put("unlocked,disabled,dependency.failed,null,disableFailed",
-                "unlocked,disabled,dependency.failed,null,");
-        stateTable.put("unlocked,disabled,dependency.failed,null,enableNotFailed",
-                UNLOCKED_DISABLED_DEPENDENCY_NULL);
-        stateTable.put("unlocked,disabled,dependency.failed,null,disableDependency",
-                "unlocked,disabled,dependency.failed,null,");
-        stateTable.put("unlocked,disabled,dependency.failed,null,enableNoDependency", UNLOCKED_DISABLED_FAILED_NULL);
-        stateTable.put("unlocked,disabled,dependency.failed,null,promote",
-                "unlocked,disabled,dependency.failed,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,dependency.failed,null,demote",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,coldstandby,lock",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,coldstandby,unlock",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,coldstandby,disableFailed",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,coldstandby,enableNotFailed",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,coldstandby,disableDependency",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,coldstandby,enableNoDependency",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,coldstandby,promote",
-                "unlocked,disabled,dependency.failed,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,dependency.failed,coldstandby,demote",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,hotstandby,lock",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,hotstandby,unlock",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,hotstandby,disableFailed",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,hotstandby,enableNotFailed",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,hotstandby,disableDependency",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,hotstandby,enableNoDependency",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,hotstandby,promote",
-                "unlocked,disabled,dependency.failed,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,dependency.failed,hotstandby,demote",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,providingservice,lock",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,providingservice,unlock",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,providingservice,disableFailed",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,providingservice,enableNotFailed",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,providingservice,disableDependency",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,providingservice,enableNoDependency",
-                "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("unlocked,disabled,dependency.failed,providingservice,promote",
-                "unlocked,disabled,dependency.failed,coldstandby,StandbyStatusException");
-        stateTable.put("unlocked,disabled,dependency.failed,providingservice,demote",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,enabled,null,null,lock", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,null,null,unlock", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,null,null,disableFailed", "locked,disabled,failed,null,");
-        stateTable.put("locked,enabled,null,null,enableNotFailed", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,null,null,disableDependency", "locked,disabled,dependency,null,");
-        stateTable.put("locked,enabled,null,null,enableNoDependency", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,null,null,promote", "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,null,null,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,null,coldstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,null,coldstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("locked,enabled,null,coldstandby,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,enabled,null,coldstandby,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,null,coldstandby,disableDependency", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,enabled,null,coldstandby,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,null,coldstandby,promote",
-                "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,null,coldstandby,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,null,hotstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,null,hotstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("locked,enabled,null,hotstandby,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,enabled,null,hotstandby,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,null,hotstandby,disableDependency", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,enabled,null,hotstandby,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,null,hotstandby,promote",
-                "locked,enabled,null,coldstandby,StandbyStateException");
-        stateTable.put("locked,enabled,null,hotstandby,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,null,providingservice,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,null,providingservice,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("locked,enabled,null,providingservice,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,enabled,null,providingservice,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,null,providingservice,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,enabled,null,providingservice,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,null,providingservice,promote",
-                "locked,enabled,null,coldstandby,StandbyStateException");
-        stateTable.put("locked,enabled,null,providingservice,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,null,lock", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,failed,null,unlock", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,failed,null,disableFailed", "locked,disabled,failed,null,");
-        stateTable.put("locked,enabled,failed,null,enableNotFailed", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,failed,null,disableDependency", "locked,disabled,dependency,null,");
-        stateTable.put("locked,enabled,failed,null,enableNoDependency", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,failed,null,promote", "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,failed,null,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,coldstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,coldstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("locked,enabled,failed,coldstandby,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,enabled,failed,coldstandby,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,coldstandby,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,enabled,failed,coldstandby,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,coldstandby,promote",
-                "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,failed,coldstandby,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,hotstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,hotstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("locked,enabled,failed,hotstandby,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,enabled,failed,hotstandby,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,hotstandby,disableDependency", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,enabled,failed,hotstandby,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,hotstandby,promote",
-                "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,failed,hotstandby,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,providingservice,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,providingservice,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("locked,enabled,failed,providingservice,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,enabled,failed,providingservice,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,providingservice,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,enabled,failed,providingservice,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,failed,providingservice,promote",
-                "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,failed,providingservice,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,null,lock", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,dependency,null,unlock", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,dependency,null,disableFailed", "locked,disabled,failed,null,");
-        stateTable.put("locked,enabled,dependency,null,enableNotFailed", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,dependency,null,disableDependency", "locked,disabled,dependency,null,");
-        stateTable.put("locked,enabled,dependency,null,enableNoDependency", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,dependency,null,promote",
-                "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,dependency,null,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,coldstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,coldstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("locked,enabled,dependency,coldstandby,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,enabled,dependency,coldstandby,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,coldstandby,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,enabled,dependency,coldstandby,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,coldstandby,promote",
-                "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,dependency,coldstandby,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,hotstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,hotstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("locked,enabled,dependency,hotstandby,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,enabled,dependency,hotstandby,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,hotstandby,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,enabled,dependency,hotstandby,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,hotstandby,promote",
-                "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,dependency,hotstandby,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,providingservice,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,providingservice,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("locked,enabled,dependency,providingservice,disableFailed",
-                "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,enabled,dependency,providingservice,enableNotFailed",
-                LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,providingservice,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,enabled,dependency,providingservice,enableNoDependency",
-                LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency,providingservice,promote",
-                "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,dependency,providingservice,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,null,lock", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,dependency.failed,null,unlock", UNLOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,dependency.failed,null,disableFailed", "locked,disabled,failed,null,");
-        stateTable.put("locked,enabled,dependency.failed,null,enableNotFailed", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,dependency.failed,null,disableDependency", "locked,disabled,dependency,null,");
-        stateTable.put("locked,enabled,dependency.failed,null,enableNoDependency", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,enabled,dependency.failed,null,promote",
-                "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,dependency.failed,null,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,coldstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,coldstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,coldstandby,disableFailed",
-                "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,enabled,dependency.failed,coldstandby,enableNotFailed",
-                LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,coldstandby,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,enabled,dependency.failed,coldstandby,enableNoDependency",
-                LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,coldstandby,promote",
-                "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,dependency.failed,coldstandby,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,hotstandby,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,hotstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,hotstandby,disableFailed",
-                "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,enabled,dependency.failed,hotstandby,enableNotFailed",
-                LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,hotstandby,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,enabled,dependency.failed,hotstandby,enableNoDependency",
-                LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,hotstandby,promote",
-                "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,dependency.failed,hotstandby,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,providingservice,lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,providingservice,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,providingservice,disableFailed",
-                "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,enabled,dependency.failed,providingservice,enableNotFailed",
-                LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,providingservice,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,enabled,dependency.failed,providingservice,enableNoDependency",
-                LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,enabled,dependency.failed,providingservice,promote",
-                "locked,enabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,enabled,dependency.failed,providingservice,demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,null,null,lock", "locked,disabled,null,null,");
-        stateTable.put("locked,disabled,null,null,unlock", "unlocked,disabled,null,null,");
-        stateTable.put("locked,disabled,null,null,disableFailed", "locked,disabled,failed,null,");
-        stateTable.put("locked,disabled,null,null,enableNotFailed", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,disabled,null,null,disableDependency", "locked,disabled,dependency,null,");
-        stateTable.put("locked,disabled,null,null,enableNoDependency", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,disabled,null,null,promote", "locked,disabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,disabled,null,null,demote", "locked,disabled,null,coldstandby,");
-        stateTable.put("locked,disabled,null,coldstandby,lock", "locked,disabled,null,coldstandby,");
-        stateTable.put("locked,disabled,null,coldstandby,unlock", "unlocked,disabled,null,coldstandby,");
-        stateTable.put("locked,disabled,null,coldstandby,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,null,coldstandby,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,null,coldstandby,disableDependency", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,null,coldstandby,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,null,coldstandby,promote",
-                "locked,disabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,disabled,null,coldstandby,demote", "locked,disabled,null,coldstandby,");
-        stateTable.put("locked,disabled,null,hotstandby,lock", "locked,disabled,null,coldstandby,");
-        stateTable.put("locked,disabled,null,hotstandby,unlock", "unlocked,disabled,null,coldstandby,");
-        stateTable.put("locked,disabled,null,hotstandby,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,null,hotstandby,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,null,hotstandby,disableDependency", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,null,hotstandby,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,null,hotstandby,promote",
-                "locked,disabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,disabled,null,hotstandby,demote", "locked,disabled,null,coldstandby,");
-        stateTable.put("locked,disabled,null,providingservice,lock", "locked,disabled,null,coldstandby,");
-        stateTable.put("locked,disabled,null,providingservice,unlock", "unlocked,disabled,null,coldstandby,");
-        stateTable.put("locked,disabled,null,providingservice,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,null,providingservice,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,null,providingservice,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,null,providingservice,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,null,providingservice,promote",
-                "locked,disabled,null,coldstandby,StandbyStatusException");
-        stateTable.put("locked,disabled,null,providingservice,demote", "locked,disabled,null,coldstandby,");
-        stateTable.put("locked,disabled,failed,null,lock", "locked,disabled,failed,null,");
-        stateTable.put("locked,disabled,failed,null,unlock", UNLOCKED_DISABLED_FAILED_NULL);
-        stateTable.put("locked,disabled,failed,null,disableFailed", "locked,disabled,failed,null,");
-        stateTable.put("locked,disabled,failed,null,enableNotFailed", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,disabled,failed,null,disableDependency", "locked,disabled,dependency.failed,null,");
-        stateTable.put("locked,disabled,failed,null,enableNoDependency", "locked,disabled,failed,null,");
-        stateTable.put("locked,disabled,failed,null,promote",
-                "locked,disabled,failed,coldstandby,StandbyStatusException");
-        stateTable.put("locked,disabled,failed,null,demote", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,coldstandby,lock", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,coldstandby,unlock", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,coldstandby,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,coldstandby,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,failed,coldstandby,disableDependency",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,coldstandby,enableNoDependency", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,coldstandby,promote",
-                "locked,disabled,failed,coldstandby,StandbyStatusException");
-        stateTable.put("locked,disabled,failed,coldstandby,demote", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,hotstandby,lock", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,hotstandby,unlock", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,hotstandby,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,hotstandby,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,failed,hotstandby,disableDependency",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,hotstandby,enableNoDependency", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,hotstandby,promote",
-                "locked,disabled,failed,coldstandby,StandbyStatusException");
-        stateTable.put("locked,disabled,failed,hotstandby,demote", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,providingservice,lock", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,providingservice,unlock", "unlocked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,providingservice,disableFailed", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,providingservice,enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,failed,providingservice,disableDependency",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,providingservice,enableNoDependency",
-                "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,failed,providingservice,promote",
-                "locked,disabled,failed,coldstandby,StandbyStatusException");
-        stateTable.put("locked,disabled,failed,providingservice,demote", "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency,null,lock", "locked,disabled,dependency,null,");
-        stateTable.put("locked,disabled,dependency,null,unlock", UNLOCKED_DISABLED_DEPENDENCY_NULL);
-        stateTable.put("locked,disabled,dependency,null,disableFailed", "locked,disabled,dependency.failed,null,");
-        stateTable.put("locked,disabled,dependency,null,enableNotFailed", "locked,disabled,dependency,null,");
-        stateTable.put("locked,disabled,dependency,null,disableDependency", "locked,disabled,dependency,null,");
-        stateTable.put("locked,disabled,dependency,null,enableNoDependency", LOCKED_ENABLED_NULL_NULL);
-        stateTable.put("locked,disabled,dependency,null,promote",
-                LOCKED_DISABLED_DEPENDENCY_COLDSTANDBY_STANDBY_STATUS_EXCEPTION);
-        stateTable.put("locked,disabled,dependency,null,demote", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,coldstandby,lock", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,coldstandby,unlock", "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,coldstandby,disableFailed",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency,coldstandby,enableNotFailed",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,coldstandby,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,coldstandby,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,dependency,coldstandby,promote",
-                LOCKED_DISABLED_DEPENDENCY_COLDSTANDBY_STANDBY_STATUS_EXCEPTION);
-        stateTable.put("locked,disabled,dependency,coldstandby,demote", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,hotstandby,lock", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,hotstandby,unlock", "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,hotstandby,disableFailed",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency,hotstandby,enableNotFailed",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,hotstandby,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,hotstandby,enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,dependency,hotstandby,promote",
-                LOCKED_DISABLED_DEPENDENCY_COLDSTANDBY_STANDBY_STATUS_EXCEPTION);
-        stateTable.put("locked,disabled,dependency,hotstandby,demote", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,providingservice,lock", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,providingservice,unlock",
-                "unlocked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,providingservice,disableFailed",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency,providingservice,enableNotFailed",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,providingservice,disableDependency",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency,providingservice,enableNoDependency",
-                LOCKED_ENABLED_NULL_COLDSTANDBY);
-        stateTable.put("locked,disabled,dependency,providingservice,promote",
-                LOCKED_DISABLED_DEPENDENCY_COLDSTANDBY_STANDBY_STATUS_EXCEPTION);
-        stateTable.put("locked,disabled,dependency,providingservice,demote", "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,null,lock", "locked,disabled,dependency.failed,null,");
-        stateTable.put("locked,disabled,dependency.failed,null,unlock", "unlocked,disabled,dependency.failed,null,");
-        stateTable.put("locked,disabled,dependency.failed,null,disableFailed",
-                "locked,disabled,dependency.failed,null,");
-        stateTable.put("locked,disabled,dependency.failed,null,enableNotFailed", "locked,disabled,dependency,null,");
-        stateTable.put("locked,disabled,dependency.failed,null,disableDependency",
-                "locked,disabled,dependency.failed,null,");
-        stateTable.put("locked,disabled,dependency.failed,null,enableNoDependency", "locked,disabled,failed,null,");
-        stateTable.put("locked,disabled,dependency.failed,null,promote",
-                LOCKED_DISABLED_DEPENDENCY_FAILED_COLDSTANDBY_STANDBY_STATUS_EXCEPTION);
-        stateTable.put("locked,disabled,dependency.failed,null,demote",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,coldstandby,lock",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,coldstandby,unlock",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,coldstandby,disableFailed",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,coldstandby,enableNotFailed",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,coldstandby,disableDependency",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,coldstandby,enableNoDependency",
-                "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,coldstandby,promote",
-                LOCKED_DISABLED_DEPENDENCY_FAILED_COLDSTANDBY_STANDBY_STATUS_EXCEPTION);
-        stateTable.put("locked,disabled,dependency.failed,coldstandby,demote",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,hotstandby,lock",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,hotstandby,unlock",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,hotstandby,disableFailed",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,hotstandby,enableNotFailed",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,hotstandby,disableDependency",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,hotstandby,enableNoDependency",
-                "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,hotstandby,promote",
-                LOCKED_DISABLED_DEPENDENCY_FAILED_COLDSTANDBY_STANDBY_STATUS_EXCEPTION);
-        stateTable.put("locked,disabled,dependency.failed,hotstandby,demote",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,providingservice,lock",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,providingservice,unlock",
-                "unlocked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,providingservice,disableFailed",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,providingservice,enableNotFailed",
-                "locked,disabled,dependency,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,providingservice,disableDependency",
-                "locked,disabled,dependency.failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,providingservice,enableNoDependency",
-                "locked,disabled,failed,coldstandby,");
-        stateTable.put("locked,disabled,dependency.failed,providingservice,promote",
-                LOCKED_DISABLED_DEPENDENCY_FAILED_COLDSTANDBY_STANDBY_STATUS_EXCEPTION);
-        stateTable.put("locked,disabled,dependency.failed,providingservice,demote",
-                "locked,disabled,dependency.failed,coldstandby,");
+        STATE_TABLE.clear();
 
-        return stateTable;
+        // lock
+        populate("${1},enabled,${3},${4},lock", LOCKED_ENABLED_NULL_COLDSTANDBY);
+        populate("${1},enabled,${3},null,lock", LOCKED_ENABLED_NULL_NULL);
+
+        populate("${1},disabled,${3},${4},lock", LOCKED_DISABLED_ANY_COLDSTANDBY);
+        populate("${1},disabled,${3},null,lock", LOCKED_DISABLED_ANY_NULL);
+
+
+        // unlock
+        populate("unlocked,enabled,${3},${4},unlock", UNLOCKED_ENABLED_NULL_ANY);
+        populate("unlocked,enabled,${3},coldstandby,unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
+
+        populate("locked,enabled,${3},${4},unlock", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
+        populate("locked,enabled,${3},null,unlock", UNLOCKED_ENABLED_NULL_NULL);
+
+        populate("${1},disabled,${3},${4},unlock", UNLOCKED_DISABLED_ANY_COLDSTANDBY);
+        populate("${1},disabled,${3},null,unlock", UNLOCKED_DISABLED_ANY_NULL);
+
+
+        // disableFailed
+        populate("${1},${2},${3},${4},disableFailed", ANY_DISABLED_FAILED_COLDSTANDBY);
+        populate("${1},${2},${3},null,disableFailed", ANY_DISABLED_FAILED_NULL);
+
+        populate("${1},disabled,${3:dep},${4},disableFailed", ANY_DISABLED_DEPENDENCY_FAILED_COLDSTANDBY);
+        populate("${1},disabled,${3:dep},null,disableFailed", ANY_DISABLED_DEPENDENCY_FAILED_NULL);
+
+
+        // enableNotFailed
+        populate("unlocked,${2},${3},${4},enableNotFailed", UNLOCKED_ENABLED_NULL_ANY);
+        populate("unlocked,${2},${3},coldstandby,enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
+
+        populate("unlocked,disabled,${3},${4},enableNotFailed", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
+        populate("unlocked,disabled,${3},null,enableNotFailed", UNLOCKED_ENABLED_NULL_NULL);
+
+        populate("locked,${2},${3},${4},enableNotFailed", LOCKED_ENABLED_NULL_COLDSTANDBY);
+        populate("locked,${2},${3},null,enableNotFailed", LOCKED_ENABLED_NULL_NULL);
+
+        populate("${1},disabled,${3:dep},${4},enableNotFailed", ANY_DISABLED_DEPENDENCY_COLDSTANDBY);
+        populate("${1},disabled,${3:dep},null,enableNotFailed", ANY_DISABLED_DEPENDENCY_NULL);
+
+
+        // disableDependency
+        populate("${1},${2},${3},${4},disableDependency", ANY_DISABLED_DEPENDENCY_COLDSTANDBY);
+        populate("${1},${2},${3},null,disableDependency", ANY_DISABLED_DEPENDENCY_NULL);
+
+        populate("${1},disabled,${3:fail},${4},disableDependency", ANY_DISABLED_DEPENDENCY_FAILED_COLDSTANDBY);
+        populate("${1},disabled,${3:fail},null,disableDependency", ANY_DISABLED_DEPENDENCY_FAILED_NULL);
+
+        populate("unlocked,enabled,dependency,hotstandby,disableDependency", UNLOCKED_DISABLED_DEPENDENCY_HOTSTANDBY);
+
+
+        // enableNoDependency
+        populate("unlocked,enabled,${3},${4},enableNoDependency", UNLOCKED_ENABLED_NULL_ANY);
+        populate("unlocked,enabled,${3},coldstandby,enableNoDependency", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
+
+        populate("unlocked,disabled,${3},${4},enableNoDependency", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
+        populate("unlocked,disabled,${3},null,enableNoDependency", UNLOCKED_ENABLED_NULL_NULL);
+
+        populate("locked,${2},${3},${4},enableNoDependency", LOCKED_ENABLED_NULL_COLDSTANDBY);
+        populate("locked,${2},${3},null,enableNoDependency", LOCKED_ENABLED_NULL_NULL);
+
+        populate("${1},disabled,${3:fail},${4},enableNoDependency", ANY_DISABLED_FAILED_COLDSTANDBY);
+        populate("${1},disabled,${3:fail},null,enableNoDependency", ANY_DISABLED_FAILED_NULL);
+
+
+        // promote
+        populate("unlocked,enabled,${3},${4},promote", UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE);
+
+        populate("locked,enabled,${3},${4},promote", LOCKED_ENABLED_NULL_COLDSTANDBY_STANDBY_STATUS_EXCEPTION);
+
+        populate("${1},disabled,${3},${4},promote", ANY_DISABLED_ANY_COLDSTANDBY_STANDBY_STATUS_EXCEPTION);
+
+
+        // demote
+        populate("unlocked,enabled,${3},${4},demote", UNLOCKED_ENABLED_NULL_HOTSTANDBY);
+        populate("unlocked,disabled,null,${4},demote", UNLOCKED_DISABLED_NULL_COLDSTANDBY);
+
+        populate("locked,enabled,${3},${4},demote", LOCKED_ENABLED_NULL_COLDSTANDBY);
+
+        populate("${1},disabled,${3},${4},demote", ANY_DISABLED_ANY_COLDSTANDBY);
+    }
+
+    /**
+     * Populates {@link #STATE_TABLE} with the incoming and outgoing strings, trying all
+     * substitutions of the item place-holders that appear within the strings.
+     * @param incoming incoming string, with optional item place-holders
+     * @param outgoing outgoing string, with optional item place-holders
+     */
+    private static void populate(String incoming, String outgoing) {
+        populate(incoming, outgoing, 0);
+    }
+
+    /**
+     * Makes appropriate substitutions within the incoming and outgoing strings, looping
+     * through all possible items at the given position. Once the position has reached the
+     * end of the item table, the incoming/outgoing result is added to
+     * {@link #STATE_TABLE}.
+     *
+     * @param incoming incoming string, with optional item place-holders
+     * @param outgoing outgoing string, with optional item place-holders
+     * @param pos current position within the transition items
+     */
+    private static void populate(String incoming, String outgoing, int pos) {
+
+        if (pos >= TRANSITION_ITEMS.size()) {
+            // used up all possible replacements - add result to the table
+            STATE_TABLE.put(incoming, outgoing);
+            return;
+        }
+
+        Pair<String, String[]> pair = TRANSITION_ITEMS.get(pos);
+        String key = pair.getKey();
+
+        if (!incoming.contains(key) && !outgoing.contains(key)) {
+            // strings do not contain a place-holder for this position - try the next
+            populate(incoming, outgoing, pos + 1);
+            return;
+        }
+
+        // process all items associated with this place-holder
+        for (String item : pair.getValue()) {
+            String incoming2 = incoming.replace(key, item);
+            String outgoing2 = outgoing.replace(key, item);
+            populate(incoming2, outgoing2, pos + 1);
+        }
     }
 
     /**

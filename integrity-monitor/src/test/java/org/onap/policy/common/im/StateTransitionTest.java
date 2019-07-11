@@ -1185,7 +1185,7 @@ public class StateTransitionTest {
 
         logger.info("??? StateTransition testcase 279");
         se = st.getEndingState(LOCKED, ENABLED, "null", HOTSTANDBY, PROMOTE);
-        assertEquals("coldstandby,locked,enabled,null,StandbyStateException", makeString(se));
+        assertEquals("coldstandby,locked,enabled,null,StandbyStatusException", makeString(se));
 
         logger.info("??? StateTransition testcase 280");
         se = st.getEndingState(LOCKED, ENABLED, "null", HOTSTANDBY, DEMOTE);
@@ -1217,7 +1217,7 @@ public class StateTransitionTest {
 
         logger.info("??? StateTransition testcase 287");
         se = st.getEndingState(LOCKED, ENABLED, "null", PROVIDINGSERVICE, PROMOTE);
-        assertEquals("coldstandby,locked,enabled,null,StandbyStateException", makeString(se));
+        assertEquals("coldstandby,locked,enabled,null,StandbyStatusException", makeString(se));
 
         logger.info("??? StateTransition testcase 288");
         se = st.getEndingState(LOCKED, ENABLED, "null", PROVIDINGSERVICE, DEMOTE);
