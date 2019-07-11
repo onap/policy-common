@@ -23,6 +23,9 @@ package org.onap.policy.common.gson.internal;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -31,23 +34,33 @@ import com.google.gson.JsonPrimitive;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
+import org.junit.After;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.policy.common.gson.JacksonExclusionStrategy;
 import org.onap.policy.common.gson.annotation.GsonJsonProperty;
+import org.onap.policy.common.gson.internal.Adapter.Factory;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.Data;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.DerivedData;
+import org.powermock.reflect.Whitebox;
 
 public class AdapterTest {
+    private static final String GET_INVALID_NAME = "get$InvalidName";
+    private static final String SET_INVALID_NAME = "set$InvalidName";
     private static final String EMPTY_ALIAS = "emptyAlias";
     private static final String GET_VALUE = ".getValue";
     private static final String GET_VALUE_NAME = "getValue";
+    private static final String SET_VALUE_NAME = "setValue";
     private static final String VALUE_NAME = "value";
     private static final String MY_NAME = AdapterTest.class.getName();
+    private static final String FACTORY_FIELD = "factory";
 
     private static DataAdapterFactory dataAdapter = new DataAdapterFactory();
 
     private static Gson gson = new GsonBuilder().registerTypeAdapterFactory(dataAdapter)
                     .setExclusionStrategies(new JacksonExclusionStrategy()).create();
+
+    private static Factory saveFactory;
 
     /*
      * The remaining fields are just used within the tests.
@@ -64,26 +77,44 @@ public class AdapterTest {
 
     protected String unaliased;
 
-    protected String $invalidFieldName;
-
     private List<Data> listField;
 
     private Data dataField;
 
+    @BeforeClass
+    public static void setUpBeforeClass() {
+        saveFactory = Whitebox.getInternalState(Adapter.class, FACTORY_FIELD);
+    }
+
+    @After
+    public void tearDown() {
+        Whitebox.setInternalState(Adapter.class, FACTORY_FIELD, saveFactory);
+    }
 
     @Test
     public void testIsManagedField() {
         assertTrue(Adapter.isManaged(field(VALUE_NAME)));
 
-        assertFalse(Adapter.isManaged(field("$invalidFieldName")));
+        // return an invalid field name
+        Factory factory = mock(Factory.class);
+        when(factory.getName(any(Field.class))).thenReturn("$invalidFieldName");
+        Whitebox.setInternalState(Adapter.class, FACTORY_FIELD, factory);
+        assertFalse(Adapter.isManaged(field(VALUE_NAME)));
     }
 
     @Test
     public void testIsManagedMethod() {
         assertTrue(Adapter.isManaged(mget(GET_VALUE_NAME)));
 
-        assertFalse(Adapter.isManaged(mget("get$InvalidName")));
-        assertFalse(Adapter.isManaged(mset("set$InvalidName")));
+        // return an invalid method name
+        Factory factory = mock(Factory.class);
+        Whitebox.setInternalState(Adapter.class, FACTORY_FIELD, factory);
+
+        when(factory.getName(any(Method.class))).thenReturn(GET_INVALID_NAME);
+        assertFalse(Adapter.isManaged(mget(GET_VALUE_NAME)));
+
+        when(factory.getName(any(Method.class))).thenReturn(SET_INVALID_NAME);
+        assertFalse(Adapter.isManaged(mset(SET_VALUE_NAME)));
     }
 
     @Test
@@ -178,7 +209,7 @@ public class AdapterTest {
 
 
         // test setter
-        adapter = new Adapter(gson, mset("setValue"), String.class);
+        adapter = new Adapter(gson, mset(SET_VALUE_NAME), String.class);
 
         assertEquals(VALUE_NAME, adapter.getPropName());
         assertEquals(MY_NAME + ".setValue", adapter.getFullName());
@@ -205,7 +236,12 @@ public class AdapterTest {
         assertEquals(EMPTY_ALIAS, Adapter.detmPropName(field(EMPTY_ALIAS)));
         assertEquals("name-with-alias", Adapter.detmPropName(field("nameWithAlias")));
         assertEquals("unaliased", Adapter.detmPropName(field("unaliased")));
-        assertEquals(null, Adapter.detmPropName(field("$invalidFieldName")));
+
+        // return an invalid field name
+        Factory factory = mock(Factory.class);
+        when(factory.getName(any(Field.class))).thenReturn("$invalidFieldName");
+        Whitebox.setInternalState(Adapter.class, FACTORY_FIELD, factory);
+        assertEquals(null, Adapter.detmPropName(field(VALUE_NAME)));
     }
 
     @Test
@@ -218,7 +254,13 @@ public class AdapterTest {
         assertEquals(null, Adapter.detmGetterPropName(mget("isString")));
         assertEquals(null, Adapter.detmGetterPropName(mget("noGet")));
         assertEquals(null, Adapter.detmGetterPropName(mget("get")));
-        assertEquals(null, Adapter.detmGetterPropName(mget("get$InvalidName")));
+
+        // return an invalid method name
+        Factory factory = mock(Factory.class);
+        Whitebox.setInternalState(Adapter.class, FACTORY_FIELD, factory);
+
+        when(factory.getName(any(Method.class))).thenReturn(GET_INVALID_NAME);
+        assertEquals(null, Adapter.detmGetterPropName(mget(GET_VALUE_NAME)));
     }
 
     @Test
@@ -228,7 +270,13 @@ public class AdapterTest {
         assertEquals("plain", Adapter.detmSetterPropName(mset("setPlain")));
         assertEquals(null, Adapter.detmSetterPropName(mset("noSet")));
         assertEquals(null, Adapter.detmSetterPropName(mset("set")));
-        assertEquals(null, Adapter.detmSetterPropName(mset("set$InvalidName")));
+
+        // return an invalid method name
+        Factory factory = mock(Factory.class);
+        Whitebox.setInternalState(Adapter.class, FACTORY_FIELD, factory);
+
+        when(factory.getName(any(Method.class))).thenReturn(SET_INVALID_NAME);
+        assertEquals(null, Adapter.detmSetterPropName(mset(SET_VALUE_NAME)));
     }
 
     @Test
@@ -335,11 +383,6 @@ public class AdapterTest {
         return "";
     }
 
-    // name has a bogus character
-    protected String get$InvalidName() {
-        return "";
-    }
-
 
     protected void setValue(String text) {
         // do nothing
@@ -368,11 +411,6 @@ public class AdapterTest {
 
     // nothing after "get"
     protected void set(String text) {
-        // do nothing
-    }
-
-    // name has a bogus character
-    protected void set$InvalidName(String text) {
         // do nothing
     }
 

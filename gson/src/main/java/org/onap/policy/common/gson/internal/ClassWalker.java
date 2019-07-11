@@ -241,7 +241,7 @@ public class ClassWalker {
             return;
         }
 
-        String name = Adapter.detmPropName(field);
+        String name = detmPropName(field);
         if (name == null) {
             // invalid name
             return;
@@ -385,5 +385,11 @@ public class ClassWalker {
      */
     private String getFqdn(Method method) {
         return (method.getDeclaringClass().getName() + "." + method.getName());
+    }
+
+    // these may be overridden by junit tests
+
+    protected String detmPropName(Field field) {
+        return Adapter.detmPropName(field);
     }
 }

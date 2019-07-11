@@ -42,6 +42,11 @@ public class Adapter {
     private static final Pattern VALID_NAME_PAT = Pattern.compile("[a-zA-Z_]\\w*");
 
     /**
+     * Factory to access objects.  Overridden by junit tests.
+     */
+    private static Factory factory = new Factory();
+
+    /**
      * Name of the property within the json structure containing the item.
      */
     private final String propName;
@@ -157,7 +162,7 @@ public class Adapter {
      * @return {@code true} if the field is managed by the walker, {@code false} otherwise
      */
     public static boolean isManaged(Field field) {
-        return VALID_NAME_PAT.matcher(field.getName()).matches();
+        return VALID_NAME_PAT.matcher(factory.getName(field)).matches();
     }
 
     /**
@@ -168,7 +173,7 @@ public class Adapter {
      *         otherwise
      */
     public static boolean isManaged(Method method) {
-        return VALID_NAME_PAT.matcher(method.getName()).matches();
+        return VALID_NAME_PAT.matcher(factory.getName(method)).matches();
     }
 
     /**
@@ -185,7 +190,7 @@ public class Adapter {
         }
 
         // no name provided - use it as is
-        return (isManaged(field) ? field.getName() : null);
+        return (isManaged(field) ? factory.getName(field) : null);
     }
 
     /**
@@ -204,7 +209,7 @@ public class Adapter {
                 return null;
             }
 
-            String name = method.getName();
+            String name = factory.getName(method);
 
             if (name.startsWith("get")) {
                 return name.substring(3);
@@ -238,7 +243,7 @@ public class Adapter {
                 return null;
             }
 
-            String name = method.getName();
+            String name = factory.getName(method);
 
             if (name.startsWith("set")) {
                 return name.substring(3);
@@ -284,7 +289,7 @@ public class Adapter {
      * @return the field fully qualified name
      */
     public static String getQualifiedName(Field field) {
-        return (field.getDeclaringClass().getName() + "." + field.getName());
+        return (field.getDeclaringClass().getName() + "." + factory.getName(field));
     }
 
     /**
@@ -294,7 +299,7 @@ public class Adapter {
      * @return the method's fully qualified name
      */
     public static String getQualifiedName(Method method) {
-        return (method.getDeclaringClass().getName() + "." + method.getName());
+        return (method.getDeclaringClass().getName() + "." + factory.getName(method));
     }
 
     /**
@@ -338,6 +343,20 @@ public class Adapter {
             }
 
             return conv;
+        }
+    }
+
+    /**
+     * Factory used to access various objects.
+     */
+    public static class Factory {
+
+        public String getName(Field field) {
+            return field.getName();
+        }
+
+        public String getName(Method method) {
+            return method.getName();
         }
     }
 }

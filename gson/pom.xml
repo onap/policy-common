@@ -57,6 +57,11 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
@@ -120,7 +125,6 @@
                             <includeTestResources>true</includeTestResources>
                             <excludes>
                             </excludes>
-                            <suppressionsLocation>${project.basedir}/checkstyle-suppressions.xml</suppressionsLocation>
                             <consoleOutput>true</consoleOutput>
                             <failsOnViolation>true</failsOnViolation>
                             <violationSeverity>warning</violationSeverity>

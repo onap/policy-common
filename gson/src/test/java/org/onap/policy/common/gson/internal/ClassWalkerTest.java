@@ -46,6 +46,7 @@ import org.onap.policy.common.gson.annotation.GsonJsonProperty;
 public class ClassWalkerTest {
 
     private static final String SET_OVERRIDE = ".setOverride";
+    private static final String INVALID_FIELD_NAME = "invalidFieldName";
 
     private MyWalker walker;
 
@@ -205,6 +206,15 @@ public class ClassWalkerTest {
 
             super.examine(method);
         }
+
+        @Override
+        protected String detmPropName(Field field) {
+            if (INVALID_FIELD_NAME.equals(field.getName())) {
+                return null;
+            }
+
+            return super.detmPropName(field);
+        }
     }
 
     protected static interface Intfc1 {
@@ -223,7 +233,8 @@ public class ClassWalkerTest {
         private int id;
         public String value;
 
-        public String invalid$fieldName;
+        // this is not actually invalid, but will be treated as if it were
+        public String invalidFieldName;
 
         @GsonJsonProperty("exposed")
         private String exposedField;
