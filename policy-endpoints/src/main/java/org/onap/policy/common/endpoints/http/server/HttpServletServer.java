@@ -26,6 +26,12 @@ import org.onap.policy.common.capabilities.Startable;
  * Http Servlet Server interface.
  */
 public interface HttpServletServer extends Startable {
+    /**
+     * Gets the server name.
+     *
+     * @return the server name
+     */
+    String getName();
 
     /**
      * Get the port.
