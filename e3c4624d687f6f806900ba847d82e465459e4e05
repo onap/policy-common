@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "47c97415_966ffd5a",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-07-17T19:10:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a1df47c2_8813d09f",
+      "revId": "e3c4624d687f6f806900ba847d82e465459e4e05",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3a67aa76_a8445020",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-07-17T14:18:32Z",
       "side": 1,
       "message": "there\u0027s also a filters property similar to how the rest server classes are done.",
+      "revId": "e3c4624d687f6f806900ba847d82e465459e4e05",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8ec0b68d_59a0baed",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-07-17T19:10:20Z",
+      "side": 1,
+      "message": "after some discussion, we agreed to leave it as it\u0027s coded here",
+      "parentUuid": "3a67aa76_a8445020",
       "revId": "e3c4624d687f6f806900ba847d82e465459e4e05",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
