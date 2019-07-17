@@ -29,33 +29,47 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
- * Adapter factory for Map&lt;String,Object&gt;. By default, GSON treats all Objects, that
- * are numbers, as Double. This walks the map and converts Doubles to Integer or Long, if
+ * Adapter factory for Map&lt;String,Object&gt; and List&lt;String&gt;. By default, GSON treats all Objects, that
+ * are numbers, as Double. This recursively walks a map/list and converts Doubles to Integer or Long, if
  * possible.
  */
 public class MapDoubleAdapterFactory implements TypeAdapterFactory {
 
     @Override
     public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> type) {
-        if (type.getRawType() != Map.class) {
-            return null;
-        }
-
-        Type[] actualParams = ((ParameterizedType) type.getType()).getActualTypeArguments();
-
-        // only supports Map<String,Object>
-        if (actualParams[0] != String.class || actualParams[1] != Object.class) {
+        if (!isMapType(type) && !isListType(type)) {
             return null;
         }
 
         TypeAdapter<T> delegate = gson.getDelegateAdapter(this, type);
 
         return new MapAdapter<>(delegate);
+    }
+
+    private <T> boolean isMapType(TypeToken<T> type) {
+        if (type.getRawType() != Map.class) {
+            return false;
+        }
+
+        Type[] actualParams = ((ParameterizedType) type.getType()).getActualTypeArguments();
+
+        // only supports Map<String,Object>
+        return (actualParams[0] == String.class && actualParams[1] == Object.class);
+    }
+
+    private <T> boolean isListType(TypeToken<T> type) {
+        if (type.getRawType() != List.class) {
+            return false;
+        }
+
+        Type[] actualParams = ((ParameterizedType) type.getType()).getActualTypeArguments();
+
+        // only supports List<Object>
+        return (actualParams[0] == Object.class);
     }
 
     /**
@@ -88,65 +102,9 @@ public class MapDoubleAdapterFactory implements TypeAdapterFactory {
         public T read(JsonReader in) throws IOException {
             T value = delegate.read(in);
 
-            @SuppressWarnings("rawtypes")
-            Map map = (Map) value;
-
-            convertFromDouble(map);
+            DoubleConverter.convertFromDouble(value);
 
             return value;
-        }
-
-        /**
-         * Performs conversion of all values in a map.
-         *
-         * @param map the map whose values are to be converted
-         */
-        @SuppressWarnings("rawtypes")
-        private void convertFromDouble(Map map) {
-
-            @SuppressWarnings("unchecked")
-            Set<Entry> set = map.entrySet();
-
-            for (Entry entry : set) {
-                convertFromDouble(entry);
-            }
-        }
-
-        /**
-         * Converts an entry's value. If the value is a Map, then it recursively converts
-         * the entries of the map.
-         *
-         * @param entry entry whose value is to be converted
-         */
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        private void convertFromDouble(Entry entry) {
-            Object obj = entry.getValue();
-
-            if (obj instanceof Map) {
-                convertFromDouble((Map) obj);
-                return;
-            }
-
-            if (!(obj instanceof Double)) {
-                return;
-            }
-
-            Double num = (Double) obj;
-            long longval = num.longValue();
-
-            if (Double.compare(num.doubleValue(), longval) == 0) {
-                // it's integral - determine if it's an integer or a long
-                int intval = (int) longval;
-
-                if (intval == longval) {
-                    // it fits in an integer
-                    entry.setValue(intval);
-
-                } else {
-                    // doesn't fit in an integer - must be a long
-                    entry.setValue(longval);
-                }
-            }
         }
     }
 }

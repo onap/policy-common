@@ -24,8 +24,10 @@ import static org.junit.Assert.assertEquals;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.Test;
 
@@ -34,84 +36,130 @@ public class MapDoubleAdapterFactoryTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void test() {
+    public void testMap() {
         MyMap map = new MyMap();
-        map.props = new HashMap<>();
-        map.props.put("plainString", "def");
-        map.props.put("posInt", 10);
-        map.props.put("negInt", -10);
-        map.props.put("doubleVal", 12.5);
-        map.props.put("posLong", 100000000000L);
-        map.props.put("negLong", -100000000000L);
+        map.data = new HashMap<>();
+        map.data.put("plainString", "def");
+        map.data.put("posInt", 10);
+        map.data.put("negInt", -10);
+        map.data.put("doubleVal", 12.5);
+        map.data.put("posLong", 100000000000L);
+        map.data.put("negLong", -100000000000L);
 
         Map<String, Object> nested = new LinkedHashMap<>();
-        map.props.put("nestedMap", nested);
+        map.data.put("nestedMap", nested);
         nested.put("nestedString", "world");
         nested.put("nestedInt", 50);
 
         String json = gson.toJson(map);
 
-        map.props.clear();
+        map.data.clear();
         map = gson.fromJson(json, MyMap.class);
 
         assertEquals(json, gson.toJson(map));
 
-        assertEquals(10, map.props.get("posInt"));
-        assertEquals(-10, map.props.get("negInt"));
-        assertEquals(100000000000L, map.props.get("posLong"));
-        assertEquals(-100000000000L, map.props.get("negLong"));
-        assertEquals(12.5, map.props.get("doubleVal"));
-        assertEquals(nested, map.props.get("nestedMap"));
+        assertEquals(10, map.data.get("posInt"));
+        assertEquals(-10, map.data.get("negInt"));
+        assertEquals(100000000000L, map.data.get("posLong"));
+        assertEquals(-100000000000L, map.data.get("negLong"));
+        assertEquals(12.5, map.data.get("doubleVal"));
+        assertEquals(nested, map.data.get("nestedMap"));
 
-        nested = (Map<String, Object>) map.props.get("nestedMap");
+        nested = (Map<String, Object>) map.data.get("nestedMap");
         assertEquals(50, nested.get("nestedInt"));
+    }
+
+    @Test
+    public void testList() {
+        MyList list = new MyList();
+        list.data = new ArrayList<>();
+        list.data.add("ghi");
+        list.data.add(100);
+
+        List<Object> nested = new ArrayList<>();
+        list.data.add(nested);
+        nested.add("world2");
+        nested.add(500);
+
+        String json = gson.toJson(list);
+
+        list.data.clear();
+        list = gson.fromJson(json, MyList.class);
+
+        assertEquals(json, gson.toJson(list));
+
+        assertEquals("[ghi, 100, [world2, 500]]", list.data.toString());
     }
 
     @Test
     public void test_ValueIsNotObject() {
         MyDoubleMap map = new MyDoubleMap();
-        map.props = new LinkedHashMap<>();
-        map.props.put("plainDouble", 13.5);
-        map.props.put("doubleAsInt", 100.0);
+        map.data = new LinkedHashMap<>();
+        map.data.put("plainDouble", 13.5);
+        map.data.put("doubleAsInt", 100.0);
 
         String json = gson.toJson(map);
 
-        map.props.clear();
+        map.data.clear();
         map = gson.fromJson(json, MyDoubleMap.class);
 
         // everything should still be Double - check by simply accessing
-        map.props.get("plainDouble");
-        map.props.get("doubleAsInt");
+        map.data.get("plainDouble");
+        map.data.get("doubleAsInt");
     }
 
     @Test
     public void test_KeyIsNotString() {
         MyObjectMap map = new MyObjectMap();
 
-        map.props = new LinkedHashMap<>();
-        map.props.put("plainDouble2", 14.5);
-        map.props.put("doubleAsInt2", 200.0);
+        map.data = new LinkedHashMap<>();
+        map.data.put("plainDouble2", 14.5);
+        map.data.put("doubleAsInt2", 200.0);
 
         String json = gson.toJson(map);
 
-        map.props.clear();
+        map.data.clear();
         map = gson.fromJson(json, MyObjectMap.class);
 
         // everything should still be Double
-        assertEquals(14.5, map.props.get("plainDouble2"));
-        assertEquals(200.0, map.props.get("doubleAsInt2"));
+        assertEquals(14.5, map.data.get("plainDouble2"));
+        assertEquals(200.0, map.data.get("doubleAsInt2"));
+    }
+
+    @Test
+    public void test_ListValueIsNotObject() {
+        MyDoubleList list = new MyDoubleList();
+        list.data = new ArrayList<>();
+        list.data.add(13.5);
+        list.data.add(100.0);
+
+        String json = gson.toJson(list);
+
+        list.data.clear();
+        list = gson.fromJson(json, MyDoubleList.class);
+
+        // everything should still be Double - check by simply accessing
+        assertEquals("[13.5, 100.0]", list.data.toString());
     }
 
     private static class MyMap {
-        private Map<String, Object> props;
+        private Map<String, Object> data;
     }
 
     private static class MyDoubleMap {
-        private Map<String, Double> props;
+        private Map<String, Double> data;
     }
 
     private static class MyObjectMap {
-        private Map<Object, Object> props;
+        private Map<Object, Object> data;
+    }
+
+    private static class MyList {
+        private List<Object> data;
+    }
+
+    private static class MyDoubleList {
+        private List<Double> data;
     }
 
 }
