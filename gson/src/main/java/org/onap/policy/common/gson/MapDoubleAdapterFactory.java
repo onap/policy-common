@@ -30,8 +30,6 @@ import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 /**
  * Adapter factory for Map&lt;String,Object&gt;. By default, GSON treats all Objects, that
@@ -88,65 +86,9 @@ public class MapDoubleAdapterFactory implements TypeAdapterFactory {
         public T read(JsonReader in) throws IOException {
             T value = delegate.read(in);
 
-            @SuppressWarnings("rawtypes")
-            Map map = (Map) value;
-
-            convertFromDouble(map);
+            DoubleConverter.convertFromDouble(value);
 
             return value;
-        }
-
-        /**
-         * Performs conversion of all values in a map.
-         *
-         * @param map the map whose values are to be converted
-         */
-        @SuppressWarnings("rawtypes")
-        private void convertFromDouble(Map map) {
-
-            @SuppressWarnings("unchecked")
-            Set<Entry> set = map.entrySet();
-
-            for (Entry entry : set) {
-                convertFromDouble(entry);
-            }
-        }
-
-        /**
-         * Converts an entry's value. If the value is a Map, then it recursively converts
-         * the entries of the map.
-         *
-         * @param entry entry whose value is to be converted
-         */
-        @SuppressWarnings({"unchecked", "rawtypes"})
-        private void convertFromDouble(Entry entry) {
-            Object obj = entry.getValue();
-
-            if (obj instanceof Map) {
-                convertFromDouble((Map) obj);
-                return;
-            }
-
-            if (!(obj instanceof Double)) {
-                return;
-            }
-
-            Double num = (Double) obj;
-            long longval = num.longValue();
-
-            if (Double.compare(num.doubleValue(), longval) == 0) {
-                // it's integral - determine if it's an integer or a long
-                int intval = (int) longval;
-
-                if (intval == longval) {
-                    // it fits in an integer
-                    entry.setValue(intval);
-
-                } else {
-                    // doesn't fit in an integer - must be a long
-                    entry.setValue(longval);
-                }
-            }
         }
     }
 }
