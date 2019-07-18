@@ -201,6 +201,15 @@ public class StandardCoderTest {
     }
 
     @Test
+    public void testConvertFromDouble() throws Exception {
+        String text = "[listA, {keyA=100}, 200]";
+        assertEquals(text, coder.decode(text, Object.class).toString());
+
+        text = "{keyB=200}";
+        assertEquals(text, coder.decode(text, Object.class).toString());
+    }
+
+    @Test
     public void testToStandard() throws Exception {
         MyObject obj = new MyObject();
         obj.abc = "xyz";

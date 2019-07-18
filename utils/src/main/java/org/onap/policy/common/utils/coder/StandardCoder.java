@@ -38,6 +38,7 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import org.onap.policy.common.gson.DoubleConverter;
 import org.onap.policy.common.gson.MapDoubleAdapterFactory;
 
 /**
@@ -238,7 +239,7 @@ public class StandardCoder implements Coder {
      * @return the object represented by the given json string
      */
     protected <T> T fromJson(String json, Class<T> clazz) {
-        return GSON.fromJson(json, clazz);
+        return convertFromDouble(clazz, GSON.fromJson(json, clazz));
     }
 
     /**
@@ -249,7 +250,24 @@ public class StandardCoder implements Coder {
      * @return the object represented by the given json string
      */
     protected <T> T fromJson(Reader source, Class<T> clazz) {
-        return GSON.fromJson(source, clazz);
+        return convertFromDouble(clazz, GSON.fromJson(source, clazz));
+    }
+
+    /**
+     * Converts a value from Double to Integer/Long, walking the value's contents if it's
+     * a List/Map. Only applies if the specified class refers to the Object class.
+     * Otherwise, it leaves the value unchanged.
+     *
+     * @param clazz class of object to be decoded
+     * @param value value to be converted
+     * @return the converted value
+     */
+    private <T> T convertFromDouble(Class<T> clazz, T value) {
+        if (clazz != Object.class) {
+            return value;
+        }
+
+        return clazz.cast(DoubleConverter.convertFromDouble(value));
     }
 
     /**
