@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9e6ace11_47a46a72",
+        "filename": "policy-endpoints/src/test/resources/org/onap/policy/common/endpoints/parameters/TopicParameters_valid.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-07-24T16:40:04Z",
+      "side": 1,
+      "message": "need to update junit to verify these values are set properly (and null for the previous topic\u0027s parameters)?",
+      "revId": "e86df36b1eeb3ac870401b3648ba6393ff02e796",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
