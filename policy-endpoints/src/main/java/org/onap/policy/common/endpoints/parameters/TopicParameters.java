@@ -20,10 +20,10 @@
 
 package org.onap.policy.common.endpoints.parameters;
 
-import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
 
@@ -36,9 +36,7 @@ import org.onap.policy.common.parameters.annotations.NotNull;
 @NotBlank
 @Getter
 @Setter
-@EqualsAndHashCode
-public class TopicParameters {
-    private String topic;
-    private List<String> servers;
+@EqualsAndHashCode(callSuper = false)
+public class TopicParameters extends BusTopicParams{
     private String topicCommInfrastructure;
 }
