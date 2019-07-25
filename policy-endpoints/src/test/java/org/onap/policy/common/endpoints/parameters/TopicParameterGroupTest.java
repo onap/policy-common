@@ -27,6 +27,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Method;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.utils.coder.Coder;
@@ -78,5 +80,43 @@ public class TopicParameterGroupTest {
         final GroupValidationResult result = topicParameterGroup.validate();
         assertFalse(result.isValid());
         assertTrue(result.getResult().contains("parameter group has status INVALID"));
+    }
+
+    @Test
+    public void test_allparams() throws Exception {
+        String json = testData.getParameterGroupAsString(
+            "src/test/resources/org/onap/policy/common/endpoints/parameters/TopicParameters_all_params.json");
+        TopicParameterGroup topicParameterGroup = coder.decode(json, TopicParameterGroup.class);
+        for (TopicParameters topicParameters : topicParameterGroup.getTopicSinks()) {
+            assertTrue(checkIfAllParamsNotEmpty(topicParameters));
+        }
+        for (TopicParameters topicParameters : topicParameterGroup.getTopicSources()) {
+            assertTrue(checkIfAllParamsNotEmpty(topicParameters));
+        }
+        final GroupValidationResult result = topicParameterGroup.validate();
+        assertNull(result.getResult());
+        assertTrue(result.isValid());
+    }
+
+    /**
+     * Method to check if all parameters in TopicParameters are set.
+     * Any parameters added to @link TopicParameters or @link BusTopicParams must be added to
+     * TopicParameters_all_params.json.
+     *
+     * @param topicParameters topic parameters
+     * @return true if all parameters are not empty (if string) or true (if boolean)
+     * @throws Exception the exception
+     */
+    private boolean checkIfAllParamsNotEmpty(TopicParameters topicParameters) throws Exception {
+        for (Method m : topicParameters.getClass().getMethods()) {
+            if (m.getName().startsWith("get") && m.getParameterTypes().length == 0) {
+                final Object parameter = m.invoke(topicParameters);
+                if ((parameter instanceof String && StringUtils.isBlank(parameter.toString()))
+                    || (parameter instanceof Boolean && !(Boolean) parameter)) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

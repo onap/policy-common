@@ -23,6 +23,8 @@
     },{
         "topic" : "POLICY-PDP-PAP3",
         "servers" : [ "message-router2, message-router3" ],
-        "topicCommInfrastructure" : "dmaap"
+        "topicCommInfrastructure" : "dmaap",
+        "effectiveTopic":"effectiveTopic1",
+        "allowSelfSignedCerts":true
     }]
 }
