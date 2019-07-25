@@ -1,0 +1,12 @@
+{
+    "topicSources" : [ {
+        "topic" : "POLICY-PDP-PAP1",
+        "servers" : [],
+        "topicCommInfrastructure" : "dmaap"
+    }],
+    "topicSinks" : [ {
+        "topic" : "POLICY-PDP-PAP2",
+        "servers" : [ "message-router1, message-router2" ],
+        "topicCommInfrastructure" : "dmaap"
+    }]
+}

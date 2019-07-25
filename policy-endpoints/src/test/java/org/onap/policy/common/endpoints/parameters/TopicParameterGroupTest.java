@@ -27,6 +27,9 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+import java.lang.reflect.Method;
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.utils.coder.Coder;
@@ -77,6 +80,53 @@ public class TopicParameterGroupTest {
         TopicParameterGroup topicParameterGroup = coder.decode(json, TopicParameterGroup.class);
         final GroupValidationResult result = topicParameterGroup.validate();
         assertFalse(result.isValid());
-        assertTrue(result.getResult().contains("parameter group has status INVALID"));
+        assertTrue(result.getResult().contains("INVALID"));
+    }
+
+    @Test
+    public void test_missing_mandatory_params() throws Exception {
+        String json = testData.getParameterGroupAsString(
+            "src/test/resources/org/onap/policy/common/endpoints/parameters/TopicParameters_missing_mandatory.json");
+        TopicParameterGroup topicParameterGroup = coder.decode(json, TopicParameterGroup.class);
+        final GroupValidationResult result = topicParameterGroup.validate();
+        assertTrue(result.getResult().contains("Mandatory parameters are missing"));
+        assertFalse(result.isValid());
+    }
+
+    @Test
+    public void test_allparams() throws Exception {
+        String json = testData.getParameterGroupAsString(
+            "src/test/resources/org/onap/policy/common/endpoints/parameters/TopicParameters_all_params.json");
+        TopicParameterGroup topicParameterGroup = coder.decode(json, TopicParameterGroup.class);
+        final GroupValidationResult result = topicParameterGroup.validate();
+        assertNull(result.getResult());
+        assertTrue(result.isValid());
+        assertTrue(checkIfAllParamsNotEmpty(topicParameterGroup.getTopicSinks()));
+        assertTrue(checkIfAllParamsNotEmpty(topicParameterGroup.getTopicSources()));
+    }
+
+    /**
+     * Method to check if all parameters in TopicParameters are set.
+     * Any parameters added to @link TopicParameters or @link BusTopicParams must be added to
+     * TopicParameters_all_params.json.
+     *
+     * @param topicParameters topic parameters
+     * @return true if all parameters are not empty (if string) or true (if boolean)
+     * @throws Exception the exception
+     */
+    private boolean checkIfAllParamsNotEmpty(List<TopicParameters> topicParametersList) throws Exception {
+        for (TopicParameters topicParameters : topicParametersList) {
+            for (Method m : topicParameters.getClass().getMethods()) {
+                if (m.getName().startsWith("get") && m.getParameterTypes().length == 0) {
+                    final Object parameter = m.invoke(topicParameters);
+                    if ((parameter instanceof String && StringUtils.isBlank(parameter.toString()))
+                        || (parameter instanceof Boolean && !(Boolean) parameter)
+                        || (parameter instanceof Number && ((Number)parameter).longValue() == 0)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 }
