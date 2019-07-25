@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2018 Samsung Electronics Co., Ltd. All rights reserved.
  * Modifications Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2019 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +24,8 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -45,6 +48,8 @@ import org.apache.commons.lang3.StringUtils;
  * useHttps does connection use HTTPS?
  * allowSelfSignedCerts are self-signed certificates allow
  */
+@Getter
+@Setter
 public class BusTopicParams {
 
     private int port;
@@ -77,106 +82,6 @@ public class BusTopicParams {
 
     public static TopicParamsBuilder builder() {
         return new TopicParamsBuilder();
-    }
-
-    public String getPartitionId() {
-        return partitionId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getEnvironment() {
-        return environment;
-    }
-
-    public String getAftEnvironment() {
-        return aftEnvironment;
-    }
-
-    public String getPartner() {
-        return partner;
-    }
-
-    public String getLatitude() {
-        return latitude;
-    }
-
-    public String getLongitude() {
-        return longitude;
-    }
-
-    public Map<String, String> getAdditionalProps() {
-        return additionalProps;
-    }
-
-    public List<String> getServers() {
-        return servers;
-    }
-
-    public String getTopic() {
-        return topic;
-    }
-
-    public String getEffectiveTopic() {
-        return effectiveTopic;
-    }
-
-    public String getApiKey() {
-        return apiKey;
-    }
-
-    public String getApiSecret() {
-        return apiSecret;
-    }
-
-    public String getConsumerGroup() {
-        return consumerGroup;
-    }
-
-    public String getConsumerInstance() {
-        return consumerInstance;
-    }
-
-    public int getFetchTimeout() {
-        return fetchTimeout;
-    }
-
-    public int getFetchLimit() {
-        return fetchLimit;
-    }
-
-    public String getClientName() {
-        return clientName;
-    }
-
-    public String getHostname() {
-        return hostname;
-    }
-
-    public int getPort() {
-        return port;
-    }
-
-    public String getBasePath() {
-        return basePath;
-    }
-
-    public boolean isManaged() {
-        return managed;
-    }
-
-    public boolean isUseHttps() {
-        return useHttps;
-    }
-
-    public boolean isAllowSelfSignedCerts() {
-        return allowSelfSignedCerts;
     }
 
     /**
