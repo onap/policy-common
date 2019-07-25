@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af7409c2_6c205300",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/parameters/TopicParameterGroupTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-07-25T15:54:07Z",
+      "side": 1,
+      "message": "longValue() instead of intValue(), to avoid truncation of most significant bits?",
+      "revId": "ed4f44f506772acc1ac34508658fc42b509b441f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
