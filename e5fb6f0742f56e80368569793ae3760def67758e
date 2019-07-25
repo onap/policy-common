@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9fb5a8ed_68871f20",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/parameters/TopicParameterGroupTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-07-25T12:49:29Z",
+      "side": 1,
+      "message": "Integer \u0026 Long, too?",
+      "revId": "e5fb6f0742f56e80368569793ae3760def67758e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
