@@ -23,7 +23,10 @@ package org.onap.policy.common.endpoints.parameters;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
+import org.apache.commons.lang3.StringUtils;
+import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.parameters.ParameterGroupImpl;
+import org.onap.policy.common.parameters.ValidationStatus;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
 
@@ -43,5 +46,30 @@ public class TopicParameterGroup extends ParameterGroupImpl {
 
     public TopicParameterGroup() {
         super(TopicParameterGroup.class.getSimpleName());
+    }
+
+    /* (non-Javadoc)
+     * @see org.onap.policy.common.parameters.ParameterGroupImpl#validate()
+     */
+    @Override
+    public GroupValidationResult validate() {
+        GroupValidationResult result = super.validate();
+        if (result.isValid() && (checkMissingMandatoryParams(topicSources)
+            || checkMissingMandatoryParams(topicSinks))) {
+            result.setResult(ValidationStatus.INVALID, "Mandatory parameters are missing. topic, servers "
+                + "and topicCommInfrastructure must be specified.");
+        }
+        return result;
+    }
+
+    private boolean checkMissingMandatoryParams(List<TopicParameters> topicParametersList) {
+        for (TopicParameters topicParameters : topicParametersList) {
+            if (StringUtils.isBlank(topicParameters.getTopic())
+                || StringUtils.isBlank(topicParameters.getTopicCommInfrastructure())
+                || topicParameters.getServers().isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
