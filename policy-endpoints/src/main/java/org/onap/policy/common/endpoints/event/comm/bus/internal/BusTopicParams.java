@@ -24,6 +24,7 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import java.util.List;
 import java.util.Map;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
@@ -65,7 +66,10 @@ public class BusTopicParams {
     private int fetchLimit;
     private boolean useHttps;
     private boolean allowSelfSignedCerts;
-    private boolean managed;
+
+    // defaults to false if unset
+    @Getter(AccessLevel.NONE)
+    private Boolean managed;
 
     private String userName;
     private String password;
@@ -82,6 +86,22 @@ public class BusTopicParams {
 
     public static TopicParamsBuilder builder() {
         return new TopicParamsBuilder();
+    }
+
+    /**
+     * Determines if the topic should be managed. Note: the default value depends on the
+     * subclass.
+     *
+     * @return {@code true} if the topic should be managed, {@code false} otherwise;
+     *         defaults to {@code false} if not set
+     */
+    public boolean isManaged() {
+        Boolean man = getRawManaged();
+        return (man != null && man);
+    }
+
+    protected Boolean getRawManaged() {
+        return managed;
     }
 
     /**

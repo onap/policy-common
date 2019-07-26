@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
+ *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,4 +40,16 @@ import org.onap.policy.common.parameters.annotations.NotNull;
 @EqualsAndHashCode(callSuper = false)
 public class TopicParameters extends BusTopicParams {
     private String topicCommInfrastructure;
+
+    /**
+     * Determines if the topic should be managed.
+     *
+     * @return {@code true} if the topic should be managed, {@code false} otherwise;
+     *         defaults to {@code true} if not set
+     */
+    @Override
+    public boolean isManaged() {
+        Boolean man = getRawManaged();
+        return (man == null || man);
+    }
 }
