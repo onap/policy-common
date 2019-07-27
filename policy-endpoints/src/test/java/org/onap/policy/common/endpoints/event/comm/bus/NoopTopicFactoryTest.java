@@ -39,6 +39,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 
 public abstract class NoopTopicFactoryTest<F extends NoopTopicFactory<T>, T extends NoopTopicEndpoint>
     extends TopicFactoryTestBase<T> {
@@ -61,6 +62,17 @@ public abstract class NoopTopicFactoryTest<F extends NoopTopicFactory<T>, T exte
     @After
     public void tearDown() {
         factory.destroy();
+    }
+
+    @Test
+    public void testBuildBusTopicParams() {
+        initFactory();
+
+        T item1 = buildTopic(makeParams(servers, MY_TOPIC, true));
+        assertNotNull(item1);
+
+        assertEquals(servers, item1.getServers());
+        assertEquals(MY_TOPIC, item1.getTopic());
     }
 
     @Test
@@ -196,6 +208,10 @@ public abstract class NoopTopicFactoryTest<F extends NoopTopicFactory<T>, T exte
         return factory.build(properties);
     }
 
+    protected T buildTopic(BusTopicParams param) {
+        return factory.build(param);
+    }
+
     protected T buildTopic(List<String> servers, String topic, boolean managed) {
         return factory.build(servers, topic, managed);
     }
@@ -223,5 +239,15 @@ public abstract class NoopTopicFactoryTest<F extends NoopTopicFactory<T>, T exte
     @Override
     protected TopicPropertyBuilder makePropBuilder() {
         return new NoopTopicPropertyBuilder(factory.getTopicsPropertyName());
+    }
+
+    private BusTopicParams makeParams(List<String> servers, String topic, boolean managed) {
+        BusTopicParams params = new BusTopicParams();
+
+        params.setServers(servers);
+        params.setTopic(topic);
+        params.setManaged(managed);
+
+        return params;
     }
 }

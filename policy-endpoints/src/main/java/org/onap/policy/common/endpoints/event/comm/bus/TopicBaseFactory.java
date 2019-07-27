@@ -23,6 +23,7 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 import java.util.List;
 import java.util.Properties;
 import org.onap.policy.common.endpoints.event.comm.Topic;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 
 /**
  * Topic Base Factory.
@@ -48,6 +49,14 @@ public interface TopicBaseFactory<T extends Topic> {
      * @return T instance.
      */
     T build(List<String> servers, String topic, boolean managed);
+
+    /**
+     * Construct an instance of an endpoint.
+     *
+     * @param param parameters
+     * @return an instance of T.
+     */
+    T build(BusTopicParams param);
 
     /**
      * destroy TopicBase instance.

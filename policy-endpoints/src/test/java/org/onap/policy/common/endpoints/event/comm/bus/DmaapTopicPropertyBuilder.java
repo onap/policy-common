@@ -61,6 +61,10 @@ import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperti
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_LIMIT_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX;
 
+import java.util.Arrays;
+import lombok.Getter;
+import org.onap.policy.common.endpoints.parameters.TopicParameters;
+
 public class DmaapTopicPropertyBuilder extends TopicPropertyBuilder {
 
     public static final String SERVER = "my-server";
@@ -74,6 +78,9 @@ public class DmaapTopicPropertyBuilder extends TopicPropertyBuilder {
     public static final String MY_DME_VERSION = "my-version";
     public static final String MY_AAF_MECHID = "my-aaf-mechid";
     public static final String MY_AAF_PASS = "my-aaf-passwd";
+
+    @Getter
+    private TopicParameters params = new TopicParameters();
 
     /**
      * Constructs the object.
@@ -119,6 +126,28 @@ public class DmaapTopicPropertyBuilder extends TopicPropertyBuilder {
         setTopicProperty(PROPERTY_DMAAP_DME2_SESSION_STICKINESS_REQUIRED_SUFFIX, MY_STICKINESS);
         setTopicProperty(PROPERTY_DMAAP_DME2_SUB_CONTEXT_PATH_SUFFIX, MY_SUBCONTEXT);
         setTopicProperty(PROPERTY_DMAAP_DME2_VERSION_SUFFIX, MY_DME_VERSION);
+
+        params.setTopicCommInfrastructure("dmaap");
+        params.setTopic(topic);
+        params.setEffectiveTopic(MY_EFFECTIVE_TOPIC);
+        params.setConsumerGroup(MY_CONS_GROUP);
+        params.setConsumerInstance(MY_CONS_INST);
+        params.setManaged(true);
+        params.setUseHttps(true);
+        params.setUserName(MY_AAF_MECHID);
+        params.setPassword(MY_AAF_PASS);
+        params.setAftEnvironment(MY_AFT_ENV);
+        params.setAllowSelfSignedCerts(true);
+        params.setApiKey(MY_API_KEY);
+        params.setApiSecret(MY_API_SECRET);
+        params.setFetchLimit(MY_FETCH_LIMIT);
+        params.setFetchTimeout(MY_FETCH_TIMEOUT);
+        params.setEnvironment(MY_ENV);
+        params.setLatitude(MY_LAT);
+        params.setLongitude(MY_LONG);
+        params.setPartitionId(MY_PARTITION);
+        params.setPartner(MY_PARTNER);
+        params.setServers(Arrays.asList(SERVER));
 
         return this;
     }

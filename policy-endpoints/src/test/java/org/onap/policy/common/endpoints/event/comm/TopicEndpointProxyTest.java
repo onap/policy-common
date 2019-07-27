@@ -28,10 +28,17 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 import java.util.Properties;
+import org.junit.After;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
+import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicPropertyBuilder;
+import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicPropertyBuilder;
+import org.onap.policy.common.endpoints.event.comm.bus.UebTopicFactories;
+import org.onap.policy.common.endpoints.event.comm.bus.UebTopicPropertyBuilder;
+import org.onap.policy.common.endpoints.parameters.TopicParameterGroup;
+import org.onap.policy.common.endpoints.parameters.TopicParameters;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 
@@ -47,41 +54,54 @@ public class TopicEndpointProxyTest {
     private static final String DMAAP_SINK_TOPIC = "dmaap-sink";
 
     private Properties configuration = new Properties();
+    private TopicParameterGroup group = new TopicParameterGroup();
 
     /**
      * Constructor.
      */
     public TopicEndpointProxyTest() {
-        Properties noopSourceProperties =
+        NoopTopicPropertyBuilder noopSourceBuilder =
             new NoopTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_NOOP_SOURCE_TOPICS)
-                .makeTopic(NOOP_SOURCE_TOPIC).build();
+                .makeTopic(NOOP_SOURCE_TOPIC);
+        configuration.putAll(noopSourceBuilder.build());
+        group.getTopicSources().add(noopSourceBuilder.getParams());
 
-        Properties noopSinkProperties =
+        NoopTopicPropertyBuilder noopSinkBuilder =
             new NoopTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_NOOP_SINK_TOPICS)
-                .makeTopic(NOOP_SINK_TOPIC).build();
+                .makeTopic(NOOP_SINK_TOPIC);
+        configuration.putAll(noopSinkBuilder.build());
+        group.getTopicSinks().add(noopSinkBuilder.getParams());
 
-        Properties uebSourceProperties =
-            new NoopTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS)
-                .makeTopic(UEB_SOURCE_TOPIC).build();
+        UebTopicPropertyBuilder uebSourceBuilder =
+            new UebTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS)
+                .makeTopic(UEB_SOURCE_TOPIC);
+        configuration.putAll(uebSourceBuilder.build());
+        group.getTopicSources().add(uebSourceBuilder.getParams());
 
-        Properties uebSinkProperties =
-            new NoopTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS)
-                .makeTopic(UEB_SINK_TOPIC).build();
+        UebTopicPropertyBuilder uebSinkBuilder =
+            new UebTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS)
+                .makeTopic(UEB_SINK_TOPIC);
+        configuration.putAll(uebSinkBuilder.build());
+        group.getTopicSinks().add(uebSinkBuilder.getParams());
 
-        Properties dmaapSourceProperties =
+        DmaapTopicPropertyBuilder dmaapSourceBuilder =
             new DmaapTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS)
-                .makeTopic(DMAAP_SOURCE_TOPIC).build();
+                .makeTopic(DMAAP_SOURCE_TOPIC);
+        configuration.putAll(dmaapSourceBuilder.build());
+        group.getTopicSources().add(dmaapSourceBuilder.getParams());
 
-        Properties dmaapSinkProperties =
+        DmaapTopicPropertyBuilder dmaapSinkBuilder =
             new DmaapTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS)
-                .makeTopic(DMAAP_SINK_TOPIC).build();
+                .makeTopic(DMAAP_SINK_TOPIC);
+        configuration.putAll(dmaapSinkBuilder.build());
+        group.getTopicSinks().add(dmaapSinkBuilder.getParams());
 
-        configuration.putAll(noopSourceProperties);
-        configuration.putAll(noopSinkProperties);
-        configuration.putAll(uebSourceProperties);
-        configuration.putAll(uebSinkProperties);
-        configuration.putAll(dmaapSourceProperties);
-        configuration.putAll(dmaapSinkProperties);
+        TopicParameters invalidCommInfraParams =
+                        new NoopTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_NOOP_SOURCE_TOPICS)
+                                        .makeTopic(NOOP_SOURCE_TOPIC).getParams();
+        invalidCommInfraParams.setTopicCommInfrastructure(Topic.CommInfrastructure.REST.name());
+        group.getTopicSources().add(invalidCommInfraParams);
+        group.getTopicSinks().add(invalidCommInfraParams);
     }
 
     private <T extends Topic> boolean exists(List<T> topics, String topicName) {
@@ -112,6 +132,21 @@ public class TopicEndpointProxyTest {
             || exists(topics, DMAAP_SINK_TOPIC);
     }
 
+    /**
+     * Destroys all managed topics.
+     */
+    @After
+    public void tearDown() {
+        NoopTopicFactories.getSinkFactory().destroy();
+        NoopTopicFactories.getSourceFactory().destroy();
+
+        UebTopicFactories.getSinkFactory().destroy();
+        UebTopicFactories.getSourceFactory().destroy();
+
+        DmaapTopicFactories.getSinkFactory().destroy();
+        DmaapTopicFactories.getSourceFactory().destroy();
+    }
+
     @Test
     public void testSerialize() {
         TopicEndpoint manager = new TopicEndpointProxy();
@@ -123,7 +158,18 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void addTopicSources() {
+    public void addTopicSourcesListOfTopicParameters() {
+        TopicEndpoint manager = new TopicEndpointProxy();
+
+        List<TopicSource>  sources = manager.addTopicSources(group.getTopicSources());
+        assertSame(3, sources.size());
+
+        assertTrue(allSources(sources));
+        assertFalse(anySink(sources));
+    }
+
+    @Test
+    public void addTopicSourcesProperties() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSource>  sources = manager.addTopicSources(configuration);
@@ -134,7 +180,18 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void addTopicSinks() {
+    public void addTopicSinksListOfTopicParameters() {
+        TopicEndpoint manager = new TopicEndpointProxy();
+
+        List<TopicSink>  sinks = manager.addTopicSinks(group.getTopicSinks());
+        assertSame(3, sinks.size());
+
+        assertFalse(anySource(sinks));
+        assertTrue(allSinks(sinks));
+    }
+
+    @Test
+    public void addTopicSinksProperties() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSink>  sinks = manager.addTopicSinks(configuration);
@@ -145,7 +202,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void addTopics() {
+    public void addTopicsProperties() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<Topic>  topics = manager.addTopics(configuration);
@@ -153,6 +210,34 @@ public class TopicEndpointProxyTest {
 
         assertTrue(allSources(topics));
         assertTrue(allSinks(topics));
+    }
+
+    @Test
+    public void addTopicsTopicParameterGroup() {
+        TopicEndpoint manager = new TopicEndpointProxy();
+
+        List<Topic>  topics = manager.addTopics(group);
+        assertSame(6, topics.size());
+
+        assertTrue(allSources(topics));
+        assertTrue(allSinks(topics));
+    }
+
+    @Test
+    public void lockSinks_lockSources_locked() {
+        TopicEndpoint manager = new TopicEndpointProxy();
+        manager.lock();
+        for (Topic topic : manager.addTopics(group)) {
+            assertTrue(topic.isLocked());
+        }
+    }
+
+    @Test
+    public void lockSinks_lockSources_unlocked() {
+        TopicEndpoint manager = new TopicEndpointProxy();
+        for (Topic topic : manager.addTopics(group)) {
+            assertFalse(topic.isLocked());
+        }
     }
 
     @Test

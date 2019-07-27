@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import org.onap.policy.common.endpoints.event.comm.Topic;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 
 /**
  * Topic Factory implementation that indexes T instances in a hash table.
@@ -97,6 +98,14 @@ public abstract class TopicBaseHashedFactory<T extends Topic> implements TopicBa
             }
         }
         return newEndpoints;
+    }
+
+    /**
+     * {@inheritDoc}.
+     */
+    @Override
+    public T build(BusTopicParams param) {
+        return this.build(param.getServers(), param.getTopic(), param.isManaged());
     }
 
     /**
