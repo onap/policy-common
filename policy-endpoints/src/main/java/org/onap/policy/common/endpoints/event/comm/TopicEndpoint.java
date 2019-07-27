@@ -30,6 +30,8 @@ import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSource;
+import org.onap.policy.common.endpoints.parameters.TopicParameterGroup;
+import org.onap.policy.common.endpoints.parameters.TopicParameters;
 
 /**
  * Abstraction to managed the system's Networked Topic Endpoints, sources of all events input into
@@ -47,22 +49,50 @@ public interface TopicEndpoint extends Startable, Lockable {
     List<Topic> addTopics(Properties properties);
 
     /**
+     * Add topics configuration (sources and sinks) into a single list.
+     *
+     * @param params parameters to configure topic
+     * @return topic list
+     * @throws IllegalArgumentException when invalid arguments are provided
+     */
+    List<Topic> addTopics(TopicParameterGroup params);
+
+    /**
      * Add Topic Sources to the communication infrastructure initialized per properties.
      *
      * @param properties properties for Topic Source construction
-     * @return a generic Topic Source
+     * @return a list of generic Topic Sources
      * @throws IllegalArgumentException when invalid arguments are provided
      */
     List<TopicSource> addTopicSources(Properties properties);
+
+
+    /**
+     * Add Topic Sources to the communication infrastructure initialized per properties.
+     *
+     * @param paramList parameters for Topic Source construction
+     * @return a list of generic Topic Sources
+     * @throws IllegalArgumentException when invalid arguments are provided
+     */
+    List<TopicSource> addTopicSources(List<TopicParameters> paramList);
 
     /**
      * Add Topic Sinks to the communication infrastructure initialized per properties.
      *
      * @param properties properties for Topic Sink construction
-     * @return a generic Topic Sink
+     * @return a list of generic Topic Sinks
      * @throws IllegalArgumentException when invalid arguments are provided
      */
     List<TopicSink> addTopicSinks(Properties properties);
+
+    /**
+     * Add Topic Sinks to the communication infrastructure initialized per properties.
+     *
+     * @param paramList parameters for Topic Sink construction
+     * @return a list of generic Topic Sinks
+     * @throws IllegalArgumentException when invalid arguments are provided
+     */
+    List<TopicSink> addTopicSinks(List<TopicParameters> paramList);
 
     /**
      * Gets all Topic Sources.

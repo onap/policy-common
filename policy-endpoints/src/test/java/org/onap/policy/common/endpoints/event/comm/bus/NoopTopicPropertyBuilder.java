@@ -27,10 +27,17 @@ import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperti
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX;
 
+import java.util.Arrays;
+import lombok.Getter;
+import org.onap.policy.common.endpoints.parameters.TopicParameters;
+
 public class NoopTopicPropertyBuilder extends TopicPropertyBuilder {
 
     public static final String SERVER = "my-server";
     public static final String TOPIC2 = "my-topic-2";
+
+    @Getter
+    private TopicParameters params = new TopicParameters();
 
     /**
      * Constructs the object.
@@ -55,6 +62,14 @@ public class NoopTopicPropertyBuilder extends TopicPropertyBuilder {
         setTopicProperty(PROPERTY_HTTP_HTTPS_SUFFIX, "true");
         setTopicProperty(PROPERTY_ALLOW_SELF_SIGNED_CERTIFICATES_SUFFIX, "true");
         setTopicProperty(PROPERTY_TOPIC_SERVERS_SUFFIX, SERVER);
+
+        params.setTopicCommInfrastructure("noop");
+        params.setTopic(topic);
+        params.setEffectiveTopic(MY_EFFECTIVE_TOPIC);
+        params.setManaged(true);
+        params.setUseHttps(true);
+        params.setAllowSelfSignedCerts(true);
+        params.setServers(Arrays.asList(SERVER));
 
         return this;
     }
