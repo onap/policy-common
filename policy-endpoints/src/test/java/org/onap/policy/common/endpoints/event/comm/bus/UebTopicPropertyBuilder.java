@@ -45,6 +45,10 @@ import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperti
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_LIMIT_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX;
 
+import java.util.Arrays;
+import lombok.Getter;
+import org.onap.policy.common.endpoints.parameters.TopicParameters;
+
 public class UebTopicPropertyBuilder extends TopicPropertyBuilder {
 
     public static final String SERVER = "my-server";
@@ -52,6 +56,9 @@ public class UebTopicPropertyBuilder extends TopicPropertyBuilder {
 
     public static final String MY_AAF_MECHID = "my-aaf-mechid";
     public static final String MY_AAF_PASS = "my-aaf-passwd";
+
+    @Getter
+    private TopicParameters params = new TopicParameters();
 
     /**
      * Constructs the object.
@@ -86,6 +93,24 @@ public class UebTopicPropertyBuilder extends TopicPropertyBuilder {
         setTopicProperty(PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX, MY_FETCH_TIMEOUT);
         setTopicProperty(PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX, MY_PARTITION);
         setTopicProperty(PROPERTY_TOPIC_SERVERS_SUFFIX, SERVER);
+
+        params.setTopicCommInfrastructure("ueb");
+        params.setTopic(topic);
+        params.setEffectiveTopic(MY_EFFECTIVE_TOPIC);
+        params.setConsumerGroup(MY_CONS_GROUP);
+        params.setConsumerInstance(MY_CONS_INST);
+        params.setManaged(true);
+        params.setUseHttps(true);
+        params.setUserName(MY_AAF_MECHID);
+        params.setPassword(MY_AAF_PASS);
+        params.setAftEnvironment(MY_AFT_ENV);
+        params.setAllowSelfSignedCerts(true);
+        params.setApiKey(MY_API_KEY);
+        params.setApiSecret(MY_API_SECRET);
+        params.setFetchLimit(MY_FETCH_LIMIT);
+        params.setFetchTimeout(MY_FETCH_TIMEOUT);
+        params.setPartitionId(MY_PARTITION);
+        params.setServers(Arrays.asList(SERVER));
 
         return this;
     }

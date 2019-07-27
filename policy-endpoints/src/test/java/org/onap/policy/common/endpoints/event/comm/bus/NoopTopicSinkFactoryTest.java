@@ -20,10 +20,19 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Test;
+
 public class NoopTopicSinkFactoryTest extends NoopTopicFactoryTest<NoopTopicSinkFactory, NoopTopicSink> {
 
     @Override
     protected NoopTopicSinkFactory buildFactory() {
         return new NoopTopicSinkFactory();
+    }
+
+    @Test
+    public void testToString() {
+        assertTrue(new NoopTopicSinkFactory().toString().startsWith("NoopTopicSinkFactory ["));
     }
 }
