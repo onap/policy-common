@@ -2,7 +2,6 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
  *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
-
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +32,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.utils.coder.Coder;
+import org.onap.policy.common.utils.coder.CoderException;
 import org.onap.policy.common.utils.coder.StandardCoder;
 
 /**
@@ -45,13 +45,20 @@ public class TopicParameterGroupTest {
     private static final Coder coder = new StandardCoder();
 
     @Test
-    public void test() {
+    public void test() throws CoderException {
         final TopicParameterGroup topicParameterGroup =
                 testData.toObject(testData.getTopicParameterGroupMap(false), TopicParameterGroup.class);
         final GroupValidationResult validationResult = topicParameterGroup.validate();
         assertTrue(validationResult.isValid());
         assertEquals(CommonTestData.TOPIC_PARAMS, topicParameterGroup.getTopicSinks());
         assertEquals(CommonTestData.TOPIC_PARAMS, topicParameterGroup.getTopicSources());
+
+        // these should default to true
+        assertTrue(new TopicParameters().isManaged());
+        assertTrue(coder.decode("{}", TopicParameters.class).isManaged());
+
+        // but can be overridden
+        assertFalse(coder.decode("{'managed':false}".replace('\'', '"'), TopicParameters.class).isManaged());
     }
 
     @Test
