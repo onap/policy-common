@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a8132a93_bfc489fc",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/TopicEndpointProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-07-29T17:49:54Z",
+      "side": 1,
+      "message": "For consistency, in this source file, can this be done as the other TopicSources do it? ie. the undelying factory decides if it is of interest or not based on the input parameters (ie. as how it is done in line 112)",
+      "revId": "9757eeb85c330f86b02874beb551322d5a23cfef",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "059a5bf3_26489095",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/TopicEndpointProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-07-29T17:49:54Z",
+      "side": 1,
+      "message": "could convert the string to enum and change case statements on the actual enum value.   If not, probably better to define symbolic constants that match the enum value strings.",
+      "revId": "9757eeb85c330f86b02874beb551322d5a23cfef",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "93d4ac3e_edb96a27",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/TopicEndpointProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-07-29T17:49:54Z",
+      "side": 1,
+      "message": "same comments, as a note, the suggested size is passed in to the ArrayList constructor in the other addTopicSources changes you have.",
+      "revId": "9757eeb85c330f86b02874beb551322d5a23cfef",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1cf78439_df9fb8ec",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/parameters/TopicParameterGroup.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-07-29T17:49:54Z",
+      "side": 1,
+      "message": "final ?",
+      "revId": "9757eeb85c330f86b02874beb551322d5a23cfef",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
