@@ -22,6 +22,30 @@
       "revId": "4513f428543dbd09f855fdd392d90d628f5d403e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6beb177c_ad26fae4",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/parameters/TopicParameters.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-07-29T12:46:22Z",
+      "side": 1,
+      "message": "that\u0027s how it is in ParamUtils, which copies TopicParms to Properties",
+      "parentUuid": "230d7eb9_11621310",
+      "range": {
+        "startLine": 46,
+        "startChar": 8,
+        "endLine": 46,
+        "endChar": 25
+      },
+      "revId": "4513f428543dbd09f855fdd392d90d628f5d403e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
