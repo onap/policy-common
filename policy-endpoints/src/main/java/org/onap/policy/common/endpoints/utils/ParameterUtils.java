@@ -21,12 +21,19 @@
 
 package org.onap.policy.common.endpoints.utils;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Properties;
-
+import org.apache.commons.lang3.StringUtils;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.parameters.TopicParameterGroup;
 import org.onap.policy.common.endpoints.parameters.TopicParameters;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is common utility class with utility methods for parameters.
@@ -34,6 +41,11 @@ import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
  * @author Ajith Sreekumar (ajith.sreekumar@est.tech)
  */
 public class ParameterUtils {
+
+    /**
+     * Logger.
+     */
+    private static Logger logger = LoggerFactory.getLogger(ParameterUtils.class);
 
     /**
      * Private constructor used to prevent sub class instantiation.
@@ -56,12 +68,10 @@ public class ParameterUtils {
         // for each topicCommInfrastructure, there could be multiple topics (specified as comma separated string)
         // for each such topics, there could be multiple servers (specified as comma separated string)
         for (TopicParameters source : topicSources) {
-            updateTopicProperties(topicProperties, "source", source.getTopicCommInfrastructure(), source.getTopic(),
-                    source.getServers());
+            updateTopicProperties(topicProperties, "source", source);
         }
         for (TopicParameters sink : topicSinks) {
-            updateTopicProperties(topicProperties, "sink", sink.getTopicCommInfrastructure(), sink.getTopic(),
-                    sink.getServers());
+            updateTopicProperties(topicProperties, "sink", sink);
         }
 
         return topicProperties;
@@ -72,19 +82,44 @@ public class ParameterUtils {
      *
      * @param topicProperties the topic properties object which is to be updated
      * @param keyName either it is source or sink
-     * @param topicCommInfra the infra such as  dmaap, ueb or noop
-     * @param topicName the topic
-     * @param servers the list of server names for the topic
+     * @param topicParameters the topic parameters object
      */
-    public static void updateTopicProperties(Properties topicProperties, String keyName, String topicCommInfra,
-            String topicName, List<String> servers) {
+    public static void updateTopicProperties(Properties topicProperties, String keyName,
+        TopicParameters topicParameters) {
+        String topicCommInfra = topicParameters.getTopicCommInfrastructure();
+        String topicName = topicParameters.getTopic();
+        List<String> servers = topicParameters.getServers();
+
         String propKey = topicCommInfra + "." + keyName + PolicyEndPointProperties.PROPERTY_TOPIC_TOPICS_SUFFIX;
         if (topicProperties.containsKey(propKey)) {
             topicProperties.setProperty(propKey, topicProperties.getProperty(propKey) + "," + topicName);
         } else {
             topicProperties.setProperty(propKey, topicName);
         }
-        topicProperties.setProperty(propKey + "." + topicName + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX,
+        String propWithTopicKey = propKey + "." + topicName;
+        topicProperties.setProperty(propWithTopicKey + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX,
                 String.join(",", servers));
+
+        Field[] fields = BusTopicParams.class.getDeclaredFields();
+        for (Field field : fields) {
+            if (!field.isSynthetic()) {
+                try {
+                    Object parameter = new PropertyDescriptor(field.getName(), TopicParameters.class)
+                        .getReadMethod().invoke(topicParameters);
+                    if ((parameter instanceof String && StringUtils.isNotBlank(parameter.toString()))
+                        || (parameter instanceof Number && ((Number) parameter).longValue() >= 0)) {
+                        topicProperties.setProperty(propWithTopicKey + "." + field.getName(), parameter.toString());
+                    }
+                    if (parameter instanceof Boolean && (Boolean) parameter) {
+                        topicProperties.setProperty(propWithTopicKey + "." + field.getName(),
+                            Boolean.toString((Boolean) parameter));
+                    }
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException
+                    | IntrospectionException e) {
+                    logger.error("Error while creating Properties object from TopicParameters", e);
+                }
+            }
+        }
+
     }
 }
