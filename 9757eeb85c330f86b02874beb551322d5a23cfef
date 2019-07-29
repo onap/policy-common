@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5e80a6df_4f9f03ea",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/TopicEndpointProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-07-29T18:31:35Z",
+      "side": 1,
+      "message": "could do that, but it would require an additional method to be added to each of the six factory classes (and six additional test cases).  In addition, one down side of how the others do it is that they end up reporting warnings for the topics that are not applicable; it\u0027s always disconcerting to find those in the log.\n\nAre you sure you want me to do that?",
+      "parentUuid": "a8132a93_bfc489fc",
+      "revId": "9757eeb85c330f86b02874beb551322d5a23cfef",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "059a5bf3_26489095",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/TopicEndpointProxy.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-07-29T17:49:54Z",
       "side": 1,
       "message": "could convert the string to enum and change case statements on the actual enum value.   If not, probably better to define symbolic constants that match the enum value strings.",
+      "revId": "9757eeb85c330f86b02874beb551322d5a23cfef",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "66bb39ff_417d3e0c",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/TopicEndpointProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-07-29T18:31:35Z",
+      "side": 1,
+      "message": "yep, was adding string constants, but got side-tracked. Think I\u0027ll do the enum conversion instead, as you suggest",
+      "parentUuid": "059a5bf3_26489095",
       "revId": "9757eeb85c330f86b02874beb551322d5a23cfef",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "be245b23_758d2b45",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/TopicEndpointProxy.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-07-29T18:31:35Z",
+      "side": 1,
+      "message": "ah, missed this one - thx",
+      "parentUuid": "93d4ac3e_edb96a27",
+      "revId": "9757eeb85c330f86b02874beb551322d5a23cfef",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1cf78439_df9fb8ec",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/parameters/TopicParameterGroup.java",
         "patchSetId": 2
@@ -64,6 +118,24 @@
       "writtenOn": "2019-07-29T17:49:54Z",
       "side": 1,
       "message": "final ?",
+      "revId": "9757eeb85c330f86b02874beb551322d5a23cfef",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3730ae28_4e609106",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/parameters/TopicParameterGroup.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-07-29T18:31:35Z",
+      "side": 1,
+      "message": "will do (wasn\u0027t sure how gson would behave with this, but appears to work fine)",
+      "parentUuid": "1cf78439_df9fb8ec",
       "revId": "9757eeb85c330f86b02874beb551322d5a23cfef",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
