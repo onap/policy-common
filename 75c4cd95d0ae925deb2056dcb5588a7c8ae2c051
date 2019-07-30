@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "8151c7e7_f2cfbc98",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/ParameterUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 4903
+      },
+      "writtenOn": "2019-07-30T11:38:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe9450af_22fb0d2f",
+      "revId": "75c4cd95d0ae925deb2056dcb5588a7c8ae2c051",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0e08c4aa_950d1b3a",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/ParameterUtils.java",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "77a1ed9a_734b28cc",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/ParameterUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 4903
+      },
+      "writtenOn": "2019-07-30T11:38:59Z",
+      "side": 1,
+      "message": "Done. Not sure if we need to unset all other properly set parameters in case of an exception. Moreover, can\u0027t really think of a situation when exception could occur here.",
+      "parentUuid": "0e08c4aa_950d1b3a",
+      "revId": "75c4cd95d0ae925deb2056dcb5588a7c8ae2c051",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a039b85b_39156e38",
         "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/utils/ParameterUtilsTest.java",
         "patchSetId": 1
@@ -47,6 +83,24 @@
       "writtenOn": "2019-07-29T17:50:54Z",
       "side": 1,
       "message": "need to check sink properties, too?",
+      "revId": "75c4cd95d0ae925deb2056dcb5588a7c8ae2c051",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e99f8a67_dd9092ae",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/utils/ParameterUtilsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 4903
+      },
+      "writtenOn": "2019-07-30T11:38:59Z",
+      "side": 1,
+      "message": "The json file has all the parameters. Just checking some in random here, which includes int, booleans and strings. If needed, can check all the parameters for sinks and sources, but that would be too many",
+      "parentUuid": "a039b85b_39156e38",
       "revId": "75c4cd95d0ae925deb2056dcb5588a7c8ae2c051",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
