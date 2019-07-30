@@ -21,7 +21,6 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 import java.util.List;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 
 /**
@@ -35,14 +34,6 @@ public class NoopTopicSourceFactory extends NoopTopicFactory<NoopTopicSource> {
     @Override
     protected String getTopicsPropertyName() {
         return PolicyEndPointProperties.PROPERTY_NOOP_SOURCE_TOPICS;
-    }
-
-    /**
-     * {@inheritDoc}.
-     */
-    @Override
-    public NoopTopicSource build(BusTopicParams param) {
-        return build(param.getServers(), param.getTopic());
     }
 
     /**

@@ -21,7 +21,6 @@
 
 package org.onap.policy.common.endpoints.parameters;
 
-import java.util.LinkedList;
 import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
@@ -43,8 +42,8 @@ import org.onap.policy.common.parameters.annotations.NotNull;
 @Setter
 public class TopicParameterGroup extends ParameterGroupImpl {
 
-    private final List<TopicParameters> topicSources = new LinkedList<>();
-    private final List<TopicParameters> topicSinks = new LinkedList<>();
+    private List<TopicParameters> topicSources;
+    private List<TopicParameters> topicSinks;
 
     public TopicParameterGroup() {
         super(TopicParameterGroup.class.getSimpleName());

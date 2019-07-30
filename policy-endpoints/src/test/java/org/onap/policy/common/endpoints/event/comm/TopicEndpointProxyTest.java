@@ -22,10 +22,12 @@ package org.onap.policy.common.endpoints.event.comm;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import org.junit.After;
@@ -60,6 +62,9 @@ public class TopicEndpointProxyTest {
      * Constructor.
      */
     public TopicEndpointProxyTest() {
+        group.setTopicSinks(new LinkedList<>());
+        group.setTopicSources(new LinkedList<>());
+
         NoopTopicPropertyBuilder noopSourceBuilder =
             new NoopTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_NOOP_SOURCE_TOPICS)
                 .makeTopic(NOOP_SOURCE_TOPIC);
@@ -221,6 +226,14 @@ public class TopicEndpointProxyTest {
 
         assertTrue(allSources(topics));
         assertTrue(allSinks(topics));
+    }
+
+    @Test
+    public void addTopicsTopicParameterGroupNull() {
+        TopicEndpoint manager = new TopicEndpointProxy();
+
+        List<Topic>  topics = manager.addTopics(new TopicParameterGroup());
+        assertEquals(0, topics.size());
     }
 
     @Test

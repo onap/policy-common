@@ -22,6 +22,7 @@ package org.onap.policy.common.endpoints.event.comm;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import org.onap.policy.common.capabilities.Startable;
@@ -69,9 +70,14 @@ class TopicEndpointProxy implements TopicEndpoint {
 
     @Override
     public List<Topic> addTopics(TopicParameterGroup params) {
-        List<Topic> topics = new ArrayList<>(params.getTopicSinks().size() + params.getTopicSources().size());
-        topics.addAll(addTopicSources(params.getTopicSources()));
-        topics.addAll(addTopicSinks(params.getTopicSinks()));
+        List<TopicParameters> sinks =
+                        (params.getTopicSinks() != null ? params.getTopicSinks() : Collections.emptyList());
+        List<TopicParameters> sources =
+                        (params.getTopicSources() != null ? params.getTopicSources() : Collections.emptyList());
+
+        List<Topic> topics = new ArrayList<>(sinks.size() + sources.size());
+        topics.addAll(addTopicSources(sources));
+        topics.addAll(addTopicSinks(sinks));
         return topics;
     }
 
