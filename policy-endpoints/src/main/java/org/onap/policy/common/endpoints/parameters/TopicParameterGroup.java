@@ -54,22 +54,38 @@ public class TopicParameterGroup extends ParameterGroupImpl {
     @Override
     public GroupValidationResult validate() {
         GroupValidationResult result = super.validate();
-        if (result.isValid() && (checkMissingMandatoryParams(topicSources)
-            || checkMissingMandatoryParams(topicSinks))) {
-            result.setResult(ValidationStatus.INVALID, "Mandatory parameters are missing. topic, servers "
-                + "and topicCommInfrastructure must be specified.");
+        if (result.isValid()) {
+            StringBuilder errorMsg = new StringBuilder();
+            StringBuilder missingSourceParams = checkMissingMandatoryParams(topicSources);
+            if (missingSourceParams.length() > 0) {
+                errorMsg.append(missingSourceParams.append("missing in topicSources. "));
+            }
+            StringBuilder missingSinkParams = checkMissingMandatoryParams(topicSinks);
+            if (missingSinkParams.length() > 0) {
+                errorMsg.append(missingSinkParams.append("missing in topicSinks."));
+            }
+
+            if (errorMsg.length() > 0) {
+                errorMsg.insert(0, "Mandatory parameters are missing. ");
+                result.setResult(ValidationStatus.INVALID, errorMsg.toString());
+            }
         }
         return result;
     }
 
-    private boolean checkMissingMandatoryParams(List<TopicParameters> topicParametersList) {
+    private StringBuilder checkMissingMandatoryParams(List<TopicParameters> topicParametersList) {
+        StringBuilder missingParams = new StringBuilder();
         for (TopicParameters topicParameters : topicParametersList) {
-            if (StringUtils.isBlank(topicParameters.getTopic())
-                || StringUtils.isBlank(topicParameters.getTopicCommInfrastructure())
-                || topicParameters.getServers().isEmpty()) {
-                return true;
+            if (StringUtils.isBlank(topicParameters.getTopic())) {
+                missingParams.append("topic, ");
+            }
+            if (StringUtils.isBlank(topicParameters.getTopicCommInfrastructure())) {
+                missingParams.append("topicCommInfrastructure, ");
+            }
+            if (null == topicParameters.getServers() || topicParameters.getServers().isEmpty()) {
+                missingParams.append("servers, ");
             }
         }
-        return false;
+        return missingParams;
     }
 }
