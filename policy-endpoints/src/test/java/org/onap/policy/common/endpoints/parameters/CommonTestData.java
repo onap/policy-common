@@ -53,7 +53,7 @@ public class CommonTestData {
     public static final String TOPIC_INFRA = "dmaap";
     public static final String TOPIC_SERVER = "message-router";
 
-    protected static final List<TopicParameters> TOPIC_PARAMS =
+    public static final List<TopicParameters> TOPIC_PARAMS =
         Arrays.asList(getTopicParameters(TOPIC_NAME, TOPIC_INFRA, TOPIC_SERVER));
 
     protected static final Coder coder = new StandardCoder();

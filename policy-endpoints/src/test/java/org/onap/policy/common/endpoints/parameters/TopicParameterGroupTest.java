@@ -26,10 +26,12 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import java.lang.reflect.Method;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.utils.coder.Coder;
 import org.onap.policy.common.utils.coder.CoderException;
@@ -123,12 +125,14 @@ public class TopicParameterGroupTest {
      */
     private boolean checkIfAllParamsNotEmpty(List<TopicParameters> topicParametersList) throws Exception {
         for (TopicParameters topicParameters : topicParametersList) {
-            for (Method m : topicParameters.getClass().getMethods()) {
-                if (m.getName().startsWith("get") && m.getParameterTypes().length == 0) {
-                    final Object parameter = m.invoke(topicParameters);
+            Field[] fields = BusTopicParams.class.getDeclaredFields();
+            for (Field field : fields) {
+                if (!field.isSynthetic()) {
+                    Object parameter = new PropertyDescriptor(field.getName(), TopicParameters.class).getReadMethod()
+                        .invoke(topicParameters);
                     if ((parameter instanceof String && StringUtils.isBlank(parameter.toString()))
                         || (parameter instanceof Boolean && !(Boolean) parameter)
-                        || (parameter instanceof Number && ((Number)parameter).longValue() == 0)) {
+                        || (parameter instanceof Number && ((Number) parameter).longValue() == 0)) {
                         return false;
                     }
                 }
