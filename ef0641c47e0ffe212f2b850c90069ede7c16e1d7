@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "67f6fdf0_c22e417a",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/parameters/TopicParameterGroup.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 4903
+      },
+      "writtenOn": "2019-07-30T12:59:25Z",
+      "side": 1,
+      "message": "Was trying to make the error message more descriptive (missing params in topic sources/sinks) and keeping the error message check simple (by just looking at the length)",
+      "parentUuid": "ac253f1d_54ea1cf3",
+      "revId": "ef0641c47e0ffe212f2b850c90069ede7c16e1d7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "feeaa53b_7b9b0e8c",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/ParameterUtils.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2019-07-30T12:45:47Z",
       "side": 1,
       "message": "can\u0027t remember - is there junit coverage for all of these branches, and at least one exception case?  Although maybe it doesn\u0027t matter as I expect this to be removed in the next sprint.",
+      "revId": "ef0641c47e0ffe212f2b850c90069ede7c16e1d7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "77a9d934_cfe8bc63",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/ParameterUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 4903
+      },
+      "writtenOn": "2019-07-30T12:59:25Z",
+      "side": 1,
+      "message": "Junits are there for getTopicProperties method, but yeah no exception case covered. Not sure when an exception occurs here while creating the properties object using the fields.",
+      "parentUuid": "feeaa53b_7b9b0e8c",
       "revId": "ef0641c47e0ffe212f2b850c90069ede7c16e1d7",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
