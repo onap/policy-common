@@ -28,6 +28,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -127,7 +128,7 @@ public class TopicParameterGroupTest {
         for (TopicParameters topicParameters : topicParametersList) {
             Field[] fields = BusTopicParams.class.getDeclaredFields();
             for (Field field : fields) {
-                if (!field.isSynthetic()) {
+                if (!field.isSynthetic() && !Modifier.isStatic(field.getModifiers())) {
                     Object parameter = new PropertyDescriptor(field.getName(), TopicParameters.class).getReadMethod()
                         .invoke(topicParameters);
                     if ((parameter instanceof String && StringUtils.isBlank(parameter.toString()))

@@ -77,7 +77,7 @@ public class RestServer extends ServiceManagerContainer {
      *
      * @return the properties object
      */
-    private Properties getServerProperties(RestServerParameters restServerParameters, String names) {
+    protected Properties getServerProperties(RestServerParameters restServerParameters, String names) {
         final Properties props = new Properties();
         props.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES, restServerParameters.getName());
 
