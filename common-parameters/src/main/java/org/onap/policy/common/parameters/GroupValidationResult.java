@@ -109,7 +109,7 @@ public class GroupValidationResult extends CommonGroupValidationResult {
 
         // Nested parameter groups are allowed
         if (ParameterGroup.class.isAssignableFrom(fieldType)) {
-            return new GroupValidationResult((ParameterGroup) fieldObject);
+            return ((ParameterGroup) fieldObject).validate();
         }
 
         // Nested maps of parameter groups are allowed
