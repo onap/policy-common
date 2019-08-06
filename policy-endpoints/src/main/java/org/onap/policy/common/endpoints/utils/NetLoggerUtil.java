@@ -21,8 +21,8 @@
 package org.onap.policy.common.endpoints.utils;
 
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
-import org.onap.policy.common.endpoints.features.NetLoggerFeatureApi;
 import org.onap.policy.common.endpoints.features.NetLoggerFeatureProviders;
+import org.onap.policy.common.utils.services.FeatureApiUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -111,17 +111,11 @@ public class NetLoggerUtil {
      */
     private static boolean featureBeforeLog(Logger eventLogger, EventType type, CommInfrastructure protocol,
                     String topic, String message) {
-        for (NetLoggerFeatureApi feature : NetLoggerFeatureProviders.getProviders().getList()) {
-            try {
-                if (feature.beforeLog(eventLogger, type, protocol, topic, message)) {
-                    return true;
-                }
-            } catch (Exception e) {
-                logger.error("feature {} before-log failure because of {}", feature.getClass().getName(),
-                                e.getMessage(), e);
-            }
-        }
-        return false;
+
+        return FeatureApiUtils.apply(NetLoggerFeatureProviders.getProviders().getList(),
+            feature -> feature.beforeLog(eventLogger, type, protocol, topic, message),
+            (feature, ex) -> logger.error("feature {} before-log failure because of {}",
+                            feature.getClass().getName(), ex.getMessage(), ex));
     }
 
     /**
@@ -138,17 +132,11 @@ public class NetLoggerUtil {
      */
     private static boolean featureAfterLog(Logger eventLogger, EventType type, CommInfrastructure protocol,
                     String topic, String message) {
-        for (NetLoggerFeatureApi feature : NetLoggerFeatureProviders.getProviders().getList()) {
-            try {
-                if (feature.afterLog(eventLogger, type, protocol, topic, message)) {
-                    return true;
-                }
-            } catch (Exception e) {
-                logger.error("feature {} after-log failure because of {}", feature.getClass().getName(), e.getMessage(),
-                                e);
-            }
-        }
-        return false;
+
+        return FeatureApiUtils.apply(NetLoggerFeatureProviders.getProviders().getList(),
+            feature -> feature.afterLog(eventLogger, type, protocol, topic, message),
+            (feature, ex) -> logger.error("feature {} after-log failure because of {}",
+                            feature.getClass().getName(), ex.getMessage(), ex));
     }
 
 }
