@@ -32,7 +32,7 @@ public class NetLoggerFeatureProviders {
      * Feature providers implementing this interface.
      */
     @Getter
-    private static OrderedServiceImpl<NetLoggerFeatureApi> providers =
+    private static final OrderedServiceImpl<NetLoggerFeatureApi> providers =
                     new OrderedServiceImpl<>(NetLoggerFeatureApi.class);
 
     private NetLoggerFeatureProviders() {
