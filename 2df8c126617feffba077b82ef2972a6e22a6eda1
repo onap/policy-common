@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9142dfd3_68a9fa36",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/services/ApiUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-08-14T17:26:51Z",
+      "side": 1,
+      "message": "For your consideration, consider naming it \"FeatureApiUtils\" instead of \"ApiUtils\".   It only applies to \"features\" not much applicability beyond that, just to make it clear when reading the code.",
+      "revId": "2df8c126617feffba077b82ef2972a6e22a6eda1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
