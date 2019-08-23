@@ -23,15 +23,29 @@ package org.onap.policy.common.endpoints.http.server.test;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Properties;
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import lombok.Getter;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -39,12 +53,15 @@ import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.onap.policy.common.endpoints.http.server.HttpServletServerFactory;
+import org.onap.policy.common.endpoints.http.server.JsonExceptionMapper;
 import org.onap.policy.common.endpoints.http.server.RestServer;
 import org.onap.policy.common.endpoints.http.server.RestServer.Factory;
 import org.onap.policy.common.endpoints.http.server.aaf.AafAuthFilter;
 import org.onap.policy.common.endpoints.parameters.RestServerParameters;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.gson.GsonMessageBodyHandler;
+import org.onap.policy.common.utils.coder.StandardCoder;
+import org.onap.policy.common.utils.network.NetworkUtil;
 import org.powermock.reflect.Whitebox;
 
 public class RestServerTest {
@@ -58,6 +75,7 @@ public class RestServerTest {
     private static final String USER = "my-user";
     private static Factory saveFactory;
 
+    private RestServer realRest;
     private RestServer rest;
     private HttpServletServer server1;
     private HttpServletServer server2;
@@ -101,6 +119,18 @@ public class RestServerTest {
         when(params.isHttps()).thenReturn(true);
 
         Whitebox.setInternalState(RestServer.class, FACTORY_FIELD, factory);
+
+        realRest = null;
+    }
+
+    /**
+     * Stops the rest server.
+     */
+    @After
+    public void tearDown() {
+        if (realRest != null) {
+            realRest.stop();
+        }
     }
 
     @Test
@@ -181,8 +211,56 @@ public class RestServerTest {
         assertEquals(PASS, props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX));
         assertEquals("true", props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX));
         assertEquals("true", props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_AAF_SUFFIX));
-        assertEquals(GsonMessageBodyHandler.class.getName(),
+        assertEquals(String.join(",", GsonMessageBodyHandler.class.getName(), JsonExceptionMapper.class.getName()),
                         props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER));
+    }
+
+    @Test
+    public void testInvalidJson() throws Exception {
+        when(params.getHost()).thenReturn("localhost");
+        when(params.getPort()).thenReturn(NetworkUtil.allocPort());
+        when(params.isHttps()).thenReturn(false);
+        when(params.isAaf()).thenReturn(false);
+
+        // use real factory
+        Whitebox.setInternalState(RestServer.class, FACTORY_FIELD, saveFactory);
+
+        realRest = new RestServer(params, null, RealProvider.class) {
+            @Override
+            protected Properties getServerProperties(RestServerParameters restServerParameters, String names) {
+                Properties props = super.getServerProperties(restServerParameters, names);
+
+                String svcpfx = PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+                                + restServerParameters.getName();
+                props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX, "false");
+
+                return props;
+            }
+        };
+
+        realRest.start();
+        assertTrue(NetworkUtil.isTcpPortOpen(params.getHost(), params.getPort(), 100, 100));
+
+        assertEquals(200, roundTrip(new StandardCoder().encode(new MyRequest())));
+        assertEquals(400, roundTrip("{'bogus-json'"));
+    }
+
+    private int roundTrip(String request) throws IOException {
+        URL url = new URL("http://" + params.getHost() + ":" + params.getPort() + "/request");
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setDoInput(true);
+        conn.setDoOutput(true);
+        conn.setRequestMethod("POST");
+        String auth = params.getUserName() + ":" + params.getPassword();
+        conn.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString(auth.getBytes()));
+        conn.setRequestProperty("Content-type", MediaType.APPLICATION_JSON);
+        conn.connect();
+
+        try (PrintWriter wtr = new PrintWriter(conn.getOutputStream())) {
+            wtr.write(request);
+        }
+
+        return conn.getResponseCode();
     }
 
     @Test
@@ -219,5 +297,26 @@ public class RestServerTest {
         private Provider2() {
             // do nothing
         }
+    }
+
+    @Path("/")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public static class RealProvider {
+        @POST
+        @Path("/request")
+        public Response decision(MyRequest body) {
+            return Response.status(Response.Status.OK).entity(new MyResponse()).build();
+        }
+    }
+
+    @Getter
+    public static class MyRequest {
+        private String data;
+    }
+
+    @Getter
+    public static class MyResponse {
+        private String text = "hello";
     }
 }
