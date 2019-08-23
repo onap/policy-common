@@ -99,7 +99,7 @@ public class RestServer extends ServiceManagerContainer {
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_AAF_SUFFIX,
                         String.valueOf(restServerParameters.isAaf()));
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER,
-                        GsonMessageBodyHandler.class.getName());
+                        String.join(",", GsonMessageBodyHandler.class.getName(), JsonExceptionMapper.class.getName()));
         return props;
     }
 
