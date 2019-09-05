@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20c7c65c_4342d8c0",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-09-05T14:17:06Z",
+      "side": 1,
+      "message": "I already merged this, but shouldn\u0027t it be 3.1.0-SNAPSHOT (since this is master branch)?",
+      "revId": "5434a50ab4b74f80bd4a7df148fd4bd4162b5b56",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
