@@ -26,9 +26,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -40,6 +39,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.onap.policy.common.endpoints.http.server.HttpServletServerFactoryInstance;
+import org.onap.policy.common.utils.coder.StandardYamlCoder;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 import org.onap.policy.common.utils.network.NetworkUtil;
 import org.slf4j.Logger;
@@ -50,6 +50,8 @@ import org.slf4j.LoggerFactory;
  */
 public class HttpServerTest {
     private static final String LOCALHOST = "localhost";
+    private static final String JSON_MEDIA = "application/json";
+    private static final String YAML_MEDIA = "application/yaml";
     private static final String SWAGGER_JSON = "/swagger.json";
     private static final String JUNIT_ECHO_HELLO = "/junit/echo/hello";
     private static final String JUNIT_ECHO_FULL_REQUEST = "/junit/echo/full/request";
@@ -84,6 +86,7 @@ public class HttpServerTest {
 
         MyJacksonProvider.resetSome();
         MyGsonProvider.resetSome();
+        MyYamlProvider.resetSome();
     }
 
     private static void incrementPort() {
@@ -112,7 +115,7 @@ public class HttpServerTest {
         request.setText(SOME_TEXT);
         String reqText = gson.toJson(request);
 
-        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, JSON_MEDIA, reqText);
         assertEquals(reqText, response);
     }
 
@@ -135,7 +138,7 @@ public class HttpServerTest {
         request.setText(SOME_TEXT);
         String reqText = gson.toJson(request);
 
-        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, JSON_MEDIA, reqText);
         assertEquals(reqText, response);
 
         assertTrue(MyJacksonProvider.hasReadSome());
@@ -143,6 +146,9 @@ public class HttpServerTest {
 
         assertFalse(MyGsonProvider.hasReadSome());
         assertFalse(MyGsonProvider.hasWrittenSome());
+
+        assertFalse(MyYamlProvider.hasReadSome());
+        assertFalse(MyYamlProvider.hasWrittenSome());
     }
 
     @Test
@@ -164,11 +170,48 @@ public class HttpServerTest {
         request.setText(SOME_TEXT);
         String reqText = gson.toJson(request);
 
-        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, JSON_MEDIA, reqText);
         assertEquals(reqText, response);
 
         assertTrue(MyGsonProvider.hasReadSome());
         assertTrue(MyGsonProvider.hasWrittenSome());
+
+        assertFalse(MyJacksonProvider.hasReadSome());
+        assertFalse(MyJacksonProvider.hasWrittenSome());
+
+        assertFalse(MyYamlProvider.hasReadSome());
+        assertFalse(MyYamlProvider.hasWrittenSome());
+    }
+
+    @Test
+    public void testYamlPackageServer() throws Exception {
+        logger.info("-- testYamlPackageServer() --");
+
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo", LOCALHOST, port, "/", false, true);
+
+        server.setSerializationProvider(MyYamlProvider.class.getName());
+        server.addServletPackage("/*", this.getClass().getPackage().getName());
+        server.addFilterClass("/*", TestFilter.class.getName());
+        server.waitedStart(5000);
+
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+
+        RestEchoReqResp request = new RestEchoReqResp();
+        request.setRequestId(100);
+        request.setText(SOME_TEXT);
+        String reqText = new StandardYamlCoder().encode(request);
+
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, YAML_MEDIA, reqText);
+
+        // response reader strips newlines, so we should, too, before comparing
+        assertEquals(reqText.replace("\n", ""), response);
+
+        assertTrue(MyYamlProvider.hasReadSome());
+        assertTrue(MyYamlProvider.hasWrittenSome());
+
+        assertFalse(MyGsonProvider.hasReadSome());
+        assertFalse(MyGsonProvider.hasWrittenSome());
 
         assertFalse(MyJacksonProvider.hasReadSome());
         assertFalse(MyJacksonProvider.hasWrittenSome());
@@ -191,7 +234,7 @@ public class HttpServerTest {
         request.setText(SOME_TEXT);
         String reqText = gson.toJson(request);
 
-        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, JSON_MEDIA, reqText);
         assertEquals(reqText, response);
     }
 
@@ -213,7 +256,7 @@ public class HttpServerTest {
         request.setText(SOME_TEXT);
         String reqText = gson.toJson(request);
 
-        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, JSON_MEDIA, reqText);
         assertEquals(reqText, response);
 
         assertTrue(MyJacksonProvider.hasReadSome());
@@ -221,6 +264,9 @@ public class HttpServerTest {
 
         assertFalse(MyGsonProvider.hasReadSome());
         assertFalse(MyGsonProvider.hasWrittenSome());
+
+        assertFalse(MyYamlProvider.hasReadSome());
+        assertFalse(MyYamlProvider.hasWrittenSome());
     }
 
     @Test
@@ -241,11 +287,47 @@ public class HttpServerTest {
         request.setText(SOME_TEXT);
         String reqText = gson.toJson(request);
 
-        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, reqText);
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, JSON_MEDIA, reqText);
         assertEquals(reqText, response);
 
         assertTrue(MyGsonProvider.hasReadSome());
         assertTrue(MyGsonProvider.hasWrittenSome());
+
+        assertFalse(MyJacksonProvider.hasReadSome());
+        assertFalse(MyJacksonProvider.hasWrittenSome());
+
+        assertFalse(MyYamlProvider.hasReadSome());
+        assertFalse(MyYamlProvider.hasWrittenSome());
+    }
+
+    @Test
+    public void testYamlClassServer() throws Exception {
+        logger.info("-- testYamlClassServer() --");
+
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+                        .build("echo", LOCALHOST, port, "/", false, true);
+        server.setSerializationProvider(MyYamlProvider.class.getName());
+        server.addServletClass("/*", RestEchoService.class.getName());
+        server.addFilterClass("/*", TestFilter.class.getName());
+        server.waitedStart(5000);
+
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+
+        RestEchoReqResp request = new RestEchoReqResp();
+        request.setRequestId(100);
+        request.setText(SOME_TEXT);
+        String reqText = new StandardYamlCoder().encode(request);
+
+        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, YAML_MEDIA, reqText);
+
+        // response reader strips newlines, so we should, too, before comparing
+        assertEquals(reqText.replace("\n", ""), response);
+
+        assertTrue(MyYamlProvider.hasReadSome());
+        assertTrue(MyYamlProvider.hasWrittenSome());
+
+        assertFalse(MyGsonProvider.hasReadSome());
+        assertFalse(MyGsonProvider.hasWrittenSome());
 
         assertFalse(MyJacksonProvider.hasReadSome());
         assertFalse(MyJacksonProvider.hasWrittenSome());
@@ -416,7 +498,7 @@ public class HttpServerTest {
      * @throws IOException thrown is IO exception occurs
      * @throws InterruptedException thrown if thread interrupted occurs
      */
-    private String http(String urlString, String post)
+    private String http(String urlString, String mediaType, String post)
             throws IOException, InterruptedException {
         URL url = new URL(urlString);
         if (!NetworkUtil.isTcpPortOpen(url.getHost(), url.getPort(), 25, 2)) {
@@ -425,7 +507,7 @@ public class HttpServerTest {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setRequestMethod("POST");
         conn.setDoOutput(true);
-        conn.setRequestProperty("Content-Type", "application/json");
+        conn.setRequestProperty("Content-Type", mediaType);
         IOUtils.write(post, conn.getOutputStream());
         return response(conn);
     }
@@ -438,14 +520,9 @@ public class HttpServerTest {
      * @throws IOException if an I/O error occurs
      */
     private String response(URLConnection conn) throws IOException {
-        StringBuilder response = new StringBuilder();
-        try (BufferedReader ioReader = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
-            String line;
-            while ((line = ioReader.readLine()) != null) {
-                response.append(line);
-            }
+        try (InputStream inpstr = conn.getInputStream()) {
+            return String.join("", IOUtils.readLines(inpstr));
         }
-        return response.toString();
     }
 
 }

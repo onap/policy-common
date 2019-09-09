@@ -56,7 +56,7 @@ public class RestEchoService {
 
     @POST
     @Path("/full/request")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, "application/yaml"})
     @ApiOperation(value = "echoes back the request structure", response = RestEchoReqResp.class)
     public Response echoFullyPost(RestEchoReqResp reqResp) {
         return Response.status(Status.OK).entity(reqResp).build();
