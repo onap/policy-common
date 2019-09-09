@@ -211,6 +211,16 @@ public class StandardCoder implements Coder {
     }
 
     /**
+     * Encodes an object into a json tree, without catching exceptions.
+     *
+     * @param object object to be encoded
+     * @return a json element representing the object
+     */
+    protected JsonElement toJsonTree(Object object) {
+        return GSON.toJsonTree(object);
+    }
+
+    /**
      * Encodes an object into json, without catching exceptions.
      *
      * @param object object to be encoded
@@ -229,6 +239,17 @@ public class StandardCoder implements Coder {
      */
     protected void toJson(Writer target, Object object) throws IOException {
         GSON.toJson(object, object.getClass(), target);
+    }
+
+    /**
+     * Decodes a json element into an object, without catching exceptions.
+     *
+     * @param json json element to be decoded
+     * @param clazz class of object to be decoded
+     * @return the object represented by the given json element
+     */
+    protected <T> T fromJson(JsonElement json, Class<T> clazz) {
+        return convertFromDouble(clazz, GSON.fromJson(json, clazz));
     }
 
     /**
