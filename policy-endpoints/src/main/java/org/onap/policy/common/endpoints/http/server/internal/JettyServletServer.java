@@ -21,22 +21,20 @@
 package org.onap.policy.common.endpoints.http.server.internal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import java.util.EnumSet;
-
 import javax.servlet.DispatcherType;
-
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.UserStore;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
+import org.eclipse.jetty.server.CustomRequestLog;
 import org.eclipse.jetty.server.HttpConfiguration;
 import org.eclipse.jetty.server.HttpConnectionFactory;
 import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
-import org.eclipse.jetty.server.Slf4jRequestLog;
+import org.eclipse.jetty.server.Slf4jRequestLogWriter;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.util.security.Constraint;
@@ -163,7 +161,10 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         this.context.setContextPath(ctxtPath);
 
         this.jettyServer = new Server();
-        this.jettyServer.setRequestLog(new Slf4jRequestLog());
+
+        CustomRequestLog requestLog =
+                        new CustomRequestLog(new Slf4jRequestLogWriter(), CustomRequestLog.EXTENDED_NCSA_FORMAT);
+        this.jettyServer.setRequestLog(requestLog);
 
         if (https) {
             this.connector = httpsConnector();
@@ -204,7 +205,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      * @return the server connector
      */
     public ServerConnector httpsConnector() {
-        SslContextFactory sslContextFactory = new SslContextFactory();
+        SslContextFactory sslContextFactory = new SslContextFactory.Server();
 
         String keyStore = System.getProperty(SYSTEM_KEYSTORE_PROPERTY_NAME);
         if (keyStore != null) {
