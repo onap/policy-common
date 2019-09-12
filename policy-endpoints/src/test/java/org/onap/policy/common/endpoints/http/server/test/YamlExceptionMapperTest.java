@@ -22,29 +22,29 @@ package org.onap.policy.common.endpoints.http.server.test;
 
 import static org.junit.Assert.assertEquals;
 
-import com.google.gson.JsonSyntaxException;
 import javax.ws.rs.core.Response;
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.endpoints.http.server.JsonExceptionMapper;
+import org.onap.policy.common.endpoints.http.server.YamlExceptionMapper;
 import org.onap.policy.common.utils.coder.CoderException;
-import org.onap.policy.common.utils.coder.StandardCoder;
+import org.onap.policy.common.utils.coder.StandardYamlCoder;
+import org.yaml.snakeyaml.error.YAMLException;
 
-public class JsonExceptionMapperTest {
-    private JsonExceptionMapper mapper;
+public class YamlExceptionMapperTest {
+    private YamlExceptionMapper mapper;
 
     @Before
     public void setUp() {
-        mapper = new JsonExceptionMapper();
+        mapper = new YamlExceptionMapper();
     }
 
     @Test
     public void testToResponse() throws CoderException {
-        JsonSyntaxException ex = new JsonSyntaxException("expected exception");
+        YAMLException ex = new YAMLException("expected exception");
         Response resp = mapper.toResponse(ex);
 
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), resp.getStatus());
-        assertEquals("{'errorDetails':'Invalid request'}".replace('\'', '"'),
-                        new StandardCoder().encode(resp.getEntity()));
+        assertEquals("errorDetails: Invalid request",
+                        new StandardYamlCoder().encode(resp.getEntity()).trim());
     }
 }

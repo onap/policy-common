@@ -20,28 +20,27 @@
 
 package org.onap.policy.common.endpoints.http.server;
 
-import com.google.gson.JsonSyntaxException;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  * Catches JSON exceptions when decoding a REST request and converts them from an HTTP 500
  * error code to an HTTP 400 error code.
  */
 @Provider
-@Produces(MediaType.APPLICATION_JSON)
-public class JsonExceptionMapper implements ExceptionMapper<JsonSyntaxException> {
-    private static Logger logger = LoggerFactory.getLogger(JsonExceptionMapper.class);
+@Produces("application/yaml")
+public class YamlExceptionMapper implements ExceptionMapper<YAMLException> {
+    private static Logger logger = LoggerFactory.getLogger(YamlExceptionMapper.class);
 
     @Override
-    public Response toResponse(JsonSyntaxException exception) {
-        logger.warn("invalid JSON request", exception);
+    public Response toResponse(YAMLException exception) {
+        logger.warn("invalid YAML request", exception);
         return Response.status(Response.Status.BAD_REQUEST).entity(new SimpleResponse("Invalid request")).build();
     }
 

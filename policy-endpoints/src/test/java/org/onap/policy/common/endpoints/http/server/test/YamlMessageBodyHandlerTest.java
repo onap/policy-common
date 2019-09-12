@@ -36,6 +36,7 @@ import javax.ws.rs.core.MediaType;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.http.server.YamlMessageBodyHandler;
+import org.yaml.snakeyaml.error.YAMLException;
 
 public class YamlMessageBodyHandlerTest {
     private static final String EXPECTED_EXCEPTION = "expected exception";
@@ -168,7 +169,17 @@ public class YamlMessageBodyHandlerTest {
         };
 
         assertThatThrownBy(() -> hdlr.readFrom(CLASS_OBJ, CLASS_OBJ, null, null, null, inpstr))
-                        .isInstanceOf(IOException.class);
+                        .isInstanceOf(YAMLException.class);
+
+        inpstr.close();
+    }
+
+    @Test
+    public void testReadFrom_Invalid() throws Exception {
+        InputStream inpstr = new ByteArrayInputStream("plain text".getBytes());
+
+        assertThatThrownBy(() -> hdlr.readFrom(CLASS_OBJ, CLASS_OBJ, null, null, null, inpstr))
+                        .isInstanceOf(YAMLException.class);
 
         inpstr.close();
     }
