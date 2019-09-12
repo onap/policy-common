@@ -20,11 +20,13 @@
 
 package org.onap.policy.common.endpoints.http.server;
 
+import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.io.Reader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -39,6 +41,7 @@ import org.onap.policy.common.utils.coder.CoderException;
 import org.onap.policy.common.utils.coder.StandardYamlCoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.yaml.snakeyaml.error.YAMLException;
 
 /**
  * Provider that serializes and de-serializes JSON via gson.
@@ -72,7 +75,7 @@ public class YamlMessageBodyHandler implements MessageBodyReader<Object>, Messag
                     MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException {
 
         try (OutputStreamWriter writer = new OutputStreamWriter(entityStream, StandardCharsets.UTF_8)) {
-            new StandardYamlCoder().encode(writer, object);
+            new MyYamlCoder().encode(writer, object);
 
         } catch (CoderException e) {
             throw new IOException(e);
@@ -101,10 +104,24 @@ public class YamlMessageBodyHandler implements MessageBodyReader<Object>, Messag
 
         try (InputStreamReader streamReader = new InputStreamReader(entityStream, StandardCharsets.UTF_8)) {
             Class<?> clazz = (Class<?>) genericType;
-            return new StandardYamlCoder().decode(streamReader, clazz);
+            return new MyYamlCoder().decode(streamReader, clazz);
+        }
+    }
 
-        } catch (CoderException e) {
-            throw new IOException(e);
+    /**
+     * Yaml coder that yields YAMLException on input so that the http servlet can identify
+     * it and generate a bad-request status code. Only the {@link #decode(Reader, Class)}
+     * method must be overridden.
+     */
+    private static class MyYamlCoder extends StandardYamlCoder {
+        @Override
+        public <T> T decode(Reader source, Class<T> clazz) {
+            try {
+                return fromJson(source, clazz);
+
+            } catch (JsonSyntaxException e) {
+                throw new YAMLException(e);
+            }
         }
     }
 }

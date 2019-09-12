@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.http.server.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -34,6 +35,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.Properties;
@@ -45,6 +47,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import lombok.Getter;
+import org.apache.commons.io.IOUtils;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -56,6 +59,7 @@ import org.onap.policy.common.endpoints.http.server.HttpServletServerFactory;
 import org.onap.policy.common.endpoints.http.server.JsonExceptionMapper;
 import org.onap.policy.common.endpoints.http.server.RestServer;
 import org.onap.policy.common.endpoints.http.server.RestServer.Factory;
+import org.onap.policy.common.endpoints.http.server.YamlExceptionMapper;
 import org.onap.policy.common.endpoints.http.server.YamlMessageBodyHandler;
 import org.onap.policy.common.endpoints.http.server.aaf.AafAuthFilter;
 import org.onap.policy.common.endpoints.parameters.RestServerParameters;
@@ -66,6 +70,7 @@ import org.onap.policy.common.utils.network.NetworkUtil;
 import org.powermock.reflect.Whitebox;
 
 public class RestServerTest {
+    private static final String APPLICATION_YAML = "application/yaml";
     private static final String SERVER1 = "my-server-A";
     private static final String SERVER2 = "my-server-B";
     private static final String FACTORY_FIELD = "factory";
@@ -83,6 +88,7 @@ public class RestServerTest {
     private Factory factory;
     private HttpServletServerFactory serverFactory;
     private RestServerParameters params;
+    private String errorMsg;
 
     @BeforeClass
     public static void setUpBeforeClass() {
@@ -213,7 +219,7 @@ public class RestServerTest {
         assertEquals("true", props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX));
         assertEquals("true", props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_AAF_SUFFIX));
         assertEquals(String.join(",", GsonMessageBodyHandler.class.getName(), YamlMessageBodyHandler.class.getName(),
-                        JsonExceptionMapper.class.getName()),
+                        JsonExceptionMapper.class.getName(), YamlExceptionMapper.class.getName()),
                         props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER));
     }
 
@@ -245,9 +251,45 @@ public class RestServerTest {
 
         assertEquals(200, roundTrip(new StandardCoder().encode(new MyRequest())));
         assertEquals(400, roundTrip("{'bogus-json'"));
+        assertThat(errorMsg).contains("Invalid JSON request");
+    }
+
+    @Test
+    public void testInvalidYaml() throws Exception {
+        when(params.getHost()).thenReturn("localhost");
+        when(params.getPort()).thenReturn(NetworkUtil.allocPort());
+        when(params.isHttps()).thenReturn(false);
+        when(params.isAaf()).thenReturn(false);
+
+        // use real factory
+        Whitebox.setInternalState(RestServer.class, FACTORY_FIELD, saveFactory);
+
+        realRest = new RestServer(params, null, RealProvider.class) {
+            @Override
+            protected Properties getServerProperties(RestServerParameters restServerParameters, String names) {
+                Properties props = super.getServerProperties(restServerParameters, names);
+
+                String svcpfx = PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "."
+                                + restServerParameters.getName();
+                props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX, "false");
+
+                return props;
+            }
+        };
+
+        realRest.start();
+        assertTrue(NetworkUtil.isTcpPortOpen(params.getHost(), params.getPort(), 100, 100));
+
+        assertEquals(200, roundTrip(new StandardCoder().encode(new MyRequest()), APPLICATION_YAML));
+        assertEquals(400, roundTrip("<bogus yaml", APPLICATION_YAML));
+        assertThat(errorMsg).contains("Invalid YAML request");
     }
 
     private int roundTrip(String request) throws IOException {
+        return roundTrip(request, MediaType.APPLICATION_JSON);
+    }
+
+    private int roundTrip(String request, String mediaType) throws IOException {
         URL url = new URL("http://" + params.getHost() + ":" + params.getPort() + "/request");
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
         conn.setDoInput(true);
@@ -255,14 +297,22 @@ public class RestServerTest {
         conn.setRequestMethod("POST");
         String auth = params.getUserName() + ":" + params.getPassword();
         conn.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString(auth.getBytes()));
-        conn.setRequestProperty("Content-type", MediaType.APPLICATION_JSON);
+        conn.setRequestProperty("Content-type", mediaType);
         conn.connect();
 
         try (PrintWriter wtr = new PrintWriter(conn.getOutputStream())) {
             wtr.write(request);
         }
 
-        return conn.getResponseCode();
+        int code = conn.getResponseCode();
+
+        if (code == 200) {
+            errorMsg = "";
+        } else {
+            errorMsg = IOUtils.toString(conn.getErrorStream(), StandardCharsets.UTF_8);
+        }
+
+        return code;
     }
 
     @Test
@@ -302,8 +352,8 @@ public class RestServerTest {
     }
 
     @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces({MediaType.APPLICATION_JSON, APPLICATION_YAML})
+    @Consumes({MediaType.APPLICATION_JSON, APPLICATION_YAML})
     public static class RealProvider {
         @POST
         @Path("/request")

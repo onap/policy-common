@@ -168,7 +168,7 @@ public class YamlMessageBodyHandlerTest {
         };
 
         assertThatThrownBy(() -> hdlr.readFrom(CLASS_OBJ, CLASS_OBJ, null, null, null, inpstr))
-                        .isInstanceOf(IOException.class);
+                        .isInstanceOf(Exception.class);
 
         inpstr.close();
     }
