@@ -44,6 +44,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.junit.Before;
@@ -201,6 +202,22 @@ public class StandardCoderTest {
     }
 
     @Test
+    public void testToJsonTree_testFromJsonJsonElementClassT() throws Exception {
+        MyMap map = new MyMap();
+        map.props = new LinkedHashMap<>();
+        map.props.put("jel keyA", "jel valueA");
+        map.props.put("jel keyB", "jel valueB");
+
+        JsonElement json = coder.toJsonTree(map);
+        assertEquals("{'props':{'jel keyA':'jel valueA','jel keyB':'jel valueB'}}".replace('\'', '"'), json.toString());
+
+        Object result = coder.fromJson(json, MyMap.class);
+
+        assertNotNull(result);
+        assertEquals("{jel keyA=jel valueA, jel keyB=jel valueB}", result.toString());
+    }
+
+    @Test
     public void testConvertFromDouble() throws Exception {
         String text = "[listA, {keyA=100}, 200]";
         assertEquals(text, coder.decode(text, Object.class).toString());
@@ -276,7 +293,12 @@ public class StandardCoderTest {
         }
     }
 
-    private static class MyMap {
+    public static class MyMap {
         private Map<String, Object> props;
+
+        @Override
+        public String toString() {
+            return props.toString();
+        }
     }
 }

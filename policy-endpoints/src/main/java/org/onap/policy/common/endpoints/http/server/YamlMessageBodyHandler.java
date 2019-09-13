@@ -26,7 +26,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.Reader;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
@@ -37,14 +36,14 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
-import org.onap.policy.common.utils.coder.CoderException;
-import org.onap.policy.common.utils.coder.StandardYamlCoder;
+import org.onap.policy.common.gson.GsonMessageBodyHandler;
+import org.onap.policy.common.utils.coder.YamlJsonTranslator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.error.YAMLException;
 
 /**
- * Provider that serializes and de-serializes JSON via gson.
+ * Provider that serializes and de-serializes YAML via snakeyaml and gson.
  */
 @Provider
 @Consumes(MediaType.WILDCARD)
@@ -53,11 +52,33 @@ public class YamlMessageBodyHandler implements MessageBodyReader<Object>, Messag
 
     public static final Logger logger = LoggerFactory.getLogger(YamlMessageBodyHandler.class);
 
+    public static final String APPLICATION_YAML = "application/yaml";
+
+    /**
+     * Translator that's used when none is specified. We want a GSON object that's
+     * configured the same was as it is in {@link GsonMessageBodyHandler}, so just get it
+     * from there.
+     */
+    private static final YamlJsonTranslator DEFAULT_TRANSLATOR =
+                    new YamlJsonTranslator(new GsonMessageBodyHandler().getGson());
+
+    private final YamlJsonTranslator translator;
+
     /**
      * Constructs the object.
      */
     public YamlMessageBodyHandler() {
+        this(DEFAULT_TRANSLATOR);
+    }
+
+    /**
+     * Constructs the object.
+     *
+     * @param translator translator to use to translate to/from YAML
+     */
+    public YamlMessageBodyHandler(YamlJsonTranslator translator) {
         logger.info("Accepting YAML for REST calls");
+        this.translator = translator;
     }
 
     @Override
@@ -75,10 +96,7 @@ public class YamlMessageBodyHandler implements MessageBodyReader<Object>, Messag
                     MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException {
 
         try (OutputStreamWriter writer = new OutputStreamWriter(entityStream, StandardCharsets.UTF_8)) {
-            new MyYamlCoder().encode(writer, object);
-
-        } catch (CoderException e) {
-            throw new IOException(e);
+            translator.toYaml(writer, object);
         }
     }
 
@@ -104,24 +122,10 @@ public class YamlMessageBodyHandler implements MessageBodyReader<Object>, Messag
 
         try (InputStreamReader streamReader = new InputStreamReader(entityStream, StandardCharsets.UTF_8)) {
             Class<?> clazz = (Class<?>) genericType;
-            return new MyYamlCoder().decode(streamReader, clazz);
-        }
-    }
+            return translator.fromYaml(streamReader, clazz);
 
-    /**
-     * Yaml coder that yields YAMLException on input so that the http servlet can identify
-     * it and generate a bad-request status code. Only the {@link #decode(Reader, Class)}
-     * method must be overridden.
-     */
-    private static class MyYamlCoder extends StandardYamlCoder {
-        @Override
-        public <T> T decode(Reader source, Class<T> clazz) {
-            try {
-                return fromJson(source, clazz);
-
-            } catch (JsonSyntaxException e) {
-                throw new YAMLException(e);
-            }
+        } catch (JsonSyntaxException e) {
+            throw new YAMLException(e);
         }
     }
 }

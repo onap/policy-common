@@ -62,9 +62,17 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
      * into Integer/Long, where possible.
      */
     public GsonMessageBodyHandler() {
-        this(new GsonBuilder().registerTypeAdapterFactory(new MapDoubleAdapterFactory()).create());
+        this(new GsonBuilder());
+    }
 
-        logger.info("Using GSON for REST calls");
+    /**
+     * Constructs the object, using a Gson object that translates Doubles inside of Maps
+     * into Integer/Long, where possible.
+     *
+     * @param builder builder to use to create the gson object
+     */
+    public GsonMessageBodyHandler(GsonBuilder builder) {
+        this(builder.registerTypeAdapterFactory(new MapDoubleAdapterFactory()).create());
     }
 
     /**
@@ -74,6 +82,8 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
      */
     public GsonMessageBodyHandler(Gson gson) {
         this.gson = gson;
+
+        logger.info("Using GSON for REST calls");
     }
 
     @Override

@@ -69,7 +69,6 @@ import org.onap.policy.common.utils.network.NetworkUtil;
 import org.powermock.reflect.Whitebox;
 
 public class RestServerTest {
-    private static final String APPLICATION_YAML = "application/yaml";
     private static final String SERVER1 = "my-server-A";
     private static final String SERVER2 = "my-server-B";
     private static final String FACTORY_FIELD = "factory";
@@ -247,8 +246,9 @@ public class RestServerTest {
     public void testInvalidYaml() throws Exception {
         initRealParams();
 
-        assertEquals(200, roundTrip(new StandardCoder().encode(new MyRequest()), APPLICATION_YAML));
-        assertEquals(400, roundTrip("<bogus yaml", APPLICATION_YAML));
+        assertEquals(200, roundTrip(new StandardCoder().encode(new MyRequest()),
+                        YamlMessageBodyHandler.APPLICATION_YAML));
+        assertEquals(400, roundTrip("<bogus yaml", YamlMessageBodyHandler.APPLICATION_YAML));
         assertThat(errorMsg).contains("Invalid request");
     }
 
@@ -340,8 +340,8 @@ public class RestServerTest {
     }
 
     @Path("/")
-    @Produces({MediaType.APPLICATION_JSON, APPLICATION_YAML})
-    @Consumes({MediaType.APPLICATION_JSON, APPLICATION_YAML})
+    @Produces({MediaType.APPLICATION_JSON, YamlMessageBodyHandler.APPLICATION_YAML})
+    @Consumes({MediaType.APPLICATION_JSON, YamlMessageBodyHandler.APPLICATION_YAML})
     public static class RealProvider {
         @POST
         @Path("/request")
