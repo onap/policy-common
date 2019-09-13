@@ -117,7 +117,7 @@ public class YamlMessageBodyHandlerTest {
         MyObject obj1 = new MyObject(10);
 
         assertThatThrownBy(() -> hdlr.writeTo(obj1, obj1.getClass(), CLASS_OBJ, null, null, null, outstr))
-                        .isInstanceOf(IOException.class);
+                        .isInstanceOf(YAMLException.class);
 
         outstr.close();
     }

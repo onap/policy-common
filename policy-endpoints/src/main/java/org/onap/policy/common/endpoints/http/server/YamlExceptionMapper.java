@@ -34,7 +34,7 @@ import org.yaml.snakeyaml.error.YAMLException;
  * error code to an HTTP 400 error code.
  */
 @Provider
-@Produces("application/yaml")
+@Produces(YamlMessageBodyHandler.APPLICATION_YAML)
 public class YamlExceptionMapper implements ExceptionMapper<YAMLException> {
     private static Logger logger = LoggerFactory.getLogger(YamlExceptionMapper.class);
 

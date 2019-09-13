@@ -39,6 +39,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.onap.policy.common.endpoints.http.server.HttpServletServerFactoryInstance;
+import org.onap.policy.common.endpoints.http.server.YamlMessageBodyHandler;
 import org.onap.policy.common.utils.coder.StandardYamlCoder;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 import org.onap.policy.common.utils.network.NetworkUtil;
@@ -51,7 +52,7 @@ import org.slf4j.LoggerFactory;
 public class HttpServerTest {
     private static final String LOCALHOST = "localhost";
     private static final String JSON_MEDIA = "application/json";
-    private static final String YAML_MEDIA = "application/yaml";
+    private static final String YAML_MEDIA = YamlMessageBodyHandler.APPLICATION_YAML;
     private static final String SWAGGER_JSON = "/swagger.json";
     private static final String JUNIT_ECHO_HELLO = "/junit/echo/hello";
     private static final String JUNIT_ECHO_FULL_REQUEST = "/junit/echo/full/request";

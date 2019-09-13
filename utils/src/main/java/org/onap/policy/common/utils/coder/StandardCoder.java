@@ -38,6 +38,8 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.onap.policy.common.gson.DoubleConverter;
 import org.onap.policy.common.gson.MapDoubleAdapterFactory;
 
@@ -49,6 +51,7 @@ public class StandardCoder implements Coder {
     /**
      * Gson object used to encode and decode messages.
      */
+    @Getter(AccessLevel.PROTECTED)
     private static final Gson GSON =
                     new GsonBuilder().registerTypeAdapter(StandardCoderObject.class, new StandardTypeAdapter())
                                     .registerTypeAdapterFactory(new MapDoubleAdapterFactory()).create();

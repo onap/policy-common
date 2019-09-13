@@ -1,4 +1,4 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
@@ -18,42 +18,34 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.utils.coder;
+package org.onap.policy.common.endpoints.http.server;
 
-import java.io.Reader;
-import java.io.Writer;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.ext.Provider;
+import org.onap.policy.common.gson.JacksonHandler;
+import org.onap.policy.common.utils.coder.YamlJsonTranslator;
 
 /**
- * YAML encoder and decoder using the "standard" mechanism, which is currently gson. All
- * of the methods perform conversion to/from YAML (instead of JSON).
+ * Provider that serializes and de-serializes YAML via snakeyaml and gson using jackson
+ * default behaviors and annotations.
  */
-public class StandardYamlCoder extends StandardCoder {
-    private final YamlJsonTranslator translator;
+@Provider
+@Consumes(MediaType.WILDCARD)
+@Produces(MediaType.WILDCARD)
+public class YamlJacksonHandler extends YamlMessageBodyHandler {
+
+    /**
+     * Translator to be used. We want a GSON object that's configured the same way as it
+     * is in {@link JacksonHandler}, so just get it from there.
+     */
+    private static final YamlJsonTranslator TRANS = new YamlJsonTranslator(new JacksonHandler().getGson());
 
     /**
      * Constructs the object.
      */
-    public StandardYamlCoder() {
-        translator = new YamlJsonTranslator(getGSON());
-    }
-
-    @Override
-    protected String toJson(Object object) {
-        return translator.toYaml(object);
-    }
-
-    @Override
-    protected void toJson(Writer target, Object object) {
-        translator.toYaml(target, object);
-    }
-
-    @Override
-    protected <T> T fromJson(String yaml, Class<T> clazz) {
-        return translator.fromYaml(yaml, clazz);
-    }
-
-    @Override
-    protected <T> T fromJson(Reader source, Class<T> clazz) {
-        return translator.fromYaml(source, clazz);
+    public YamlJacksonHandler() {
+        super(TRANS);
     }
 }
