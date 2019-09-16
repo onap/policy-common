@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5c3a8793_f289b4a9",
+        "filename": "gson/src/main/java/org/onap/policy/common/gson/JacksonHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-09-16T12:51:39Z",
+      "side": 0,
+      "message": "Is the create() ok to drop?",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 35
+      },
+      "revId": "63922e3dc9101f019cb490f6c5d02991c10fcdf5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
