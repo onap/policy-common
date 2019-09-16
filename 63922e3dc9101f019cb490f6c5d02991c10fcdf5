@@ -22,6 +22,30 @@
       "revId": "63922e3dc9101f019cb490f6c5d02991c10fcdf5",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "908284bb_3d037966",
+        "filename": "gson/src/main/java/org/onap/policy/common/gson/JacksonHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-09-16T13:05:36Z",
+      "side": 0,
+      "message": "Yes, it\u0027s now passing the builder object, itself, to the superclass, which will invoke create() after adding its own adapters (i.e., MapDoubleAdapterFactory) to the builder.\nHowever, it did occur to me after the fact that I could have simply added a static \"configBuilder()\" method that invokers could use, rather than add a constructor that takes (and modifies) a GsonBuilder.  I\u0027m open to making that change if it would be preferable.",
+      "parentUuid": "5c3a8793_f289b4a9",
+      "range": {
+        "startLine": 54,
+        "startChar": 0,
+        "endLine": 54,
+        "endChar": 35
+      },
+      "revId": "63922e3dc9101f019cb490f6c5d02991c10fcdf5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
