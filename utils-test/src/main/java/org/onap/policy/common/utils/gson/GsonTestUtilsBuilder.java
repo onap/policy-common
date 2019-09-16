@@ -37,7 +37,7 @@ public class GsonTestUtilsBuilder {
         gsonBldr = new GsonBuilder();
 
         // register jackson behaviors with the builder
-        new JacksonHandler(gsonBldr);
+        JacksonHandler.configBuilder(gsonBldr);
     }
 
     /**

@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.gson;
 
+import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,20 +37,30 @@ public class JacksonHandler extends GsonMessageBodyHandler {
      * Constructs the object.
      */
     public JacksonHandler() {
-        this(new GsonBuilder());
-
-        logger.info("Using GSON with Jackson behaviors for REST calls");
+        this(configBuilder(new GsonBuilder()).create());
     }
 
     /**
      * Constructs the object.
-     * @param builder builder to use to create the gson object
+     *
+     * @param gson the Gson object to be used to serialize and de-serialize
      */
-    public JacksonHandler(GsonBuilder builder) {
-        super(builder
-                        .registerTypeAdapterFactory(new JacksonFieldAdapterFactory())
-                        .registerTypeAdapterFactory(new JacksonMethodAdapterFactory())
-                        .setExclusionStrategies(new JacksonExclusionStrategy()));
+    public JacksonHandler(Gson gson) {
+        super(gson);
+        logger.info("Using GSON with Jackson behaviors for REST calls");
     }
 
+    /**
+     * Configures a builder with the adapters normally used by this handler (e.g.,
+     * adapters for GsonJsonXxx annotations).
+     *
+     * @param builder builder to be configured
+     * @return the configured builder
+     */
+    public static GsonBuilder configBuilder(GsonBuilder builder) {
+        return builder.registerTypeAdapterFactory(new JacksonFieldAdapterFactory())
+                        .registerTypeAdapterFactory(new JacksonMethodAdapterFactory())
+                        .registerTypeAdapterFactory(new MapDoubleAdapterFactory())
+                        .setExclusionStrategies(new JacksonExclusionStrategy());
+    }
 }

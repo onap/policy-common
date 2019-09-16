@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.http.server;
 
+import com.google.gson.GsonBuilder;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -40,7 +41,8 @@ public class YamlJacksonHandler extends YamlMessageBodyHandler {
      * Translator to be used. We want a GSON object that's configured the same way as it
      * is in {@link JacksonHandler}, so just get it from there.
      */
-    private static final YamlJsonTranslator TRANS = new YamlJsonTranslator(new JacksonHandler().getGson());
+    private static final YamlJsonTranslator TRANS =
+                    new YamlJsonTranslator(JacksonHandler.configBuilder(new GsonBuilder()).create());
 
     /**
      * Constructs the object.

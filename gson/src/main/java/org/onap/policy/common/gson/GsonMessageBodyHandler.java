@@ -37,6 +37,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.ext.MessageBodyReader;
 import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,7 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
     /**
      * Object to be used to serialize and de-serialize.
      */
-    @Getter
+    @Getter(AccessLevel.PROTECTED)
     private final Gson gson;
 
     /**
@@ -62,17 +63,7 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
      * into Integer/Long, where possible.
      */
     public GsonMessageBodyHandler() {
-        this(new GsonBuilder());
-    }
-
-    /**
-     * Constructs the object, using a Gson object that translates Doubles inside of Maps
-     * into Integer/Long, where possible.
-     *
-     * @param builder builder to use to create the gson object
-     */
-    public GsonMessageBodyHandler(GsonBuilder builder) {
-        this(builder.registerTypeAdapterFactory(new MapDoubleAdapterFactory()).create());
+        this(configBuilder(new GsonBuilder()).create());
     }
 
     /**
@@ -84,6 +75,17 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
         this.gson = gson;
 
         logger.info("Using GSON for REST calls");
+    }
+
+    /**
+     * Configures a builder with the adapters normally used by this handler (e.g., mapper
+     * that converts Double to Integer).
+     *
+     * @param builder builder to be configured
+     * @return the configured builder
+     */
+    public static GsonBuilder configBuilder(GsonBuilder builder) {
+        return builder.registerTypeAdapterFactory(new MapDoubleAdapterFactory());
     }
 
     @Override

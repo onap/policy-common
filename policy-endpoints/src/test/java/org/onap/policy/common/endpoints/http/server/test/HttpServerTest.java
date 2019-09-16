@@ -509,6 +509,7 @@ public class HttpServerTest {
         conn.setRequestMethod("POST");
         conn.setDoOutput(true);
         conn.setRequestProperty("Content-Type", mediaType);
+        conn.setRequestProperty("Accept", mediaType);
         IOUtils.write(post, conn.getOutputStream());
         return response(conn);
     }

@@ -265,6 +265,7 @@ public class RestServerTest {
         String auth = params.getUserName() + ":" + params.getPassword();
         conn.setRequestProperty("Authorization", "Basic " + Base64.getEncoder().encodeToString(auth.getBytes()));
         conn.setRequestProperty("Content-type", mediaType);
+        conn.setRequestProperty("Accept", mediaType);
         conn.connect();
 
         try (PrintWriter wtr = new PrintWriter(conn.getOutputStream())) {

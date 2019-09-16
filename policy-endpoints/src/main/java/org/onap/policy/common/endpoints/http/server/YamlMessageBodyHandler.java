@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.http.server;
 
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -60,7 +61,7 @@ public class YamlMessageBodyHandler implements MessageBodyReader<Object>, Messag
      * from there.
      */
     private static final YamlJsonTranslator DEFAULT_TRANSLATOR =
-                    new YamlJsonTranslator(new GsonMessageBodyHandler().getGson());
+                    new YamlJsonTranslator(GsonMessageBodyHandler.configBuilder(new GsonBuilder()).create());
 
     private final YamlJsonTranslator translator;
 
