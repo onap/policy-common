@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67d4de78_55d021f3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-10-10T20:14:08Z",
+      "side": 1,
+      "message": "Remove the Space between Issue-ID and Change-Id",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 14,
+        "endChar": 0
+      },
+      "revId": "4375524e2e6c228938a50d111c25bec2486323b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8398d895_743789d1",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/PropertyUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-10-10T20:14:08Z",
+      "side": 1,
+      "message": "This will generate a sonar for too many nested. Instead, re-write it to do the negative check first:\n\nif (! value.startsWith(\"enc:\")) {\n    continue;\n}\ntry {\n....",
+      "range": {
+        "startLine": 117,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 1
+      },
+      "revId": "4375524e2e6c228938a50d111c25bec2486323b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "40abd246_8a945d41",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-10-10T20:14:08Z",
+      "side": 1,
+      "message": "This is another potential too many nested. Think about maybe doing this:\nif (!value.startsWith(\"enc:\")) {\n   jsonObjectNew.addProperty(name, value);\n   continue;\n}\ntry {\n....",
+      "range": {
+        "startLine": 94,
+        "startChar": 0,
+        "endLine": 95,
+        "endChar": 0
+      },
+      "revId": "4375524e2e6c228938a50d111c25bec2486323b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08e4621c_5b3e1b61",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-10-10T20:14:08Z",
+      "side": 1,
+      "message": "NO system.out - use logger and make sure log the exception.",
+      "range": {
+        "startLine": 99,
+        "startChar": 25,
+        "endLine": 99,
+        "endChar": 73
+      },
+      "revId": "4375524e2e6c228938a50d111c25bec2486323b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4743b1a5_854eb8f0",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-10-10T20:14:08Z",
+      "side": 1,
+      "message": "remove commented out code.",
+      "range": {
+        "startLine": 105,
+        "startChar": 12,
+        "endLine": 106,
+        "endChar": 38
+      },
+      "revId": "4375524e2e6c228938a50d111c25bec2486323b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b10c9e08_50ff33a5",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/PropertyCoderObjectTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-10-10T20:14:08Z",
+      "side": 1,
+      "message": "No System.out allowed",
+      "range": {
+        "startLine": 73,
+        "startChar": 15,
+        "endLine": 73,
+        "endChar": 52
+      },
+      "revId": "4375524e2e6c228938a50d111c25bec2486323b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49d67f6e_211c5aca",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/PropertyCoderTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-10-10T20:14:08Z",
+      "side": 1,
+      "message": "No System.out",
+      "range": {
+        "startLine": 64,
+        "startChar": 8,
+        "endLine": 64,
+        "endChar": 49
+      },
+      "revId": "4375524e2e6c228938a50d111c25bec2486323b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
