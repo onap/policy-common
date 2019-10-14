@@ -31,23 +31,28 @@ import static org.mockito.Mockito.mock;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Field;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.policy.common.logging.flexlogger.PropertyUtil.Listener;
+import org.onap.policy.common.utils.security.CryptoUtils;
 import org.powermock.reflect.Whitebox;
 
 public class PropertyUtilTest {
 
     private static final String TIMER_FIELD = "timer";
+    private static String AES_ENCRYPTION_KEY = "AES_ENCRYPTION_KEY";
     private static final File FILE = new File("target/test.properties");
     private static Timer saveTimer;
     
@@ -71,7 +76,7 @@ public class PropertyUtilTest {
      * Perform test case set up.
      */
     @Before
-    public void setUp() throws IOException {
+    public void setUp() throws IOException, ReflectiveOperationException {
         task = null;
         timer = mock(Timer.class);
         Whitebox.setInternalState(PropertyUtil.LazyHolder.class, TIMER_FIELD, timer);
@@ -95,21 +100,31 @@ public class PropertyUtilTest {
         PropertyUtil.stopListening(FILE, testListener);
         FILE.delete();
     }
-    
+
     @Test
     public void testTimer() {
         assertNotNull(saveTimer);
     }
 
     @Test
-    public void testGetProperties() throws IOException {
+    public void testGetProperties() throws IOException, ReflectiveOperationException {
+        updateEnv(AES_ENCRYPTION_KEY, "abcdefghijklmnopqrstuvwxyzabcdef");
+        String secretKey = System.getenv(AES_ENCRYPTION_KEY);
+        CryptoUtils crypto = new CryptoUtils(secretKey);
+        Properties readProperties = PropertyUtil.getProperties("src/test/resources/testcrypto.properties", crypto);
+        for (String key : readProperties.stringPropertyNames()) {
+            String value = readProperties.getProperty(key);
+            if (key.contentEquals("xacml.pdp.rest.password")) {
+                System.out.println("key: " + key + ", value: " + value);
+            }
+        } 
         FileOutputStream fileOutputStream = new FileOutputStream(FILE);
         Properties properties = new Properties();
         properties.put("testProperty", "testValue");
         properties.store(fileOutputStream, "");
         fileOutputStream.close();
 
-        Properties readProperties = PropertyUtil.getProperties(FILE, testListener);
+        readProperties = PropertyUtil.getProperties(FILE, testListener);
         assertEquals("testValue", readProperties.getProperty("testProperty"));
     }
 
@@ -149,6 +164,17 @@ public class PropertyUtilTest {
         // hence "testValue" will be returned here instead of "testNewValue"
         assertEquals("testValueNew", readProperties.getProperty("testProperty"));
     }
+    
+    /**
+     * A helper to set envrionment variable.
+     */
+    @SuppressWarnings({ "unchecked" })
+    public void updateEnv(String name, String val) throws ReflectiveOperationException {
+        Map<String, String> env = System.getenv();
+        Field field = env.getClass().getDeclaredField("m");
+        field.setAccessible(true);
+        ((Map<String, String>) field.get(env)).put(name, val);
+    }
 
     /**
      * The {@link #propertiesChanged(Properties, Set)} method is invoked via a background
@@ -167,5 +193,4 @@ public class PropertyUtilTest {
             return latch.await(5, TimeUnit.SECONDS);
         }
     }
-
 }
