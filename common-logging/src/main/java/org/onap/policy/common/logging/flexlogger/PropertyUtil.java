@@ -32,6 +32,9 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.regex.Pattern;
+
+import org.onap.policy.common.utils.security.CryptoUtils;
 
 /**
  * This class provides utilities to read properties from a properties file, and optionally get
@@ -49,29 +52,70 @@ public class PropertyUtil {
 
     // this table maps canonical file into a 'ListenerRegistration' instance
     private static HashMap<File, ListenerRegistration> registrations = new HashMap<>();
-
+    private static String AES_ENCRYPTION_KEY = "AES_ENCRYPTION_KEY";
     /**
      * Read in a properties file.
      *
      * @param file the properties file
+     * @param secretKey the encryption key
+     * @return a Properties object, containing the associated properties
+     * @throws IOException - subclass 'FileNotFoundException' if the file does not exist or can't be
+     *         opened, and 'IOException' if there is a problem loading the properties file.
+     */
+    public static Properties getProperties(File file, String secretKey) throws IOException { 
+        CryptoUtils crypto = null;
+        if (secretKey != null) {
+            crypto = new CryptoUtils(secretKey);
+        } else {
+            String newKey = System.getenv(AES_ENCRYPTION_KEY);
+            crypto = new CryptoUtils(newKey);
+        }
+        Properties rval = getProperties(file, crypto);
+        return rval;
+    }
+
+    /**
+     * Read in a properties file and CryptoUtils object
+     *
+     * @param file the properties file
+     * @param crypto CryptoUtils object
+     * @return a Properties object, containing the associated properties
+     * @throws IOException - subclass 'FileNotFoundException' if the file does not exist or can't be
+     *         opened, and 'IOException' if there is a problem loading the properties file.
+     */
+    public static Properties getProperties(File file, CryptoUtils crypto) throws IOException {
+        Properties rval = new Properties();
+        try (FileInputStream fis = new FileInputStream(file)){
+            // load properties (may throw an IOException)
+            rval.load(fis);
+            if (crypto != null) {
+                for (String key : rval.stringPropertyNames()) {
+                    String value = rval.getProperty(key);
+                    if (!value.startsWith("enc:")) {
+                        continue;
+                    }
+                    value = crypto.decrypt(value);
+                    rval.replace(key, value);
+                }
+            } else {
+                displayErrorMessage("WARNING: PropertyUtil - CryptoUtils is null");
+            }
+        } catch (Exception e) {
+            displayErrorMessage(e);
+        }
+        return rval;
+    }
+
+    /**
+     * Read in a properties file.
+     *
+     * @param fileName the properties file
      * @return a Properties object, containing the associated properties
      * @throws IOException - subclass 'FileNotFoundException' if the file does not exist or can't be
      *         opened, and 'IOException' if there is a problem loading the properties file.
      */
     public static Properties getProperties(File file) throws IOException {
-        // create an InputStream (may throw a FileNotFoundException)
-        FileInputStream fis = new FileInputStream(file);
-        try {
-            // create the properties instance
-            Properties rval = new Properties();
-
-            // load properties (may throw an IOException)
-            rval.load(fis);
-            return rval;
-        } finally {
-            // close input stream
-            fis.close();
-        }
+        return getProperties(file, (String)null);
     }
 
     /**
@@ -83,7 +127,20 @@ public class PropertyUtil {
      *         opened, and 'IOException' if there is a problem loading the properties file.
      */
     public static Properties getProperties(String fileName) throws IOException {
-        return getProperties(new File(fileName));
+        return getProperties(new File(fileName), (String)null);
+    }
+
+    /**
+     * Read in a properties file with CryptoUtils object
+     *
+     * @param fileName the properties file
+     * @param CryptoUtils object
+     * @return a Properties object, containing the associated properties
+     * @throws IOException - subclass 'FileNotFoundException' if the file does not exist or can't be
+     *         opened, and 'IOException' if there is a problem loading the properties file.
+     */
+    public static Properties getProperties(String fileName, CryptoUtils crypto) throws IOException {
+        return getProperties(new File(fileName), crypto);
     }
 
     /* ============================================================ */
@@ -336,5 +393,4 @@ public class PropertyUtil {
     public static void stopListening(String fileName, Listener listener) throws IOException {
         stopListening(new File(fileName), listener);
     }
-
 }
