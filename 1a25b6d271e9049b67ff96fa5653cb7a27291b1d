@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5e763bb7_b3ff7085",
+        "filename": "common-logging/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-15T15:03:06Z",
+      "side": 1,
+      "message": "remove trailing spaces",
+      "revId": "1a25b6d271e9049b67ff96fa5653cb7a27291b1d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e1952ee6_35a0e6e5",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/PropertyUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-15T15:03:06Z",
+      "side": 1,
+      "message": "maybe create the crypto first and then collapse the rest of this method into the single call on line 81.  No need to open and/or load the file within this method, because the following method already does that",
+      "revId": "1a25b6d271e9049b67ff96fa5653cb7a27291b1d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "62511250_bab4c806",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/PropertyUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-15T15:03:06Z",
+      "side": 1,
+      "message": "use try-with-resources, so it is automatically closed, whether or not there\u0027s an exception",
+      "revId": "1a25b6d271e9049b67ff96fa5653cb7a27291b1d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b5f54f1c_68062374",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/PropertyUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-15T15:03:06Z",
+      "side": 1,
+      "message": "move the \"if\" test before line 107, so it only has to be done once",
+      "revId": "1a25b6d271e9049b67ff96fa5653cb7a27291b1d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fb07f704_20e8de1e",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/PropertyUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-15T15:03:06Z",
+      "side": 1,
+      "message": "remove trailing spaces\n\nsame comment below",
+      "revId": "1a25b6d271e9049b67ff96fa5653cb7a27291b1d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b4948fd7_f3e263e6",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/PropertyUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-15T15:03:06Z",
+      "side": 1,
+      "message": "with changes suggested above, this can directly call the second method (i.e., by changing the cast from \"String\" to \"Crypto\")",
+      "revId": "1a25b6d271e9049b67ff96fa5653cb7a27291b1d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f23d486_04b0e19d",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-15T15:03:06Z",
+      "side": 1,
+      "message": "remove trailing spaces\n\nsame comment below",
+      "revId": "1a25b6d271e9049b67ff96fa5653cb7a27291b1d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1b510a77_a8973f28",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-15T15:03:06Z",
+      "side": 1,
+      "message": "with this approach, there\u0027s still way too much code here.  Let\u0027s try this:\n1) remove \"extends ...\"\n2) remove all methods except fromJson\n3) fromJson(Reader) uses a static gson object (with no type adapters) to read a JsonElement from the reader\n4) it then walks the JsonElement recursively (using the methods in the nested class below\n5) it then invokes: new StandardCoder().fromJson() to convert the JsonElement into the desired class\n6) remove \"extends...\" from the nested class below\n7) in the nested class, configure the crypto object in the constructor",
+      "revId": "1a25b6d271e9049b67ff96fa5653cb7a27291b1d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1cbff95f_08db6545",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-15T15:03:06Z",
+      "side": 1,
+      "message": "need to handle nested objects - the value, itself, may be a JsonArray or a JsonObject whose contents must also be analyzed.  To facilitate that, this whole \"for\" loop will probably have to be moved into its own method which can be called recursively.",
+      "revId": "1a25b6d271e9049b67ff96fa5653cb7a27291b1d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "205fbb04_4f7075b0",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-15T15:03:06Z",
+      "side": 1,
+      "message": "should throw a particular exception type, CoderException would probably work\n\nsame comment below",
+      "revId": "1a25b6d271e9049b67ff96fa5653cb7a27291b1d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e69e4143_80847500",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 257,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-15T15:03:06Z",
+      "side": 1,
+      "message": "use a static Gson object\n\nsame comment below",
+      "revId": "1a25b6d271e9049b67ff96fa5653cb7a27291b1d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
