@@ -1,0 +1,225 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f20442f8_0ce3b1d0",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/PropertyUtil.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "probably only do this if newKey!\u003dnull",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ad80bf2_25994546",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/PropertyUtil.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "combine these two lines (i.e., just: return getProps())",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca8c3750_fc567c57",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/PropertyUtil.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "oh, bummer, I steered you wrong - only want to display this if one of the fields actually starts with \"enc:\".  So I guess the if/else needs to be moved back inside like you originally had it - sorry for the misdirection",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "154969a7_8f31b4da",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/PropertyUtilTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "remove trailing spaces",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "14468239_c8e227d3",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/PropertyUtilTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "looks like may need to add several more test cases for full coverage: 1) secretKey null  2) environment variable null  3) both null and a property contains \"enc:\"  4) both null and no property contains \"enc:\"",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b6de98df_a33b9e09",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/PropertyUtilTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "just do a getProperty() instead of the for-loop and then assertEquals() that it is decoded into the expected value",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "725fa81f_58a51e04",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/PropertyUtilTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "And now we find the advantage of using regular methods instead of static methods.  If getProperties() were a regular method, then we could provide an overrideable method to retrieve an environment variable, letting us substitute in whatever value we want without actually mucking with the real environment.\n\nSticking with static methods, though, we could move it into another class (a nested class might work) and then use powermock to stub the method in the other class.\n\n@Jorge: Do you have an opinion?  Is it OK to muck with the system environment like this?  The field name, \"m\", probably won\u0027t change any time soon.",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "74724d5f_97c1bd20",
+        "filename": "utils/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "let\u0027s stick with the same dependency used by the \"policy/common/gson\" project:\n\n    \u003cgroupId\u003ecom.google.code.gson\u003c/groupId\u003e\n    \u003cartifactId\u003egson\u003c/artifactId\u003e",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "35503c64_cf685798",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "remove trailing spaces\n\nsame comment through-out",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bfec05d9_9f6fd083",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "add: if it\u0027s not a JsonObject then return",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d4e921d0_32d987ee",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "just return: new JsonPrimitive(value) (or something like that)",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "685b26ff_9f0c7c53",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "replace lines 102 \u0026 103 with:\n\n  for(JsonElement element: jsonArray) {",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5274452b_7422d40e",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T18:28:11Z",
+      "side": 1,
+      "message": "use entry.getValue() instead\n\nfor that matter, just combine lines 114 \u0026 115",
+      "revId": "b00b7666012aab9096f6cb57c573917cde238aa7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
