@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb581d0a_35fd3dd3",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/PropertyUtil.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T23:50:53Z",
+      "side": 1,
+      "message": "trailing space",
+      "revId": "6fd89c1b248e86d6a5a4b5762c9b17fdb9466e8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f54a9a7e_cd530b4e",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/PropertyUtilTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T23:50:53Z",
+      "side": 1,
+      "message": "trailing space\n\nsame comment below",
+      "revId": "6fd89c1b248e86d6a5a4b5762c9b17fdb9466e8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "af6b3b8e_ee786662",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/PropertyUtilTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T23:50:53Z",
+      "side": 1,
+      "message": "uncomment and use assertEquals",
+      "revId": "6fd89c1b248e86d6a5a4b5762c9b17fdb9466e8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7a005c4b_3fe5489c",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/PropertyUtilTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T23:50:53Z",
+      "side": 1,
+      "message": "use assertEquals",
+      "revId": "6fd89c1b248e86d6a5a4b5762c9b17fdb9466e8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8888573c_4b7a0416",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/PropertyUtilTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T23:50:53Z",
+      "side": 1,
+      "message": "use assertEquals - it should still be the original value, with \"enc:\" since it is never decrypted",
+      "revId": "6fd89c1b248e86d6a5a4b5762c9b17fdb9466e8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d6a92154_e9dd392e",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/PropertyUtilTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T23:50:53Z",
+      "side": 1,
+      "message": "use assertEquals - it should still be the original value, with \"enc:\" since it is never decrypted",
+      "revId": "6fd89c1b248e86d6a5a4b5762c9b17fdb9466e8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "69bde070_90bc44c2",
+        "filename": "common-logging/src/test/resources/testcrypto.properties",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T23:50:53Z",
+      "side": 1,
+      "message": "weird.  wonder why it\u0027s highlighting \"olicy\"?",
+      "revId": "6fd89c1b248e86d6a5a4b5762c9b17fdb9466e8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d39e69ae_bcd840e0",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-16T23:50:53Z",
+      "side": 1,
+      "message": "trailing space",
+      "revId": "6fd89c1b248e86d6a5a4b5762c9b17fdb9466e8c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
