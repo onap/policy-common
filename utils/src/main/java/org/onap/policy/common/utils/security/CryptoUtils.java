@@ -21,7 +21,6 @@
 package org.onap.policy.common.utils.security;
 
 import java.nio.charset.StandardCharsets;
-import java.security.GeneralSecurityException;
 import java.util.Random;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
@@ -90,10 +89,8 @@ public class CryptoUtils {
      * @param value
      *  The plain text string
      * @return The encrypted String
-     * @throws GeneralSecurityException
-     *  In case of issue with the encryption
      */
-    public String encrypt(String value) throws GeneralSecurityException {
+    public String encrypt(String value) {
         return encryptValue(value, secretKeySpec);
     }
 
@@ -142,10 +139,8 @@ public class CryptoUtils {
      * @param value
      *  The encrypted string that must be decrypted using the Policy Encryption Key
      * @return The String decrypted if string begin with 'enc:'
-     * @throws GeneralSecurityException
-     *   In case of issue with the encryption
      */
-    public String decrypt(String value) throws GeneralSecurityException {
+    public String decrypt(String value) {
         return decryptValue(value, secretKeySpec);
     }
 
@@ -198,8 +193,6 @@ public class CryptoUtils {
      * @param keyString
      *            The key as a string in base64 String
      * @return The SecretKeySpec created
-     * @throws DecoderException
-     *             In case of issues with the decoding of base64 String
      */
     private static SecretKeySpec getSecretKeySpec(String keyString) {
         byte[] key = DatatypeConverter.parseBase64Binary(keyString);
@@ -215,7 +208,7 @@ public class CryptoUtils {
      */
     private static SecretKeySpec readSecretKeySpec(String secretKey) {
         if (secretKey != null && !secretKey.isEmpty()) {
-            SecretKeySpec keySpec = null;
+            SecretKeySpec keySpec;
             try {
                 keySpec = getSecretKeySpec(secretKey);
                 return keySpec;
