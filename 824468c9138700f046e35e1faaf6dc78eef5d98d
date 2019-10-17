@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0115687_7aa66e02",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-17T13:32:57Z",
+      "side": 1,
+      "message": "use: !StringUtils.isBlank()",
+      "revId": "824468c9138700f046e35e1faaf6dc78eef5d98d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a9de7e14_dafa00a0",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-17T13:32:57Z",
+      "side": 1,
+      "message": "delete this line",
+      "revId": "824468c9138700f046e35e1faaf6dc78eef5d98d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "74333137_80c32118",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-17T13:32:57Z",
+      "side": 1,
+      "message": "combine these lines",
+      "revId": "824468c9138700f046e35e1faaf6dc78eef5d98d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
