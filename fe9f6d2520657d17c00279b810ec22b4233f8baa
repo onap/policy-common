@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "849fcc3d_267e67ff",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-10-18T18:13:06Z",
+      "side": 1,
+      "message": "Let\u0027s just log this. I believe we are going to phase out flexlogger and anything in policy/common shouldn\u0027t be \"display\"ing anything.",
+      "range": {
+        "startLine": 85,
+        "startChar": 20,
+        "endLine": 85,
+        "endChar": 39
+      },
+      "revId": "fe9f6d2520657d17c00279b810ec22b4233f8baa",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
