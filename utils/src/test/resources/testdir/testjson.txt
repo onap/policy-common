@@ -1,0 +1,1 @@
+{"aes_encryption_key":"abcdefghijklmnopqrstuvwxyzabcdef","xacml.pdp.rest.password":"enc:YZ8EqzsxIOzIuK416SWAdrv+0cKKkqsQt/NYH9+uxwI=","xacml.pdp.rest.url":"http://localhost:8085/pdp/api/getDecision","xacml.pdp.rest.user":"testpdp","xacml.pdp.rest.client.user":"policy","xacml.pdp.rest.client.password":"policy","xacml.pdp.rest.environment":"TEST"}
