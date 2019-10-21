@@ -33,8 +33,8 @@ import org.slf4j.LoggerFactory;
 /**
  * AES Encryption Utilities.
  */
-public class CryptoUtils {
-    private static Logger logger = LoggerFactory.getLogger(CryptoUtils.class);
+public class CryptoUtils implements CryptoCoder {
+    private static final Logger logger = LoggerFactory.getLogger(CryptoUtils.class);
 
     /**
      * Definition of encryption algorithm.
@@ -90,13 +90,13 @@ public class CryptoUtils {
      *  The plain text string
      * @return The encrypted String
      */
+    @Override
     public String encrypt(String value) {
         return encryptValue(value, secretKeySpec);
     }
 
     /**
      * Encrypt a value based on the Policy Encryption Key.
-     *
      * @param value
      *  The plain text string
      * @param secretKey
@@ -140,6 +140,7 @@ public class CryptoUtils {
      *  The encrypted string that must be decrypted using the Policy Encryption Key
      * @return The String decrypted if string begin with 'enc:'
      */
+    @Override
     public String decrypt(String value) {
         return decryptValue(value, secretKeySpec);
     }
@@ -208,10 +209,8 @@ public class CryptoUtils {
      */
     private static SecretKeySpec readSecretKeySpec(String secretKey) {
         if (secretKey != null && !secretKey.isEmpty()) {
-            SecretKeySpec keySpec;
             try {
-                keySpec = getSecretKeySpec(secretKey);
-                return keySpec;
+                return getSecretKeySpec(secretKey);
             } catch (Exception e) {
                 logger.error("Invalid key - exception: ", e);
                 return null;

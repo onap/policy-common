@@ -44,7 +44,7 @@ public class CryptoUtilsTest {
     @Test
     public void testEncrypt() throws GeneralSecurityException {
         logger.info("testEncrypt:");
-        CryptoUtils cryptoUtils = new CryptoUtils(SECRET_KEY);
+        CryptoCoder cryptoUtils = new CryptoUtils(SECRET_KEY);
         String encryptedValue = cryptoUtils.encrypt(PASS);
         logger.info(ENCRYPTED_MSG, PASS, encryptedValue);
         assertTrue(encryptedValue.startsWith("enc:"));
@@ -57,7 +57,7 @@ public class CryptoUtilsTest {
     @Test
     public void testDecrypt() throws GeneralSecurityException {
         logger.info("testDecrypt:");
-        CryptoUtils cryptoUtils = new CryptoUtils(SECRET_KEY);
+        CryptoCoder cryptoUtils = new CryptoUtils(SECRET_KEY);
         String decryptedValue = cryptoUtils.decrypt(ENCRYPTED_PASS);
         logger.info(DECRYPTED_MSG, ENCRYPTED_PASS, decryptedValue);
         assertEquals(PASS, decryptedValue);
