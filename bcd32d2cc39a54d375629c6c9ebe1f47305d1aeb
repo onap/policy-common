@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9526e028_ecb3990b",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-21T14:33:55Z",
+      "side": 1,
+      "message": "delete",
+      "revId": "bcd32d2cc39a54d375629c6c9ebe1f47305d1aeb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
