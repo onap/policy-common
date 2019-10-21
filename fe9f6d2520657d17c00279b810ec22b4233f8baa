@@ -22,6 +22,30 @@
       "revId": "fe9f6d2520657d17c00279b810ec22b4233f8baa",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c27ea4e_be2ba966",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-21T11:47:22Z",
+      "side": 1,
+      "message": "good point - let\u0027s change all of these \"displayErrorMessage\" to \"logger.xxx()\", using an slf4j logger instead of a flexlogger",
+      "parentUuid": "849fcc3d_267e67ff",
+      "range": {
+        "startLine": 85,
+        "startChar": 20,
+        "endLine": 85,
+        "endChar": 39
+      },
+      "revId": "fe9f6d2520657d17c00279b810ec22b4233f8baa",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
