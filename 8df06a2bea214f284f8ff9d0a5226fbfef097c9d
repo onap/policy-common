@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6e252a8f_853ba0d2",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-22T22:21:31Z",
+      "side": 1,
+      "message": "hmm.  this brings up a point: is the key that\u0027s passed to decode() a secret key?  Or is it the name of the property within jsonObject that contains the secret key?  I think it\u0027s the latter",
+      "revId": "8df06a2bea214f284f8ff9d0a5226fbfef097c9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b6830c39_a2b11b27",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-22T22:21:31Z",
+      "side": 1,
+      "message": "else: log a warning",
+      "revId": "8df06a2bea214f284f8ff9d0a5226fbfef097c9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bd0c8e14_f245ed49",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/PropertyCoderTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-22T22:21:31Z",
+      "side": 1,
+      "message": "trailing space",
+      "revId": "8df06a2bea214f284f8ff9d0a5226fbfef097c9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
