@@ -2,6 +2,57 @@
   "comments": [
     {
       "key": {
+        "uuid": "0330d694_2566439a",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-10-22T23:27:47Z",
+      "side": 1,
+      "message": "final",
+      "revId": "8df06a2bea214f284f8ff9d0a5226fbfef097c9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8d9e6c14_be4eb9ee",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-10-22T23:27:47Z",
+      "side": 1,
+      "message": "Use CryptoCoder interface instead.",
+      "revId": "8df06a2bea214f284f8ff9d0a5226fbfef097c9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a0a62449_6dea58ad",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-10-22T23:27:47Z",
+      "side": 1,
+      "message": "I think you can mark crypto final, as it is only assigned in constructor.",
+      "revId": "8df06a2bea214f284f8ff9d0a5226fbfef097c9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "6e252a8f_853ba0d2",
         "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
         "patchSetId": 2
@@ -13,6 +64,40 @@
       "writtenOn": "2019-10-22T22:21:31Z",
       "side": 1,
       "message": "hmm.  this brings up a point: is the key that\u0027s passed to decode() a secret key?  Or is it the name of the property within jsonObject that contains the secret key?  I think it\u0027s the latter",
+      "revId": "8df06a2bea214f284f8ff9d0a5226fbfef097c9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "929236fd_b6f3705a",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-10-22T23:27:47Z",
+      "side": 1,
+      "message": "I think if crypto is null, simply return jsonElement no need to get into any \"decrypt\" calls ..",
+      "revId": "8df06a2bea214f284f8ff9d0a5226fbfef097c9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "84331099_a3b8618a",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-10-22T23:27:47Z",
+      "side": 1,
+      "message": "May be we should extract \"enc:\" in some common place as it is commonly used.",
       "revId": "8df06a2bea214f284f8ff9d0a5226fbfef097c9d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
