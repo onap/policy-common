@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c01c8a1d_4fd49745",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-23T13:02:49Z",
+      "side": 1,
+      "message": "leave out \".getAsJsonObject()\"",
+      "revId": "f96a83cd83d7dd88e2244ad76888e2584336693f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a4c31a3b_a16c3d30",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-23T13:02:49Z",
+      "side": 1,
+      "message": "these additional checks are not needed",
+      "revId": "f96a83cd83d7dd88e2244ad76888e2584336693f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d00f130f_490c421e",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-23T13:02:49Z",
+      "side": 1,
+      "message": "with the check at 88, these checks are no longer needed either - ok to leave them in, but not sure how to get code coverage on them",
+      "revId": "f96a83cd83d7dd88e2244ad76888e2584336693f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d4c62a26_1198f09f",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-23T13:02:49Z",
+      "side": 1,
+      "message": "guess this is no longer needed",
+      "revId": "f96a83cd83d7dd88e2244ad76888e2584336693f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
