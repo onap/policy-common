@@ -87,6 +87,24 @@
     },
     {
       "key": {
+        "uuid": "50ff2f49_aeac93b0",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-10-23T13:02:49Z",
+      "side": 1,
+      "message": "that\u0027s ok with me, but it means there will be no warnings if someone has a property starting with \"enc:\" but no crypto.",
+      "parentUuid": "929236fd_b6f3705a",
+      "revId": "8df06a2bea214f284f8ff9d0a5226fbfef097c9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "84331099_a3b8618a",
         "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
         "patchSetId": 2
