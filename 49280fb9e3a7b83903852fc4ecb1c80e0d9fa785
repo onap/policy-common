@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6741d26b_5769a551",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-10-24T12:30:31Z",
+      "side": 1,
+      "message": "Seems like this should be used in the class - especially when null or blank parameters are sent to methods.",
+      "range": {
+        "startLine": 47,
+        "startChar": 31,
+        "endLine": 47,
+        "endChar": 37
+      },
+      "revId": "49280fb9e3a7b83903852fc4ecb1c80e0d9fa785",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2d42f680_a7ba11d7",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/PropertyCoder.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2019-10-24T12:30:31Z",
+      "side": 1,
+      "message": "extra trailing space",
+      "range": {
+        "startLine": 111,
+        "startChar": 13,
+        "endLine": 111,
+        "endChar": 14
+      },
+      "revId": "49280fb9e3a7b83903852fc4ecb1c80e0d9fa785",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
