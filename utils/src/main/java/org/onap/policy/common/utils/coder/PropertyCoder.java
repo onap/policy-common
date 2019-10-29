@@ -67,7 +67,7 @@ public class PropertyCoder {
     private static class MyDecoder extends StandardCoder {
         private CryptoCoder crypto = null;
 
-        MyDecoder(JsonElement jsonElement, String keyProperty) throws CoderException {
+        MyDecoder(JsonElement jsonElement, String keyProperty) {
             if (!jsonElement.isJsonObject()) {
                 return;
             }
