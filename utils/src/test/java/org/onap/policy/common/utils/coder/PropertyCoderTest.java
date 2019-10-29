@@ -59,7 +59,7 @@ public class PropertyCoderTest {
     }
 
     @Test
-    public void testPropertyCoder() throws CoderException {
+    public void testPropertyCoder() {
         MyClass data = propertyCoder.decode(json, AES_ENCRYPTION_KEY, MyClass.class);
         assertEquals("alpha", data.getPdpRestPass());
         assertEquals("hello", data.servers.get(0).pass);
@@ -69,7 +69,7 @@ public class PropertyCoderTest {
     }
 
     @Test
-    public void testPropertyCoderReader() throws CoderException {
+    public void testPropertyCoderReader() {
         Reader reader = new StringReader(json);
         MyClass data = propertyCoder.decode(reader, AES_ENCRYPTION_KEY, MyClass.class);
         assertEquals("alpha", data.getPdpRestPass());

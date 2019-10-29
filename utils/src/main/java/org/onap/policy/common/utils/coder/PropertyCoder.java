@@ -54,12 +54,12 @@ public class PropertyCoder {
      * @param clazz class T object
      * @return a class T object
      */
-    public <T> T decode(String json, String keyProperty, Class<T> clazz) throws CoderException {
+    public <T> T decode(String json, String keyProperty, Class<T> clazz) {
         JsonElement jsonElement = GSON.fromJson(json, JsonElement.class);
         return new MyDecoder(jsonElement, keyProperty).decrypt(jsonElement, clazz);
     }
 
-    public <T> T decode(Reader reader, String keyProperty, Class<T> clazz) throws CoderException {
+    public <T> T decode(Reader reader, String keyProperty, Class<T> clazz) {
         JsonElement jsonElement = GSON.fromJson(reader, JsonElement.class);
         return new MyDecoder(jsonElement, keyProperty).decrypt(jsonElement, clazz);
     }
@@ -67,7 +67,7 @@ public class PropertyCoder {
     private static class MyDecoder extends StandardCoder {
         private CryptoCoder crypto = null;
 
-        MyDecoder(JsonElement jsonElement, String keyProperty) throws CoderException {
+        MyDecoder(JsonElement jsonElement, String keyProperty) {
             if (!jsonElement.isJsonObject()) {
                 return;
             }
