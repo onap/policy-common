@@ -25,19 +25,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-
 import java.io.Reader;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Getter;
-
 import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.utils.security.CryptoCoder;
 import org.onap.policy.common.utils.security.CryptoUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * JSON encoder and decoder using the "property" mechanism, which is currently gson.
