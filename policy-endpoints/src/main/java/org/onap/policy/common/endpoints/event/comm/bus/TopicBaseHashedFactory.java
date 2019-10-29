@@ -59,7 +59,7 @@ public abstract class TopicBaseHashedFactory<T extends Topic> implements TopicBa
     protected abstract List<String> getServers(String topicName, Properties properties);
 
     /**
-     * is this topic managed?
+     * Determines if this topic is managed.
      *
      * @param topicName name.
      * @param properties properties.
