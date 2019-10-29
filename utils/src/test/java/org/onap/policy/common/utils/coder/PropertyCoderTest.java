@@ -23,13 +23,10 @@ package org.onap.policy.common.utils.coder;
 import static org.junit.Assert.assertEquals;
 
 import com.google.gson.annotations.SerializedName;
-
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
-
 import lombok.Getter;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,14 +34,14 @@ public class PropertyCoderTest {
     private PropertyCoder propertyCoder = null;
     private static final String AES_ENCRYPTION_KEY = "aes_encryption_key";
     private static final String json =
-            ("{'aes_encryption_key':'abcdefghijklmnopqrstuvwxyzabcdef'"
-            + ",'xacml.pdp.rest.password':'enc:YZ8EqzsxIOzIuK416SWAdrv+0cKKkqsQt/NYH9+uxwI='"
+            ("{'aes_encryption_key':'YWJjZGVmZ2hpamtsbW5vcA=='"
+            + ",'xacml.pdp.rest.password':'enc:Kc1D7+jke2/4TyNaJhp6zt7urKodRYXliH3psMsG3Yo='"
             + ",'xacml.pdp.rest.user':'testpdp'"
             + ",'xacml.pdp.rest.client.user':'policy'"
             + ",'xacml.pdp.rest.client.password':'policy'"
             + ",'xacml.pdp.rest.environment':'TEST'"
             + ",'servers':[{'name':'server1','port':'10',"
-            + "'pass':'enc:KXIY94KcAapOAAeFbtjQL4kBPB4k+NJfwdP+GpG3LWQ='}"
+            + "'pass':'enc:lW2pTc2pDJpwkW7SWkES+eEpLisxi8BgbcKnAN7pkhM='}"
             + ",{'name':'server2','port':'20','pass':'plaintext'}]"
             + "}").replace('\'', '"');
 

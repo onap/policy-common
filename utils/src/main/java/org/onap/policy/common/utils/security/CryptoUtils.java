@@ -228,7 +228,7 @@ public class CryptoUtils implements CryptoCoder {
      *  The encrypted string or plain text value
      * @return boolean value indicate if string prefix with enc: or not
      */
-    public static Boolean isEncrypted(String value) {
+    public static boolean isEncrypted(String value) {
         return (value != null && value.startsWith("enc:"));
     }
 
