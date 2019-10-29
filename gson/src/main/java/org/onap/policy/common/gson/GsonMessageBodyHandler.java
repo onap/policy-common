@@ -85,7 +85,7 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
      * @return the configured builder
      */
     public static GsonBuilder configBuilder(GsonBuilder builder) {
-        return builder.registerTypeAdapterFactory(new MapDoubleAdapterFactory());
+        return builder.disableHtmlEscaping().registerTypeAdapterFactory(new MapDoubleAdapterFactory());
     }
 
     @Override

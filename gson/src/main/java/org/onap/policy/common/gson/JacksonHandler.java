@@ -61,6 +61,7 @@ public class JacksonHandler extends GsonMessageBodyHandler {
         return builder.registerTypeAdapterFactory(new JacksonFieldAdapterFactory())
                         .registerTypeAdapterFactory(new JacksonMethodAdapterFactory())
                         .registerTypeAdapterFactory(new MapDoubleAdapterFactory())
-                        .setExclusionStrategies(new JacksonExclusionStrategy());
+                        .setExclusionStrategies(new JacksonExclusionStrategy())
+                        .disableHtmlEscaping();
     }
 }
