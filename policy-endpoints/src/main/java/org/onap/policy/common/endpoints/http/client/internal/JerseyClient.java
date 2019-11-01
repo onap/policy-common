@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
+ * Modifications Copyright (C) 2019 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +55,7 @@ public class JerseyClient implements HttpClient {
     private static Logger logger = LoggerFactory.getLogger(JerseyClient.class);
 
     protected static final String JERSEY_DEFAULT_SERIALIZATION_PROVIDER =
-                    "com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider";
+                    "org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider";
 
     protected final String name;
     protected final boolean https;

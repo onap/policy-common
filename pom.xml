@@ -3,6 +3,7 @@
   ONAP policy
   ================================================================================
   Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+  Modifications Copyright (C) 2019 Nordix Foundation.
   ================================================================================
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -24,7 +25,7 @@
     <parent>
         <groupId>org.onap.policy.parent</groupId>
         <artifactId>integration</artifactId>
-        <version>3.0.1</version>
+        <version>3.1.0-SNAPSHOT</version>
         <relativePath />
     </parent>
 
@@ -59,7 +60,6 @@
 
         <!-- Project common dependency versions -->
         <commons-lang3.version>3.4</commons-lang3.version>
-        <jersey.version>2.25.1</jersey.version>
     </properties>
 
     <modules>

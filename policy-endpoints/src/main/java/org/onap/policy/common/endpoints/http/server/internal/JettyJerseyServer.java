@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2019 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,11 +33,10 @@ import org.slf4j.LoggerFactory;
 /**
  * REST Jetty Server that uses Jersey Servlets to support JAX-RS Web Services.
  *
- * <p>Note: the serialization provider will always be added to the server's class providers,
- * as will the swagger providers (assuming swagger has been enabled). This happens whether
- * {@link #addServletClass(String, String)} is used or
- * {@link #addServletPackage(String, String)} is used. Thus it's possible to have both the
- * server's class provider property and the server's package provider property populated.
+ * <p>Note: the serialization provider will always be added to the server's class providers, as will the swagger
+ * providers (assuming swagger has been enabled). This happens whether {@link #addServletClass(String, String)} is used
+ * or {@link #addServletPackage(String, String)} is used. Thus it's possible to have both the server's class provider
+ * property and the server's package provider property populated.
  */
 public class JettyJerseyServer extends JettyServletServer {
 
@@ -64,7 +64,7 @@ public class JettyJerseyServer extends JettyServletServer {
      * Jersey Jackson Classes Init Param Value.
      */
     protected static final String JERSEY_JACKSON_INIT_CLASSNAMES_PARAM_VALUE =
-            "com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider";
+            "org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider";
 
     /**
      * Jersey Swagger Classes Init Param Value.
@@ -149,7 +149,7 @@ public class JettyJerseyServer extends JettyServletServer {
         return servlets.computeIfAbsent(servletPath, key -> {
 
             ServletHolder jerseyServlet =
-                            context.addServlet(org.glassfish.jersey.servlet.ServletContainer.class, servletPath);
+                    context.addServlet(org.glassfish.jersey.servlet.ServletContainer.class, servletPath);
             jerseyServlet.setInitOrder(0);
 
             return jerseyServlet;
@@ -217,9 +217,9 @@ public class JettyJerseyServer extends JettyServletServer {
     }
 
     /**
-     * Adds "standard" parameters to the initParameter set. Sets swagger parameters, if
-     * specified, and sets the class provider property. This can be invoked multiple
-     * times, but only the first actually causes any changes to the parameter set.
+     * Adds "standard" parameters to the initParameter set. Sets swagger parameters, if specified, and sets the class
+     * provider property. This can be invoked multiple times, but only the first actually causes any changes to the
+     * parameter set.
      *
      * @param jerseyServlet servlet into which parameters should be added
      */
@@ -244,8 +244,8 @@ public class JettyJerseyServer extends JettyServletServer {
     }
 
     /**
-     * Note: this must be invoked <i>before</i> {@link #addServletClass(String, String)}
-     * or {@link #addServletPackage(String, String)}.
+     * Note: this must be invoked <i>before</i> {@link #addServletClass(String, String)} or
+     * {@link #addServletPackage(String, String)}.
      */
     @Override
     public void setSerializationProvider(String provider) {
