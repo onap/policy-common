@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "655d08fe_6e4b065e",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-11-01T11:35:16Z",
+      "side": 0,
+      "message": "Exclusion is now in the main POM.",
+      "range": {
+        "startLine": 129,
+        "startChar": 12,
+        "endLine": 134,
+        "endChar": 25
+      },
+      "revId": "afc7fa55500109a25772681882ad12c22c794a2b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
