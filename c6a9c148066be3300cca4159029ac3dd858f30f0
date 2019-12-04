@@ -16,6 +16,24 @@
       "revId": "c6a9c148066be3300cca4159029ac3dd858f30f0",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bae62c56_0f7f5a7c",
+        "filename": "integrity-audit/src/main/resources/logback.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-12-04T14:09:52Z",
+      "side": 1,
+      "message": "same question",
+      "parentUuid": "dca51fcc_12cb894a",
+      "revId": "c6a9c148066be3300cca4159029ac3dd858f30f0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
