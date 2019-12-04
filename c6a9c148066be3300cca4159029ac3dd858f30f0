@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "dca51fcc_12cb894a",
+        "filename": "integrity-audit/src/main/resources/logback.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-12-04T14:02:47Z",
+      "side": 1,
+      "message": "interesting.  is it valid to split a property\u0027s value like this?",
+      "revId": "c6a9c148066be3300cca4159029ac3dd858f30f0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
