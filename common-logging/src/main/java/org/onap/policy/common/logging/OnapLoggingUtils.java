@@ -24,7 +24,8 @@ import javax.servlet.http.HttpServletRequest;
 
 public class OnapLoggingUtils {
 
-    private OnapLoggingUtils() {}
+    private OnapLoggingUtils() {
+    }
 
     /**
      * Get the ONAPLoggingContext for a request.
@@ -34,7 +35,7 @@ public class OnapLoggingUtils {
      * @return the ONAPLoggingContext
      */
     public static OnapLoggingContext getLoggingContextForRequest(HttpServletRequest request,
-            OnapLoggingContext baseContext) {
+                    OnapLoggingContext baseContext) {
         OnapLoggingContext requestContext = new OnapLoggingContext(baseContext);
         if (request.getLocalAddr() != null) { // may be null in junit tests
             requestContext.setServerIpAddress(request.getLocalAddr());
@@ -57,6 +58,5 @@ public class OnapLoggingUtils {
         }
         return requestContext;
     }
-
 
 }
