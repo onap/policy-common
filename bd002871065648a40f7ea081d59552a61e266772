@@ -2,6 +2,40 @@
   "comments": [
     {
       "key": {
+        "uuid": "26fd079f_0415093c",
+        "filename": "integrity-audit/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-12-05T16:41:33Z",
+      "side": 1,
+      "message": "fyi: an alternative would be to use ExtractAppender.java from common/utils-test, but this is probably ok as is",
+      "revId": "bd002871065648a40f7ea081d59552a61e266772",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8c0b7006_af17ea6b",
+        "filename": "integrity-audit/src/main/resources/logback.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-12-05T16:41:33Z",
+      "side": 1,
+      "message": "wonder why it separated all of these onto separate lines?",
+      "revId": "bd002871065648a40f7ea081d59552a61e266772",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c0f992c8_ed054364",
         "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/DefaultLoggingPatternTest.java",
         "patchSetId": 4
