@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c0f992c8_ed054364",
+        "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/DefaultLoggingPatternTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2019-12-05T16:40:28Z",
+      "side": 1,
+      "message": "One question Liam, this integrity-audit code uses Logger and not XLogger, will still print appropriately with the changes you made in the logback.xml?\n\nAs an aside, not sure why this module has a logback.xml under src/main/resources, that doesn\u0027t seem right, but unsure about side effects on policy/engine if removed.",
+      "revId": "bd002871065648a40f7ea081d59552a61e266772",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
