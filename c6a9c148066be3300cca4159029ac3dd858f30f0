@@ -34,6 +34,24 @@
       "revId": "c6a9c148066be3300cca4159029ac3dd858f30f0",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "012ac2eb_a809d5c4",
+        "filename": "integrity-audit/src/main/resources/logback.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-12-05T15:31:30Z",
+      "side": 1,
+      "message": "You can but to avoid spaces (corresponding to the indent) in the log, you need to have the next line at the very left.\n\nIn the end I decided to break the string down into parts as separate properties, I think that is more readable",
+      "parentUuid": "bae62c56_0f7f5a7c",
+      "revId": "c6a9c148066be3300cca4159029ac3dd858f30f0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
