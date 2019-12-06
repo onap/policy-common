@@ -16,6 +16,24 @@
       "revId": "8a8e73881b00bbc5382a28301f318a076140ff98",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "22cd92a5_c354d128",
+        "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/DefaultLoggingPatternTest.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-12-06T15:24:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd950ee1_e607c46d",
+      "revId": "8a8e73881b00bbc5382a28301f318a076140ff98",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
