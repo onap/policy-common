@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8dbfaee_245da935",
+        "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/DefaultLoggingPatternTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-12-06T14:37:15Z",
+      "side": 1,
+      "message": "maybe just use:\n\n  new File(\"name\").deleteOnExit()",
+      "revId": "0eadaa1f73856895c727f919442995349fd9668e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "48b8f8b2_20fa6d06",
+        "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/DefaultLoggingPatternTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-12-06T14:37:15Z",
+      "side": 1,
+      "message": "use \"{}\" instead of concatenation",
+      "revId": "0eadaa1f73856895c727f919442995349fd9668e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
