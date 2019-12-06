@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "7467396f_28e61f51",
+        "filename": "integrity-audit/pom.xml",
+        "patchSetId": 4
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-12-06T14:40:27Z",
+      "side": 1,
+      "message": "OK",
+      "parentUuid": "26fd079f_0415093c",
+      "revId": "bd002871065648a40f7ea081d59552a61e266772",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8c0b7006_af17ea6b",
         "filename": "integrity-audit/src/main/resources/logback.xml",
         "patchSetId": 4
@@ -47,6 +65,24 @@
       "writtenOn": "2019-12-05T16:40:28Z",
       "side": 1,
       "message": "One question Liam, this integrity-audit code uses Logger and not XLogger, will still print appropriately with the changes you made in the logback.xml?\n\nAs an aside, not sure why this module has a logback.xml under src/main/resources, that doesn\u0027t seem right, but unsure about side effects on policy/engine if removed.",
+      "revId": "bd002871065648a40f7ea081d59552a61e266772",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a1aa58ce_b40e4dc3",
+        "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/DefaultLoggingPatternTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2019-12-06T14:40:27Z",
+      "side": 1,
+      "message": "On first question, good question, the answer is that it works fine for Logger too. I added a test case for it.\n\nThe logback.xml was there before this review but, I agree, it could cause problems especially as you can\u0027t guarantee what order the various logback.xml files are in the classpath. Log4j will use the first one it comes across, something I know from having spent many hours checking why logging changes I was making in a certain logback.xml were not showing up where I needed them.",
+      "parentUuid": "c0f992c8_ed054364",
       "revId": "bd002871065648a40f7ea081d59552a61e266772",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
