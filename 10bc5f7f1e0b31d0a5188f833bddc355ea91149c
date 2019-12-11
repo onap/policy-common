@@ -16,6 +16,24 @@
       "revId": "10bc5f7f1e0b31d0a5188f833bddc355ea91149c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e3ab4e2c_b96e3a33",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/parameters/TopicParameterGroupTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1757
+      },
+      "writtenOn": "2019-12-11T19:33:29Z",
+      "side": 1,
+      "message": "You\u0027re right, this was erroring before I updated the top level pom. Will revert",
+      "parentUuid": "b2687f51_4a0c2800",
+      "revId": "10bc5f7f1e0b31d0a5188f833bddc355ea91149c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
