@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b2687f51_4a0c2800",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/parameters/TopicParameterGroupTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2019-12-11T18:35:42Z",
+      "side": 1,
+      "message": "should not need the String cast",
+      "revId": "10bc5f7f1e0b31d0a5188f833bddc355ea91149c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
