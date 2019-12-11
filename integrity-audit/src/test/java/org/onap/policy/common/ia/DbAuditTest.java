@@ -123,9 +123,9 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         truncateTable(properties, A_SEQ_PU, "IntegrityAuditEntity");
     }
 
-    /*
+    /**
      * Tests printing an error to the log in the event where there are no entities saved in the
-     * database
+     * database.
      */
     @Test
     public void noEntitiesTest() throws Exception {
@@ -144,8 +144,8 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         logger.info("noEntitiesTest: Exit");
     }
 
-    /*
-     * Tests the detection of only one entry in the database
+    /**
+     * Tests the detection of only one entry in the database.
      */
     @Test
     public void oneEntityTest() throws Exception {
@@ -168,8 +168,8 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         logger.info("oneEntityTest: Exit");
     }
 
-    /*
-     * Tests reporting mismatches and missing entries using the error log
+    /**
+     * Tests reporting mismatches and missing entries using the error log.
      */
     @Test
     public void mismatchTest() throws Exception {

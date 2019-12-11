@@ -129,8 +129,8 @@ public class TopicParameterGroupTest {
             Field[] fields = BusTopicParams.class.getDeclaredFields();
             for (Field field : fields) {
                 if (!field.isSynthetic() && !Modifier.isStatic(field.getModifiers())) {
-                    Object parameter = new PropertyDescriptor(field.getName(), TopicParameters.class).getReadMethod()
-                        .invoke(topicParameters);
+                    Object parameter = new PropertyDescriptor((String) field.getName(), TopicParameters.class)
+                        .getReadMethod().invoke(topicParameters);
                     if ((parameter instanceof String && StringUtils.isBlank(parameter.toString()))
                         || (parameter instanceof Boolean && !(Boolean) parameter)
                         || (parameter instanceof Number && ((Number) parameter).longValue() == 0)) {
