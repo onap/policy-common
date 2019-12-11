@@ -26,9 +26,11 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 import java.util.Properties;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -123,12 +125,11 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         truncateTable(properties, A_SEQ_PU, "IntegrityAuditEntity");
     }
 
-    /*
-     * Tests printing an error to the log in the event where there are no entities saved in the
-     * database
+    /**
+     * Tests printing an error to the log in the event where there are no entities saved in the database.
      */
     @Test
-    public void noEntitiesTest() throws Exception {
+    public void testNoEntities() throws Exception {
         Properties properties = makeProperties();
 
         logger.info("noEntitiesTest: Entering");
@@ -144,11 +145,11 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         logger.info("noEntitiesTest: Exit");
     }
 
-    /*
-     * Tests the detection of only one entry in the database
+    /**
+     * Tests the detection of only one entry in the database.
      */
     @Test
-    public void oneEntityTest() throws Exception {
+    public void testOneEntity() throws Exception {
         Properties properties = makeProperties();
 
         logger.info("oneEntityTest: Entering");
@@ -168,11 +169,11 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         logger.info("oneEntityTest: Exit");
     }
 
-    /*
-     * Tests reporting mismatches and missing entries using the error log
+    /**
+     * Tests reporting mismatches and missing entries using the error log.
      */
     @Test
-    public void mismatchTest() throws Exception {
+    public void testMismatch() throws Exception {
         logger.info("mismatchTest: Entering");
 
         // use new URLs so we get a completely new DB
@@ -187,8 +188,8 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         properties2.put(IntegrityAuditProperties.DB_URL, dbUrl2);
 
         /*
-         * We must drop and re-create DB1 so that it's sequence generator is in step with the
-         * sequence generator for DB2.
+         * We must drop and re-create DB1 so that it's sequence generator is in step with the sequence generator for
+         * DB2.
          */
         recreateDb1(properties);
 
@@ -221,8 +222,8 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         new DbDao("pdp3", A_SEQ_PU, properties2).destroy();
 
         /*
-         * Run the DB Audit, once it finds a mismatch and sleeps, update DB1 to have the same entry
-         * as DB2 it can be confirmed that the mismatch is resolved
+         * Run the DB Audit, once it finds a mismatch and sleeps, update DB1 to have the same entry as DB2 it can be
+         * confirmed that the mismatch is resolved
          */
         DbAudit dbAudit = new DbAudit(dbDao);
         dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, NODE_TYPE);
@@ -231,8 +232,8 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         new DbDao("pdp3", A_SEQ_PU, properties, dbUrl2).destroy();
 
         /*
-         * Run the audit again and correct the mismatch, the result should be one entry in the
-         * mismatchKeySet because of the missing entry from the beginning of the test
+         * Run the audit again and correct the mismatch, the result should be one entry in the mismatchKeySet because of
+         * the missing entry from the beginning of the test
          */
         dbAudit.dbAudit(RESOURCE_NAME, A_SEQ_PU, NODE_TYPE);
 

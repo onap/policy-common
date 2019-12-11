@@ -32,11 +32,11 @@ public class IntegrityAuditTest {
     private static final String RESOURCE_NAME = "resourceName";
     private static final String SOMETHING = "something";
 
-    @Test
     /**
      * Test if we can access the updated bad params outside of the parmsAreBad method.
      */
-    public void parmsAreBadTest() {
+    @Test
+    public void testParmsAreBad() {
         // Try with 2 null params
         StringBuilder badParams = new StringBuilder();
         IntegrityAudit.parmsAreBad(null, SOMETHING, null, badParams);
