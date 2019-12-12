@@ -444,7 +444,6 @@ public class TopicEndpointProxyTest {
         assertThatIllegalArgumentException().isThrownBy(() -> manager.getDmaapTopicSink(""));
     }
 
-
     @Test
     public void testGetNoopTopicSource() {
         TopicEndpoint manager = new TopicEndpointProxy();
