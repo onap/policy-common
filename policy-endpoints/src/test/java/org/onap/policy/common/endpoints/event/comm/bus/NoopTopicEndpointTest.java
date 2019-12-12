@@ -29,13 +29,14 @@ import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 import java.util.Collections;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 
 public abstract class NoopTopicEndpointTest<F extends NoopTopicFactory<T>, T extends NoopTopicEndpoint>
-    extends TopicTestBase {
+        extends TopicTestBase {
 
     protected final F factory;
     protected T endpoint;
@@ -54,7 +55,7 @@ public abstract class NoopTopicEndpointTest<F extends NoopTopicFactory<T>, T ext
     }
 
     @Test
-    public void tesIo() {
+    public void testIo() {
         TopicListener listener = mock(TopicListener.class);
         this.endpoint.register(listener);
         this.endpoint.start();

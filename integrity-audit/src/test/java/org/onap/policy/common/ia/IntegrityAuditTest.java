@@ -36,7 +36,7 @@ public class IntegrityAuditTest {
     /**
      * Test if we can access the updated bad params outside of the parmsAreBad method.
      */
-    public void parmsAreBadTest() {
+    public void testParmsAreBad() {
         // Try with 2 null params
         StringBuilder badParams = new StringBuilder();
         IntegrityAudit.parmsAreBad(null, SOMETHING, null, badParams);
