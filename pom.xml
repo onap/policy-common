@@ -54,6 +54,8 @@
         <!-- sonar/jacoco overrides -->
         <!-- Overriding oparent default sonar/jacoco settings Combine all
             our reports into one file shared across sub-modules -->
+        <jacoco.version>0.8.3</jacoco.version>
+        <sonar-jacoco-listeners.version>3.2</sonar-jacoco-listeners.version>
         <sonar.jacoco.reportPath>${project.basedir}/../target/code-coverage/jacoco-ut.exec</sonar.jacoco.reportPath>
         <sonar.jacoco.itReportPath>${project.basedir}/../target/code-coverage/jacoco-it.exec</sonar.jacoco.itReportPath>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -234,6 +236,11 @@
                         <scope>compile</scope>
                     </dependency>
                 </dependencies>
+            </plugin>
+	    <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.6.0.1398</version>
             </plugin>
         </plugins>
     </build>
