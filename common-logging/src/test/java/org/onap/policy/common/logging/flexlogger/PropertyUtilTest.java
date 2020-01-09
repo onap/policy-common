@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2018 Ericsson, AT&T. All rights reserved.
+ * Copyright (C) 2018-2020 Ericsson, AT&T. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@ package org.onap.policy.common.logging.flexlogger;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyLong;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
 
@@ -77,7 +77,7 @@ public class PropertyUtilTest {
         Whitebox.setInternalState(PropertyUtil.LazyHolder.class, TIMER_FIELD, timer);
         
         doAnswer(args -> {
-            task = args.getArgumentAt(0, TimerTask.class);
+            task = args.getArgument(0, TimerTask.class);
             return null;
         }).when(timer).schedule(any(TimerTask.class), anyLong(), anyLong());
         
