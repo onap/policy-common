@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.utils.gson;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -98,7 +99,8 @@ public class GsonTestUtilsTest {
         data.setId(600);
         data.setText(HELLO);
 
-        utils.compareGson(data, "{'id': ${obj.id}, 'text': '${obj.text}'}".replace('\'', '"'));
+        assertThatCode(() -> utils.compareGson(data, "{'id': ${obj.id}, 'text': '${obj.text}'}".replace('\'', '"')))
+                        .doesNotThrowAnyException();
     }
 
     @Test
