@@ -251,8 +251,8 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
         final EntityManagerFactory mockedEmf = getMockedEntityManagerFactory(mockedEm);
         final TypedQuery<StateManagementEntity> mockedQuery = mock(TypedQuery.class);
 
-        when(mockedQuery.setFlushMode(Mockito.anyObject())).thenReturn(mockedQuery);
-        when(mockedQuery.setLockMode(Mockito.anyObject())).thenReturn(mockedQuery);
+        when(mockedQuery.setFlushMode(Mockito.any())).thenReturn(mockedQuery);
+        when(mockedQuery.setLockMode(Mockito.any())).thenReturn(mockedQuery);
         when(mockedEm.createQuery(anyString(), any(StateManagementEntity.class.getClass()))).thenReturn(mockedQuery);
 
         doThrow(QueryTimeoutException.class).when(mockedQuery).getResultList();

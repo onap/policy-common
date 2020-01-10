@@ -42,7 +42,7 @@ public class TestParameterValidationUtils {
     @Test
     public void testValidateIntParameter() {
         assertTrue(ParameterValidationUtils.validateIntParameter(5555));
-        assertTrue(ParameterValidationUtils.validateIntParameter(new Integer(7777)));
+        assertTrue(ParameterValidationUtils.validateIntParameter(Integer.valueOf(7777)));
         assertFalse(ParameterValidationUtils.validateIntParameter(0));
         assertFalse(ParameterValidationUtils.validateIntParameter(-1));
     }
@@ -50,7 +50,7 @@ public class TestParameterValidationUtils {
     @Test
     public void testValidateLongParameter() {
         assertTrue(ParameterValidationUtils.validateLongParameter(5555L));
-        assertTrue(ParameterValidationUtils.validateLongParameter(new Long(7777L)));
+        assertTrue(ParameterValidationUtils.validateLongParameter(Long.valueOf(7777L)));
         assertFalse(ParameterValidationUtils.validateLongParameter(0L));
         assertFalse(ParameterValidationUtils.validateLongParameter(-1L));
     }
