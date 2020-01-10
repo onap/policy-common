@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,9 @@
 
 package org.onap.policy.common.im;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Observable;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import javax.persistence.EntityManager;
@@ -43,7 +44,7 @@ import org.slf4j.LoggerFactory;
  * notified.
  *
  */
-public class StateManagement extends Observable {
+public class StateManagement {
     private static final String RESOURCE_NAME = "resource";
     private static final String GET_STATE_MANAGEMENT_ENTITY_QUERY =
             "Select p from StateManagementEntity p where p.resourceName=:" + RESOURCE_NAME;
@@ -95,6 +96,8 @@ public class StateManagement extends Observable {
      */
     private static final Object SYNCLOCK = new Object();
     private static final Object FLUSHLOCK = new Object();
+
+    private final List<StateChangeNotifier> observers = new LinkedList<>();
 
     /**
      * StateManagement constructor.
@@ -162,7 +165,6 @@ public class StateManagement extends Observable {
                 et.commit();
 
                 if (changed != null) {
-                    setChanged();
                     notifyObservers(changed);
                 }
 
@@ -172,6 +174,28 @@ public class StateManagement extends Observable {
                 logger.error("StateManagement.{}() caught unexpected exception: ", methodName, ex);
                 throw new StateManagementException("StateManagement." + methodName + "() Exception: " + ex);
             }
+        }
+    }
+
+    /**
+     * Adds an observer to list of those to be notified when this changes.
+     * @param observer observer to be added
+     */
+    public void addObserver(StateChangeNotifier observer) {
+        synchronized(observers) {
+            observers.add(observer);
+        }
+    }
+
+    private void notifyObservers(String changed) {
+        // make a copy of the list so it can be updated while we're iterating over it
+        List<StateChangeNotifier> observers2;
+        synchronized(observers) {
+            observers2 = new ArrayList<>(observers);
+        }
+
+        for(StateChangeNotifier obs: observers2) {
+            obs.update(this, changed);
         }
     }
 

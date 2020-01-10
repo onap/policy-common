@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.utils.gson;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -98,7 +99,8 @@ public class GsonTestUtilsTest {
         data.setId(600);
         data.setText(HELLO);
 
-        utils.compareGson(data, "{'id': ${obj.id}, 'text': '${obj.text}'}".replace('\'', '"'));
+        assertThatCode(() -> utils.compareGson(data, "{'id': ${obj.id}, 'text': '${obj.text}'}".replace('\'', '"')))
+                        .doesNotThrowAnyException();
     }
 
     @Test
