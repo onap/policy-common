@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a52a695a_ffda048f",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/validation/TestParameterValidationUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-01-10T21:07:58Z",
+      "side": 1,
+      "message": "ah I think Jim captured this in his review!",
+      "revId": "3bcdff8b499407d7412e1c4d6d46c5ce1b712758",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
