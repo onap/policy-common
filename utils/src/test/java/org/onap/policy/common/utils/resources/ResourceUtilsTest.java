@@ -2,6 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2020 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +31,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Set;
 
 import org.junit.After;
 import org.junit.Before;
@@ -73,6 +76,15 @@ public class ResourceUtilsTest {
         try (final FileWriter fileWriter = new FileWriter(tmpUsedFile)) {
             fileWriter.write("Bluebirds fly over the rainbow");
         }
+    }
+
+    /**
+     * Cleandown resource utils test.
+     */
+    @After
+    public void cleandownResourceUtilsTest() {
+        tmpEmptyFile.delete();
+        tmpUsedFile.delete();
     }
 
     /**
@@ -298,14 +310,37 @@ public class ResourceUtilsTest {
         assertNull(ResourceUtils.getFilePath4Resource(null));
         assertEquals("/something/else", ResourceUtils.getFilePath4Resource("/something/else"));
         assertTrue(ResourceUtils.getFilePath4Resource("xml/example.xml").endsWith("xml/example.xml"));
+        assertTrue(ResourceUtils.getFilePath4Resource("com/google").endsWith("com/google"));
     }
 
-    /**
-     * Cleandown resource utils test.
-     */
-    @After
-    public void cleandownResourceUtilsTest() {
-        tmpEmptyFile.delete();
-        tmpUsedFile.delete();
+    @Test
+    public void testGetDirectoryContents() throws MalformedURLException {
+        assertTrue(ResourceUtils.getDirectoryContents(null).isEmpty());
+        assertTrue(ResourceUtils.getDirectoryContents("idontexist").isEmpty());
+        assertTrue(ResourceUtils.getDirectoryContents("logback-test.xml").isEmpty());
+
+        Set<String> resultD0 = ResourceUtils.getDirectoryContents("testdir");
+        assertEquals(1, resultD0.size());
+        assertEquals("testdir/testfile.xml", resultD0.iterator().next());
+
+        Set<String> resultD1 = ResourceUtils.getDirectoryContents("org/onap/policy/common");
+        assertTrue(resultD1.size() > 0);
+        assertEquals("org/onap/policy/common/utils/", resultD1.iterator().next());
+
+        Set<String> resultD2 = ResourceUtils.getDirectoryContents("org/onap/policy/common/utils/coder");
+        assertTrue(resultD2.size() >= 15);
+        assertEquals("org/onap/policy/common/utils/coder/CoderExceptionTest.class", resultD2.iterator().next());
+
+        Set<String> resultJ0 = ResourceUtils.getDirectoryContents("com");
+        assertEquals(189, resultJ0.size());
+        assertEquals("com/google/", resultJ0.iterator().next());
+
+        Set<String> resultJ1 = ResourceUtils.getDirectoryContents("com/google/gson/util");
+        assertEquals(1, resultJ1.size());
+        assertEquals("com/google/gson/util/VersionUtils.class", resultJ1.iterator().next());
+
+        URL dummyUrl = new URL("http://even/worse");
+        assertTrue(ResourceUtils.getDirectoryContentsJar(dummyUrl, "nonexistantdirectory").isEmpty());
+
     }
 }
