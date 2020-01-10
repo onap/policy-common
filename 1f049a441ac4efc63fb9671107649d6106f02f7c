@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "31af390e_e2a582ae",
+        "filename": "integrity-monitor/src/test/java/org/onap/policy/common/im/StateManagementTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1757
+      },
+      "writtenOn": "2020-01-10T22:11:06Z",
+      "side": 1,
+      "message": "\u0027Matchers\u0027 is also deprecated and replaced with \u0027ArgumentMatchers\u0027",
+      "range": {
+        "startLine": 26,
+        "startChar": 26,
+        "endLine": 26,
+        "endChar": 34
+      },
+      "revId": "1f049a441ac4efc63fb9671107649d6106f02f7c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
