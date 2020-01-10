@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bebb8937_70042da9",
+        "filename": "common-logging/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-01-10T14:06:30Z",
+      "side": 1,
+      "message": "should this be mockito2 instead of mockito?",
+      "revId": "613946040a9e49bed487b5946f925bb6f22c5ee8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
