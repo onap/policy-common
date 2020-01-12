@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "79cd2346_b6025b84",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/ResourceUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-01-12T15:54:51Z",
+      "side": 1,
+      "message": "In the existing methods we don\u0027t throw exceptions because sometimes the user has to call two methods, one to see if the resource exists on the local file system or in a jar. Also, the user may just want to know if a resource exists or not. I followed that convention in the new methods.",
+      "parentUuid": "f68010ae_b818ec05",
+      "revId": "3bcdff8b499407d7412e1c4d6d46c5ce1b712758",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f7e0e488_28cd4778",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/resources/ResourceUtilsTest.java",
         "patchSetId": 2
@@ -30,6 +48,24 @@
       "writtenOn": "2020-01-10T21:23:57Z",
       "side": 1,
       "message": "should probably also verify that one of the directory names ends with \"/\"",
+      "revId": "3bcdff8b499407d7412e1c4d6d46c5ce1b712758",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "07780a3c_fdc64e6a",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/resources/ResourceUtilsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-01-12T15:54:51Z",
+      "side": 1,
+      "message": "I think the test at lines 26-28 checks the case of a resource being a directory.",
+      "parentUuid": "f7e0e488_28cd4778",
       "revId": "3bcdff8b499407d7412e1c4d6d46c5ce1b712758",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -65,6 +101,24 @@
       "side": 1,
       "message": "yep",
       "parentUuid": "a52a695a_ffda048f",
+      "revId": "3bcdff8b499407d7412e1c4d6d46c5ce1b712758",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "855e24d6_8d0966f6",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/validation/TestParameterValidationUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-01-12T15:54:51Z",
+      "side": 1,
+      "message": "Let\u0027s merge your review first and then I can rebase.",
+      "parentUuid": "5c08dd6a_4c904689",
       "revId": "3bcdff8b499407d7412e1c4d6d46c5ce1b712758",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
