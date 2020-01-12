@@ -122,6 +122,24 @@
       "revId": "3bcdff8b499407d7412e1c4d6d46c5ce1b712758",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0793fe68_32ea4d67",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/validation/TestParameterValidationUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-01-12T16:06:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "855e24d6_8d0966f6",
+      "revId": "3bcdff8b499407d7412e1c4d6d46c5ce1b712758",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
