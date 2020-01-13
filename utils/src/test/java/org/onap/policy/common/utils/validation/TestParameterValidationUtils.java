@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
+ *  Modifications Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +43,7 @@ public class TestParameterValidationUtils {
     @Test
     public void testValidateIntParameter() {
         assertTrue(ParameterValidationUtils.validateIntParameter(5555));
-        assertTrue(ParameterValidationUtils.validateIntParameter(new Integer(7777)));
+        assertTrue(ParameterValidationUtils.validateIntParameter(Integer.valueOf(7777)));
         assertFalse(ParameterValidationUtils.validateIntParameter(0));
         assertFalse(ParameterValidationUtils.validateIntParameter(-1));
     }
@@ -50,7 +51,7 @@ public class TestParameterValidationUtils {
     @Test
     public void testValidateLongParameter() {
         assertTrue(ParameterValidationUtils.validateLongParameter(5555L));
-        assertTrue(ParameterValidationUtils.validateLongParameter(new Long(7777L)));
+        assertTrue(ParameterValidationUtils.validateLongParameter(Long.valueOf(7777L)));
         assertFalse(ParameterValidationUtils.validateLongParameter(0L));
         assertFalse(ParameterValidationUtils.validateLongParameter(-1L));
     }
