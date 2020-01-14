@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018, 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -40,7 +40,7 @@ public class SpecProperties extends Properties {
 
     /**
      * Constructor.
-     * 
+     *
      * @param prefix the property name prefix that appears before any specialization, may
      *        be ""
      * @param specialization the property name specialization (e.g., session name)
@@ -52,7 +52,7 @@ public class SpecProperties extends Properties {
 
     /**
      * Constructor.
-     * 
+     *
      * @param prefix the property name prefix that appears before any specialization, may
      *        be ""
      * @param specialization the property name specialization (e.g., session name)
@@ -67,7 +67,7 @@ public class SpecProperties extends Properties {
 
     /**
      * Adds a trailing "." to a String, if it doesn't already have one.
-     * 
+     *
      * @param text text to which the "." should be added
      * @return the text, with a trailing "."
      */
@@ -78,7 +78,7 @@ public class SpecProperties extends Properties {
     /**
      * Gets the property whose value has the given key, looking first for the specialized
      * property name, and then for the generalized property name.
-     * 
+     *
      * @param key property name, without the specialization
      * @return the value from the property set, or {@code null} if the property set does
      *         not contain the value
@@ -108,12 +108,12 @@ public class SpecProperties extends Properties {
     }
 
     @Override
-    public final int hashCode() {
+    public final synchronized int hashCode() {
         throw new UnsupportedOperationException("SpecProperties cannot be hashed");
     }
 
     @Override
-    public final boolean equals(Object obj) {
+    public final synchronized boolean equals(Object obj) {
         throw new UnsupportedOperationException("cannot compare SpecProperties");
     }
 }

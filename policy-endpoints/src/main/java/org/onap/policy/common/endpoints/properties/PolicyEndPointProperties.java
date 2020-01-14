@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ public class PolicyEndPointProperties {
     public static final String PROPERTY_TOPIC_API_KEY_SUFFIX = ".apiKey";
     public static final String PROPERTY_TOPIC_API_SECRET_SUFFIX = ".apiSecret";
     public static final String PROPERTY_TOPIC_AAF_MECHID_SUFFIX = ".aafMechId";
-    public static final String PROPERTY_TOPIC_AAF_PASSWORD_SUFFIX = ".aafPassword";
+    public static final String PROPERTY_TOPIC_AAF_PASSWORD_SUFFIX = ".aafPassword"; //NOSONAR
     public static final String PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX = ".effectiveTopic";
     public static final String PROPERTY_TOPIC_EVENTS_SUFFIX = ".events";
     public static final String PROPERTY_TOPIC_EVENTS_FILTER_SUFFIX = ".filter";
@@ -84,7 +84,7 @@ public class PolicyEndPointProperties {
     public static final String PROPERTY_HTTP_CONTEXT_URIPATH_SUFFIX = ".contextUriPath";
 
     public static final String PROPERTY_HTTP_AUTH_USERNAME_SUFFIX = ".userName";
-    public static final String PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX = ".password";
+    public static final String PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX = ".password"; //NOSONAR
     public static final String PROPERTY_HTTP_AUTH_URIPATH_SUFFIX = ".authUriPath";
 
     public static final String PROPERTY_HTTP_FILTER_CLASSES_SUFFIX = ".filterClasses";

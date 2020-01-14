@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018, 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ public class IntegrityMonitorProperties {
     public static final String DB_DRIVER = "javax.persistence.jdbc.driver";
     public static final String DB_URL = "javax.persistence.jdbc.url";
     public static final String DB_USER = "javax.persistence.jdbc.user";
-    public static final String DB_PWD = "javax.persistence.jdbc.password";
+    public static final String DB_PWD = "javax.persistence.jdbc.password"; //NOSONAR
 
     // intervals specified are in seconds
     public static final int DEFAULT_MONITOR_INTERVAL = 30;

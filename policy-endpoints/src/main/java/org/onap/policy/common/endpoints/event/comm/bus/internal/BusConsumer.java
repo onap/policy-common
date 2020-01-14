@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -169,7 +169,7 @@ public interface BusConsumer {
         public Iterable<String> fetch() throws IOException {
             try {
                 return getCurrentConsumer().fetch();
-            } catch (final IOException e) {
+            } catch (final IOException e) { //NOSONAR
                 logger.error("{}: cannot fetch because of {} - backoff for {} ms.", this, e.getMessage(),
                         this.fetchTimeout);
                 sleepAfterFetchFailure();
@@ -179,7 +179,7 @@ public interface BusConsumer {
 
         private void sleepAfterFetchFailure() {
             try {
-                this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS);
+                this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS); //NOSONAR
 
             } catch (InterruptedException e) {
                 logger.warn("{}: interrupted while handling fetch error", this, e);
@@ -343,7 +343,7 @@ public interface BusConsumer {
 
         private void sleepAfterFetchFailure() {
             try {
-                this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS);
+                this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS); //NOSONAR
 
             } catch (InterruptedException e) {
                 logger.warn("{}: interrupted while handling fetch error", this, e);

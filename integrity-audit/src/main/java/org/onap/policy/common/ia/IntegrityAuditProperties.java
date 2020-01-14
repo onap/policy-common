@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ public class IntegrityAuditProperties {
     public static final String DB_DRIVER = "javax.persistence.jdbc.driver";
     public static final String DB_URL = "javax.persistence.jdbc.url";
     public static final String DB_USER = "javax.persistence.jdbc.user";
-    public static final String DB_PWD = "javax.persistence.jdbc.password";
+    public static final String DB_PWD = "javax.persistence.jdbc.password"; //NOSONAR
     public static final String AUDIT_PERIOD_SECONDS = "integrity_audit_period_seconds";
 
 
