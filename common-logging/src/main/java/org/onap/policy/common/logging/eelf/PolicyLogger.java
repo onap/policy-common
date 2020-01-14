@@ -137,7 +137,7 @@ public class PolicyLogger {
 
     }
 
-    public static Level getDebugLevel() {
+    public static synchronized Level getDebugLevel() {
         return debugLevel;
     }
 
@@ -148,7 +148,7 @@ public class PolicyLogger {
     /**
      * Sets Debug Level.
      */
-    public static void setDebugLevel(String newDebugLevel) {
+    public static synchronized void setDebugLevel(String newDebugLevel) {
 
         if (isOverrideLogbackLevel) {
             PolicyLogger.debugLevel = Level.valueOf(newDebugLevel);
@@ -157,7 +157,7 @@ public class PolicyLogger {
 
     }
 
-    public static Level getAuditLevel() {
+    public static synchronized Level getAuditLevel() {
         return auditLevel;
     }
 
@@ -168,7 +168,7 @@ public class PolicyLogger {
     /**
      * Sets Audit OFF or ON.
      */
-    public static void setAuditLevel(String newAuditLevel) {
+    public static synchronized void setAuditLevel(String newAuditLevel) {
 
         if (isOverrideLogbackLevel) {
             if ("OFF".equalsIgnoreCase(newAuditLevel)) {
@@ -182,7 +182,7 @@ public class PolicyLogger {
         }
     }
 
-    public static Level getMetricsLevel() {
+    public static synchronized Level getMetricsLevel() {
         return metricsLevel;
     }
 
@@ -193,7 +193,7 @@ public class PolicyLogger {
     /**
      * Sets Metrics OFF or ON.
      */
-    public static void setMetricsLevel(String newMetricsLevel) {
+    public static synchronized void setMetricsLevel(String newMetricsLevel) {
 
         if (isOverrideLogbackLevel) {
             if ("OFF".equalsIgnoreCase(newMetricsLevel)) {
@@ -208,7 +208,7 @@ public class PolicyLogger {
 
     }
 
-    public static Level getErrorLevel() {
+    public static synchronized Level getErrorLevel() {
         return errorLevel;
     }
 
@@ -219,7 +219,7 @@ public class PolicyLogger {
     /**
      * Sets Error OFF or ON.
      */
-    public static void setErrorLevel(String newErrorLevel) {
+    public static synchronized void setErrorLevel(String newErrorLevel) {
 
         if (isOverrideLogbackLevel) {
             if ("OFF".equalsIgnoreCase(newErrorLevel)) {
@@ -233,7 +233,7 @@ public class PolicyLogger {
         }
     }
 
-    public static String getClassname() {
+    public static synchronized String getClassname() {
         return classNameProp;
     }
 

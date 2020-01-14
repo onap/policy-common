@@ -40,7 +40,6 @@
 
     <properties>
         <!-- Project common build settings -->
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Project path properties -->
         <nexusproxy>https://nexus.onap.org</nexusproxy>

@@ -30,6 +30,11 @@
     <artifactId>capabilities</artifactId>
     <description>Properties</description>
     <packaging>jar</packaging>
+    
+    <properties>
+        <!-- There is no code in this sub-module, only holds interfaces. So skip sonar. -->
+        <sonar.skip>true</sonar.skip>
+    </properties>
 
     <build>
         <pluginManagement>

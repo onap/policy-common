@@ -55,9 +55,9 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      * Keystore/Truststore system property names.
      */
     public static final String SYSTEM_KEYSTORE_PROPERTY_NAME = "javax.net.ssl.keyStore";
-    public static final String SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME = "javax.net.ssl.keyStorePassword";
+    public static final String SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME = "javax.net.ssl.keyStorePassword"; //NOSONAR
     public static final String SYSTEM_TRUSTSTORE_PROPERTY_NAME = "javax.net.ssl.trustStore";
-    public static final String SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME = "javax.net.ssl.trustStorePassword";
+    public static final String SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME = "javax.net.ssl.trustStorePassword"; //NOSONAR
 
     /**
      * Logger.
@@ -460,6 +460,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      *
      * @return the name
      */
+    @Override
     public String getName() {
         return name;
     }

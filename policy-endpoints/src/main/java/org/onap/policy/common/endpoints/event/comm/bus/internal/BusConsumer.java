@@ -169,7 +169,7 @@ public interface BusConsumer {
         public Iterable<String> fetch() throws IOException {
             try {
                 return getCurrentConsumer().fetch();
-            } catch (final IOException e) {
+            } catch (final IOException e) { //NOSONAR
                 logger.error("{}: cannot fetch because of {} - backoff for {} ms.", this, e.getMessage(),
                         this.fetchTimeout);
                 sleepAfterFetchFailure();
@@ -179,7 +179,7 @@ public interface BusConsumer {
 
         private void sleepAfterFetchFailure() {
             try {
-                this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS);
+                this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS); //NOSONAR
 
             } catch (InterruptedException e) {
                 logger.warn("{}: interrupted while handling fetch error", this, e);
@@ -343,7 +343,7 @@ public interface BusConsumer {
 
         private void sleepAfterFetchFailure() {
             try {
-                this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS);
+                this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS); //NOSONAR
 
             } catch (InterruptedException e) {
                 logger.warn("{}: interrupted while handling fetch error", this, e);
