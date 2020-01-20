@@ -34,7 +34,7 @@ import com.google.gson.JsonParseException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import javax.script.ScriptException;
+import org.apache.commons.jexl3.JexlException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -139,7 +139,7 @@ public class GsonTestUtilsTest {
 
         assertThatThrownBy(() -> utils.applyScripts("use ${obj.text} this", null))
                         .isInstanceOf(JsonParseException.class)
-                        .hasCauseInstanceOf(ScriptException.class)
+                        .hasCauseInstanceOf(JexlException.class)
                         .hasMessage("cannot expand element: ${obj.text}");
     }
 
