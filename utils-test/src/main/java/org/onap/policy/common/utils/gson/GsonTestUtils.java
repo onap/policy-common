@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-management
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,10 +39,11 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
+import org.apache.commons.jexl3.JexlBuilder;
+import org.apache.commons.jexl3.JexlContext;
+import org.apache.commons.jexl3.JexlEngine;
+import org.apache.commons.jexl3.JexlException;
+import org.apache.commons.jexl3.MapContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,7 +62,7 @@ public class GsonTestUtils {
     /**
      * Engine used to interpolate strings before they're compared.
      */
-    private static ScriptEngine engineInstance = null;
+    private static JexlEngine engineInstance = null;
 
     /**
      * Used to encode and decode an object via gson.
@@ -199,9 +200,9 @@ public class GsonTestUtils {
         }
 
         // bind the object to the variable, "obj"
-        ScriptEngine eng = getEngine();
-        Bindings bindings = eng.createBindings();
-        bindings.put("obj", object);
+        JexlEngine eng = getEngine();
+        JexlContext context = new MapContext();
+        context.set("obj", object);
 
         // work our way through the text, interpolating script elements as we go
         StringBuilder bldr = new StringBuilder();
@@ -222,10 +223,10 @@ public class GsonTestUtils {
                  * Note: must use "eng" instead of "engineInstance" to ensure that we use
                  * the same engine that's associated with the bindings.
                  */
-                Object result = eng.eval(script, bindings);
+                Object result = eng.createExpression(script).evaluate(context);
                 bldr.append(result == null ? "null" : result.toString());
 
-            } catch (ScriptException e) {
+            } catch (JexlException e) {
                 throw new JsonParseException("cannot expand element: " + mat.group(), e);
             }
         }
@@ -241,10 +242,10 @@ public class GsonTestUtils {
      *
      * @return the script engine
      */
-    private static ScriptEngine getEngine() {
+    private static JexlEngine getEngine() {
         if (engineInstance == null) {
             // race condition here, but it's ok to overwrite with a new engine
-            engineInstance = new ScriptEngineManager().getEngineByName("javascript");
+            engineInstance = new JexlBuilder().create();
         }
 
         return engineInstance;
