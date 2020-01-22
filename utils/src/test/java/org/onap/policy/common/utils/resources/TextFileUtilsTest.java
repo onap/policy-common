@@ -30,6 +30,7 @@ import org.junit.Test;
 
 /**
  * Test text file utilities.
+ *
  * @author Liam Fallon (liam.fallon@est.tech)
  */
 public class TextFileUtilsTest {
@@ -37,7 +38,7 @@ public class TextFileUtilsTest {
     private static final String FILE_CONTENT = "This is the contents of a text file";
 
     @Test
-    public void test() throws IOException {
+    public void testPutToFile() throws IOException {
         final File tempTextFile = File.createTempFile("Test", "txt");
 
         TextFileUtils.putStringAsTextFile(FILE_CONTENT, tempTextFile.getAbsolutePath());
@@ -48,6 +49,25 @@ public class TextFileUtilsTest {
         final FileInputStream fis = new FileInputStream(tempTextFile);
         final String textFileString1 = TextFileUtils.getStreamAsString(fis);
         assertEquals(textFileString0, textFileString1);
+    }
 
+    @Test
+    public void testPutToFileWithNewPath() throws IOException {
+        String tempDirAndFileName = System.getProperty("java.io.tmpdir") + "/non/existant/path/Test.txt";
+
+        TextFileUtils.putStringAsTextFile(FILE_CONTENT, tempDirAndFileName);
+
+        final String textFileString0 = TextFileUtils.getTextFileAsString(tempDirAndFileName);
+        assertEquals(FILE_CONTENT, textFileString0);
+
+        final FileInputStream fis = new FileInputStream(tempDirAndFileName);
+        final String textFileString1 = TextFileUtils.getStreamAsString(fis);
+        assertEquals(textFileString0, textFileString1);
+
+        File tempDirAndFile = new File(tempDirAndFileName);
+        tempDirAndFile.delete();
+        tempDirAndFile.getParentFile().delete();
+        tempDirAndFile.getParentFile().getParentFile().delete();
+        tempDirAndFile.getParentFile().getParentFile().getParentFile().delete();
     }
 }

@@ -62,6 +62,10 @@ public abstract class TextFileUtils {
      */
     public static void putStringAsTextFile(final String outString, final String textFilePath) throws IOException {
         final File textFile = new File(textFilePath);
+        if (!textFile.getParentFile().exists()) {
+            textFile.getParentFile().mkdirs();
+        }
+
         putStringAsFile(outString, textFile);
     }
 
