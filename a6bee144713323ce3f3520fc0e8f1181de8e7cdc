@@ -78,6 +78,24 @@
     },
     {
       "key": {
+        "uuid": "79a62e45_bed1c4c1",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/StandardValCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-01-27T14:35:38Z",
+      "side": 1,
+      "message": "Probably just log it for now to avoid the sonar - not sure how easy it would be to propagate the error.",
+      "parentUuid": "3d773ba7_43ff8899",
+      "revId": "a6bee144713323ce3f3520fc0e8f1181de8e7cdc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62208295_81008df7",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/StandardValCoderTest.java",
         "patchSetId": 2
