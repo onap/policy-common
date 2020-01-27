@@ -42,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "a65a0005_0c2603fc",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/StandardValCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-01-27T14:27:53Z",
+      "side": 1,
+      "message": "what\u0027s your preference here Jim?",
+      "parentUuid": "4deaa107_541e64e6",
+      "revId": "a6bee144713323ce3f3520fc0e8f1181de8e7cdc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62208295_81008df7",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/StandardValCoderTest.java",
         "patchSetId": 2
