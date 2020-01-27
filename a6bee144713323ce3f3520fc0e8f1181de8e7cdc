@@ -22,6 +22,40 @@
       "revId": "a6bee144713323ce3f3520fc0e8f1181de8e7cdc",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4deaa107_541e64e6",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/StandardValCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-01-27T14:16:46Z",
+      "side": 1,
+      "message": "sonar: log the exception.  (Or maybe \"ignore\" this sonar issue.)",
+      "revId": "a6bee144713323ce3f3520fc0e8f1181de8e7cdc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "62208295_81008df7",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/StandardValCoderTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-01-27T14:16:46Z",
+      "side": 1,
+      "message": "add fail().  This is why I push assertj, because it\u0027s too easy to forget to add fail() in the appropriate branch.  There might be an assertj method that will get the exception so that it can be further examined, as is done here\n\nsame comment below",
+      "revId": "a6bee144713323ce3f3520fc0e8f1181de8e7cdc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
