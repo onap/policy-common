@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3674cab7_350f596d",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/StandardValCoder.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-01-27T14:53:10Z",
+      "side": 1,
+      "message": "I think that has to be e itself - sonar will report if you call a method.",
+      "range": {
+        "startLine": 94,
+        "startChar": 63,
+        "endLine": 94,
+        "endChar": 75
+      },
+      "revId": "87c88545b8de4f54543ca1a9bcd63e88b0a8e4f2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
