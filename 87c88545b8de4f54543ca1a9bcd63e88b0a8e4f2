@@ -22,6 +22,23 @@
       "revId": "87c88545b8de4f54543ca1a9bcd63e88b0a8e4f2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e82b89a_7d0c477a",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/StandardValCoder.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-01-27T14:54:01Z",
+      "side": 1,
+      "message": "not sure if the sonar would get silent if no \"e\" alone is passed as a param to the logger.info statement. The nested exception is the only one providing value, there is no value in logging the CoderException wrapper as only adds verbosity (making it more difficult to read).   I can change to e if we want to make sure we silent the sonar though.",
+      "revId": "87c88545b8de4f54543ca1a9bcd63e88b0a8e4f2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
