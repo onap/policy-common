@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP PAP
+ * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ public class StandardCoder implements Coder {
         try {
             toJson(target, object);
 
-        } catch (RuntimeException | IOException e) {
+        } catch (RuntimeException e) {
             throw new CoderException(e);
         }
     }
@@ -238,9 +238,8 @@ public class StandardCoder implements Coder {
      *
      * @param target target to which to write the encoded json
      * @param object object to be encoded
-     * @throws IOException if an I/O error occurs
      */
-    protected void toJson(Writer target, Object object) throws IOException {
+    protected void toJson(Writer target, Object object) {
         GSON.toJson(object, object.getClass(), target);
     }
 
@@ -286,7 +285,7 @@ public class StandardCoder implements Coder {
      * @param value value to be converted
      * @return the converted value
      */
-    private <T> T convertFromDouble(Class<T> clazz, T value) {
+    protected <T> T convertFromDouble(Class<T> clazz, T value) {
         if (clazz != Object.class) {
             return value;
         }
