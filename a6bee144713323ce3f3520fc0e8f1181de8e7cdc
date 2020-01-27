@@ -60,6 +60,24 @@
     },
     {
       "key": {
+        "uuid": "3d773ba7_43ff8899",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/StandardValCoder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-01-27T14:31:52Z",
+      "side": 1,
+      "message": "the question is: in what context would this be used?  If it would be helpful to know what the problem is with the json, then perhaps it should be logged.  If not, then I\u0027d prefer to just ignore it (if Pam\u0027s in agreement).",
+      "parentUuid": "a65a0005_0c2603fc",
+      "revId": "a6bee144713323ce3f3520fc0e8f1181de8e7cdc",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "62208295_81008df7",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/StandardValCoderTest.java",
         "patchSetId": 2
