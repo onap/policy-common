@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa8d92ac_5d68ff30",
+        "filename": "utils/src/test/resources/org/onap/policy/common/utils/coder/test.schema.json",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-01-28T15:33:37Z",
+      "side": 1,
+      "message": "This is cool! Can we write a schema for a TOSCA service type I wonder?",
+      "revId": "2ce955e7c3c53b16596a18b0f5f68f2b491d1de6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
