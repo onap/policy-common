@@ -16,6 +16,24 @@
       "revId": "2ce955e7c3c53b16596a18b0f5f68f2b491d1de6",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4243baac_11f70128",
+        "filename": "utils/src/test/resources/org/onap/policy/common/utils/coder/test.schema.json",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-01-28T18:13:03Z",
+      "side": 1,
+      "message": "Yes, we can from sample json, let\u0027s touch basis after scrum and can show you.",
+      "parentUuid": "aa8d92ac_5d68ff30",
+      "revId": "2ce955e7c3c53b16596a18b0f5f68f2b491d1de6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
