@@ -38,6 +38,8 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.onap.policy.common.gson.DoubleConverter;
@@ -285,8 +287,13 @@ public class StandardCoder implements Coder {
      * @param value value to be converted
      * @return the converted value
      */
+<<<<<<< HEAD
     protected <T> T convertFromDouble(Class<T> clazz, T value) {
         if (clazz != Object.class) {
+=======
+    private <T> T convertFromDouble(Class<T> clazz, T value) {
+        if (clazz != Object.class && !Map.class.isAssignableFrom(clazz) && !List.class.isAssignableFrom(clazz)) {
+>>>>>>> a261265... Decode doubles as integers where possible
             return value;
         }
 
