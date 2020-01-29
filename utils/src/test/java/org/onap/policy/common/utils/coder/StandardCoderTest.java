@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP PAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,8 +45,10 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -281,6 +283,18 @@ public class StandardCoderTest {
         assertEquals(-10, map.props.get("negInt"));
         assertEquals(100000000000L, map.props.get("posLong"));
         assertEquals(12.5, map.props.get("doubleVal"));
+
+        // test when decoding into a map
+        @SuppressWarnings("unchecked")
+        Map<String,Object> map2 = coder.decode("{'intValue':10, 'dblVal':20.1}", TreeMap.class);
+        assertEquals("{dblVal=20.1, intValue=10}", map2.toString());
+    }
+
+    @Test
+    public void testListDouble() throws Exception {
+        @SuppressWarnings("unchecked")
+        List<Object> list = coder.decode("[10, 20.1, 30]", LinkedList.class);
+        assertEquals("[10, 20.1, 30]", list.toString());
     }
 
 

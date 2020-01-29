@@ -38,6 +38,8 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.onap.policy.common.gson.DoubleConverter;
@@ -286,7 +288,7 @@ public class StandardCoder implements Coder {
      * @return the converted value
      */
     protected <T> T convertFromDouble(Class<T> clazz, T value) {
-        if (clazz != Object.class) {
+        if (clazz != Object.class && !Map.class.isAssignableFrom(clazz) && !List.class.isAssignableFrom(clazz)) {
             return value;
         }
 
