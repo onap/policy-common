@@ -1,8 +1,8 @@
-/*
+/*-
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,17 +27,25 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeMap;
+import java.util.function.BiConsumer;
 import org.junit.Before;
 import org.junit.Test;
 
 public class TestBeanValidationResult {
+    private static final String TEXT1 = "abc";
+    private static final String TEXT2 = "def";
     private static final String MY_LIST = "my-list";
+    private static final String MY_MAP = "my-map";
     private static final String OBJECT = "an object";
     private static final String INITIAL_INDENT = "xx ";
     private static final String NEXT_INDENT = "yy ";
     private static final String MID_INDENT = "xx yy ";
     private static final String NAME = "my-name";
     private static final String MY_LIST_INVALID = "  'my-list' INVALID, item has status INVALID\n    ";
+    private static final String MY_MAP_INVALID = "  'my-map' INVALID, item has status INVALID\n    ";
     private static final String BEAN_INVALID_MSG = requote("'my-name' INVALID, item has status INVALID\n");
 
     private String cleanMsg;
@@ -52,10 +60,10 @@ public class TestBeanValidationResult {
      */
     @Before
     public void setUp() {
-        clean = new ObjectValidationResult("abc", 10);
+        clean = new ObjectValidationResult(TEXT1, 10);
         cleanMsg = clean.getResult("", "", true);
 
-        invalid = new ObjectValidationResult("def", 20);
+        invalid = new ObjectValidationResult(TEXT2, 20);
         invalid.setResult(ValidationStatus.INVALID, "invalid");
         invalidMsg = invalid.getResult();
 
@@ -148,6 +156,50 @@ public class TestBeanValidationResult {
         assertEquals(requote(BEAN_INVALID_MSG + MY_LIST_INVALID + invalidMsg
                         + "    " + invalidMsg), bean.getResult());
 
+    }
+
+    @Test
+    public void testValidateMap() {
+        Map<String,ValidationResult> map = null;
+        bean = new BeanValidationResult(NAME, OBJECT);
+        assertTrue(bean.validateMap(MY_MAP, map, validMapEntry()));
+        assertTrue(bean.isValid());
+        assertNull(bean.getResult());
+
+        map = Map.of(TEXT1, clean, TEXT2, clean);
+        bean = new BeanValidationResult(NAME, OBJECT);
+        assertTrue(bean.validateMap(MY_MAP, map, validMapEntry()));
+        assertTrue(bean.isValid());
+        assertNull(bean.getResult());
+
+        // null value in the map
+        map = new TreeMap<>();
+        map.put(TEXT1, clean);
+        map.put(TEXT2, null);
+        bean = new BeanValidationResult(NAME, OBJECT);
+        assertFalse(bean.validateMap(MY_MAP, map, validMapEntry()));
+        assertFalse(bean.isValid());
+        assertEquals(requote(BEAN_INVALID_MSG + MY_MAP_INVALID
+                        + "item 'def' value 'null' INVALID, is null\n"), bean.getResult());
+
+        map = Map.of(TEXT1, invalid, TEXT2, invalid);
+        bean = new BeanValidationResult(NAME, OBJECT);
+        assertFalse(bean.validateMap(MY_MAP, map, validMapEntry()));
+        assertFalse(bean.isValid());
+        assertEquals(requote(BEAN_INVALID_MSG + MY_MAP_INVALID + invalidMsg
+                        + "    " + invalidMsg), bean.getResult());
+
+    }
+
+    private BiConsumer<BeanValidationResult, Entry<String, ValidationResult>> validMapEntry() {
+        return (result, entry) -> {
+            var value = entry.getValue();
+            if (value == null) {
+                result.validateNotNull(entry.getKey(), value);
+            } else {
+                result.addResult(value);
+            }
+        };
     }
 
     private static String requote(String text) {

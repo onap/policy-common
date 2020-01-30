@@ -1,6 +1,6 @@
-/*
+/*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,9 @@ package org.onap.policy.common.parameters;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 /**
@@ -117,6 +120,34 @@ public class BeanValidationResult extends ValidationResultImpl {
             } else {
                 result.addResult(itemValidator.apply(item));
             }
+        }
+
+        if (result.isValid()) {
+            return true;
+
+        } else {
+            addResult(result);
+            return false;
+        }
+    }
+
+    /**
+     * Validates the entries in a map.
+     *
+     * @param mapName name of the list
+     * @param map map whose entries are to be validated, or {@code null}
+     * @param entryValidator function to validate an entry in the map
+     * @return {@code true} if all entries in the map are valid, {@code false} otherwise
+     */
+    public <V> boolean validateMap(String mapName, Map<String, V> map,
+                    BiConsumer<BeanValidationResult, Entry<String, V>> entryValidator) {
+        if (map == null) {
+            return true;
+        }
+
+        BeanValidationResult result = new BeanValidationResult(mapName, null);
+        for (Entry<String, V> ent : map.entrySet()) {
+            entryValidator.accept(result, ent);
         }
 
         if (result.isValid()) {
