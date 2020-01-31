@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,17 @@ public class StandardYamlCoder extends StandardCoder {
      */
     public StandardYamlCoder() {
         translator = new YamlJsonTranslator(getGSON());
+    }
+
+    @Override
+    public String pretty(Object object) throws CoderException {
+        try {
+            // YAML is already "pretty"
+            return toJson(object);
+
+        } catch (RuntimeException e) {
+            throw new CoderException(e);
+        }
     }
 
     @Override

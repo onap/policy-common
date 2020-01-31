@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,11 @@
 
 package org.onap.policy.common.utils.coder;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.when;
 
 import java.io.File;
 import java.io.StringWriter;
@@ -42,6 +45,22 @@ public class StandardYamlCoderTest {
     public void setUp() throws CoderException {
         coder = new StandardYamlCoder();
         cont = coder.decode(YAML_FILE, Container.class);
+    }
+
+    @Test
+    public void testPretty() throws CoderException {
+        String expected = coder.encode(cont);
+        String yaml = coder.pretty(cont);
+        assertEquals(expected, yaml);
+
+        Container cont2 = coder.decode(yaml, Container.class);
+        assertEquals(cont, cont2);
+
+        // test exception case
+        IllegalArgumentException expex = new IllegalArgumentException("expected exception");
+        coder = spy(new StandardYamlCoder());
+        when(coder.toJson(cont)).thenThrow(expex);
+        assertThatThrownBy(() -> coder.pretty(cont)).isInstanceOf(CoderException.class).hasCause(expex);
     }
 
     @Test

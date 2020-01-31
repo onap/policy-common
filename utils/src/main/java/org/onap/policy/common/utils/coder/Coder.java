@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP PAP
+ * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,6 +106,15 @@ public interface Coder {
      * @throws CoderException if an error occurs
      */
     <T> T decode(File source, Class<T> clazz) throws CoderException;
+
+    /**
+     * Encodes an object into "pretty" json.
+     *
+     * @param object object to be encoded
+     * @return a json string representing the object
+     * @throws CoderException if an error occurs
+     */
+    String pretty(Object object) throws CoderException;
 
     /**
      * Converts an object/POJO to a standard object.

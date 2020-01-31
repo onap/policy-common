@@ -204,6 +204,17 @@ public class StandardCoderTest {
     }
 
     @Test
+    public void testPrettyObject() throws Exception {
+        List<Integer> arr = Arrays.asList(1100, 1110);
+        assertEquals("[\n  1100,\n  1110\n]", coder.pretty(arr));
+
+        // test exception case
+        coder = spy(new StandardCoder());
+        when(coder.toPrettyJson(arr)).thenThrow(jpe);
+        assertThatThrownBy(() -> coder.pretty(arr)).isInstanceOf(CoderException.class).hasCause(jpe);
+    }
+
+    @Test
     public void testToJsonTree_testFromJsonJsonElementClassT() throws Exception {
         MyMap map = new MyMap();
         map.props = new LinkedHashMap<>();
