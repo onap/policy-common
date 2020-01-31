@@ -16,6 +16,24 @@
       "revId": "207e058d67878dbfd60c0d010d037e6faedccc86",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7f24e2ed_23f6413f",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/Coder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-01-31T18:15:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4202c29_7acc8e37",
+      "revId": "207e058d67878dbfd60c0d010d037e6faedccc86",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
