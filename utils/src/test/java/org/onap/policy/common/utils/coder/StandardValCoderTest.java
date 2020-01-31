@@ -22,6 +22,7 @@ package org.onap.policy.common.utils.coder;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -119,6 +120,18 @@ public class StandardValCoderTest {
         StringWriter writer = new StringWriter();
         valCoder.encode(writer, valOuter);
         assertEquals(valOuterJson, writer.toString());
+    }
+
+    @Test
+    public void testPretty() throws CoderException {
+        StandardValCoder valCoder = new StandardValCoder(jsonSchema, "test-schema");
+        ValOuter valOuter = valCoder.decode(validJson, ValOuter.class);
+
+        String valOuterJson = valCoder.encode(valOuter);
+        String prettyValOuterJson = valCoder.pretty(valOuter);
+        assertNotEquals(valOuterJson, prettyValOuterJson);
+
+        assertEquals(valOuter, valCoder.decode(prettyValOuterJson, ValOuter.class));
     }
 
     @Test

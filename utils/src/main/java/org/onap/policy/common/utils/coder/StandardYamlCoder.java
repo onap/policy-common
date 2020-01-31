@@ -38,6 +38,17 @@ public class StandardYamlCoder extends StandardCoder {
     }
 
     @Override
+    public String pretty(Object object) throws CoderException {
+        try {
+            // YAML is already "pretty"
+            return toJson(object);
+
+        } catch (RuntimeException e) {
+            throw new CoderException(e);
+        }
+    }
+
+    @Override
     protected String toJson(Object object) {
         return translator.toYaml(object);
     }

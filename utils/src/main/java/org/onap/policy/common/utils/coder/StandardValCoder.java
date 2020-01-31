@@ -62,10 +62,21 @@ public class StandardValCoder extends StandardCoder {
     }
 
     @Override
+    protected String toPrettyJson(Object object) {
+        /*
+         * The validator strips off the "pretty" stuff (i.e., spaces), thus we have to validate
+         * and generate the pretty JSON in separate steps.
+         */
+        getGSON().toJson(object, object.getClass(), validatorApi.createJsonWriter(validator, new StringWriter()));
+
+        return super.toPrettyJson(object);
+    }
+
+    @Override
     protected String toJson(@NonNull Object object) {
         StringWriter output = new StringWriter();
         toJson(output, object);
-        return String.valueOf(output);
+        return output.toString();
     }
 
     @Override

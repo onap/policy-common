@@ -108,6 +108,15 @@ public interface Coder {
     <T> T decode(File source, Class<T> clazz) throws CoderException;
 
     /**
+     * Encodes an object into "pretty" json.
+     *
+     * @param object object to be encoded
+     * @return a json string representing the object
+     * @throws CoderException if an error occurs
+     */
+    String pretty(Object object) throws CoderException;
+
+    /**
      * Converts an object/POJO to a standard object.
      *
      * @param object object to be converted
