@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,16 @@
 package org.onap.policy.common.endpoints.http.client;
 
 import java.util.Map;
-
+import java.util.concurrent.Future;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.core.Response;
 
 import org.onap.policy.common.capabilities.Startable;
 
 /**
- * Http Client interface.
+ * Http Client interface. Supports both synchronous and asynchronous operations.
+ *
  */
 public interface HttpClient extends Startable {
 
@@ -48,6 +50,24 @@ public interface HttpClient extends Startable {
     Response get();
 
     /**
+     * Asynchronous GET request.
+     *
+     * @param callback callback to be invoked, asynchronously, when the request completes
+     * @param path context uri path.
+     *
+     * @return future that can be used to cancel the request and await the response
+     */
+    Future<Response> get(InvocationCallback<Response> callback, String path);
+
+    /**
+     * Asynchronous GET request.
+     *
+     * @param callback callback to be invoked, asynchronously, when the request completes
+     * @return future that can be used to cancel the request and await the response
+     */
+    Future<Response> get(InvocationCallback<Response> callback);
+
+    /**
      * PUT request.
      *
      * @param path context uri path
@@ -57,6 +77,19 @@ public interface HttpClient extends Startable {
      * @return response.
      */
     Response put(String path, Entity<?> entity, Map<String, Object> headers);
+
+    /**
+     * Asynchronous PUT request.
+     *
+     * @param callback callback to be invoked, asynchronously, when the request completes
+     * @param path context uri path
+     * @param entity body
+     * @param headers headers
+     *
+     * @return future that can be used to cancel the request and await the response
+     */
+    Future<Response> put(InvocationCallback<Response> callback, String path, Entity<?> entity,
+                    Map<String, Object> headers);
 
     /**
      * POST request.
@@ -70,6 +103,19 @@ public interface HttpClient extends Startable {
     Response post(String path, Entity<?> entity, Map<String, Object> headers);
 
     /**
+     * Asynchronous POST request.
+     *
+     * @param callback callback to be invoked, asynchronously, when the request completes
+     * @param path context uri path
+     * @param entity body
+     * @param headers headers
+     *
+     * @return future that can be used to cancel the request and await the response
+     */
+    Future<Response> post(InvocationCallback<Response> callback, String path, Entity<?> entity,
+                    Map<String, Object> headers);
+
+    /**
      * DELETE request.
      *
      * @param path context uri path
@@ -78,6 +124,17 @@ public interface HttpClient extends Startable {
      * @return response.
      */
     Response delete(String path, Map<String, Object> headers);
+
+    /**
+     * Asynchronous DELETE request.
+     *
+     * @param callback callback to be invoked, asynchronously, when the request completes
+     * @param path context uri path
+     * @param headers headers
+     *
+     * @return future that can be used to cancel the request and await the response
+     */
+    Future<Response> delete(InvocationCallback<Response> callback, String path, Map<String, Object> headers);
 
     /**
      * Retrieve the body from the HTTP transaction.
