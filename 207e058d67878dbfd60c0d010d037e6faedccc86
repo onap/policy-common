@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4202c29_7acc8e37",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/Coder.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-01-31T17:53:35Z",
+      "side": 1,
+      "message": "one other option would be to add an boolean optional argument \"pretty\" to existing \"encode\".",
+      "revId": "207e058d67878dbfd60c0d010d037e6faedccc86",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
