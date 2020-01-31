@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,15 +23,21 @@ package org.onap.policy.common.endpoints.http.server.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import lombok.Getter;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -194,11 +200,49 @@ public class HttpClientTest {
     }
 
     @Test
+    public void testHttpGetNoAuthClientAsync() throws Exception {
+        final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
+            6666);
+        MyCallback callback = new MyCallback();
+        final Response response = client.get(callback, HELLO).get();
+
+        verifyCallback("testHttpGetNoAuthClientAsync", callback, response);
+
+        final String body = HttpClient.getBody(response, String.class);
+
+        assertEquals(200, response.getStatus());
+        assertEquals(HELLO, body);
+    }
+
+    private void verifyCallback(String testName, MyCallback callback, final Response response)
+                    throws InterruptedException {
+        assertTrue(testName, callback.await());
+        assertNull(testName, callback.getThrowable());
+        assertSame(testName, response, callback.getResponse());
+    }
+
+    @Test
     public void testHttpPutNoAuthClient() throws Exception {
         final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false, 6666);
 
         Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
         final Response response = client.put(HELLO, entity, Collections.emptyMap());
+        final String body = HttpClient.getBody(response, String.class);
+
+        assertEquals(200, response.getStatus());
+        assertEquals(PUT_HELLO, body);
+    }
+
+    @Test
+    public void testHttpPutNoAuthClientAsync() throws Exception {
+        final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false, 6666);
+
+        Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
+        MyCallback callback = new MyCallback();
+        final Response response = client.put(callback, HELLO, entity, Collections.emptyMap()).get();
+
+        verifyCallback("testHttpPutNoAuthClientAsync", callback, response);
+
         final String body = HttpClient.getBody(response, String.class);
 
         assertEquals(200, response.getStatus());
@@ -219,6 +263,23 @@ public class HttpClientTest {
     }
 
     @Test
+    public void testHttpPostNoAuthClientAsync() throws Exception {
+        final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
+            6666);
+
+        Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
+        MyCallback callback = new MyCallback();
+        final Response response = client.post(callback, HELLO, entity, Collections.emptyMap()).get();
+
+        verifyCallback("testHttpPostNoAuthClientAsync", callback, response);
+
+        final String body = HttpClient.getBody(response, String.class);
+
+        assertEquals(200, response.getStatus());
+        assertEquals("POST:hello:{myParameter=myValue}", body);
+    }
+
+    @Test
     public void testHttpDeletetNoAuthClient() throws Exception {
         final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
             6666);
@@ -228,6 +289,41 @@ public class HttpClientTest {
 
         assertEquals(200, response.getStatus());
         assertEquals("DELETE:hello", body);
+    }
+
+    @Test
+    public void testHttpDeletetNoAuthClientAsync() throws Exception {
+        final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
+            6666);
+
+        MyCallback callback = new MyCallback();
+        final Response response = client.delete(callback, HELLO, Collections.emptyMap()).get();
+
+        verifyCallback("testHttpDeletetNoAuthClientAsync", callback, response);
+
+        final String body = HttpClient.getBody(response, String.class);
+
+        assertEquals(200, response.getStatus());
+        assertEquals("DELETE:hello", body);
+    }
+
+    /**
+     * Perform one asynchronous test with auth client; don't need to test every method.
+     * @throws Exception if an error occurs
+     */
+    @Test
+    public void testHttpAsyncAuthClient() throws Exception {
+        final HttpClient client = getAuthHttpClient();
+
+        MyCallback callback = new MyCallback();
+        final Response response = client.get(callback, HELLO).get();
+
+        verifyCallback("testHttpAsyncAuthClient", callback, response);
+
+        final String body = HttpClient.getBody(response, String.class);
+
+        assertEquals(200, response.getStatus());
+        assertEquals(HELLO, body);
     }
 
     @Test
@@ -382,16 +478,33 @@ public class HttpClientTest {
             server.waitedStart(10000);
         }
 
+        Response response;
         final HttpClient clientPap = HttpClientFactoryInstance.getClientFactory().get("PAP");
-        final Response response = clientPap.get();
+        response = clientPap.get();
         assertEquals(200, response.getStatus());
 
         final HttpClient clientPdp = HttpClientFactoryInstance.getClientFactory().get("PDP");
-        final Response response2 = clientPdp.get("test");
-        assertEquals(500, response2.getStatus());
+        response = clientPdp.get("test");
+        assertEquals(500, response.getStatus());
 
         assertFalse(MyJacksonProvider.hasWrittenSome());
         assertFalse(MyGsonProvider.hasWrittenSome());
+
+        // try with empty path
+        response = clientPap.get("");
+        assertEquals(200, response.getStatus());
+
+        // try it asynchronously, too
+        MyCallback callback = new MyCallback();
+        response = clientPap.get(callback).get();
+        verifyCallback("testHttpAuthClientProps", callback, response);
+        assertEquals(200, response.getStatus());
+
+        // try it asynchronously, with empty path
+        callback = new MyCallback();
+        response = clientPap.get(callback, "").get();
+        verifyCallback("testHttpAuthClientProps - empty path", callback, response);
+        assertEquals(200, response.getStatus());
     }
 
     @Test
@@ -497,4 +610,29 @@ public class HttpClientTest {
 
     }
 
+    class MyCallback implements InvocationCallback<Response> {
+        @Getter
+        private Response response;
+
+        @Getter
+        private Throwable throwable;
+
+        private CountDownLatch latch = new CountDownLatch(1);
+
+        @Override
+        public void completed(Response response) {
+            this.response = response;
+            latch.countDown();
+        }
+
+        @Override
+        public void failed(Throwable throwable) {
+            this.throwable = throwable;
+            latch.countDown();
+        }
+
+        public boolean await() throws InterruptedException {
+            return latch.await(5, TimeUnit.SECONDS);
+        }
+    }
 }

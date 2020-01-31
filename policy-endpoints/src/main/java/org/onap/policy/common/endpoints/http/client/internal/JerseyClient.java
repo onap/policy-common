@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * Modifications Copyright (C) 2019 Nordix Foundation.
  * ================================================================================
@@ -28,11 +28,13 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.Future;
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
+import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.ClientProperties;
@@ -169,8 +171,28 @@ public class JerseyClient implements HttpClient {
     }
 
     @Override
+    public Future<Response> get(InvocationCallback<Response> callback, String path) {
+        if (!StringUtils.isBlank(path)) {
+            return this.client.target(this.baseUrl).path(path).request().async().get(callback);
+        } else {
+            return this.client.target(this.baseUrl).request().async().get(callback);
+        }
+    }
+
+    @Override
+    public Future<Response> get(InvocationCallback<Response> callback) {
+        return this.client.target(this.baseUrl).request().async().get(callback);
+    }
+
+    @Override
     public Response put(String path, Entity<?> entity, Map<String, Object> headers) {
         return getBuilder(path, headers).put(entity);
+    }
+
+    @Override
+    public Future<Response> put(InvocationCallback<Response> callback, String path, Entity<?> entity,
+                    Map<String, Object> headers) {
+        return getBuilder(path, headers).async().put(entity, callback);
     }
 
     @Override
@@ -179,8 +201,19 @@ public class JerseyClient implements HttpClient {
     }
 
     @Override
+    public Future<Response> post(InvocationCallback<Response> callback, String path, Entity<?> entity,
+                    Map<String, Object> headers) {
+        return getBuilder(path, headers).async().post(entity, callback);
+    }
+
+    @Override
     public Response delete(String path, Map<String, Object> headers) {
         return getBuilder(path, headers).delete();
+    }
+
+    @Override
+    public Future<Response> delete(InvocationCallback<Response> callback, String path, Map<String, Object> headers) {
+        return getBuilder(path, headers).async().delete(callback);
     }
 
     @Override
