@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3acc76ad_337aa48c",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/coder/StandardYamlCoder.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-02-02T10:19:43Z",
+      "side": 1,
+      "message": ":-)",
+      "range": {
+        "startLine": 42,
+        "startChar": 0,
+        "endLine": 42,
+        "endChar": 2
+      },
+      "revId": "4f909d754b638ab4563eb9466836cc2d7a184d63",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
