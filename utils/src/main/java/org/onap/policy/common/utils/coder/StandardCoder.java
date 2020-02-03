@@ -54,9 +54,21 @@ public class StandardCoder implements Coder {
      * Gson object used to encode and decode messages.
      */
     @Getter(AccessLevel.PROTECTED)
-    private static final Gson GSON = GsonMessageBodyHandler.configBuilder(
-                    new GsonBuilder().registerTypeAdapter(StandardCoderObject.class, new StandardTypeAdapter()))
-                    .create();
+    private static final Gson GSON;
+
+    /**
+     * Gson object used to encode messages in "pretty" format.
+     */
+    @Getter(AccessLevel.PROTECTED)
+    private static final Gson GSON_PRETTY;
+
+    static {
+        GsonBuilder builder = GsonMessageBodyHandler.configBuilder(
+                        new GsonBuilder().registerTypeAdapter(StandardCoderObject.class, new StandardTypeAdapter()));
+
+        GSON = builder.create();
+        GSON_PRETTY = builder.setPrettyPrinting().create();
+    }
 
     /**
      * Constructs the object.
@@ -67,8 +79,18 @@ public class StandardCoder implements Coder {
 
     @Override
     public String encode(Object object) throws CoderException {
+        return encode(object, false);
+    }
+
+    @Override
+    public String encode(Object object, boolean pretty) throws CoderException {
         try {
-            return toJson(object);
+            if (pretty) {
+                return toPrettyJson(object);
+
+            } else {
+                return toJson(object);
+            }
 
         } catch (RuntimeException e) {
             throw new CoderException(e);
@@ -149,6 +171,16 @@ public class StandardCoder implements Coder {
         } catch (RuntimeException | IOException e) {
             throw new CoderException(e);
         }
+    }
+
+    /**
+     * Encodes the object as "pretty" json.
+     *
+     * @param object object to be encoded
+     * @return the encoded object
+     */
+    protected String toPrettyJson(Object object) {
+        return GSON_PRETTY.toJson(object);
     }
 
     @Override

@@ -77,6 +77,32 @@ public class StandardCoderTest {
     }
 
     @Test
+    public void testEncodeObjectBoolean() throws Exception {
+        final List<Integer> arr = Arrays.asList(1100, 1110);
+
+        /*
+         * As plain json.
+         */
+        assertEquals("[1100,1110]", coder.encode(arr, false));
+
+        // test exception case
+        coder = spy(new StandardCoder());
+        when(coder.toJson(arr)).thenThrow(jpe);
+        assertThatThrownBy(() -> coder.encode(arr, false)).isInstanceOf(CoderException.class).hasCause(jpe);
+
+
+        /*
+         * As pretty json.
+         */
+        assertEquals("[\n  1100,\n  1110\n]", coder.encode(arr, true));
+
+        // test exception case
+        coder = spy(new StandardCoder());
+        when(coder.toPrettyJson(arr)).thenThrow(jpe);
+        assertThatThrownBy(() -> coder.encode(arr, true)).isInstanceOf(CoderException.class).hasCause(jpe);
+    }
+
+    @Test
     public void testEncodeWriterObject() throws Exception {
         List<Integer> arr = Arrays.asList(1200, 1210);
         StringWriter wtr = new StringWriter();
