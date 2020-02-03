@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
- *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  *  Modifications Copyright (C) 2020 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -321,26 +321,36 @@ public class ResourceUtilsTest {
 
         Set<String> resultD0 = ResourceUtils.getDirectoryContents("testdir");
         assertEquals(1, resultD0.size());
-        assertEquals("testdir/testfile.xml", resultD0.iterator().next());
+        assertEquals("testdir/testfile.xml", normalizePath(resultD0.iterator().next()));
 
         Set<String> resultD1 = ResourceUtils.getDirectoryContents("org/onap/policy/common");
         assertTrue(resultD1.size() > 0);
-        assertEquals("org/onap/policy/common/utils/", resultD1.iterator().next());
+        assertEquals("org/onap/policy/common/utils/", normalizePath(resultD1.iterator().next()));
 
         Set<String> resultD2 = ResourceUtils.getDirectoryContents("org/onap/policy/common/utils/coder");
         assertTrue(resultD2.size() >= 15);
-        assertEquals("org/onap/policy/common/utils/coder/CoderExceptionTest.class", resultD2.iterator().next());
+        assertEquals("org/onap/policy/common/utils/coder/CoderExceptionTest.class",
+                        normalizePath(resultD2.iterator().next()));
 
         Set<String> resultJ0 = ResourceUtils.getDirectoryContents("com");
         assertEquals(189, resultJ0.size());
-        assertEquals("com/google/", resultJ0.iterator().next());
+        assertEquals("com/google/", normalizePath(resultJ0.iterator().next()));
 
         Set<String> resultJ1 = ResourceUtils.getDirectoryContents("com/google/gson/util");
         assertEquals(1, resultJ1.size());
-        assertEquals("com/google/gson/util/VersionUtils.class", resultJ1.iterator().next());
+        assertEquals("com/google/gson/util/VersionUtils.class", normalizePath(resultJ1.iterator().next()));
 
         URL dummyUrl = new URL("http://even/worse");
         assertTrue(ResourceUtils.getDirectoryContentsJar(dummyUrl, "nonexistantdirectory").isEmpty());
 
+    }
+
+    /**
+     * Normalizes a path name, replacing OS-specific separators with "/".
+     * @param pathName path name to be normalized
+     * @return the normalized path name
+     */
+    private String normalizePath(String pathName) {
+        return pathName.replace(File.separator, "/");
     }
 }
