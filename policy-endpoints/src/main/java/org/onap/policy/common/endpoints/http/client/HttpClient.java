@@ -53,19 +53,21 @@ public interface HttpClient extends Startable {
      * Asynchronous GET request.
      *
      * @param callback callback to be invoked, asynchronously, when the request completes
-     * @param path context uri path.
+     * @param path context uri path
+     * @param headers request headers
      *
      * @return future that can be used to cancel the request or await the response
      */
-    Future<Response> get(InvocationCallback<Response> callback, String path);
+    Future<Response> get(InvocationCallback<Response> callback, String path, Map<String, Object> headers);
 
     /**
      * Asynchronous GET request.
      *
      * @param callback callback to be invoked, asynchronously, when the request completes
+     * @param headers request headers
      * @return future that can be used to cancel the request or await the response
      */
-    Future<Response> get(InvocationCallback<Response> callback);
+    Future<Response> get(InvocationCallback<Response> callback, Map<String, Object> headers);
 
     /**
      * PUT request.
