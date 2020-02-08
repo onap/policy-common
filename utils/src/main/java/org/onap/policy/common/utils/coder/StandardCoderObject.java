@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +20,17 @@
 
 package org.onap.policy.common.utils.coder;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import java.io.Serializable;
 
 /**
  * Object type used by the {@link StandardCoder}. Different serialization tools have
  * different "standard objects". For instance, GSON uses {@link JsonElement}. This class
  * wraps that object so that it can be used without exposing the object, itself.
  */
-public class StandardCoderObject {
+public class StandardCoderObject implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Data wrapped by this.
@@ -62,32 +65,73 @@ public class StandardCoderObject {
     /**
      * Gets a field's value from this object, traversing the object hierarchy.
      *
-     * @param fields field hierarchy
+     * @param fields field hierarchy. These may be strings, identifying fields within the
+     *        object, or Integers, identifying an index within an array
      * @return the field value or {@code null} if the field does not exist or is not a
      *         primitive
      */
-    public String getString(String... fields) {
-
-        /*
-         * This could be relatively easily modified to allow Integer arguments, as well,
-         * which would be used to specify indices within an array.
-         */
+    public String getString(Object... fields) {
 
         JsonElement jel = data;
 
-        for (String field : fields) {
+        for (Object field : fields) {
             if (jel == null) {
                 return null;
             }
 
-            if (jel.isJsonObject()) {
-                jel = jel.getAsJsonObject().get(field);
+            if (field instanceof String) {
+                jel = getFieldFromObject(jel, field.toString());
+
+            } else if (field instanceof Integer) {
+                jel = getItemFromArray(jel, (int) field);
 
             } else {
-                return null;
+                throw new IllegalArgumentException("subscript is not a string or integer: " + field);
             }
         }
 
         return (jel != null && jel.isJsonPrimitive() ? jel.getAsString() : null);
+    }
+
+    /**
+     * Gets an item from an object.
+     *
+     * @param element object from which to extract the item
+     * @param field name of the field from which to extract the item
+     * @return the item, or {@code null} if the element is not an object or if the field
+     *         does not exist
+     */
+    protected JsonElement getFieldFromObject(JsonElement element, String field) {
+        if (!element.isJsonObject()) {
+            return null;
+        }
+
+        return element.getAsJsonObject().get(field);
+    }
+
+    /**
+     * Gets an item from an array.
+     *
+     * @param element array from which to extract the item
+     * @param index index of the item to extract
+     * @return the item, or {@code null} if the element is not an array or if the index is
+     *         out of bounds
+     */
+    protected JsonElement getItemFromArray(JsonElement element, int index) {
+        if (index < 0) {
+            throw new IllegalArgumentException("subscript is invalid: " + index);
+        }
+
+        if (!element.isJsonArray()) {
+            return null;
+        }
+
+        JsonArray array = element.getAsJsonArray();
+
+        if (index >= array.size()) {
+            return null;
+        }
+
+        return array.get(index);
     }
 }
