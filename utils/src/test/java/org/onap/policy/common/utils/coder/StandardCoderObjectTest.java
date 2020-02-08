@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.utils.coder;
 
+import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -34,10 +35,11 @@ public class StandardCoderObjectTest {
 
     private static final String PROP1 = "abc";
     private static final String PROP2 = "ghi";
+    private static final Integer PROP2_INDEX = 1;
     private static final String PROP2b = "jkl";
     private static final String VAL1 = "def";
     private static final String VAL2 = "mno";
-    private static final String JSON = "{'abc':'def','ghi':{'jkl':'mno'}}".replace('\'', '"');
+    private static final String JSON = "{'abc':'def','ghi':[{},{'jkl':'mno'}]}".replace('\'', '"');
 
     private StandardCoderObject sco;
 
@@ -68,7 +70,7 @@ public class StandardCoderObjectTest {
         assertEquals(VAL1, sco.getString(PROP1));
 
         // multiple fields
-        assertEquals(VAL2, sco.getString(PROP2, PROP2b));
+        assertEquals(VAL2, sco.getString(PROP2, PROP2_INDEX, PROP2b));
 
         // not found
         assertNull(sco.getString("xyz"));
@@ -85,5 +87,44 @@ public class StandardCoderObjectTest {
 
         // not a JSON object
         assertNull(sco.getString(PROP1, PROP2));
+
+        // invalid subscript
+        assertThatIllegalArgumentException().isThrownBy(() -> sco.getString(10.0));
+    }
+
+    @Test
+    public void testGetFieldFromObject() {
+        // not an object
+        assertNull(sco.getFieldFromObject(fromJson("[]"), PROP1));
+
+        // field doesn't exist
+        assertNull(sco.getFieldFromObject(fromJson("{}"), "non-existent"));
+
+        // field exists
+        assertEquals(4, sco.getFieldFromObject(fromJson("{\"world\":4}"), "world").getAsInt());
+    }
+
+    @Test
+    public void testGetItemFromArray() {
+        // not an array
+        assertNull(sco.getItemFromArray(fromJson("{}"), 0));
+
+        // negative index
+        assertThatIllegalArgumentException().isThrownBy(() -> sco.getItemFromArray(fromJson("[]"), -1));
+
+        // index out of bounds
+        assertNull(sco.getItemFromArray(fromJson("[5]"), 1));
+        assertNull(sco.getItemFromArray(fromJson("[5]"), 2));
+
+        // index exists
+        assertEquals(6, sco.getItemFromArray(fromJson("[5,6,7]"), 1).getAsInt());
+
+        // edge case: first and last item
+        assertEquals(50, sco.getItemFromArray(fromJson("[50,60,70]"), 0).getAsInt());
+        assertEquals(700, sco.getItemFromArray(fromJson("[500,600,700]"), 2).getAsInt());
+    }
+
+    private JsonElement fromJson(String json) {
+        return gson.fromJson(json, JsonElement.class);
     }
 }
