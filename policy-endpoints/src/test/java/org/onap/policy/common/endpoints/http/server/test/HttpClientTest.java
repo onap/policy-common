@@ -31,6 +31,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import javax.ws.rs.client.Entity;
@@ -204,7 +205,7 @@ public class HttpClientTest {
         final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
             6666);
         MyCallback callback = new MyCallback();
-        final Response response = client.get(callback, HELLO).get();
+        final Response response = client.get(callback, HELLO, new TreeMap<>()).get();
 
         verifyCallback("testHttpGetNoAuthClientAsync", callback, response);
 
@@ -316,7 +317,7 @@ public class HttpClientTest {
         final HttpClient client = getAuthHttpClient();
 
         MyCallback callback = new MyCallback();
-        final Response response = client.get(callback, HELLO).get();
+        final Response response = client.get(callback, HELLO, null).get();
 
         verifyCallback("testHttpAsyncAuthClient", callback, response);
 
@@ -496,13 +497,13 @@ public class HttpClientTest {
 
         // try it asynchronously, too
         MyCallback callback = new MyCallback();
-        response = clientPap.get(callback).get();
+        response = clientPap.get(callback, null).get();
         verifyCallback("testHttpAuthClientProps", callback, response);
         assertEquals(200, response.getStatus());
 
         // try it asynchronously, with empty path
         callback = new MyCallback();
-        response = clientPap.get(callback, "").get();
+        response = clientPap.get(callback, "", null).get();
         verifyCallback("testHttpAuthClientProps - empty path", callback, response);
         assertEquals(200, response.getStatus());
     }

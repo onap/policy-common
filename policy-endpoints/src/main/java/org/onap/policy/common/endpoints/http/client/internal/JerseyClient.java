@@ -26,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Future;
@@ -171,17 +172,23 @@ public class JerseyClient implements HttpClient {
     }
 
     @Override
-    public Future<Response> get(InvocationCallback<Response> callback, String path) {
+    public Future<Response> get(InvocationCallback<Response> callback, String path, Map<String, Object> headers) {
+        Map<String, Object> headers2 = (headers != null ? headers : Collections.emptyMap());
+
         if (!StringUtils.isBlank(path)) {
-            return this.client.target(this.baseUrl).path(path).request().async().get(callback);
+            return getBuilder(path, headers2).async().get(callback);
         } else {
-            return this.client.target(this.baseUrl).request().async().get(callback);
+            return get(callback, headers2);
         }
     }
 
     @Override
-    public Future<Response> get(InvocationCallback<Response> callback) {
-        return this.client.target(this.baseUrl).request().async().get(callback);
+    public Future<Response> get(InvocationCallback<Response> callback, Map<String, Object> headers) {
+        Builder builder = this.client.target(this.baseUrl).request();
+        if (headers != null) {
+            headers.forEach(builder::header);
+        }
+        return builder.async().get(callback);
     }
 
     @Override
