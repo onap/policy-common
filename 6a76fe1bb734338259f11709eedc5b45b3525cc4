@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c9afb879_c34c259e",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/client/BidirectionalTopicClient.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-02-14T18:14:30Z",
+      "side": 1,
+      "message": "could also throw exception if size \u003e 1 ?",
+      "revId": "6a76fe1bb734338259f11709eedc5b45b3525cc4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
