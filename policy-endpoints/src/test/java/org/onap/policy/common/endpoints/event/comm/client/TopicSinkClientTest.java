@@ -26,26 +26,32 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.onap.policy.common.endpoints.event.comm.TopicEndpoint;
 import org.onap.policy.common.endpoints.event.comm.TopicEndpointManager;
 import org.onap.policy.common.endpoints.event.comm.TopicSink;
 
 public class TopicSinkClientTest {
     private static final String TOPIC = "my-topic";
 
-    private TopicSinkClient client;
+    @Mock
     private TopicSink sink;
+    @Mock
+    private TopicEndpoint endpoint;
+
+    private TopicSinkClient client;
     private List<TopicSink> sinks;
 
     /**
@@ -55,10 +61,12 @@ public class TopicSinkClientTest {
      */
     @Before
     public void setUp() throws Exception {
-        sink = mock(TopicSink.class);
+        MockitoAnnotations.initMocks(this);
+
         when(sink.send(anyString())).thenReturn(true);
 
         sinks = Arrays.asList(sink, null);
+        when(endpoint.getTopicSinks(TOPIC)).thenReturn(sinks);
 
         client = new TopicSinkClient2(TOPIC);
 
@@ -99,9 +107,9 @@ public class TopicSinkClientTest {
     @Test
     public void testTopicSinkClient() {
         // unknown topic -> should throw exception
-        sinks = new LinkedList<>();
+        when(endpoint.getTopicSinks(TOPIC)).thenReturn(Collections.emptyList());
         assertThatThrownBy(() -> new TopicSinkClient2(TOPIC)).isInstanceOf(TopicSinkClientException.class)
-                .hasMessage("no sinks for topic: my-topic");
+                        .hasMessage("no sinks for topic: my-topic");
     }
 
     @Test
@@ -111,7 +119,7 @@ public class TopicSinkClientTest {
 
         assertThatThrownBy(() -> new TopicSinkClient((TopicSink) null)).isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> new TopicSinkClient("blah")).isInstanceOf(TopicSinkClientException.class)
-                            .hasMessage("no sinks for topic: blah");
+                        .hasMessage("no sinks for topic: blah");
     }
 
     @Test
@@ -139,8 +147,8 @@ public class TopicSinkClientTest {
         }
 
         @Override
-        protected List<TopicSink> getTopicSinks(final String topic) {
-            return sinks;
+        protected TopicEndpoint getTopicEndpointManager() {
+            return endpoint;
         }
     }
 }

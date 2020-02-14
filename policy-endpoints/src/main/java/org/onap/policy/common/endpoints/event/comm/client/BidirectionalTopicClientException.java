@@ -1,9 +1,8 @@
 /*-
  * ============LICENSE_START=======================================================
- * ONAP PAP
+ * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2019 Nordix Foundation.
+ * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +20,30 @@
 
 package org.onap.policy.common.endpoints.event.comm.client;
 
-import static org.junit.Assert.assertEquals;
+/**
+ * Exception thrown by BidirectionalTopicClient class.
+ */
+public class BidirectionalTopicClientException extends Exception {
+    private static final long serialVersionUID = 1L;
 
-import org.junit.Test;
-import org.onap.policy.common.utils.test.ExceptionsTester;
+    public BidirectionalTopicClientException() {
+        super();
+    }
 
-public class TopicSinkClientExceptionTest {
+    public BidirectionalTopicClientException(String message) {
+        super(message);
+    }
 
-    @Test
-    public void test() {
-        assertEquals(5, new ExceptionsTester().test(TopicSinkClientException.class));
+    public BidirectionalTopicClientException(Throwable cause) {
+        super(cause);
+    }
+
+    public BidirectionalTopicClientException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public BidirectionalTopicClientException(String message, Throwable cause, boolean enableSuppression,
+                    boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

@@ -46,7 +46,8 @@ import org.onap.policy.common.gson.DoubleConverter;
 import org.onap.policy.common.gson.GsonMessageBodyHandler;
 
 /**
- * JSON encoder and decoder using the "standard" mechanism, which is currently gson.
+ * JSON encoder and decoder using the "standard" mechanism, which is currently gson.  Objects
+ * of this type are intended to be thread safe, thus only one need be instantiated.
  */
 public class StandardCoder implements Coder {
 

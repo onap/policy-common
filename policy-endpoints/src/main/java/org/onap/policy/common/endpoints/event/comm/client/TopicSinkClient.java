@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP PAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,6 +24,7 @@ package org.onap.policy.common.endpoints.event.comm.client;
 import java.util.List;
 import lombok.Getter;
 import lombok.NonNull;
+import org.onap.policy.common.endpoints.event.comm.TopicEndpoint;
 import org.onap.policy.common.endpoints.event.comm.TopicEndpointManager;
 import org.onap.policy.common.endpoints.event.comm.TopicSink;
 import org.onap.policy.common.utils.coder.Coder;
@@ -56,7 +57,7 @@ public class TopicSinkClient {
      * @throws TopicSinkClientException if the topic does not exist
      */
     public TopicSinkClient(final String topic) throws TopicSinkClientException {
-        final List<TopicSink> lst = getTopicSinks(topic);
+        final List<TopicSink> lst = getTopicEndpointManager().getTopicSinks(topic);
         if (lst.isEmpty()) {
             throw new TopicSinkClientException("no sinks for topic: " + topic);
         }
@@ -102,13 +103,7 @@ public class TopicSinkClient {
 
     // the remaining methods are wrappers that can be overridden by junit tests
 
-    /**
-     * Gets the sinks for a given topic.
-     *
-     * @param topic the topic of interest
-     * @return the sinks for the topic
-     */
-    protected List<TopicSink> getTopicSinks(final String topic) {
-        return TopicEndpointManager.getManager().getTopicSinks(topic);
+    protected TopicEndpoint getTopicEndpointManager() {
+        return TopicEndpointManager.getManager();
     }
 }
