@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "e58e0a1a_efc246b8",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/time/PseudoExecutor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-02-17T14:09:57Z",
+      "side": 1,
+      "message": "We already have a PseudoScheduledExecutorServer, so this fits with that naming.  In addition, it doesn\u0027t actually execute anything until runAll() is invoked, so in that sense, it isn\u0027t a \"real\" executor.",
+      "parentUuid": "d14fbd23_6dcfb165",
+      "revId": "81d04e54c10d622ce113318577f0838ee9552dc9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef643678_ce452428",
         "filename": "utils-test/src/main/java/org/onap/policy/common/utils/time/PseudoExecutor.java",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-02-17T01:17:25Z",
       "side": 1,
       "message": "List\u003cRunnable\u003e tasks ?",
+      "revId": "81d04e54c10d622ce113318577f0838ee9552dc9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0c11770a_41073b54",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/time/PseudoExecutor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-02-17T14:09:57Z",
+      "side": 1,
+      "message": "Ack - I\u0027ll change it to Queue, as that\u0027s how it\u0027s being used",
+      "parentUuid": "ef643678_ce452428",
       "revId": "81d04e54c10d622ce113318577f0838ee9552dc9",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
