@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d14fbd23_6dcfb165",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/time/PseudoExecutor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-02-17T01:17:25Z",
+      "side": 1,
+      "message": "May be BatchExecutor could be more meaningful name for this functionality?",
+      "revId": "81d04e54c10d622ce113318577f0838ee9552dc9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ef643678_ce452428",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/time/PseudoExecutor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-02-17T01:17:25Z",
+      "side": 1,
+      "message": "List\u003cRunnable\u003e tasks ?",
+      "revId": "81d04e54c10d622ce113318577f0838ee9552dc9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
