@@ -91,9 +91,9 @@ public class RestServer extends ServiceManagerContainer {
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "false");
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX, "true");
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX,
-                        restServerParameters.getUserName());
+            getValue(restServerParameters.getUserName()));
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX,
-                        restServerParameters.getPassword());
+            getValue(restServerParameters.getPassword()));
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX,
                         String.valueOf(restServerParameters.isHttps()));
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_AAF_SUFFIX,
@@ -122,6 +122,13 @@ public class RestServer extends ServiceManagerContainer {
         }
 
         return names.toString();
+    }
+
+    private String getValue(final String value) {
+        if (value != null && value.matches("[$][{].*[}]$")) {
+            return System.getenv(value.substring(2, value.length() - 1));
+        }
+        return value;
     }
 
     @Override
