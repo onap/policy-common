@@ -32,6 +32,37 @@ import java.io.Writer;
 public interface Coder {
 
     /**
+     * Converts an object/POJO to an object of the given type.
+     *
+     * @param <T> desired type
+     * @param source source object
+     * @param clazz class of the desired object type
+     * @return the converted object
+     * @throws CoderException if an error occurs
+     */
+    default <S, T> T convert(S source, Class<T> clazz) throws CoderException {
+        if (source == null) {
+            return null;
+
+        } else if (clazz == source.getClass()) {
+            // same class - just cast it
+            return clazz.cast(source);
+
+        } else if (clazz == String.class) {
+            // target is a string - just encode the source
+            return (clazz.cast(encode(source)));
+
+        } else if (source.getClass() == String.class) {
+            // source is a string - just decode it
+            return decode(source.toString(), clazz);
+
+        } else {
+            // do it the long way: encode to a string and then decode the string
+            return decode(encode(source), clazz);
+        }
+    }
+
+    /**
      * Encodes an object into json.
      *
      * @param object object to be encoded
@@ -44,7 +75,8 @@ public interface Coder {
      * Encodes an object into json, optionally making it "pretty".
      *
      * @param object object to be encoded
-     * @param pretty {@code true} if it should be encoded as "pretty" json, {@code false} otherwise
+     * @param pretty {@code true} if it should be encoded as "pretty" json, {@code false}
+     *        otherwise
      * @return a json string representing the object
      * @throws CoderException if an error occurs
      */

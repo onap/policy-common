@@ -23,6 +23,8 @@ package org.onap.policy.common.utils.coder;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -63,6 +65,35 @@ public class StandardCoderTest {
     @Before
     public void setUp() {
         coder = new StandardCoder();
+    }
+
+    @Test
+    public void testConvert() throws CoderException {
+        // null source
+        assertNull(coder.convert(null, StandardCoderObject.class));
+
+        // same class of object
+        StandardCoderObject sco = new StandardCoderObject();
+        assertSame(sco, coder.convert(sco, StandardCoderObject.class));
+
+        // source is a string
+        assertEquals(Integer.valueOf(10), coder.convert("10", Integer.class));
+
+        // target is a string
+        assertEquals("10", coder.convert(10, String.class));
+
+        // source and target are different types, neither is a string
+        sco = coder.convert(Map.of("hello", "world"), StandardCoderObject.class);
+        assertEquals("world", sco.getString("hello"));
+
+        // throw an exeception
+        coder = new StandardCoder() {
+            @Override
+            protected <T> T fromJson(JsonElement json, Class<T> clazz) {
+                throw jpe;
+            }
+        };
+        assertThatThrownBy(() -> coder.convert(10, Long.class)).isInstanceOf(CoderException.class).hasCause(jpe);
     }
 
     @Test
@@ -312,7 +343,7 @@ public class StandardCoderTest {
 
         // test when decoding into a map
         @SuppressWarnings("unchecked")
-        Map<String,Object> map2 = coder.decode("{'intValue':10, 'dblVal':20.1}", TreeMap.class);
+        Map<String, Object> map2 = coder.decode("{'intValue':10, 'dblVal':20.1}", TreeMap.class);
         assertEquals("{dblVal=20.1, intValue=10}", map2.toString());
     }
 

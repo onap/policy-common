@@ -78,6 +78,39 @@ public class StandardCoder implements Coder {
     }
 
     @Override
+    public <S, T> T convert(S source, Class<T> clazz) throws CoderException {
+        if (source == null) {
+            return null;
+
+        } else if (clazz == source.getClass()) {
+            // same class - just cast it
+            return clazz.cast(source);
+
+        } else if (clazz == String.class) {
+            // target is a string - just encode the source
+            return (clazz.cast(encode(source)));
+
+        } else if (source.getClass() == String.class) {
+            // source is a string - just decode it
+            return decode(source.toString(), clazz);
+
+        } else {
+            /*
+             * Do it the long way: encode to a tree and then decode the tree. This entire
+             * method could have been left out and the default Coder.convert() used
+             * instead, but this should perform slightly better as it only uses a
+             * JsonElement as the intermediate data structure, while Coder.convert() goes
+             * all the way to a String as the intermediate data structure.
+             */
+            try {
+                return fromJson(toJsonTree(source), clazz);
+            } catch (RuntimeException e) {
+                throw new CoderException(e);
+            }
+        }
+    }
+
+    @Override
     public String encode(Object object) throws CoderException {
         return encode(object, false);
     }
