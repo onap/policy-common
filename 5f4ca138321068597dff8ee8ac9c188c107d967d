@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "404b5c1c_0670ee7d",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpServerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-02-24T13:16:50Z",
+      "side": 1,
+      "message": "FYI: the second number is a sleep time, in milliseconds; it would be perfectly reasonable to change it to \"100\"",
+      "revId": "5f4ca138321068597dff8ee8ac9c188c107d967d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
