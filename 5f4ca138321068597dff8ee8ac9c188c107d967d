@@ -34,6 +34,24 @@
       "revId": "5f4ca138321068597dff8ee8ac9c188c107d967d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bb6d033c_3a2ea876",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpServerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-02-24T13:25:27Z",
+      "side": 1,
+      "message": "I mean the last one; change \"5\" to \"100\".  The idea is, if the port isn\u0027t open yet, then why try again in just 5ms?  Give it a little longer to get things running.\n\nOTOH: The first number, \"25\", is the number of times it will retry before giving up.  So even if it never succeeds, 25x100ms \u003d 2.5s is still not very long to wait to learn the outcome.\n\nsame comment below",
+      "parentUuid": "d0843e19_dcdbc26e",
+      "revId": "5f4ca138321068597dff8ee8ac9c188c107d967d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
