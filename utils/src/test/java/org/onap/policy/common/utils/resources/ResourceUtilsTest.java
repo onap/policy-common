@@ -336,9 +336,10 @@ public class ResourceUtilsTest {
         assertEquals(189, resultJ0.size());
         assertEquals("com/google/", normalizePath(resultJ0.iterator().next()));
 
-        Set<String> resultJ1 = ResourceUtils.getDirectoryContents("com/google/gson/util");
-        assertEquals(1, resultJ1.size());
-        assertEquals("com/google/gson/util/VersionUtils.class", normalizePath(resultJ1.iterator().next()));
+        Set<String> resultJ1 = ResourceUtils.getDirectoryContents("com/google/gson");
+        assertTrue(resultJ1.size() > 1);
+        assertTrue(resultJ1.contains("com/google/gson/JsonElement.class"));
+        //assertEquals("com/google/gson/JsonElement.class", normalizePath(resultJ1.iterator().next()));
 
         URL dummyUrl = new URL("http://even/worse");
         assertTrue(ResourceUtils.getDirectoryContentsJar(dummyUrl, "nonexistantdirectory").isEmpty());
