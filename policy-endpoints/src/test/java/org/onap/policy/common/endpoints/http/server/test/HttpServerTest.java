@@ -486,7 +486,7 @@ public class HttpServerTest {
     private String http(String urlString)
             throws IOException, InterruptedException {
         URL url = new URL(urlString);
-        if (!NetworkUtil.isTcpPortOpen(url.getHost(), url.getPort(), 25, 2)) {
+        if (!NetworkUtil.isTcpPortOpen(url.getHost(), url.getPort(), 25, 5)) {
             throw new IllegalStateException("port never opened: " + url);
         }
         return response(url.openConnection());
@@ -502,7 +502,7 @@ public class HttpServerTest {
     private String http(String urlString, String mediaType, String post)
             throws IOException, InterruptedException {
         URL url = new URL(urlString);
-        if (!NetworkUtil.isTcpPortOpen(url.getHost(), url.getPort(), 25, 2)) {
+        if (!NetworkUtil.isTcpPortOpen(url.getHost(), url.getPort(), 25, 5)) {
             throw new IllegalStateException("port never opened: " + url);
         }
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
