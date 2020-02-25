@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2020 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +84,8 @@ public interface HttpServletServer extends Startable {
      * @param restClass JAX-RS API Class
      *
      * @throws IllegalArgumentException unable to process because of invalid input
-     * @throws IllegalStateException unable to process because of invalid state
+     * @throws IllegalStateException unable to process because of invalid state, for example
+     *         different types of servlets map to the same servletPath
      */
     void addServletClass(String servletPath, String restClass);
 
@@ -94,9 +96,22 @@ public interface HttpServletServer extends Startable {
      * @param restPackage JAX-RS package to scan
      *
      * @throws IllegalArgumentException unable to process because of invalid input
-     * @throws IllegalStateException unable to process because of invalid state
+     * @throws IllegalStateException unable to process because of invalid state, for example
+     *         different types of servlets map to the same servletPath
      */
     void addServletPackage(String servletPath, String restPackage);
+
+    /**
+     * Add org.eclipse.jetty.servlet.DefaultServlet into context
+     *
+     * @param servletPath servlet path
+     * @param resourceBase static resources folder
+     *
+     * @throws IllegalArgumentException unable to process because of invalid input
+     * @throws IllegalStateException unable to process because of invalid state, for example
+     *         different types of servlets map to the same servletPath
+     */
+    void addServletResource(String servletPath, String resourceBase);
 
     /**
      * Blocking start of the http server.

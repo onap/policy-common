@@ -3,7 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2019 Nordix Foundation.
+ * Modifications Copyright (C) 2019-2020 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ package org.onap.policy.common.endpoints.http.server.internal;
 import io.swagger.jersey.config.JerseyJaxrsConfig;
 import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ServerProperties;
 import org.onap.policy.common.utils.network.NetworkUtil;
@@ -71,15 +72,36 @@ public class JettyJerseyServer extends JettyServletServer {
      */
     protected static final String SWAGGER_INIT_CLASSNAMES_PARAM_VALUE =
             "io.swagger.jaxrs.listing.ApiListingResource," + "io.swagger.jaxrs.listing.SwaggerSerializers";
+
+    /**
+     * Servlet Holder Resource Base Path.
+     */
+    protected static final String SERVLET_HOLDER_RESOURCE_BASE = "resourceBase";
+
+    /**
+     * Servlet Holder Directory Allowed.
+     */
+    protected static final String SERVLET_HOLDER_DIR_ALLOWED = "dirAllowed";
+
+    /**
+     * Servlet Holder Path Information Only.
+     */
+    protected static final String SERVLET_HOLDER_PATH_INFO_ONLY = "pathInfoOnly";
+
     /**
      * Logger.
      */
     protected static Logger logger = LoggerFactory.getLogger(JettyJerseyServer.class);
 
     /**
-     * Container for servlets.
+     * Container for jersey servlets.
      */
-    protected HashMap<String, ServletHolder> servlets = new HashMap<>();
+    protected HashMap<String, ServletHolder> jerseyServlets = new HashMap<>();
+
+    /**
+     * Container for default servlets.
+     */
+    protected HashMap<String, ServletHolder> defaultServlets = new HashMap<>();
 
     /**
      * Swagger ID.
@@ -144,9 +166,9 @@ public class JettyJerseyServer extends JettyServletServer {
      *
      * @throws IllegalArgumentException if invalid arguments are provided
      */
-    protected synchronized ServletHolder getServlet(String servletPath) {
+    protected synchronized ServletHolder getJerseyServlet(String servletPath) {
 
-        return servlets.computeIfAbsent(servletPath, key -> {
+        return jerseyServlets.computeIfAbsent(servletPath, key -> {
 
             ServletHolder jerseyServlet =
                     context.addServlet(org.glassfish.jersey.servlet.ServletContainer.class, servletPath);
@@ -156,10 +178,23 @@ public class JettyJerseyServer extends JettyServletServer {
         });
     }
 
+    /**
+     * Retrieves cached default servlet based on servlet path.
+     *
+     * @param servletPath servlet path
+     * @return the jetty servlet holder
+     *
+     * @throws IllegalArgumentException if invalid arguments are provided
+     */
+    protected synchronized ServletHolder getDefaultServlet(String servPath) {
+
+        return defaultServlets.computeIfAbsent(servPath, key -> context.addServlet(DefaultServlet.class, servPath));
+    }
+
     @Override
     public synchronized void addServletPackage(String servletPath, String restPackage) {
         String servPath = servletPath;
-        if (restPackage == null || restPackage.isEmpty()) {
+        if (StringUtils.isBlank(restPackage)) {
             throw new IllegalArgumentException("No discoverable REST package provided");
         }
 
@@ -167,7 +202,7 @@ public class JettyJerseyServer extends JettyServletServer {
             servPath = "/*";
         }
 
-        ServletHolder jerseyServlet = this.getServlet(servPath);
+        ServletHolder jerseyServlet = this.getJerseyServlet(servPath);
 
         initStandardParams(jerseyServlet);
 
@@ -189,7 +224,7 @@ public class JettyJerseyServer extends JettyServletServer {
     @Override
     public synchronized void addServletClass(String servletPath, String restClass) {
 
-        if (restClass == null || restClass.isEmpty()) {
+        if (StringUtils.isBlank(restClass)) {
             throw new IllegalArgumentException("No discoverable REST class provided");
         }
 
@@ -197,7 +232,7 @@ public class JettyJerseyServer extends JettyServletServer {
             servletPath = "/*";
         }
 
-        ServletHolder jerseyServlet = this.getServlet(servletPath);
+        ServletHolder jerseyServlet = this.getJerseyServlet(servletPath);
 
         initStandardParams(jerseyServlet);
 
@@ -213,6 +248,28 @@ public class JettyJerseyServer extends JettyServletServer {
 
         if (logger.isDebugEnabled()) {
             logger.debug("{}: added REST class: {}", this, jerseyServlet.dump());
+        }
+    }
+
+    @Override
+    public synchronized void addServletResource(String servletPath, String resoureBase) {
+
+        if (StringUtils.isBlank(resoureBase)) {
+            throw new IllegalArgumentException("No resourceBase provided");
+        }
+
+        if (servletPath == null || servletPath.isEmpty()) {
+            servletPath = "/*";
+        }
+
+        ServletHolder defaultServlet = this.getDefaultServlet(servletPath);
+
+        defaultServlet.setInitParameter(SERVLET_HOLDER_RESOURCE_BASE, resoureBase);
+        defaultServlet.setInitParameter(SERVLET_HOLDER_DIR_ALLOWED, "false");
+        defaultServlet.setInitParameter(SERVLET_HOLDER_PATH_INFO_ONLY, "true");
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("{}: added REST class: {}", this, defaultServlet.dump());
         }
     }
 
@@ -255,8 +312,9 @@ public class JettyJerseyServer extends JettyServletServer {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("JettyJerseyServer [servlets=").append(servlets).append(", swaggerId=").append(swaggerId)
-                .append(", toString()=").append(super.toString()).append("]");
+        builder.append("JettyJerseyServer [Jerseyservlets=").append(jerseyServlets).append(", Defaultservlets=")
+                .append(defaultServlets).append(", swaggerId=").append(swaggerId).append(", toString()=")
+                .append(super.toString()).append("]");
         return builder.toString();
     }
 }
