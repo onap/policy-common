@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a83e07e8_74748497",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-02-25T14:06:16Z",
+      "side": 1,
+      "message": "maybe rename to addServletResource?",
+      "revId": "5a21223eb53e0d52bc522ac3d53454d99dffacb1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5243e17c_fdf886af",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyJerseyServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-02-25T14:06:16Z",
+      "side": 1,
+      "message": "use StringUtil.isBlank()",
+      "revId": "5a21223eb53e0d52bc522ac3d53454d99dffacb1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
