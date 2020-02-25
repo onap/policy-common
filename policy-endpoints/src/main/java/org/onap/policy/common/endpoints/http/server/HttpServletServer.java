@@ -99,6 +99,16 @@ public interface HttpServletServer extends Startable {
     void addServletPackage(String servletPath, String restPackage);
 
     /**
+     * Add org.eclipse.jetty.servlet.DefaultServlet into context
+     *
+     * @param servletPath servlet path
+     * @param resourceBase static resources folder
+     *
+     * @throws IllegalArgumentException unable to process because of invalid input
+     */
+    void addDefaultServlet(String servletPath, String resourceBase);
+
+    /**
      * Blocking start of the http server.
      *
      * @param maxWaitTime max time to wait for the start to take place

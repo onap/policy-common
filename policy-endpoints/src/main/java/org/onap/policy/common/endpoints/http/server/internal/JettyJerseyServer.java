@@ -24,6 +24,7 @@ package org.onap.policy.common.endpoints.http.server.internal;
 import io.swagger.jersey.config.JerseyJaxrsConfig;
 import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ServerProperties;
 import org.onap.policy.common.utils.network.NetworkUtil;
@@ -71,6 +72,22 @@ public class JettyJerseyServer extends JettyServletServer {
      */
     protected static final String SWAGGER_INIT_CLASSNAMES_PARAM_VALUE =
             "io.swagger.jaxrs.listing.ApiListingResource," + "io.swagger.jaxrs.listing.SwaggerSerializers";
+
+    /**
+     * Servlet Holder Resource Base Path.
+     */
+    protected static final String SERVLET_HOLDER_RESOURCE_BASE = "resourceBase";
+
+    /**
+     * Servlet Holder Directory Allowed.
+     */
+    protected static final String SERVLET_HOLDER_DIR_ALLOWED = "dirAllowed";
+
+    /**
+     * Servlet Holder Path Information Only.
+     */
+    protected static final String SERVLET_HOLDER_PATH_INFO_ONLY = "pathInfoOnly";
+
     /**
      * Logger.
      */
@@ -156,6 +173,19 @@ public class JettyJerseyServer extends JettyServletServer {
         });
     }
 
+    /**
+     * Retrieves cached default server based on servlet path.
+     *
+     * @param servletPath servlet path
+     * @return the jetty servlet holder
+     *
+     * @throws IllegalArgumentException if invalid arguments are provided
+     */
+    protected synchronized ServletHolder getDefaultServlet(String servletPath) {
+
+        return servlets.computeIfAbsent(servletPath, key -> context.addServlet(DefaultServlet.class, servletPath));
+    }
+
     @Override
     public synchronized void addServletPackage(String servletPath, String restPackage) {
         String servPath = servletPath;
@@ -213,6 +243,28 @@ public class JettyJerseyServer extends JettyServletServer {
 
         if (logger.isDebugEnabled()) {
             logger.debug("{}: added REST class: {}", this, jerseyServlet.dump());
+        }
+    }
+
+    @Override
+    public synchronized void addDefaultServlet(String servletPath, String resoureBase) {
+
+        if (resoureBase == null || resoureBase.isEmpty()) {
+            throw new IllegalArgumentException("No resourceBase provided");
+        }
+
+        if (servletPath == null || servletPath.isEmpty()) {
+            servletPath = "/*";
+        }
+
+        ServletHolder defaultServlet = this.getDefaultServlet(servletPath);
+
+        defaultServlet.setInitParameter(SERVLET_HOLDER_RESOURCE_BASE, resoureBase);
+        defaultServlet.setInitParameter(SERVLET_HOLDER_DIR_ALLOWED, "false");
+        defaultServlet.setInitParameter(SERVLET_HOLDER_PATH_INFO_ONLY, "true");
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("{}: added REST class: {}", this, defaultServlet.dump());
         }
     }
 
