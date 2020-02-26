@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "718f0a07_71b8bbec",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 5240
+      },
+      "writtenOn": "2020-02-26T08:02:10Z",
+      "side": 1,
+      "message": "DefaultServlet is the term introduced by jetty spec. \nBut I agree that we could change the name as addServletResource, that is more understandable.\n\nIs it possible to add a junit to see it in action, and add coverage to the method in the other class?\nYes, Ning Xi would add another review for it.",
+      "parentUuid": "52ed2831_e8f40a82",
+      "revId": "5a21223eb53e0d52bc522ac3d53454d99dffacb1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cdeeaff6_36847175",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyJerseyServer.java",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2020-02-25T14:27:54Z",
       "side": 1,
       "message": "Questions: So, there could be multiple \"DefaultServlets\" at different paths I take it.   So there could be many DefaultServlets ?   I guess the name confuses me, so want to make sure.",
+      "revId": "5a21223eb53e0d52bc522ac3d53454d99dffacb1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ba2506d8_3568584d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyJerseyServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 5240
+      },
+      "writtenOn": "2020-02-26T08:02:10Z",
+      "side": 1,
+      "message": "Yes, static resource could come from multiple paths.",
+      "parentUuid": "cdeeaff6_36847175",
       "revId": "5a21223eb53e0d52bc522ac3d53454d99dffacb1",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -71,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "f1e49c90_f631a3c4",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyJerseyServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 5240
+      },
+      "writtenOn": "2020-02-26T08:02:10Z",
+      "side": 1,
+      "message": "Can a DefaultServlet be in the same package as a JaxRs Servlet? \nNo, static resources handled by\nDefaultServlet are not source code, they could be existed at src/main/resources, or stand alone folder like /project/webapp.\n\ncan a JaxRs Servlet and the DefaultServlet coexist under the same \"servletPath\"? \nNo, they can\u0027t, otherwise IllegalStateException would happpen. \nI also use jerseyServlets and defaultServlets to store two types of servlets.",
+      "parentUuid": "bf7b68b2_1a9a688c",
+      "revId": "5a21223eb53e0d52bc522ac3d53454d99dffacb1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5243e17c_fdf886af",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyJerseyServer.java",
         "patchSetId": 1
@@ -82,6 +136,24 @@
       "writtenOn": "2020-02-25T14:06:16Z",
       "side": 1,
       "message": "use StringUtil.isBlank()",
+      "revId": "5a21223eb53e0d52bc522ac3d53454d99dffacb1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1a405627_e2df827f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyJerseyServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 5240
+      },
+      "writtenOn": "2020-02-26T08:02:10Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "5243e17c_fdf886af",
       "revId": "5a21223eb53e0d52bc522ac3d53454d99dffacb1",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
