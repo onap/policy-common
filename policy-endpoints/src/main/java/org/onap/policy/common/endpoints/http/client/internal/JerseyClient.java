@@ -131,7 +131,8 @@ public class JerseyClient implements HttpClient {
             if (this.selfSignedCerts) {
                 sslContext.init(null, NetworkUtil.getAlwaysTrustingManager(), new SecureRandom());
                 clientBuilder =
-                        ClientBuilder.newBuilder().sslContext(sslContext).hostnameVerifier((host, session) -> true);
+                        ClientBuilder.newBuilder().sslContext(sslContext).hostnameVerifier(
+                            (host, session) -> host.equalsIgnoreCase(session.getPeerHost()));
             } else {
                 sslContext.init(null, null, null);
                 clientBuilder = ClientBuilder.newBuilder().sslContext(sslContext);
