@@ -102,7 +102,7 @@ public interface HttpServletServer extends Startable {
     void addServletPackage(String servletPath, String restPackage);
 
     /**
-     * Add org.eclipse.jetty.servlet.DefaultServlet into context
+     * Add a static resource path to manage static resources.
      *
      * @param servletPath servlet path
      * @param resourceBase static resources folder

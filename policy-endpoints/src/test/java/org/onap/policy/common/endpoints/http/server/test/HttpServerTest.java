@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2020 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +21,15 @@
 
 package org.onap.policy.common.endpoints.http.server.test;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -474,6 +478,103 @@ public class HttpServerTest {
 
         HttpServletServerFactoryInstance.getServerFactory().destroy();
         assertTrue(HttpServletServerFactoryInstance.getServerFactory().inventory().isEmpty());
+    }
+
+    @Test
+    public void testSingleStaticResourceServer() throws Exception {
+        logger.info("-- testSingleStaticResourceServer() --");
+
+        HttpServletServer staticServer = HttpServletServerFactoryInstance.getServerFactory()
+                .buildStaticResourceServer("Static Resources Server", false, LOCALHOST, port, "/", true);
+        Throwable thrown = catchThrowable(() -> staticServer.addServletResource("/*", null));
+        assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("No resourceBase provided");
+
+        staticServer.addServletResource(null,
+                HttpServerTest.class.getClassLoader().getResource("webapps/root").toExternalForm());
+
+        thrown = catchThrowable(() -> staticServer.addServletClass("/*", RestEchoService.class.getName()));
+        assertThat(thrown).isInstanceOf(UnsupportedOperationException.class)
+                .hasMessageContaining("is not supported on this type of jetty server");
+
+        thrown = catchThrowable(() -> staticServer.addServletPackage("/api/*", this.getClass().getPackage().getName()));
+        assertThat(thrown).isInstanceOf(UnsupportedOperationException.class)
+                .hasMessageContaining("is not supported on this type of jetty server");
+
+        thrown = catchThrowable(() -> staticServer.setSerializationProvider(MyGsonProvider.class.getName()));
+        assertThat(thrown).isInstanceOf(UnsupportedOperationException.class)
+                .hasMessageContaining("is not supported on this type of jetty server");
+
+        staticServer.waitedStart(5000);
+
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+        assertEquals(1, HttpServletServerFactoryInstance.getServerFactory().inventory().size());
+
+        String response = http(portUrl);
+        assertThat(response).contains("Test Jetty Static Resources Root");
+
+        HttpServletServerFactoryInstance.getServerFactory().destroy(port);
+        assertEquals(0, HttpServletServerFactoryInstance.getServerFactory().inventory().size());
+    }
+
+    @Test
+    public void testMultiStaticResourceServer() throws Exception {
+        logger.info("-- testMultiStaticResourceServer() --");
+
+        HttpServletServer staticResourceServer = HttpServletServerFactoryInstance.getServerFactory()
+                .buildStaticResourceServer("Static Resources Server", false, LOCALHOST, port, "/", true);
+        staticResourceServer.addServletResource("/root/*",
+                HttpServerTest.class.getClassLoader().getResource("webapps/root").toExternalForm());
+        staticResourceServer.addServletResource("/alt-root/*",
+                HttpServerTest.class.getClassLoader().getResource("webapps/alt-root").toExternalForm());
+        staticResourceServer.waitedStart(5000);
+
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+        assertEquals(1, HttpServletServerFactoryInstance.getServerFactory().inventory().size());
+
+        String response = http(portUrl + "/root/");
+        assertThat(response).contains("Test Jetty Static Resources Root");
+
+        response = http(portUrl + "/alt-root/");
+        assertThat(response).contains("Test Jetty Static Resources Alt-Root");
+
+        HttpServletServerFactoryInstance.getServerFactory().destroy(port);
+        assertEquals(0, HttpServletServerFactoryInstance.getServerFactory().inventory().size());
+    }
+
+    @Test
+    public void testMultiTypesServer() throws Exception {
+        logger.info("-- testMultiTypesServer() --");
+
+        HttpServletServer staticResourceServer = HttpServletServerFactoryInstance.getServerFactory()
+                .buildStaticResourceServer("Static Resources Server", false, LOCALHOST, port, "/", true);
+        staticResourceServer.addServletResource("/root/*",
+                HttpServerTest.class.getClassLoader().getResource("webapps/root").toExternalForm());
+        staticResourceServer.waitedStart(5000);
+
+        int port2 = port + 1;
+        HttpServletServer jerseyServer =
+                HttpServletServerFactoryInstance.getServerFactory().build("echo", LOCALHOST, port2, "/", false, true);
+        jerseyServer.addServletPackage("/api/*", this.getClass().getPackage().getName());
+
+        Throwable thrown = catchThrowable(() -> jerseyServer.addServletResource("/root/*",
+                HttpServerTest.class.getClassLoader().getResource("webapps/root").toExternalForm()));
+        assertThat(thrown).isInstanceOf(UnsupportedOperationException.class)
+                .hasMessageContaining("is not supported on this type of jetty server");
+
+        jerseyServer.waitedStart(5000);
+
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+        assertEquals(2, HttpServletServerFactoryInstance.getServerFactory().inventory().size());
+
+        String response = http(portUrl + "/root/");
+        assertThat(response).contains("Test Jetty Static Resources Root");
+
+        response = http(LOCALHOST_PREFIX + port2 + "/api" + JUNIT_ECHO_HELLO);
+        assertEquals(HELLO, response);
+
+        HttpServletServerFactoryInstance.getServerFactory().destroy();
+        assertEquals(0, HttpServletServerFactoryInstance.getServerFactory().inventory().size());
     }
 
     /**

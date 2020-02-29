@@ -23,8 +23,8 @@ package org.onap.policy.common.endpoints.http.server.internal;
 
 import io.swagger.jersey.config.JerseyJaxrsConfig;
 import java.util.HashMap;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jetty.servlet.DefaultServlet;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ServerProperties;
 import org.onap.policy.common.utils.network.NetworkUtil;
@@ -74,34 +74,14 @@ public class JettyJerseyServer extends JettyServletServer {
             "io.swagger.jaxrs.listing.ApiListingResource," + "io.swagger.jaxrs.listing.SwaggerSerializers";
 
     /**
-     * Servlet Holder Resource Base Path.
-     */
-    protected static final String SERVLET_HOLDER_RESOURCE_BASE = "resourceBase";
-
-    /**
-     * Servlet Holder Directory Allowed.
-     */
-    protected static final String SERVLET_HOLDER_DIR_ALLOWED = "dirAllowed";
-
-    /**
-     * Servlet Holder Path Information Only.
-     */
-    protected static final String SERVLET_HOLDER_PATH_INFO_ONLY = "pathInfoOnly";
-
-    /**
      * Logger.
      */
     protected static Logger logger = LoggerFactory.getLogger(JettyJerseyServer.class);
 
     /**
-     * Container for jersey servlets.
+     * Container for servlets.
      */
-    protected HashMap<String, ServletHolder> jerseyServlets = new HashMap<>();
-
-    /**
-     * Container for default servlets.
-     */
-    protected HashMap<String, ServletHolder> defaultServlets = new HashMap<>();
+    protected final Map<String, ServletHolder> servlets = new HashMap<>();
 
     /**
      * Swagger ID.
@@ -166,9 +146,9 @@ public class JettyJerseyServer extends JettyServletServer {
      *
      * @throws IllegalArgumentException if invalid arguments are provided
      */
-    protected synchronized ServletHolder getJerseyServlet(String servletPath) {
+    protected synchronized ServletHolder getServlet(String servletPath) {
 
-        return jerseyServlets.computeIfAbsent(servletPath, key -> {
+        return servlets.computeIfAbsent(servletPath, key -> {
 
             ServletHolder jerseyServlet =
                     context.addServlet(org.glassfish.jersey.servlet.ServletContainer.class, servletPath);
@@ -176,19 +156,6 @@ public class JettyJerseyServer extends JettyServletServer {
 
             return jerseyServlet;
         });
-    }
-
-    /**
-     * Retrieves cached default servlet based on servlet path.
-     *
-     * @param servletPath servlet path
-     * @return the jetty servlet holder
-     *
-     * @throws IllegalArgumentException if invalid arguments are provided
-     */
-    protected synchronized ServletHolder getDefaultServlet(String servPath) {
-
-        return defaultServlets.computeIfAbsent(servPath, key -> context.addServlet(DefaultServlet.class, servPath));
     }
 
     @Override
@@ -202,7 +169,7 @@ public class JettyJerseyServer extends JettyServletServer {
             servPath = "/*";
         }
 
-        ServletHolder jerseyServlet = this.getJerseyServlet(servPath);
+        ServletHolder jerseyServlet = this.getServlet(servPath);
 
         initStandardParams(jerseyServlet);
 
@@ -232,7 +199,7 @@ public class JettyJerseyServer extends JettyServletServer {
             servletPath = "/*";
         }
 
-        ServletHolder jerseyServlet = this.getJerseyServlet(servletPath);
+        ServletHolder jerseyServlet = this.getServlet(servletPath);
 
         initStandardParams(jerseyServlet);
 
@@ -248,28 +215,6 @@ public class JettyJerseyServer extends JettyServletServer {
 
         if (logger.isDebugEnabled()) {
             logger.debug("{}: added REST class: {}", this, jerseyServlet.dump());
-        }
-    }
-
-    @Override
-    public synchronized void addServletResource(String servletPath, String resoureBase) {
-
-        if (StringUtils.isBlank(resoureBase)) {
-            throw new IllegalArgumentException("No resourceBase provided");
-        }
-
-        if (servletPath == null || servletPath.isEmpty()) {
-            servletPath = "/*";
-        }
-
-        ServletHolder defaultServlet = this.getDefaultServlet(servletPath);
-
-        defaultServlet.setInitParameter(SERVLET_HOLDER_RESOURCE_BASE, resoureBase);
-        defaultServlet.setInitParameter(SERVLET_HOLDER_DIR_ALLOWED, "false");
-        defaultServlet.setInitParameter(SERVLET_HOLDER_PATH_INFO_ONLY, "true");
-
-        if (logger.isDebugEnabled()) {
-            logger.debug("{}: added REST class: {}", this, defaultServlet.dump());
         }
     }
 
@@ -312,9 +257,8 @@ public class JettyJerseyServer extends JettyServletServer {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append("JettyJerseyServer [Jerseyservlets=").append(jerseyServlets).append(", Defaultservlets=")
-                .append(defaultServlets).append(", swaggerId=").append(swaggerId).append(", toString()=")
-                .append(super.toString()).append("]");
+        builder.append("JettyJerseyServer [Jerseyservlets=").append(servlets).append(", swaggerId=").append(swaggerId)
+                .append(", toString()=").append(super.toString()).append("]");
         return builder.toString();
     }
 }
