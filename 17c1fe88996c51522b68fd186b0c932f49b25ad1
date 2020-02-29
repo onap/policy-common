@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9224d8d6_3afe5957",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-02-29T15:28:29Z",
+      "side": 1,
+      "message": "in the future, we can add a property to have this call buildStaticResourceServer(), if appropriate",
+      "revId": "17c1fe88996c51522b68fd186b0c932f49b25ad1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "812549ee_c7f273f2",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyJerseyServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-02-29T15:28:29Z",
+      "side": 1,
+      "message": "should probably make this \"final\" and declare it as a \"Map\" instead of \"HashMap\"",
+      "revId": "17c1fe88996c51522b68fd186b0c932f49b25ad1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "13dc22cf_bcb0f333",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyStaticResourceServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-02-29T15:28:29Z",
+      "side": 1,
+      "message": "should probably make this \"final\" and declare it as a \"Map\" instead of \"HashMap\"",
+      "revId": "17c1fe88996c51522b68fd186b0c932f49b25ad1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4e1f6164_a22291a7",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyStaticResourceServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-02-29T15:28:29Z",
+      "side": 1,
+      "message": "use @ToString instead",
+      "revId": "17c1fe88996c51522b68fd186b0c932f49b25ad1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
