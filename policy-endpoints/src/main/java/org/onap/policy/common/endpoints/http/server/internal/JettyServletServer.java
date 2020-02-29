@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2019-2020 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,6 +64,8 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      * Logger.
      */
     private static Logger logger = LoggerFactory.getLogger(JettyServletServer.class);
+
+    private static final String NOT_SUPPORTED = " is not supported on this type of jetty server";
 
     /**
      * Server name.
@@ -492,6 +495,26 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     @GsonJsonIgnore
     public String getPassword() {
         return password;
+    }
+
+    @Override
+    public void setSerializationProvider(String provider) {
+        throw new UnsupportedOperationException("setSerializationProvider()" + NOT_SUPPORTED);
+    }
+
+    @Override
+    public void addServletClass(String servletPath, String restClass) {
+        throw new UnsupportedOperationException("addServletClass()" + NOT_SUPPORTED);
+    }
+
+    @Override
+    public void addServletPackage(String servletPath, String restPackage) {
+        throw new UnsupportedOperationException("addServletPackage()" + NOT_SUPPORTED);
+    }
+
+    @Override
+    public void addServletResource(String servletPath, String resourceBase) {
+        throw new UnsupportedOperationException("addServletResource()" + NOT_SUPPORTED);
     }
 
     @Override
