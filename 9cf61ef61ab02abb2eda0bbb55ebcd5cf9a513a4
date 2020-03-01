@@ -87,6 +87,24 @@
       "revId": "9cf61ef61ab02abb2eda0bbb55ebcd5cf9a513a4",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ab41d1b5_ca630946",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-03-01T18:10:01Z",
+      "side": 1,
+      "message": "I just check the dependency tree, this is the only sub-module where it is declared and used. Not declared in policy/parent either. Perhaps it is in another repo? If so, we can consolidate another time.",
+      "parentUuid": "9e2c4f3a_c0b525c9",
+      "revId": "9cf61ef61ab02abb2eda0bbb55ebcd5cf9a513a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
