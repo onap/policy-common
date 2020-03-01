@@ -46,6 +46,30 @@
       "revId": "9cf61ef61ab02abb2eda0bbb55ebcd5cf9a513a4",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b3478025_50bb742f",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-03-01T15:07:05Z",
+      "side": 1,
+      "message": "Ok I see I tried it locally. Can you add this comment:\n\u003c! This is required since oparent does not include jetty-servlets. TBD get oparent updated --\u003e\n\nI will open a JIRA on Integration board and Policy Board.",
+      "parentUuid": "eba2c5d8_86654cdb",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 55
+      },
+      "revId": "9cf61ef61ab02abb2eda0bbb55ebcd5cf9a513a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
