@@ -70,6 +70,23 @@
       "revId": "9cf61ef61ab02abb2eda0bbb55ebcd5cf9a513a4",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e2c4f3a_c0b525c9",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-03-01T16:55:39Z",
+      "side": 1,
+      "message": "Can you check on this, I think the DefaultServlet that you are using is contained in this jar.    If this is the case, the \"jetty-servlets\" dependency below wont be needed, so the version issue will be OK.  Can you check to make sure?",
+      "revId": "9cf61ef61ab02abb2eda0bbb55ebcd5cf9a513a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
