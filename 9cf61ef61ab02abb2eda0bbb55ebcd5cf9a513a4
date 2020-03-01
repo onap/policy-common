@@ -22,6 +22,30 @@
       "revId": "9cf61ef61ab02abb2eda0bbb55ebcd5cf9a513a4",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eba2c5d8_86654cdb",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 5240
+      },
+      "writtenOn": "2020-03-01T14:47:25Z",
+      "side": 1,
+      "message": "maven does not allow to use defined \u003cjetty.version\u003e properties from oparent for jetty-servlets. Unless I add jetty-servlets into oparent.",
+      "parentUuid": "c1f04086_e31b16f3",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 43,
+        "endChar": 55
+      },
+      "revId": "9cf61ef61ab02abb2eda0bbb55ebcd5cf9a513a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
