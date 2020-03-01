@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8018ac72_dcc30a8f",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 5240
+      },
+      "writtenOn": "2020-03-01T14:40:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "de0c9efa_db960388",
+      "range": {
+        "startLine": 114,
+        "startChar": 12,
+        "endLine": 114,
+        "endChar": 47
+      },
+      "revId": "17c1fe88996c51522b68fd186b0c932f49b25ad1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9224d8d6_3afe5957",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
         "patchSetId": 1
@@ -36,6 +60,24 @@
       "writtenOn": "2020-02-29T15:28:29Z",
       "side": 1,
       "message": "in the future, we can add a property to have this call buildStaticResourceServer(), if appropriate",
+      "revId": "17c1fe88996c51522b68fd186b0c932f49b25ad1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f016efcb_212976ab",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 5240
+      },
+      "writtenOn": "2020-03-01T14:40:35Z",
+      "side": 1,
+      "message": "yes, possiblely.",
+      "parentUuid": "9224d8d6_3afe5957",
       "revId": "17c1fe88996c51522b68fd186b0c932f49b25ad1",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
@@ -59,6 +101,24 @@
     },
     {
       "key": {
+        "uuid": "b21f4cec_23e5dd28",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyJerseyServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 5240
+      },
+      "writtenOn": "2020-03-01T14:40:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "812549ee_c7f273f2",
+      "revId": "17c1fe88996c51522b68fd186b0c932f49b25ad1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "13dc22cf_bcb0f333",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyStaticResourceServer.java",
         "patchSetId": 1
@@ -76,6 +136,24 @@
     },
     {
       "key": {
+        "uuid": "5c4b502b_b1e8f09d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyStaticResourceServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 5240
+      },
+      "writtenOn": "2020-03-01T14:40:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "13dc22cf_bcb0f333",
+      "revId": "17c1fe88996c51522b68fd186b0c932f49b25ad1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4e1f6164_a22291a7",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyStaticResourceServer.java",
         "patchSetId": 1
@@ -87,6 +165,24 @@
       "writtenOn": "2020-02-29T15:28:29Z",
       "side": 1,
       "message": "use @ToString instead",
+      "revId": "17c1fe88996c51522b68fd186b0c932f49b25ad1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5fb97534_b4e01c01",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyStaticResourceServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 5240
+      },
+      "writtenOn": "2020-03-01T14:40:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4e1f6164_a22291a7",
       "revId": "17c1fe88996c51522b68fd186b0c932f49b25ad1",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
