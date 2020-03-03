@@ -36,6 +36,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.InvocationCallback;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.ClientProperties;
@@ -158,17 +159,22 @@ public class JerseyClient implements HttpClient {
     }
 
     @Override
+    public WebTarget getWebTarget() {
+        return this.client.target(this.baseUrl);
+    }
+
+    @Override
     public Response get(String path) {
         if (!StringUtils.isBlank(path)) {
-            return this.client.target(this.baseUrl).path(path).request().get();
+            return getWebTarget().path(path).request().get();
         } else {
-            return this.client.target(this.baseUrl).request().get();
+            return getWebTarget().request().get();
         }
     }
 
     @Override
     public Response get() {
-        return this.client.target(this.baseUrl).request().get();
+        return getWebTarget().request().get();
     }
 
     @Override
@@ -184,7 +190,7 @@ public class JerseyClient implements HttpClient {
 
     @Override
     public Future<Response> get(InvocationCallback<Response> callback, Map<String, Object> headers) {
-        Builder builder = this.client.target(this.baseUrl).request();
+        Builder builder = getWebTarget().request();
         if (headers != null) {
             headers.forEach(builder::header);
         }
@@ -328,7 +334,7 @@ public class JerseyClient implements HttpClient {
     }
 
     private Builder getBuilder(String path, Map<String, Object> headers) {
-        Builder builder = this.client.target(this.baseUrl).path(path).request();
+        Builder builder = getWebTarget().path(path).request();
         for (Entry<String, Object> header : headers.entrySet()) {
             builder.header(header.getKey(), header.getValue());
         }

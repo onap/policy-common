@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.concurrent.Future;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.InvocationCallback;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 
 import org.onap.policy.common.capabilities.Startable;
@@ -213,4 +214,10 @@ public interface HttpClient extends Startable {
      */
     String getBaseUrl();
 
+    /**
+     * Gets a web target associated with the base URL.
+     *
+     * @return a webtarget
+     */
+    WebTarget getWebTarget();
 }
