@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,9 @@ import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -85,7 +88,10 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
      * @return the configured builder
      */
     public static GsonBuilder configBuilder(GsonBuilder builder) {
-        return builder.disableHtmlEscaping().registerTypeAdapterFactory(new MapDoubleAdapterFactory());
+        return builder.disableHtmlEscaping().registerTypeAdapterFactory(new MapDoubleAdapterFactory())
+                        .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
+                        .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter());
     }
 
     @Override

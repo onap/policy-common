@@ -363,7 +363,7 @@ public class StandardCoder implements Coder {
     /**
      * Adapter for standard objects.
      */
-    private static class StandardTypeAdapter extends TypeAdapter<StandardCoderObject> {
+    protected static class StandardTypeAdapter extends TypeAdapter<StandardCoderObject> {
 
         /**
          * Used to read/write a JsonElement.
