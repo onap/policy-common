@@ -20,14 +20,20 @@
 
 package org.onap.policy.common.gson;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import javax.ws.rs.core.MediaType;
 import org.junit.Before;
 import org.junit.Test;
@@ -160,6 +166,30 @@ public class GsonMessageBodyHandlerTest {
         assertEquals(12.5, map.props.get("doubleVal"));
     }
 
+    @Test
+    public void testInterestingFields() throws IOException {
+        InterestingFields data = new InterestingFields();
+        data.theInstant = Instant.ofEpochMilli(1583249713500L);
+        data.theUuid = UUID.fromString("a850cb9f-3c5e-417c-abfd-0679cdcd1ab0");
+        data.theDate = LocalDateTime.of(2020, 2, 3, 4, 5, 6, 789000000);
+
+        ByteArrayOutputStream outstr = new ByteArrayOutputStream();
+        hdlr.writeTo(data, data.getClass(), data.getClass(), null, null, null, outstr);
+
+        // ensure fields are encoded as expected
+
+        // @formatter:off
+        assertThat(outstr.toString(StandardCharsets.UTF_8))
+                            .contains("1583249713500")
+                            .contains("\"2020-02-03T04:05:06\"")
+                            .contains("a850cb9f-3c5e-417c-abfd-0679cdcd1ab0");
+        // @formatter:on
+
+        Object obj2 = hdlr.readFrom(Object.class, data.getClass(), null, null, null,
+                        new ByteArrayInputStream(outstr.toByteArray()));
+        assertEquals(data.toString(), obj2.toString());
+    }
+
 
     public static class MyObject {
         private int id;
@@ -184,6 +214,20 @@ public class GsonMessageBodyHandlerTest {
         @Override
         public String toString() {
             return props.toString();
+        }
+    }
+
+    private static class InterestingFields {
+        private LocalDateTime theDate;
+        private Instant theInstant;
+        private UUID theUuid;
+
+        @Override
+        public String toString() {
+            return "InterestingFields [theInstant=" + theInstant.getEpochSecond() + "n" + theInstant.getNano()
+                            + ", theUuid=" + theUuid + ", theDate=" + theDate.getYear() + "." + theDate.getMonthValue()
+                            + "." + theDate.getDayOfMonth() + "." + theDate.getHour() + "." + theDate.getMinute() + "."
+                            + theDate.getSecond() + "]";
         }
     }
 }

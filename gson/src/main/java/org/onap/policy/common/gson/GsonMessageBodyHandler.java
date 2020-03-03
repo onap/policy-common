@@ -30,6 +30,8 @@ import java.io.OutputStreamWriter;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -85,7 +87,9 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
      * @return the configured builder
      */
     public static GsonBuilder configBuilder(GsonBuilder builder) {
-        return builder.disableHtmlEscaping().registerTypeAdapterFactory(new MapDoubleAdapterFactory());
+        return builder.disableHtmlEscaping().registerTypeAdapterFactory(new MapDoubleAdapterFactory())
+                        .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
+                        .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter());
     }
 
     @Override
