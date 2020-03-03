@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +20,23 @@
 
 package org.onap.policy.common.gson;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import javax.ws.rs.core.MediaType;
+import lombok.ToString;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -160,6 +168,30 @@ public class GsonMessageBodyHandlerTest {
         assertEquals(12.5, map.props.get("doubleVal"));
     }
 
+    @Test
+    public void testInterestingFields() throws IOException {
+        InterestingFields data = new InterestingFields();
+        data.instant = Instant.ofEpochMilli(1583249713500L);
+        data.uuid = UUID.fromString("a850cb9f-3c5e-417c-abfd-0679cdcd1ab0");
+        data.localDate = LocalDateTime.of(2020, 2, 3, 4, 5, 6, 789000000);
+
+        ByteArrayOutputStream outstr = new ByteArrayOutputStream();
+        hdlr.writeTo(data, data.getClass(), data.getClass(), null, null, null, outstr);
+
+        // ensure fields are encoded as expected
+
+        // @formatter:off
+        assertThat(outstr.toString(StandardCharsets.UTF_8))
+                            .contains("\"2020-03-03T15:35:13.500Z\"")
+                            .contains("\"2020-02-03T04:05:06\"")
+                            .contains("a850cb9f-3c5e-417c-abfd-0679cdcd1ab0");
+        // @formatter:on
+
+        Object obj2 = hdlr.readFrom(Object.class, data.getClass(), null, null, null,
+                        new ByteArrayInputStream(outstr.toByteArray()));
+        assertEquals(data.toString(), obj2.toString());
+    }
+
 
     public static class MyObject {
         private int id;
@@ -185,5 +217,13 @@ public class GsonMessageBodyHandlerTest {
         public String toString() {
             return props.toString();
         }
+    }
+
+    @ToString
+    private static class InterestingFields {
+        private LocalDateTime localDate;
+        private Instant instant;
+        private UUID uuid;
+        private ZonedDateTime zonedDate;
     }
 }
