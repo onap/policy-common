@@ -33,7 +33,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-import java.util.Map;
 import java.util.Properties;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -111,7 +110,6 @@ public class BidirectionalTopicClientTest {
 
     @Test
     public void testBidirectionalTopicClient_testGetters() {
-        assertNotNull(client.getSinkClient());
         assertSame(sink, client.getSink());
         assertSame(source, client.getSource());
         assertEquals(SINK_TOPIC, client.getSinkTopic());
@@ -127,7 +125,7 @@ public class BidirectionalTopicClientTest {
     public void testBidirectionalTopicClientExceptions() {
         assertThatThrownBy(() -> new BidirectionalTopicClient2("unknown-sink", SOURCE_TOPIC))
                         .isInstanceOf(BidirectionalTopicClientException.class)
-                        .hasCauseInstanceOf(TopicSinkClientException.class);
+                        .hasMessage("no sinks for topic: unknown-sink");
 
         assertThatThrownBy(() -> new BidirectionalTopicClient2(SINK_TOPIC, "unknown-source"))
                         .isInstanceOf(BidirectionalTopicClientException.class)
@@ -146,8 +144,8 @@ public class BidirectionalTopicClientTest {
      */
     @Test
     public void testDelegates() {
-        assertTrue(client.send(Map.of("outgoing", "outgoing-text")));
-        verify(sink).send("{\"outgoing\":\"outgoing-text\"}");
+        assertTrue(client.send("hello"));
+        verify(sink).send("hello");
 
         assertTrue(client.offer("incoming"));
         verify(source).offer("incoming");
