@@ -36,6 +36,7 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.InvocationCallback;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.ClientProperties;
@@ -155,6 +156,11 @@ public class JerseyClient implements HttpClient {
         for (String prov : providers.split(",")) {
             this.client.register(Class.forName(prov));
         }
+    }
+
+    @Override
+    public WebTarget getWebTarget() {
+        return this.client.target(this.baseUrl);
     }
 
     @Override
