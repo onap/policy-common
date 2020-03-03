@@ -3,6 +3,7 @@
  * ONAP Policy Engine - Common Modules
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2020 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +27,7 @@ import java.util.List;
 import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
+import org.onap.policy.common.endpoints.http.server.internal.JettyStaticResourceServer;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.endpoints.utils.PropertyUtils;
 import org.slf4j.Logger;
@@ -86,6 +88,23 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
         }
 
         return serviceList;
+    }
+
+
+
+    @Override
+    public HttpServletServer buildStaticResourceServer(String name, boolean https, String host, int port,
+            String contextPath, boolean managed) {
+        if (servers.containsKey(port)) {
+            return servers.get(port);
+        }
+
+        JettyStaticResourceServer server = new JettyStaticResourceServer(name, https, host, port, contextPath);
+        if (managed) {
+            servers.put(port, server);
+        }
+
+        return server;
     }
 
     private void addService(ArrayList<HttpServletServer> serviceList, String serviceName, Properties properties) {
