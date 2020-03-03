@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "60c74d35_2cefb256",
+        "filename": "gson/src/main/java/org/onap/policy/common/gson/GsonMessageBodyHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-03-03T17:22:07Z",
+      "side": 1,
+      "message": "license",
+      "revId": "18d7757c7beb4bde1389a9e9c7195b3ebb90c1a1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
