@@ -131,8 +131,14 @@ public class JerseyClient implements HttpClient {
             SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
             if (this.selfSignedCerts) {
                 sslContext.init(null, NetworkUtil.getAlwaysTrustingManager(), new SecureRandom());
+
+                // This falls under self signed certs which is used for non-production testing environments where
+                // the hostname in the cert is unlikely to be crafted properly.  We always return true for the
+                // hostname verifier.  This causes a sonar vuln but we ignore it as it could cause problems in some
+                // testing environments.
                 clientBuilder =
-                        ClientBuilder.newBuilder().sslContext(sslContext).hostnameVerifier((host, session) -> true);
+                        ClientBuilder.newBuilder().sslContext(sslContext).hostnameVerifier(
+                            (host, session) -> true); //NOSONAR
             } else {
                 sslContext.init(null, null, null);
                 clientBuilder = ClientBuilder.newBuilder().sslContext(sslContext);
