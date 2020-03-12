@@ -43,7 +43,7 @@ public class RequestIdDispatcher<T> extends ScoListener<T> {
     /**
      * Name of the request id field, which may be hierarchical.
      */
-    private final String[] requestIdFieldNames;
+    private final Object[] requestIdFieldNames;
 
     /**
      * Listeners for autonomous messages.

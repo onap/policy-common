@@ -7,9 +7,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,11 +20,9 @@
 
 package org.onap.policy.common.utils.properties.exception;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
-
-import org.hamcrest.CoreMatchers;
 
 /**
  * Superclass used to test subclasses of {@link PropertyException}.
@@ -52,7 +50,7 @@ public class SupportBasicPropertyExceptionTester {
     protected static final String FIELD = "PROPERTY";
 
     /*
-     * Methods to perform various tests on the except subclass. 
+     * Methods to perform various tests on the except subclass.
      */
 
     protected void doTestPropertyExceptionStringField_AllPopulated(PropertyException ex) {
@@ -98,7 +96,7 @@ public class SupportBasicPropertyExceptionTester {
 
     /**
      * Performs standard tests that should apply to all subclasses.
-     * 
+     *
      * @param ex exception to test
      */
     protected void standardTests(PropertyException ex) {
@@ -111,17 +109,17 @@ public class SupportBasicPropertyExceptionTester {
     /**
      * Performs standard tests for exceptions that were provided a message in their
      * constructor.
-     * 
+     *
      * @param ex exception to test
      */
     protected void standardMessageTests(PropertyException ex) {
-        assertThat(ex.getMessage(), CoreMatchers.endsWith(MESSAGE));
+        assertThat(ex.getMessage()).endsWith(MESSAGE);
     }
 
     /**
      * Performs standard tests for exceptions that were provided a throwable in their
      * constructor.
-     * 
+     *
      * @param ex exception to test
      */
     protected void standardThrowableTests(PropertyException ex) {

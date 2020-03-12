@@ -36,7 +36,7 @@ public class MessageTypeDispatcher extends JsonListener {
     /**
      * Name of the message field, which may be hierarchical.
      */
-    private final String[] messageFieldNames;
+    private final Object[] messageFieldNames;
 
     /**
      * Name of the message field, joined with "." - for logging.
