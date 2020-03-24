@@ -1,4 +1,4 @@
-/*
+/*--
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
@@ -36,8 +36,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Extension to the StandardCoder to support streaming validation
- * against a Draft-07 Json schema specification.
+ * Extension to the StandardCoder to support streaming validation against a Draft-07 Json schema specification.
  */
 
 @ToString
@@ -56,16 +55,15 @@ public class StandardValCoder extends StandardCoder {
      * StandardCoder with validation.
      */
     public StandardValCoder(@NonNull String jsonSchema, @NonNull String name) {
-        SchemaSource schemaSource =
-                new StringSchemaSource(jsonSchema, JsonSchemaVersion.DRAFT07, null, name);
+        SchemaSource schemaSource = new StringSchemaSource(jsonSchema, JsonSchemaVersion.DRAFT07, null, name);
         this.validator = validatorApi.loadSchema(schemaSource);
     }
 
     @Override
     protected String toPrettyJson(Object object) {
         /*
-         * The validator strips off the "pretty" stuff (i.e., spaces), thus we have to validate
-         * and generate the pretty JSON in separate steps.
+         * The validator strips off the "pretty" stuff (i.e., spaces), thus we have to validate and generate the pretty
+         * JSON in separate steps.
          */
         getGSON().toJson(object, object.getClass(), validatorApi.createJsonWriter(validator, new StringWriter()));
 
@@ -102,7 +100,7 @@ public class StandardValCoder extends StandardCoder {
         try {
             conformance(json);
         } catch (CoderException e) {
-            logger.info("JSON is not conformant to schema {}", e);
+            logger.info("JSON is not conformant to schema", e);
             return false;
         }
         return true;

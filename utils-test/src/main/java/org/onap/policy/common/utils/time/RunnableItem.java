@@ -1,8 +1,8 @@
-/*
+/*-
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ package org.onap.policy.common.utils.time;
 import java.util.concurrent.Future;
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.onap.policy.common.utils.time.TestTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,7 +79,7 @@ class RunnableItem extends WorkItem {
         try {
             action.run();
         } catch (RuntimeException e) {
-            logger.warn("work item {} threw an exception {}", this, e);
+            logger.warn("work item {} threw an exception", this, e);
         }
     }
 

@@ -1,8 +1,8 @@
-/*
+/*--
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,6 @@ import java.util.List;
 import org.junit.Test;
 import org.onap.policy.common.gson.JacksonExclusionStrategy;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.Data;
-import org.onap.policy.common.gson.internal.MethodDeserializer;
 
 public class MethodDeserializerTest {
     private static final String PROP_NAME = "text";
@@ -43,7 +42,7 @@ public class MethodDeserializerTest {
     private static DataAdapterFactory dataAdapter = new DataAdapterFactory();
 
     private static Gson gson = new GsonBuilder().registerTypeAdapterFactory(dataAdapter)
-                    .setExclusionStrategies(new JacksonExclusionStrategy()).create();
+            .setExclusionStrategies(new JacksonExclusionStrategy()).create();
 
     private MethodDeserializer deser;
 

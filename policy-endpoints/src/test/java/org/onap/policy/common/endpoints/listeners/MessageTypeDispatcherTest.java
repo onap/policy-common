@@ -1,4 +1,4 @@
-/*
+/*--
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
@@ -37,8 +37,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
-import org.onap.policy.common.endpoints.listeners.MessageTypeDispatcher;
-import org.onap.policy.common.endpoints.listeners.ScoListener;
 import org.onap.policy.common.utils.coder.StandardCoderObject;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
 import org.slf4j.LoggerFactory;
