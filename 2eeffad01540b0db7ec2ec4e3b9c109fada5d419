@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7adbdc29_01c34b3e",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-03-27T13:18:56Z",
+      "side": 1,
+      "message": "maybe leave the log message in this time, but remove the trailing \"e\" argument?  Or wrap the exception in another exception that includes the message",
+      "revId": "2eeffad01540b0db7ec2ec4e3b9c109fada5d419",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2cbcc1b6_00b87637",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-03-27T13:18:56Z",
+      "side": 1,
+      "message": "remove \"{}\" place-holder",
+      "revId": "2eeffad01540b0db7ec2ec4e3b9c109fada5d419",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
