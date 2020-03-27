@@ -1,8 +1,8 @@
-/*
+/*--
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,16 +60,11 @@ public class DbAudit {
      */
     public DbAudit(DbDao dbDao) {
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Constructor: Entering");
-        }
+        logger.debug("Constructor: Entering");
 
         this.dbDao = dbDao;
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("Constructor: Exiting");
-        }
-
+        logger.debug("Constructor: Exiting");
     }
 
     /**
@@ -153,8 +148,6 @@ public class DbAudit {
         if (logger.isDebugEnabled()) {
             logger.debug("dbAudit: Exiting");
         }
-
-        return; // all done
     }
 
     private void compareList(String persistenceUnit, List<IntegrityAuditEntity> iaeList, IntegrityAuditEntity myIae,
@@ -246,7 +239,7 @@ public class DbAudit {
              * again for all nodes later.
              */
             compareMineWithTheirs(myEntries, theirEntries, clazzName, misMatchedMap);
-        } // end for (IntegrityAuditEntity iae : iaeList)
+        }
     }
 
     private void compareMineWithTheirs(Map<Object, Object> myEntries, Map<Object, Object> theirEntries,
@@ -332,7 +325,7 @@ public class DbAudit {
                     logger.debug("dbAudit: Second comparison; waking from sleep");
                 }
             }
-        } // end: for(String clazzName: classNameList)
+        }
 
         if (errorCount != 0) {
             String msg = " DB Audit: " + errorCount

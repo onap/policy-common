@@ -174,7 +174,6 @@ public class StateManagement {
                 logger.debug("StateManagement: {}() operation completed, resourceName = {}",
                                 methodName, resourceName);
             } catch (final Exception ex) {
-                logger.error("StateManagement.{}() caught unexpected exception: ", methodName, ex);
                 throw new StateManagementException("StateManagement." + methodName + "() Exception: " + ex);
             }
         }
@@ -476,7 +475,6 @@ public class StateManagement {
             }
         } catch (final Exception ex) {
             final String message = "findStateManagementEntity exception";
-            logger.error("{}: {}", message, ex.toString(), ex);
             throw new EntityRetrievalException(message, ex);
         }
     }
