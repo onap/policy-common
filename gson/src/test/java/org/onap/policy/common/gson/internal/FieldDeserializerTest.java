@@ -1,8 +1,8 @@
-/*
+/*-
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,18 +61,18 @@ public class FieldDeserializerTest {
         // no value in tree - text remains unchanged
         text = INITIAL_VALUE;
         deser.getFromTree(json, this);
-        assertEquals(text, INITIAL_VALUE);
+        assertEquals(INITIAL_VALUE, text);
 
         // null value in tree - text remains unchanged
         json.add(TEXT_FIELD_NAME, JsonNull.INSTANCE);
         deser.getFromTree(json, this);
-        assertEquals(text, INITIAL_VALUE);
+        assertEquals(INITIAL_VALUE, text);
 
         // now assign a value - text should be changed now
         json.addProperty(TEXT_FIELD_NAME, NEW_VALUE);
 
         deser.getFromTree(json, this);
-        assertEquals(text, NEW_VALUE);
+        assertEquals(NEW_VALUE, text);
 
         /*
          * check list field

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018-2019 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -75,9 +75,7 @@ public class SingleThreadedDmaapTopicSource extends SingleThreadedBusTopicSource
         try {
             this.init();
         } catch (Exception e) {
-            logger.error("ERROR during init in dmaap-source: cannot create topic {} because of {}",
-                            topic, e.getMessage(), e);
-            throw new IllegalArgumentException(e);
+            throw new IllegalArgumentException("ERROR during init in dmaap-source: cannot create topic " + topic, e);
         }
     }
 

@@ -925,7 +925,7 @@ public class IntegrityMonitor {
             }
             // check the next group
 
-        } // end for (String group : depGroups)
+        }
 
         return dependencyOk;
     }
@@ -963,7 +963,7 @@ public class IntegrityMonitor {
                 appendSeparator(errorMsg);
                 errorMsg.append(failMsg);
             }
-        } // end for (String dep : dependencies)
+        }
 
         // if all dependencies in a group are failed, set this
         // resource's state to disable dependency
@@ -1206,7 +1206,7 @@ public class IntegrityMonitor {
             } catch (Exception e1) {
                 logger.error(EXCEPTION_STRING, e1);
             }
-            logger.error("writeFpc DB table commit failed with exception", e);
+            logger.error("writeFpc DB table commit failed with exception");
             throw e;
         }
     }
@@ -1500,8 +1500,8 @@ public class IntegrityMonitor {
                 if (sme != null && !sme.getOpState().equals(StateManagement.DISABLED)) {
                     disableFailed(sme);
                 }
-            } // end if(diffMs > staleMs)
-        } // end for(ForwardProgressEntity fpe : fpList)
+            }
+        }
         logger.debug("IntegrityMonitor.executeStateAudit(): exit");
     }
 
@@ -1817,7 +1817,7 @@ public class IntegrityMonitor {
             allNotWellMap = new HashMap<>();
         }
 
-        if (asw) {
+        if (Boolean.TRUE.equals(asw)) {
             logger.info("allSeemsWell: ALL SEEMS WELL: key = {}, msg = {}", key, msg);
             allSeemsWellMap.put(key, msg);
             allNotWellMap.remove(key);

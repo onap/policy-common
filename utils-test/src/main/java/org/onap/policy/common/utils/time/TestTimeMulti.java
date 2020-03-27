@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import java.util.PriorityQueue;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 import lombok.Getter;
-import org.onap.policy.common.utils.time.TestTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -180,7 +179,7 @@ public class TestTimeMulti extends TestTime {
             long realEnd = System.currentTimeMillis() + maxWaitMs;
 
             while (System.currentTimeMillis() < realEnd) {
-                if (condition.call()) {
+                if (Boolean.TRUE.equals(condition.call())) {
                     return;
                 }
 

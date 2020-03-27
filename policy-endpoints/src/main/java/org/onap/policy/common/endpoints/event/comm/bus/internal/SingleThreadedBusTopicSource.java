@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018-2019 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,7 +47,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
      * Not to be converted to PolicyLogger. This will contain all instract /out traffic and only
      * that in a single file in a concise format.
      */
-    private static Logger logger = LoggerFactory.getLogger(InlineBusTopicSink.class);
+    private static Logger logger = LoggerFactory.getLogger(SingleThreadedBusTopicSource.class);
 
     /**
      * Bus consumer group.
@@ -134,8 +134,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
                 logger.info("{}: register: start not attempted", this);
             }
         } catch (Exception e) {
-            logger.warn("{}: cannot start after registration of because of: {}", this, topicListener, e.getMessage(),
-                    e);
+            logger.warn("{}: cannot start after registration of because of: {}", this, topicListener, e);
         }
     }
 
@@ -176,8 +175,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
                     busPollerThread.start();
                     return true;
                 } catch (Exception e) {
-                    logger.warn("{}: cannot start because of {}", this, e.getMessage(), e);
-                    throw new IllegalStateException(e);
+                    throw new IllegalStateException(this + ": cannot start", e);
                 }
             }
         }
