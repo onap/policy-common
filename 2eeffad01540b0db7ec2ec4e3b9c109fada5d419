@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5b86146f_655c703d",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/IntegrityMonitor.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1208,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-03-27T14:57:53Z",
+      "side": 1,
+      "message": "I\u0027ll put the logger back, but probably sonarcloud will mark it again. We shall see. I don\u0027t trust wrapping it right now.",
+      "parentUuid": "7adbdc29_01c34b3e",
+      "revId": "2eeffad01540b0db7ec2ec4e3b9c109fada5d419",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2cbcc1b6_00b87637",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
         "patchSetId": 1
@@ -30,6 +48,24 @@
       "writtenOn": "2020-03-27T13:18:56Z",
       "side": 1,
       "message": "remove \"{}\" place-holder",
+      "revId": "2eeffad01540b0db7ec2ec4e3b9c109fada5d419",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "282d921d_5b10d901",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-03-27T14:57:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cbcc1b6_00b87637",
       "revId": "2eeffad01540b0db7ec2ec4e3b9c109fada5d419",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
