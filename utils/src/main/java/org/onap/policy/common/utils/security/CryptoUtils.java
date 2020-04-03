@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,9 +62,9 @@ public class CryptoUtils implements CryptoCoder {
 
     /**
      * Used to generate a random "iv". Strong randomness is not needed, as this is only
-     * used as a "salt".
+     * used as a "salt".  (Thus sonar is disabled.)
      */
-    private static final Random RANDOM = new Random();
+    private static final Random RANDOM = new Random();  // NOSONAR
 
     /**
      * CryptoUtils - encryption tool constructor.
@@ -228,7 +228,7 @@ public class CryptoUtils implements CryptoCoder {
      *  The encrypted string or plain text value
      * @return boolean value indicate if string prefix with enc: or not
      */
-    public static Boolean isEncrypted(String value) {
+    public static boolean isEncrypted(String value) {
         return (value != null && value.startsWith("enc:"));
     }
 

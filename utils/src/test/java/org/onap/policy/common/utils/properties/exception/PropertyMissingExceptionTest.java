@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018, 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +34,10 @@ public class PropertyMissingExceptionTest extends SupportBasicPropertyExceptionT
      */
     @Test
     public void testPropertyExceptionStringField() {
-        doTestPropertyExceptionStringField_AllPopulated(new PropertyMissingException(PROPERTY, FIELD));
-        doTestPropertyExceptionStringField_NullProperty(new PropertyMissingException(null, FIELD));
-        doTestPropertyExceptionStringField_NullField(new PropertyMissingException(PROPERTY, null));
-        doTestPropertyExceptionStringField_BothNull(new PropertyMissingException(null, null));
+        verifyPropertyExceptionStringField_AllPopulated(new PropertyMissingException(PROPERTY, FIELD));
+        verifyPropertyExceptionStringField_NullProperty(new PropertyMissingException(null, FIELD));
+        verifyPropertyExceptionStringField_NullField(new PropertyMissingException(PROPERTY, null));
+        verifyPropertyExceptionStringField_BothNull(new PropertyMissingException(null, null));
     }
 
 }

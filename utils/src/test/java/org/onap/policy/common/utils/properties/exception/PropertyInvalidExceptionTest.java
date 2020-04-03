@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018, 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +34,10 @@ public class PropertyInvalidExceptionTest extends SupportBasicPropertyExceptionT
      */
     @Test
     public void testPropertyExceptionStringField() {
-        doTestPropertyExceptionStringField_AllPopulated(new PropertyInvalidException(PROPERTY, FIELD));
-        doTestPropertyExceptionStringField_NullProperty(new PropertyInvalidException(null, FIELD));
-        doTestPropertyExceptionStringField_NullField(new PropertyInvalidException(PROPERTY, null));
-        doTestPropertyExceptionStringField_BothNull(new PropertyInvalidException(null, null));
+        verifyPropertyExceptionStringField_AllPopulated(new PropertyInvalidException(PROPERTY, FIELD));
+        verifyPropertyExceptionStringField_NullProperty(new PropertyInvalidException(null, FIELD));
+        verifyPropertyExceptionStringField_NullField(new PropertyInvalidException(PROPERTY, null));
+        verifyPropertyExceptionStringField_BothNull(new PropertyInvalidException(null, null));
     }
 
     /**
@@ -47,7 +47,7 @@ public class PropertyInvalidExceptionTest extends SupportBasicPropertyExceptionT
      */
     @Test
     public void testPropertyExceptionStringFieldString() {
-        doTestPropertyExceptionStringFieldString(new PropertyInvalidException(PROPERTY, FIELD, MESSAGE));
+        verifyPropertyExceptionStringFieldString(new PropertyInvalidException(PROPERTY, FIELD, MESSAGE));
     }
 
     /**
@@ -57,7 +57,7 @@ public class PropertyInvalidExceptionTest extends SupportBasicPropertyExceptionT
      */
     @Test
     public void testPropertyExceptionStringFieldThrowable() {
-        doTestPropertyExceptionStringFieldThrowable(new PropertyInvalidException(PROPERTY, FIELD, THROWABLE));
+        verifyPropertyExceptionStringFieldThrowable(new PropertyInvalidException(PROPERTY, FIELD, THROWABLE));
     }
 
     /**
@@ -67,7 +67,7 @@ public class PropertyInvalidExceptionTest extends SupportBasicPropertyExceptionT
      */
     @Test
     public void testPropertyExceptionStringFieldStringThrowable() {
-        doTestPropertyExceptionStringFieldStringThrowable(
+        verifyPropertyExceptionStringFieldStringThrowable(
                         new PropertyInvalidException(PROPERTY, FIELD, MESSAGE, THROWABLE));
     }
 

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,7 +49,10 @@ public class FieldDeserializer extends Adapter implements Deserializer {
 
         this.field = field;
 
-        field.setAccessible(true);
+        /*
+         * Turning off sonar, as this is required for emulation of "jackson".
+         */
+        field.setAccessible(true);  // NOSONAR
     }
 
     @Override
@@ -62,7 +65,10 @@ public class FieldDeserializer extends Adapter implements Deserializer {
         Object value = fromJsonTree(jsonEl);
 
         try {
-            field.set(target, value);
+            /*
+             * Turning off sonar, as this is required for emulation of "jackson".
+             */
+            field.set(target, value);   // NOSONAR
 
         } catch (IllegalArgumentException | IllegalAccessException e) {
             throw new JsonParseException(makeError(SET_ERR), e);

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018, 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +34,10 @@ public class PropertyAccessExceptionTest extends SupportBasicPropertyExceptionTe
      */
     @Test
     public void testPropertyAccessExceptionStringField() {
-        doTestPropertyExceptionStringField_AllPopulated( new PropertyAccessException(PROPERTY, FIELD));
-        doTestPropertyExceptionStringField_NullProperty( new PropertyAccessException(null, FIELD));
-        doTestPropertyExceptionStringField_NullField( new PropertyAccessException(PROPERTY, null));
-        doTestPropertyExceptionStringField_BothNull( new PropertyAccessException(null, null));
+        verifyPropertyExceptionStringField_AllPopulated( new PropertyAccessException(PROPERTY, FIELD));
+        verifyPropertyExceptionStringField_NullProperty( new PropertyAccessException(null, FIELD));
+        verifyPropertyExceptionStringField_NullField( new PropertyAccessException(PROPERTY, null));
+        verifyPropertyExceptionStringField_BothNull( new PropertyAccessException(null, null));
     }
 
     /**
@@ -47,7 +47,7 @@ public class PropertyAccessExceptionTest extends SupportBasicPropertyExceptionTe
      */
     @Test
     public void testPropertyAccessExceptionStringFieldString() {
-        doTestPropertyExceptionStringFieldString(new PropertyAccessException(PROPERTY, FIELD, MESSAGE));
+        verifyPropertyExceptionStringFieldString(new PropertyAccessException(PROPERTY, FIELD, MESSAGE));
     }
 
     /**
@@ -57,7 +57,7 @@ public class PropertyAccessExceptionTest extends SupportBasicPropertyExceptionTe
      */
     @Test
     public void testPropertyAccessExceptionStringFieldThrowable() {
-        doTestPropertyExceptionStringFieldThrowable(new PropertyAccessException(PROPERTY, FIELD, THROWABLE));
+        verifyPropertyExceptionStringFieldThrowable(new PropertyAccessException(PROPERTY, FIELD, THROWABLE));
     }
 
     /**
@@ -67,7 +67,7 @@ public class PropertyAccessExceptionTest extends SupportBasicPropertyExceptionTe
      */
     @Test
     public void testPropertyAccessExceptionStringFieldStringThrowable() {
-        doTestPropertyExceptionStringFieldStringThrowable(
+        verifyPropertyExceptionStringFieldStringThrowable(
                         new PropertyAccessException(PROPERTY, FIELD, MESSAGE, THROWABLE));
     }
 

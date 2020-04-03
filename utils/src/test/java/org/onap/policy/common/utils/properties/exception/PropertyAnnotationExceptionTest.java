@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018, 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,10 +34,10 @@ public class PropertyAnnotationExceptionTest extends SupportBasicPropertyExcepti
      */
     @Test
     public void testPropertyExceptionStringField() {
-        doTestPropertyExceptionStringField_AllPopulated(new PropertyAnnotationException(PROPERTY, FIELD));
-        doTestPropertyExceptionStringField_NullProperty(new PropertyAnnotationException(null, FIELD));
-        doTestPropertyExceptionStringField_NullField(new PropertyAnnotationException(PROPERTY, null));
-        doTestPropertyExceptionStringField_BothNull(new PropertyAnnotationException(null, null));
+        verifyPropertyExceptionStringField_AllPopulated(new PropertyAnnotationException(PROPERTY, FIELD));
+        verifyPropertyExceptionStringField_NullProperty(new PropertyAnnotationException(null, FIELD));
+        verifyPropertyExceptionStringField_NullField(new PropertyAnnotationException(PROPERTY, null));
+        verifyPropertyExceptionStringField_BothNull(new PropertyAnnotationException(null, null));
     }
 
     /**
@@ -47,7 +47,7 @@ public class PropertyAnnotationExceptionTest extends SupportBasicPropertyExcepti
      */
     @Test
     public void testPropertyExceptionStringFieldString() {
-        doTestPropertyExceptionStringFieldString(new PropertyAnnotationException(PROPERTY, FIELD, MESSAGE));
+        verifyPropertyExceptionStringFieldString(new PropertyAnnotationException(PROPERTY, FIELD, MESSAGE));
     }
 
     /**
@@ -57,7 +57,7 @@ public class PropertyAnnotationExceptionTest extends SupportBasicPropertyExcepti
      */
     @Test
     public void testPropertyExceptionStringFieldThrowable() {
-        doTestPropertyExceptionStringFieldThrowable(new PropertyAnnotationException(PROPERTY, FIELD, THROWABLE));
+        verifyPropertyExceptionStringFieldThrowable(new PropertyAnnotationException(PROPERTY, FIELD, THROWABLE));
     }
 
     /**
@@ -67,7 +67,7 @@ public class PropertyAnnotationExceptionTest extends SupportBasicPropertyExcepti
      */
     @Test
     public void testPropertyExceptionStringFieldStringThrowable() {
-        doTestPropertyExceptionStringFieldStringThrowable(
+        verifyPropertyExceptionStringFieldStringThrowable(
                         new PropertyAnnotationException(PROPERTY, FIELD, MESSAGE, THROWABLE));
     }
 

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -65,7 +66,9 @@ public class BusConsumerTest extends TopicTestBase {
         new CambriaConsumerWrapper(makeBuilder().apiKey(null).apiSecret(null).build());
         new CambriaConsumerWrapper(makeBuilder().userName(null).build());
         new CambriaConsumerWrapper(makeBuilder().password(null).build());
-        new CambriaConsumerWrapper(makeBuilder().userName(null).password(null).build());
+
+        assertThatCode(() -> new CambriaConsumerWrapper(makeBuilder().userName(null).password(null).build()))
+                        .doesNotThrowAnyException();
     }
 
     @Test
@@ -101,7 +104,8 @@ public class BusConsumerTest extends TopicTestBase {
         // set filter several times to cause different branches of close() to be executed
         for (int count = 0; count < 3; ++count) {
             cons.close();
-            cons.setFilter("close=" + count);
+            final int count2 = count;
+            assertThatCode(() -> cons.setFilter("close=" + count2)).doesNotThrowAnyException();
         }
     }
 
@@ -110,7 +114,8 @@ public class BusConsumerTest extends TopicTestBase {
         // set filter several times to cause different branches to be executed
         CambriaConsumerWrapper cons = new CambriaConsumerWrapper(builder.build());
         for (int count = 0; count < 3; ++count) {
-            cons.setFilter("set-filter=" + count);
+            final int count2 = count;
+            assertThatCode(() -> cons.setFilter("set-filter=" + count2)).doesNotThrowAnyException();
         }
     }
 
@@ -122,7 +127,7 @@ public class BusConsumerTest extends TopicTestBase {
     @Test
     public void testDmaapConsumerWrapper() throws Exception {
         // verify that different wrappers can be built
-        new DmaapAafConsumerWrapper(makeBuilder().build());
+        assertThatCode(() -> new DmaapAafConsumerWrapper(makeBuilder().build())).doesNotThrowAnyException();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -167,7 +172,7 @@ public class BusConsumerTest extends TopicTestBase {
 
     @Test
     public void testDmaapConsumerWrapperClose() throws Exception {
-        new DmaapAafConsumerWrapper(makeBuilder().build()).close();
+        assertThatCode(() -> new DmaapAafConsumerWrapper(makeBuilder().build()).close()).doesNotThrowAnyException();
     }
 
     @Test
@@ -179,7 +184,8 @@ public class BusConsumerTest extends TopicTestBase {
     public void testDmaapAafConsumerWrapper() throws Exception {
         // verify that different wrappers can be built
         new DmaapAafConsumerWrapper(makeBuilder().useHttps(true).build());
-        new DmaapAafConsumerWrapper(makeBuilder().useHttps(false).build());
+        assertThatCode(() -> new DmaapAafConsumerWrapper(makeBuilder().useHttps(false).build()))
+                        .doesNotThrowAnyException();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -207,7 +213,8 @@ public class BusConsumerTest extends TopicTestBase {
 
         addProps.put(ROUTE_PROP, MY_ROUTE);
         new DmaapDmeConsumerWrapper(makeBuilder().build());
-        new DmaapDmeConsumerWrapper(makeBuilder().partner(null).build());
+        assertThatCode(() -> new DmaapDmeConsumerWrapper(makeBuilder().partner(null).build()))
+                        .doesNotThrowAnyException();
     }
 
     @Test(expected = IllegalArgumentException.class)
