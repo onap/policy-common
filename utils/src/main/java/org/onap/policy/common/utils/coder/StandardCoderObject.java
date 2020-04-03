@@ -35,7 +35,11 @@ public class StandardCoderObject implements Serializable {
     /**
      * Data wrapped by this.
      */
-    private final JsonElement data;
+    /*
+     * this should not be transient, but since it isn't serializable, we're stuck with it
+     * until there's time to address the issue
+     */
+    private final transient JsonElement data;
 
     /**
      * Constructs the object.

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018, 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,42 +53,42 @@ public class SupportBasicPropertyExceptionTester {
      * Methods to perform various tests on the except subclass.
      */
 
-    protected void doTestPropertyExceptionStringField_AllPopulated(PropertyException ex) {
+    protected void verifyPropertyExceptionStringField_AllPopulated(PropertyException ex) {
         standardTests(ex);
     }
 
-    protected void doTestPropertyExceptionStringField_NullProperty(PropertyException ex) {
+    protected void verifyPropertyExceptionStringField_NullProperty(PropertyException ex) {
         assertEquals(null, ex.getPropertyName());
         assertEquals(FIELD, ex.getFieldName());
         assertNotNull(ex.getMessage());
         assertNotNull(ex.toString());
     }
 
-    protected void doTestPropertyExceptionStringField_NullField(PropertyException ex) {
+    protected void verifyPropertyExceptionStringField_NullField(PropertyException ex) {
         assertEquals(PROPERTY, ex.getPropertyName());
         assertEquals(null, ex.getFieldName());
         assertNotNull(ex.getMessage());
         assertNotNull(ex.toString());
     }
 
-    protected void doTestPropertyExceptionStringField_BothNull(PropertyException ex) {
+    protected void verifyPropertyExceptionStringField_BothNull(PropertyException ex) {
         assertEquals(null, ex.getPropertyName());
         assertEquals(null, ex.getFieldName());
         assertNotNull(ex.getMessage());
         assertNotNull(ex.toString());
     }
 
-    protected void doTestPropertyExceptionStringFieldString(PropertyException ex) {
+    protected void verifyPropertyExceptionStringFieldString(PropertyException ex) {
         standardTests(ex);
         standardMessageTests(ex);
     }
 
-    protected void doTestPropertyExceptionStringFieldThrowable(PropertyException ex) {
+    protected void verifyPropertyExceptionStringFieldThrowable(PropertyException ex) {
         standardTests(ex);
         standardThrowableTests(ex);
     }
 
-    protected void doTestPropertyExceptionStringFieldStringThrowable(PropertyException ex) {
+    protected void verifyPropertyExceptionStringFieldStringThrowable(PropertyException ex) {
         standardTests(ex);
         standardMessageTests(ex);
         standardThrowableTests(ex);

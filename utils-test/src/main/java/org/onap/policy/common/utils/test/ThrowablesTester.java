@@ -2,7 +2,7 @@
  * ============LICENSE_START====================================================
  * Common Utils-Test
  * =============================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018, 2020 AT&T Intellectual Property. All rights reserved.
  * =============================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,7 @@ public class ThrowablesTester {
     private static Logger logger =
                     LoggerFactory.getLogger(ThrowablesTester.class);
 
-    public static final String EXPECTED_EXCEPTION_MSG = 
+    public static final String EXPECTED_EXCEPTION_MSG =
                     "expected exception";
     private static final String EXPECTED_SUPPRESSED_EXCEPTION_MSG =
                     "expected suppressed exception";
@@ -530,8 +530,7 @@ public class ThrowablesTester {
 
         } catch (NoSuchMethodException | SecurityException e) {
             // this constructor is not defined so nothing to test
-            logger.debug("skipped test, no constructor for: "
-                            + claz + " due to: " + e);
+            logger.debug("skipped test, no constructor for: {}", claz, e);
             return null;
         }
     }

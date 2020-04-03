@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,10 @@ public class Adapter {
         this.gson = gson;
         this.fullName = getQualifiedName(field);
 
-        field.setAccessible(true);
+        /*
+         * Turning off sonar, as this is required for emulation of "jackson".
+         */
+        field.setAccessible(true);  // NOSONAR
     }
 
     /**
@@ -100,7 +103,10 @@ public class Adapter {
         this.gson = gson;
         this.fullName = getQualifiedName(accessor);
 
-        accessor.setAccessible(true);
+        /*
+         * Turning off sonar, as this is required for emulation of "jackson".
+         */
+        accessor.setAccessible(true); // NOSONAR
     }
 
     /**

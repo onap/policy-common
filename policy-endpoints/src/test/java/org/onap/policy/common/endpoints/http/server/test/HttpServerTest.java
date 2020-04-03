@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,6 +22,7 @@
 package org.onap.policy.common.endpoints.http.server.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.Assert.assertEquals;
@@ -346,7 +347,7 @@ public class HttpServerTest {
         server.addFilterClass("/*", TestFilter.class.getName());
 
         // ensure we can serialize the server
-        new GsonTestUtils().compareGson(server, HttpServerTest.class);
+        assertThatCode(() -> new GsonTestUtils().compareGson(server, HttpServerTest.class)).doesNotThrowAnyException();
     }
 
     @Test

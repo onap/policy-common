@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 package org.onap.policy.common.gson;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -104,8 +105,8 @@ public class MapDoubleAdapterFactoryTest {
         map = gson.fromJson(json, MyDoubleMap.class);
 
         // everything should still be Double - check by simply accessing
-        map.data.get("plainDouble");
-        map.data.get("doubleAsInt");
+        assertNotNull(map.data.get("plainDouble"));
+        assertNotNull(map.data.get("doubleAsInt"));
     }
 
     @Test

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -449,21 +449,21 @@ class TopicEndpointProxy implements TopicEndpoint {
 
     @Override
     public boolean lock() {
+        boolean shouldLock;
 
         synchronized (this) {
-            if (this.locked) {
-                return true;
-            }
-
+            shouldLock = !this.locked;
             this.locked = true;
         }
 
-        for (final TopicSource source : this.getTopicSources()) {
-            source.lock();
-        }
+        if (shouldLock) {
+            for (final TopicSource source : this.getTopicSources()) {
+                source.lock();
+            }
 
-        for (final TopicSink sink : this.getTopicSinks()) {
-            sink.lock();
+            for (final TopicSink sink : this.getTopicSinks()) {
+                sink.lock();
+            }
         }
 
         return true;
@@ -471,20 +471,21 @@ class TopicEndpointProxy implements TopicEndpoint {
 
     @Override
     public boolean unlock() {
-        synchronized (this) {
-            if (!this.locked) {
-                return true;
-            }
+        boolean shouldUnlock;
 
+        synchronized (this) {
+            shouldUnlock = this.locked;
             this.locked = false;
         }
 
-        for (final TopicSource source : this.getTopicSources()) {
-            source.unlock();
-        }
+        if (shouldUnlock) {
+            for (final TopicSource source : this.getTopicSources()) {
+                source.unlock();
+            }
 
-        for (final TopicSink sink : this.getTopicSinks()) {
-            sink.unlock();
+            for (final TopicSink sink : this.getTopicSinks()) {
+                sink.unlock();
+            }
         }
 
         return true;

@@ -225,7 +225,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
             try {
                 fetchAllMessages();
             } catch (IOException | RuntimeException e) {
-                logger.error("{}: cannot fetch because of ", this, e.getMessage(), e);
+                logger.error("{}: cannot fetch", this, e);
             }
         }
 

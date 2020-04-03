@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -51,7 +52,8 @@ public class InlineUebTopicSinkTest extends TopicTestBase {
 
     @Test
     public void testSerialize() {
-        new GsonTestUtils().compareGson(sink, InlineUebTopicSinkTest.class);
+        assertThatCode(() -> new GsonTestUtils().compareGson(sink, InlineUebTopicSinkTest.class))
+                        .doesNotThrowAnyException();
     }
 
     @Test
@@ -61,7 +63,7 @@ public class InlineUebTopicSinkTest extends TopicTestBase {
 
     @Test
     public void testInit() {
-        sink.init();
+        assertThatCode(() -> sink.init()).doesNotThrowAnyException();
     }
 
     @Test

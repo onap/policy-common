@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -97,7 +98,7 @@ public class TopicBaseTest extends TopicTestBase {
 
     @Test
     public void testSerialize() {
-        new GsonTestUtils().compareGson(base, TopicBaseTest.class);
+        assertThatCode(() -> new GsonTestUtils().compareGson(base, TopicBaseTest.class)).doesNotThrowAnyException();
     }
 
     @Test

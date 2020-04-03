@@ -174,22 +174,8 @@ public class DbAudit {
             compareMineWithTheirs(persistenceUnit, iaeList, myIae, misMatchedMap, clazzName, myEntries);
 
             // Time check
-            if ((AuditorTime.getInstance().getMillis() - startTime) >= DB_AUDIT_UPDATE_MS) {
-                // update the timestamp
-                dbDao.setLastUpdated();
-                // reset the startTime
-                startTime = AuditorTime.getInstance().getMillis();
-            } else {
-                // sleep a couple seconds to break up the activity
-                if (logger.isDebugEnabled()) {
-                    logger.debug("dbAudit: Sleeping " + DB_AUDIT_SLEEP_MS + "ms");
-                }
-                sleep();
-                if (logger.isDebugEnabled()) {
-                    logger.debug("dbAudit: Waking from sleep");
-                }
-            }
-        } // end: for(String clazzName: classNameList)
+            startTime = timeCheck("First", startTime);
+        }
 
         // check if misMatchedMap is empty
         if (misMatchedMap.isEmpty()) {
@@ -197,8 +183,6 @@ public class DbAudit {
             if (logger.isDebugEnabled()) {
                 logger.debug("dbAudit: Exiting, misMatchedMap is empty");
             }
-            // we are done
-            return;
         } else {
             if (logger.isDebugEnabled()) {
                 logger.debug("dbAudit: Doing another comparison; misMatchedMap.size()=" + misMatchedMap.size());
@@ -258,6 +242,25 @@ public class DbAudit {
         }
     }
 
+    private long timeCheck(String type, long startTime) throws IntegrityAuditException {
+        if ((AuditorTime.getInstance().getMillis() - startTime) >= DB_AUDIT_UPDATE_MS) {
+            // update the timestamp
+            dbDao.setLastUpdated();
+            // reset the startTime
+            return AuditorTime.getInstance().getMillis();
+        } else {
+            // sleep a couple seconds to break up the activity
+            if (logger.isDebugEnabled()) {
+                logger.debug("dbAudit: " + type + " comparison; sleeping " + DB_AUDIT_SLEEP_MS + "ms");
+            }
+            sleep();
+            if (logger.isDebugEnabled()) {
+                logger.debug("dbAudit: " + type + " comparison; waking from sleep");
+            }
+            return startTime;
+        }
+    }
+
     /**
      * Creates properties for the other db node.
      * @param iae target DB node
@@ -310,21 +313,7 @@ public class DbAudit {
             errorCount += recompareMineWithTheirs(resourceName, persistenceUnit, iaeList, myIae, clazzName,
                             keySet, myEntries);
             // Time check
-            if ((AuditorTime.getInstance().getMillis() - startTime) >= DB_AUDIT_UPDATE_MS) {
-                // update the timestamp
-                dbDao.setLastUpdated();
-                // reset the startTime
-                startTime = AuditorTime.getInstance().getMillis();
-            } else {
-                // sleep a couple seconds to break up the activity
-                if (logger.isDebugEnabled()) {
-                    logger.debug("dbAudit: Second comparison; sleeping " + DB_AUDIT_SLEEP_MS + "ms");
-                }
-                sleep();
-                if (logger.isDebugEnabled()) {
-                    logger.debug("dbAudit: Second comparison; waking from sleep");
-                }
-            }
+            startTime = timeCheck("Second", startTime);
         }
 
         if (errorCount != 0) {

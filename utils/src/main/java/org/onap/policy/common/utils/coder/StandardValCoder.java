@@ -65,7 +65,7 @@ public class StandardValCoder extends StandardCoder {
          * The validator strips off the "pretty" stuff (i.e., spaces), thus we have to validate and generate the pretty
          * JSON in separate steps.
          */
-        getGSON().toJson(object, object.getClass(), validatorApi.createJsonWriter(validator, new StringWriter()));
+        gson.toJson(object, object.getClass(), validatorApi.createJsonWriter(validator, new StringWriter()));
 
         return super.toPrettyJson(object);
     }
@@ -79,18 +79,18 @@ public class StandardValCoder extends StandardCoder {
 
     @Override
     protected void toJson(@NonNull Writer target, @NonNull Object object) {
-        getGSON().toJson(object, object.getClass(), validatorApi.createJsonWriter(validator, target));
+        gson.toJson(object, object.getClass(), validatorApi.createJsonWriter(validator, target));
     }
 
     @Override
     protected <T> T fromJson(@NonNull Reader source, @NonNull Class<T> clazz) {
-        return convertFromDouble(clazz, getGSON().fromJson(validatorApi.createJsonReader(validator, source), clazz));
+        return convertFromDouble(clazz, gson.fromJson(validatorApi.createJsonReader(validator, source), clazz));
     }
 
     @Override
     protected <T> T fromJson(String json, Class<T> clazz) {
         StringReader reader = new StringReader(json);
-        return convertFromDouble(clazz, getGSON().fromJson(validatorApi.createJsonReader(validator, reader), clazz));
+        return convertFromDouble(clazz, gson.fromJson(validatorApi.createJsonReader(validator, reader), clazz));
     }
 
     /**

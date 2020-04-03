@@ -298,7 +298,7 @@ public class TestTimeMulti extends TestTime {
         logger.info("enqueue work item {}", item);
         synchronized (updateLock) {
             queue.add(item);
-            updateLock.notify();
+            updateLock.notifyAll();
         }
     }
 

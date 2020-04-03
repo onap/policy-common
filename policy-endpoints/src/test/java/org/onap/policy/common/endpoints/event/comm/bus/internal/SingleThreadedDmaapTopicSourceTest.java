@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -53,7 +54,8 @@ public class SingleThreadedDmaapTopicSourceTest extends TopicTestBase {
 
     @Test
     public void testSerialize() {
-        new GsonTestUtils().compareGson(source, SingleThreadedDmaapTopicSourceTest.class);
+        assertThatCode(() -> new GsonTestUtils().compareGson(source, SingleThreadedDmaapTopicSourceTest.class))
+                        .doesNotThrowAnyException();
     }
 
     @Test
@@ -75,9 +77,10 @@ public class SingleThreadedDmaapTopicSourceTest extends TopicTestBase {
     @Test
     public void testInit() {
         // verify with different parameters
-        new SingleThreadedDmaapTopicSource(makeBuilder().userName(null).build()).shutdown();
         new SingleThreadedDmaapTopicSource(makeBuilder().environment(null).aftEnvironment(null).latitude(null)
                         .longitude(null).partner(null).build()).shutdown();
+        assertThatCode(() -> new SingleThreadedDmaapTopicSource(makeBuilder().userName(null).build()).shutdown())
+                        .doesNotThrowAnyException();
     }
 
     @Test(expected = IllegalArgumentException.class)

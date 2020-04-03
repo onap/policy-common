@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,16 +94,13 @@ public abstract class NoopTopicEndpoint extends TopicBase {
         logger.info("{}: starting", this);
 
         synchronized (this) {
+            if (!this.alive) {
+                if (locked) {
+                    throw new IllegalStateException(this + " is locked.");
+                }
 
-            if (this.alive) {
-                return true;
+                this.alive = true;
             }
-
-            if (locked) {
-                throw new IllegalStateException(this + " is locked.");
-            }
-
-            this.alive = true;
         }
 
         return true;
