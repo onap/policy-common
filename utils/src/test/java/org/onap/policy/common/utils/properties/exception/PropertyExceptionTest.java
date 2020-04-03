@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018, 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,10 +34,10 @@ public class PropertyExceptionTest extends SupportBasicPropertyExceptionTester {
      */
     @Test
     public void testPropertyExceptionStringField() {
-        doTestPropertyExceptionStringField_AllPopulated(new PropertyException(PROPERTY, FIELD));
-        doTestPropertyExceptionStringField_NullProperty(new PropertyException(null, FIELD));
-        doTestPropertyExceptionStringField_NullField(new PropertyException(PROPERTY, null));
-        doTestPropertyExceptionStringField_BothNull(new PropertyException(null, null));
+        verifyPropertyExceptionStringField_AllPopulated(new PropertyException(PROPERTY, FIELD));
+        verifyPropertyExceptionStringField_NullProperty(new PropertyException(null, FIELD));
+        verifyPropertyExceptionStringField_NullField(new PropertyException(PROPERTY, null));
+        verifyPropertyExceptionStringField_BothNull(new PropertyException(null, null));
     }
 
     /**
@@ -47,7 +47,7 @@ public class PropertyExceptionTest extends SupportBasicPropertyExceptionTester {
      */
     @Test
     public void testPropertyExceptionStringFieldString() {
-        doTestPropertyExceptionStringFieldString(new PropertyException(PROPERTY, FIELD, MESSAGE));
+        verifyPropertyExceptionStringFieldString(new PropertyException(PROPERTY, FIELD, MESSAGE));
     }
 
     /**
@@ -57,7 +57,7 @@ public class PropertyExceptionTest extends SupportBasicPropertyExceptionTester {
      */
     @Test
     public void testPropertyExceptionStringFieldThrowable() {
-        doTestPropertyExceptionStringFieldThrowable(new PropertyException(PROPERTY, FIELD, THROWABLE));
+        verifyPropertyExceptionStringFieldThrowable(new PropertyException(PROPERTY, FIELD, THROWABLE));
     }
 
     /**
@@ -67,7 +67,7 @@ public class PropertyExceptionTest extends SupportBasicPropertyExceptionTester {
      */
     @Test
     public void testPropertyExceptionStringFieldStringThrowable() {
-        doTestPropertyExceptionStringFieldStringThrowable(new PropertyException(PROPERTY, FIELD, MESSAGE, THROWABLE));
+        verifyPropertyExceptionStringFieldStringThrowable(new PropertyException(PROPERTY, FIELD, MESSAGE, THROWABLE));
     }
 
 }

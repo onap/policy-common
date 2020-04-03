@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
+ *  Modifications Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 /**
@@ -34,7 +36,6 @@ import java.nio.file.Files;
  * @author Liam Fallon (liam.fallon@est.tech)
  */
 public abstract class TextFileUtils {
-    private static final String UTF_8 = "UTF-8";
     private static final int READER_CHAR_BUFFER_SIZE_4096 = 4096;
 
     private TextFileUtils() {
@@ -50,7 +51,7 @@ public abstract class TextFileUtils {
      */
     public static String getTextFileAsString(final String textFilePath) throws IOException {
         final File textFile = new File(textFilePath);
-        return new String(Files.readAllBytes(textFile.toPath()), UTF_8);
+        return Files.readString(textFile.toPath());
     }
 
     /**
@@ -77,7 +78,7 @@ public abstract class TextFileUtils {
      * @throws IOException on errors reading text from the file
      */
     public static void putStringAsFile(final String outString, final File textFile) throws IOException {
-        Files.write(textFile.toPath(), outString.getBytes(UTF_8));
+        Files.writeString(textFile.toPath(), outString);
     }
 
     /**
@@ -88,7 +89,7 @@ public abstract class TextFileUtils {
      * @throws IOException on errors reading text from the file
      */
     public static String getStreamAsString(final InputStream textStream) throws IOException {
-        return getReaderAsString(new InputStreamReader(textStream, UTF_8));
+        return getReaderAsString(new InputStreamReader(textStream, StandardCharsets.UTF_8));
     }
 
     /**

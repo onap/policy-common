@@ -22,12 +22,7 @@ package org.onap.policy.common.utils.coder;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import java.io.Reader;
-import java.io.Writer;
 import java.time.Instant;
-import lombok.AccessLevel;
-import lombok.Getter;
 import org.onap.policy.common.gson.GsonMessageBodyHandler;
 import org.onap.policy.common.gson.InstantAsMillisTypeAdapter;
 
@@ -40,14 +35,12 @@ public class StandardCoderInstantAsMillis extends StandardCoder {
     /**
      * Gson object used to encode and decode messages.
      */
-    @Getter(AccessLevel.PROTECTED)
-    private static final Gson GSON;
+    private static final Gson GSON_INSTANT;
 
     /**
      * Gson object used to encode messages in "pretty" format.
      */
-    @Getter(AccessLevel.PROTECTED)
-    private static final Gson GSON_PRETTY;
+    private static final Gson GSON_INSTANT_PRETTY;
 
     static {
         GsonBuilder builder = GsonMessageBodyHandler
@@ -55,71 +48,14 @@ public class StandardCoderInstantAsMillis extends StandardCoder {
                                         new StandardTypeAdapter()))
                         .registerTypeAdapter(Instant.class, new InstantAsMillisTypeAdapter());
 
-        GSON = builder.create();
-        GSON_PRETTY = builder.setPrettyPrinting().create();
+        GSON_INSTANT = builder.create();
+        GSON_INSTANT_PRETTY = builder.setPrettyPrinting().create();
     }
 
     /**
      * Constructs the object.
      */
     public StandardCoderInstantAsMillis() {
-        super();
-    }
-
-    @Override
-    protected String toPrettyJson(Object object) {
-        return GSON_PRETTY.toJson(object);
-    }
-
-    @Override
-    public StandardCoderObject toStandard(Object object) throws CoderException {
-        try {
-            return new StandardCoderObject(GSON.toJsonTree(object));
-
-        } catch (RuntimeException e) {
-            throw new CoderException(e);
-        }
-    }
-
-    @Override
-    public <T> T fromStandard(StandardCoderObject sco, Class<T> clazz) throws CoderException {
-        try {
-            return GSON.fromJson(sco.getData(), clazz);
-
-        } catch (RuntimeException e) {
-            throw new CoderException(e);
-        }
-    }
-
-    // the remaining methods are wrappers that can be overridden by junit tests
-
-    @Override
-    protected JsonElement toJsonTree(Object object) {
-        return GSON.toJsonTree(object);
-    }
-
-    @Override
-    protected String toJson(Object object) {
-        return GSON.toJson(object);
-    }
-
-    @Override
-    protected void toJson(Writer target, Object object) {
-        GSON.toJson(object, object.getClass(), target);
-    }
-
-    @Override
-    protected <T> T fromJson(JsonElement json, Class<T> clazz) {
-        return convertFromDouble(clazz, GSON.fromJson(json, clazz));
-    }
-
-    @Override
-    protected <T> T fromJson(String json, Class<T> clazz) {
-        return convertFromDouble(clazz, GSON.fromJson(json, clazz));
-    }
-
-    @Override
-    protected <T> T fromJson(Reader source, Class<T> clazz) {
-        return convertFromDouble(clazz, GSON.fromJson(source, clazz));
+        super(GSON_INSTANT, GSON_INSTANT_PRETTY);
     }
 }

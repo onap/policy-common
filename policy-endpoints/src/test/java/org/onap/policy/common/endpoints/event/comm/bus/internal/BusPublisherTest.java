@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
@@ -66,7 +67,8 @@ public class BusPublisherTest extends TopicTestBase {
         new CambriaPublisherWrapper(makeBuilder().apiKey(null).apiSecret(null).build());
         new CambriaPublisherWrapper(makeBuilder().userName(null).build());
         new CambriaPublisherWrapper(makeBuilder().password(null).build());
-        new CambriaPublisherWrapper(makeBuilder().userName(null).password(null).build());
+        assertThatCode(() -> new CambriaPublisherWrapper(makeBuilder().userName(null).password(null).build()))
+                        .doesNotThrowAnyException();
     }
 
     @Test
@@ -109,7 +111,8 @@ public class BusPublisherTest extends TopicTestBase {
         // verify with different constructor arguments
         new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASS, true);
         new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASS, false);
-        new DmaapPublisherWrapper(ProtocolTypeConstants.DME2, servers, MY_TOPIC, MY_USERNAME, MY_PASS, true) {};
+        assertThatCode(() -> new DmaapPublisherWrapper(ProtocolTypeConstants.DME2, servers, MY_TOPIC, MY_USERNAME,
+                        MY_PASS, true) {}).doesNotThrowAnyException();
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -188,7 +191,7 @@ public class BusPublisherTest extends TopicTestBase {
         new DmaapDmePublisherWrapper(makeBuilder().partner(null).build());
 
         addProps.put("null-value", null);
-        new DmaapDmePublisherWrapper(makeBuilder().build());
+        assertThatCode(() -> new DmaapDmePublisherWrapper(makeBuilder().build())).doesNotThrowAnyException();
     }
 
     @Test(expected = IllegalArgumentException.class)

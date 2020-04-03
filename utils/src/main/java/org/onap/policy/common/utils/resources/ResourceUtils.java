@@ -2,6 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2020 Nordix Foundation.
+ *  Modifications Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,7 +101,7 @@ public abstract class ResourceUtils {
                 resourceOutputStreamBuffer.write(resourceBuffer, 0, length);
             }
         } catch (final IOException e) {
-            LOGGER.debug("error reading resource stream \"{}\" : " + e.getMessage(), resourceName, e);
+            LOGGER.debug("error reading resource stream {}", resourceName, e);
             return null;
         }
 
@@ -130,7 +131,7 @@ public abstract class ResourceUtils {
             return urlToResource.openStream();
         } catch (final IOException e) {
             // Any of many IO exceptions such as the resource is a directory
-            LOGGER.debug("error attaching resource \"{}\" to stream : " + e.getMessage(), resourceName, e);
+            LOGGER.debug("error attaching resource {}", resourceName, e);
             return null;
         }
     }
@@ -164,7 +165,7 @@ public abstract class ResourceUtils {
                 return url;
             }
         } catch (final Exception e) {
-            LOGGER.debug("error getting URL resource \"{}\" : " + e.getMessage(), e);
+            LOGGER.debug("error getting URL resource {}", resourceName, e);
             return null;
         }
     }
@@ -199,7 +200,7 @@ public abstract class ResourceUtils {
                 return null;
             }
         } catch (final Exception e) {
-            LOGGER.debug("error finding resource \"{}\" : " + e.getMessage(), e);
+            LOGGER.debug("error finding resource {}", resourceName, e);
             return null;
         }
     }
@@ -288,6 +289,8 @@ public abstract class ResourceUtils {
      */
     public static Set<String> getDirectoryContentsJar(final URL jarResourceDirectoryUrl,
             final String resourceDirectoryName) {
+        String dirNameWithSlash = resourceDirectoryName + "/";
+        int minLength = dirNameWithSlash.length() + 1;
         File jarResourceDirectory = new File(jarResourceDirectoryUrl.getPath());
         String jarFileName = jarResourceDirectory.getParent().replaceFirst("^file:", "").replaceFirst("!.*$", "");
 
@@ -297,10 +300,14 @@ public abstract class ResourceUtils {
             Enumeration<JarEntry> entries = jarFile.entries();
 
             while (entries.hasMoreElements()) {
-                JarEntry je = entries.nextElement();
+                /*
+                 * Ignore sonar issue, as the entries are not being expanded here.
+                 */
+                JarEntry je = entries.nextElement();    // NOSONAR
+                String jeName = je.getName();
 
-                if (je.getName().matches("^" + resourceDirectoryName + "\\/.+")) {
-                    localDirectorySet.add(je.getName());
+                if (jeName.length() >= minLength && jeName.startsWith(dirNameWithSlash)) {
+                    localDirectorySet.add(jeName);
                 }
             }
         } catch (IOException ioe) {

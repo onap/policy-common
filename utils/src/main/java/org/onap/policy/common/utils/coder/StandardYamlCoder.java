@@ -34,7 +34,7 @@ public class StandardYamlCoder extends StandardCoder {
      * Constructs the object.
      */
     public StandardYamlCoder() {
-        translator = new YamlJsonTranslator(getGSON());
+        translator = new YamlJsonTranslator(gson);
     }
 
     @Override

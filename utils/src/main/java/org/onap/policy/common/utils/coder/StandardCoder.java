@@ -40,8 +40,6 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import lombok.AccessLevel;
-import lombok.Getter;
 import org.onap.policy.common.gson.DoubleConverter;
 import org.onap.policy.common.gson.GsonMessageBodyHandler;
 
@@ -53,28 +51,44 @@ public class StandardCoder implements Coder {
     /**
      * Gson object used to encode and decode messages.
      */
-    @Getter(AccessLevel.PROTECTED)
-    private static final Gson GSON;
+    private static final Gson GSON_STD;
 
     /**
      * Gson object used to encode messages in "pretty" format.
      */
-    @Getter(AccessLevel.PROTECTED)
-    private static final Gson GSON_PRETTY;
+    private static final Gson GSON_STD_PRETTY;
 
     static {
         GsonBuilder builder = GsonMessageBodyHandler.configBuilder(
                         new GsonBuilder().registerTypeAdapter(StandardCoderObject.class, new StandardTypeAdapter()));
 
-        GSON = builder.create();
-        GSON_PRETTY = builder.setPrettyPrinting().create();
+        GSON_STD = builder.create();
+        GSON_STD_PRETTY = builder.setPrettyPrinting().create();
     }
+
+    /**
+     * Gson object used to encode and decode messages.
+     */
+    protected final Gson gson;
+
+    /**
+     * Gson object used to encode messages in "pretty" format.
+     */
+    protected final Gson gsonPretty;
 
     /**
      * Constructs the object.
      */
     public StandardCoder() {
-        super();
+        this(GSON_STD, GSON_STD_PRETTY);
+    }
+
+    /**
+     * Constructs the object.
+     */
+    protected StandardCoder(Gson gson, Gson gsonPretty) {
+        this.gson = gson;
+        this.gsonPretty = gsonPretty;
     }
 
     @Override
@@ -213,13 +227,13 @@ public class StandardCoder implements Coder {
      * @return the encoded object
      */
     protected String toPrettyJson(Object object) {
-        return GSON_PRETTY.toJson(object);
+        return gsonPretty.toJson(object);
     }
 
     @Override
     public StandardCoderObject toStandard(Object object) throws CoderException {
         try {
-            return new StandardCoderObject(GSON.toJsonTree(object));
+            return new StandardCoderObject(gson.toJsonTree(object));
 
         } catch (RuntimeException e) {
             throw new CoderException(e);
@@ -229,7 +243,7 @@ public class StandardCoder implements Coder {
     @Override
     public <T> T fromStandard(StandardCoderObject sco, Class<T> clazz) throws CoderException {
         try {
-            return GSON.fromJson(sco.getData(), clazz);
+            return gson.fromJson(sco.getData(), clazz);
 
         } catch (RuntimeException e) {
             throw new CoderException(e);
@@ -287,7 +301,7 @@ public class StandardCoder implements Coder {
      * @return a json element representing the object
      */
     protected JsonElement toJsonTree(Object object) {
-        return GSON.toJsonTree(object);
+        return gson.toJsonTree(object);
     }
 
     /**
@@ -297,7 +311,7 @@ public class StandardCoder implements Coder {
      * @return a json string representing the object
      */
     protected String toJson(Object object) {
-        return GSON.toJson(object);
+        return gson.toJson(object);
     }
 
     /**
@@ -307,7 +321,7 @@ public class StandardCoder implements Coder {
      * @param object object to be encoded
      */
     protected void toJson(Writer target, Object object) {
-        GSON.toJson(object, object.getClass(), target);
+        gson.toJson(object, object.getClass(), target);
     }
 
     /**
@@ -318,7 +332,7 @@ public class StandardCoder implements Coder {
      * @return the object represented by the given json element
      */
     protected <T> T fromJson(JsonElement json, Class<T> clazz) {
-        return convertFromDouble(clazz, GSON.fromJson(json, clazz));
+        return convertFromDouble(clazz, gson.fromJson(json, clazz));
     }
 
     /**
@@ -329,7 +343,7 @@ public class StandardCoder implements Coder {
      * @return the object represented by the given json string
      */
     protected <T> T fromJson(String json, Class<T> clazz) {
-        return convertFromDouble(clazz, GSON.fromJson(json, clazz));
+        return convertFromDouble(clazz, gson.fromJson(json, clazz));
     }
 
     /**
@@ -340,7 +354,7 @@ public class StandardCoder implements Coder {
      * @return the object represented by the given json string
      */
     protected <T> T fromJson(Reader source, Class<T> clazz) {
-        return convertFromDouble(clazz, GSON.fromJson(source, clazz));
+        return convertFromDouble(clazz, gson.fromJson(source, clazz));
     }
 
     /**
