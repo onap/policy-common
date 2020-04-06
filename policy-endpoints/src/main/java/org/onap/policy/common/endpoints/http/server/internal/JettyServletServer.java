@@ -115,7 +115,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     /**
      * Jetty thread.
      */
-    protected volatile Thread jettyThread;
+    protected Thread jettyThread;
 
     /**
      * Start condition.
@@ -418,11 +418,12 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
         this.stop();
 
-        if (this.jettyThread == null) {
-            return;
+        Thread jettyThreadCopy;
+        synchronized (this) {
+            if ((jettyThreadCopy = this.jettyThread) == null) {
+                return;
+            }
         }
-
-        Thread jettyThreadCopy = this.jettyThread;
 
         if (jettyThreadCopy.isAlive()) {
             try {

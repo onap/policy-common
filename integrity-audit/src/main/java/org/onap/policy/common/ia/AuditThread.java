@@ -169,7 +169,9 @@ public class AuditThread extends Thread {
         IntegrityAuditEntity thisEntity;
         integrityAudit.setThreadInitialized(true); // An exception will set it to false
 
-        while (true) {
+        boolean interrupted = false;
+
+        while (!interrupted) {
             try {
                 /*
                  * It may have been awhile since we last cycled through this loop, so refresh
@@ -208,16 +210,16 @@ public class AuditThread extends Thread {
                 if (isInterruptedException(e)) {
                     String msg = "AuditThread.run loop - Exception thrown: " + e.getMessage() + "; Stopping.";
                     logger.error(MessageCodes.EXCEPTION_ERROR, e, msg);
-                    break;
+                    interrupted = true;
+
+                } else {
+                    String msg = "AuditThread.run loop - Exception thrown: " + e.getMessage()
+                                    + "; Will try audit again in " + integrityAuditPeriodSeconds + " seconds";
+                    logger.error(MessageCodes.EXCEPTION_ERROR, e, msg);
+                    // Sleep and try again later
+                    AuditorTime.getInstance().sleep(integrityAuditPeriodSeconds * 1000L);
                 }
-
-                String msg = "AuditThread.run loop - Exception thrown: " + e.getMessage()
-                        + "; Will try audit again in " + integrityAuditPeriodSeconds + " seconds";
-                logger.error(MessageCodes.EXCEPTION_ERROR, e, msg);
-                // Sleep and try again later
-                AuditorTime.getInstance().sleep(integrityAuditPeriodSeconds * 1000L);
             }
-
         }
     }
 
