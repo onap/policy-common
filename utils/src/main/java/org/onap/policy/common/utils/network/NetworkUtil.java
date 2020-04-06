@@ -105,7 +105,11 @@ public class NetworkUtil {
      * @throws IOException if a socket cannot be created
      */
     public static int allocPort(InetSocketAddress hostAddr) throws IOException {
-        try (ServerSocket socket = new ServerSocket()) {
+        /*
+         * The socket is only used to find an unused address for a new server. As a
+         * result, it poses no security risk, thus the sonar issue can be ignored.
+         */
+        try (ServerSocket socket = new ServerSocket()) {    // NOSONAR
             socket.bind(hostAddr);
 
             return socket.getLocalPort();
@@ -134,7 +138,11 @@ public class NetworkUtil {
             throws InterruptedException {
         int retry = 0;
         while (retry < retries) {
-            try (Socket s = new Socket(host, port)) {
+            /*
+             * As with the server socket, this is only used to see if the port is open,
+             * thus the sonar issue can be ignored.
+             */
+            try (Socket s = new Socket(host, port)) {   // NOSONAR
                 logger.debug("{}:{} connected - retries={} interval={}", host, port, retries, interval);
                 return true;
             } catch (final IOException e) {
