@@ -31,11 +31,16 @@ public class DisplayUtils {
         // do nothing
     }
 
+    /*
+     * As the comment above says, these purposely write to System.out rather than a
+     * logger, thus sonar is disabled.
+     */
+
     public static void displayMessage(Object message) {
-        System.out.println(message);
+        System.out.println(message);    // NOSONAR
     }
 
     public static void displayErrorMessage(Object msg) {
-        System.err.println(msg);
+        System.err.println(msg);        // NOSONAR
     }
 }

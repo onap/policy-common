@@ -57,7 +57,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Consumer;
@@ -86,7 +85,6 @@ public class PolicyLogger {
     private static String hostAddress = null;
     private static String component = null;
 
-    private static TimerTask ttrcker = null;
     private static boolean isEventTrackerRunning = false;
     private static Timer timer = null;
 
@@ -1186,7 +1184,7 @@ public class PolicyLogger {
     private static void startCleanUp() {
 
         if (!isEventTrackerRunning) {
-            ttrcker = new EventTrackInfoHandler();
+            EventTrackInfoHandler ttrcker = new EventTrackInfoHandler();
             timer = new Timer(true);
             timer.scheduleAtFixedRate(ttrcker, timerDelayTime, checkInterval);
             debugLogger.info("EventTrackInfoHandler begins! : " + new Date());

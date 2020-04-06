@@ -21,6 +21,7 @@
 
 package org.onap.policy.common.logging.flexlogger;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertSame;
 
@@ -131,7 +132,9 @@ public class FlexLoggerTest {
         changedKeys.add("error.level");
         changedKeys.add("audit.level");
         PropertiesCallBack propertiesCallBack = new PropertiesCallBack("name");
-        propertiesCallBack.propertiesChanged(PropertyUtil.getProperties("config/policyLogger.properties"), changedKeys);
+        assertThatCode(() -> propertiesCallBack
+                        .propertiesChanged(PropertyUtil.getProperties("config/policyLogger.properties"), changedKeys))
+                                        .doesNotThrowAnyException();
     }
 
 }

@@ -21,6 +21,7 @@
 
 package org.onap.policy.common.logging.flexlogger;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -41,7 +42,7 @@ public class SystemOutLoggerTest {
 
     @Test
     public void testSystemOutLoggerClassOfQ() {
-        new SystemOutLogger(SystemOutLoggerTest.class);
+        assertThatCode(() -> new SystemOutLogger(SystemOutLoggerTest.class)).doesNotThrowAnyException();
     }
 
     @Test

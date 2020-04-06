@@ -23,8 +23,8 @@ package org.onap.policy.common.logging.eelf;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
@@ -63,7 +63,7 @@ public class EventTrackInfoHandler extends TimerTask {
 
         ArrayList<String> expiredEvents = null;
 
-        for (ConcurrentHashMap.Entry<String, EventData> entry : eventInfo.entrySet()) {
+        for (Map.Entry<String, EventData> entry : eventInfo.entrySet()) {
             EventData event = entry.getValue();
             startTime = event.getStartTime();
             ns = Duration.between(startTime, Instant.now()).getSeconds();

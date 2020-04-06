@@ -496,17 +496,17 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
 
     private void writeObject(ObjectOutputStream out) throws IOException {
         // write out 'methodName', 'className', 'transId' strings
-        out.writeObject(methodName);
-        out.writeObject(className);
-        out.writeObject(transId);
+        out.writeUTF(methodName);
+        out.writeUTF(className);
+        out.writeUTF(transId);
     }
 
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
 
         // read in 'methodName', 'className', 'transId' strings
-        methodName = (String) (in.readObject());
-        className = (String) (in.readObject());
-        transId = (String) (in.readObject());
+        methodName = in.readUTF();
+        className = in.readUTF();
+        transId = in.readUTF();
 
         // look up associated logger
         log = Logger.getLogger(className);

@@ -45,6 +45,10 @@ public class PropertyUtil {
          * This may be overridden by junit tests.
          */
         private static Timer timer = new Timer("PropertyUtil-Timer", true);
+
+        private LazyHolder() {
+            super();
+        }
     }
 
     // this table maps canonical file into a 'ListenerRegistration' instance
@@ -60,17 +64,13 @@ public class PropertyUtil {
      */
     public static Properties getProperties(File file) throws IOException {
         // create an InputStream (may throw a FileNotFoundException)
-        FileInputStream fis = new FileInputStream(file);
-        try {
+        try (FileInputStream fis = new FileInputStream(file)) {
             // create the properties instance
             Properties rval = new Properties();
 
             // load properties (may throw an IOException)
             rval.load(fis);
             return rval;
-        } finally {
-            // close input stream
-            fis.close();
         }
     }
 

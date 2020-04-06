@@ -21,6 +21,7 @@
 
 package org.onap.policy.common.logging.flexlogger;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -41,7 +42,7 @@ public class Logger4JTest {
 
     @Test
     public void testLogger4JClassOfQ() {
-        new Logger4J(this.getClass());
+        assertThatCode(() -> new Logger4J(this.getClass())).doesNotThrowAnyException();
     }
 
     @Test

@@ -209,21 +209,13 @@ public class FlexLogger extends SecurityManager {
             className = new FlexLogger().getClassName();
         }
 
-        if (!eelfLoggerMap.containsKey(className)) {
-            logger = new EelfLogger(clazz, isNewTransaction);
-            eelfLoggerMap.put(className, logger);
-        } else {
-            logger = eelfLoggerMap.get(className);
-            if (logger == null) {
-                logger = new EelfLogger(clazz, isNewTransaction);
-                eelfLoggerMap.put(className, logger);
-            }
-            // installl already created but it is new transaction
-            if (isNewTransaction) {
-                String transId = PolicyLogger.postMdcInfoForEvent(null);
-                logger.setTransId(transId);
-            }
+        logger = eelfLoggerMap.computeIfAbsent(className, key -> new EelfLogger(clazz, isNewTransaction));
+
+        if (isNewTransaction) {
+            String transId = PolicyLogger.postMdcInfoForEvent(null);
+            logger.setTransId(transId);
         }
+
         displayMessage("eelfLoggerMap size : " + eelfLoggerMap.size() + " class name: " + className);
         return logger;
     }

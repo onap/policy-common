@@ -30,6 +30,7 @@ import static com.att.eelf.configuration.Configuration.MDC_SERVER_FQDN;
 import static com.att.eelf.configuration.Configuration.MDC_SERVER_IP_ADDRESS;
 import static com.att.eelf.configuration.Configuration.MDC_SERVICE_INSTANCE_ID;
 import static com.att.eelf.configuration.Configuration.MDC_SERVICE_NAME;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -613,7 +614,7 @@ public class PolicyLoggerTest {
 
     @Test
     public void testInitNullProperties() {
-        PolicyLogger.init(null);
+        assertThatCode(() -> PolicyLogger.init(null)).doesNotThrowAnyException();
     }
 
     @Test
@@ -630,7 +631,7 @@ public class PolicyLoggerTest {
         properties.setProperty("stop.check.point", "0");
         properties.setProperty("logger.property", "LOG4J");
 
-        PolicyLogger.init(properties);
+        assertThatCode(() -> PolicyLogger.init(properties)).doesNotThrowAnyException();
     }
 
     @Test
