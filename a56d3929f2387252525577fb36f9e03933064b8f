@@ -69,6 +69,24 @@
       "revId": "a56d3929f2387252525577fb36f9e03933064b8f",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88fc8e98_9b9878f4",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineBusTopicSink.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-04-06T14:15:15Z",
+      "side": 1,
+      "message": "Yes, you\u0027re right (missed the ! in 87).   Interesting sonar though, as it favors nested structures, in this context.   Nesting 3 levels, instead of 2 before.",
+      "parentUuid": "27f20f85_5f02969e",
+      "revId": "a56d3929f2387252525577fb36f9e03933064b8f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
