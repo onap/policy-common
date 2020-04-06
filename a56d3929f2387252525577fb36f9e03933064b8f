@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d3d644b_8524e6c9",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/NoopTopicEndpoint.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-04-06T14:04:28Z",
+      "side": 1,
+      "message": "same comment as before - general",
+      "revId": "a56d3929f2387252525577fb36f9e03933064b8f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d2ea8112_af8f0ac8",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineBusTopicSink.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-04-06T14:04:28Z",
+      "side": 1,
+      "message": "Not sure about this change, I think in theory, alive (control by start) and lock (control by lock) are independent, and you could toggle those indepedently, so any of the 4 combinations is a valid admin scenario\n\nIf here in this case, we decide that having the 4 combos is faulty, the locked flag should be reset after line 93 I think.",
+      "revId": "a56d3929f2387252525577fb36f9e03933064b8f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
