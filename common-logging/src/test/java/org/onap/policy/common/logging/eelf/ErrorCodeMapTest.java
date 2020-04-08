@@ -47,7 +47,7 @@ public class ErrorCodeMapTest {
     @Test
     public void testErrorCodeInfoGetErrorCode() {
         ErrorCodeInfo errorCodeInfo = ErrorCodeMap.getErrorCodeInfo(MessageCodes.EXCEPTION_ERROR);
-        assertEquals("POLICY-503E", errorCodeInfo.getErrorCode());
+        assertEquals("500", errorCodeInfo.getErrorCode());
     }
 
     @Test
