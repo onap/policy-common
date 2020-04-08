@@ -79,7 +79,8 @@ public class OnapConfigProperties {
     public static final String CLASS_NAME = "ClassName";
 
     public static final String SERVER_NAME = "ServerName";
-
+    
+    public static final String INVOCATION_ID = "InvocationID";
 
     private OnapConfigProperties() {
         // do nothing

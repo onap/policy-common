@@ -24,6 +24,13 @@ import java.util.EnumMap;
 
 /**
  * ErrorCodeMap contains a HashMap of ErrorCodeInfo (error code and error description).
+ * Standard error code:
+ * 100 – permission errors
+ * 200 – availability errors
+ * 300 – data errors 
+ * 400 – schema errors 
+ * 500 – business process errors 
+ * 900 – unknown errors
  */
 public class ErrorCodeMap {
 
@@ -31,41 +38,42 @@ public class ErrorCodeMap {
 
     private static final String CHECK_ERROR_MESSAGE = " Please check the error message for detail information";
 
-    private static final String ERROR_PERMISSIONS = "POLICY-100E";
+    private static final String ERROR_PERMISSIONS = "100";
     private static final String ERROR_PERMISSIONS_DESCRIPTION = "This is a Permissions Error." + CHECK_ERROR_MESSAGE;
 
-    private static final String ERROR_SCHEMA_INVALID = "POLICY-400E";
+    private static final String ERROR_SCHEMA_INVALID = "400";
     private static final String ERROR_SCHEMA_INVALID_DESCRIPTION = "This is an Invalid Schema Error."
         + CHECK_ERROR_MESSAGE;
 
-    private static final String UPDATE_ERROR = "POLICY-502E";
+
+    private static final String UPDATE_ERROR = "300";
     private static final String UPDATE_ERROR_DESCRIPTION = "This is an updating error." + CHECK_ERROR_MESSAGE;
 
-    private static final String EXCEPTION_ERROR_CODE = "POLICY-503E";
+    private static final String EXCEPTION_ERROR_CODE = "500";
     private static final String EXCEPTION_ERROR_DESCRIPTION = "This is an exception error message during the process."
         + CHECK_ERROR_MESSAGE;
 
-    private static final String MISS_PROPERTY_ERROR = "POLICY-504E";
+    private static final String MISS_PROPERTY_ERROR = "300";
     private static final String MISS_PROPERTY_ERROR_DESCRIPTION = "This is an error of missing properties."
         + CHECK_ERROR_MESSAGE;
 
-    private static final String GENERAL_ERROR_CODE = "POLICY-515E";
+    private static final String GENERAL_ERROR_CODE = "500";
     private static final String GENERAL_ERROR_DESCRIPTION = "This is a general error message during the process."
         + CHECK_ERROR_MESSAGE;
 
-    private static final String ERROR_SYSTEM_ERROR = "POLICY-516E";
+    private static final String ERROR_SYSTEM_ERROR = "200";
     private static final String ERROR_SYSTEM_ERROR_DESCRIPTION = "This is a System Error." + CHECK_ERROR_MESSAGE;
 
-    private static final String ERROR_DATA_ISSUE = "POLICY-517E";
+    private static final String ERROR_DATA_ISSUE = "300";
     private static final String ERROR_DATA_ISSUE_DESCRIPTION = "This is a Data Issue Error." + CHECK_ERROR_MESSAGE;
 
-    private static final String ERROR_PROCESS_FLOW = "POLICY-518E";
+    private static final String ERROR_PROCESS_FLOW = "500";
     private static final String ERROR_PROCESS_FLOW_DESCRIPTION = "This is a Process Flow Error." + CHECK_ERROR_MESSAGE;
 
-    private static final String ERROR_UNKNOWN = "POLICY-519E";
+    private static final String ERROR_UNKNOWN = "900";
     private static final String ERROR_UNKNOWN_DESCRIPTION = "This is an Unknown Error." + CHECK_ERROR_MESSAGE;
 
-    private static final String ERROR_AUDIT = "POLICY-520E";
+    private static final String ERROR_AUDIT = "300";
     private static final String ERROR_AUDIT_DESCRIPTION = "This is an audit Error." + CHECK_ERROR_MESSAGE;
 
     static {
