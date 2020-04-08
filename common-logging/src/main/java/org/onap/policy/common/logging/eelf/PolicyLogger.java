@@ -34,6 +34,7 @@ import static org.onap.policy.common.logging.eelf.OnapConfigProperties.END_TIME_
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.ERROR_CATEGORY;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.ERROR_CODE;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.ERROR_DESCRIPTION;
+import static org.onap.policy.common.logging.eelf.OnapConfigProperties.INVOCATION_ID;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.PARTNER_NAME;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.RESPONSE_CODE;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.RESPONSE_DESCRIPTION;
@@ -55,6 +56,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.UUID;
@@ -562,6 +564,8 @@ public class PolicyLogger {
             MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
             MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
+        } else {
+            setDefaultErrorCode();
         }
         errorLogger.error(MessageCodes.GENERAL_ERROR, arg0);
     }
@@ -579,6 +583,8 @@ public class PolicyLogger {
             MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
             MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
+        } else {
+            setDefaultErrorCode();
         }
         errorLogger.error(MessageCodes.GENERAL_ERROR, arg0);
     }
@@ -596,6 +602,8 @@ public class PolicyLogger {
             MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorCode());
             MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
+        } else {
+            setDefaultErrorCode();
         }
         errorLogger.error(MessageCodes.GENERAL_ERROR, "" + arg0);
     }
@@ -615,6 +623,8 @@ public class PolicyLogger {
             MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(msg).getErrorCode());
             MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(msg).getErrorDesc());
 
+        } else {
+            setDefaultErrorCode();
         }
         String arguments2 = getNormalizedStackTrace(arg0, arguments);
         errorLogger.error(msg, arguments2);
@@ -637,6 +647,8 @@ public class PolicyLogger {
             MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(msg).getErrorCode());
             MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(msg).getErrorDesc());
 
+        } else {
+            setDefaultErrorCode();
         }
         String arguments2 = getNormalizedStackTrace(arg0, arguments);
         errorLogger.error(msg, arguments2);
@@ -656,6 +668,8 @@ public class PolicyLogger {
             MDC.put(ERROR_CODE, ErrorCodeMap.getErrorCodeInfo(msg).getErrorCode());
             MDC.put(ERROR_DESCRIPTION, ErrorCodeMap.getErrorCodeInfo(msg).getErrorDesc());
 
+        } else {
+            setDefaultErrorCode();
         }
         errorLogger.error(msg, arguments);
     }
@@ -738,7 +752,9 @@ public class PolicyLogger {
      * @param arg0 the message
      */
     public static void audit(String className, Object arg0) {
+        MDC.put(INVOCATION_ID, MDC.get(MDC_KEY_REQUEST_ID));
         MDC.put(STATUS_CODE, COMPLETE_STATUS);
+        MDC.put(RESPONSE_CODE, "0");
         MDC.put(classNameProp, className);
         auditLogger.info("" + arg0);
     }
@@ -749,7 +765,9 @@ public class PolicyLogger {
      * @param arg0 the message
      */
     public static void audit(Object arg0) {
+        MDC.put(INVOCATION_ID, MDC.get(MDC_KEY_REQUEST_ID));
         MDC.put(STATUS_CODE, COMPLETE_STATUS);
+        MDC.put(RESPONSE_CODE, "0");
         MDC.put(classNameProp, "");
         auditLogger.info("" + arg0);
     }
@@ -1064,6 +1082,7 @@ public class PolicyLogger {
 
         String serviceName = MDC.get(MDC_SERVICE_NAME);
         MDC.put(MDC_KEY_REQUEST_ID, eventId);
+        MDC.put(STATUS_CODE, COMPLETE_STATUS);
         metricsLogger.info(MessageCodes.RULE_AUDIT_END_INFO, serviceName, arg1);
 
     }
@@ -1082,6 +1101,7 @@ public class PolicyLogger {
         MDC.put(classNameProp, className);
         String serviceName = MDC.get(MDC_SERVICE_NAME);
         MDC.put(MDC_KEY_REQUEST_ID, eventId);
+        MDC.put(STATUS_CODE, COMPLETE_STATUS);
         metricsLogger.info(MessageCodes.RULE_AUDIT_END_INFO, serviceName, arg1);
     }
 
@@ -1119,6 +1139,8 @@ public class PolicyLogger {
      * @param arg0 the message
      */
     public static void metrics(String arg0) {
+        MDC.put(INVOCATION_ID, MDC.get(MDC_KEY_REQUEST_ID));
+        MDC.put(RESPONSE_CODE, "0");
         String serviceName = MDC.get(MDC_SERVICE_NAME);
         metricsLogger.info(MessageCodes.RULE_METRICS_INFO, serviceName, arg0);
     }
@@ -1130,6 +1152,8 @@ public class PolicyLogger {
      */
     public static void metrics(String className, Object arg0) {
         seTimeStamps();
+        MDC.put(INVOCATION_ID, MDC.get(MDC_KEY_REQUEST_ID));
+        MDC.put(RESPONSE_CODE, "0");
         MDC.put(classNameProp, className);
         String serviceName = MDC.get(MDC_SERVICE_NAME);
         metricsLogger.info(MessageCodes.RULE_METRICS_INFO, serviceName, "" + arg0);
@@ -1142,6 +1166,8 @@ public class PolicyLogger {
      */
     public static void metrics(Object arg0) {
         seTimeStamps();
+        MDC.put(INVOCATION_ID, MDC.get(MDC_KEY_REQUEST_ID));
+        MDC.put(RESPONSE_CODE, "0");
         MDC.put(classNameProp, "");
         String serviceName = MDC.get(MDC_SERVICE_NAME);
         metricsLogger.info(MessageCodes.RULE_METRICS_INFO, serviceName, "" + arg0);
@@ -1361,4 +1387,15 @@ public class PolicyLogger {
     public static void setServerInfo(String serverHost, String serverPort) {
         MDC.put(SERVER_NAME, serverHost + ":" + serverPort);
     }
+
+    /**
+     * Set default error code and error description.
+     */
+    private static void setDefaultErrorCode() {
+        MDC.put(ERROR_CODE,
+            ErrorCodeMap.getErrorCodeInfo(MessageCodes.ERROR_UNKNOWN).getErrorCode());
+        MDC.put(ERROR_DESCRIPTION,
+            ErrorCodeMap.getErrorCodeInfo(MessageCodes.ERROR_UNKNOWN).getErrorDesc());
+    }
+
 }
