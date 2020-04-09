@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "34528ab3_b1306110",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-09T14:58:58Z",
+      "side": 1,
+      "message": "this will throw NPE, as it is only invoked when we already know the look-up returned null",
+      "revId": "8201b7be59a9bb4f54c68b400ba8487e539b61ca",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15fbf23e_0bec153c",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1398,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-09T14:58:58Z",
+      "side": 1,
+      "message": "getErrorDesc",
+      "revId": "8201b7be59a9bb4f54c68b400ba8487e539b61ca",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
