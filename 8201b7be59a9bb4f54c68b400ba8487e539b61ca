@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "752daaec_47b9b11b",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1394,
+      "author": {
+        "id": 1761
+      },
+      "writtenOn": "2020-04-09T17:50:14Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "34528ab3_b1306110",
+      "revId": "8201b7be59a9bb4f54c68b400ba8487e539b61ca",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "15fbf23e_0bec153c",
         "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
         "patchSetId": 1
