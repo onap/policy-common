@@ -44,6 +44,7 @@ import javax.persistence.LockModeType;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.onap.policy.common.im.jmx.ComponentAdmin;
 import org.onap.policy.common.im.jmx.ComponentAdminMBean;
 import org.onap.policy.common.im.jmx.JmxAgentConnection;
@@ -229,6 +230,9 @@ public class IntegrityMonitor {
         //
         // Create the entity manager factory
         //
+        if (!properties.containsKey(PersistenceUnitProperties.ECLIPSELINK_PERSISTENCE_XML)) {
+            properties.setProperty(PersistenceUnitProperties.ECLIPSELINK_PERSISTENCE_XML, "META-INF/persistenceIM.xml");
+        }
         emf = Persistence.createEntityManagerFactory(getPersistenceUnit(), properties);
         //
         // Did it get created?
