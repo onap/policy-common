@@ -287,7 +287,7 @@ public class PolicyLoggerTest {
         Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
         PolicyLogger.error("str1", "str2");
         Mockito.verify(mockLogger).error(MessageCodes.GENERAL_ERROR, "str2");
-        assertEquals("POLICY-515E", MDC.get("ErrorCode"));
+        assertEquals("500", MDC.get("ErrorCode"));
         assertEquals("This is a general error message during the process. Please check the error message for detail "
                 + "information", MDC.get("ErrorDescription"));
     }
@@ -299,7 +299,7 @@ public class PolicyLoggerTest {
         PolicyLogger.error("str1");
         Mockito.verify(mockLogger).error(MessageCodes.GENERAL_ERROR, "str1");
         assertEquals("ERROR", MDC.get("ErrorCategory"));
-        assertEquals("POLICY-515E", MDC.get("ErrorCode"));
+        assertEquals("500", MDC.get("ErrorCode"));
         assertEquals("This is a general error message during the process. Please check the error message for detail "
                 + "information", MDC.get("ErrorDescription"));
     }
@@ -311,7 +311,7 @@ public class PolicyLoggerTest {
         PolicyLogger.error(1);
         Mockito.verify(mockLogger).error(MessageCodes.GENERAL_ERROR, "1");
         assertEquals("ERROR", MDC.get("ErrorCategory"));
-        assertEquals("POLICY-515E", MDC.get("ErrorCode"));
+        assertEquals("500", MDC.get("ErrorCode"));
         assertEquals("This is a general error message during the process. Please check the error message for detail "
                 + "information", MDC.get("ErrorDescription"));
     }
