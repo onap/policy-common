@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0d81e3b6_e7feeaa8",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/ErrorCodeMap.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-04-10T15:16:18Z",
+      "side": 1,
+      "message": "append \", 2020\"",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 26
+      },
+      "revId": "0839e14e0164789122cef30f28b34cee9a081a91",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd9728a9_6ca81ccb",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/OnapConfigProperties.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-04-10T15:16:18Z",
+      "side": 1,
+      "message": "2017-2018, 2020\n\njust add , 2020",
+      "range": {
+        "startLine": 5,
+        "startChar": 17,
+        "endLine": 5,
+        "endChar": 27
+      },
+      "revId": "0839e14e0164789122cef30f28b34cee9a081a91",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4344124_4cdff662",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/eelf/ErrorCodeMapTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-04-10T15:16:18Z",
+      "side": 1,
+      "message": "Add a line below\nModifications Copyright (C) 2020 AT\u0026T.\n\nIf you can remove the extra whitespace that would be great!",
+      "range": {
+        "startLine": 5,
+        "startChar": 3,
+        "endLine": 5,
+        "endChar": 51
+      },
+      "revId": "0839e14e0164789122cef30f28b34cee9a081a91",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5973afd2_29f2a6e2",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/eelf/ErrorCodeMapTest.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-04-10T15:16:18Z",
+      "side": 1,
+      "message": "our friend the extra whitespace",
+      "range": {
+        "startLine": 10,
+        "startChar": 2,
+        "endLine": 10,
+        "endChar": 3
+      },
+      "revId": "0839e14e0164789122cef30f28b34cee9a081a91",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
