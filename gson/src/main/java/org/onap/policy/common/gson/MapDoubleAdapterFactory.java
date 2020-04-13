@@ -51,24 +51,36 @@ public class MapDoubleAdapterFactory implements TypeAdapterFactory {
     }
 
     private <T> boolean isMapType(TypeToken<T> type) {
-        if (type.getRawType() != Map.class) {
+        if (!Map.class.isAssignableFrom(type.getRawType())) {
             return false;
+        }
+
+        // only supports Map<String,Object>
+
+        if (!(type.getType() instanceof ParameterizedType)) {
+            // untyped - assume the parameters are the correct type
+            return true;
         }
 
         Type[] actualParams = ((ParameterizedType) type.getType()).getActualTypeArguments();
 
-        // only supports Map<String,Object>
         return (actualParams[0] == String.class && actualParams[1] == Object.class);
     }
 
     private <T> boolean isListType(TypeToken<T> type) {
-        if (type.getRawType() != List.class) {
+        if (!List.class.isAssignableFrom(type.getRawType())) {
             return false;
+        }
+
+        // only supports List<Object>
+
+        if (!(type.getType() instanceof ParameterizedType)) {
+            // untyped - assume the parameters are the correct type
+            return true;
         }
 
         Type[] actualParams = ((ParameterizedType) type.getType()).getActualTypeArguments();
 
-        // only supports List<Object>
         return (actualParams[0] == Object.class);
     }
 
