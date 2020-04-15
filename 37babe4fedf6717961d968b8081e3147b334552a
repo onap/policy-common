@@ -16,6 +16,24 @@
       "revId": "37babe4fedf6717961d968b8081e3147b334552a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a42217d_6a9da115",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/security/CryptoUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-04-15T22:52:47Z",
+      "side": 1,
+      "message": "Right, we don\u0027t. It\u0027s for the \"main\", may make more sense to have it to standard out, not sure if gives sonars inside of main.",
+      "parentUuid": "61a5f440_c16d1070",
+      "revId": "37babe4fedf6717961d968b8081e3147b334552a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
