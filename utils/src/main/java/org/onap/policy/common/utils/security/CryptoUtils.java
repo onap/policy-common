@@ -27,14 +27,14 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.lang3.ArrayUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.onap.policy.common.logging.flexlogger.FlexLogger;
+import org.onap.policy.common.logging.flexlogger.Logger;
 
 /**
  * AES Encryption Utilities.
  */
 public class CryptoUtils implements CryptoCoder {
-    private static final Logger logger = LoggerFactory.getLogger(CryptoUtils.class);
+    private static final Logger logger = FlexLogger.getLogger(CryptoUtils.class, true);
 
     /**
      * Definition of encryption algorithm.
@@ -240,12 +240,12 @@ public class CryptoUtils implements CryptoCoder {
         if (args.length == 3) {
             if ("enc".equals(args[0])) {
                 String encryptedValue = encrypt(args[1], args[2]);
-                logger.info("original value: {} encrypted value: {}", args[1], encryptedValue);
+                logger.info("original value: " + args[1] + " encrypted value: " + encryptedValue);
             } else if ("dec".equals(args[0])) {
                 String decryptedValue = decrypt(args[1], args[2]);
-                logger.info("original value: {} decrypted value: {}", args[1], decryptedValue);
+                logger.info("original value: " + args[1] + " decrypted value: " + decryptedValue);
             } else {
-                logger.info("Unknown request: {}", args[0]);
+                logger.info("Unknown request: " + args[0]);
             }
         } else {
             logger.info("Usage  : CryptoUtils enc/dec password   secretKey");
