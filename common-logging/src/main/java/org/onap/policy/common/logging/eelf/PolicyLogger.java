@@ -47,6 +47,7 @@ import static org.onap.policy.common.logging.flexlogger.DisplayUtils.displayErro
 import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFLogger.Level;
 import com.att.eelf.configuration.EELFManager;
+
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.InetAddress;
@@ -56,12 +57,12 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.Map;
 import java.util.Properties;
 import java.util.Timer;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Consumer;
+
 import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.logging.flexlogger.LoggerType;
 import org.slf4j.MDC;
