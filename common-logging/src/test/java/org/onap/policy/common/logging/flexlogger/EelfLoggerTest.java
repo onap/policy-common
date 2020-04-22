@@ -3,7 +3,7 @@
  * ONAP-Logging
  * ================================================================================
  * Copyright (C) 2018 Ericsson. All rights reserved.
- * Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.never;
 
 import com.att.eelf.configuration.EELFLogger;
 import java.util.UUID;
@@ -93,6 +94,9 @@ public class EelfLoggerTest {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.debug("message");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isDebugEnabled()).thenReturn(true);
+        eelfLogger.debug("message");
         Mockito.verify(mockLogger).debug(MessageCodes.GENERAL_INFO, "message");
     }
 
@@ -100,6 +104,9 @@ public class EelfLoggerTest {
     public void testErrorObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
+        eelfLogger.error("message");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isErrorEnabled()).thenReturn(true);
         eelfLogger.error("message");
         Mockito.verify(mockLogger).error(MessageCodes.GENERAL_ERROR, "message");
     }
@@ -109,6 +116,9 @@ public class EelfLoggerTest {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.info("message");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isInfoEnabled()).thenReturn(true);
+        eelfLogger.info("message");
         Mockito.verify(mockLogger).info(MessageCodes.GENERAL_INFO, "message");
     }
 
@@ -116,6 +126,9 @@ public class EelfLoggerTest {
     public void testWarnObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        eelfLogger.warn("message");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isWarnEnabled()).thenReturn(true);
         eelfLogger.warn("message");
         Mockito.verify(mockLogger).warn(MessageCodes.GENERAL_INFO, "message");
     }
@@ -219,6 +232,8 @@ public class EelfLoggerTest {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.info("message", new NullPointerException());
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isInfoEnabled()).thenReturn(true);
         Mockito.verify(mockLogger).info((MessageCodes) Mockito.any(),
                 Mockito.startsWith("message:java.lang.NullPointerException"));
     }
@@ -316,6 +331,9 @@ public class EelfLoggerTest {
     public void testMetrics() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "metricsLogger", mockLogger);
+        eelfLogger.metrics(1);
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isInfoEnabled()).thenReturn(true);
         eelfLogger.metrics(1);
         Mockito.verify(mockLogger).info(Mockito.eq(MessageCodes.RULE_METRICS_INFO), Mockito.anyString(),
                 Mockito.eq("1"));
