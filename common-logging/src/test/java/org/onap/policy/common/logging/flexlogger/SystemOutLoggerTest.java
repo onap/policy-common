@@ -427,7 +427,7 @@ public class SystemOutLoggerTest {
         try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
-            systemOutLogger.debug(1, new NullPointerException());
+            systemOutLogger.debug("1", new NullPointerException());
             assertTrue(baos.toString(),
                     baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
@@ -444,7 +444,7 @@ public class SystemOutLoggerTest {
         try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
-            systemOutLogger.error(1, new NullPointerException());
+            systemOutLogger.error("1", new NullPointerException());
             assertTrue(baos.toString(),
                     baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
@@ -461,7 +461,7 @@ public class SystemOutLoggerTest {
         try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
-            systemOutLogger.info(1, new NullPointerException());
+            systemOutLogger.info("1", new NullPointerException());
             assertTrue(baos.toString(),
                     baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
@@ -478,7 +478,7 @@ public class SystemOutLoggerTest {
         try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
-            systemOutLogger.warn(1, new NullPointerException());
+            systemOutLogger.warn("1", new NullPointerException());
             assertTrue(baos.toString(),
                     baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
@@ -512,7 +512,7 @@ public class SystemOutLoggerTest {
         try {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
-            systemOutLogger.audit(1, new NullPointerException());
+            systemOutLogger.audit("1", new NullPointerException());
             assertTrue(baos.toString(),
                     baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {

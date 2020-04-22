@@ -54,6 +54,7 @@ import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
@@ -63,6 +64,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.StringUtils;
+import org.onap.policy.common.logging.OnapLoggingUtils;
 import org.onap.policy.common.logging.flexlogger.LoggerType;
 import org.slf4j.MDC;
 
@@ -331,7 +333,6 @@ public class PolicyLogger {
      * Set Timestamps for start, end and duration of logging a transaction.
      */
     private static void seTimeStamps() {
-
         MDC.put(MDC_INSTANCE_UUID, "");
         MDC.put(MDC_ALERT_SEVERITY, "");
 
@@ -433,18 +434,6 @@ public class PolicyLogger {
     }
 
     /**
-     * Records only one String message with its class name.
-     *
-     * @param className the class name
-     * @param arg0 the message
-     */
-    public static void info(String className, String arg0) {
-        MDC.put(classNameProp, className);
-        debugLogger.info(MessageCodes.GENERAL_INFO, arg0);
-    }
-
-
-    /**
      * Records only one String message.
      *
      * @param arg0 the message
@@ -483,14 +472,29 @@ public class PolicyLogger {
     }
 
     /**
-     * Records only one String message with its class name.
+     * Records a message with passed in message text and variable number of arguments.
      *
-     * @param arg0 log message
-     * @param className class name
+     * @param message class name if one argument, otherwise message text
+     * @param arguments variable number of arguments
      */
-    public static void warn(String className, String arg0) {
-        MDC.put(classNameProp, className);
-        debugLogger.warn(MessageCodes.GENERAL_INFO, arg0);
+    public static void info(String message, Object... arguments) {
+        if (!debugLogger.isInfoEnabled()) {
+            return;
+        }
+        if (arguments.length == 1 && !OnapLoggingUtils.isThrowable(arguments[0])) {
+            MDC.put(classNameProp, message);
+            debugLogger.info(MessageCodes.GENERAL_INFO,
+                arguments[0] == null ? "" : arguments[0].toString());
+            return;
+        }
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            String arguments2 = getNormalizedStackTrace((Throwable)arguments[0], "");
+            debugLogger.info(MessageCodes.GENERAL_INFO, message + arguments2);
+            return;
+        }
+
+        MDC.put(classNameProp, "");
+        debugLogger.info(message, arguments);
     }
 
     /**
@@ -553,15 +557,28 @@ public class PolicyLogger {
     }
 
     /**
-     * Records only one String message with its class name.
+     * Records a message with passed in message text and variable number of arguments.
      *
-     * @param className class name
-     * @param arg0 log message
+     * @param message class name if one argument, otherwise message text
+     * @param arguments variable number of arguments
      */
-    public static void error(String className, String arg0) {
-        MDC.put(classNameProp, className);
-        setErrorCode(MessageCodes.GENERAL_ERROR);
-        errorLogger.error(MessageCodes.GENERAL_ERROR, arg0);
+    public static void warn(String message, Object... arguments) {
+        if (!debugLogger.isWarnEnabled()) {
+            return;
+        }
+        if (arguments.length == 1 && !OnapLoggingUtils.isThrowable(arguments[0])) {
+            MDC.put(classNameProp, message);
+            debugLogger.warn(MessageCodes.GENERAL_INFO,
+                arguments[0] == null ? "" : arguments[0].toString());
+            return;
+        }
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            String arguments2 = getNormalizedStackTrace((Throwable)arguments[0], "");
+            debugLogger.warn(MessageCodes.GENERAL_INFO, message + arguments2);
+            return;
+        }
+        MDC.put(classNameProp, "");
+        debugLogger.warn(message, arguments);
     }
 
     /**
@@ -629,6 +646,33 @@ public class PolicyLogger {
     }
 
     /**
+     * Records a message with passed in message text and variable number of arguments.
+     *
+     * @param message class name if one argument, otherwise message text
+     * @param arguments variable number of arguments
+     */
+    public static void error(String message, Object... arguments) {
+        if (!errorLogger.isErrorEnabled()) {
+            return;
+        }
+        if (arguments.length == 1 && !OnapLoggingUtils.isThrowable(arguments[0])) {
+            MDC.put(classNameProp, message);
+            setErrorCode(MessageCodes.GENERAL_ERROR);
+            errorLogger.error(MessageCodes.GENERAL_ERROR,
+                arguments[0] == null ? "" : arguments[0].toString());
+            return;
+        }
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            String arguments2 = getNormalizedStackTrace((Throwable)arguments[0], "");
+            errorLogger.error(MessageCodes.GENERAL_ERROR, message + arguments2);
+            return;
+        }
+        MDC.put(classNameProp, "");
+        setErrorCode(MessageCodes.GENERAL_ERROR);
+        errorLogger.error(message, arguments);
+    }
+
+    /**
      * Records a message with passed in message code and a list of string values.
      *
      * @param msg the message code
@@ -637,17 +681,6 @@ public class PolicyLogger {
     public static void debug(MessageCodes msg, String... arguments) {
         MDC.put(classNameProp, "");
         debugLogger.debug(msg, arguments);
-    }
-
-    /**
-     * Records only one String message with its class name.
-     *
-     * @param className the class name
-     * @param arg0 the message
-     */
-    public static void debug(String className, String arg0) {
-        MDC.put(classNameProp, className);
-        debugLogger.debug(MessageCodes.GENERAL_INFO, arg0);
     }
 
     /**
@@ -700,17 +733,28 @@ public class PolicyLogger {
     }
 
     /**
-     * Records only one String message with its class name.
+     * Records a message with passed in message text and variable number of arguments.
      *
-     * @param className the class name
-     * @param arg0 the message
+     * @param message class name if one argument, otherwise message text
+     * @param arguments variable number of arguments
      */
-    public static void audit(String className, Object arg0) {
-        MDC.put(INVOCATION_ID, MDC.get(MDC_KEY_REQUEST_ID));
-        MDC.put(STATUS_CODE, COMPLETE_STATUS);
-        MDC.put(RESPONSE_CODE, "0");
-        MDC.put(classNameProp, className);
-        auditLogger.info("" + arg0);
+    public static void debug(String message, Object... arguments) {
+        if (!debugLogger.isDebugEnabled()) {
+            return;
+        }
+        if (arguments.length == 1 && !OnapLoggingUtils.isThrowable(arguments[0])) {
+            MDC.put(classNameProp, message);
+            debugLogger.debug(MessageCodes.GENERAL_INFO,
+                arguments[0] == null ? "" : arguments[0].toString());
+            return;
+        }
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            String arguments2 = getNormalizedStackTrace((Throwable)arguments[0], "");
+            debugLogger.debug(MessageCodes.GENERAL_INFO, message + arguments2);
+            return;
+        }
+        MDC.put(classNameProp, "");
+        debugLogger.debug(message, arguments);
     }
 
     /**
@@ -724,6 +768,29 @@ public class PolicyLogger {
         MDC.put(RESPONSE_CODE, "0");
         MDC.put(classNameProp, "");
         auditLogger.info("" + arg0);
+    }
+
+    /**
+     * Records a message with passed in message text and variable number of arguments.
+     *
+     * @param message class name if one argument, otherwise message text
+     * @param arguments variable number of arguments
+     */
+    public static void audit(String message, Object... arguments) {
+        if (!auditLogger.isInfoEnabled()) {
+            return;
+        }
+        MDC.put(INVOCATION_ID, postMdcInfoForEvent(null));
+        MDC.put(STATUS_CODE, COMPLETE_STATUS);
+        MDC.put(RESPONSE_CODE, "0");
+        if (arguments.length == 1 && !OnapLoggingUtils.isThrowable(arguments[0])) {
+            MDC.put(classNameProp, message);
+            auditLogger.info(arguments[0] == null ? "" : arguments[0].toString());
+            return;
+        }
+
+        MDC.put(classNameProp, "");
+        auditLogger.info(message, arguments);
     }
 
     /**
@@ -1093,24 +1160,11 @@ public class PolicyLogger {
      * @param arg0 the message
      */
     public static void metrics(String arg0) {
+        seTimeStamps();
         MDC.put(INVOCATION_ID, MDC.get(MDC_KEY_REQUEST_ID));
         MDC.put(RESPONSE_CODE, "0");
         String serviceName = MDC.get(MDC_SERVICE_NAME);
         metricsLogger.info(MessageCodes.RULE_METRICS_INFO, serviceName, arg0);
-    }
-
-    /**
-     * Records the metrics event with a class name and a String message.
-     *
-     * @param arg0 the message
-     */
-    public static void metrics(String className, Object arg0) {
-        seTimeStamps();
-        MDC.put(INVOCATION_ID, MDC.get(MDC_KEY_REQUEST_ID));
-        MDC.put(RESPONSE_CODE, "0");
-        MDC.put(classNameProp, className);
-        String serviceName = MDC.get(MDC_SERVICE_NAME);
-        metricsLogger.info(MessageCodes.RULE_METRICS_INFO, serviceName, "" + arg0);
     }
 
     /**
@@ -1125,6 +1179,36 @@ public class PolicyLogger {
         MDC.put(classNameProp, "");
         String serviceName = MDC.get(MDC_SERVICE_NAME);
         metricsLogger.info(MessageCodes.RULE_METRICS_INFO, serviceName, "" + arg0);
+    }
+
+    /**
+     * Records a message with passed in message text and variable number of arguments.
+     *
+     * @param message class name if one argument, otherwise message text
+     * @param arguments variable number of arguments
+     */
+    public static void metrics(String message, Object... arguments) {
+        if (!metricsLogger.isInfoEnabled()) {
+            return;
+        }
+        seTimeStamps();
+        MDC.put(INVOCATION_ID, MDC.get(MDC_KEY_REQUEST_ID));
+        MDC.put(RESPONSE_CODE, "0");
+        if (arguments.length == 1 && !OnapLoggingUtils.isThrowable(arguments[0])) {
+            MDC.put(classNameProp, message);
+            String serviceName = MDC.get(MDC_SERVICE_NAME);
+            metricsLogger.info(MessageCodes.RULE_METRICS_INFO, serviceName,
+                arguments[0] == null ? "" : arguments[0].toString());
+            return;
+        }
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            String arguments2 = getNormalizedStackTrace((Throwable)arguments[0], "");
+            metricsLogger.info(MessageCodes.RULE_METRICS_INFO, message + arguments2);
+            return;
+        }
+
+        MDC.put(classNameProp, "");
+        metricsLogger.info(message, arguments);
     }
 
     /**
