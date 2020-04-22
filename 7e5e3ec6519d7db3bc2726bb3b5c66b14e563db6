@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "56665f72_e5955ee0",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/EelfLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-22T15:53:18Z",
+      "side": 1,
+      "message": "Update copyright to include 2020. Same comment for all files.",
+      "revId": "7e5e3ec6519d7db3bc2726bb3b5c66b14e563db6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d24e20a_63fc71ac",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/EelfLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-22T15:53:18Z",
+      "side": 1,
+      "message": "The PolicyLogger internally uses \"EELFLogger\" from the EELF Logging library which already supports the \"{}\" message formatter. There\u0027s no need to use OnapLoggingUtils.formatMessage() to parse the message. You could add a new method in PolicyLogger: PolicyLogger.debug(String, Object...) that invokes EELFLogger.debug(String, Object...), which will handle the message parsing for you. Same comment for similar methods.",
+      "revId": "7e5e3ec6519d7db3bc2726bb3b5c66b14e563db6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e4cdb8ad_b497d7a2",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-22T15:53:18Z",
+      "side": 1,
+      "message": "Shouldn\u0027t message be a string so that you can invoke the underlying logger\u0027s methods that support the arguments \u0027String\u0027 and \u0027Object...\u0027? Otherwise you will have to cast. Same comment throughout.",
+      "revId": "7e5e3ec6519d7db3bc2726bb3b5c66b14e563db6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
