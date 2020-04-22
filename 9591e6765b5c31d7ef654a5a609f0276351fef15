@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "35478617_587335bc",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-22T18:39:54Z",
+      "side": 1,
+      "message": "You still want to modify the Logger interface so that the EELFLogger returned by FlexLogger can invoke these methods. For the EELFLogger it can just invoke the methods you have just added. For the other types of loggers that don\u0027t support \"{}\", the utility you wrote would be useful there.",
+      "revId": "9591e6765b5c31d7ef654a5a609f0276351fef15",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
