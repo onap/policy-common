@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,4 +60,41 @@ public class OnapLoggingUtils {
         return requestContext;
     }
 
+    /**
+     * Create message text replace {} place holder with data
+     * if last argument is throwable/exception, pass it as argument to logger.
+     * @param format message format can contains text and {}
+     * @param arguments output arguments
+     * @return
+     */
+    public static String formatMessage(String format, Object ...arguments) {
+        if (arguments.length <= 0 || arguments[0] == null) {
+            return format;
+        }
+        int index;
+        StringBuilder builder = new StringBuilder();
+        String[] token = format.split("[{][}]");
+        for (index = 0; index < arguments.length; index++) {
+            if (index < token.length) {
+                builder.append(token[index]);
+                builder.append(arguments[index]);
+            } else {
+                break;
+            }
+        }
+        for (int index2 = index; index2 < token.length; index2++) {
+            builder.append(token[index2]);
+        }
+
+        return builder.toString();
+    }
+
+    /**
+     * Check object is throwable.
+     * @param obj to verify
+     * @return true if object is throwable or false otherwise
+     */
+    public static boolean isThrowable(Object obj) {
+        return (obj instanceof Throwable || Throwable.class.isInstance(obj));
+    }
 }
