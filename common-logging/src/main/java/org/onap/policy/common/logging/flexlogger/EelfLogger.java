@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import com.att.eelf.configuration.EELFLogger.Level;
 import java.io.Serializable;
 import java.util.UUID;
 
+import org.onap.policy.common.logging.OnapLoggingUtils;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.eelf.PolicyLogger;
 
@@ -158,11 +159,15 @@ public class EelfLogger implements Logger, Serializable {
      * Records a message.
      *
      * @param message the message
-     * @param throwable the throwable
+     * @param arguments variable number of arguments
      */
     @Override
-    public void debug(Object message, Throwable throwable) {
-        PolicyLogger.debug(MessageCodes.GENERAL_INFO, throwable, message.toString());
+    public void debug(String message, Object...arguments) {
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            PolicyLogger.debug(MessageCodes.GENERAL_INFO, (Throwable)arguments[0], message.toString());
+        } else {
+            PolicyLogger.debug(message, arguments);
+        }
     }
 
     /**
@@ -173,17 +178,6 @@ public class EelfLogger implements Logger, Serializable {
     @Override
     public void error(Object message) {
         PolicyLogger.error(className, "" + message);
-    }
-
-    /**
-     * Records an error message.
-     *
-     * @param message the message
-     * @param throwable the throwable
-     */
-    @Override
-    public void error(Object message, Throwable throwable) {
-        PolicyLogger.error(MessageCodes.ERROR_UNKNOWN, throwable, message.toString());
     }
 
     /**
@@ -210,6 +204,21 @@ public class EelfLogger implements Logger, Serializable {
     }
 
     /**
+     * Records an error message.
+     *
+     * @param message the message text
+     * @param arguments the messages
+     */
+    @Override
+    public void error(String message, Object...arguments) {
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            PolicyLogger.error(MessageCodes.ERROR_UNKNOWN, (Throwable)arguments[0], message);
+        } else {
+            PolicyLogger.error(message, arguments);
+        }
+    }
+
+    /**
      * Records a message.
      *
      * @param message the message
@@ -223,11 +232,15 @@ public class EelfLogger implements Logger, Serializable {
      * Records a message.
      *
      * @param message the message
-     * @param throwable the throwable
+     * @param arguments the arguments
      */
     @Override
-    public void info(Object message, Throwable throwable) {
-        PolicyLogger.info(MessageCodes.GENERAL_INFO, throwable, message.toString());
+    public void info(String message, Object...arguments) {
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            PolicyLogger.info(MessageCodes.GENERAL_INFO, (Throwable)arguments[0], message.toString());
+        } else {
+            PolicyLogger.info(message, arguments);
+        }
     }
 
     /**
@@ -238,17 +251,6 @@ public class EelfLogger implements Logger, Serializable {
     @Override
     public void warn(Object message) {
         PolicyLogger.warn(className, "" + message);
-    }
-
-    /**
-     * Records a message.
-     *
-     * @param message the message
-     * @param throwable the throwable
-     */
-    @Override
-    public void warn(Object message, Throwable throwable) {
-        PolicyLogger.warn(MessageCodes.GENERAL_WARNING, throwable, message.toString());
     }
 
     /**
@@ -272,6 +274,21 @@ public class EelfLogger implements Logger, Serializable {
     @Override
     public void warn(MessageCodes msg, Throwable throwable, String... arguments) {
         PolicyLogger.warn(msg, className, throwable, arguments);
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments the arguments
+     */
+    @Override
+    public void warn(String message, Object...arguments) {
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            PolicyLogger.warn(MessageCodes.GENERAL_WARNING, (Throwable)arguments[0], message.toString());
+        } else {
+            PolicyLogger.warn(message, arguments);
+        }
     }
 
     /**
@@ -379,11 +396,15 @@ public class EelfLogger implements Logger, Serializable {
      * Records an audit message.
      *
      * @param message the message
-     * @param throwable the throwable
+     * @param arguments the arguments
      */
     @Override
-    public void audit(Object message, Throwable throwable) {
-        PolicyLogger.audit(message);
+    public void audit(String message, Object...arguments) {
+        if (arguments.length == 1) {
+            PolicyLogger.audit(message);
+        } else {
+            PolicyLogger.audit(message, arguments);
+        }
     }
 
     /**
@@ -482,6 +503,17 @@ public class EelfLogger implements Logger, Serializable {
     @Override
     public void metrics(Object message) {
         PolicyLogger.metrics(className, message);
+    }
+
+    /**
+     * Records a metrics message.
+     *
+     * @param message the message
+     * @param arguments the arguments
+     */
+    @Override
+    public void metrics(String message, Object...arguments) {
+        PolicyLogger.metrics(message, arguments);
     }
 
     /**
