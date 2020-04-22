@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,11 @@ public interface Logger {
     public void debug(Object message, Throwable throwable);
 
     /**
+     * Prints messages with the level.DEBUG
+     */
+    public void debug(String message, Object... arguments);
+
+    /**
      * Prints messages with the level.ERROR
      */
     public void error(Object message);
@@ -61,6 +66,11 @@ public interface Logger {
     public void error(MessageCodes msg, Throwable arg0, String... arguments);
 
     /**
+     * Prints messages with the level.ERROR
+     */
+    public void error(String message, Object... arguments);
+
+    /**
      * Prints messages with the level.INFO
      */
     public void info(Object message);
@@ -69,6 +79,11 @@ public interface Logger {
      * Prints messages with the level.INFO
      */
     public void info(Object message, Throwable throwable);
+
+    /**
+     * Prints messages with the level.INFO
+     */
+    public void info(String message, Object... arguments);
 
     /**
      * Prints messages with the level.WARN
@@ -91,6 +106,11 @@ public interface Logger {
     public void warn(MessageCodes msg, Throwable arg0, String... arguments);
 
     /**
+     * Prints messages with the level.WARN
+     */
+    public void warn(String message, Object... arguments);
+
+    /**
      * Prints messages with the level.TRACE
      */
     public void trace(Object message);
@@ -109,6 +129,11 @@ public interface Logger {
      * Prints messages in audit log with the level.INFO
      */
     public void audit(Object arg0, Throwable throwable);
+
+    /**
+     * Prints messages in audit log with the level.INFO
+     */
+    public void audit(String message, Object... arguments);
 
     /**
      * Records event Id in audit log with the level.INFO
@@ -155,6 +180,11 @@ public interface Logger {
      * Records the Metrics log message.
      */
     public void metrics(Object arg0);
+
+    /**
+     * Records the Metrics log message.
+     */
+    public void metrics(String message, Object... arguments);
 
     /**
      * Returns a boolean value, true for debug logging enabled, false for not enabled.

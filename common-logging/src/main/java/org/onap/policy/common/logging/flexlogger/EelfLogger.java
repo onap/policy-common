@@ -166,6 +166,17 @@ public class EelfLogger implements Logger, Serializable {
     }
 
     /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments the arguments for message
+     */
+    @Override
+    public void debug(String message, Object... arguments) {
+        PolicyLogger.debug(message, arguments);
+    }
+
+    /**
      * Records an error message.
      *
      * @param message the message
@@ -210,6 +221,17 @@ public class EelfLogger implements Logger, Serializable {
     }
 
     /**
+     * Records an error message.
+     *
+     * @param message the message
+     * @param arguments the arguments for message
+     */
+    @Override
+    public void error(String message, Object... arguments) {
+        PolicyLogger.error(message, arguments);
+    }
+
+    /**
      * Records a message.
      *
      * @param message the message
@@ -228,6 +250,17 @@ public class EelfLogger implements Logger, Serializable {
     @Override
     public void info(Object message, Throwable throwable) {
         PolicyLogger.info(MessageCodes.GENERAL_INFO, throwable, message.toString());
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments the arguments for message
+     */
+    @Override
+    public void info(String message, Object... arguments) {
+        PolicyLogger.info(message, arguments);
     }
 
     /**
@@ -272,6 +305,17 @@ public class EelfLogger implements Logger, Serializable {
     @Override
     public void warn(MessageCodes msg, Throwable throwable, String... arguments) {
         PolicyLogger.warn(msg, className, throwable, arguments);
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments the arguments for message
+     */
+    @Override
+    public void warn(String message, Object... arguments) {
+        PolicyLogger.warn(message, arguments);
     }
 
     /**
@@ -387,6 +431,17 @@ public class EelfLogger implements Logger, Serializable {
     }
 
     /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments the arguments for message
+     */
+    @Override
+    public void audit(String message, Object... arguments) {
+        PolicyLogger.audit(message, arguments);
+    }
+
+    /**
      * Records an audit message.
      *
      * @param eventId the event ID
@@ -482,6 +537,17 @@ public class EelfLogger implements Logger, Serializable {
     @Override
     public void metrics(Object message) {
         PolicyLogger.metrics(className, message);
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments the arguments for message
+     */
+    @Override
+    public void metrics(String message, Object... arguments) {
+        PolicyLogger.metrics(message, arguments);
     }
 
     /**
