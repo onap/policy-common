@@ -36,6 +36,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.PARTNER_NAME;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.RESPONSE_CODE;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.RESPONSE_DESCRIPTION;
@@ -200,6 +202,9 @@ public class PolicyLoggerTest {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.info("str1", "str2");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isInfoEnabled()).thenReturn(true);
+        PolicyLogger.info("str1", "str2");
         Mockito.verify(mockLogger).info(MessageCodes.GENERAL_INFO, "str2");
     }
 
@@ -243,6 +248,9 @@ public class PolicyLoggerTest {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn("str1", "str2");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isWarnEnabled()).thenReturn(true);
+        PolicyLogger.warn("str1", "str2");
         Mockito.verify(mockLogger).warn(MessageCodes.GENERAL_INFO, "str2");
     }
 
@@ -285,6 +293,9 @@ public class PolicyLoggerTest {
     public void testErrorStringString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
+        PolicyLogger.error("str1", "str2");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isErrorEnabled()).thenReturn(true);
         PolicyLogger.error("str1", "str2");
         Mockito.verify(mockLogger).error(MessageCodes.GENERAL_ERROR, "str2");
         assertEquals("500", MDC.get("ErrorCode"));
@@ -356,6 +367,9 @@ public class PolicyLoggerTest {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.debug("str1", "str2");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isDebugEnabled()).thenReturn(true);
+        PolicyLogger.debug("str1", "str2");
         Mockito.verify(mockLogger).debug(MessageCodes.GENERAL_INFO, "str2");
     }
 
@@ -379,6 +393,9 @@ public class PolicyLoggerTest {
     public void testAuditStringObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "auditLogger", mockLogger);
+        PolicyLogger.audit("PolicyLoggerTest", 1);
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isInfoEnabled()).thenReturn(true);
         PolicyLogger.audit("PolicyLoggerTest", 1);
         assertEquals("PolicyLoggerTest", MDC.get("ClassName"));
         assertEquals("COMPLETE", MDC.get("StatusCode"));
@@ -590,6 +607,9 @@ public class PolicyLoggerTest {
     public void testMetricsStringObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "metricsLogger", mockLogger);
+        PolicyLogger.metrics("PolicyLoggerTest", 1);
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isInfoEnabled()).thenReturn(true);
         PolicyLogger.metrics("PolicyLoggerTest", 1);
         Mockito.verify(mockLogger).info(Mockito.eq(MessageCodes.RULE_METRICS_INFO), Mockito.anyString(),
                 Mockito.eq("1"));

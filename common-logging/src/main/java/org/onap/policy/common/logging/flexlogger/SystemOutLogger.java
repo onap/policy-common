@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.UUID;
 
+import org.onap.policy.common.logging.OnapLoggingUtils;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.eelf.PolicyLogger;
 
@@ -152,6 +153,21 @@ public class SystemOutLogger implements Logger, Serializable {
     }
 
     /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments variable number of arguments
+     */
+    @Override
+    public void debug(String message, Object...arguments) {
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            displayMessage(transId + "|" + className + " : " + message + ":" + arguments[0]);
+        } else {
+            displayMessage(OnapLoggingUtils.formatMessage(message, arguments));
+        }
+    }
+
+    /**
      * Records an error message.
      *
      * @param message the message
@@ -193,8 +209,22 @@ public class SystemOutLogger implements Logger, Serializable {
      */
     @Override
     public void error(MessageCodes msg, String... arguments) {
-
         displayMessage(transId + "|" + className + " : " + "MessageCode:" + msg + Arrays.asList(arguments));
+    }
+
+    /**
+     * Records a error message.
+     *
+     * @param message the message
+     * @param arguments variable number of arguments
+     */
+    @Override
+    public void error(String message, Object...arguments) {
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            displayMessage(transId + "|" + className + " : " + message + ":" + arguments[0]);
+        } else {
+            displayMessage(OnapLoggingUtils.formatMessage(message, arguments));
+        }
     }
 
     /**
@@ -222,21 +252,25 @@ public class SystemOutLogger implements Logger, Serializable {
      * Records a message.
      *
      * @param message the message
+     * @param arguments variable number of arguments
      */
     @Override
-    public void warn(Object message) {
-        displayMessage(transId + "|" + className + " : " + message);
+    public void info(String message, Object...arguments) {
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            displayMessage(transId + "|" + className + " : " + message + ":" + arguments[0]);
+        } else {
+            displayMessage(OnapLoggingUtils.formatMessage(message, arguments));
+        }
     }
 
     /**
      * Records a message.
      *
      * @param message the message
-     * @param throwable the throwable
      */
     @Override
-    public void warn(Object message, Throwable throwable) {
-        displayMessage(transId + "|" + className + " : " + message + ":" + throwable);
+    public void warn(Object message) {
+        displayMessage(transId + "|" + className + " : " + message);
     }
 
     /**
@@ -254,6 +288,17 @@ public class SystemOutLogger implements Logger, Serializable {
     /**
      * Records a message.
      *
+     * @param message the message
+     * @param throwable the throwable
+     */
+    @Override
+    public void warn(Object message, Throwable throwable) {
+        displayMessage(transId + "|" + className + " : " + message + ":" + throwable);
+    }
+
+    /**
+     * Records a message.
+     *
      * @param msg the message code
      * @param throwable the throwable
      * @param arguments the messages
@@ -263,6 +308,21 @@ public class SystemOutLogger implements Logger, Serializable {
 
         displayMessage(transId + "|" + className + " : " + "MessageCodes:" + msg + Arrays.asList(arguments));
 
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments variable number of arguments
+     */
+    @Override
+    public void warn(String message, Object...arguments) {
+        if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
+            displayMessage(transId + "|" + className + " : " + message + ":" + arguments[0]);
+        } else {
+            displayMessage(OnapLoggingUtils.formatMessage(message, arguments));
+        }
     }
 
     /**
@@ -373,6 +433,20 @@ public class SystemOutLogger implements Logger, Serializable {
     /**
      * Records an audit message.
      *
+     * @param message the message
+     */
+    @Override
+    public void audit(String message, Object... arguments) {
+        if (arguments.length == 1) {
+            displayMessage(transId + "|" + className + " : " + message + ":" + arguments[0]);
+        } else {
+            displayMessage(OnapLoggingUtils.formatMessage(message, arguments));
+        }
+    }
+
+    /**
+     * Records an audit message.
+     *
      * @param eventId the event ID
      */
     @Override
@@ -477,6 +551,21 @@ public class SystemOutLogger implements Logger, Serializable {
     public void metrics(Object message) {
 
         displayMessage(className + " : " + message);
+    }
+
+    /**
+     * Records a metrics message.
+     *
+     * @param message the message
+     * @param arguments the arguments
+     */
+    @Override
+    public void metrics(String message, Object... arguments) {
+        if (arguments.length == 1) {
+            displayMessage(className + " : " + message + " : " + arguments[0]);
+        } else {
+            displayMessage(OnapLoggingUtils.formatMessage(message, arguments));
+        }
     }
 
     /**
