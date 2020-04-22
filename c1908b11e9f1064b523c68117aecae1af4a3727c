@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81f2385c_7d4f2486",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/EelfLogger.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-22T21:22:29Z",
+      "side": 1,
+      "message": "Update copyright to include 2020. Same comment for other files.",
+      "revId": "c1908b11e9f1064b523c68117aecae1af4a3727c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ca7f466_a0b371b0",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-22T21:22:29Z",
+      "side": 1,
+      "message": "Did you still want to use the utility you wrote to translate \"{}\" for loggers that don\u0027t support that capability out of the box?",
+      "revId": "c1908b11e9f1064b523c68117aecae1af4a3727c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
