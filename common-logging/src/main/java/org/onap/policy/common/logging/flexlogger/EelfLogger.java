@@ -25,6 +25,7 @@ import com.att.eelf.configuration.EELFLogger.Level;
 import java.io.Serializable;
 import java.util.UUID;
 
+import org.onap.policy.common.logging.OnapLoggingUtils;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.eelf.PolicyLogger;
 
@@ -166,6 +167,22 @@ public class EelfLogger implements Logger, Serializable {
     }
 
     /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments variable number of arguments
+     */
+    @Override
+    public void debug(Object message, Object ...arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            debug(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            PolicyLogger.debug(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
+    }
+
+    /**
      * Records an error message.
      *
      * @param message the message
@@ -210,6 +227,22 @@ public class EelfLogger implements Logger, Serializable {
     }
 
     /**
+     * Records an error message.
+     *
+     * @param message the text message
+     * @param arguments the arguments for error message
+     */
+    @Override
+    public void error(Object message, Object... arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            error(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            PolicyLogger.error(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
+    }
+
+    /**
      * Records a message.
      *
      * @param message the message
@@ -228,6 +261,22 @@ public class EelfLogger implements Logger, Serializable {
     @Override
     public void info(Object message, Throwable throwable) {
         PolicyLogger.info(MessageCodes.GENERAL_INFO, throwable, message.toString());
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the text message
+     * @param arguments the arguments for message
+     */
+    @Override
+    public void info(Object message, Object... arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            info(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            PolicyLogger.info(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
     }
 
     /**
@@ -277,6 +326,22 @@ public class EelfLogger implements Logger, Serializable {
     /**
      * Records a message.
      *
+     * @param message the text message
+     * @param arguments the arguments for message
+     */
+    @Override
+    public void warn(Object message, Object... arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            warn(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            PolicyLogger.warn(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
+    }
+
+    /**
+     * Records a message.
+     *
      * @param message the message
      */
     @Override
@@ -293,6 +358,22 @@ public class EelfLogger implements Logger, Serializable {
     @Override
     public void trace(Object message, Throwable throwable) {
         PolicyLogger.trace(message);
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the text message
+     * @param arguments the arguments for message
+     */
+    @Override
+    public void trace(Object message, Object... arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            trace(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            PolicyLogger.trace(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
     }
 
     /**
@@ -384,6 +465,22 @@ public class EelfLogger implements Logger, Serializable {
     @Override
     public void audit(Object message, Throwable throwable) {
         PolicyLogger.audit(message);
+    }
+
+    /**
+     * Records an audit message.
+     *
+     * @param message the text message
+     * @param arguments the arguments for message
+     */
+    @Override
+    public void audit(Object message, Object... arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            audit(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            PolicyLogger.audit(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
     }
 
     /**
@@ -482,6 +579,22 @@ public class EelfLogger implements Logger, Serializable {
     @Override
     public void metrics(Object message) {
         PolicyLogger.metrics(className, message);
+    }
+
+    /**
+     * Records a metrics message.
+     *
+     * @param message the text message
+     * @param arguments the arguments for message
+     */
+    @Override
+    public void metrics(Object message, Object... arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            metrics(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            PolicyLogger.metrics(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
     }
 
     /**

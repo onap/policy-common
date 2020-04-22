@@ -41,6 +41,11 @@ public interface Logger {
     public void debug(Object message, Throwable throwable);
 
     /**
+     * Prints messages with the level.DEBUG
+     */
+    public void debug(Object message, Object ...arguments);
+
+    /**
      * Prints messages with the level.ERROR
      */
     public void error(Object message);
@@ -61,6 +66,11 @@ public interface Logger {
     public void error(MessageCodes msg, Throwable arg0, String... arguments);
 
     /**
+     * Prints messages with the level.ERROR
+     */
+    public void error(Object msg, Object... arguments);
+
+    /**
      * Prints messages with the level.INFO
      */
     public void info(Object message);
@@ -69,6 +79,11 @@ public interface Logger {
      * Prints messages with the level.INFO
      */
     public void info(Object message, Throwable throwable);
+
+    /**
+     * Prints messages with the level.INFO
+     */
+    public void info(Object msg, Object... arguments);
 
     /**
      * Prints messages with the level.WARN
@@ -91,6 +106,11 @@ public interface Logger {
     public void warn(MessageCodes msg, Throwable arg0, String... arguments);
 
     /**
+     * Prints messages with the level.WARN
+     */
+    public void warn(Object msg, Object... arguments);
+
+    /**
      * Prints messages with the level.TRACE
      */
     public void trace(Object message);
@@ -101,6 +121,11 @@ public interface Logger {
     public void trace(Object message, Throwable throwable);
 
     /**
+     * Prints messages with the level.TRACE
+     */
+    public void trace(Object msg, Object... arguments);
+
+    /**
      * Prints messages in audit log with the level.INFO
      */
     public void audit(Object arg0);
@@ -109,6 +134,11 @@ public interface Logger {
      * Prints messages in audit log with the level.INFO
      */
     public void audit(Object arg0, Throwable throwable);
+
+    /**
+     * Prints messages in audit log with the level.INFO
+     */
+    public void audit(Object msg, Object... arguments);
 
     /**
      * Records event Id in audit log with the level.INFO
@@ -155,6 +185,11 @@ public interface Logger {
      * Records the Metrics log message.
      */
     public void metrics(Object arg0);
+
+    /**
+     * Records the Metrics log message.
+     */
+    public void metrics(Object msg, Object... arguments);
 
     /**
      * Returns a boolean value, true for debug logging enabled, false for not enabled.

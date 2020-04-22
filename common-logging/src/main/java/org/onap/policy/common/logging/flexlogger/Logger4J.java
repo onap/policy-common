@@ -33,6 +33,7 @@ import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.Priority;
+import org.onap.policy.common.logging.OnapLoggingUtils;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.eelf.PolicyLogger;
 
@@ -115,6 +116,22 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     }
 
     /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments variable number of arguments
+     */
+    @Override
+    public void debug(Object message, Object ...arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            debug(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            log.debug(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
+    }
+
+    /**
      * Records an error message.
      *
      * @param message the message
@@ -160,6 +177,22 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     }
 
     /**
+     * Records an error message.
+     *
+     * @param message the message
+     * @param arguments arguments to error message
+     */
+    @Override
+    public void error(Object message, Object ...arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            error(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            log.error(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
+    }
+
+    /**
      * Records a message.
      *
      * @param message the message
@@ -178,6 +211,22 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     @Override
     public void info(Object message, Throwable throwable) {
         log.info(message, throwable);
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments arguments to error message
+     */
+    @Override
+    public void info(Object message, Object ...arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            info(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            log.info(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
     }
 
     /**
@@ -228,6 +277,22 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
      * Records a message.
      *
      * @param message the message
+     * @param arguments arguments to error message
+     */
+    @Override
+    public void warn(Object message, Object ...arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            warn(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            log.warn(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the message
      */
     @Override
     public void trace(Object message) {
@@ -243,6 +308,22 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     @Override
     public void trace(Object message, Throwable throwable) {
         log.trace(message, throwable);
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments arguments to message
+     */
+    @Override
+    public void trace(Object message, Object ...arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            trace(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            log.trace(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
     }
 
     /**
@@ -328,6 +409,22 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     @Override
     public void audit(Object message, Throwable throwable) {
         log.info(message, throwable);
+    }
+
+    /**
+     * Records an audit message.
+     *
+     * @param message the message
+     * @param arguments arguments to error message
+     */
+    @Override
+    public void audit(Object message, Object ...arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            audit(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            log.info(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
     }
 
     /**
@@ -444,6 +541,22 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     }
 
     /**
+     * Records a metrics message.
+     *
+     * @param message the message
+     * @param arguments arguments to metrics message
+     */
+    @Override
+    public void metrics(Object message, Object ...arguments) {
+        if (arguments.length > 0 && OnapLoggingUtils.isThrowable(arguments[arguments.length - 1])) {
+            metrics(OnapLoggingUtils.formatMessage((String)message, arguments),
+                (Throwable)arguments[arguments.length - 1]);
+        } else {
+            log.info(OnapLoggingUtils.formatMessage((String)message, arguments));
+        }
+    }
+
+    /**
      * Returns transaction Id.
      *
      * @param transId the transaction ID
@@ -511,4 +624,5 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
         // look up associated logger
         log = Logger.getLogger(className);
     }
+
 }
