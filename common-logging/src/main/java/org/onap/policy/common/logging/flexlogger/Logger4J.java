@@ -115,6 +115,17 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     }
 
     /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments variable number of arguments
+     */
+    @Override
+    public void debug(String message, Object... arguments) {
+        log.debug(transId + "|" + className + "|" + "Message :" + message + Arrays.asList(arguments));
+    }
+
+    /**
      * Records an error message.
      *
      * @param message the message
@@ -163,6 +174,17 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
      * Records a message.
      *
      * @param message the message
+     * @param arguments variable number of arguments
+     */
+    @Override
+    public void error(String message, Object... arguments) {
+        log.error(transId + "|" + className + "|" + "Message :" + message + Arrays.asList(arguments));
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the message
      */
     @Override
     public void info(Object message) {
@@ -178,6 +200,17 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     @Override
     public void info(Object message, Throwable throwable) {
         log.info(message, throwable);
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments variable number of arguments
+     */
+    @Override
+    public void info(String message, Object... arguments) {
+        log.info(transId + "|" + className + "|" + "Message :" + message + Arrays.asList(arguments));
     }
 
     /**
@@ -222,6 +255,17 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     @Override
     public void warn(MessageCodes msg, Throwable throwable, String... arguments) {
         log.warn(className + "|" + "MessageCodes:" + msg + Arrays.asList(arguments));
+    }
+
+    /**
+     * Records a message.
+     *
+     * @param message the message
+     * @param arguments variable number of arguments
+     */
+    @Override
+    public void warn(String message, Object... arguments) {
+        log.warn(transId + "|" + className + "|" + "Message :" + message + Arrays.asList(arguments));
     }
 
     /**
@@ -328,6 +372,17 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     @Override
     public void audit(Object message, Throwable throwable) {
         log.info(message, throwable);
+    }
+
+    /**
+     * Records an audit message.
+     *
+     * @param message the message
+     * @param arguments variable number of arguments
+     */
+    @Override
+    public void audit(String message, Object... arguments) {
+        log.info(transId + "|" + className + "|" + "Message :" + message + Arrays.asList(arguments));
     }
 
     /**
@@ -441,6 +496,17 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     @Override
     public void metrics(Object message) {
         log.info(message);
+    }
+
+    /**
+     * Records a metrics message.
+     *
+     * @param message the message
+     * @param arguments variable number of arguments
+     */
+    @Override
+    public void metrics(String message, Object... arguments) {
+        log.info(transId + "|" + className + "|" + "Message :" + message + Arrays.asList(arguments));
     }
 
     /**

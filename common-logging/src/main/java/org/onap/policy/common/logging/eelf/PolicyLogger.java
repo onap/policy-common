@@ -483,6 +483,18 @@ public class PolicyLogger {
     }
 
     /**
+     * Records a message with passed in message text and variable number of arguments.
+     *
+     * @param message the message text
+     * @param arguments variable number of arguments
+     */
+    public static void info(String message, Object... arguments) {
+        seTimeStamps();
+        MDC.put(classNameProp, "");
+        debugLogger.info(message, arguments);
+    }
+
+    /**
      * Records only one String message with its class name.
      *
      * @param arg0 log message
@@ -550,6 +562,18 @@ public class PolicyLogger {
         MDC.put(classNameProp, className);
         String arguments2 = getNormalizedStackTrace(arg0, arguments);
         debugLogger.warn(msg, arguments2);
+    }
+
+    /**
+     * Records a message with passed in message text and variable number of arguments.
+     *
+     * @param message the message text
+     * @param arguments variable number of arguments
+     */
+    public static void warn(String message, Object... arguments) {
+        seTimeStamps();
+        MDC.put(classNameProp, "");
+        debugLogger.warn(message, arguments);
     }
 
     /**
@@ -629,6 +653,18 @@ public class PolicyLogger {
     }
 
     /**
+     * Records a message with passed in message text and variable number of arguments.
+     *
+     * @param message the message text
+     * @param arguments variable number of arguments
+     */
+    public static void error(String message, Object... arguments) {
+        MDC.put(classNameProp, "");
+        setErrorCode(MessageCodes.GENERAL_ERROR);
+        errorLogger.error(message, arguments);
+    }
+
+    /**
      * Records a message with passed in message code and a list of string values.
      *
      * @param msg the message code
@@ -700,6 +736,17 @@ public class PolicyLogger {
     }
 
     /**
+     * Records a message with passed in message text and variable number of arguments.
+     *
+     * @param message the message text
+     * @param arguments variable number of arguments
+     */
+    public static void debug(String message, Object... arguments) {
+        MDC.put(classNameProp, "");
+        debugLogger.debug(message, arguments);
+    }
+
+    /**
      * Records only one String message with its class name.
      *
      * @param className the class name
@@ -724,6 +771,20 @@ public class PolicyLogger {
         MDC.put(RESPONSE_CODE, "0");
         MDC.put(classNameProp, "");
         auditLogger.info("" + arg0);
+    }
+
+    /**
+     * Records a message with passed in message text and variable number of arguments.
+     *
+     * @param message the message text
+     * @param arguments variable number of arguments
+     */
+    public static void audit(String message, Object... arguments) {
+        MDC.put(INVOCATION_ID, postMdcInfoForEvent(null));
+        MDC.put(STATUS_CODE, COMPLETE_STATUS);
+        MDC.put(RESPONSE_CODE, "0");
+        MDC.put(classNameProp, "");
+        auditLogger.info(message, arguments);
     }
 
     /**
@@ -1093,6 +1154,7 @@ public class PolicyLogger {
      * @param arg0 the message
      */
     public static void metrics(String arg0) {
+        seTimeStamps();
         MDC.put(INVOCATION_ID, MDC.get(MDC_KEY_REQUEST_ID));
         MDC.put(RESPONSE_CODE, "0");
         String serviceName = MDC.get(MDC_SERVICE_NAME);
@@ -1125,6 +1187,20 @@ public class PolicyLogger {
         MDC.put(classNameProp, "");
         String serviceName = MDC.get(MDC_SERVICE_NAME);
         metricsLogger.info(MessageCodes.RULE_METRICS_INFO, serviceName, "" + arg0);
+    }
+
+    /**
+     * Records a message with passed in message text and variable number of arguments.
+     *
+     * @param message the message text
+     * @param arguments variable number of arguments
+     */
+    public static void metrics(String message, Object... arguments) {
+        seTimeStamps();
+        MDC.put(INVOCATION_ID, postMdcInfoForEvent(null));
+        MDC.put(RESPONSE_CODE, "0");
+        MDC.put(classNameProp, "");
+        metricsLogger.info(message, arguments);
     }
 
     /**
