@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a3f5ed5b_ea1717aa",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-23T14:41:09Z",
+      "side": 1,
+      "message": "Good catch.  Looking at 441, it makes me wonder if these new methods should also set/pass a message code like the old method.",
+      "parentUuid": "3064156a_f729df50",
+      "revId": "e9d55980e436840f224c8a366612376e6d7a3cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "cfc4aa27_8f6af01b",
         "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
         "patchSetId": 3
