@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "165ee029_e8082c02",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-23T13:48:39Z",
+      "side": 1,
+      "message": "Suggestion: It would be nice if the added methods in this class also supported formatted messages too. In that case, I would extract \u0027formatMessage()\u0027 from the Logger4j class and put it in a utility class to avoid duplicate code, like you had in a previous patch.",
+      "revId": "e9d55980e436840f224c8a366612376e6d7a3cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
