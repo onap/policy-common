@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "174d79a5_c502e26c",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 336,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-23T22:10:51Z",
+      "side": 1,
+      "message": "oops",
+      "revId": "5f2248378c5384449dade0769c59dce2a5ea8432",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3db10c4d_5dcc93fc",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-23T22:10:51Z",
+      "side": 1,
+      "message": "should delete this and the others (i.e., debug, warn, error) too",
+      "revId": "5f2248378c5384449dade0769c59dce2a5ea8432",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
