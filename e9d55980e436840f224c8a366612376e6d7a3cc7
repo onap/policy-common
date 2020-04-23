@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "3064156a_f729df50",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 490,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-04-23T14:37:01Z",
+      "side": 1,
+      "message": "I think  this new method signature will be hiding this method in line 441:  \npublic static void info(String className, String arg0)\nYou may be able to remove the 441 method if the had the same body, but they don\u0027t.\n\nCan you test it out and verify which method is called when calling\n info(\"a\", \"b\") and get back to us?\n\nThis is a general question, it also applies to warn below ..",
+      "revId": "e9d55980e436840f224c8a366612376e6d7a3cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "165ee029_e8082c02",
         "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
         "patchSetId": 3
