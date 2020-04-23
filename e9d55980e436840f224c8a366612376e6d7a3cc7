@@ -19,6 +19,74 @@
     },
     {
       "key": {
+        "uuid": "cfc4aa27_8f6af01b",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 661,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-23T14:38:53Z",
+      "side": 1,
+      "message": "need to call seTimestamps() ?\n\nsame question for the various methods below",
+      "revId": "e9d55980e436840f224c8a366612376e6d7a3cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bbf2c4d8_0f1a4f15",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-23T14:38:53Z",
+      "side": 1,
+      "message": "it would probably be good to invoke the appropriate isXxxEnabled() method, so-as to avoid doing the formatMessage if it is unnecessary.\n\nsame comment for the subsequent changes",
+      "revId": "e9d55980e436840f224c8a366612376e6d7a3cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db3ad690_b0d59075",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-23T14:38:53Z",
+      "side": 1,
+      "message": "The signature of this call to debug() will match both lines 113 and 124.  Depending on which one javac chooses, this could result in inifinite recursion.  Perhaps change it to invoke log.debug() instead of debug().\n\nSame comment for the subsequent changes",
+      "revId": "e9d55980e436840f224c8a366612376e6d7a3cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9833e42e_dd1f733d",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 646,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-23T14:38:53Z",
+      "side": 1,
+      "message": "is the \"|| ...\" portion needed?  I think the first portion is sufficient, unless there\u0027s some specific oddity that this handles.",
+      "revId": "e9d55980e436840f224c8a366612376e6d7a3cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "165ee029_e8082c02",
         "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
         "patchSetId": 3
@@ -30,6 +98,24 @@
       "writtenOn": "2020-04-23T13:48:39Z",
       "side": 1,
       "message": "Suggestion: It would be nice if the added methods in this class also supported formatted messages too. In that case, I would extract \u0027formatMessage()\u0027 from the Logger4j class and put it in a utility class to avoid duplicate code, like you had in a previous patch.",
+      "revId": "e9d55980e436840f224c8a366612376e6d7a3cc7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1abd10d1_391ef69f",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-23T14:38:53Z",
+      "side": 1,
+      "message": "Agreed",
+      "parentUuid": "165ee029_e8082c02",
       "revId": "e9d55980e436840f224c8a366612376e6d7a3cc7",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
