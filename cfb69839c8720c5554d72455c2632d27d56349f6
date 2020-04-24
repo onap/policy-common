@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fb614a7b_30ba0915",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/EelfLogger.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T19:45:44Z",
+      "side": 1,
+      "message": "I\u0027m sorry.  This is just getting more complicated than it needs to be, particularly since PolicyLogger already does all of the argument stuff.  Let\u0027s just put this class back the way it was and simply add the String/Args methods for info, debug, warn, error, audit, metrics:\n\n  debug(String message, Object[] args) {\n    PolicyLogger.debug(message, args)\n  }",
+      "revId": "cfb69839c8720c5554d72455c2632d27d56349f6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6feb31c9_4cd9dbff",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T19:45:44Z",
+      "side": 1,
+      "message": "don\u0027t need \".toString()\"",
+      "revId": "cfb69839c8720c5554d72455c2632d27d56349f6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
