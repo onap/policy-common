@@ -1,0 +1,616 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ae29307b_4bbe8662",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/OnapLoggingUtils.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "remove the \"|| ...\" portion of this test",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "42ea6f69_c9225b39",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "I\u0027m wondering why we\u0027re adding these hooks in multiple classes.  Seems like one should be invoking the other, in which case, it should only be needed in one class, and all of the code should use that one class.\n\nIn other words, no classes should be invoking the EELFLoggers directly, but should be using PolicyLogger instead.  If that were the case, then the hooks would only be needed in PolicyLogger.",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e87eff78_0e04115b",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 480,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "add return if info not enabled",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0af2866e_a2423b9f",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "toString will throw NPE if arguments[0]\u003dnull",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fe45f338_7bfd4e2f",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "use debugLogger directly",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c200db8f_4394a16a",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 491,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "should this also pass a message code?",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "57871954_6e069d34",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 559,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "add return if warn not enabled",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f22a1e0_8daf07f8",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 562,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "toString will throw NPE if arguments[0]\u003dnull",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e7389777_2893b39c",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 566,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "use debugLogger directly",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c8cce9da_21825319",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "should this also pass a message code?",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ad281214_dfbcfaa4",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 643,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "add return if error not enabled",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d02aed89_35824fd8",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 647,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "toString will throw NPE if arguments[0]\u003dnull",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bb714fea_ee7dc87f",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 651,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "use errorLogger directly",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e34b20c_56fb17f1",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 656,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "should this also pass a message code?",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c3d9197_32d5db2a",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "add return if debug not enabled",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "88caee03_1f652591",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 728,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "toString will throw NPE if arguments[0]\u003dnull",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c29fe590_77f57c4d",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 732,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "use debugLogger directly",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8550a7fe_10668a06",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 736,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "should this also pass a message code?",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3a8efea_e4209fcd",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 758,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "add return if info not enabled",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9831aac9_7d4b176b",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1166,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "add return if info not enabled",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "235ee51d_30441a17",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1173,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "toString will throw NPE if arguments[0]\u003dnull",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00c4c218_f118c6b8",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 1178,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "should this also pass a message code?",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5dfa3796_8adeca56",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "as with PolicyLogger, need to remove this method and fold it into the method on line 125\n\nsame comment for the corresponding info(), error(), and warn() methods",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06c62de4_979e4742",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "invoke log.debug",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d7e1cea6_49eb1a40",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "invoke log.error",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cff26f72_5ff853be",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "invoke log.info",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "22fe5b47_b347a477",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 285,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "invoke log.warn",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "37bc0e35_7cc4166d",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "invoke log.info",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2999c5d9_6efba5b5",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 536,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "invoke log.info",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b840668c_38a090d5",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "as with PolicyLogger, need to remove this method and fold it into the method on line 162\n\nsame comment for the corresponding info(), error(), and warn() methods",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c244e58a_55f54e57",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "invoke displayMessage",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73abbc7b_2a9d188b",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "invoke displayMessage",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2f06e247_a377a15c",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "invoke displayMessage",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebb7972f_1bbf0f61",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 325,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "invoke displayMessage",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c84a8960_42514964",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 445,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "invoke displayMessage",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3957b25_81879e15",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 570,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-24T13:23:19Z",
+      "side": 1,
+      "message": "invoke displayMessage",
+      "revId": "02e0634831510dbc295d1d281288006f1de855cf",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
