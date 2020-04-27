@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "39698f36_cff8a095",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-27T15:33:53Z",
+      "side": 1,
+      "message": "I agree that the prior implementation made that assumption but at least it was explicit in the arguments that the string was \"className\" so it gives a hint to the developer of what it is specifically using the string as. I think changing it to message is fine too but then placing the value in the MDC with the classNameProp key is a little off putting to me as it may or may not be an actual class name. That being said I don\u0027t have a strong opinion on the matter so I\u0027m fine with it if everyone else is. Perhaps a note in the Java doc that describes under what conditions message is used as a className could help clarify.",
+      "parentUuid": "30bfbb50_f0af4168",
+      "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "278d10c5_4036cb01",
         "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
         "patchSetId": 8
