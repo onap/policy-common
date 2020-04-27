@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "30bfbb50_f0af4168",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-27T15:18:45Z",
+      "side": 1,
+      "message": "That is certainly what the old method did, the method that this subsumed.  Whether it\u0027s a valid assumption or not, I\u0027m not sure.  Honestly, I\u0027m still not sure of the purpose of these changes, as I don\u0027t think we intend to modify existing code to use this new functionality.  In fact, I think we plan to eliminate flexlogger altogether.",
+      "parentUuid": "4ada5316_880fd2f0",
+      "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "278d10c5_4036cb01",
         "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
         "patchSetId": 8
@@ -70,6 +88,24 @@
     },
     {
       "key": {
+        "uuid": "d1cb0256_b67d8525",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-27T15:18:45Z",
+      "side": 1,
+      "message": "I think SystemOutLogger is the only place where we want to format the message like this - the other loggers still work differently.",
+      "parentUuid": "34bec049_1d7a9ca2",
+      "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8b3bee57_dc806006",
         "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
         "patchSetId": 8
@@ -81,6 +117,24 @@
       "writtenOn": "2020-04-27T13:55:53Z",
       "side": 1,
       "message": "What about the arguments?",
+      "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4cf6fe58_03ee8579",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-27T15:18:45Z",
+      "side": 1,
+      "message": "oh, good catch!",
+      "parentUuid": "8b3bee57_dc806006",
       "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
