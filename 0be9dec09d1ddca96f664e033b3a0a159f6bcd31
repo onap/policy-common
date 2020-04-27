@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "278d10c5_4036cb01",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 780,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-04-27T13:46:29Z",
+      "side": 1,
+      "message": "Is there a reason why these checks \"enabled\" checks are done in this method but not in the other audit ones?\nThe question will apply to all the other methods, metrics, etc ..",
+      "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
