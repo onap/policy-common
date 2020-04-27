@@ -55,6 +55,24 @@
     },
     {
       "key": {
+        "uuid": "473a5029_f5627100",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-04-27T16:08:32Z",
+      "side": 1,
+      "message": "Agreed, the doc on line 477 (and other places) should reflect the fact that this is assumed to be a class name, if there is exactly one argument and the argument is not a throwable.  Wonder how often this is used?",
+      "parentUuid": "39698f36_cff8a095",
+      "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "278d10c5_4036cb01",
         "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
         "patchSetId": 8
