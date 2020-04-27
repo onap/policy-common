@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "4ada5316_880fd2f0",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 484,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-27T13:55:53Z",
+      "side": 1,
+      "message": "So in general with these checks, there\u0027s an assumption that if there\u0027s only one argument and the it isn\u0027t a throwable, the message is the class name. That isn\u0027t always going to be the case but if everyone else is okay with that then that is okay with me. It\u0027s a small detail.",
+      "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "278d10c5_4036cb01",
         "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/PolicyLogger.java",
         "patchSetId": 8
@@ -13,6 +30,74 @@
       "writtenOn": "2020-04-27T13:46:29Z",
       "side": 1,
       "message": "Is there a reason why these checks \"enabled\" checks are done in this method but not in the other audit ones?\nThe question will apply to all the other methods, metrics, etc ..",
+      "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77d93adf_7671ef0e",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/EelfLogger.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-27T13:55:53Z",
+      "side": 1,
+      "message": "License Update",
+      "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "34bec049_1d7a9ca2",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 441,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-27T13:55:53Z",
+      "side": 1,
+      "message": "Do we really need the check for length of one? Couldn\u0027t OnapLoggingUtils.formatMessage() handle the case of only one argument?",
+      "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8b3bee57_dc806006",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/SystemOutLogger.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 565,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-27T13:55:53Z",
+      "side": 1,
+      "message": "What about the arguments?",
+      "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "91b3ed63_34704031",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/EelfLoggerTest.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-27T13:55:53Z",
+      "side": 1,
+      "message": "License Update",
       "revId": "0be9dec09d1ddca96f664e033b3a0a159f6bcd31",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
