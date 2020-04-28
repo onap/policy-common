@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d928e465_5504a88d",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/EelfLoggerTest.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1677
+      },
+      "writtenOn": "2020-04-28T13:31:20Z",
+      "side": 1,
+      "message": "One last license update, otherwise everything looks good!",
+      "revId": "8a8655937059ecf90b23cb9588d6031c5ae28c5f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
