@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7f22f6b_87c54f30",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/EelfLoggerTest.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-04-28T14:01:26Z",
+      "side": 1,
+      "message": "Joseph - update, not overwrite.\n2019-2020",
+      "range": {
+        "startLine": 6,
+        "startChar": 31,
+        "endLine": 6,
+        "endChar": 35
+      },
+      "revId": "4d3f91643662bedff8484cb4a0835e3d0e534541",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
