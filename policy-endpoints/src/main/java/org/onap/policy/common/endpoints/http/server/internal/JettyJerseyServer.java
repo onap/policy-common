@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019-2020 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,8 @@ import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ServerProperties;
+import org.onap.policy.common.endpoints.http.server.JsonExceptionMapper;
+import org.onap.policy.common.gson.GsonMessageBodyHandler;
 import org.onap.policy.common.utils.network.NetworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -62,10 +64,10 @@ public class JettyJerseyServer extends JettyServletServer {
     protected static final String SWAGGER_PRETTY_PRINT = "swagger.pretty.print";
 
     /**
-     * Jersey Jackson Classes Init Param Value.
+     * Jersey GSON Classes Init Param Value.
      */
-    protected static final String JERSEY_JACKSON_INIT_CLASSNAMES_PARAM_VALUE =
-            "org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider";
+    protected static final String JERSEY_GSON_INIT_CLASSNAMES_PARAM_VALUE =
+                    String.join(",", GsonMessageBodyHandler.class.getName(), JsonExceptionMapper.class.getName());
 
     /**
      * Jersey Swagger Classes Init Param Value.
@@ -91,7 +93,7 @@ public class JettyJerseyServer extends JettyServletServer {
     /**
      * The serialization provider to be used when classes are added to the service.
      */
-    private String classProvider = JERSEY_JACKSON_INIT_CLASSNAMES_PARAM_VALUE;
+    private String classProvider = JERSEY_GSON_INIT_CLASSNAMES_PARAM_VALUE;
 
     /**
      * Constructor.

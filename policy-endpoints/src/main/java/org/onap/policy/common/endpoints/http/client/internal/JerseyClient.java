@@ -59,7 +59,7 @@ public class JerseyClient implements HttpClient {
     private static Logger logger = LoggerFactory.getLogger(JerseyClient.class);
 
     protected static final String JERSEY_DEFAULT_SERIALIZATION_PROVIDER =
-                    "org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider";
+                    "org.onap.policy.common.gson.GsonMessageBodyHandler";
 
     protected final String name;
     protected final boolean https;
