@@ -60,6 +60,8 @@ public class JerseyClient implements HttpClient {
 
     protected static final String JERSEY_DEFAULT_SERIALIZATION_PROVIDER =
                     "org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider";
+    protected static final String GSON_DEFAULT_SERIALIZATION_PROVIDER =
+                    "org.onap.policy.common.gson.GsonMessageBodyHandler";
 
     protected final String name;
     protected final boolean https;
@@ -158,7 +160,7 @@ public class JerseyClient implements HttpClient {
      */
     private void registerSerProviders(String serializationProvider) throws ClassNotFoundException {
         String providers = (StringUtils.isBlank(serializationProvider)
-                        ? JERSEY_DEFAULT_SERIALIZATION_PROVIDER : serializationProvider);
+                        ? GSON_DEFAULT_SERIALIZATION_PROVIDER : serializationProvider);
         for (String prov : providers.split(",")) {
             this.client.register(Class.forName(prov));
         }
