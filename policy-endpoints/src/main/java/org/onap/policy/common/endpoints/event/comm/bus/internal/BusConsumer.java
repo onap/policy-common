@@ -35,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.dmaap.mr.client.MRClientFactory;
 import org.onap.dmaap.mr.client.impl.MRConsumerImpl;
+import org.onap.dmaap.mr.client.impl.MRConsumerImpl.MRConsumerImplBuilder;
 import org.onap.dmaap.mr.client.response.MRConsumerResponse;
 import org.onap.dmaap.mr.test.clients.ProtocolTypeConstants;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
@@ -302,10 +303,16 @@ public interface BusConsumer {
                 throw new IllegalArgumentException("No topic for DMaaP");
             }
 
-            this.consumer = new MRConsumerImpl(busTopicParams.getServers(), busTopicParams.getTopic(),
-                    busTopicParams.getConsumerGroup(), busTopicParams.getConsumerInstance(),
-                    busTopicParams.getFetchTimeout(), busTopicParams.getFetchLimit(), null,
-                    busTopicParams.getApiKey(), busTopicParams.getApiSecret());
+            this.consumer = new MRConsumerImplBuilder()
+                            .setHostPart(busTopicParams.getServers())
+                            .setTopic(busTopicParams.getTopic())
+                            .setConsumerGroup(busTopicParams.getConsumerGroup())
+                            .setConsumerId(busTopicParams.getConsumerInstance())
+                            .setTimeoutMs(busTopicParams.getFetchTimeout())
+                            .setLimit(busTopicParams.getFetchLimit())
+                            .setApiKey(busTopicParams.getApiKey())
+                            .setApiSecret(busTopicParams.getApiSecret())
+                            .createMRConsumerImpl();
 
             this.consumer.setUsername(busTopicParams.getUserName());
             this.consumer.setPassword(busTopicParams.getPassword());
