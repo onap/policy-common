@@ -31,8 +31,6 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.UUID;
 
-import org.apache.log4j.Logger;
-import org.apache.log4j.Priority;
 import org.onap.policy.common.logging.OnapLoggingUtils;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.eelf.PolicyLogger;
@@ -56,7 +54,6 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     public Logger4J(Class<?> clazz) {
         displayMessage("create instance of Logger4J");
         if (clazz != null) {
-            log = Logger.getLogger(clazz);
             className = clazz.getName();
         }
     }
@@ -69,9 +66,6 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
      */
     public Logger4J(String name, String className) {
         displayMessage("create instance of Logger4J");
-        if (name != null) {
-            log = Logger.getLogger(name);
-        }
         this.className = className;
     }
 
@@ -80,7 +74,6 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
      */
     @Override
     public void setTransId(String transId) {
-        log.info(transId);
         this.transId = transId;
     }
 
@@ -324,7 +317,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     @SuppressWarnings("deprecation")
     @Override
     public boolean isErrorEnabled() {
-        return log.isEnabledFor(Priority.ERROR);
+        return false;
     }
 
     /**
@@ -346,7 +339,7 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
     @Override
     public boolean isWarnEnabled() {
         // return log4j value
-        return log.isEnabledFor(Priority.WARN);
+        return false;
     }
 
     /**
@@ -601,7 +594,6 @@ public class Logger4J implements org.onap.policy.common.logging.flexlogger.Logge
         transId = in.readUTF();
 
         // look up associated logger
-        log = Logger.getLogger(className);
     }
 
 }
