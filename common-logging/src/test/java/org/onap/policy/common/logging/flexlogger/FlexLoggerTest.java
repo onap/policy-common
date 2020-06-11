@@ -43,13 +43,6 @@ public class FlexLoggerTest {
     }
 
     @Test
-    public void testGetLoggerClassOfQLog4j() {
-        Whitebox.setInternalState(FlexLogger.class, "loggerType", LoggerType.LOG4J);
-        Logger logger = FlexLogger.getLogger(this.getClass());
-        assertSame(logger, FlexLogger.getLogger(this.getClass()));
-    }
-
-    @Test
     public void testGetLoggerClassOfQSystemOut() {
         Whitebox.setInternalState(FlexLogger.class, "loggerType", LoggerType.SYSTEMOUT);
         Logger logger = FlexLogger.getLogger(this.getClass());
@@ -59,13 +52,6 @@ public class FlexLoggerTest {
     @Test
     public void testGetLoggerStringEelf() {
         Whitebox.setInternalState(FlexLogger.class, "loggerType", LoggerType.EELF);
-        Logger logger = FlexLogger.getLogger("str1");
-        assertSame(logger, FlexLogger.getLogger("str1"));
-    }
-
-    @Test
-    public void testGetLoggerStringLog4j() {
-        Whitebox.setInternalState(FlexLogger.class, "loggerType", LoggerType.LOG4J);
         Logger logger = FlexLogger.getLogger("str1");
         assertSame(logger, FlexLogger.getLogger("str1"));
     }
@@ -85,13 +71,6 @@ public class FlexLoggerTest {
     }
 
     @Test
-    public void testGetLoggerClassOfQBooleanLog4j() {
-        Whitebox.setInternalState(FlexLogger.class, "loggerType", LoggerType.LOG4J);
-        Logger logger = FlexLogger.getLogger(this.getClass(), true);
-        assertSame(logger, FlexLogger.getLogger(this.getClass(), true));
-    }
-
-    @Test
     public void testGetLoggerClassOfQBooleanSystemOut() {
         Whitebox.setInternalState(FlexLogger.class, "loggerType", LoggerType.SYSTEMOUT);
         Logger logger = FlexLogger.getLogger(this.getClass(), true);
@@ -101,13 +80,6 @@ public class FlexLoggerTest {
     @Test
     public void testGetLoggerStringBooleanEelf() {
         Whitebox.setInternalState(FlexLogger.class, "loggerType", LoggerType.EELF);
-        Logger logger = FlexLogger.getLogger("str1", true);
-        assertSame(logger, FlexLogger.getLogger("str1", true));
-    }
-
-    @Test
-    public void testGetLoggerStringBooleanLog4j() {
-        Whitebox.setInternalState(FlexLogger.class, "loggerType", LoggerType.LOG4J);
         Logger logger = FlexLogger.getLogger("str1", true);
         assertSame(logger, FlexLogger.getLogger("str1", true));
     }

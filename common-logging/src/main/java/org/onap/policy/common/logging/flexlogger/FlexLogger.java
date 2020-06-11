@@ -40,7 +40,6 @@ public class FlexLogger extends SecurityManager {
 
     private static final String GET_LOGGER_PREFIX = "FlexLogger:getLogger : loggerType = ";
     private static LoggerType loggerType = LoggerType.EELF;
-    private static ConcurrentHashMap<String, Logger4J> logger4JMap = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<String, EelfLogger> eelfLoggerMap = new ConcurrentHashMap<>();
     private static ConcurrentHashMap<String, SystemOutLogger> systemOutMap = new ConcurrentHashMap<>();
 
@@ -61,9 +60,6 @@ public class FlexLogger extends SecurityManager {
 
             case EELF:
                 logger = getEelfLogger(clazz, false);
-                break;
-            case LOG4J:
-                logger = getLog4JLogger();
                 break;
             case SYSTEMOUT:
             default:
@@ -87,9 +83,6 @@ public class FlexLogger extends SecurityManager {
 
             case EELF:
                 logger = getEelfLogger(null, false);
-                break;
-            case LOG4J:
-                logger = getLog4JLogger(name);
                 break;
             case SYSTEMOUT:
             default:
@@ -115,9 +108,6 @@ public class FlexLogger extends SecurityManager {
             case EELF:
                 logger = getEelfLogger(clazz, isNewTransaction);
                 break;
-            case LOG4J:
-                logger = getLog4JLogger();
-                break;
             case SYSTEMOUT:
             default:
                 logger = getSystemOutLogger();
@@ -142,9 +132,6 @@ public class FlexLogger extends SecurityManager {
             case EELF:
                 logger = getEelfLogger(null, isNewTransaction);
                 break;
-            case LOG4J:
-                logger = getLog4JLogger(name);
-                break;
             case SYSTEMOUT:
             default:
                 logger = getSystemOutLogger();
@@ -160,37 +147,6 @@ public class FlexLogger extends SecurityManager {
     public String getClassName() {
         displayMessage("getClassContext()[3].getName() " + getClassContext()[3].getName());
         return getClassContext()[3].getName();
-    }
-
-    /**
-     * Returns an instance of Logger4J.
-     */
-    private static Logger4J getLog4JLogger() {
-        String className = new FlexLogger().getClassName();
-
-        if (!logger4JMap.containsKey(className)) {
-            // for 1610 release use the default debug.log for log4j
-            Logger4J logger = new Logger4J("debugLogger", className);
-            logger4JMap.put(className, logger);
-        }
-
-        return logger4JMap.get(className);
-    }
-
-    /**
-     * Returns an instance of Logger4J.
-     *
-     * @param name the name of the logger
-     */
-    private static Logger4J getLog4JLogger(String name) {
-        String className = new FlexLogger().getClassName();
-
-        if (!logger4JMap.containsKey(className)) {
-            Logger4J logger = new Logger4J(name, className);
-            logger4JMap.put(className, logger);
-        }
-
-        return logger4JMap.get(className);
     }
 
     /**
