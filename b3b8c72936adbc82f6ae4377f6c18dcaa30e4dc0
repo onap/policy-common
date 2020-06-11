@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "535e9b93_30df6c82",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/Logger4JTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-06-11T18:06:00Z",
+      "side": 0,
+      "message": "should still have this test, but all it would just be a one-liner",
+      "revId": "b3b8c72936adbc82f6ae4377f6c18dcaa30e4dc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a341a8e_0663648c",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/Logger4JTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-06-11T18:06:00Z",
+      "side": 0,
+      "message": "same comment",
+      "revId": "b3b8c72936adbc82f6ae4377f6c18dcaa30e4dc0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}

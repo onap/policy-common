@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a0901741_d391bdcb",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/flexlogger/Logger4J.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-06-11T18:06:00Z",
+      "side": 1,
+      "message": "can this whole class be removed?",
+      "revId": "71b5063584280625441057eefdb8d7b406ed0571",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
