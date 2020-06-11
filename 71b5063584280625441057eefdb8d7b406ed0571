@@ -16,6 +16,40 @@
       "revId": "71b5063584280625441057eefdb8d7b406ed0571",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d5161d1_ff732c2d",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/Logger4JTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-06-11T18:08:20Z",
+      "side": 1,
+      "message": "2020 should not be added - it\u0027s already on the AT\u0026T line, where it belongs",
+      "revId": "71b5063584280625441057eefdb8d7b406ed0571",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9960309d_55c1ec67",
+        "filename": "integrity-audit/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-06-11T18:08:20Z",
+      "side": 1,
+      "message": "\"2019, 2020\" \u003d\u003e \"2020\"",
+      "revId": "71b5063584280625441057eefdb8d7b406ed0571",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
