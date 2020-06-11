@@ -1389,10 +1389,6 @@ public class PolicyLogger {
         switch (loggerTypeProp.toUpperCase()) {
             case "EELF":
                 return LoggerType.EELF;
-
-            case "LOG4J":
-                return LoggerType.LOG4J;
-
             case "SYSTEMOUT":
                 return LoggerType.SYSTEMOUT;
 
