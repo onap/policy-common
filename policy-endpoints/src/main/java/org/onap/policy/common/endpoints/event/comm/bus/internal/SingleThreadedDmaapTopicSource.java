@@ -23,7 +23,6 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import java.net.MalformedURLException;
 import java.util.Map;
-
 import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSource;
 import org.slf4j.Logger;

@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018, 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,6 @@ package org.onap.policy.common.im.jpa;
 
 import java.io.Serializable;
 import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -87,7 +86,7 @@ public class ImTestEntity implements Serializable {
 
     /**
      * Get the Im test Id.
-     * 
+     *
      * @return the Id
      */
     public long getImTestId() {
@@ -96,7 +95,7 @@ public class ImTestEntity implements Serializable {
 
     /**
      * Get the createdBy.
-     * 
+     *
      * @return the createdBy
      */
     public String getCreatedBy() {
@@ -105,7 +104,7 @@ public class ImTestEntity implements Serializable {
 
     /**
      * Set the createdBy.
-     * 
+     *
      * @param createdBy the createdBy to set
      */
     public void setCreatedBy(String createdBy) {
@@ -114,7 +113,7 @@ public class ImTestEntity implements Serializable {
 
     /**
      * Get the modifiedBy.
-     * 
+     *
      * @return the modifiedBy
      */
     public String getModifiedBy() {
@@ -123,7 +122,7 @@ public class ImTestEntity implements Serializable {
 
     /**
      * Set the ModifiedBy.
-     * 
+     *
      * @param modifiedBy the modifiedBy to set
      */
     public void setModifiedBy(String modifiedBy) {
@@ -132,7 +131,7 @@ public class ImTestEntity implements Serializable {
 
     /**
      * Get the modifiedDate.
-     * 
+     *
      * @return the modifiedDate
      */
     public Date getModifiedDate() {
@@ -141,7 +140,7 @@ public class ImTestEntity implements Serializable {
 
     /**
      * Set the modifiedDate.
-     * 
+     *
      * @param modifiedDate the modifiedDate to set
      */
     public void setModifiedDate(Date modifiedDate) {
@@ -150,7 +149,7 @@ public class ImTestEntity implements Serializable {
 
     /**
      * Get the createdDate.
-     * 
+     *
      * @return the createdDate
      */
     public Date getCreatedDate() {

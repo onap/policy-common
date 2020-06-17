@@ -21,7 +21,6 @@
 package org.onap.policy.common.logging.flexlogger;
 
 import java.util.UUID;
-
 import org.onap.policy.common.logging.eelf.MessageCodes;
 
 /**

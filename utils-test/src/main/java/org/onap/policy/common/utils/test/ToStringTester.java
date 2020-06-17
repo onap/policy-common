@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
- *  Modifications Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  *  Modifications Copyright (C) 2019 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,6 @@ import com.openpojo.reflection.PojoClass;
 import com.openpojo.validation.affirm.Affirm;
 import com.openpojo.validation.test.Tester;
 import com.openpojo.validation.utils.ValidationHelper;
-
 import org.hamcrest.Matcher;
 
 

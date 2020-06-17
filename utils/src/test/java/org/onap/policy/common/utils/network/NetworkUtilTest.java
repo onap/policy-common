@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-utils
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ package org.onap.policy.common.utils.network;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -67,7 +68,7 @@ public class NetworkUtilTest {
     public void testAllocPort_testAllocPortString__testAllocPortInetSocketAddress() throws Exception {
         // allocate wild-card port
         int wildCardPort = NetworkUtil.allocPort();
-        assertTrue(wildCardPort != 0);
+        assertNotEquals(0, wildCardPort);
 
         // verify that we can listen on the port
         try (ServerSocket wildSocket = new ServerSocket(wildCardPort)) {
@@ -78,10 +79,10 @@ public class NetworkUtilTest {
 
         // allocate port using host name
         int localPort = NetworkUtil.allocPort(LOCALHOST);
-        assertTrue(localPort != 0);
+        assertNotEquals(0, localPort);
 
         // the OS should have allocated a new port, even though the first has been closed
-        assertTrue(localPort != wildCardPort);
+        assertNotEquals(wildCardPort, localPort);
 
         try (ServerSocket localSocket = new ServerSocket()) {
             localSocket.bind(new InetSocketAddress(LOCALHOST, localPort));

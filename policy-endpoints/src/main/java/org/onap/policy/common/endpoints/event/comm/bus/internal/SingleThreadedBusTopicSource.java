@@ -24,7 +24,6 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.UUID;
-
 import org.onap.policy.common.endpoints.event.comm.FilterableTopicSource;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.BusTopicSource;

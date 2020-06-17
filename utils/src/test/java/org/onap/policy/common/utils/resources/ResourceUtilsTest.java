@@ -34,7 +34,6 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -234,10 +233,10 @@ public class ResourceUtilsTest {
         assertNotNull(theString);
 
         theString = ResourceUtils.getResourceAsString(tmpEmptyFile.getAbsolutePath());
-        assertTrue(theString.equals(""));
+        assertEquals("", theString);
 
         theString = ResourceUtils.getResourceAsString(tmpUsedFile.getAbsolutePath());
-        assertTrue(theString.equals("Bluebirds fly over the rainbow"));
+        assertEquals("Bluebirds fly over the rainbow", theString);
 
         theString = ResourceUtils.getResourceAsString(jarFileResource);
         assertNotNull(theString);

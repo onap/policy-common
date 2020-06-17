@@ -23,11 +23,9 @@ package org.onap.policy.common.logging.flexlogger;
 import static org.onap.policy.common.logging.flexlogger.DisplayUtils.displayMessage;
 
 import com.att.eelf.configuration.EELFLogger.Level;
-
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.UUID;
-
 import org.onap.policy.common.logging.OnapLoggingUtils;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.eelf.PolicyLogger;

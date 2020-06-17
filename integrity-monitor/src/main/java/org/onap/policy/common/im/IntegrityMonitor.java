@@ -43,6 +43,7 @@ import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.onap.policy.common.im.jmx.ComponentAdmin;
@@ -287,15 +288,15 @@ public class IntegrityMonitor {
     }
 
     protected void createOrUpdateForwardProgress(String resourceName) {
-        Query fquery = em.createQuery(QUERY_STRING);
+        TypedQuery<ForwardProgressEntity> fquery = em.createQuery(QUERY_STRING, ForwardProgressEntity.class);
         fquery.setParameter("rn", resourceName);
 
-        @SuppressWarnings("rawtypes")
-        List fpList = fquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+        List<ForwardProgressEntity> fpList =
+                        fquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
         ForwardProgressEntity fpx = null;
         if (!fpList.isEmpty()) {
             // ignores multiple results
-            fpx = (ForwardProgressEntity) fpList.get(0);
+            fpx = fpList.get(0);
             // refresh the object from DB in case cached data was returned
             em.refresh(fpx);
             if (logger.isDebugEnabled()) {
@@ -318,15 +319,17 @@ public class IntegrityMonitor {
     }
 
     protected void createOrUpdateResourceReg(String resourceName, String jmxUrl, EntityTransaction et) {
-        Query rquery = em.createQuery("Select r from ResourceRegistrationEntity r where r.resourceName=:rn");
+        TypedQuery<ResourceRegistrationEntity> rquery =
+                        em.createQuery("Select r from ResourceRegistrationEntity r where r.resourceName=:rn",
+                                        ResourceRegistrationEntity.class);
         rquery.setParameter("rn", resourceName);
 
-        @SuppressWarnings("rawtypes")
-        List rrList = rquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+        List<ResourceRegistrationEntity> rrList =
+                        rquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
         ResourceRegistrationEntity rrx = null;
         if (!rrList.isEmpty()) {
             // ignores multiple results
-            rrx = (ResourceRegistrationEntity) rrList.get(0);
+            rrx = rrList.get(0);
             // refresh the object from DB in case cached data was returned
             em.refresh(rrx);
             if (logger.isDebugEnabled()) {
@@ -555,41 +558,44 @@ public class IntegrityMonitor {
         AtomicReference<StateManagementEntity> stateManagementEntity = new AtomicReference<>();
 
         String errorMsg =
-                withinTransaction(dep + ": ForwardProgressEntity DB operation failed with exception: ", () -> {
-                    Query query =
-                            em.createQuery("Select p from ForwardProgressEntity p where p.resourceName=:resource");
-                    query.setParameter(LC_RESOURCE_STRING, dep);
+            withinTransaction(dep + ": ForwardProgressEntity DB operation failed with exception: ", () -> {
+                TypedQuery<ForwardProgressEntity> query = em.createQuery(
+                                "Select p from ForwardProgressEntity p where p.resourceName=:resource",
+                                ForwardProgressEntity.class);
+                query.setParameter(LC_RESOURCE_STRING, dep);
 
-                    @SuppressWarnings("rawtypes")
-                    List fpList =
-                            query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+                List<ForwardProgressEntity> fpList = query.setLockMode(LockModeType.NONE)
+                                .setFlushMode(FlushModeType.COMMIT).getResultList();
 
-                    if (!fpList.isEmpty()) {
-                        // exists
-                        forwardProgressEntity.set((ForwardProgressEntity) fpList.get(0));
-                        // refresh the object from DB in case cached data was
-                        // returned
-                        em.refresh(forwardProgressEntity.get());
-                        logger.debug("Found entry in ForwardProgressEntity table for dependent Resource={}", dep);
-                        return null;
+                if (!fpList.isEmpty()) {
+                    // exists
+                    forwardProgressEntity.set(fpList.get(0));
+                    // refresh the object from DB in case cached data was
+                    // returned
+                    em.refresh(forwardProgressEntity.get());
+                    logger.debug("Found entry in ForwardProgressEntity table for dependent Resource={}",
+                                    dep);
+                    return null;
 
-                    } else {
-                        return dep + ": resource not found in ForwardProgressEntity database table";
-                    }
-                });
+                } else {
+                    return dep + ": resource not found in ForwardProgressEntity database table";
+                }
+            });
 
         if (errorMsg == null) {
             errorMsg = withinTransaction(dep + ": StateManagementEntity DB read failed with exception: ", () -> {
 
                 // query if StateManagement entry exists for dependent resource
-                Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
+                TypedQuery<StateManagementEntity> query =
+                                em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource",
+                                                StateManagementEntity.class);
                 query.setParameter(LC_RESOURCE_STRING, dep);
 
-                @SuppressWarnings("rawtypes")
-                List smList = query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+                List<StateManagementEntity> smList =
+                                query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
                 if (!smList.isEmpty()) {
                     // exist
-                    stateManagementEntity.set((StateManagementEntity) smList.get(0));
+                    stateManagementEntity.set(smList.get(0));
                     // refresh the object from DB in case cached data was
                     // returned
                     em.refresh(stateManagementEntity.get());
@@ -713,15 +719,15 @@ public class IntegrityMonitor {
     }
 
     private String fpCheck2(String dep) {
-        Query fquery = em.createQuery(QUERY_STRING);
+        TypedQuery<ForwardProgressEntity> fquery = em.createQuery(QUERY_STRING, ForwardProgressEntity.class);
         fquery.setParameter("rn", dep);
 
-        @SuppressWarnings("rawtypes")
-        List fpList = fquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+        List<ForwardProgressEntity> fpList =
+                        fquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
         ForwardProgressEntity fpx;
         if (!fpList.isEmpty()) {
             // ignores multiple results
-            fpx = (ForwardProgressEntity) fpList.get(0);
+            fpx = fpList.get(0);
             // refresh the object from DB in case cached data was returned
             em.refresh(fpx);
             if (logger.isDebugEnabled()) {
@@ -794,16 +800,18 @@ public class IntegrityMonitor {
 
     private String getJmxUrlFromDb(String dep, AtomicReference<String> jmxUrl) {
         // query if ResourceRegistration entry exists for resourceName
-        Query rquery = em.createQuery("Select r from ResourceRegistrationEntity r where r.resourceName=:rn");
+        TypedQuery<ResourceRegistrationEntity> rquery =
+                        em.createQuery("Select r from ResourceRegistrationEntity r where r.resourceName=:rn",
+                                        ResourceRegistrationEntity.class);
         rquery.setParameter("rn", dep);
 
-        @SuppressWarnings("rawtypes")
-        List rrList = rquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+        List<ResourceRegistrationEntity> rrList =
+                        rquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
         ResourceRegistrationEntity rrx = null;
 
         if (!rrList.isEmpty()) {
             // ignores multiple results
-            rrx = (ResourceRegistrationEntity) rrList.get(0);
+            rrx = rrList.get(0);
             // refresh the object from DB in case cached data was
             // returned
             em.refresh(rrx);
@@ -1197,15 +1205,15 @@ public class IntegrityMonitor {
 
         try {
             // query if ForwardProgress entry exists for resourceName
-            Query fquery = em.createQuery(QUERY_STRING);
+            TypedQuery<ForwardProgressEntity> fquery = em.createQuery(QUERY_STRING, ForwardProgressEntity.class);
             fquery.setParameter("rn", resourceName);
 
-            @SuppressWarnings("rawtypes")
-            List fpList = fquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+            List<ForwardProgressEntity> fpList =
+                            fquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
             ForwardProgressEntity fpx;
             if (!fpList.isEmpty()) {
                 // ignores multiple results
-                fpx = (ForwardProgressEntity) fpList.get(0);
+                fpx = fpList.get(0);
                 // refresh the object from DB in case cached data was returned
                 em.refresh(fpx);
                 if (logger.isDebugEnabled()) {
@@ -1544,14 +1552,16 @@ public class IntegrityMonitor {
 
         try {
             // query if StateManagement entry exists for fpe resource
-            Query query = em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource");
+            TypedQuery<StateManagementEntity> query =
+                            em.createQuery("Select p from StateManagementEntity p where p.resourceName=:resource",
+                                            StateManagementEntity.class);
             query.setParameter(LC_RESOURCE_STRING, fpe.getResourceName());
 
-            @SuppressWarnings("rawtypes")
-            List smList = query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
+            List<StateManagementEntity> smList =
+                            query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
             if (!smList.isEmpty()) {
                 // exists
-                sme = (StateManagementEntity) smList.get(0);
+                sme = smList.get(0);
                 // refresh the object from DB in case cached data was
                 // returned
                 em.refresh(sme);

@@ -37,7 +37,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.PARTNER_NAME;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.RESPONSE_CODE;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.RESPONSE_DESCRIPTION;
@@ -46,11 +45,9 @@ import static org.onap.policy.common.logging.eelf.OnapConfigProperties.STATUS_CO
 
 import com.att.eelf.configuration.EELFLogger;
 import com.att.eelf.configuration.EELFLogger.Level;
-
 import java.time.Instant;
 import java.util.Properties;
 import java.util.UUID;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

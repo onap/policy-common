@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP PAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,7 +22,7 @@
 package org.onap.policy.common.utils.validation;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -48,7 +48,7 @@ public class VersionTest {
     public void testHashCode() {
         int hash = vers.hashCode();
         int hash2 = new Version(MAJOR, MINOR, PATCH + 1).hashCode();
-        assertTrue(hash != hash2);
+        assertNotEquals(hash, hash2);
     }
 
     @Test
@@ -72,16 +72,16 @@ public class VersionTest {
 
     @Test
     public void testEquals() {
-        assertFalse(vers.equals(null));
-        assertFalse(vers.equals(new Object()));
+        assertNotEquals(vers, null);
+        assertNotEquals(vers, new Object());
 
-        assertTrue(vers.equals(vers));
+        assertEquals(vers, vers);
 
-        assertTrue(vers.equals(new Version(MAJOR, MINOR, PATCH)));
+        assertEquals(vers, new Version(MAJOR, MINOR, PATCH));
 
-        assertFalse(vers.equals(new Version(MAJOR + 1, MINOR, PATCH)));
-        assertFalse(vers.equals(new Version(MAJOR, MINOR + 1, PATCH)));
-        assertFalse(vers.equals(new Version(MAJOR, MINOR, PATCH + 1)));
+        assertNotEquals(vers, new Version(MAJOR + 1, MINOR, PATCH));
+        assertNotEquals(vers, new Version(MAJOR, MINOR + 1, PATCH));
+        assertNotEquals(vers, new Version(MAJOR, MINOR, PATCH + 1));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class VersionTest {
         vers = new Version(101, 201, 301);
 
         // equals case
-        assertTrue(new Version(101, 201, 301).compareTo(vers) == 0);
+        assertEquals(0, new Version(101, 201, 301).compareTo(vers));
 
         // major takes precedence
         assertTrue(new Version(102, 200, 300).compareTo(vers) > 0);

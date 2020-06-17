@@ -27,10 +27,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -401,13 +401,13 @@ public class HttpServerTest {
         assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port2).isAlive());
 
         String response = http(portUrl + JUNIT_ECHO_HELLO);
-        assertTrue(HELLO.equals(response));
+        assertEquals(HELLO, response);
 
         response = http(portUrl + SWAGGER_JSON);
-        assertTrue(response != null);
+        assertNotNull(response);
 
         response = http(LOCALHOST_PREFIX + port2 + JUNIT_ECHO_HELLO);
-        assertTrue(HELLO.equals(response));
+        assertEquals(HELLO, response);
 
         assertThatThrownBy(() -> http(LOCALHOST_PREFIX + port2 + SWAGGER_JSON)).isInstanceOf(IOException.class);
 
@@ -429,7 +429,7 @@ public class HttpServerTest {
         assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
 
         String response = http(portUrl + JUNIT_ECHO_HELLO);
-        assertTrue(HELLO.equals(response));
+        assertEquals(HELLO, response);
 
         response = http(portUrl + "/junit/endpoints/http/servers");
         assertTrue(response.contains(randomName));
@@ -451,7 +451,7 @@ public class HttpServerTest {
         assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
 
         String response = http(portUrl + JUNIT_ECHO_HELLO);
-        assertTrue(HELLO.equals(response));
+        assertEquals(HELLO, response);
 
         HttpServletServerFactoryInstance.getServerFactory().destroy();
         assertTrue(HttpServletServerFactoryInstance.getServerFactory().inventory().isEmpty());
@@ -472,7 +472,7 @@ public class HttpServerTest {
         assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
 
         String response = http(portUrl + JUNIT_ECHO_HELLO);
-        assertTrue(HELLO.equals(response));
+        assertEquals(HELLO, response);
 
         response = http(portUrl + "/junit/endpoints/http/servers");
         assertTrue(response.contains(randomName));

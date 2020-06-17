@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_ALLOW_SELF_SIGNED_CERTIFICATES_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX;
@@ -82,7 +84,7 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
         assertNotNull(item2);
         assertEquals(item.getTopic(), item.getEffectiveTopic());
         assertNotEquals(item2.getTopic(), item2.getEffectiveTopic());
-        assertTrue(item != item2);
+        assertNotSame(item, item2);
 
         // duplicate topics, but since they aren't managed, they should be different
         T item3 = buildTopic(makeBuilder().managed(false).build());
@@ -91,9 +93,9 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
         assertNotNull(item4);
         assertEquals(MY_TOPIC, item4.getTopic());
         assertEquals(TOPIC2, item4.getEffectiveTopic());
-        assertTrue(item != item3);
-        assertTrue(item != item4);
-        assertTrue(item3 != item4);
+        assertNotSame(item, item3);
+        assertNotSame(item, item4);
+        assertNotSame(item3, item4);
 
         // two managed topics
         T item5 = buildTopic(makeBuilder().build());
@@ -102,8 +104,8 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
         assertNotNull(item6);
 
         // re-build same managed topics - should get exact same objects
-        assertTrue(item5 == buildTopic(makeBuilder().topic(MY_TOPIC).build()));
-        assertTrue(item6 == buildTopic(makeBuilder().topic(TOPIC2).build()));
+        assertSame(item5, buildTopic(makeBuilder().topic(MY_TOPIC).build()));
+        assertSame(item6, buildTopic(makeBuilder().topic(TOPIC2).build()));
     }
 
     /**
@@ -135,11 +137,11 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
 
         T item2 = buildTopic(servers, TOPIC2);
         assertNotNull(item2);
-        assertTrue(item1 != item2);
+        assertNotSame(item1, item2);
 
         // duplicate - should be the same, as these topics are managed
         T item3 = buildTopic(servers, TOPIC2);
-        assertTrue(item2 == item3);
+        assertSame(item2, item3);
     }
 
     /**

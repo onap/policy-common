@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018, 2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,6 @@ package org.onap.policy.common.im.jmx;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
 import javax.management.InstanceAlreadyExistsException;
 import javax.management.InstanceNotFoundException;
 import javax.management.MBeanRegistrationException;
@@ -31,7 +30,6 @@ import javax.management.MBeanServerFactory;
 import javax.management.MalformedObjectNameException;
 import javax.management.NotCompliantMBeanException;
 import javax.management.ObjectName;
-
 import org.onap.policy.common.im.IntegrityMonitor;
 import org.onap.policy.common.im.IntegrityMonitorException;
 import org.onap.policy.common.im.StateManagement;
@@ -54,7 +52,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 
     /**
      * Constructor.
-     * 
+     *
      * @param name the MBean name
      * @param integrityMonitor the integrity monitor
      * @param stateManager the state manager
@@ -81,7 +79,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 
     /**
      * Registers with the MBean server.
-     * 
+     *
      * @throws ComponentAdminException a JMX exception
      */
     public synchronized void register() throws ComponentAdminException {
@@ -114,7 +112,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 
     /**
      * Checks if this MBean is registered with the MBeanServer.
-     * 
+     *
      * @return true if this MBean is registered with the MBeanServer.
      */
     public boolean isRegistered() {
@@ -123,7 +121,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 
     /**
      * Unregisters with the MBean server.
-     * 
+     *
      * @throws ComponentAdminException a JMX exception
      */
     public synchronized void unregister() throws ComponentAdminException {
@@ -151,7 +149,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 
     /**
      * Finds the MBeanServer.
-     * 
+     *
      * @return the MBeanServer, or null if it is not found
      */
     public static MBeanServer findMBeanServer() {
@@ -172,7 +170,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 
     /**
      * Creates the MBeanServer (intended for unit testing only).
-     * 
+     *
      * @return the MBeanServer
      */
     public static MBeanServer createMBeanServer() {
@@ -181,7 +179,7 @@ public class ComponentAdmin implements ComponentAdminMBean {
 
     /**
      * Get the MBean object name for the specified feature name.
-     * 
+     *
      * @param componentName component name
      * @return the object name
      * @throws MalformedObjectNameException a JMX exception

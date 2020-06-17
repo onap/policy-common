@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,10 @@
 package org.onap.policy.common.logging.eelf;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
 import java.time.Instant;
-
 import org.junit.Test;
 
 public class EventDataTest {
@@ -142,32 +139,33 @@ public class EventDataTest {
         final EventData d3 = new EventData("abc", iend, istart);
 
         // same object
-        assertTrue(d1.equals(d1));
+        assertEquals(d1, d1);
 
         // compare with null
-        assertFalse(d1.equals(null));
+        assertNotEquals(d1, null);
 
         // compare with request id
-        assertTrue(d1.equals("abc"));
-        assertFalse(d1.equals("abd"));
+        // note: ignoring sonar because we want to test d1.equals(), not "abc".equals()
+        assertEquals(d1, "abc");        // NOSONAR
+        assertNotEquals(d1, "abd");
 
         // compare with int - different class type
-        assertFalse(d1.equals(10));
+        assertNotEquals(d1, 10);
 
         // "this" has null request id
-        assertFalse(new EventData().equals(d1));
+        assertNotEquals(new EventData(), d1);
 
         // both null
-        assertTrue(new EventData().equals(new EventData()));
+        assertEquals(new EventData(), new EventData());
 
         // this request id is not null, other is null
-        assertFalse(d1.equals(new EventData()));
+        assertNotEquals(d1, new EventData());
 
         // neither null, same
-        assertTrue(d1.equals(d3));
+        assertEquals(d1, d3);
 
         // neither null, diff
-        assertFalse(d1.equals(d2));
+        assertNotEquals(d1, d2);
     }
 
 }

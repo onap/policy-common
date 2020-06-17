@@ -22,7 +22,6 @@
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import java.util.UUID;
-
 import org.onap.policy.common.endpoints.event.comm.bus.BusTopicSink;
 import org.onap.policy.common.endpoints.utils.NetLoggerUtil;
 import org.onap.policy.common.endpoints.utils.NetLoggerUtil.EventType;

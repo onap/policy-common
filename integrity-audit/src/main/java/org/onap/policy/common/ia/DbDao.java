@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ import org.onap.policy.common.logging.flexlogger.Logger;
  *
  */
 public class DbDao {
-    private static final Logger logger = FlexLogger.getLogger(DbDao.class.getName());
+    private static final Logger logger = FlexLogger.getLogger();
 
     private String resourceName;
     private String persistenceUnit;
@@ -505,17 +505,16 @@ public class DbDao {
 
             // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
             // found, create a new entry
-            Query iaequery = em.createQuery(SELECT_STRING);
+            TypedQuery<IntegrityAuditEntity> iaequery = em.createQuery(SELECT_STRING, IntegrityAuditEntity.class);
             iaequery.setParameter("rn", resourceName);
             iaequery.setParameter("pu", persistenceUnit);
 
-            @SuppressWarnings("rawtypes")
-            List iaeList = iaequery.getResultList();
+            List<IntegrityAuditEntity> iaeList = iaequery.getResultList();
             IntegrityAuditEntity iae;
 
             if (!iaeList.isEmpty()) {
                 // ignores multiple results
-                iae = (IntegrityAuditEntity) iaeList.get(0);
+                iae = iaeList.get(0);
 
             } else {
                 // If it does not exist

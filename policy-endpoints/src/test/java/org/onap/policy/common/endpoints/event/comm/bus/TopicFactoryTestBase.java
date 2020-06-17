@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,8 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX;
 
@@ -126,9 +128,9 @@ public abstract class TopicFactoryTestBase<T extends Topic> extends TopicTestBas
 
         int index = 0;
         T item = lst.get(index++);
-        assertTrue(item != lst.get(index++));
-        assertTrue(item == lst.get(index++));
-        assertTrue(item == lst.get(index++));
+        assertNotSame(item, lst.get(index++));
+        assertSame(item, lst.get(index++));
+        assertSame(item, lst.get(index++));
     }
 
     /**

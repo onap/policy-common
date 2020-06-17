@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ package org.onap.policy.common.logging.eelf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
 import java.time.Instant;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -62,8 +62,8 @@ public class EventTrackInfoTest {
         info.storeEventData(data1);
         info.storeEventData(data2);
 
-        assertTrue(data1 == info.getEventDataByRequestId("abc"));
-        assertTrue(data2 == info.getEventDataByRequestId("def"));
+        assertSame(data1, info.getEventDataByRequestId("abc"));
+        assertSame(data2, info.getEventDataByRequestId("def"));
         assertNull(info.getEventDataByRequestId("hello"));
     }
 
@@ -86,14 +86,14 @@ public class EventTrackInfoTest {
         assertEquals(2, info.getEventInfo().size());
 
         // look-up by request id
-        assertTrue(data1 == info.getEventDataByRequestId("abc"));
-        assertTrue(data2 == info.getEventDataByRequestId("def"));
+        assertSame(data1, info.getEventDataByRequestId("abc"));
+        assertSame(data2, info.getEventDataByRequestId("def"));
 
         // doesn't replace existing value
         info.storeEventData(new EventData("abc", iend, istart));
         assertEquals(2, info.getEventInfo().size());
-        assertTrue(data1 == info.getEventDataByRequestId("abc"));
-        assertTrue(data2 == info.getEventDataByRequestId("def"));
+        assertSame(data1, info.getEventDataByRequestId("abc"));
+        assertSame(data2, info.getEventDataByRequestId("def"));
     }
 
     /**
@@ -111,7 +111,7 @@ public class EventTrackInfoTest {
 
         // look-up by request id
         assertNull(info.getEventDataByRequestId("abc"));
-        assertTrue(data2 == info.getEventDataByRequestId("def"));
+        assertSame(data2, info.getEventDataByRequestId("def"));
     }
 
     /**
@@ -123,8 +123,8 @@ public class EventTrackInfoTest {
         info.storeEventData(data2);
 
         assertEquals(2, info.getEventInfo().size());
-        assertTrue(data1 == info.getEventInfo().get("abc"));
-        assertTrue(data2 == info.getEventInfo().get("def"));
+        assertSame(data1, info.getEventInfo().get("abc"));
+        assertSame(data2, info.getEventInfo().get("def"));
     }
 
 }

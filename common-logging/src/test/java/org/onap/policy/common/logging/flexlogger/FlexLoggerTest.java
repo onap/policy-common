@@ -52,15 +52,15 @@ public class FlexLoggerTest {
     @Test
     public void testGetLoggerStringEelf() {
         Whitebox.setInternalState(FlexLogger.class, "loggerType", LoggerType.EELF);
-        Logger logger = FlexLogger.getLogger("str1");
-        assertSame(logger, FlexLogger.getLogger("str1"));
+        Logger logger = FlexLogger.getLogger();
+        assertSame(logger, FlexLogger.getLogger());
     }
 
     @Test
     public void testGetLoggerStringSystemOut() {
         Whitebox.setInternalState(FlexLogger.class, "loggerType", LoggerType.SYSTEMOUT);
-        Logger logger = FlexLogger.getLogger("str1");
-        assertSame(logger, FlexLogger.getLogger("str1"));
+        Logger logger = FlexLogger.getLogger();
+        assertSame(logger, FlexLogger.getLogger());
     }
 
     @Test
@@ -80,15 +80,15 @@ public class FlexLoggerTest {
     @Test
     public void testGetLoggerStringBooleanEelf() {
         Whitebox.setInternalState(FlexLogger.class, "loggerType", LoggerType.EELF);
-        Logger logger = FlexLogger.getLogger("str1", true);
-        assertSame(logger, FlexLogger.getLogger("str1", true));
+        Logger logger = FlexLogger.getLogger(true);
+        assertSame(logger, FlexLogger.getLogger(true));
     }
 
     @Test
     public void testGetLoggerStringBooleanSystemOut() {
         Whitebox.setInternalState(FlexLogger.class, "loggerType", LoggerType.SYSTEMOUT);
-        Logger logger = FlexLogger.getLogger("str1", true);
-        assertSame(logger, FlexLogger.getLogger("str1", true));
+        Logger logger = FlexLogger.getLogger(true);
+        assertSame(logger, FlexLogger.getLogger(true));
     }
 
     @Test

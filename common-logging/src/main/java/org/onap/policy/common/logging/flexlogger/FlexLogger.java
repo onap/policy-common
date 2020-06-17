@@ -29,7 +29,6 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-
 import org.onap.policy.common.logging.eelf.PolicyLogger;
 import org.onap.policy.common.logging.flexlogger.PropertyUtil.Listener;
 
@@ -73,10 +72,8 @@ public class FlexLogger extends SecurityManager {
 
     /**
      * Returns an instance of Logger.
-     *
-     * @param name the name of the logger
      */
-    public static Logger getLogger(String name) {
+    public static Logger getLogger() {
         Logger logger = null;
         displayMessage(GET_LOGGER_PREFIX + loggerType);
         switch (loggerType) {
@@ -121,10 +118,9 @@ public class FlexLogger extends SecurityManager {
     /**
      * Returns an instance of Logger.
      *
-     * @param name the name of the logger
      * @param isNewTransaction is a new transaction
      */
-    public static Logger getLogger(String name, boolean isNewTransaction) {
+    public static Logger getLogger(boolean isNewTransaction) {
         Logger logger = null;
         displayMessage(GET_LOGGER_PREFIX + loggerType);
         switch (loggerType) {

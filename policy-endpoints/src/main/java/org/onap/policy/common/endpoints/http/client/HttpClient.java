@@ -26,7 +26,6 @@ import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
-
 import org.onap.policy.common.capabilities.Startable;
 
 /**

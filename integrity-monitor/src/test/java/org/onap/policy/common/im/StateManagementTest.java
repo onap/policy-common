@@ -34,7 +34,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceException;
 import javax.persistence.QueryTimeoutException;
 import javax.persistence.TypedQuery;
-
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

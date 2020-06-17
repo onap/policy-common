@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,7 +22,6 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
@@ -76,10 +75,10 @@ public abstract class TopicBase implements Topic {
 
     /**
      * Instantiates a new Topic Base.
-     * 
+     *
      * @param servers list of servers
      * @param topic topic name
-     * 
+     *
      * @throws IllegalArgumentException if invalid parameters are present
      */
     public TopicBase(List<String> servers, String topic) {
@@ -152,7 +151,7 @@ public abstract class TopicBase implements Topic {
 
     /**
      * Broadcast event to all listeners.
-     * 
+     *
      * @param message the event
      * @return true if all notifications are performed with no error, false otherwise
      */
@@ -173,7 +172,7 @@ public abstract class TopicBase implements Topic {
 
     /**
      * Take a snapshot of current topic listeners.
-     * 
+     *
      * @return the topic listeners
      */
     protected synchronized List<TopicListener> snapshotTopicListeners() {
