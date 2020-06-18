@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a4ee9422_2d92fca2",
+        "filename": "utils-test/src/main/java/org/onap/policy/common/utils/io/Serializer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-06-18T17:49:56Z",
+      "side": 1,
+      "message": "this doesn\u0027t appear to be used anywhere else, so made it private for safety sake",
+      "revId": "6c750f414961b3956919ef457d1bf1eb82064d15",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5742c814_b8132cd8",
+        "filename": "utils-test/src/test/java/org/onap/policy/common/utils/io/SerializerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-06-18T17:49:56Z",
+      "side": 1,
+      "message": "since deserialize is private now, had to change the tests in this junit use roundTrip() instead, which invokes deserialize(), internally",
+      "revId": "6c750f414961b3956919ef457d1bf1eb82064d15",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
