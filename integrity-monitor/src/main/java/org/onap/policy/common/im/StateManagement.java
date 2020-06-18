@@ -147,7 +147,7 @@ public class StateManagement {
      *        was updated, {@code null} if no change was made
      * @throws StateManagementException if an error occurs
      */
-    private void setState(String methodName, String resourceName, ExFunction<StateManagementEntity,String> updateState)
+    private void setState(String methodName, String resourceName, ExFunction<StateManagementEntity, String> updateState)
                     throws StateManagementException {
 
         synchronized (SYNCLOCK) {
@@ -513,7 +513,7 @@ public class StateManagement {
     }
 
     @FunctionalInterface
-    private static interface ExFunction<T,R> {
+    private static interface ExFunction<T, R> {
         public R update(T object) throws IntegrityMonitorException;
     }
 

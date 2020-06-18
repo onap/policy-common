@@ -61,7 +61,7 @@ public class FeatureApiUtilsTest {
     public void testApplyFeatureFalse() {
         List<String> lst = Arrays.asList("falseF1", "exceptF2", "falseF3");
 
-        assertFalse(FeatureApiUtils.apply(lst, pred, (str,ex) -> errors.add(str)));
+        assertFalse(FeatureApiUtils.apply(lst, pred, (str, ex) -> errors.add(str)));
         assertEquals(lst.toString(), tried.toString());
         assertEquals("[exceptF2]", errors.toString());
     }

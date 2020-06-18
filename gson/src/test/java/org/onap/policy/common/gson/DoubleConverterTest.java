@@ -59,7 +59,7 @@ public class DoubleConverterTest {
         assertEquals("[list, null, 21]", list.toString());
 
         // map
-        Map<String,Object> map = new LinkedHashMap<>();
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put("map-A", "map-value");
         map.put("map-B", null);
         map.put("map-C", 22.0);
@@ -88,13 +88,13 @@ public class DoubleConverterTest {
     @Test
     public void testConvertFromDoubleMap() {
         // null is ok
-        DoubleConverter.convertFromDouble((Map<String,Object>) null);
+        DoubleConverter.convertFromDouble((Map<String, Object>) null);
 
-        Map<String,Object> map = new LinkedHashMap<>();
+        Map<String, Object> map = new LinkedHashMap<>();
         map.put("keyA", "valueA");
         map.put("keyB", 200.0);
 
-        Map<String,Object> nested = new LinkedHashMap<>();
+        Map<String, Object> nested = new LinkedHashMap<>();
         map.put("keyC", nested);
         nested.put("nested-key", 201.0);
 

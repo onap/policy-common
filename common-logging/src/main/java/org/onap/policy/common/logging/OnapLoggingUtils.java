@@ -67,7 +67,7 @@ public class OnapLoggingUtils {
      * @param arguments output arguments
      * @return
      */
-    public static String formatMessage(String format, Object ...arguments) {
+    public static String formatMessage(String format, Object...arguments) {
         if (arguments.length <= 0 || arguments[0] == null) {
             return format;
         }

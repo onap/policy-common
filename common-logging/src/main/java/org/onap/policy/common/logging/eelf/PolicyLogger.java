@@ -486,7 +486,7 @@ public class PolicyLogger {
             return;
         }
         if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
-            String arguments2 = getNormalizedStackTrace((Throwable)arguments[0], "");
+            String arguments2 = getNormalizedStackTrace((Throwable) arguments[0], "");
             debugLogger.info(MessageCodes.GENERAL_INFO, message + arguments2);
             return;
         }
@@ -571,7 +571,7 @@ public class PolicyLogger {
             return;
         }
         if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
-            String arguments2 = getNormalizedStackTrace((Throwable)arguments[0], "");
+            String arguments2 = getNormalizedStackTrace((Throwable) arguments[0], "");
             debugLogger.warn(MessageCodes.GENERAL_INFO, message + arguments2);
             return;
         }
@@ -661,7 +661,7 @@ public class PolicyLogger {
             return;
         }
         if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
-            String arguments2 = getNormalizedStackTrace((Throwable)arguments[0], "");
+            String arguments2 = getNormalizedStackTrace((Throwable) arguments[0], "");
             errorLogger.error(MessageCodes.GENERAL_ERROR, message + arguments2);
             return;
         }
@@ -747,7 +747,7 @@ public class PolicyLogger {
             return;
         }
         if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
-            String arguments2 = getNormalizedStackTrace((Throwable)arguments[0], "");
+            String arguments2 = getNormalizedStackTrace((Throwable) arguments[0], "");
             debugLogger.debug(MessageCodes.GENERAL_INFO, message + arguments2);
             return;
         }
@@ -1200,7 +1200,7 @@ public class PolicyLogger {
             return;
         }
         if (arguments.length == 1 && OnapLoggingUtils.isThrowable(arguments[0])) {
-            String arguments2 = getNormalizedStackTrace((Throwable)arguments[0], "");
+            String arguments2 = getNormalizedStackTrace((Throwable) arguments[0], "");
             metricsLogger.info(MessageCodes.RULE_METRICS_INFO, message + arguments2);
             return;
         }

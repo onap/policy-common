@@ -36,10 +36,10 @@ public class DmaapPropertyUtils {
     /**
      * Maps a topic property to a DME property.
      */
-    private static final Map<String,String> PROP_TO_DME;
+    private static final Map<String, String> PROP_TO_DME;
 
     static {
-        Map<String,String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
 
         map.put(PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ROUTE_OFFER_SUFFIX,
                         PolicyEndPointProperties.DME2_ROUTE_OFFER_PROPERTY);

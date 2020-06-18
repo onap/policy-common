@@ -44,7 +44,7 @@ public class OrderedServiceImpl<T extends OrderedService> {
     private ServiceLoader<T> serviceLoader = null;
 
     // use this to ensure that we only use one unique instance of each class
-    private static Map<Class<?>,OrderedService> classToSingleton = new HashMap<>();
+    private static Map<Class<?>, OrderedService> classToSingleton = new HashMap<>();
 
     /**
      * Constructor - create the 'ServiceLoader' instance.
@@ -86,7 +86,7 @@ public class OrderedServiceImpl<T extends OrderedService> {
         // build a list of all of the current implementors
         List<T> tmp = new LinkedList<>();
         for (T service : serviceLoader) {
-            tmp.add((T)getSingleton(service));
+            tmp.add((T) getSingleton(service));
         }
 
         // Sort the list according to sequence number, and then alphabetically

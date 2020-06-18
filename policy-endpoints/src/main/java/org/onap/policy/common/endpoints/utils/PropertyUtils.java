@@ -129,7 +129,7 @@ public class PropertyUtils {
     }
 
     @FunctionalInterface
-    public static interface TriConsumer<A,B,C> {
+    public static interface TriConsumer<A, B, C> {
         public void accept(A propName, B propValue, C exception);
     }
 }

@@ -160,7 +160,7 @@ public class TestBeanValidationResult {
 
     @Test
     public void testValidateMap() {
-        Map<String,ValidationResult> map = null;
+        Map<String, ValidationResult> map = null;
         bean = new BeanValidationResult(NAME, OBJECT);
         assertTrue(bean.validateMap(MY_MAP, map, validMapEntry()));
         assertTrue(bean.isValid());

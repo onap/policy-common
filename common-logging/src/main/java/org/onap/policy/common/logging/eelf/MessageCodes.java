@@ -149,7 +149,7 @@ public enum MessageCodes implements EELFResolvableErrorEnum {
     MESSAGE_ERROR_SAMPLE;
 
 
-    /**
+    /*
      * Static initializer to ensure the resource bundles for this class are loaded... Here this
      * application loads messages from three bundles.
      */

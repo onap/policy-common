@@ -104,7 +104,7 @@ public class PropertyObjectUtilsTest {
 
         Map<String, Object> result = PropertyObjectUtils.toObject(props, "");
         // @formatter:off
-        Map<String,Object> map =
+        Map<String, Object> map =
             Map.of("abc",
                 Arrays.asList(null, "expand.ghi", "expand.def"));
         // @formatter:on
@@ -119,7 +119,7 @@ public class PropertyObjectUtilsTest {
 
         Map<String, Object> result = PropertyObjectUtils.toObject(props, "");
         // @formatter:off
-        Map<String,Object> map =
+        Map<String, Object> map =
             Map.of("object",
                 Map.of("abc",
                     Map.of("ghi", "object.jkl")));
@@ -134,7 +134,7 @@ public class PropertyObjectUtilsTest {
 
         Map<String, Object> result = PropertyObjectUtils.toObject(props, "");
         // @formatter:off
-        Map<String,Object> map =
+        Map<String, Object> map =
             Map.of("array",
                 Map.of("abc",
                     List.of(

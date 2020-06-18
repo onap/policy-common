@@ -111,8 +111,7 @@ public class GroupValidationResult extends CommonGroupValidationResult {
         if (ParameterGroup.class.isAssignableFrom(fieldType)) {
             if (null != fieldObject) {
                 return ((ParameterGroup) fieldObject).validate();
-            }
-            else {
+            } else {
                 return new GroupValidationResult((ParameterGroup) fieldObject);
             }
         }

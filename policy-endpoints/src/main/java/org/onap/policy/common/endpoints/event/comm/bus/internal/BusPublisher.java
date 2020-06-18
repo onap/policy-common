@@ -292,8 +292,8 @@ public interface BusPublisher {
          */
         public DmaapDmePublisherWrapper(BusTopicParams busTopicParams) {
 
-            super(ProtocolTypeConstants.DME2, busTopicParams.getServers(),busTopicParams.getTopic(),
-                    busTopicParams.getUserName(),busTopicParams.getPassword(),busTopicParams.isUseHttps());
+            super(ProtocolTypeConstants.DME2, busTopicParams.getServers(), busTopicParams.getTopic(),
+                    busTopicParams.getUserName(), busTopicParams.getPassword(), busTopicParams.isUseHttps());
 
             String dme2RouteOffer = busTopicParams.isAdditionalPropsValid()
                             ? busTopicParams.getAdditionalProps().get(

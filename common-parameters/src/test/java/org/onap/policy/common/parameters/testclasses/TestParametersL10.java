@@ -109,8 +109,7 @@ public class TestParametersL10 extends ParameterGroupImpl {
     public void triggerValidationStatus(final ValidationStatus triggerStatus, int level) {
         if (level == 0) {
             return;
-        }
-        else {
+        } else {
             level--;
         }
 

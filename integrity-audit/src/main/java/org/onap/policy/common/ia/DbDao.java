@@ -332,7 +332,7 @@ public class DbDao {
      */
     public IntegrityAuditEntity getMyIntegrityAuditEntity() throws DbDaoTransactionException {
 
-        return updateIae("getMyIntegrityAuditEntity", this.resourceName, this.persistenceUnit, (em,iae) -> {
+        return updateIae("getMyIntegrityAuditEntity", this.resourceName, this.persistenceUnit, (em, iae) -> {
 
             if (iae != null) {
                 // refresh the object from DB in case cached data was returned
@@ -404,7 +404,7 @@ public class DbDao {
      */
     private void register(String altDbUrl) throws DbDaoTransactionException {
 
-        updateIae("register", this.resourceName, this.persistenceUnit, (em,iae) -> {
+        updateIae("register", this.resourceName, this.persistenceUnit, (em, iae) -> {
             IntegrityAuditEntity iae2 = iae;
 
             // If it already exists, we just want to update the properties and lastUpdated date
@@ -460,7 +460,7 @@ public class DbDao {
         logger.debug("setDesignated: enter, resourceName: " + resourceName + ", persistenceUnit: " + persistenceUnit
                 + ", designated: " + desig);
 
-        updateIae("setDesignated", resourceName, persistenceUnit, (em,iae) -> {
+        updateIae("setDesignated", resourceName, persistenceUnit, (em, iae) -> {
 
             if (iae != null) {
                 // refresh the object from DB in case cached data was returned
@@ -493,7 +493,7 @@ public class DbDao {
      * @throws DbDaoTransactionException if an error occurs
      */
     private IntegrityAuditEntity updateIae(String methodName, String resourceName, String persistenceUnit,
-                    BiConsumer<EntityManager,IntegrityAuditEntity> updater) throws DbDaoTransactionException {
+                    BiConsumer<EntityManager, IntegrityAuditEntity> updater) throws DbDaoTransactionException {
         try {
 
             EntityManager em = emf.createEntityManager();
@@ -547,7 +547,7 @@ public class DbDao {
         logger.debug("setLastUpdated: enter, resourceName: " + this.resourceName + ", persistenceUnit: "
                 + this.persistenceUnit);
 
-        updateIae("setLastUpdated", this.resourceName, this.persistenceUnit, (em,iae) -> {
+        updateIae("setLastUpdated", this.resourceName, this.persistenceUnit, (em, iae) -> {
 
             if (iae != null) {
                 // refresh the object from DB in case cached data was returned

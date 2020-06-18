@@ -44,7 +44,7 @@ public class FeatureApiUtils {
      *         otherwise
      */
     public static <T> boolean apply(List<T> providers, Predicate<T> predicate,
-                    BiConsumer<T,Exception> handleEx) {
+                    BiConsumer<T, Exception> handleEx) {
 
         for (T feature : providers) {
             try {

@@ -34,10 +34,10 @@ public class PropertyAccessExceptionTest extends SupportBasicPropertyExceptionTe
      */
     @Test
     public void testPropertyAccessExceptionStringField() {
-        verifyPropertyExceptionStringField_AllPopulated( new PropertyAccessException(PROPERTY, FIELD));
-        verifyPropertyExceptionStringField_NullProperty( new PropertyAccessException(null, FIELD));
-        verifyPropertyExceptionStringField_NullField( new PropertyAccessException(PROPERTY, null));
-        verifyPropertyExceptionStringField_BothNull( new PropertyAccessException(null, null));
+        verifyPropertyExceptionStringField_AllPopulated(new PropertyAccessException(PROPERTY, FIELD));
+        verifyPropertyExceptionStringField_NullProperty(new PropertyAccessException(null, FIELD));
+        verifyPropertyExceptionStringField_NullField(new PropertyAccessException(PROPERTY, null));
+        verifyPropertyExceptionStringField_BothNull(new PropertyAccessException(null, null));
     }
 
     /**

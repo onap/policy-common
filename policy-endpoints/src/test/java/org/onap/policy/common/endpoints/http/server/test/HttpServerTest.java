@@ -386,7 +386,7 @@ public class HttpServerTest {
         logger.info("-- testMultipleServers() --");
 
         HttpServletServer server1 = HttpServletServerFactoryInstance.getServerFactory()
-                        .build("echo-1", false,LOCALHOST, port, "/", true, true);
+                        .build("echo-1", false, LOCALHOST, port, "/", true, true);
         server1.addServletPackage("/*", this.getClass().getPackage().getName());
         server1.waitedStart(5000);
 

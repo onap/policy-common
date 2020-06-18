@@ -62,8 +62,7 @@ public class Version implements Comparable<Version> {
             this.major = newVersion.major;
             this.minor = newVersion.minor;
             this.patch = newVersion.patch;
-        }
-        else {
+        } else {
             this.major = 0;
             this.minor = 0;
             this.patch = 0;

@@ -359,7 +359,7 @@ public class IntegrityMonitor {
             // create instance of StateManagement class and pass emf to it
             stateManager = new StateManagement(emf, resourceName);
 
-            /**
+            /*
              * Initialize the state and status attributes. This will maintain any Administrative state value but will
              * set the operational state = enabled, availability status = null, standby status = null. The integrity
              * monitor will set the operational state via the FPManager and the owning application must set the standby
