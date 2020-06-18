@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,7 +80,7 @@ public class SerializerTest {
         byte[] data2 = Serializer.serialize(obj1);
         assertEquals(Arrays.toString(data), Arrays.toString(data2));
 
-        MyObject obj2 = Serializer.deserialize(MyObject.class, data);
+        MyObject obj2 = Serializer.roundTrip(obj1);
         assertEquals(obj1.value, obj2.value);
     }
 
@@ -210,16 +210,14 @@ public class SerializerTest {
             }
         });
 
-        assertThatThrownBy(() -> Serializer.serialize(new MyObject(130))).isEqualTo(ex2);
+        assertThatThrownBy(() -> Serializer.roundTrip(new MyObject(130))).isEqualTo(ex2);
 
     }
 
     @Test
     public void testDeserialize() throws Exception {
         MyObject obj1 = new MyObject(3);
-        byte[] data = Serializer.serialize(obj1);
-
-        MyObject obj2 = Serializer.deserialize(MyObject.class, data);
+        MyObject obj2 = Serializer.roundTrip(obj1);
         assertEquals(obj1.value, obj2.value);
     }
 
@@ -249,8 +247,7 @@ public class SerializerTest {
             }
         });
 
-        byte[] data = Serializer.serialize(new MyObject(300));
-        assertThatThrownBy(() -> Serializer.deserialize(MyObject.class, data)).isEqualTo(ex);
+        assertThatThrownBy(() -> Serializer.roundTrip(new MyObject(300))).isEqualTo(ex);
     }
 
     @Test
@@ -267,8 +264,7 @@ public class SerializerTest {
             }
         });
 
-        byte[] data = Serializer.serialize(new MyObject(310));
-        assertThatThrownBy(() -> Serializer.deserialize(MyObject.class, data)).isEqualTo(ex);
+        assertThatThrownBy(() -> Serializer.roundTrip(new MyObject(310))).isEqualTo(ex);
     }
 
     @Test
@@ -287,9 +283,20 @@ public class SerializerTest {
          */
         text = text.replace("MyObject", "AnObject");
 
-        byte[] data = text.getBytes(binary);
+        byte[] data2 = text.getBytes(binary);
 
-        assertThatThrownBy(() -> Serializer.deserialize(MyObject.class, data)).isInstanceOf(IOException.class)
+        /*
+         * Use a factory that returns a byte array for "data2" instead of the real "data".
+         */
+        setFactory(new Factory() {
+            @Override
+            public ByteArrayInputStream makeByteArrayInputStream(byte[] data) {
+                // read from "data2" instead of "data"
+                return super.makeByteArrayInputStream(data2);
+            }
+        });
+
+        assertThatThrownBy(() -> Serializer.roundTrip(obj1)).isInstanceOf(IOException.class)
                         .hasCauseInstanceOf(ClassNotFoundException.class);
     }
 
@@ -313,8 +320,7 @@ public class SerializerTest {
             }
         });
 
-        byte[] data = Serializer.serialize(new MyObject(320));
-        assertThatThrownBy(() -> Serializer.deserialize(MyObject.class, data)).isEqualTo(ex);
+        assertThatThrownBy(() -> Serializer.roundTrip(new MyObject(320))).isEqualTo(ex);
     }
 
     @Test
@@ -348,8 +354,7 @@ public class SerializerTest {
             }
         });
 
-        byte[] data = Serializer.serialize(new MyObject(330));
-        assertThatThrownBy(() -> Serializer.deserialize(MyObject.class, data)).isEqualTo(ex2);
+        assertThatThrownBy(() -> Serializer.roundTrip(new MyObject(330))).isEqualTo(ex2);
     }
 
     @Test
