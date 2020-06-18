@@ -73,7 +73,7 @@ public class Serializer {
      * @return the object that was de-serialized from the byte array
      * @throws IOException if an error occurs
      */
-    public static <T> T deserialize(Class<T> clazz, byte[] data) throws IOException {
+    private static <T> T deserialize(Class<T> clazz, byte[] data) throws IOException {
 
         try (ByteArrayInputStream in = factory.makeByteArrayInputStream(data);
                         ObjectInputStream ois = factory.makeObjectInputStream(in)) {
@@ -133,7 +133,11 @@ public class Serializer {
          */
         public Object readObject(ObjectInputStream ois) throws IOException {
             try {
-                return ois.readObject();
+                /*
+                 * This class is only used by junit tests. In addition, it is only used by
+                 * deserialize(), which has been made "private", thus disabling sonar.
+                 */
+                return ois.readObject(); // NOSONAR
 
             } catch (ClassNotFoundException e) {
                 throw new IOException(e);
