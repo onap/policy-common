@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ public class Serializer {
      * @return the object that was de-serialized from the byte array
      * @throws IOException if an error occurs
      */
-    public static <T> T deserialize(Class<T> clazz, byte[] data) throws IOException {
+    private static <T> T deserialize(Class<T> clazz, byte[] data) throws IOException {
 
         try (ByteArrayInputStream in = factory.makeByteArrayInputStream(data);
                         ObjectInputStream ois = factory.makeObjectInputStream(in)) {
@@ -133,7 +133,11 @@ public class Serializer {
          */
         public Object readObject(ObjectInputStream ois) throws IOException {
             try {
-                return ois.readObject();
+                /*
+                 * This class is only used by junit tests. In addition, it is only used by
+                 * deserialize(), which has been made "private", thus disabling sonar.
+                 */
+                return ois.readObject(); // NOSONAR
 
             } catch (ClassNotFoundException e) {
                 throw new IOException(e);

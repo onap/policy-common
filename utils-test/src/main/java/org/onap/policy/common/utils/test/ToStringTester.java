@@ -37,23 +37,22 @@ import org.hamcrest.Matcher;
  *
  * @author Ram Krishna Verma (ram.krishna.verma@est.tech)
  */
-@SuppressWarnings("rawtypes")
 public class ToStringTester implements Tester {
 
-    private final Matcher matcher;
+    private final Matcher<?> matcher;
 
     public ToStringTester() {
         matcher = anything();
     }
 
-    public ToStringTester(final Matcher matcher) {
+    public ToStringTester(final Matcher<?> matcher) {
         this.matcher = matcher;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public void run(final PojoClass pojoClass) {
-        final Class clazz = pojoClass.getClazz();
+        final Class<?> clazz = pojoClass.getClazz();
         if (anyOf(matcher).matches(clazz)) {
             final Object classInstance = ValidationHelper.getBasicInstance(pojoClass);
 
