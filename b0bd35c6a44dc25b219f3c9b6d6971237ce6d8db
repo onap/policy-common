@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6a7ec86_ffc28705",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpServerTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-06-24T22:49:24Z",
+      "side": 1,
+      "message": "failing on checkstyle looks like, need javadoc here:\n\n[WARN] /w/workspace/policy-common-master-verify-java/policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpServerTest.java:102:5: Missing a Javadoc comment. [MissingJavadocMethod]\nAudit done.\n[WARNING] src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpServerTest.java:[102,5] (javadoc) MissingJavadocMethod: Missing a Javadoc comment.",
+      "revId": "b0bd35c6a44dc25b219f3c9b6d6971237ce6d8db",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
