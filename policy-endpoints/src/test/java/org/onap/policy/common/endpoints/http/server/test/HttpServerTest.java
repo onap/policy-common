@@ -102,6 +102,8 @@ public class HttpServerTest {
     @AfterClass
     public static void tearDownAfterClass() {
         HttpServletServerFactoryInstance.getServerFactory().destroy();
+        System.clearProperty("cadi_longitude");
+        System.clearProperty("cadi_latitude");
     }
 
     @Test
@@ -374,6 +376,8 @@ public class HttpServerTest {
         assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
         assertEquals(1, HttpServletServerFactoryInstance.getServerFactory().inventory().size());
 
+        System.setProperty("cadi_longitude", "0.0");
+        System.setProperty("cadi_latitude", "0.0");
         server.setAafAuthentication("/*");
         assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAaf());
 
