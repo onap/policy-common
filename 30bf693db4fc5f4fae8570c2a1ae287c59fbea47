@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "178a1aa2_46ff5f62",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/Pair.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-06-25T15:40:48Z",
+      "side": 1,
+      "message": "Wayne, you\u0027re going to hate me for this but could we not just use the Pair class in Apache Commons?\n\nSee this example:\n\nimport org.apache.commons.lang3.tuple.MutablePair;\nimport org.apache.commons.lang3.tuple.Pair;\n\npublic class PairDeleteMe {\n    \n    public static void main(String[] args) {\n        Pair\u003cInteger, Integer\u003e myPair \u003d new MutablePair\u003c\u003e(1,2);\n        \n        if (myPair.getLeft() + myPair.getRight() !\u003d 3) {\n            System.err.println(\"Somehow we are defying the laws of science, Jim\");\n        }\n        else {\n            System.err.println(\"All is well in the world, Jim\");\n        }\n    }\n\n}",
+      "revId": "30bf693db4fc5f4fae8570c2a1ae287c59fbea47",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
