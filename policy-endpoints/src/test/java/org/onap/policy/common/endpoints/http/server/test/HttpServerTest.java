@@ -37,6 +37,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
@@ -619,7 +620,7 @@ public class HttpServerTest {
         conn.setDoOutput(true);
         conn.setRequestProperty("Content-Type", mediaType);
         conn.setRequestProperty("Accept", mediaType);
-        IOUtils.write(post, conn.getOutputStream());
+        IOUtils.write(post, conn.getOutputStream(), StandardCharsets.UTF_8);
         return response(conn);
     }
 
@@ -632,7 +633,7 @@ public class HttpServerTest {
      */
     private String response(URLConnection conn) throws IOException {
         try (InputStream inpstr = conn.getInputStream()) {
-            return String.join("", IOUtils.readLines(inpstr));
+            return String.join("", IOUtils.readLines(inpstr, StandardCharsets.UTF_8));
         }
     }
 
