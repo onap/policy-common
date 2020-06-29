@@ -113,19 +113,17 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
             // the standbystatus shall transition to coldstandby and a
             // StandbyStatusException shall be thrown
             logger.info("\n??? promote() test case P4");
-            assertThatThrownBy(() -> {
-                sm.disableFailed();
-                sm.lock();
+            sm.disableFailed();
+            sm.lock();
+            assertThatThrownBy(sm::promote).isInstanceOf(IntegrityMonitorException.class);
 
-                sm.promote();
-            });
             assertEquals(LOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(sm));
 
             // P3 If promote() is called while standbyStatus is coldstandby, the
             // state shall not transition
             // and a StandbyStatusException shall be thrown
             logger.info("\n??? promote() test case P3");
-            assertThatThrownBy(sm::promote);
+            assertThatThrownBy(sm::promote).isInstanceOf(IntegrityMonitorException.class);
             assertEquals(LOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(sm));
 
             // P2 If promote() is called while the standbyStatus is null and the
@@ -217,7 +215,7 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
             assertEquals(UNLOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(stateChangeNotifier.getStateManagement()));
 
             logger.info("\n??? State change notification test case 6 - promote()");
-            assertThatThrownBy(sm::promote);
+            assertThatThrownBy(sm::promote).isInstanceOf(IntegrityMonitorException.class);
             assertEquals(UNLOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(sm));
 
         } catch (final Exception ex) {

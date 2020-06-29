@@ -31,6 +31,7 @@ import static org.mockito.Mockito.when;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -319,7 +320,9 @@ public class StandardCoderTest {
         assertEquals(json, coder.toJson(sco));
 
         // invalid json -> exception
-        assertThatThrownBy(() -> coder.fromJson(new StringReader("["), StandardCoderObject.class));
+        StringReader rdr = new StringReader("[");
+        assertThatThrownBy(() -> coder.fromJson(rdr, StandardCoderObject.class))
+                        .isInstanceOf(JsonSyntaxException.class);
     }
 
     @Test

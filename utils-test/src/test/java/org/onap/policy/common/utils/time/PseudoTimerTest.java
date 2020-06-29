@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,8 +83,9 @@ public class PseudoTimerTest {
 
     @Test
     public void testScheduleTimerTaskDate() {
-        assertThatThrownBy(() -> timer.schedule(new MyTask(), new Date()))
-                        .isInstanceOf(UnsupportedOperationException.class);
+        MyTask task = new MyTask();
+        Date curdate = new Date();
+        assertThatThrownBy(() -> timer.schedule(task, curdate)).isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
@@ -105,8 +106,9 @@ public class PseudoTimerTest {
 
     @Test
     public void testScheduleTimerTaskDateLong() {
-        assertThatThrownBy(() -> timer.schedule(new MyTask(), new Date(), 1L))
-                        .isInstanceOf(UnsupportedOperationException.class);
+        MyTask task = new MyTask();
+        Date curdate = new Date();
+        assertThatThrownBy(() -> timer.schedule(task, curdate, 1L)).isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
@@ -127,7 +129,9 @@ public class PseudoTimerTest {
 
     @Test
     public void testScheduleAtFixedRateTimerTaskDateLong() {
-        assertThatThrownBy(() -> timer.scheduleAtFixedRate(new MyTask(), new Date(), 1L))
+        MyTask task = new MyTask();
+        Date curdate = new Date();
+        assertThatThrownBy(() -> timer.scheduleAtFixedRate(task, curdate, 1L))
                         .isInstanceOf(UnsupportedOperationException.class);
     }
 

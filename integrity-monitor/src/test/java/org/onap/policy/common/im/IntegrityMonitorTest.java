@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -192,7 +192,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         waitCycles(DEPENDENCY_CHECK_CYCLES);
 
         final IntegrityMonitor im2 = im;
-        assertThatThrownBy(im2::evaluateSanity);
+        assertThatThrownBy(im2::evaluateSanity).isInstanceOf(IntegrityMonitorException.class);
 
         // undo dependency groups and jmx test properties settings
         myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
@@ -313,7 +313,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         assertEquals(StateManagement.LOCKED, sm.getAdminState());
 
         // test startTransaction. It should fail since it is locked
-        assertThatThrownBy(im::startTransaction);
+        assertThatThrownBy(im::startTransaction).isInstanceOf(IntegrityMonitorException.class);
 
         sm.unlock();
         logger.debug("\n\nsm.unlock()\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
@@ -374,7 +374,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         assertEquals(StateManagement.HOT_STANDBY, sm.getStandbyStatus());
 
         // test startTransaction. It should fail since it is standby
-        assertThatThrownBy(im::startTransaction);
+        assertThatThrownBy(im::startTransaction).isInstanceOf(IntegrityMonitorException.class);
 
         sm.promote();
 
@@ -400,7 +400,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
 
         // Test startTransaction. Should fail since standby status is cold
         // standby
-        assertThatThrownBy(im::startTransaction);
+        assertThatThrownBy(im::startTransaction).isInstanceOf(IntegrityMonitorException.class);
 
         sm.enableNoDependency();
 
@@ -410,7 +410,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         assertEquals(StateManagement.FAILED, sm.getAvailStatus());
         // Test startTransaction. Should fail since standby status is cold
         // standby
-        assertThatThrownBy(im::startTransaction);
+        assertThatThrownBy(im::startTransaction).isInstanceOf(IntegrityMonitorException.class);
 
         sm.disableDependency();
         sm.enableNotFailed();
@@ -423,7 +423,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         assertEquals(StateManagement.DEPENDENCY, sm.getAvailStatus());
         // Test startTransaction. Should fail since standby status is cold
         // standby
-        assertThatThrownBy(im::startTransaction);
+        assertThatThrownBy(im::startTransaction).isInstanceOf(IntegrityMonitorException.class);
 
         sm.enableNoDependency();
         logger.debug(
@@ -432,7 +432,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         assertEquals(StateManagement.ENABLED, sm.getOpState());
         // test startTransaction. It should fail since standby status is hot
         // standby
-        assertThatThrownBy(im::startTransaction);
+        assertThatThrownBy(im::startTransaction).isInstanceOf(IntegrityMonitorException.class);
 
         logger.debug("\n\ntestIM: Exit\n\n");
     }
@@ -490,7 +490,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         // to do it.
         logger.debug("\n\nIntegrityMonitor.testSanityState: calling im.dependencyCheck()\n\n");
         im.dependencyCheck();
-        assertThatThrownBy(im::evaluateSanity);
+        assertThatThrownBy(im::evaluateSanity).isInstanceOf(IntegrityMonitorException.class);
 
         logger.debug("\n\ntestSanityState: Exit\n\n");
     }
@@ -648,7 +648,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
          */
         waitCycles(DEPENDENCY_CHECK_CYCLES);
 
-        assertThatThrownBy(im::evaluateSanity);
+        assertThatThrownBy(im::evaluateSanity).isInstanceOf(IntegrityMonitorException.class);
 
         logger.debug("\n\ntestStateCheck: Exit\n\n");
     }

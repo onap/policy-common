@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
@@ -37,6 +38,7 @@ import org.junit.Test;
 public class PseudoScheduledExecutorServiceTest {
     private static final long DELAY_MS = 100L;
     private static final long PERIOD_MS = 200L;
+    private static final List<Callable<Object>> EMPTY_CALLABLES = Collections.emptyList();
 
     private int ran;
     private int called;
@@ -135,25 +137,25 @@ public class PseudoScheduledExecutorServiceTest {
 
     @Test
     public void testInvokeAllCollectionOfQextendsCallableOfT() {
-        assertThatThrownBy(() -> svc.invokeAll(Collections.emptyList()))
+        assertThatThrownBy(() -> svc.invokeAll(EMPTY_CALLABLES))
                         .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
     public void testInvokeAllCollectionOfQextendsCallableOfTLongTimeUnit() {
-        assertThatThrownBy(() -> svc.invokeAll(Collections.emptyList(), 1, TimeUnit.MILLISECONDS))
+        assertThatThrownBy(() -> svc.invokeAll(EMPTY_CALLABLES, 1, TimeUnit.MILLISECONDS))
                         .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
     public void testInvokeAnyCollectionOfQextendsCallableOfT() {
-        assertThatThrownBy(() -> svc.invokeAny(Collections.emptyList()))
+        assertThatThrownBy(() -> svc.invokeAny(EMPTY_CALLABLES))
                         .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
     public void testInvokeAnyCollectionOfQextendsCallableOfTLongTimeUnit() {
-        assertThatThrownBy(() -> svc.invokeAny(Collections.emptyList(), 1, TimeUnit.MILLISECONDS))
+        assertThatThrownBy(() -> svc.invokeAny(EMPTY_CALLABLES, 1, TimeUnit.MILLISECONDS))
                         .isInstanceOf(UnsupportedOperationException.class);
     }
 
