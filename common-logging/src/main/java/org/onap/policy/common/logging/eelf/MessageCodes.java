@@ -20,13 +20,13 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import com.att.eelf.i18n.EELFResolvableErrorEnum;
+import com.att.eelf.i18n.EELFResolvableResourceEnum;
 import com.att.eelf.i18n.EELFResourceManager;
 
 /**
  * MessageCodes contains all the messagge codes for EELF logging messages.
  */
-public enum MessageCodes implements EELFResolvableErrorEnum {
+public enum MessageCodes implements EELFResolvableResourceEnum {
     // Below is a list of Error Messages taken from com.att.research.xacml.api XACMLErrorConstants
     // found under:
     // policy-engine\XACML\src\main\java\com\att\research\xacml\api\XACMLErrorConstants.java

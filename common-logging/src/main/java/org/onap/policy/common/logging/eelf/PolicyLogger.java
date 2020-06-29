@@ -71,13 +71,13 @@ import org.slf4j.MDC;
  */
 public class PolicyLogger {
 
-    private static EELFLogger errorLogger = EELFManager.getInstance().getErrorLogger();
+    private static EELFLogger errorLogger = EELFManager.getErrorLogger();
 
-    private static EELFLogger metricsLogger = EELFManager.getInstance().getMetricsLogger();
+    private static EELFLogger metricsLogger = EELFManager.getMetricsLogger();
 
-    private static EELFLogger auditLogger = EELFManager.getInstance().getAuditLogger();
+    private static EELFLogger auditLogger = EELFManager.getAuditLogger();
 
-    private static EELFLogger debugLogger = EELFManager.getInstance().getDebugLogger();
+    private static EELFLogger debugLogger = EELFManager.getDebugLogger();
 
     private static final String POLICY_LOGGER = "PolicyLogger";
 
