@@ -252,7 +252,7 @@ public class EelfLoggerTest {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.trace("message", new NullPointerException());
-        Mockito.verify(mockLogger).trace("message");
+        Mockito.verify(mockLogger).trace("{}", "message");
     }
 
     @Test
@@ -260,7 +260,7 @@ public class EelfLoggerTest {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "auditLogger", mockLogger);
         eelfLogger.audit("message", new NullPointerException());
-        Mockito.verify(mockLogger).info("message");
+        Mockito.verify(mockLogger).info("{}", "message");
     }
 
     @Test
