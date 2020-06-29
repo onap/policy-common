@@ -76,10 +76,11 @@ public class GsonTestUtilsTest {
         utils.compareGson(data, GsonTestUtilsTest.class);
 
         // file not found
-        assertThatThrownBy(() -> utils.compareGson(data,
-                        new File(GsonTestUtilsTest.class.getSimpleName() + "-NotFound.json")))
-                                        .isInstanceOf(JsonParseException.class)
-                                        .hasCauseInstanceOf(FileNotFoundException.class);
+        File file = new File(GsonTestUtilsTest.class.getSimpleName() + "-NotFound.json");
+
+        assertThatThrownBy(() -> utils.compareGson(data, file))
+            .isInstanceOf(JsonParseException.class)
+            .hasCauseInstanceOf(FileNotFoundException.class);
 
         // force I/O error while reading file
         GsonTestUtils utils2 = new GsonTestUtils() {

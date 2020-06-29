@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,8 +115,7 @@ public class YamlMessageBodyHandlerTest {
         };
 
         MyObject obj1 = new MyObject(10);
-
-        assertThatThrownBy(() -> hdlr.writeTo(obj1, obj1.getClass(), CLASS_OBJ, null, null, null, outstr))
+        assertThatThrownBy(() -> hdlr.writeTo(obj1, MyObject.class, CLASS_OBJ, null, null, null, outstr))
                         .isInstanceOf(YAMLException.class);
 
         outstr.close();
