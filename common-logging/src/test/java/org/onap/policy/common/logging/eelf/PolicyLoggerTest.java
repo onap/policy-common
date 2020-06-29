@@ -383,7 +383,7 @@ public class PolicyLoggerTest {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.debug(1);
-        Mockito.verify(mockLogger).debug("1");
+        Mockito.verify(mockLogger).debug("{}", 1);
     }
 
     @Test
@@ -396,7 +396,7 @@ public class PolicyLoggerTest {
         PolicyLogger.audit("PolicyLoggerTest", 1);
         assertEquals("PolicyLoggerTest", MDC.get("ClassName"));
         assertEquals("COMPLETE", MDC.get("StatusCode"));
-        Mockito.verify(mockLogger).info("1");
+        Mockito.verify(mockLogger).info("{}", "1");
     }
 
     @Test
@@ -406,7 +406,7 @@ public class PolicyLoggerTest {
         PolicyLogger.audit(1);
         assertEquals("", MDC.get("ClassName"));
         assertEquals("COMPLETE", MDC.get("StatusCode"));
-        Mockito.verify(mockLogger).info("1");
+        Mockito.verify(mockLogger).info("{}", 1);
     }
 
     @Test
@@ -495,7 +495,7 @@ public class PolicyLoggerTest {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.trace(1);
-        Mockito.verify(mockLogger).trace("1");
+        Mockito.verify(mockLogger).trace("{}", 1);
     }
 
     @Test

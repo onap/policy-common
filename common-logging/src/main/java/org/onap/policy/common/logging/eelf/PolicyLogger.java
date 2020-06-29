@@ -699,7 +699,7 @@ public class PolicyLogger {
     public static void debug(Object arg0) {
 
         MDC.put(classNameProp, "");
-        debugLogger.debug("" + arg0);
+        debugLogger.debug("{}", arg0);
     }
 
     /**
@@ -765,7 +765,7 @@ public class PolicyLogger {
         MDC.put(STATUS_CODE, COMPLETE_STATUS);
         MDC.put(RESPONSE_CODE, "0");
         MDC.put(classNameProp, "");
-        auditLogger.info("" + arg0);
+        auditLogger.info("{}", arg0);
     }
 
     /**
@@ -783,7 +783,7 @@ public class PolicyLogger {
         MDC.put(RESPONSE_CODE, "0");
         if (arguments.length == 1 && !OnapLoggingUtils.isThrowable(arguments[0])) {
             MDC.put(classNameProp, message);
-            auditLogger.info(arguments[0] == null ? "" : arguments[0].toString());
+            auditLogger.info("{}", arguments[0] == null ? "" : arguments[0].toString());
             return;
         }
 
@@ -858,7 +858,7 @@ public class PolicyLogger {
     public static void trace(Object arg0) {
 
         MDC.put(classNameProp, "");
-        debugLogger.trace("" + arg0);
+        debugLogger.trace("{}", arg0);
     }
 
     /**
@@ -879,13 +879,13 @@ public class PolicyLogger {
         event.setStartTime(Instant.now());
         eventTracker.storeEventData(event);
         MDC.put(MDC_KEY_REQUEST_ID, eventId);
-        debugLogger.info("CONCURRENTHASHMAP_LIMIT : " + concurrentHashMapLimit);
+        debugLogger.info("CONCURRENTHASHMAP_LIMIT : {}", concurrentHashMapLimit);
         // --- Tracking the size of the concurrentHashMap, if it is above limit, keep EventTrack
         // Timer running
         int size = eventTracker.getEventInfo().size();
 
-        debugLogger.info("EventInfo concurrentHashMap Size : " + size + " on " + new Date());
-        debugLogger.info("isEventTrackerRunning : " + isEventTrackerRunning);
+        debugLogger.info("EventInfo concurrentHashMap Size : {} on {}", size, new Date());
+        debugLogger.info("isEventTrackerRunning : {}", isEventTrackerRunning);
 
         if (size >= concurrentHashMapLimit) {
 
@@ -1084,7 +1084,7 @@ public class PolicyLogger {
         if (eventTracker != null && eventTracker.getEventDataByRequestId(eventId) != null) {
 
             eventTracker.remove(eventId);
-            debugLogger.info("eventTracker.remove(" + eventId + ")");
+            debugLogger.info("eventTracker.remove({})", eventId);
 
         }
     }
@@ -1249,9 +1249,9 @@ public class PolicyLogger {
             EventTrackInfoHandler ttrcker = new EventTrackInfoHandler();
             timer = new Timer(true);
             timer.scheduleAtFixedRate(ttrcker, timerDelayTime, checkInterval);
-            debugLogger.info("EventTrackInfoHandler begins! : " + new Date());
+            debugLogger.info("EventTrackInfoHandler begins! : {}", new Date());
         } else {
-            debugLogger.info("Timer is still running : " + new Date());
+            debugLogger.info("Timer is still running : {}", new Date());
 
         }
     }
@@ -1265,9 +1265,9 @@ public class PolicyLogger {
         if (isEventTrackerRunning && timer != null) {
             timer.cancel();
             timer.purge();
-            debugLogger.info("Timer stopped: " + new Date());
+            debugLogger.info("Timer stopped: {}", new Date());
         } else {
-            debugLogger.info("Timer was already stopped : " + new Date());
+            debugLogger.info("Timer was already stopped : {}", new Date());
 
         }
         isEventTrackerRunning = false;
@@ -1301,7 +1301,7 @@ public class PolicyLogger {
             stopCheckPoint = getIntProp(loggerProperties, "stop.check.point", stopCheckPoint);
 
             component = loggerProperties.getProperty("policy.component", "DROOLS");
-            debugLogger.info("component: " + component);
+            debugLogger.info("component: {}", component);
 
             return detmLoggerType(loggerProperties);
 
@@ -1323,7 +1323,7 @@ public class PolicyLogger {
     private static int getIntProp(Properties properties, String propName, int defaultValue) {
         final int propValue = Integer.parseInt(properties.getProperty(propName, String.valueOf(defaultValue)));
 
-        debugLogger.info(propName + " value: " + propValue);
+        debugLogger.info("{} value: {}", propName, propValue);
 
         if (propValue > 0) {
             return propValue;
@@ -1336,7 +1336,7 @@ public class PolicyLogger {
                         ErrorCodeMap.getErrorCodeInfo(MessageCodes.GENERAL_ERROR).getErrorDesc());
 
             }
-            errorLogger.error("failed to get the " + propName + ", so use its default value: " + defaultValue);
+            errorLogger.error("failed to get the {}, so use its default value: ", propName, defaultValue);
             return defaultValue;
         }
     }
@@ -1356,7 +1356,7 @@ public class PolicyLogger {
         final String propValue = properties.getProperty(propName, defaultValue);
 
         if (!StringUtils.isBlank(propValue)) {
-            debugLogger.info(propName + " level: " + propValue);
+            debugLogger.info("{} level: ", propName, propValue);
         }
 
         setter.accept(propValue);
@@ -1366,7 +1366,7 @@ public class PolicyLogger {
         final String propValue = properties.getProperty(propName, "ON");
 
         if (Level.OFF.toString().equalsIgnoreCase(propValue)) {
-            debugLogger.info(propName + " level: " + propValue);
+            debugLogger.info("{} level: ", propName, propValue);
         }
 
         setter.accept(propValue);
@@ -1382,7 +1382,7 @@ public class PolicyLogger {
 
     private static LoggerType detmLoggerType(Properties loggerProperties) {
         final String loggerTypeProp = loggerProperties.getProperty("logger.type", LoggerType.EELF.toString());
-        debugLogger.info("loggerType value: " + loggerTypeProp);
+        debugLogger.info("loggerType value: {}", loggerTypeProp);
 
         switch (loggerTypeProp.toUpperCase()) {
             case "EELF":
