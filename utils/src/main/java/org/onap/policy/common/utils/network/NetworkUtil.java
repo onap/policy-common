@@ -26,9 +26,8 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.security.cert.X509Certificate;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import org.apache.commons.net.util.TrustManagerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,29 +47,7 @@ public class NetworkUtil {
     /**
      * A trust manager that always trusts certificates.
      */
-    // @formatter:off
-    private static final TrustManager[] ALWAYS_TRUST_MANAGER = new TrustManager[] {
-        new X509TrustManager() {
-
-            @Override
-            public X509Certificate[] getAcceptedIssuers() {
-                return new X509Certificate[0];
-            }
-
-            @Override
-            public void checkClientTrusted(final java.security.cert.X509Certificate[] certs,
-                            final String authType) {
-                // always trust
-            }
-
-            @Override
-            public void checkServerTrusted(final java.security.cert.X509Certificate[] certs,
-                            final String authType) {
-                // always trust
-            }
-        }
-    };
-    // @formatter:on
+    private static final TrustManager[] ALWAYS_TRUST_MANAGER = { TrustManagerUtils.getAcceptAllTrustManager() };
 
     private NetworkUtil() {
         // Empty constructor
