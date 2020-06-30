@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f7693d82_56cce9ed",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/network/NetworkUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2020-06-30T13:43:38Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "d3e074c0010cce39ed4ca0071f5a78aadc8d6496",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
