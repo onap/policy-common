@@ -27,7 +27,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -41,8 +40,8 @@ import org.onap.policy.common.im.MonitorTime;
 
 @Entity
 @Table(name = "ForwardProgressEntity")
-@NamedQueries({@NamedQuery(name = " ForwardProgressEntity.findAll", query = "SELECT e FROM ForwardProgressEntity e "),
-        @NamedQuery(name = "ForwardProgressEntity.deleteAll", query = "DELETE FROM ForwardProgressEntity WHERE 1=1")})
+@NamedQuery(name = " ForwardProgressEntity.findAll", query = "SELECT e FROM ForwardProgressEntity e ")
+@NamedQuery(name = "ForwardProgressEntity.deleteAll", query = "DELETE FROM ForwardProgressEntity WHERE 1=1")
 // @SequenceGenerator(name="seqForwardProgress", initialValue=1, allocationSize=1)
 
 public class ForwardProgressEntity implements Serializable {
