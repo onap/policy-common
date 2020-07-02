@@ -34,6 +34,24 @@
       "revId": "6a384a208834df1ca94c350d8cd8ddad82f18efb",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "822760c1_d2c08551",
+        "filename": "utils/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2020-07-02T15:42:05Z",
+      "side": 1,
+      "message": "taking my comment back, as this is \"utils\" not \"utils-test\"",
+      "parentUuid": "482088d1_8483795d",
+      "revId": "6a384a208834df1ca94c350d8cd8ddad82f18efb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
