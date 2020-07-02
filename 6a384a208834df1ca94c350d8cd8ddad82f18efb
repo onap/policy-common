@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c58369d1_bfba7cbd",
+        "filename": "utils/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-07-02T14:21:45Z",
+      "side": 1,
+      "message": "Please delete openpojo and hamcrest.\n\nI\u0027m not sure why they\u0027re here - it compiles without them.  At the very least, they should have included \"scope\u003dtest\".",
+      "revId": "6a384a208834df1ca94c350d8cd8ddad82f18efb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
