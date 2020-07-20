@@ -21,7 +21,6 @@
 
 package org.onap.policy.common.endpoints.http.server.internal;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.EnumSet;
 import javax.servlet.DispatcherType;
 import org.eclipse.jetty.security.ConstraintMapping;
@@ -492,7 +491,6 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      *
      * @return the password
      */
-    @JsonIgnore
     @GsonJsonIgnore
     public String getPassword() {
         return password;

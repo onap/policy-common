@@ -91,7 +91,6 @@ public class HttpServerTest {
 
         HttpServletServerFactoryInstance.getServerFactory().destroy();
 
-        MyJacksonProvider.resetSome();
         MyGsonProvider.resetSome();
         MyYamlProvider.resetSome();
     }
@@ -132,38 +131,6 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testJacksonPackageServer() throws Exception {
-        logger.info("-- testJacksonPackageServer() --");
-
-        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
-                        .build("echo", LOCALHOST, port, "/", false, true);
-
-        server.setSerializationProvider(MyJacksonProvider.class.getName());
-        server.addServletPackage("/*", this.getClass().getPackage().getName());
-        server.addFilterClass("/*", TestFilter.class.getName());
-        server.waitedStart(5000);
-
-        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
-
-        RestEchoReqResp request = new RestEchoReqResp();
-        request.setRequestId(100);
-        request.setText(SOME_TEXT);
-        String reqText = gson.toJson(request);
-
-        String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, JSON_MEDIA, reqText);
-        assertEquals(reqText, response);
-
-        assertTrue(MyJacksonProvider.hasReadSome());
-        assertTrue(MyJacksonProvider.hasWrittenSome());
-
-        assertFalse(MyGsonProvider.hasReadSome());
-        assertFalse(MyGsonProvider.hasWrittenSome());
-
-        assertFalse(MyYamlProvider.hasReadSome());
-        assertFalse(MyYamlProvider.hasWrittenSome());
-    }
-
-    @Test
     public void testGsonPackageServer() throws Exception {
         logger.info("-- testGsonPackageServer() --");
 
@@ -187,9 +154,6 @@ public class HttpServerTest {
 
         assertTrue(MyGsonProvider.hasReadSome());
         assertTrue(MyGsonProvider.hasWrittenSome());
-
-        assertFalse(MyJacksonProvider.hasReadSome());
-        assertFalse(MyJacksonProvider.hasWrittenSome());
 
         assertFalse(MyYamlProvider.hasReadSome());
         assertFalse(MyYamlProvider.hasWrittenSome());
@@ -224,9 +188,6 @@ public class HttpServerTest {
 
         assertFalse(MyGsonProvider.hasReadSome());
         assertFalse(MyGsonProvider.hasWrittenSome());
-
-        assertFalse(MyJacksonProvider.hasReadSome());
-        assertFalse(MyJacksonProvider.hasWrittenSome());
     }
 
     @Test
@@ -256,7 +217,6 @@ public class HttpServerTest {
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
                         .build("echo", LOCALHOST, port, "/", false, true);
-        server.setSerializationProvider(MyJacksonProvider.class.getName());
         server.addServletClass("/*", RestEchoService.class.getName());
         server.addFilterClass("/*", TestFilter.class.getName());
         server.waitedStart(5000);
@@ -270,9 +230,6 @@ public class HttpServerTest {
 
         String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, JSON_MEDIA, reqText);
         assertEquals(reqText, response);
-
-        assertTrue(MyJacksonProvider.hasReadSome());
-        assertTrue(MyJacksonProvider.hasWrittenSome());
 
         assertFalse(MyGsonProvider.hasReadSome());
         assertFalse(MyGsonProvider.hasWrittenSome());
@@ -304,9 +261,6 @@ public class HttpServerTest {
 
         assertTrue(MyGsonProvider.hasReadSome());
         assertTrue(MyGsonProvider.hasWrittenSome());
-
-        assertFalse(MyJacksonProvider.hasReadSome());
-        assertFalse(MyJacksonProvider.hasWrittenSome());
 
         assertFalse(MyYamlProvider.hasReadSome());
         assertFalse(MyYamlProvider.hasWrittenSome());
@@ -340,9 +294,6 @@ public class HttpServerTest {
 
         assertFalse(MyGsonProvider.hasReadSome());
         assertFalse(MyGsonProvider.hasWrittenSome());
-
-        assertFalse(MyJacksonProvider.hasReadSome());
-        assertFalse(MyJacksonProvider.hasWrittenSome());
     }
 
     @Test

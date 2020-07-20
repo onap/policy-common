@@ -25,7 +25,6 @@ import com.att.nsa.apiClient.http.HttpClient.ConnectionType;
 import com.att.nsa.cambria.client.CambriaBatchingPublisher;
 import com.att.nsa.cambria.client.CambriaClientBuilders;
 import com.att.nsa.cambria.client.CambriaClientBuilders.PublisherBuilder;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -69,7 +68,6 @@ public interface BusPublisher {
         /**
          * The actual Cambria publisher.
          */
-        @JsonIgnore
         @GsonJsonIgnore
         protected CambriaBatchingPublisher publisher;
 
