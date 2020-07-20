@@ -22,7 +22,6 @@
 
 package org.onap.policy.common.endpoints.http.client.internal;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -298,7 +297,6 @@ public class JerseyClient implements HttpClient {
         return userName;
     }
 
-    @JsonIgnore
     @GsonJsonIgnore
     @Override
     public String getPassword() {

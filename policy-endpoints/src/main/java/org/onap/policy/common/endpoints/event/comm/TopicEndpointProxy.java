@@ -20,7 +20,6 @@
 
 package org.onap.policy.common.endpoints.event.comm;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -313,42 +312,36 @@ class TopicEndpointProxy implements TopicEndpoint {
         return sinks;
     }
 
-    @JsonIgnore
     @GsonJsonIgnore
     @Override
     public List<UebTopicSource> getUebTopicSources() {
         return UebTopicFactories.getSourceFactory().inventory();
     }
 
-    @JsonIgnore
     @GsonJsonIgnore
     @Override
     public List<DmaapTopicSource> getDmaapTopicSources() {
         return DmaapTopicFactories.getSourceFactory().inventory();
     }
 
-    @JsonIgnore
     @GsonJsonIgnore
     @Override
     public List<NoopTopicSource> getNoopTopicSources() {
         return NoopTopicFactories.getSourceFactory().inventory();
     }
 
-    @JsonIgnore
     @GsonJsonIgnore
     @Override
     public List<UebTopicSink> getUebTopicSinks() {
         return UebTopicFactories.getSinkFactory().inventory();
     }
 
-    @JsonIgnore
     @GsonJsonIgnore
     @Override
     public List<DmaapTopicSink> getDmaapTopicSinks() {
         return DmaapTopicFactories.getSinkFactory().inventory();
     }
 
-    @JsonIgnore
     @GsonJsonIgnore
     @Override
     public List<NoopTopicSink> getNoopTopicSinks() {
@@ -416,7 +409,6 @@ class TopicEndpointProxy implements TopicEndpoint {
      *
      * @return list of managed endpoints
      */
-    @JsonIgnore
     @GsonJsonIgnore
     protected List<Startable> getEndpoints() {
         final List<Startable> endpoints = new ArrayList<>();

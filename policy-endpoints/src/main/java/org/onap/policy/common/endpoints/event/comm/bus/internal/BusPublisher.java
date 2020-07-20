@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,6 @@ import com.att.nsa.apiClient.http.HttpClient.ConnectionType;
 import com.att.nsa.cambria.client.CambriaBatchingPublisher;
 import com.att.nsa.cambria.client.CambriaClientBuilders;
 import com.att.nsa.cambria.client.CambriaClientBuilders.PublisherBuilder;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -69,7 +68,6 @@ public interface BusPublisher {
         /**
          * The actual Cambria publisher.
          */
-        @JsonIgnore
         @GsonJsonIgnore
         protected CambriaBatchingPublisher publisher;
 
