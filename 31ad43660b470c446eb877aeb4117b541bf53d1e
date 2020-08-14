@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "617ab2c8_4d5b567e",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/MessageConstants.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-08-14T14:28:34Z",
+      "side": 1,
+      "message": "I hadn\u0027t even thought about adding these - good idea!",
+      "revId": "31ad43660b470c446eb877aeb4117b541bf53d1e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f1a8b8d4_21eac69e",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/resources/MessageConstantsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-08-14T14:28:34Z",
+      "side": 1,
+      "message": "maybe just delete this and see if sonar complains",
+      "revId": "31ad43660b470c446eb877aeb4117b541bf53d1e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
