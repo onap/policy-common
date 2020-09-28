@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "701fc5b2_0029360e",
+        "filename": "integrity-monitor/src/test/java/org/onap/policy/common/im/StateTransitionTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-09-28T21:16:54Z",
+      "side": 1,
+      "message": "translated from the original file via a perl script and then a few minor edits",
+      "revId": "1e39e2bf48a7122aec00792cf43672a46ae9fa65",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8e5ef307_89f6fe6e",
+        "filename": "utils-test/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-09-28T21:16:54Z",
+      "side": 1,
+      "message": "if this doesn\u0027t work, then I\u0027ll change it to sonar.skip\u003dtrue instead",
+      "revId": "1e39e2bf48a7122aec00792cf43672a46ae9fa65",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
