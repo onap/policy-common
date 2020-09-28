@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP - Common Modules
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,6 +80,10 @@ public class BeanConfiguratorTest {
 
     @Test
     public void testConfigureFromProperties() throws PropertyException {
+        testStringValueNoDefault();
+    }
+
+    private void testStringValueNoDefault() throws PropertyException {
         props.setProperty(THE_VALUE, STRING_VALUE);
         PlainStringConfig cfg = new PlainStringConfig();
 
@@ -177,11 +181,7 @@ public class BeanConfiguratorTest {
 
     @Test
     public void testSetValueObjectFieldProperties_FieldSet() throws PropertyException {
-        props.setProperty(THE_VALUE, STRING_VALUE);
-        PlainStringConfig cfg = new PlainStringConfig();
-        beancfg.configureFromProperties(cfg, props);
-
-        assertEquals(STRING_VALUE, cfg.value);
+        testStringValueNoDefault();
     }
 
     @Test
@@ -500,11 +500,7 @@ public class BeanConfiguratorTest {
 
     @Test
     public void testGetStringValue() throws PropertyException {
-        props.setProperty(THE_VALUE, STRING_VALUE);
-        PlainStringConfig cfg = new PlainStringConfig();
-        beancfg.configureFromProperties(cfg, props);
-
-        assertEquals(STRING_VALUE, cfg.value);
+        testStringValueNoDefault();
     }
 
     @Test
@@ -721,12 +717,7 @@ public class BeanConfiguratorTest {
 
     @Test
     public void testGetPropValue_Prop_NoDefault() throws PropertyException {
-        props.setProperty(THE_VALUE, STRING_VALUE);
-
-        PlainStringConfig cfg = new PlainStringConfig();
-        beancfg.configureFromProperties(cfg, props);
-
-        assertEquals(STRING_VALUE, cfg.value);
+        testStringValueNoDefault();
     }
 
     @Test
