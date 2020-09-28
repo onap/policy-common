@@ -51,6 +51,24 @@
       "revId": "1e39e2bf48a7122aec00792cf43672a46ae9fa65",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e271a18f_71857070",
+        "filename": "utils-test/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-09-28T21:38:21Z",
+      "side": 1,
+      "message": "I\u0027d prefer that sonar process it like it would other test files, and fall back to sonar.skip if it doesn\u0027t work right",
+      "parentUuid": "74b957a4_76763777",
+      "revId": "1e39e2bf48a7122aec00792cf43672a46ae9fa65",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
