@@ -194,9 +194,15 @@ public class TopicBaseTest extends TopicTestBase {
         assertTrue(base.unlock());
         assertEquals(1, base.startCount);
         assertEquals(1, base.stopCount);
+    }
+
+    /**
+     * Tests lock/unlock when the stop/start methods return false.
+     */
+    @Test
+    public void testLock_testUnlock_FalseReturns() {
 
         // lock, but stop returns false
-        base = new TopicBaseImpl(servers, MY_TOPIC);
         base.stopReturn = false;
         assertFalse(base.lock());
         assertTrue(base.isLocked());
@@ -207,9 +213,15 @@ public class TopicBaseTest extends TopicTestBase {
         assertFalse(base.unlock());
         assertFalse(base.isLocked());
         assertTrue(base.unlock());
+    }
+
+    /**
+     * Tests lock/unlock when the start method throws an exception.
+     */
+    @Test
+    public void testLock_testUnlock_Exception() {
 
         // lock & re-lock, but start throws an exception
-        base = new TopicBaseImpl(servers, MY_TOPIC);
         base.startEx = true;
         assertTrue(base.lock());
         assertFalse(base.unlock());

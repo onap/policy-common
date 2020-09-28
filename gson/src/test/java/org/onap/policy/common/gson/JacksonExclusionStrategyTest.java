@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,34 +80,23 @@ public class JacksonExclusionStrategyTest {
 
     @Test
     public void testIsManaged() {
-        assertTrue(JacksonExclusionStrategy.isManaged(Data.class));
-        assertTrue(JacksonExclusionStrategy.isManaged(Intfc.class));
-        assertTrue(JacksonExclusionStrategy.isManaged(com.google.gson.TypeAdapter.class));
+        // these classes SHOULD be managed
+        Class<?>[] managed = {Data.class, Intfc.class, com.google.gson.TypeAdapter.class};
 
-        // generic classes
-        assertFalse(JacksonExclusionStrategy.isManaged(new Data[0].getClass()));
-        assertFalse(JacksonExclusionStrategy.isManaged(Enum.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(boolean.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(byte.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(short.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(int.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(long.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(float.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(double.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(char.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(Boolean.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(Byte.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(Short.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(Integer.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(Long.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(Float.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(Double.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(Character.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(String.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(MyMap.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(MyList.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(MyJson.class));
-        assertFalse(JacksonExclusionStrategy.isManaged(GenericArrayType.class));
+        for (Class<?> clazz : managed) {
+            assertTrue(clazz.getName(), JacksonExclusionStrategy.isManaged(clazz));
+        }
+
+        // generic classes should NOT be managed
+        Class<?>[] unmanaged = {
+            new Data[0].getClass(), Enum.class, boolean.class, byte.class, short.class, int.class,
+            long.class, float.class, double.class, char.class, Boolean.class, Byte.class, Short.class,
+            Integer.class, Long.class, Float.class, Double.class, Character.class, String.class,
+            MyMap.class, MyList.class, MyJson.class, GenericArrayType.class};
+
+        for (Class<?> clazz : unmanaged) {
+            assertFalse(clazz.getName(), JacksonExclusionStrategy.isManaged(clazz));
+        }
     }
 
     /**

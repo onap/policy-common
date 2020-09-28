@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ public class BusTopicParamsTest extends TopicTestBase {
     }
 
     @Test
-    public void test() {
+    public void testGetters() {
         BusTopicParams params = makeBuilder().build();
 
         assertEquals(addProps, params.getAdditionalProps());
@@ -69,11 +69,19 @@ public class BusTopicParamsTest extends TopicTestBase {
         assertEquals(MY_EFFECTIVE_TOPIC, params.getEffectiveTopic());
         assertEquals(true, params.isUseHttps());
         assertEquals(MY_USERNAME, params.getUserName());
+    }
 
+    @Test
+    public void testBooleanGetters() {
         // ensure that booleans are independent of each other
         testBoolean("true:false:false", (bldr, flag) -> bldr.allowSelfSignedCerts(flag));
         testBoolean("false:true:false", (bldr, flag) -> bldr.managed(flag));
         testBoolean("false:false:true", (bldr, flag) -> bldr.useHttps(flag));
+    }
+
+    @Test
+    public void testValidators() {
+        BusTopicParams params = makeBuilder().build();
 
         // test validity methods
         assertTrue(params.isAdditionalPropsValid());
@@ -94,8 +102,10 @@ public class BusTopicParamsTest extends TopicTestBase {
         assertFalse(params.isServersInvalid());
         assertFalse(params.isTopicInvalid());
         assertTrue(params.isUserNameValid());
+    }
 
-        // test inverted validity
+    @Test
+    public void testInvertedValidators() {
         assertFalse(makeBuilder().additionalProps(null).build().isAdditionalPropsValid());
         assertTrue(makeBuilder().aftEnvironment("").build().isAftEnvironmentInvalid());
         assertFalse(makeBuilder().apiKey("").build().isApiKeyValid());

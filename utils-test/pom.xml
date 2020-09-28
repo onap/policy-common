@@ -33,6 +33,9 @@
 
     <properties>
         <powermock.version>2.0.4</powermock.version>
+
+        <!-- this whole module is test code -->
+        <sonar.tests>src/main,src/test</sonar.tests>
     </properties>
 
     <dependencies>
