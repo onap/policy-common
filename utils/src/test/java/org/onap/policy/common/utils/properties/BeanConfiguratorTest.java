@@ -951,18 +951,8 @@ public class BeanConfiguratorTest {
 
     @Test(expected = PropertyInvalidException.class)
     public void testCheckDefaultValue_Empty_EmptyOk_Invalid() throws PropertyException {
-        class Config {
 
-            @Property(name = THE_VALUE, defaultValue = "", accept = "empty")
-            private long value;
-
-            @SuppressWarnings("unused")
-            public void setValue(long value) {
-                this.value = value;
-            }
-        }
-
-        beancfg.configureFromProperties(new Config(), props);
+        beancfg.configureFromProperties(new PrimLongDefaultBlankAcceptEmptyConfig(), props);
     }
 
     @Test
@@ -996,18 +986,8 @@ public class BeanConfiguratorTest {
 
     @Test(expected = PropertyMissingException.class)
     public void testIsEmptyOkPropertyString_False() throws PropertyException {
-        class Config {
 
-            @Property(name = THE_VALUE, defaultValue = "", accept = "")
-            private long value;
-
-            @SuppressWarnings("unused")
-            public void setValue(long value) {
-                this.value = value;
-            }
-        }
-
-        beancfg.configureFromProperties(new Config(), props);
+        beancfg.configureFromProperties(new PrimLongDefaultBlankAcceptBlankConfig(), props);
     }
 
     @Test
@@ -1031,18 +1011,8 @@ public class BeanConfiguratorTest {
 
     @Test(expected = PropertyMissingException.class)
     public void testIsEmptyOkProperty_False() throws PropertyException {
-        class Config {
 
-            @Property(name = THE_VALUE, defaultValue = "", accept = "")
-            private long value;
-
-            @SuppressWarnings("unused")
-            public void setValue(long value) {
-                this.value = value;
-            }
-        }
-
-        beancfg.configureFromProperties(new Config(), props);
+        beancfg.configureFromProperties(new PrimLongDefaultBlankAcceptBlankConfig(), props);
     }
 
     @Test
@@ -1408,6 +1378,26 @@ public class BeanConfiguratorTest {
 
         public static void setValue(String value) {
             // do nothing
+        }
+    }
+
+    class PrimLongDefaultBlankAcceptEmptyConfig {
+
+        @Property(name = THE_VALUE, defaultValue = "", accept = "empty")
+        private long value;
+
+        public void setValue(long value) {
+            this.value = value;
+        }
+    }
+
+    class PrimLongDefaultBlankAcceptBlankConfig {
+
+        @Property(name = THE_VALUE, defaultValue = "", accept = "")
+        private long value;
+
+        public void setValue(long value) {
+            this.value = value;
         }
     }
 
