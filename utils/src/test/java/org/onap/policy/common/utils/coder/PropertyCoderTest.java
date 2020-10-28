@@ -33,15 +33,29 @@ import org.junit.Test;
 public class PropertyCoderTest {
     private PropertyCoder propertyCoder = null;
     private static final String AES_ENCRYPTION_KEY = "aes_encryption_key";
+
+    /*
+     * Note: to generate the encrypted values, invoke CryptoUtils passing both the value
+     * to be encrypted and the secret key.
+     *
+     * The secret key should typically be 32 characters long, resulting in a 256-bit
+     * key, and is placed in "aes_encryption_key".
+     *
+     * For "xacml.pdp.rest.password", the encrypted value was generated via:
+     *  java org.onap.policy.common.utils.security.CryptoUtils enc alpha abcdefghijklmnopqrstuvwxyzabcdef
+     *
+     * For "pass", the encrypted value was generated via:
+     *  java org.onap.policy.common.utils.security.CryptoUtils enc hello abcdefghijklmnopqrstuvwxyzabcdef
+     */
     private static final String json =
             ("{'aes_encryption_key':'abcdefghijklmnopqrstuvwxyzabcdef'"
-            + ",'xacml.pdp.rest.password':'enc:YZ8EqzsxIOzIuK416SWAdrv+0cKKkqsQt/NYH9+uxwI='"
+            + ",'xacml.pdp.rest.password':'enc:FSfOhDygtmnX3gkMSfTFMoBFW+AG5k6goNj2KZgQmeF0DqgcMg=='"
             + ",'xacml.pdp.rest.user':'testpdp'"
             + ",'xacml.pdp.rest.client.user':'policy'"
             + ",'xacml.pdp.rest.client.password':'policy'"
             + ",'xacml.pdp.rest.environment':'TEST'"
             + ",'servers':[{'name':'server1','port':'10',"
-            + "'pass':'enc:KXIY94KcAapOAAeFbtjQL4kBPB4k+NJfwdP+GpG3LWQ='}"
+            + "'pass':'enc:08Fj6tLhmWjkZkf52O2A2ZNT8PpL80yEOEKXlbV/gnm0lkR9OA=='}"
             + ",{'name':'server2','port':'20','pass':'plaintext'}]"
             + "}").replace('\'', '"');
 
