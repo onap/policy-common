@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class CryptoUtilsTest {
     private static Logger logger = LoggerFactory.getLogger(CryptoUtilsTest.class);
     private static final String PASS = "HelloWorld";
     private static final String SECRET_KEY = "MTIzNDU2Nzg5MDEyMzQ1Ng==";
-    private static final String ENCRYPTED_PASS = "enc:hcI2XVX+cxPz/6rlbebkWpCFF6WPbBtT7iJRr2VHUkA=";
+    private static final String ENCRYPTED_PASS = "enc:Z6QzirpPyDpwmIcNbE3U2iq6g/ubJBEdzssoigxGGChlQtdWOLD8y00O";
     private static final String DECRYPTED_MSG = "encrypted value: {}  decrypted value : {}";
     private static final String ENCRYPTED_MSG = "original value : {}  encrypted value: {}";
 

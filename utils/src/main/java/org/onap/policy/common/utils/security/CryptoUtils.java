@@ -23,7 +23,7 @@ package org.onap.policy.common.utils.security;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import javax.crypto.Cipher;
-import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.lang3.ArrayUtils;
@@ -44,7 +44,9 @@ public class CryptoUtils implements CryptoCoder {
     /**
      * Detailed definition of encryption algorithm.
      */
-    private static final String ALGORITHM_DETAILS = ALGORITHM + "/CBC/PKCS5PADDING";
+    private static final String ALGORITHM_DETAILS = ALGORITHM + "/GCM/NoPadding";
+
+    private static final int TAG_SIZE_IN_BITS = 128;
 
     private static final int IV_BLOCK_SIZE_IN_BITS = 128;
 
@@ -120,7 +122,7 @@ public class CryptoUtils implements CryptoCoder {
             Cipher cipher = Cipher.getInstance(ALGORITHM_DETAILS);
             byte[] iv = new byte[IV_BLOCK_SIZE_IN_BYTES];
             RANDOM.nextBytes(iv);
-            IvParameterSpec ivspec = new IvParameterSpec(iv);
+            GCMParameterSpec ivspec = new GCMParameterSpec(TAG_SIZE_IN_BITS, iv);
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivspec);
 
             return "enc:" + DatatypeConverter.printBase64Binary(
@@ -175,7 +177,7 @@ public class CryptoUtils implements CryptoCoder {
             byte[] encryptedValue = DatatypeConverter.parseBase64Binary(pureValue);
 
             Cipher cipher = Cipher.getInstance(ALGORITHM_DETAILS);
-            IvParameterSpec ivspec = new IvParameterSpec(
+            GCMParameterSpec ivspec = new GCMParameterSpec(TAG_SIZE_IN_BITS,
                     ArrayUtils.subarray(encryptedValue, 0, IV_BLOCK_SIZE_IN_BYTES));
             byte[] realData = ArrayUtils.subarray(encryptedValue, IV_BLOCK_SIZE_IN_BYTES, encryptedValue.length);
 

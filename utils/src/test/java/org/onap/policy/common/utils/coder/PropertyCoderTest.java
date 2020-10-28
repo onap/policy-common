@@ -35,13 +35,13 @@ public class PropertyCoderTest {
     private static final String AES_ENCRYPTION_KEY = "aes_encryption_key";
     private static final String json =
             ("{'aes_encryption_key':'abcdefghijklmnopqrstuvwxyzabcdef'"
-            + ",'xacml.pdp.rest.password':'enc:YZ8EqzsxIOzIuK416SWAdrv+0cKKkqsQt/NYH9+uxwI='"
+            + ",'xacml.pdp.rest.password':'enc:FSfOhDygtmnX3gkMSfTFMoBFW+AG5k6goNj2KZgQmeF0DqgcMg=='"
             + ",'xacml.pdp.rest.user':'testpdp'"
             + ",'xacml.pdp.rest.client.user':'policy'"
             + ",'xacml.pdp.rest.client.password':'policy'"
             + ",'xacml.pdp.rest.environment':'TEST'"
             + ",'servers':[{'name':'server1','port':'10',"
-            + "'pass':'enc:KXIY94KcAapOAAeFbtjQL4kBPB4k+NJfwdP+GpG3LWQ='}"
+            + "'pass':'enc:08Fj6tLhmWjkZkf52O2A2ZNT8PpL80yEOEKXlbV/gnm0lkR9OA=='}"
             + ",{'name':'server2','port':'20','pass':'plaintext'}]"
             + "}").replace('\'', '"');
 
