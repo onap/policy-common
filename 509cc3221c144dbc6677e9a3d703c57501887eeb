@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "58042793_e950970f",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/PropertyCoderTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2020-10-29T11:34:14Z",
+      "side": 1,
+      "message": "How did these get generated? Perhaps instructions in some comments for any future developers to understand going forward??",
+      "range": {
+        "startLine": 38,
+        "startChar": 13,
+        "endLine": 38,
+        "endChar": 101
+      },
+      "revId": "509cc3221c144dbc6677e9a3d703c57501887eeb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
