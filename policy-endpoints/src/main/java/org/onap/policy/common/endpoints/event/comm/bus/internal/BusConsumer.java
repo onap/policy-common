@@ -61,23 +61,9 @@ public interface BusConsumer {
     public void close();
 
     /**
-     * BusConsumer that supports server-side filtering.
-     */
-    public interface FilterableBusConsumer extends BusConsumer {
-
-        /**
-         * Sets the server-side filter.
-         *
-         * @param filter new filter value, or {@code null}
-         * @throws IllegalArgumentException if the consumer cannot be built with the new filter
-         */
-        public void setFilter(String filter);
-    }
-
-    /**
      * Cambria based consumer.
      */
-    public static class CambriaConsumerWrapper implements FilterableBusConsumer {
+    public static class CambriaConsumerWrapper implements BusConsumer {
 
         /**
          * logger.
@@ -90,19 +76,9 @@ public interface BusConsumer {
         private final ConsumerBuilder builder;
 
         /**
-         * Locked while updating {@link #consumer} and {@link #newConsumer}.
-         */
-        private final Object consLocker = new Object();
-
-        /**
          * Cambria client.
          */
-        private CambriaConsumer consumer;
-
-        /**
-         * Cambria client to use for next fetch.
-         */
-        private CambriaConsumer newConsumer = null;
+        private final CambriaConsumer consumer;
 
         /**
          * fetch timeout.
@@ -169,7 +145,7 @@ public interface BusConsumer {
         @Override
         public Iterable<String> fetch() throws IOException {
             try {
-                return getCurrentConsumer().fetch();
+                return this.consumer.fetch();
             } catch (final IOException e) { //NOSONAR
                 logger.error("{}: cannot fetch because of {} - backoff for {} ms.", this, e.getMessage(),
                         this.fetchTimeout);
@@ -191,55 +167,7 @@ public interface BusConsumer {
         @Override
         public void close() {
             this.closeCondition.countDown();
-            getCurrentConsumer().close();
-        }
-
-        private CambriaConsumer getCurrentConsumer() {
-            CambriaConsumer old = null;
-            CambriaConsumer ret;
-
-            synchronized (consLocker) {
-                if (this.newConsumer != null) {
-                    // replace old consumer with new consumer
-                    old = this.consumer;
-                    this.consumer = this.newConsumer;
-                    this.newConsumer = null;
-                }
-
-                ret = this.consumer;
-            }
-
-            if (old != null) {
-                old.close();
-            }
-
-            return ret;
-        }
-
-        @Override
-        public void setFilter(String filter) {
-            logger.info("{}: setting DMAAP server-side filter: {}", this, filter);
-            builder.withServerSideFilter(filter);
-
-            try {
-                CambriaConsumer previous;
-                synchronized (consLocker) {
-                    previous = this.newConsumer;
-                    this.newConsumer = builder.build();
-                }
-
-                if (previous != null) {
-                    // there was already a new consumer - close it
-                    previous.close();
-                }
-
-            } catch (MalformedURLException | GeneralSecurityException e) {
-                /*
-                 * Since an exception occurred, "consumer" still has its old value, thus it should
-                 * not be closed at this point.
-                 */
-                throw new IllegalArgumentException(e);
-            }
+            this.consumer.close();
         }
 
         @Override

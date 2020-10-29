@@ -24,10 +24,8 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.UUID;
-import org.onap.policy.common.endpoints.event.comm.FilterableTopicSource;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.BusTopicSource;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FilterableBusConsumer;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.endpoints.utils.NetLoggerUtil;
 import org.onap.policy.common.endpoints.utils.NetLoggerUtil.EventType;
@@ -40,7 +38,7 @@ import org.slf4j.LoggerFactory;
  * notifying its listeners.
  */
 public abstract class SingleThreadedBusTopicSource extends BusTopicBase
-        implements Runnable, BusTopicSource, FilterableTopicSource {
+        implements Runnable, BusTopicSource {
 
     /**
      * Not to be converted to PolicyLogger. This will contain all instract /out traffic and only
@@ -260,17 +258,6 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
         NetLoggerUtil.log(EventType.IN, this.getTopicCommInfrastructure(), this.topic, event);
 
         return broadcast(event);
-    }
-
-
-    @Override
-    public void setFilter(String filter) {
-        if (consumer instanceof FilterableBusConsumer) {
-            ((FilterableBusConsumer) consumer).setFilter(filter);
-
-        } else {
-            throw new UnsupportedOperationException("no server-side filtering for topic " + topic);
-        }
     }
 
     @Override

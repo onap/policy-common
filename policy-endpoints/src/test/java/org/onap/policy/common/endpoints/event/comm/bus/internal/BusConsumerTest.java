@@ -100,23 +100,7 @@ public class BusConsumerTest extends TopicTestBase {
     @Test
     public void testCambriaConsumerWrapperClose() {
         CambriaConsumerWrapper cons = new CambriaConsumerWrapper(builder.build());
-
-        // set filter several times to cause different branches of close() to be executed
-        for (int count = 0; count < 3; ++count) {
-            cons.close();
-            final int count2 = count;
-            assertThatCode(() -> cons.setFilter("close=" + count2)).doesNotThrowAnyException();
-        }
-    }
-
-    @Test
-    public void testCambriaConsumerWrapperSetFilter() {
-        // set filter several times to cause different branches to be executed
-        CambriaConsumerWrapper cons = new CambriaConsumerWrapper(builder.build());
-        for (int count = 0; count < 3; ++count) {
-            final int count2 = count;
-            assertThatCode(() -> cons.setFilter("set-filter=" + count2)).doesNotThrowAnyException();
-        }
+        assertThatCode(() -> cons.close()).doesNotThrowAnyException();
     }
 
     @Test

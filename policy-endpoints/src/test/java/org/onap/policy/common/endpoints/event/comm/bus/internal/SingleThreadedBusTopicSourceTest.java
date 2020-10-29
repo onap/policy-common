@@ -43,7 +43,6 @@ import org.mockito.stubbing.Answer;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FilterableBusConsumer;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 
 public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
@@ -284,22 +283,6 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     @Test(expected = IllegalStateException.class)
     public void testOffer_NotStarted() {
         source.offer(MY_MESSAGE);
-    }
-
-    @Test
-    public void testSetFilter() {
-        FilterableBusConsumer filt = mock(FilterableBusConsumer.class);
-        cons = filt;
-
-        source.start();
-        source.setFilter("my-filter");
-        verify(filt).setFilter("my-filter");
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void testSetFilter_Unsupported() {
-        source.start();
-        source.setFilter("unsupported-filter");
     }
 
     @Test
