@@ -78,6 +78,12 @@
             </exclusions>
         </dependency>
 
+        <!-- needed by glassfish jersey which is needed by dmaap -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.onap.dmaap.messagerouter.dmaapclient</groupId>
             <artifactId>dmaapClient</artifactId>
