@@ -22,6 +22,30 @@
       "revId": "509cc3221c144dbc6677e9a3d703c57501887eeb",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9429fade_3f9d0277",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/coder/PropertyCoderTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-10-29T12:02:45Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "58042793_e950970f",
+      "range": {
+        "startLine": 38,
+        "startChar": 13,
+        "endLine": 38,
+        "endChar": 101
+      },
+      "revId": "509cc3221c144dbc6677e9a3d703c57501887eeb",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
