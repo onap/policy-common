@@ -71,7 +71,7 @@ public class CryptoUtils implements CryptoCoder {
     /**
      * CryptoUtils - encryption tool constructor.
      * @param secretKeySpec
-     *  AES supports 128, 192 or 256-bit long key size, it can be plain text or generated with key generator
+     *     AES supports 128, 192 or 256-bit long key size, it can be plain text or generated with key generator
      */
     public CryptoUtils(SecretKeySpec secretKeySpec) {
         this.secretKeySpec = secretKeySpec;
@@ -89,7 +89,7 @@ public class CryptoUtils implements CryptoCoder {
      * <p>Final result is to put in properties file is: IV + Outcome of openssl command
      *
      * @param value
-     *  The plain text string
+     *     The plain text string
      * @return The encrypted String
      */
     @Override
@@ -100,9 +100,9 @@ public class CryptoUtils implements CryptoCoder {
     /**
      * Encrypt a value based on the Policy Encryption Key.
      * @param value
-     *  The plain text string
+     *     The plain text string
      * @param secretKey
-     *  The secret key
+     *     The secret key
      * @return The encrypted String
      */
     public static String encrypt(String value, String secretKey) {
@@ -139,7 +139,7 @@ public class CryptoUtils implements CryptoCoder {
      * -K PrivateHexKey -iv 16BytesIVFromEncryptedString
      *
      * @param value
-     *  The encrypted string that must be decrypted using the Policy Encryption Key
+     *     The encrypted string that must be decrypted using the Policy Encryption Key
      * @return The String decrypted if string begin with 'enc:'
      */
     @Override
@@ -151,9 +151,9 @@ public class CryptoUtils implements CryptoCoder {
      * Decrypt a value based on the Policy Encryption Key if string begin with 'enc:'.
      *
      * @param value
-     *  The encrypted string that must be decrypted using the Policy Encryption Key
+     *     The encrypted string that must be decrypted using the Policy Encryption Key
      * @param secretKey
-     *  The secret key
+     *     The secret key
      * @return The String decrypted if string begin with 'enc:'
      */
     public static String decrypt(String value, String secretKey) {
@@ -227,7 +227,7 @@ public class CryptoUtils implements CryptoCoder {
      * Check if string is encrypted by verify if string prefix with 'enc:'.
      *
      * @param value
-     *  The encrypted string or plain text value
+     *     The encrypted string or plain text value
      * @return boolean value indicate if string prefix with enc: or not
      */
     public static boolean isEncrypted(String value) {

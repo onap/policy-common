@@ -65,7 +65,7 @@ public class OnapLoggingUtils {
      * if last argument is throwable/exception, pass it as argument to logger.
      * @param format message format can contains text and {}
      * @param arguments output arguments
-     * @return
+     * @return the formatted message as a String
      */
     public static String formatMessage(String format, Object...arguments) {
         if (arguments.length <= 0 || arguments[0] == null) {
