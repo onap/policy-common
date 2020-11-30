@@ -32,10 +32,18 @@ import java.time.format.DateTimeParseException;
 
 /**
  * GSON Type Adapter for "LocalDateTime" fields, that uses the standard
- * ISO_LOCAL_DATE_TIME formatter.
+ * ISO_LOCAL_DATE_TIME formatter, by default.
  */
 public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+    private DateTimeFormatter formatter;
+
+    public LocalDateTimeTypeAdapter() {
+        this(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+    }
+
+    public LocalDateTimeTypeAdapter(DateTimeFormatter formatter) {
+        this.formatter = formatter;
+    }
 
     @Override
     public LocalDateTime read(JsonReader in) throws IOException {
@@ -44,7 +52,7 @@ public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
                 in.nextNull();
                 return null;
             } else {
-                return LocalDateTime.parse(in.nextString(), FORMATTER);
+                return LocalDateTime.parse(in.nextString(), formatter);
             }
 
         } catch (DateTimeParseException e) {
@@ -57,7 +65,7 @@ public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
         if (value == null) {
             out.nullValue();
         } else {
-            String text = value.format(FORMATTER);
+            String text = value.format(formatter);
             out.value(text);
         }
     }
