@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +82,7 @@ public abstract class TopicBase implements Topic {
      *
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public TopicBase(List<String> servers, String topic) {
+    protected TopicBase(List<String> servers, String topic) {
         this(servers, topic, topic);
     }
 
@@ -93,7 +94,7 @@ public abstract class TopicBase implements Topic {
      *
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public TopicBase(List<String> servers, String topic, String effectiveTopic) {
+    protected TopicBase(List<String> servers, String topic, String effectiveTopic) {
 
         if (servers == null || servers.isEmpty()) {
             throw new IllegalArgumentException("Server(s) must be provided");

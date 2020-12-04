@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
+ * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -223,7 +224,7 @@ public interface BusConsumer {
          * @param busTopicParams contains above listed attributes
          * @throws MalformedURLException URL should be valid
          */
-        public DmaapConsumerWrapper(BusTopicParams busTopicParams) throws MalformedURLException {
+        protected DmaapConsumerWrapper(BusTopicParams busTopicParams) throws MalformedURLException {
 
             this.fetchTimeout = busTopicParams.getFetchTimeout();
 

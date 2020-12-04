@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,7 +53,7 @@ public abstract class CommonGroupValidationResult implements ValidationResult {
      *
      * @param messagePrefix status message prefix
      */
-    public CommonGroupValidationResult(String messagePrefix) {
+    protected CommonGroupValidationResult(String messagePrefix) {
         this.messagePrefix = messagePrefix;
         this.message = messagePrefix + status.toString();
     }

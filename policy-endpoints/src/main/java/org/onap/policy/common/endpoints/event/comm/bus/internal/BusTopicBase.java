@@ -3,13 +3,14 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -49,7 +50,7 @@ public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
 
     /**
      * Instantiates a new Bus Topic Base.
-     * 
+     *
      * <p>servers list of servers
      *  topic topic name
      *  apiKey API Key
@@ -59,7 +60,7 @@ public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
      * @param busTopicParams holds all our parameters
      * @throws IllegalArgumentException if invalid parameters are present
      */
-    public BusTopicBase(BusTopicParams busTopicParams) {
+    protected BusTopicBase(BusTopicParams busTopicParams) {
         super(busTopicParams.getServers(), busTopicParams.getTopic(), busTopicParams.getEffectiveTopic());
         this.apiKey = busTopicParams.getApiKey();
         this.apiSecret = busTopicParams.getApiSecret();
@@ -79,7 +80,7 @@ public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
 
     /**
      * Is using HTTPS.
-     * 
+     *
      * @return if using https
      */
     public boolean isUseHttps() {
@@ -88,7 +89,7 @@ public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
 
     /**
      * Is self signed certificates allowed.
-     * 
+     *
      * @return if self signed certificates are allowed
      */
     public boolean isAllowSelfSignedCerts() {
