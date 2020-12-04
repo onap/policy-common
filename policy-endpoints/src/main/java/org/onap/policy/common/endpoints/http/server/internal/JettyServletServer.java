@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019-2020 Nordix Foundation.
+ * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -131,7 +132,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      *
      * @throws IllegalArgumentException if invalid parameters are passed in
      */
-    public JettyServletServer(String name, boolean https, String host, int port, String contextPath) {
+    protected JettyServletServer(String name, boolean https, String host, int port, String contextPath) {
         String srvName = name;
 
         if (srvName == null || srvName.isEmpty()) {
@@ -183,7 +184,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         this.jettyServer.setHandler(context);
     }
 
-    public JettyServletServer(String name, String host, int port, String contextPath) {
+    protected JettyServletServer(String name, String host, int port, String contextPath) {
         this(name, false, host, port, contextPath);
     }
 

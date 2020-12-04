@@ -1,6 +1,7 @@
 /*
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +57,7 @@ public abstract class ValidationResultImpl implements ValidationResult {
      * @param name name of the object of this result
      * @param object object being validated
      */
-    public ValidationResultImpl(String name, Object object) {
+    protected ValidationResultImpl(String name, Object object) {
         this.name = name;
         this.object = object;
     }
@@ -69,7 +70,7 @@ public abstract class ValidationResultImpl implements ValidationResult {
      * @param status the validation status
      * @param message the validation message explaining the validation status
      */
-    public ValidationResultImpl(String name, Object object, ValidationStatus status, String message) {
+    protected ValidationResultImpl(String name, Object object, ValidationStatus status, String message) {
         this.name = name;
         this.object = object;
         this.status = status;
