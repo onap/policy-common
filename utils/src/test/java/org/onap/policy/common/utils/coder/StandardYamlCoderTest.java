@@ -97,6 +97,12 @@ public class StandardYamlCoderTest {
     }
 
     @Test
+    public void testFromJsonDoubleToInteger() throws Exception {
+        Object value = coder.decode("20", Object.class);
+        assertEquals(Integer.valueOf(20), value);
+    }
+
+    @Test
     public void testStandardTypeAdapter() throws Exception {
         String yaml = "abc: def\n";
         StandardCoderObject sco = coder.fromJson(yaml, StandardCoderObject.class);

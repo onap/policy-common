@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,6 +50,11 @@ import org.yaml.snakeyaml.serializer.Serializer;
 /**
  * YAML-JSON translator. The methods may throw either of the runtime exceptions,
  * YAMLException or JsonSyntaxException.
+ * <p/>
+ * Note: if the invoker wishes Double to be converted to Integer/Long when type
+ * Object.class is requested, then a Gson object must be used that will perform the
+ * translation. In addition, the {@link #convertFromDouble(Class, Object)} method should
+ * be overridden with an appropriate conversion method.
  */
 public class YamlJsonTranslator {
 
@@ -147,7 +152,22 @@ public class YamlJsonTranslator {
      * @return a POJO representing the original element
      */
     protected <T> T fromJson(JsonElement jel, Class<T> clazz) {
-        return gson.fromJson(jel, clazz);
+        return convertFromDouble(clazz, gson.fromJson(jel, clazz));
+    }
+
+    /**
+     * Converts a value from Double to Integer/Long, walking the value's contents if it's
+     * a List/Map. Only applies if the specified class refers to the Object class.
+     * Otherwise, it leaves the value unchanged.
+     * <p/>
+     * The default method simply returns the original value.
+     *
+     * @param clazz class of object to be decoded
+     * @param value value to be converted
+     * @return the converted value
+     */
+    protected <T> T convertFromDouble(Class<T> clazz, T value) {
+        return value;
     }
 
     /**

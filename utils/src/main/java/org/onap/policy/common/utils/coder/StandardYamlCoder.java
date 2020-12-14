@@ -34,7 +34,12 @@ public class StandardYamlCoder extends StandardCoder {
      * Constructs the object.
      */
     public StandardYamlCoder() {
-        translator = new YamlJsonTranslator(gson);
+        translator = new YamlJsonTranslator(gson) {
+            @Override
+            protected <T> T convertFromDouble(Class<T> clazz, T value) {
+                return StandardYamlCoder.this.convertFromDouble(clazz, value);
+            }
+        };
     }
 
     @Override
