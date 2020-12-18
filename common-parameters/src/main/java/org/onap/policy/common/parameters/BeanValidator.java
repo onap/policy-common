@@ -22,31 +22,23 @@ package org.onap.policy.common.parameters;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.BiPredicate;
-import java.util.function.Predicate;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
+import org.onap.policy.common.parameters.annotations.Entries;
+import org.onap.policy.common.parameters.annotations.Items;
 import org.onap.policy.common.parameters.annotations.Max;
 import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
+import org.onap.policy.common.parameters.annotations.Pattern;
+import org.onap.policy.common.parameters.annotations.Valid;
 
 /**
  * Bean validator, supporting the parameter annotations.
- * <p/>
- * Note: this currently does not support Min/Max validation of "short" or "byte"; these
- * annotations are simply ignored for these types.
  */
 public class BeanValidator {
-
-    /**
-     * {@code True} if there is a field-level annotation, {@code false} otherwise.
-     */
-    private boolean fieldIsAnnotated;
 
     /**
      * Validates top level fields within an object. For each annotated field, it retrieves
@@ -75,6 +67,22 @@ public class BeanValidator {
     }
 
     /**
+     * Adds validators based on the annotations that are available.
+     *
+     * @param validator where to add the validators
+     */
+    protected void addValidators(ValueValidator validator) {
+        validator.addAnnotation(NotNull.class, this::verNotNull);
+        validator.addAnnotation(NotBlank.class, this::verNotBlank);
+        validator.addAnnotation(Max.class, this::verMax);
+        validator.addAnnotation(Min.class, this::verMin);
+        validator.addAnnotation(Pattern.class, this::verRegex);
+        validator.addAnnotation(Valid.class, this::verCascade);
+        validator.addAnnotation(Items.class, this::verCollection);
+        validator.addAnnotation(Entries.class, this::verMap);
+    }
+
+    /**
      * Performs validation of all annotated fields found within the class.
      *
      * @param result validation results are added here
@@ -84,125 +92,9 @@ public class BeanValidator {
      */
     private void validateFields(BeanValidationResult result, Object object, Class<?> clazz) {
         for (Field field : clazz.getDeclaredFields()) {
-            validateField(result, object, clazz, field);
+            FieldValidator validator = makeFieldValidator(clazz, field);
+            validator.validateField(result, object);
         }
-    }
-
-    /**
-     * Performs validation of a single field.
-     *
-     * @param result validation results are added here
-     * @param object object whose fields are to be validated
-     * @param clazz class, within the object's hierarchy, containing the field
-     * @param field field whose value is to be validated
-     */
-    private void validateField(BeanValidationResult result, Object object, Class<?> clazz, Field field) {
-        final String fieldName = field.getName();
-        if (fieldName.contains("$")) {
-            return;
-        }
-
-        /*
-         * Identify the annotations. NotNull MUST be first so the check is run before the
-         * others.
-         */
-        fieldIsAnnotated = false;
-        List<Predicate<Object>> checkers = new ArrayList<>(10);
-        addAnnotation(clazz, field, checkers, NotNull.class, (annot, value) -> verNotNull(result, fieldName, value));
-        addAnnotation(clazz, field, checkers, NotBlank.class, (annot, value) -> verNotBlank(result, fieldName, value));
-        addAnnotation(clazz, field, checkers, Max.class, (annot, value) -> verMax(result, fieldName, annot, value));
-        addAnnotation(clazz, field, checkers, Min.class, (annot, value) -> verMin(result, fieldName, annot, value));
-
-        if (checkers.isEmpty()) {
-            // has no annotations - nothing to check
-            return;
-        }
-
-        // verify the field type is of interest
-        int mod = field.getModifiers();
-        if (Modifier.isStatic(mod)) {
-            classOnly(clazz.getName() + "." + fieldName + " is annotated but the field is static");
-            return;
-        }
-
-        // get the field's "getter" method
-        Method accessor = getAccessor(object.getClass(), fieldName);
-        if (accessor == null) {
-            classOnly(clazz.getName() + "." + fieldName + " is annotated but has no \"get\" method");
-            return;
-        }
-
-        // get the value
-        Object value = getValue(object, clazz, fieldName, accessor);
-
-        // perform the checks
-        if (value == null && field.getAnnotation(NotNull.class) == null && clazz.getAnnotation(NotNull.class) == null) {
-            // value is null and there's no null check - just return
-            return;
-        }
-
-        for (Predicate<Object> checker : checkers) {
-            if (!checker.test(value)) {
-                // invalid - don't bother with additional checks
-                return;
-            }
-        }
-    }
-
-    /**
-     * Gets the value from the object using the accessor function.
-     *
-     * @param object object whose value is to be retrieved
-     * @param clazz class containing the field
-     * @param fieldName name of the field
-     * @param accessor "getter" method
-     * @return the object's value
-     */
-    private Object getValue(Object object, Class<?> clazz, final String fieldName, Method accessor) {
-        try {
-            return accessor.invoke(object);
-
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            throw new IllegalArgumentException(clazz.getName() + "." + fieldName + " accessor threw an exception", e);
-        }
-    }
-
-    /**
-     * Throws an exception if there are field-level annotations.
-     *
-     * @param exceptionMessage exception message
-     */
-    private void classOnly(String exceptionMessage) {
-        if (fieldIsAnnotated) {
-            throw new IllegalArgumentException(exceptionMessage);
-        }
-    }
-
-    /**
-     * Looks for an annotation at the class or field level. If an annotation is found at
-     * either the field or class level, then it adds a verifier to the list of checkers.
-     *
-     * @param clazz class to be searched
-     * @param field field to be searched
-     * @param checkers where to place the new field verifier
-     * @param annotClass class of annotation to find
-     * @param check verification function to be added to the list, if the annotation is
-     *        found
-     */
-    private <T extends Annotation> void addAnnotation(Class<?> clazz, Field field, List<Predicate<Object>> checkers,
-                    Class<T> annotClass, BiPredicate<T, Object> check) {
-
-        // field annotation takes precedence over class annotation
-        T annot = field.getAnnotation(annotClass);
-        if (annot != null) {
-            fieldIsAnnotated = true;
-
-        } else if ((annot = clazz.getAnnotation(annotClass)) == null) {
-            return;
-        }
-
-        T annot2 = annot;
-        checkers.add(value -> check.test(annot2, value));
     }
 
     /**
@@ -210,27 +102,60 @@ public class BeanValidator {
      *
      * @param result where to add the validation result
      * @param fieldName field whose value is being verified
-     * @param value value to be verified, assumed to be non-null
-     * @return {@code true} if the value is valid, {@code false} otherwise
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
      */
-    private boolean verNotNull(BeanValidationResult result, String fieldName, Object value) {
-        return result.validateNotNull(fieldName, value);
+    public boolean verNotNull(BeanValidationResult result, String fieldName, Object value) {
+        if (value == null) {
+            ObjectValidationResult result2 =
+                            new ObjectValidationResult(fieldName, xlate(value), ValidationStatus.INVALID, "is null");
+            result.addResult(result2);
+            return false;
+        }
+
+        return true;
     }
 
     /**
-     * Verifies that the value is not blank.
+     * Verifies that the value is not blank. Note: this does <i>not</i> verify that the
+     * value is not {@code null}.
      *
      * @param result where to add the validation result
      * @param fieldName field whose value is being verified
-     * @param value value to be verified, assumed to be non-null
-     * @return {@code true} if the value is valid, {@code false} otherwise
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
      */
-    private boolean verNotBlank(BeanValidationResult result, String fieldName, Object value) {
+    public boolean verNotBlank(BeanValidationResult result, String fieldName, Object value) {
         if (value instanceof String && StringUtils.isBlank(value.toString())) {
-            ObjectValidationResult fieldResult =
-                            new ObjectValidationResult(fieldName, value, ValidationStatus.INVALID, "is blank");
-            result.addResult(fieldResult);
+            ObjectValidationResult result2 =
+                            new ObjectValidationResult(fieldName, xlate(value), ValidationStatus.INVALID, "is blank");
+            result.addResult(result2);
             return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Verifies that the value matches a regular expression.
+     *
+     * @param result where to add the validation result
+     * @param fieldName field whose value is being verified
+     * @param annot annotation against which the value is being verified
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
+     */
+    public boolean verRegex(BeanValidationResult result, String fieldName, Pattern annot, Object value) {
+        try {
+            if (value instanceof String && !com.google.re2j.Pattern.matches(annot.regexp(), value.toString())) {
+                ObjectValidationResult result2 = new ObjectValidationResult(fieldName, xlate(value),
+                                ValidationStatus.INVALID, "does not match regular expression " + annot.regexp());
+                result.addResult(result2);
+                return false;
+            }
+        } catch (RuntimeException e) {
+            // TODO log at trace level
+            return true;
         }
 
         return true;
@@ -242,10 +167,10 @@ public class BeanValidator {
      * @param result where to add the validation result
      * @param fieldName field whose value is being verified
      * @param annot annotation against which the value is being verified
-     * @param value value to be verified, assumed to be non-null
-     * @return {@code true} if the value is valid, {@code false} otherwise
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
      */
-    private boolean verMax(BeanValidationResult result, String fieldName, Max annot, Object value) {
+    public boolean verMax(BeanValidationResult result, String fieldName, Max annot, Object value) {
         if (!(value instanceof Number)) {
             return true;
         }
@@ -265,9 +190,9 @@ public class BeanValidator {
             return true;
         }
 
-        ObjectValidationResult fieldResult = new ObjectValidationResult(fieldName, value, ValidationStatus.INVALID,
+        ObjectValidationResult result2 = new ObjectValidationResult(fieldName, xlate(value), ValidationStatus.INVALID,
                         "exceeds the maximum value: " + annot.value());
-        result.addResult(fieldResult);
+        result.addResult(result2);
         return false;
     }
 
@@ -277,22 +202,35 @@ public class BeanValidator {
      * @param result where to add the validation result
      * @param fieldName field whose value is being verified
      * @param annot annotation against which the value is being verified
-     * @param value value to be verified, assumed to be non-null
-     * @return {@code true} if the value is valid, {@code false} otherwise
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
      */
-    private boolean verMin(BeanValidationResult result, String fieldName, Min annot, Object value) {
+    public boolean verMin(BeanValidationResult result, String fieldName, Min annot, Object value) {
+        return verMin(result, fieldName, annot.value(), value);
+    }
+
+    /**
+     * Verifies that the value is >= the minimum value.
+     *
+     * @param result where to add the validation result
+     * @param fieldName field whose value is being verified
+     * @param min minimum against which the value is being verified
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
+     */
+    public boolean verMin(BeanValidationResult result, String fieldName, long min, Object value) {
         if (!(value instanceof Number)) {
             return true;
         }
 
         Number num = (Number) value;
         if (num instanceof Integer || num instanceof Long) {
-            if (num.longValue() >= annot.value()) {
+            if (num.longValue() >= min) {
                 return true;
             }
 
         } else if (num instanceof Float || num instanceof Double) {
-            if (num.doubleValue() >= annot.value()) {
+            if (num.doubleValue() >= min) {
                 return true;
             }
 
@@ -300,54 +238,181 @@ public class BeanValidator {
             return true;
         }
 
-        ObjectValidationResult fieldResult = new ObjectValidationResult(fieldName, value, ValidationStatus.INVALID,
-                        "is below the minimum value: " + annot.value());
-        result.addResult(fieldResult);
+        ObjectValidationResult result2 = new ObjectValidationResult(fieldName, xlate(value), ValidationStatus.INVALID,
+                        "is below the minimum value: " + min);
+        result.addResult(result2);
         return false;
     }
 
     /**
-     * Gets an accessor method for the given field.
+     * Verifies that the value is valid by recursively invoking
+     * {@link #validateTop(String, Object)}.
      *
-     * @param clazz class whose methods are to be searched
-     * @param fieldName field whose "getter" is to be identified
-     * @return the field's "getter" method, or {@code null} if it is not found
+     * @param result where to add the validation result
+     * @param fieldName field whose value is being verified
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
      */
-    private Method getAccessor(Class<?> clazz, String fieldName) {
-        String capname = StringUtils.capitalize(fieldName);
-        Method accessor = getMethod(clazz, "get" + capname);
-        if (accessor != null) {
-            return accessor;
+    public boolean verCascade(BeanValidationResult result, String fieldName, Object value) {
+        if (value == null || value instanceof Collection || value instanceof Map) {
+            return true;
         }
 
-        return getMethod(clazz, "is" + capname);
+        BeanValidationResult result2 = validateTop(fieldName, value);
+
+        if (result2.isClean()) {
+            return true;
+        }
+
+        result.addResult(result2);
+
+        return result2.isValid();
     }
 
     /**
-     * Gets the "getter" method having the specified name.
+     * Validates the items in a collection.
      *
-     * @param clazz class whose methods are to be searched
-     * @param methodName name of the method of interest
-     * @return the method, or {@code null} if it is not found
+     * @param result where to add the validation result
+     * @param fieldName name of the field containing the collection
+     * @param annot validation annotations for individual items
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
      */
-    private Method getMethod(Class<?> clazz, String methodName) {
-        for (Method method : clazz.getMethods()) {
-            if (methodName.equals(method.getName()) && validMethod(method)) {
-                return method;
-            }
+    public boolean verCollection(BeanValidationResult result, String fieldName, Annotation annot, Object value) {
+
+        if (!(value instanceof Collection)) {
+            return true;
         }
 
-        return null;
+        ItemValidator itemValidator = makeItemValidator(annot);
+
+        return verCollection(result, fieldName, itemValidator, value);
     }
 
     /**
-     * Determines if a method is a valid "getter".
+     * Validates the items in a collection.
      *
-     * @param method method to be checked
-     * @return {@code true} if the method is a valid "getter", {@code false} otherwise
+     * @param result where to add the validation result
+     * @param fieldName name of the field containing the collection
+     * @param itemValidator validator for individual items within the list
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
      */
-    private boolean validMethod(Method method) {
-        int mod = method.getModifiers();
-        return !(Modifier.isStatic(mod) || method.getReturnType() == void.class || method.getParameterCount() != 0);
+    public boolean verCollection(BeanValidationResult result, String fieldName, ValueValidator itemValidator,
+                    Object value) {
+
+        if (!(value instanceof Collection) || itemValidator.isEmpty()) {
+            return true;
+        }
+
+        Collection<?> list = (Collection<?>) value;
+
+        BeanValidationResult result2 = new BeanValidationResult(fieldName, value);
+        int count = 0;
+        for (Object item : list) {
+            itemValidator.validateValue(result2, String.valueOf(count++), item);
+        }
+
+        if (result2.isClean()) {
+            return true;
+        }
+
+        result.addResult(result2);
+        return false;
+    }
+
+    /**
+     * Validates the items in a Map.
+     *
+     * @param result where to add the validation result
+     * @param fieldName name of the field containing the map
+     * @param annot validation annotations for individual entries
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
+     */
+    public boolean verMap(BeanValidationResult result, String fieldName, Entries annot, Object value) {
+
+        if (!(value instanceof Map)) {
+            return true;
+        }
+
+        EntryValidator entryValidator = makeEntryValidator(annot.key(), annot.value());
+
+        return verMap(result, fieldName, entryValidator, value);
+    }
+
+    /**
+     * Validates the items in a Map.
+     *
+     * @param result where to add the validation result
+     * @param fieldName name of the field containing the map
+     * @param entryValidator validator for individual entries within the Map
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
+     */
+    public boolean verMap(BeanValidationResult result, String fieldName, EntryValidator entryValidator, Object value) {
+
+        if (!(value instanceof Map)) {
+            return true;
+        }
+
+        Map<?, ?> map = (Map<?, ?>) value;
+
+        BeanValidationResult result2 = new BeanValidationResult(fieldName, value);
+
+        for (Entry<?, ?> entry : map.entrySet()) {
+            entryValidator.validateEntry(result2, entry);
+        }
+
+        if (result2.isClean()) {
+            return true;
+        }
+
+        result.addResult(result2);
+        return false;
+    }
+
+    /**
+     * Makes a field validator.
+     *
+     * @param clazz class containing the field
+     * @param field field of interest
+     * @return a validator for the given field
+     */
+    protected FieldValidator makeFieldValidator(Class<?> clazz, Field field) {
+        return new FieldValidator(this, clazz, field);
+    }
+
+    /**
+     * Makes an item validator.
+     *
+     * @param annot container for the item annotations
+     * @return a new item validator
+     */
+    protected ItemValidator makeItemValidator(Annotation annot) {
+        return new ItemValidator(this, annot);
+    }
+
+    /**
+     * Makes an entry validator.
+     *
+     * @param keyAnnot container for the annotations associated with the entry key
+     * @param valueAnnot container for the annotations associated with the entry value
+     * @return a new entry validator
+     */
+    protected EntryValidator makeEntryValidator(Annotation keyAnnot, Annotation valueAnnot) {
+        return new EntryValidator(this, keyAnnot, valueAnnot);
+    }
+
+    /**
+     * Translates a value to something printable, for use by
+     * {@link ObjectValidationResult}. This default method simply returns the original
+     * value.
+     *
+     * @param value value to be translated
+     * @return the translated value
+     */
+    public Object xlate(Object value) {
+        return value;
     }
 }

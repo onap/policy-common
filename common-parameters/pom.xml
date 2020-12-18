@@ -31,6 +31,10 @@
     <description>[${project.parent.artifactId}] module provides common property and parameter handling the ONAP Policy Framework</description>
 
     <dependencies>
+        <dependency>
+            <groupId>com.google.re2j</groupId>
+            <artifactId>re2j</artifactId>
+        </dependency>
          <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
