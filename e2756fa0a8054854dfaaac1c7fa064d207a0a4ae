@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68c63653_d6c0408b",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/BeanValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-12-19T03:19:31Z",
+      "side": 0,
+      "message": "this method has been split, with part moved to FieldValidator and the other to ValueValidator.",
+      "revId": "e2756fa0a8054854dfaaac1c7fa064d207a0a4ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "86dea306_21044364",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/BeanValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-12-19T03:19:31Z",
+      "side": 0,
+      "message": "these methods have been moved to FieldValidator",
+      "revId": "e2756fa0a8054854dfaaac1c7fa064d207a0a4ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5d6a79a_c096d960",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/BeanValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2020-12-19T03:19:31Z",
+      "side": 0,
+      "message": "split between ValueValidator and its subclasses",
+      "revId": "e2756fa0a8054854dfaaac1c7fa064d207a0a4ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
