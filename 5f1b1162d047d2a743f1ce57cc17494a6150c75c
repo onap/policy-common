@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "d0d8e15c_1cf369c5",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/BeanValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 356,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-12-21T10:33:11Z",
+      "side": 1,
+      "message": "Should we not return false if the incoming value is not a map?",
+      "range": {
+        "startLine": 356,
+        "startChar": 0,
+        "endLine": 356,
+        "endChar": 1
+      },
+      "revId": "5f1b1162d047d2a743f1ce57cc17494a6150c75c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fe6f78bb_7fe8c8af",
         "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/FieldValidator.java",
         "patchSetId": 1
@@ -19,6 +42,24 @@
     },
     {
       "key": {
+        "uuid": "380fe1fe_f54a90ea",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/FieldValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-12-21T10:33:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fe6f78bb_7fe8c8af",
+      "revId": "5f1b1162d047d2a743f1ce57cc17494a6150c75c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d09d2eaf_690318d5",
         "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/annotations/Items.java",
         "patchSetId": 1
@@ -33,6 +74,24 @@
       "revId": "5f1b1162d047d2a743f1ce57cc17494a6150c75c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5bc2bcf6_4877bc1d",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/annotations/Items.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-12-21T10:33:11Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "d09d2eaf_690318d5",
+      "revId": "5f1b1162d047d2a743f1ce57cc17494a6150c75c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }

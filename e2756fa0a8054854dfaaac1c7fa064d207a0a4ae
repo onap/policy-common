@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "18a7436e_afef43a1",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/BeanValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-12-21T10:33:11Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "68c63653_d6c0408b",
+      "revId": "e2756fa0a8054854dfaaac1c7fa064d207a0a4ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "86dea306_21044364",
         "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/BeanValidator.java",
         "patchSetId": 1
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "2ee6e224_0a108692",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/BeanValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-12-21T10:33:11Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "86dea306_21044364",
+      "revId": "e2756fa0a8054854dfaaac1c7fa064d207a0a4ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b5d6a79a_c096d960",
         "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/BeanValidator.java",
         "patchSetId": 1
@@ -50,6 +86,24 @@
       "revId": "e2756fa0a8054854dfaaac1c7fa064d207a0a4ae",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7881ae47_e4b4157c",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/BeanValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2020-12-21T10:33:11Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "b5d6a79a_c096d960",
+      "revId": "e2756fa0a8054854dfaaac1c7fa064d207a0a4ae",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
