@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,11 +34,14 @@ import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
 import org.onap.policy.common.parameters.annotations.Pattern;
 import org.onap.policy.common.parameters.annotations.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Bean validator, supporting the parameter annotations.
  */
 public class BeanValidator {
+    public static final Logger logger = LoggerFactory.getLogger(BeanValidator.class);
 
     /**
      * Validates top level fields within an object. For each annotated field, it retrieves
@@ -147,18 +150,18 @@ public class BeanValidator {
      */
     public boolean verRegex(BeanValidationResult result, String fieldName, Pattern annot, Object value) {
         try {
-            if (value instanceof String && !com.google.re2j.Pattern.matches(annot.regexp(), value.toString())) {
-                ObjectValidationResult result2 = new ObjectValidationResult(fieldName, xlate(value),
-                                ValidationStatus.INVALID, "does not match regular expression " + annot.regexp());
-                result.addResult(result2);
-                return false;
+            if (value instanceof String && com.google.re2j.Pattern.matches(annot.regexp(), value.toString())) {
+                return true;
             }
+
         } catch (RuntimeException e) {
-            // TODO log at trace level
-            return true;
+            logger.warn("validation error for regular expression: {}", annot.regexp(), e);
         }
 
-        return true;
+        ObjectValidationResult result2 = new ObjectValidationResult(fieldName, xlate(value), ValidationStatus.INVALID,
+                        "does not match regular expression " + annot.regexp());
+        result.addResult(result2);
+        return false;
     }
 
     /**
@@ -352,7 +355,7 @@ public class BeanValidator {
      */
     public boolean verMap(BeanValidationResult result, String fieldName, EntryValidator entryValidator, Object value) {
 
-        if (!(value instanceof Map)) {
+        if (!(value instanceof Map) || entryValidator.isEmpty()) {
             return true;
         }
 
