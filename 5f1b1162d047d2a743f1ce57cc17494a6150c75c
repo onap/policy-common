@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "da6ee96f_b5a7fb07",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/ValueValidator.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-01-04T22:41:20Z",
+      "side": 0,
+      "message": "this was previously moved to another class, so no longer needed here",
+      "revId": "5f1b1162d047d2a743f1ce57cc17494a6150c75c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
