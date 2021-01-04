@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -157,6 +157,7 @@ public class FieldValidator extends ValueValidator {
      * @return the annotation, or {@code null} if neither the field nor the class has the
      *         desired annotation
      */
+    @Override
     public <T extends Annotation> T getAnnotation(Class<T> annotClass) {
 
         // field annotation takes precedence over class annotation
@@ -178,9 +179,9 @@ public class FieldValidator extends ValueValidator {
      */
     private Method getAccessor(Class<?> clazz, String fieldName) {
         String capname = StringUtils.capitalize(fieldName);
-        Method accessor = getMethod(clazz, "get" + capname);
-        if (accessor != null) {
-            return accessor;
+        Method accessor2 = getMethod(clazz, "get" + capname);
+        if (accessor2 != null) {
+            return accessor2;
         }
 
         return getMethod(clazz, "is" + capname);

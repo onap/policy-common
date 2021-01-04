@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,30 +20,30 @@
 
 package org.onap.policy.common.parameters;
 
-import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
-import lombok.AccessLevel;
 import lombok.Getter;
 import org.junit.Before;
 import org.junit.Test;
+import org.onap.policy.common.parameters.annotations.Entries;
+import org.onap.policy.common.parameters.annotations.Items;
 import org.onap.policy.common.parameters.annotations.Max;
 import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
+import org.onap.policy.common.parameters.annotations.Pattern;
+import org.onap.policy.common.parameters.annotations.Valid;
 
 public class TestBeanValidator {
-    private static final String GET_MSG = "\"get\"";
-    private static final IllegalStateException EXPECTED_EXCEPTION = new IllegalStateException("expected exception");
     private static final String TOP = "top";
     private static final String STR_FIELD = "strValue";
     private static final String INT_FIELD = "intValue";
     private static final String NUM_FIELD = "numValue";
-    private static final String BOOL_FIELD = "boolValue";
     private static final String STRING_VALUE = "string value";
     private static final int INT_VALUE = 20;
 
@@ -114,115 +114,6 @@ public class TestBeanValidator {
     }
 
     @Test
-    public void testValidateField() {
-        /*
-         * Note: nested classes contain fields like "$this", thus the check for "$" in the
-         * variable name is already covered by the other tests.
-         */
-
-        /*
-         * Class with no annotations.
-         */
-        class NoAnnotations {
-            @SuppressWarnings("unused")
-            String strValue;
-        }
-
-        NoAnnotations noAnnot = new NoAnnotations();
-        noAnnot.strValue = null;
-        assertTrue(validator.validateTop(TOP, noAnnot).isValid());
-
-        /*
-         * Class containing a static field with an annotation.
-         */
-        AnnotFieldStatic annotFieldStatic = new AnnotFieldStatic();
-        assertThatIllegalArgumentException().isThrownBy(() -> validator.validateTop(TOP, annotFieldStatic))
-                        .withMessageContaining(STR_FIELD).withMessageContaining("static");
-
-        /*
-         * Class containing a static field, with an annotation at the class level.
-         */
-        AnnotClassStatic annotClassStatic = new AnnotClassStatic();
-        assertTrue(validator.validateTop(TOP, annotClassStatic).isValid());
-
-        /*
-         * Class with no getter method, with field-level annotation.
-         */
-        class NoGetter {
-            @NotNull
-            String strValue;
-        }
-
-        NoGetter noGetter = new NoGetter();
-        assertThatIllegalArgumentException().isThrownBy(() -> validator.validateTop(TOP, noGetter))
-                        .withMessageContaining(STR_FIELD).withMessageContaining(GET_MSG);
-
-        /*
-         * Class with no getter method, with class-level annotation.
-         */
-        @NotNull
-        class ClassNoGetter {
-            @SuppressWarnings("unused")
-            String strValue;
-        }
-
-        ClassNoGetter classNoGetter = new ClassNoGetter();
-        assertTrue(validator.validateTop(TOP, classNoGetter).isValid());
-
-        /*
-         * Class with "blank", but no "null" check. Value is null.
-         */
-        class NoNullCheck {
-            @NotBlank
-            @Getter
-            String strValue;
-        }
-
-        NoNullCheck noNullCheck = new NoNullCheck();
-        assertTrue(validator.validateTop(TOP, noNullCheck).isValid());
-
-        /*
-         * Class with conflicting minimum and maximum, where the value doesn't satisfy
-         * either of them. This should only generate one result, rather than one for each
-         * check. Note: the "max" check occurs before the "min" check, so that's the one
-         * we expect in the result.
-         */
-        class MinAndMax {
-            @Getter
-            @Min(200)
-            @Max(100)
-            Integer intValue;
-        }
-
-        MinAndMax minAndMax = new MinAndMax();
-        minAndMax.intValue = 150;
-        BeanValidationResult result = validator.validateTop(INT_FIELD, minAndMax);
-        assertFalse(result.isValid());
-        assertInvalid("testValidateField", result, INT_FIELD, "maximum");
-        assertFalse(result.getResult().contains("minimum"));
-    }
-
-    @Test
-    public void testGetValue() {
-        /*
-         * Class where the getter throws an exception.
-         */
-        class GetExcept {
-            @NotNull
-            String strValue;
-
-            @SuppressWarnings("unused")
-            public String getStrValue() {
-                throw EXPECTED_EXCEPTION;
-            }
-        }
-
-        GetExcept getExcept = new GetExcept();
-        assertThatIllegalArgumentException().isThrownBy(() -> validator.validateTop(TOP, getExcept))
-                        .withMessageContaining(STR_FIELD).withMessageContaining("accessor threw");
-    }
-
-    @Test
     public void testVerNotNull() {
         class NotNullCheck {
             @Getter
@@ -278,6 +169,58 @@ public class TestBeanValidator {
         NotBlankInt notBlankInt = new NotBlankInt();
         notBlankInt.intValue = 0;
         assertTrue(validator.validateTop(TOP, notBlankInt).isValid());
+    }
+
+    @Test
+    public void testVerRegex() {
+        class RegexCheck {
+            @Getter
+            @Pattern(regexp = "[a-f]*")
+            String strValue;
+        }
+
+        RegexCheck regexCheck = new RegexCheck();
+
+        // does not match
+        regexCheck.strValue = "xyz";
+        assertInvalid("testVerRegex", validator.validateTop(TOP, regexCheck), STR_FIELD,
+                        "does not match regular expression [a-f]");
+
+        // matches
+        regexCheck.strValue = "abcabc";
+        assertTrue(validator.validateTop(TOP, regexCheck).isValid());
+
+        // invalid regex
+        class InvalidRegexCheck {
+            @Getter
+            @Pattern(regexp = "[a-f")
+            String strValue;
+        }
+
+        InvalidRegexCheck invalidRegexCheck = new InvalidRegexCheck();
+
+        // does not match
+        invalidRegexCheck.strValue = "abc";
+        assertInvalid("testVerRegex", validator.validateTop(TOP, invalidRegexCheck), STR_FIELD,
+                        "does not match regular expression [a-f");
+
+        // matches
+        regexCheck.strValue = "abcabc";
+        assertTrue(validator.validateTop(TOP, regexCheck).isValid());
+
+        /*
+         * Class with "regex" annotation on an integer.
+         */
+        class RegexInt {
+            @Getter
+            @Pattern(regexp = "[a-f]*")
+            int intValue;
+        }
+
+        RegexInt regexInt = new RegexInt();
+        regexInt.intValue = 0;
+        assertInvalid("testVerRegex", validator.validateTop(TOP, regexInt), INT_FIELD,
+                        "does not match regular expression [a-f]");
     }
 
     @Test
@@ -468,6 +411,116 @@ public class TestBeanValidator {
         assertTrue(validator.validateTop(TOP, atomIntField).isValid());
     }
 
+    @Test
+    public void testVerCascade() {
+        class Item {
+            @Getter
+            @NotNull
+            Integer intValue;
+        }
+
+        @Getter
+        class Container {
+            @Valid
+            Item checked;
+
+            Item unchecked;
+
+            @Valid
+            List<Item> items;
+
+            @Valid
+            Map<String, Item> itemMap;
+        }
+
+        Container cont = new Container();
+        cont.unchecked = new Item();
+        cont.items = List.of(new Item());
+        cont.itemMap = Map.of(STRING_VALUE, new Item());
+
+        cont.checked = null;
+        assertTrue(validator.validateTop(TOP, cont).isValid());
+
+        cont.checked = new Item();
+
+        assertInvalid("testVerCascade", validator.validateTop(TOP, cont), INT_FIELD, "null");
+
+        cont.checked.intValue = INT_VALUE;
+        assertTrue(validator.validateTop(TOP, cont).isValid());
+    }
+
+    @Test
+    public void testVerCollection() {
+        @Getter
+        class Container {
+            @Items(min = @Min(5))
+            List<Integer> items;
+
+            // not a collection - should not be checked
+            @Items(valid = {@Valid})
+            String strValue;
+
+            String noAnnotations;
+        }
+
+        Container cont = new Container();
+        cont.strValue = STRING_VALUE;
+        cont.noAnnotations = STRING_VALUE;
+
+        // null collection - always valid
+        assertTrue(validator.validateTop(TOP, cont).isValid());
+
+        // empty collection - always valid
+        cont.items = List.of();
+        assertTrue(validator.validateTop(TOP, cont).isValid());
+
+        cont.items = List.of(-10, -20);
+        assertThat(validator.validateTop(TOP, cont).getResult()).contains("\"0\"", "-10", "\"1\"", "-20", "minimum");
+
+        cont.items = List.of(10, -30);
+        assertThat(validator.validateTop(TOP, cont).getResult()).contains("\"1\"", "-30", "minimum")
+                        .doesNotContain("\"0\"");
+
+        cont.items = List.of(10, 20);
+        assertTrue(validator.validateTop(TOP, cont).isValid());
+    }
+
+    @Test
+    public void testVerMap() {
+        @Getter
+        class Container {
+            @Entries(key = @Items(), value = @Items(min = {@Min(5)}))
+            Map<String, Integer> items;
+
+            // not a map - should not be checked
+            @Entries(key = @Items(), value = @Items(min = {@Min(5)}))
+            String strValue;
+
+            String noAnnotations;
+        }
+
+        Container cont = new Container();
+        cont.strValue = STRING_VALUE;
+        cont.noAnnotations = STRING_VALUE;
+
+        // null map - always valid
+        assertTrue(validator.validateTop(TOP, cont).isValid());
+
+        // empty map - always valid
+        cont.items = Map.of();
+        assertTrue(validator.validateTop(TOP, cont).isValid());
+
+        cont.items = Map.of("abc", -10, "def", -20);
+        assertThat(validator.validateTop(TOP, cont).getResult()).contains("abc", "-10", "def", "-20", "minimum");
+
+        cont.items = Map.of("abc", 10, "def", -30);
+        assertThat(validator.validateTop(TOP, cont).getResult()).contains("def", "-30", "minimum")
+                        .doesNotContain("abc");
+
+        cont.items = Map.of("abc", 10, "def", 20);
+        assertTrue(validator.validateTop(TOP, cont).isValid());
+    }
+
     private <T> void assertNumeric(String testName, T object, Consumer<Integer> setter, String fieldName,
                     String expectedText, int inside, int edge, int outside) {
         setter.accept(inside);
@@ -482,170 +535,8 @@ public class TestBeanValidator {
         assertInvalid("testVerNotNull", validator.validateTop(TOP, object), fieldName, expectedText);
     }
 
-    @Test
-    public void testGetAccessor() {
-        /*
-         * Class with "get" method has been tested through-out this junit, so no need to
-         * do more.
-         */
 
-        /*
-         * Class with "is" method.
-         */
-        class IsField {
-            @NotNull
-            Boolean boolValue;
-
-            @SuppressWarnings("unused")
-            public Boolean isBoolValue() {
-                return boolValue;
-            }
-        }
-
-        // ok value
-        IsField isField = new IsField();
-        isField.boolValue = true;
-        assertTrue(validator.validateTop(TOP, isField).isValid());
-
-        // invalid value
-        isField.boolValue = null;
-        assertInvalid("testGetAccessor", validator.validateTop(TOP, isField), BOOL_FIELD, "null");
-    }
-
-    @Test
-    public void testGetMethod() {
-        /*
-         * Class with some fields annotated and some not.
-         */
-        @Getter
-        class Mixed {
-            Integer intValue;
-
-            @NotNull
-            String strValue;
-        }
-
-        // invalid
-        Mixed mixed = new Mixed();
-        BeanValidationResult result = validator.validateTop(TOP, mixed);
-        assertInvalid("testGetMethod", result, STR_FIELD, "null");
-        assertFalse(result.getResult().contains(INT_FIELD));
-
-        // intValue is null, but it isn't annotated so this should be valid
-        mixed.strValue = STRING_VALUE;
-        assertTrue(validator.validateTop(TOP, mixed).isValid());
-    }
-
-    @Test
-    public void testValidMethod() {
-
-        /*
-         * Plain getter.
-         */
-        class PlainGetter {
-            @NotNull
-            @Getter
-            String strValue;
-        }
-
-        // invalid
-        PlainGetter plainGetter = new PlainGetter();
-        assertInvalid("testValidMethod", validator.validateTop(TOP, plainGetter), STR_FIELD, "null");
-
-        // valid
-        plainGetter.strValue = STRING_VALUE;
-        assertTrue(validator.validateTop(TOP, plainGetter).isValid());
-
-        /*
-         * Static getter - should throw an exception.
-         */
-        StaticGetter staticGetter = new StaticGetter();
-        assertThatIllegalArgumentException().isThrownBy(() -> validator.validateTop(TOP, staticGetter))
-                        .withMessageContaining(STR_FIELD).withMessageContaining(GET_MSG);
-
-        /*
-         * Protected getter - should throw an exception.
-         */
-        class ProtectedGetter {
-            @NotNull
-            @Getter(AccessLevel.PROTECTED)
-            String strValue;
-        }
-
-        ProtectedGetter protectedGetter = new ProtectedGetter();
-        assertThatIllegalArgumentException().isThrownBy(() -> validator.validateTop(TOP, protectedGetter))
-                        .withMessageContaining(STR_FIELD).withMessageContaining(GET_MSG);
-
-        /*
-         * getter is a "void" function - should throw an exception.
-         */
-        class VoidGetter {
-            @NotNull
-            String strValue;
-
-            @SuppressWarnings("unused")
-            public void getStrValue() {
-                // do nothing
-            }
-        }
-
-        VoidGetter voidGetter = new VoidGetter();
-        assertThatIllegalArgumentException().isThrownBy(() -> validator.validateTop(TOP, voidGetter))
-                        .withMessageContaining(STR_FIELD).withMessageContaining(GET_MSG);
-
-        /*
-         * getter takes an argument - should throw an exception.
-         */
-        class ArgGetter {
-            @NotNull
-            String strValue;
-
-            @SuppressWarnings("unused")
-            public String getStrValue(String echo) {
-                return echo;
-            }
-        }
-
-        ArgGetter argGetter = new ArgGetter();
-        assertThatIllegalArgumentException().isThrownBy(() -> validator.validateTop(TOP, argGetter))
-                        .withMessageContaining(STR_FIELD).withMessageContaining(GET_MSG);
-    }
-
-
-    private void assertInvalid(String testName, BeanValidationResult result, String fieldName, String message) {
-        String text = result.getResult();
-        assertNotNull(testName, text);
-        assertTrue(testName, text.contains(fieldName));
-        assertTrue(testName, text.contains(message));
-    }
-
-    /**
-     * Annotated static field.
-     */
-    private static class AnnotFieldStatic {
-        @NotNull
-        static String strValue;
-    }
-
-    /**
-     * Annotated class with a static field.
-     */
-    @NotNull
-    private static class AnnotClassStatic {
-        @SuppressWarnings("unused")
-        static String strValue;
-    }
-
-    /**
-     * Class with an annotated field, but a static "getter".
-     */
-    private static class StaticGetter {
-        @NotNull
-        String strValue;
-
-        @SuppressWarnings("unused")
-        public static String getStrValue() {
-            return STRING_VALUE;
-        }
+    private void assertInvalid(String testName, BeanValidationResult result, String... text) {
+        assertThat(result.getResult()).describedAs(testName).contains(text);
     }
 }

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,6 +65,7 @@ public class ItemValidator extends ValueValidator {
      * @return the annotation, or {@code null} if the {@link #annotationContainer} does
      *         not contain the desired annotation
      */
+    @Override
     public <T extends Annotation> T getAnnotation(Class<T> annotClass) {
         try {
             for (Method meth : annotationContainer.getClass().getDeclaredMethods()) {
@@ -80,7 +81,10 @@ public class ItemValidator extends ValueValidator {
         return null;
     }
 
-    private <T extends Annotation> T getAnnotation2(Class<T> annotClass, Method method)
+    /**
+     * Note: this is only marked "protected" so it can be overridden for junit testing.
+     */
+    protected <T extends Annotation> T getAnnotation2(Class<T> annotClass, Method method)
                     throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 
         Class<?> ret = method.getReturnType();
@@ -101,7 +105,9 @@ public class ItemValidator extends ValueValidator {
             return null;
         }
 
-        // TODO log if there's more than one item
+        if (arrobj.length > 1) {
+            throw new IllegalArgumentException("extra item annotations of type: " + annotClass.getName());
+        }
 
         return arrobj[0];
     }
