@@ -22,6 +22,7 @@ package org.onap.policy.common.parameters;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -64,6 +65,7 @@ public class BeanValidator {
         // check class hierarchy - don't need to check interfaces
         for (Class<?> clazz = object.getClass(); clazz != null; clazz = clazz.getSuperclass()) {
             validateFields(result, object, clazz);
+            validateMethods(result, object, clazz);
         }
 
         return result;
@@ -96,7 +98,22 @@ public class BeanValidator {
     private void validateFields(BeanValidationResult result, Object object, Class<?> clazz) {
         for (Field field : clazz.getDeclaredFields()) {
             FieldValidator validator = makeFieldValidator(clazz, field);
-            validator.validateField(result, object);
+            validator.validateComponent(result, object);
+        }
+    }
+
+    /**
+     * Performs validation of all annotated methods found within the class.
+     *
+     * @param result validation results are added here
+     * @param object object whose fields are to be validated
+     * @param clazz class, within the object's hierarchy, to be examined for fields to be
+     *        verified
+     */
+    private void validateMethods(BeanValidationResult result, Object object, Class<?> clazz) {
+        for (Method method: clazz.getDeclaredMethods()) {
+            MethodValidator validator = makeMethodValidator(clazz, method);
+            validator.validateComponent(result, object);
         }
     }
 
@@ -384,6 +401,17 @@ public class BeanValidator {
      */
     protected FieldValidator makeFieldValidator(Class<?> clazz, Field field) {
         return new FieldValidator(this, clazz, field);
+    }
+
+    /**
+     * Makes a method validator.
+     *
+     * @param clazz class containing the method
+     * @param method method of interest
+     * @return a validator for the given method
+     */
+    protected MethodValidator makeMethodValidator(Class<?> clazz, Method method) {
+        return new MethodValidator(this, clazz, method);
     }
 
     /**

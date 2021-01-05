@@ -21,6 +21,7 @@
 package org.onap.policy.common.parameters.annotations;
 
 import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
@@ -31,7 +32,7 @@ import java.lang.annotation.Target;
  * Indicates that a field (i.e., String) may not be empty.
  */
 @Retention(RUNTIME)
-@Target({TYPE, FIELD})
+@Target({TYPE, FIELD, METHOD})
 public @interface NotBlank {
 
 }

@@ -22,6 +22,7 @@ package org.onap.policy.common.parameters;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * Utilities for validator tests.
@@ -65,6 +66,32 @@ public class ValidatorUtil {
             return clazz.getDeclaredField(fieldName);
 
         } catch (NoSuchFieldException | SecurityException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Gets a method from this object.
+     *
+     * @param methodName name of the method of interest
+     * @return the given method
+     */
+    protected Method getMethod(String methodName) {
+        return getMethod(getClass(), methodName);
+    }
+
+    /**
+     * Gets a method from a given class.
+     *
+     * @param clazz class containing the method
+     * @param methodName name of the method of interest
+     * @return the given method
+     */
+    protected Method getMethod(Class<?> clazz, String methodName) {
+        try {
+            return clazz.getDeclaredMethod(methodName);
+
+        } catch (NoSuchMethodException | SecurityException e) {
             throw new RuntimeException(e);
         }
     }

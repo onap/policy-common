@@ -20,42 +20,22 @@
 
 package org.onap.policy.common.parameters;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.onap.policy.common.parameters.annotations.NotNull;
 
 /**
  * Validator of the contents of a field, supporting the parameter annotations.
  */
-public class FieldValidator extends ValueValidator {
-
-    /**
-     * {@code True} if there is a field-level annotation, {@code false} otherwise.
-     */
-    @Getter
-    @Setter(AccessLevel.PROTECTED)
-    private boolean fieldAnnotated = false;
-
-    /**
-     * Class containing the field of interest.
-     */
-    private final Class<?> clazz;
-
-    /**
-     * Field of interest.
-     */
-    private final Field field;
+public class FieldValidator extends ComponentValidator {
 
     /**
      * Method to retrieve the field's value.
      */
+    @Getter(AccessLevel.PROTECTED)
     private Method accessor;
 
 
@@ -67,13 +47,9 @@ public class FieldValidator extends ValueValidator {
      * @param field field whose value is to be validated
      */
     public FieldValidator(BeanValidator validator, Class<?> clazz, Field field) {
-        this.clazz = clazz;
-        this.field = field;
+        super(clazz, field, field.getName());
 
         String fieldName = field.getName();
-        if (fieldName.contains("$")) {
-            return;
-        }
 
         validator.addValidators(this);
 
@@ -97,77 +73,6 @@ public class FieldValidator extends ValueValidator {
             checkers.clear();
             return;
         }
-
-        // determine if null is allowed
-        if (field.getAnnotation(NotNull.class) != null || clazz.getAnnotation(NotNull.class) != null) {
-            setNullAllowed(false);
-        }
-    }
-
-    /**
-     * Performs validation of a single field.
-     *
-     * @param result validation results are added here
-     * @param object object whose field is to be validated
-     */
-    public void validateField(BeanValidationResult result, Object object) {
-        if (isEmpty()) {
-            // has no annotations - nothing to check
-            return;
-        }
-
-        // get the value
-        Object value = getValue(object, accessor);
-
-        validateValue(result, field.getName(), value);
-    }
-
-    /**
-     * Gets the value from the object using the accessor function.
-     *
-     * @param object object whose value is to be retrieved
-     * @param accessor "getter" method
-     * @return the object's value
-     */
-    private Object getValue(Object object, Method accessor) {
-        try {
-            return accessor.invoke(object);
-
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-            throw new IllegalArgumentException(clazz.getName() + "." + field.getName() + " accessor threw an exception",
-                            e);
-        }
-    }
-
-    /**
-     * Throws an exception if there are field-level annotations.
-     *
-     * @param exceptionMessage exception message
-     */
-    private void classOnly(String exceptionMessage) {
-        if (isFieldAnnotated()) {
-            throw new IllegalArgumentException(exceptionMessage);
-        }
-    }
-
-    /**
-     * Gets an annotation from the field or the class.
-     *
-     * @param annotClass annotation class of interest
-     * @return the annotation, or {@code null} if neither the field nor the class has the
-     *         desired annotation
-     */
-    @Override
-    public <T extends Annotation> T getAnnotation(Class<T> annotClass) {
-
-        // field annotation takes precedence over class annotation
-        T annot = field.getAnnotation(annotClass);
-        if (annot != null) {
-            setFieldAnnotated(true);
-            return annot;
-        }
-
-        return clazz.getAnnotation(annotClass);
     }
 
     /**
@@ -202,16 +107,5 @@ public class FieldValidator extends ValueValidator {
         }
 
         return null;
-    }
-
-    /**
-     * Determines if a method is a valid "getter".
-     *
-     * @param method method to be checked
-     * @return {@code true} if the method is a valid "getter", {@code false} otherwise
-     */
-    private boolean validMethod(Method method) {
-        int mod = method.getModifiers();
-        return !(Modifier.isStatic(mod) || method.getReturnType() == void.class || method.getParameterCount() != 0);
     }
 }

@@ -26,6 +26,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import lombok.Getter;
 import org.junit.Before;
@@ -111,6 +112,73 @@ public class TestBeanValidator {
         assertInvalid("testValidateFields", result, INT_FIELD, "minimum");
         derived.strValue = STRING_VALUE;
         derived.intValue = INT_VALUE;
+    }
+
+    @Test
+    public void testValidateTop_testValidateMethods() {
+        // validate null
+        assertTrue(validator.validateTop(TOP, null).isValid());
+
+        // validate something that has no annotations
+        assertTrue(validator.validateTop(TOP, validator).isValid());
+
+        final AtomicReference<String> strValue = new AtomicReference<>();
+        final AtomicReference<Integer> intValue = new AtomicReference<>();
+
+        @NotNull
+        class Data {
+            @SuppressWarnings("unused")
+            public String strValue() {
+                return strValue.get();
+            }
+        }
+
+        // one failure case
+        Data data = new Data();
+        strValue.set(null);
+        BeanValidationResult result = validator.validateTop(TOP, data);
+        assertInvalid("testValidateMethods", result, STR_FIELD, "null");
+        assertTrue(result.getResult().contains(TOP));
+
+        // one success case
+        strValue.set(STRING_VALUE);
+        assertTrue(validator.validateTop(TOP, data).isValid());
+
+        /**
+         * Repeat with a subclass.
+         */
+        @Getter
+        class Derived extends Data {
+            @Min(10)
+            public int intValue() {
+                return intValue.get();
+            }
+        }
+
+        Derived derived = new Derived();
+        strValue.set(STRING_VALUE);
+        intValue.set(INT_VALUE);
+
+        // success case
+        assertTrue(validator.validateTop(TOP, derived).isValid());
+
+        // failure cases
+        strValue.set(null);
+        assertInvalid("testValidateMethods", validator.validateTop(TOP, derived), STR_FIELD, "null");
+        strValue.set(STRING_VALUE);
+
+        intValue.set(1);
+        assertInvalid("testValidateMethods", validator.validateTop(TOP, derived), INT_FIELD, "minimum");
+        intValue.set(INT_VALUE);
+
+        // both invalid
+        strValue.set(null);
+        intValue.set(1);
+        result = validator.validateTop(TOP, derived);
+        assertInvalid("testValidateMethods", result, STR_FIELD, "null");
+        assertInvalid("testValidateMethods", result, INT_FIELD, "minimum");
+        strValue.set(STRING_VALUE);
+        intValue.set(INT_VALUE);
     }
 
     @Test

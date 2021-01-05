@@ -24,7 +24,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import lombok.Getter;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,6 +31,7 @@ import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotNull;
 
 public class TestFieldValidator extends ValidatorUtil {
+    private static final String NO_METHOD = "noMethod";
     private static final String UNANNOTATED_FIELD = "unannotated";
     private static final String INT_FIELD = "intValue";
     private static final int VALID_INT = 10;
@@ -80,12 +80,6 @@ public class TestFieldValidator extends ValidatorUtil {
     @Min(0)
     private int parameterizedMethod;
 
-    /**
-     * Accessor is {@link #getExMethod()}, which throws an exception.
-     */
-    @Min(0)
-    private int exMethod;
-
 
     @Before
     public void setUp() {
@@ -93,36 +87,10 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testGetAnnotation() {
-        // field-level annotation
-        assertThat(new FieldValidator(bean, TestFieldValidator.class, getField(INT_FIELD)).isEmpty()).isFalse();
-
-        // class-level annotation
-        assertThat(new FieldValidator(bean, ClassAnnot.class, getField(ClassAnnot.class, "text")).isEmpty()).isFalse();
-    }
-
-    @Test
-    public void testFieldValidator() throws NoSuchFieldException, SecurityException {
-        /*
-         * Note: nested classes contain fields like "$this", thus the check for "$" in the
-         * variable name is already covered by the other tests.
-         */
-
-        /*
-         * Class with no annotations.
-         */
-        @NotNull
-        class NoAnnotations {
-            @SuppressWarnings("unused")
-            String strValue;
-        }
-
-        Field field = NoAnnotations.class.getDeclaredField("this$0");
-
-        assertThat(new FieldValidator(bean, NoAnnotations.class, field).isEmpty()).isTrue();
+    public void testFieldValidator() {
 
         // unannotated
-        assertThat(new FieldValidator(bean, TestFieldValidator.class, getField("unannotated")).isEmpty()).isTrue();
+        assertThat(new FieldValidator(bean, TestFieldValidator.class, getField(UNANNOTATED_FIELD)).isEmpty()).isTrue();
 
         // these are invalid for various reasons
 
@@ -130,65 +98,36 @@ public class TestFieldValidator extends ValidatorUtil {
         assertThatThrownBy(() -> new FieldValidator(bean, TestFieldValidator.class, staticField2))
                         .isInstanceOf(IllegalArgumentException.class);
 
-        Field noMethodField = getField("noMethod");
+        Field noMethodField = getField(NO_METHOD);
         assertThatThrownBy(() -> new FieldValidator(bean, TestFieldValidator.class, noMethodField))
                         .isInstanceOf(IllegalArgumentException.class);
 
         // annotated
         assertThat(new FieldValidator(bean, TestFieldValidator.class, getField(INT_FIELD)).isEmpty()).isFalse();
+
+        // class-level annotation on a field without a method
+        assertThat(new FieldValidator(bean, ClassAnnot.class, getField(ClassAnnot.class, NO_METHOD)).isEmpty())
+                        .isTrue();
+
+        // class-level annotation on a static field
+        assertThat(new FieldValidator(bean, ClassAnnot.class, getField(ClassAnnot.class, "staticValue")).isEmpty())
+                        .isTrue();
     }
 
     @Test
-    public void testFieldValidator_SetNullAllowed() {
-        // default - null is allowed
-        assertThat(new FieldValidator(bean, TestFieldValidator.class, getField(INT_FIELD)).isNullAllowed()).isTrue();
-
-        // field-level NotNull
-        assertThat(new FieldValidator(bean, TestFieldValidator.class, getField("notNullValue")).isNullAllowed())
-                        .isFalse();
-
-        // class-level NotNull
-        assertThat(new FieldValidator(bean, ClassAnnot.class, getField(ClassAnnot.class, "noMethod")).isNullAllowed())
-                        .isFalse();
-    }
-
-    @Test
-    public void testValidateField_testGetValue() {
-        // unannotated
-        BeanValidationResult result = new BeanValidationResult(MY_NAME, this);
-        new FieldValidator(bean, getClass(), getField(UNANNOTATED_FIELD)).validateField(result, this);
-        assertThat(result.getResult()).isNull();
+    public void testValidateComponent() {
 
         // valid
         intValue = VALID_INT;
-        result = new BeanValidationResult(MY_NAME, this);
-        new FieldValidator(bean, getClass(), getField(INT_FIELD)).validateField(result, this);
+        BeanValidationResult result = new BeanValidationResult(MY_NAME, this);
+        new FieldValidator(bean, getClass(), getField(INT_FIELD)).validateComponent(result, this);
         assertThat(result.getResult()).isNull();
 
         // invalid
         intValue = INVALID_INT;
         result = new BeanValidationResult(MY_NAME, this);
-        new FieldValidator(bean, getClass(), getField(INT_FIELD)).validateField(result, this);
+        new FieldValidator(bean, getClass(), getField(INT_FIELD)).validateComponent(result, this);
         assertThat(result.getResult()).contains(INT_FIELD);
-
-        // throws an exception
-        FieldValidator validator = new FieldValidator(bean, TestFieldValidator.class, getField("exMethod"));
-        BeanValidationResult result2 = new BeanValidationResult(MY_NAME, this);
-        assertThatThrownBy(() -> validator.validateField(result2, this)).isInstanceOf(IllegalArgumentException.class)
-                        .getCause().isInstanceOf(InvocationTargetException.class).getCause()
-                        .hasMessage("expected exception");
-    }
-
-    @Test
-    public void testClassOnly() {
-        // class-level annotation has no bearing on a static field
-        assertThat(new FieldValidator(bean, ClassAnnot.class, getField(ClassAnnot.class, "staticValue")).isEmpty())
-                        .isTrue();
-
-        // field-level annotation on a static field
-        Field staticField2 = getField("staticField");
-        assertThatThrownBy(() -> new FieldValidator(bean, TestFieldValidator.class, staticField2))
-                        .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
@@ -206,57 +145,13 @@ public class TestFieldValidator extends ValidatorUtil {
 
         // these are invalid for various reasons
 
-        Field noMethodField = getField("noMethod");
+        Field noMethodField = getField(NO_METHOD);
         assertThatThrownBy(() -> new FieldValidator(bean, TestFieldValidator.class, noMethodField))
                         .isInstanceOf(IllegalArgumentException.class);
 
         Field staticMethodField = getField("staticMethod");
         assertThatThrownBy(() -> new FieldValidator(bean, TestFieldValidator.class, staticMethodField))
                         .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    public void testValidMethod() {
-        assertThat(new FieldValidator(bean, TestFieldValidator.class, getField(INT_FIELD)).isEmpty()).isFalse();
-
-        // these are invalid for various reasons
-
-        Field staticMethodField = getField("staticMethod");
-        assertThatThrownBy(() -> new FieldValidator(bean, TestFieldValidator.class, staticMethodField))
-                        .isInstanceOf(IllegalArgumentException.class);
-
-        Field voidMethodField = getField("voidMethod");
-        assertThatThrownBy(() -> new FieldValidator(bean, TestFieldValidator.class, voidMethodField))
-                        .isInstanceOf(IllegalArgumentException.class);
-
-        Field paramMethodField = getField("parameterizedMethod");
-        assertThatThrownBy(() -> new FieldValidator(bean, TestFieldValidator.class, paramMethodField))
-                        .isInstanceOf(IllegalArgumentException.class);
-    }
-
-    @Test
-    public void testIsFieldAnnotated_testSetFieldAnnotated() {
-        // annotated at the field level
-        assertThat(new FieldValidator(bean, getClass(), getField(INT_FIELD)).isFieldAnnotated()).isTrue();
-
-        // unannotated
-        assertThat(new FieldValidator(bean, getClass(), getField(UNANNOTATED_FIELD)).isFieldAnnotated()).isFalse();
-    }
-
-    public static int getStaticMethod() {
-        return -1000;
-    }
-
-    public void getVoidMethod() {
-        // do nothing
-    }
-
-    public int getParameterizedMethod(boolean flag) {
-        return 0;
-    }
-
-    public int getExMethod() {
-        throw new RuntimeException("expected exception");
     }
 
     @NotNull
