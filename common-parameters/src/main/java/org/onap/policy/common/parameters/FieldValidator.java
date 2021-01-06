@@ -21,10 +21,14 @@
 package org.onap.policy.common.parameters;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedParameterizedType;
+import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
+import java.util.Collection;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
@@ -76,6 +80,8 @@ public class FieldValidator extends ValueValidator {
         }
 
         validator.addValidators(this);
+        addListValidator(validator);
+        addMapValidator(validator);
 
         if (checkers.isEmpty()) {
             // has no annotations - nothing to check
@@ -102,6 +108,65 @@ public class FieldValidator extends ValueValidator {
         if (field.getAnnotation(NotNull.class) != null || clazz.getAnnotation(NotNull.class) != null) {
             setNullAllowed(false);
         }
+    }
+
+    /**
+     * Adds validators for the individual items within a collection, if the field is a
+     * collection.
+     *
+     * @param validator provider of validation methods
+     */
+    private void addListValidator(BeanValidator validator) {
+        if (!Collection.class.isAssignableFrom(field.getType())) {
+            return;
+        }
+
+        AnnotatedType tannot = field.getAnnotatedType();
+        if (!(tannot instanceof AnnotatedParameterizedType)) {
+            return;
+        }
+
+        AnnotatedType[] targs = ((AnnotatedParameterizedType) tannot).getAnnotatedActualTypeArguments();
+        if (targs.length != 1) {
+            return;
+        }
+
+        Item2Validator itemValidator = new Item2Validator(validator, targs[0]);
+        if (itemValidator.isEmpty()) {
+            return;
+        }
+
+        checkers.add((result, fieldName, value) -> validator.verCollection(result, fieldName, itemValidator, value));
+    }
+
+    /**
+     * Adds validators for the individual entries within a map, if the field is a map.
+     *
+     * @param validator provider of validation methods
+     */
+    private void addMapValidator(BeanValidator validator) {
+        if (!Map.class.isAssignableFrom(field.getType())) {
+            return;
+        }
+
+        AnnotatedType tannot = field.getAnnotatedType();
+        if (!(tannot instanceof AnnotatedParameterizedType)) {
+            return;
+        }
+
+        AnnotatedType[] targs = ((AnnotatedParameterizedType) tannot).getAnnotatedActualTypeArguments();
+        if (targs.length != 2) {
+            return;
+        }
+
+        Item2Validator keyValidator = new Item2Validator(validator, targs[0]);
+        Item2Validator valueValidator = new Item2Validator(validator, targs[1]);
+        if (keyValidator.isEmpty() && valueValidator.isEmpty()) {
+            return;
+        }
+
+        checkers.add((result, fieldName, value) -> validator.verMap(result, fieldName, keyValidator, valueValidator,
+                        value));
     }
 
     /**

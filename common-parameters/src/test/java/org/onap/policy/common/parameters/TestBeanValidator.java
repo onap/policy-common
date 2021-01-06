@@ -23,6 +23,7 @@ package org.onap.policy.common.parameters;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -30,7 +31,6 @@ import java.util.function.Consumer;
 import lombok.Getter;
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.parameters.annotations.Entries;
 import org.onap.policy.common.parameters.annotations.Items;
 import org.onap.policy.common.parameters.annotations.Max;
 import org.onap.policy.common.parameters.annotations.Min;
@@ -489,11 +489,10 @@ public class TestBeanValidator {
     public void testVerMap() {
         @Getter
         class Container {
-            @Entries(key = @Items(), value = @Items(min = {@Min(5)}))
-            Map<String, Integer> items;
+            Map<String, @Min(5) Integer> items;
 
-            // not a map - should not be checked
-            @Entries(key = @Items(), value = @Items(min = {@Min(5)}))
+            // not a map
+            @NotBlank
             String strValue;
 
             String noAnnotations;
@@ -519,6 +518,26 @@ public class TestBeanValidator {
 
         cont.items = Map.of("abc", 10, "def", 20);
         assertTrue(validator.validateTop(TOP, cont).isValid());
+    }
+
+    @Test
+    public void testGetEntryName() {
+        assertThat(validator.getEntryName(makeEntry(null, 0))).isEmpty();
+        assertThat(validator.getEntryName(makeEntry("", 0))).isEmpty();
+        assertThat(validator.getEntryName(makeEntry(STRING_VALUE, 0))).isEqualTo(STRING_VALUE);
+    }
+
+    /**
+     * Makes a Map entry with the given key and value.
+     *
+     * @param key desired key
+     * @param value desired value
+     * @return a new Map entry
+     */
+    private Map.Entry<String, Integer> makeEntry(String key, int value) {
+        HashMap<String, Integer> map = new HashMap<>();
+        map.put(key, value);
+        return map.entrySet().iterator().next();
     }
 
     private <T> void assertNumeric(String testName, T object, Consumer<Integer> setter, String fieldName,

@@ -21,6 +21,7 @@
 package org.onap.policy.common.parameters;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Field;
 
 /**
@@ -41,6 +42,16 @@ public class ValidatorUtil {
      */
     protected Annotation getAnnot(String fieldName) {
         return getField(fieldName).getAnnotations()[0];
+    }
+
+    /**
+     * Gets the annotated type for a given field.
+     *
+     * @param fieldName name of the field of interest
+     * @return the given field's annotated type
+     */
+    protected AnnotatedType getAnnotType(String fieldName) {
+        return getField(fieldName).getAnnotatedType();
     }
 
     /**
