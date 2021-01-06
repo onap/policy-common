@@ -25,13 +25,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.parameters.annotations.Min;
+import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
 
 public class TestFieldValidator extends ValidatorUtil {
+    private static final String INT_LIST_FIELD = "intList";
+    private static final String INT_MAP_FIELD = "intMap";
     private static final String UNANNOTATED_FIELD = "unannotated";
     private static final String INT_FIELD = "intValue";
     private static final int VALID_INT = 10;
@@ -43,6 +48,24 @@ public class TestFieldValidator extends ValidatorUtil {
     @Min(0)
     @Getter
     private int intValue;
+
+    @Getter
+    private List<@Min(1) Integer> intList;
+
+    @Getter
+    private Map<@NotBlank String, @Min(1) Integer> intMap;
+
+    @Getter
+    private Map<@NotBlank String, Integer> annotatedKeyMap;
+
+    @Getter
+    private Map<String, @Min(1) Integer> annotatedValueMap;
+
+    @Getter
+    private List<Integer> unannotatedList;
+
+    @Getter
+    private Map<String, Integer> unannotatedMap;
 
     @NotNull
     @Getter
@@ -153,6 +176,52 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
+    public void testAddListValidator() {
+
+        // unannotated
+        assertThat(new FieldValidator(bean, TestFieldValidator.class, getField("unannotatedList")).isEmpty()).isTrue();
+
+        // annotated
+        assertThat(new FieldValidator(bean, TestFieldValidator.class, getField(INT_LIST_FIELD)).isEmpty()).isFalse();
+    }
+
+    @Test
+    public void testAddMapValidator() {
+
+        // unannotated
+        assertThat(new FieldValidator(bean, TestFieldValidator.class, getField("unannotatedMap")).isEmpty()).isTrue();
+
+        // annotated
+        assertThat(new FieldValidator(bean, TestFieldValidator.class, getField(INT_MAP_FIELD)).isEmpty()).isFalse();
+
+        // only the key is annotated
+        FieldValidator validator = new FieldValidator(bean, TestFieldValidator.class, getField("annotatedKeyMap"));
+        assertThat(validator.isEmpty()).isFalse();
+
+        BeanValidationResult result = new BeanValidationResult(MY_NAME, this);
+        annotatedKeyMap = Map.of("abc", -10);
+        validator.validateField(result, this);
+        assertThat(result.getResult()).isNull();
+
+        annotatedKeyMap = Map.of(" ", -10);
+        validator.validateField(result, this);
+        assertThat(result.getResult()).contains("blank").doesNotContain("-10");
+
+        // only the value is annotated
+        validator = new FieldValidator(bean, TestFieldValidator.class, getField("annotatedValueMap"));
+        assertThat(validator.isEmpty()).isFalse();
+
+        result = new BeanValidationResult(MY_NAME, this);
+        annotatedValueMap = Map.of(" ", 10);
+        validator.validateField(result, this);
+        assertThat(result.getResult()).isNull();
+
+        annotatedValueMap = Map.of(" ", -10);
+        validator.validateField(result, this);
+        assertThat(result.getResult()).doesNotContain("blank").contains("\" \"", "-10");
+    }
+
+    @Test
     public void testValidateField_testGetValue() {
         // unannotated
         BeanValidationResult result = new BeanValidationResult(MY_NAME, this);
@@ -177,6 +246,22 @@ public class TestFieldValidator extends ValidatorUtil {
         assertThatThrownBy(() -> validator.validateField(result2, this)).isInstanceOf(IllegalArgumentException.class)
                         .getCause().isInstanceOf(InvocationTargetException.class).getCause()
                         .hasMessage("expected exception");
+    }
+
+    @Test
+    public void testValidateField_testGetValue_ListField() {
+        // valid
+        BeanValidationResult result = new BeanValidationResult(MY_NAME, this);
+        intList = List.of(10, 20, 30, 40);
+        new FieldValidator(bean, getClass(), getField(INT_LIST_FIELD)).validateField(result, this);
+        assertThat(result.getResult()).isNull();
+
+        // invalid
+        result = new BeanValidationResult(MY_NAME, this);
+        intList = List.of(9, -8, 7, -6);
+        new FieldValidator(bean, getClass(), getField(INT_LIST_FIELD)).validateField(result, this);
+        assertThat(result.getResult()).doesNotContain("0", "9").contains("1", "-8").doesNotContain("2", "7")
+                        .contains("3", "-6");
     }
 
     @Test

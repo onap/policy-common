@@ -288,6 +288,9 @@ public class BeanValidator {
         }
 
         ItemValidator itemValidator = makeItemValidator(annot);
+        if (itemValidator.isEmpty()) {
+            return true;
+        }
 
         return verCollection(result, fieldName, itemValidator, value);
     }
@@ -304,7 +307,7 @@ public class BeanValidator {
     public boolean verCollection(BeanValidationResult result, String fieldName, ValueValidator itemValidator,
                     Object value) {
 
-        if (!(value instanceof Collection) || itemValidator.isEmpty()) {
+        if (!(value instanceof Collection)) {
             return true;
         }
 
@@ -373,6 +376,62 @@ public class BeanValidator {
 
         result.addResult(result2);
         return false;
+    }
+
+    /**
+     * Validates the items in a Map.
+     *
+     * @param result where to add the validation result
+     * @param fieldName name of the field containing the map
+     * @param keyValidator validator for an individual key within the Map entry
+     * @param valueValidator validator for an individual value within the Map entry
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
+     */
+    public boolean verMap(BeanValidationResult result, String fieldName, ValueValidator keyValidator,
+                    ValueValidator valueValidator, Object value) {
+
+        if (!(value instanceof Map)) {
+            return true;
+        }
+
+        Map<?, ?> map = (Map<?, ?>) value;
+
+        BeanValidationResult result2 = new BeanValidationResult(fieldName, value);
+
+        for (Entry<?, ?> entry : map.entrySet()) {
+            String name = getEntryName(entry);
+
+            BeanValidationResult result3 = new BeanValidationResult(name, entry);
+            keyValidator.validateValue(result3, "key", entry.getKey());
+            valueValidator.validateValue(result3, "value", entry.getValue());
+
+            if (!result3.isClean()) {
+                result2.addResult(result3);
+            }
+        }
+
+        if (result2.isClean()) {
+            return true;
+        }
+
+        result.addResult(result2);
+        return false;
+    }
+
+    /**
+     * Gets a name for an entry.
+     *
+     * @param entry entry whose name is to be determined
+     * @return a name for the entry
+     */
+    protected <K, V> String getEntryName(Map.Entry<K, V> entry) {
+        K key = entry.getKey();
+        if (key == null) {
+            return "";
+        }
+
+        return key.toString();
     }
 
     /**
