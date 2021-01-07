@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "81239b96_4109240a",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/ItemValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-01-07T22:52:00Z",
+      "side": 1,
+      "message": "actually, ItemValidator.java was removed and Item2Validator.java was renamed to ItemValidator.java; there are no other changes to the file other than to change all appearances of \"Item2\" to \"Item\".",
+      "revId": "4fd3271364741062cfc3b84b79425e93e3e3d864",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "786526d1_3341cbb6",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestItemValidator.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-01-07T22:52:00Z",
+      "side": 1,
+      "message": "again, this file was simply a rename from TestItem2Validator.  The only other changes made during the rename were to replace references to \"Item2\" with \"Item\".",
+      "revId": "4fd3271364741062cfc3b84b79425e93e3e3d864",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
