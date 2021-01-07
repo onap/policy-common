@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,37 +21,36 @@
 package org.onap.policy.common.parameters;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.AnnotatedType;
 
 /**
  * Validator of an "item", which is typically found in a collection, or the key or value
  * components of an entry in a Map.
  */
 public class ItemValidator extends ValueValidator {
-    private final Annotation annotationContainer;
+    private final AnnotatedType annotatedType;
 
     /**
      * Constructs the object.
      *
      * @param validator provider of validation methods
-     * @param annotationContainer an annotation containing validation annotations to be
+     * @param annotatedType a type having validation annotations to be
      *        applied to the item
      */
-    public ItemValidator(BeanValidator validator, Annotation annotationContainer) {
-        this(validator, annotationContainer, true);
+    public ItemValidator(BeanValidator validator, AnnotatedType annotatedType) {
+        this(validator, annotatedType, true);
     }
 
     /**
      * Constructs the object.
      *
      * @param validator provider of validation methods
-     * @param annotationContainer an annotation containing validation annotations to be
+     * @param annotatedType a type having validation annotations to be
      *        applied to the item
      * @param addValidators {@code true} if to add validators
      */
-    public ItemValidator(BeanValidator validator, Annotation annotationContainer, boolean addValidators) {
-        this.annotationContainer = annotationContainer;
+    public ItemValidator(BeanValidator validator, AnnotatedType annotatedType, boolean addValidators) {
+        this.annotatedType = annotatedType;
 
         if (addValidators) {
             validator.addValidators(this);
@@ -62,53 +61,11 @@ public class ItemValidator extends ValueValidator {
      * Gets an annotation from the field or the class.
      *
      * @param annotClass annotation class of interest
-     * @return the annotation, or {@code null} if the {@link #annotationContainer} does
+     * @return the annotation, or {@code null} if the {@link #annotatedType} does
      *         not contain the desired annotation
      */
     @Override
     public <T extends Annotation> T getAnnotation(Class<T> annotClass) {
-        try {
-            for (Method meth : annotationContainer.getClass().getDeclaredMethods()) {
-                T annot = getAnnotation2(annotClass, meth);
-                if (annot != null) {
-                    return annot;
-                }
-            }
-        } catch (RuntimeException | IllegalAccessException | InvocationTargetException e) {
-            throw new IllegalArgumentException("cannot determine " + annotClass.getName(), e);
-        }
-
-        return null;
-    }
-
-    /**
-     * Note: this is only marked "protected" so it can be overridden for junit testing.
-     */
-    protected <T extends Annotation> T getAnnotation2(Class<T> annotClass, Method method)
-                    throws IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-
-        Class<?> ret = method.getReturnType();
-        if (!ret.isArray()) {
-            return null;
-        }
-
-        Class<?> comp = ret.getComponentType();
-        if (comp != annotClass) {
-            return null;
-        }
-
-        // get the array for this type of annotation
-        @SuppressWarnings("unchecked")
-        T[] arrobj = (T[]) method.invoke(annotationContainer);
-
-        if (arrobj.length == 0) {
-            return null;
-        }
-
-        if (arrobj.length > 1) {
-            throw new IllegalArgumentException("extra item annotations of type: " + annotClass.getName());
-        }
-
-        return arrobj[0];
+        return annotatedType.getAnnotation(annotClass);
     }
 }

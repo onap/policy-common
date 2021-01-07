@@ -31,7 +31,6 @@ import java.util.function.Consumer;
 import lombok.Getter;
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.parameters.annotations.Items;
 import org.onap.policy.common.parameters.annotations.Max;
 import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotBlank;
@@ -453,11 +452,10 @@ public class TestBeanValidator {
     public void testVerCollection() {
         @Getter
         class Container {
-            @Items(min = @Min(5))
-            List<Integer> items;
+            List<@Min(5) Integer> items;
 
             // not a collection - should not be checked
-            @Items(valid = {@Valid})
+            @Valid
             String strValue;
 
             String noAnnotations;

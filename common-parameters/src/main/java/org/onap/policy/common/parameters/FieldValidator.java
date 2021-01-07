@@ -131,7 +131,7 @@ public class FieldValidator extends ValueValidator {
             return;
         }
 
-        Item2Validator itemValidator = new Item2Validator(validator, targs[0]);
+        ItemValidator itemValidator = new ItemValidator(validator, targs[0]);
         if (itemValidator.isEmpty()) {
             return;
         }
@@ -159,8 +159,8 @@ public class FieldValidator extends ValueValidator {
             return;
         }
 
-        Item2Validator keyValidator = new Item2Validator(validator, targs[0]);
-        Item2Validator valueValidator = new Item2Validator(validator, targs[1]);
+        ItemValidator keyValidator = new ItemValidator(validator, targs[0]);
+        ItemValidator valueValidator = new ItemValidator(validator, targs[1]);
         if (keyValidator.isEmpty() && valueValidator.isEmpty()) {
             return;
         }

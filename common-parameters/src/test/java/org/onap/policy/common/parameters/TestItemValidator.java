@@ -23,15 +23,11 @@ package org.onap.policy.common.parameters;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import java.lang.annotation.Annotation;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import java.lang.reflect.Method;
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.parameters.annotations.Items;
 import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
@@ -50,31 +46,26 @@ public class TestItemValidator extends ValidatorUtil {
      * This annotation doesn't contain any annotations that the {@link BeanValidator}
      * recognizes.
      */
-    @SimpleItems(simple = {@Simple})
+    @Simple
     private int mismatch;
 
     /**
-     * Annotation with no sub-annotations.
+     * No annotations.
      */
-    @Items()
+    @SuppressWarnings("unused")
     private int noAnnotations;
 
     /**
-     * One matching sub-annotation.
+     * One matching annotation.
      */
-    @Items(notNull = {@NotNull})
+    @NotNull
     private int match;
-
-    /**
-     * Excess matching sub-annotations of a single type.
-     */
-    @Items(notNull = {@NotNull, @NotNull})
-    private int excess;
 
     /**
      * Multiple matching annotations.
      */
-    @Items(notNull = {@NotNull}, notBlank = {@NotBlank})
+    @NotNull
+    @NotBlank
     private String multiMatch;
 
 
@@ -86,24 +77,14 @@ public class TestItemValidator extends ValidatorUtil {
     @Test
     public void testGetAnnotation() {
         // no matches
-        assertThat(new ItemValidator(bean, getAnnot("noAnnotations"), true).isEmpty()).isTrue();
+        assertThat(new ItemValidator(bean, getAnnotType("noAnnotations"), true).isEmpty()).isTrue();
 
         // had a match
-        assertThat(new ItemValidator(bean, getAnnot("match"), true).isEmpty()).isFalse();
-
-        // with an exception
-        IllegalAccessException ex = new IllegalAccessException("expected exception");
-
-        assertThatThrownBy(() -> new ItemValidator(bean, getAnnot("match"), true) {
-            @Override
-            protected <T extends Annotation> T getAnnotation2(Class<T> annotClass, Method method)
-                            throws IllegalAccessException {
-                throw ex;
-            }
-        }).hasCause(ex);
+        assertThat(new ItemValidator(bean, getAnnotType("match"), true).checkers).hasSize(1);
 
         // multiple matches
-        ItemValidator validator = new ItemValidator(bean, getAnnot("multiMatch"), true);
+        ItemValidator validator = new ItemValidator(bean, getAnnotType("multiMatch"), true);
+        assertThat(validator.checkers).hasSize(2);
 
         BeanValidationResult result = new BeanValidationResult(MY_NAME, this);
         validator.validateValue(result, MY_FIELD, HELLO);
@@ -120,26 +101,14 @@ public class TestItemValidator extends ValidatorUtil {
 
     @Test
     public void testItemValidatorBeanValidatorAnnotation() {
-        assertThat(new ItemValidator(bean, getAnnot("match")).isEmpty()).isFalse();
+        assertThat(new ItemValidator(bean, getAnnotType("match")).isEmpty()).isFalse();
     }
 
     @Test
     public void testItemValidatorBeanValidatorAnnotationBoolean() {
-        assertThat(new ItemValidator(bean, getAnnot("match"), true).isEmpty()).isFalse();
+        assertThat(new ItemValidator(bean, getAnnotType("match"), true).isEmpty()).isFalse();
 
-        assertThat(new ItemValidator(bean, getAnnot("match"), false).isEmpty()).isTrue();
-    }
-
-    @Test
-    public void testGetAnnotation2() {
-        assertThat(new ItemValidator(bean, getAnnot("notArray"), true).isEmpty()).isTrue();
-        assertThat(new ItemValidator(bean, getAnnot("mismatch"), true).isEmpty()).isTrue();
-        assertThat(new ItemValidator(bean, getAnnot("noAnnotations"), true).isEmpty()).isTrue();
-
-        assertThat(new ItemValidator(bean, getAnnot("match"), true).isEmpty()).isFalse();
-
-        Annotation excess = getAnnot("excess");
-        assertThatThrownBy(() -> new ItemValidator(bean, excess, true)).isInstanceOf(IllegalArgumentException.class);
+        assertThat(new ItemValidator(bean, getAnnotType("match"), false).isEmpty()).isTrue();
     }
 
     // these annotations are not recognized by the BeanValidator
@@ -148,14 +117,5 @@ public class TestItemValidator extends ValidatorUtil {
     @Target(FIELD)
     public @interface Simple {
 
-    }
-
-    @Retention(RUNTIME)
-    @Target(FIELD)
-    public @interface SimpleItems {
-        /**
-         * Validates that it's simple.
-         */
-        Simple[] simple() default {};
     }
 }

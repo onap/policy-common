@@ -20,14 +20,11 @@
 
 package org.onap.policy.common.parameters;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
 import org.apache.commons.lang3.StringUtils;
-import org.onap.policy.common.parameters.annotations.Entries;
-import org.onap.policy.common.parameters.annotations.Items;
 import org.onap.policy.common.parameters.annotations.Max;
 import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotBlank;
@@ -81,8 +78,6 @@ public class BeanValidator {
         validator.addAnnotation(Min.class, this::verMin);
         validator.addAnnotation(Pattern.class, this::verRegex);
         validator.addAnnotation(Valid.class, this::verCascade);
-        validator.addAnnotation(Items.class, this::verCollection);
-        validator.addAnnotation(Entries.class, this::verMap);
     }
 
     /**
@@ -277,29 +272,6 @@ public class BeanValidator {
      *
      * @param result where to add the validation result
      * @param fieldName name of the field containing the collection
-     * @param annot validation annotations for individual items
-     * @param value value to be verified
-     * @return {@code true} if the next check should be performed, {@code false} otherwise
-     */
-    public boolean verCollection(BeanValidationResult result, String fieldName, Annotation annot, Object value) {
-
-        if (!(value instanceof Collection)) {
-            return true;
-        }
-
-        ItemValidator itemValidator = makeItemValidator(annot);
-        if (itemValidator.isEmpty()) {
-            return true;
-        }
-
-        return verCollection(result, fieldName, itemValidator, value);
-    }
-
-    /**
-     * Validates the items in a collection.
-     *
-     * @param result where to add the validation result
-     * @param fieldName name of the field containing the collection
      * @param itemValidator validator for individual items within the list
      * @param value value to be verified
      * @return {@code true} if the next check should be performed, {@code false} otherwise
@@ -317,57 +289,6 @@ public class BeanValidator {
         int count = 0;
         for (Object item : list) {
             itemValidator.validateValue(result2, String.valueOf(count++), item);
-        }
-
-        if (result2.isClean()) {
-            return true;
-        }
-
-        result.addResult(result2);
-        return false;
-    }
-
-    /**
-     * Validates the items in a Map.
-     *
-     * @param result where to add the validation result
-     * @param fieldName name of the field containing the map
-     * @param annot validation annotations for individual entries
-     * @param value value to be verified
-     * @return {@code true} if the next check should be performed, {@code false} otherwise
-     */
-    public boolean verMap(BeanValidationResult result, String fieldName, Entries annot, Object value) {
-
-        if (!(value instanceof Map)) {
-            return true;
-        }
-
-        EntryValidator entryValidator = makeEntryValidator(annot.key(), annot.value());
-
-        return verMap(result, fieldName, entryValidator, value);
-    }
-
-    /**
-     * Validates the items in a Map.
-     *
-     * @param result where to add the validation result
-     * @param fieldName name of the field containing the map
-     * @param entryValidator validator for individual entries within the Map
-     * @param value value to be verified
-     * @return {@code true} if the next check should be performed, {@code false} otherwise
-     */
-    public boolean verMap(BeanValidationResult result, String fieldName, EntryValidator entryValidator, Object value) {
-
-        if (!(value instanceof Map) || entryValidator.isEmpty()) {
-            return true;
-        }
-
-        Map<?, ?> map = (Map<?, ?>) value;
-
-        BeanValidationResult result2 = new BeanValidationResult(fieldName, value);
-
-        for (Entry<?, ?> entry : map.entrySet()) {
-            entryValidator.validateEntry(result2, entry);
         }
 
         if (result2.isClean()) {
@@ -443,27 +364,6 @@ public class BeanValidator {
      */
     protected FieldValidator makeFieldValidator(Class<?> clazz, Field field) {
         return new FieldValidator(this, clazz, field);
-    }
-
-    /**
-     * Makes an item validator.
-     *
-     * @param annot container for the item annotations
-     * @return a new item validator
-     */
-    protected ItemValidator makeItemValidator(Annotation annot) {
-        return new ItemValidator(this, annot);
-    }
-
-    /**
-     * Makes an entry validator.
-     *
-     * @param keyAnnot container for the annotations associated with the entry key
-     * @param valueAnnot container for the annotations associated with the entry value
-     * @return a new entry validator
-     */
-    protected EntryValidator makeEntryValidator(Annotation keyAnnot, Annotation valueAnnot) {
-        return new EntryValidator(this, keyAnnot, valueAnnot);
     }
 
     /**
