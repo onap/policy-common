@@ -31,6 +31,7 @@ public class MessageConstants {
     public static final String POLICY_DROOLS_PDP = "policy-drools-pdp";
     public static final String POLICY_XACML_PDP = "policy-xacml-pdp";
     public static final String POLICY_DISTRIBUTION = "policy-distribution";
+    public static final String POLICY_CLAMP = "policy-clamp";
 
     public static final String START_SUCCESS_MSG = "Started %s service successfully.";
     public static final String START_FAILURE_MSG = "Start of %s service failed.";
