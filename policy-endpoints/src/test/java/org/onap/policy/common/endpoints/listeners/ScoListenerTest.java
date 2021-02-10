@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ package org.onap.policy.common.endpoints.listeners;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -111,14 +110,14 @@ public class ScoListenerTest {
         status = new MyMessage(NAME);
         sco = makeSco(status);
         primary.onTopicEvent(INFRA, TOPIC, sco);
-        verify(primary).onTopicEvent(eq(INFRA), eq(TOPIC), eq(sco), eq(status));
+        verify(primary).onTopicEvent(INFRA, TOPIC, sco, status);
 
         assertFalse(appender.getExtracted().toString().contains("unable to decode"));
 
         // undecodable message
         logger.addAppender(appender);
         primary.onTopicEvent(INFRA, TOPIC, makeSco("[]"));
-        verify(primary, times(1)).onTopicEvent(eq(INFRA), eq(TOPIC), eq(sco), eq(status));
+        verify(primary, times(1)).onTopicEvent(INFRA, TOPIC, sco, status);
         assertTrue(appender.getExtracted().toString().contains("unable to decode"));
     }
 

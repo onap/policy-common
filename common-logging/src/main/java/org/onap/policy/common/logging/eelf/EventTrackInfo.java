@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,9 +66,7 @@ public class EventTrackInfo {
                 return;
             }
             // in case override the start time, check the original event was already stored or not
-            if (!eventInfo.containsKey(id)) {
-                eventInfo.put(id, event);
-            }
+            eventInfo.putIfAbsent(id, event);
         }
     }
 

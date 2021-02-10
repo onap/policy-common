@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,6 @@ import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -103,7 +102,7 @@ public class BidirectionalTopicClientTest {
         when(endpoint.getTopicSinks(SINK_TOPIC)).thenReturn(Arrays.asList(sink));
 
         when(endpoint.getTopicSources(any())).thenReturn(Arrays.asList());
-        when(endpoint.getTopicSources(eq(Arrays.asList(SOURCE_TOPIC)))).thenReturn(Arrays.asList(source));
+        when(endpoint.getTopicSources(Arrays.asList(SOURCE_TOPIC))).thenReturn(Arrays.asList(source));
 
         client = new BidirectionalTopicClient2(SINK_TOPIC, SOURCE_TOPIC);
     }
@@ -132,7 +131,7 @@ public class BidirectionalTopicClientTest {
                         .hasMessage("no sources for topic: unknown-source");
 
         // too many sources
-        when(endpoint.getTopicSources(eq(Arrays.asList(SOURCE_TOPIC)))).thenReturn(Arrays.asList(source, source));
+        when(endpoint.getTopicSources(Arrays.asList(SOURCE_TOPIC))).thenReturn(Arrays.asList(source, source));
 
         assertThatThrownBy(() -> new BidirectionalTopicClient2(SINK_TOPIC, SOURCE_TOPIC))
                         .isInstanceOf(BidirectionalTopicClientException.class)

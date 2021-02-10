@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ package org.onap.policy.common.endpoints.listeners;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -119,16 +118,16 @@ public class RequestIdDispatcherTest {
         // should process message that does not have a request id
         status = new MyMessage();
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1).onTopicEvent(INFRA, TOPIC, status);
 
         // should process again
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1, times(2)).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1, times(2)).onTopicEvent(INFRA, TOPIC, status);
 
         // should NOT process a message that has a request id
         status = new MyMessage(REQID1);
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1, never()).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1, never()).onTopicEvent(INFRA, TOPIC, status);
     }
 
     @Test
@@ -138,21 +137,21 @@ public class RequestIdDispatcherTest {
         // should NOT process message that does not have a request id
         status = new MyMessage();
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1, never()).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1, never()).onTopicEvent(INFRA, TOPIC, status);
 
         // should process a message that has the desired request id
         status = new MyMessage(REQID1);
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1).onTopicEvent(INFRA, TOPIC, status);
 
         // should process again
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1, times(2)).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1, times(2)).onTopicEvent(INFRA, TOPIC, status);
 
         // should NOT process a message that does NOT have the desired request id
         status = new MyMessage(REQID2);
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1, never()).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1, never()).onTopicEvent(INFRA, TOPIC, status);
 
         // null request id => exception
         assertThatIllegalArgumentException().isThrownBy(() -> primary.register(null, secondary1));
@@ -169,17 +168,17 @@ public class RequestIdDispatcherTest {
         // should process message
         status = new MyMessage();
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
-        verify(secondary2).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1).onTopicEvent(INFRA, TOPIC, status);
+        verify(secondary2).onTopicEvent(INFRA, TOPIC, status);
 
         primary.unregister(secondary1);
 
         // should NOT process again
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1, times(1)).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1, times(1)).onTopicEvent(INFRA, TOPIC, status);
 
         // other listener should still have processed it
-        verify(secondary2, times(2)).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary2, times(2)).onTopicEvent(INFRA, TOPIC, status);
     }
 
     @Test
@@ -190,18 +189,18 @@ public class RequestIdDispatcherTest {
         // should process a message that has the desired request id
         status = new MyMessage(REQID1);
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1).onTopicEvent(INFRA, TOPIC, status);
 
         primary.unregister(REQID1);
 
         // should NOT re-process
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1, times(1)).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1, times(1)).onTopicEvent(INFRA, TOPIC, status);
 
         // secondary should still be able to process
         status = new MyMessage(REQID2);
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary2).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary2).onTopicEvent(INFRA, TOPIC, status);
     }
 
     @Test
@@ -214,18 +213,18 @@ public class RequestIdDispatcherTest {
         // without request id
         status = new MyMessage();
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1, never()).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
-        verify(secondary2, never()).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
-        verify(secondary3).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
-        verify(secondary4).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1, never()).onTopicEvent(INFRA, TOPIC, status);
+        verify(secondary2, never()).onTopicEvent(INFRA, TOPIC, status);
+        verify(secondary3).onTopicEvent(INFRA, TOPIC, status);
+        verify(secondary4).onTopicEvent(INFRA, TOPIC, status);
 
         // with request id
         status = new MyMessage(REQID1);
         primary.onTopicEvent(INFRA, TOPIC, makeSco(status));
-        verify(secondary1).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
-        verify(secondary2, never()).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
-        verify(secondary3, never()).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
-        verify(secondary4, never()).onTopicEvent(eq(INFRA), eq(TOPIC), eq(status));
+        verify(secondary1).onTopicEvent(INFRA, TOPIC, status);
+        verify(secondary2, never()).onTopicEvent(INFRA, TOPIC, status);
+        verify(secondary3, never()).onTopicEvent(INFRA, TOPIC, status);
+        verify(secondary4, never()).onTopicEvent(INFRA, TOPIC, status);
     }
 
     @Test

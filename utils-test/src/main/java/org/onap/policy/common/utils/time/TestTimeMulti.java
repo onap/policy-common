@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -189,11 +189,13 @@ public class TestTimeMulti extends TestTime {
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             logger.error("interrupted while waiting for condition", e);
-            fail("interrupted while waiting for condition: " + e.getMessage());
+            // disabling sonar, as this is only used by junit tests
+            fail("interrupted while waiting for condition: " + e.getMessage()); // NOSONAR
 
         } catch (Exception e) {
             logger.error("condition evaluator threw an exception", e);
-            fail("condition evaluator threw an exception: " + e.getMessage());
+            // disabling sonar, as this is only used by junit tests
+            fail("condition evaluator threw an exception: " + e.getMessage());  // NOSONAR
         }
 
         fail(NEVER_SATISFIED);

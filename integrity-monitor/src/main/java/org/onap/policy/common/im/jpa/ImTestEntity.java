@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018, 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018, 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -38,8 +37,8 @@ import org.onap.policy.common.im.MonitorTime;
 
 @Entity
 @Table(name = "ImTestEntity")
-@NamedQueries({@NamedQuery(name = " ImTestEntity.findAll", query = "SELECT e FROM ImTestEntity e "),
-                @NamedQuery(name = "ImTestEntity.deleteAll", query = "DELETE FROM ImTestEntity WHERE 1=1")})
+@NamedQuery(name = " ImTestEntity.findAll", query = "SELECT e FROM ImTestEntity e ")
+@NamedQuery(name = "ImTestEntity.deleteAll", query = "DELETE FROM ImTestEntity WHERE 1=1")
 // @SequenceGenerator(name="seqImTest", initialValue=1, allocationSize=1)
 
 public class ImTestEntity implements Serializable {
