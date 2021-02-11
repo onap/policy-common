@@ -37,8 +37,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicEndpoint;
 import org.onap.policy.common.endpoints.event.comm.TopicEndpointManager;
@@ -46,6 +47,7 @@ import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.TopicSink;
 import org.onap.policy.common.endpoints.event.comm.TopicSource;
 
+@RunWith(MockitoJUnitRunner.class)
 public class BidirectionalTopicClientTest {
     private static final String SINK_TOPIC = "my-sink-topic";
     private static final String SOURCE_TOPIC = "my-source-topic";
@@ -90,8 +92,6 @@ public class BidirectionalTopicClientTest {
      */
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
-
         when(sink.send(anyString())).thenReturn(true);
         when(sink.getTopicCommInfrastructure()).thenReturn(SINK_INFRA);
 
