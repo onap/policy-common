@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,6 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.time.Instant;
-import java.util.concurrent.TimeUnit;
 
 /**
  * GSON Type Adapter for "Instant" fields, that encodes them as milliseconds.
@@ -38,10 +37,7 @@ public class InstantAsMillisTypeAdapter extends TypeAdapter<Instant> {
         if (value == null) {
             out.nullValue();
         } else {
-            long epochMillis = TimeUnit.MILLISECONDS.convert(value.getEpochSecond(), TimeUnit.SECONDS);
-            long nanoMillis = TimeUnit.MILLISECONDS.convert(value.getNano(), TimeUnit.NANOSECONDS);
-            long millis = epochMillis + nanoMillis;
-            out.value(millis);
+            out.value(value.toEpochMilli());
         }
     }
 

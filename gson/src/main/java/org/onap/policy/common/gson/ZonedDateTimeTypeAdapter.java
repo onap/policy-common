@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,7 +35,25 @@ import java.time.format.DateTimeParseException;
  * ISO_ZONED_DATE_TIME formatter.
  */
 public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+    private static final DateTimeFormatter DEFAULT_FORMATTER = DateTimeFormatter.ISO_ZONED_DATE_TIME;
+
+    private final DateTimeFormatter formatter;
+
+
+    /**
+     * Constructs an adapter that uses the ISO_ZONED_DATE_TIME formatter.
+     */
+    public ZonedDateTimeTypeAdapter() {
+        this(DEFAULT_FORMATTER);
+    }
+
+    /**
+     * Constructs an adapter that uses the specified formatter for reading and writing.
+     * @param formatter date-time formatter
+     */
+    public ZonedDateTimeTypeAdapter(DateTimeFormatter formatter) {
+        this.formatter = formatter;
+    }
 
     @Override
     public ZonedDateTime read(JsonReader in) throws IOException {
@@ -44,7 +62,7 @@ public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
                 in.nextNull();
                 return null;
             } else {
-                return ZonedDateTime.parse(in.nextString(), FORMATTER);
+                return ZonedDateTime.parse(in.nextString(), formatter);
             }
 
         } catch (DateTimeParseException e) {
@@ -57,7 +75,7 @@ public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
         if (value == null) {
             out.nullValue();
         } else {
-            String text = value.format(FORMATTER);
+            String text = value.format(formatter);
             out.value(text);
         }
     }
