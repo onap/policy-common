@@ -20,38 +20,11 @@
 
 package org.onap.policy.common.gson;
 
-import com.google.gson.JsonParseException;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
-import java.time.DateTimeException;
 import java.time.ZoneOffset;
 
-public class ZoneOffsetTypeAdapter extends TypeAdapter<ZoneOffset>  {
+public class ZoneOffsetTypeAdapter extends StringTypeAdapter<ZoneOffset> {
 
-    @Override
-    public ZoneOffset read(JsonReader in) throws IOException {
-        try {
-            if (in.peek() == JsonToken.NULL) {
-                in.nextNull();
-                return null;
-            } else {
-                return ZoneOffset.of(in.nextString());
-            }
-
-        } catch (DateTimeException e) {
-            throw new JsonParseException("invalid zone", e);
-        }
-    }
-
-    @Override
-    public void write(JsonWriter out, ZoneOffset value) throws IOException {
-        if (value == null) {
-            out.nullValue();
-        } else {
-            out.value(value.toString());
-        }
+    public ZoneOffsetTypeAdapter() {
+        super("zone", ZoneOffset::of, ZoneOffset::toString);
     }
 }

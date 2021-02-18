@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,53 +20,20 @@
 
 package org.onap.policy.common.gson;
 
-import com.google.gson.JsonParseException;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 /**
  * GSON Type Adapter for "LocalDateTime" fields, that uses the standard
  * ISO_LOCAL_DATE_TIME formatter, by default.
  */
-public class LocalDateTimeTypeAdapter extends TypeAdapter<LocalDateTime> {
-    private DateTimeFormatter formatter;
+public class LocalDateTimeTypeAdapter extends StringTypeAdapter<LocalDateTime> {
 
     public LocalDateTimeTypeAdapter() {
         this(DateTimeFormatter.ISO_LOCAL_DATE_TIME);
     }
 
     public LocalDateTimeTypeAdapter(DateTimeFormatter formatter) {
-        this.formatter = formatter;
-    }
-
-    @Override
-    public LocalDateTime read(JsonReader in) throws IOException {
-        try {
-            if (in.peek() == JsonToken.NULL) {
-                in.nextNull();
-                return null;
-            } else {
-                return LocalDateTime.parse(in.nextString(), formatter);
-            }
-
-        } catch (DateTimeParseException e) {
-            throw new JsonParseException("invalid date", e);
-        }
-    }
-
-    @Override
-    public void write(JsonWriter out, LocalDateTime value) throws IOException {
-        if (value == null) {
-            out.nullValue();
-        } else {
-            String text = value.format(formatter);
-            out.value(text);
-        }
+        super("date", string -> LocalDateTime.parse(string, formatter), value -> value.format(formatter));
     }
 }

@@ -20,49 +20,16 @@
 
 package org.onap.policy.common.gson;
 
-import com.google.gson.JsonParseException;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
-public class LocalDateTypeAdapter extends TypeAdapter<LocalDate> {
-    private DateTimeFormatter formatter;
+public class LocalDateTypeAdapter extends StringTypeAdapter<LocalDate> {
 
     public LocalDateTypeAdapter() {
         this(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
     public LocalDateTypeAdapter(DateTimeFormatter formatter) {
-        this.formatter = formatter;
-    }
-
-    @Override
-    public LocalDate read(JsonReader in) throws IOException {
-        try {
-            if (in.peek() == JsonToken.NULL) {
-                in.nextNull();
-                return null;
-            } else {
-                return LocalDate.parse(in.nextString(), formatter);
-            }
-
-        } catch (DateTimeParseException e) {
-            throw new JsonParseException("invalid date", e);
-        }
-    }
-
-    @Override
-    public void write(JsonWriter out, LocalDate value) throws IOException {
-        if (value == null) {
-            out.nullValue();
-        } else {
-            String text = value.format(formatter);
-            out.value(text);
-        }
+        super("date", string -> LocalDate.parse(string, formatter), value -> value.format(formatter));
     }
 }
