@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,11 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.OffsetTime;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -91,7 +95,11 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
         return builder.disableHtmlEscaping().registerTypeAdapterFactory(new MapDoubleAdapterFactory())
                         .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
                         .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeTypeAdapter())
-                        .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter());
+                        .registerTypeAdapter(ZonedDateTime.class, new ZonedDateTimeTypeAdapter())
+                        .registerTypeAdapter(OffsetDateTime.class, new OffsetDateTimeTypeAdapter())
+                        .registerTypeAdapter(OffsetTime.class, new OffsetTimeTypeAdapter())
+                        .registerTypeAdapter(LocalDate.class, new LocalDateTypeAdapter())
+                        .registerTypeAdapter(ZoneOffset.class, new ZoneOffsetTypeAdapter());
     }
 
     @Override
