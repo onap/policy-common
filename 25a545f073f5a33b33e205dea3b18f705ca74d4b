@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4bd8ca56_10da3193",
+        "filename": "gson/src/main/java/org/onap/policy/common/gson/GsonMessageBodyHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2021-02-18T16:31:37Z",
+      "side": 1,
+      "message": "son of a gun",
+      "range": {
+        "startLine": 5,
+        "startChar": 25,
+        "endLine": 5,
+        "endChar": 26
+      },
+      "revId": "25a545f073f5a33b33e205dea3b18f705ca74d4b",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
