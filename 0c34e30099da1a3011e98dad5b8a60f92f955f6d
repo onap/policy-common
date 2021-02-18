@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d7d90ea5_b6de7fea",
+        "filename": "gson/src/main/java/org/onap/policy/common/gson/OffsetTimeTypeAdapter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2021-02-18T16:01:10Z",
+      "side": 1,
+      "message": "should be time",
+      "range": {
+        "startLine": 55,
+        "startChar": 50,
+        "endLine": 55,
+        "endChar": 54
+      },
+      "revId": "0c34e30099da1a3011e98dad5b8a60f92f955f6d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac6f472e_8dfc303c",
+        "filename": "gson/src/test/java/org/onap/policy/common/gson/OffsetTimeTypeAdapterTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2021-02-18T16:01:10Z",
+      "side": 1,
+      "message": "time",
+      "range": {
+        "startLine": 55,
+        "startChar": 55,
+        "endLine": 55,
+        "endChar": 59
+      },
+      "revId": "0c34e30099da1a3011e98dad5b8a60f92f955f6d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
