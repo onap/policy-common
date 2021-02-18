@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,41 +20,17 @@
 
 package org.onap.policy.common.gson;
 
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
 import java.time.Instant;
-import java.time.format.DateTimeParseException;
 
 /**
  * GSON Type Adapter for "Instant" fields, that uses the standard ISO_INSTANT formatter.
  */
-public class InstantTypeAdapter extends TypeAdapter<Instant> {
+public class InstantTypeAdapter extends StringTypeAdapter<Instant> {
 
-    @Override
-    public void write(JsonWriter out, Instant value) throws IOException {
-        if (value == null) {
-            out.nullValue();
-        } else {
-            out.value(value.toString());
-        }
-    }
-
-    @Override
-    public Instant read(JsonReader in) throws IOException {
-        try {
-            if (in.peek() == JsonToken.NULL) {
-                in.nextNull();
-                return null;
-            } else {
-                String text = in.nextString();
-                return Instant.parse(text);
-            }
-
-        } catch (DateTimeParseException e) {
-            throw new IOException("invalid date", e);
-        }
+    /**
+     * Constructs an adapter.
+     */
+    public InstantTypeAdapter() {
+        super("date", Instant::parse, Instant::toString);
     }
 }

@@ -20,63 +20,28 @@
 
 package org.onap.policy.common.gson;
 
-import com.google.gson.JsonParseException;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 /**
  * GSON Type Adapter for "ZonedDateTime" fields, that uses the standard
  * ISO_ZONED_DATE_TIME formatter.
  */
-public class ZonedDateTimeTypeAdapter extends TypeAdapter<ZonedDateTime> {
-    private static final DateTimeFormatter DEFAULT_FORMATTER = DateTimeFormatter.ISO_ZONED_DATE_TIME;
-
-    private final DateTimeFormatter formatter;
-
+public class ZonedDateTimeTypeAdapter extends StringTypeAdapter<ZonedDateTime> {
 
     /**
      * Constructs an adapter that uses the ISO_ZONED_DATE_TIME formatter.
      */
     public ZonedDateTimeTypeAdapter() {
-        this(DEFAULT_FORMATTER);
+        this(DateTimeFormatter.ISO_ZONED_DATE_TIME);
     }
 
     /**
      * Constructs an adapter that uses the specified formatter for reading and writing.
+     *
      * @param formatter date-time formatter
      */
     public ZonedDateTimeTypeAdapter(DateTimeFormatter formatter) {
-        this.formatter = formatter;
-    }
-
-    @Override
-    public ZonedDateTime read(JsonReader in) throws IOException {
-        try {
-            if (in.peek() == JsonToken.NULL) {
-                in.nextNull();
-                return null;
-            } else {
-                return ZonedDateTime.parse(in.nextString(), formatter);
-            }
-
-        } catch (DateTimeParseException e) {
-            throw new JsonParseException("invalid date", e);
-        }
-    }
-
-    @Override
-    public void write(JsonWriter out, ZonedDateTime value) throws IOException {
-        if (value == null) {
-            out.nullValue();
-        } else {
-            String text = value.format(formatter);
-            out.value(text);
-        }
+        super("date", string -> ZonedDateTime.parse(string, formatter), value -> value.format(formatter));
     }
 }

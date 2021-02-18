@@ -20,49 +20,16 @@
 
 package org.onap.policy.common.gson;
 
-import com.google.gson.JsonParseException;
-import com.google.gson.TypeAdapter;
-import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
-import com.google.gson.stream.JsonWriter;
-import java.io.IOException;
 import java.time.OffsetTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
-public class OffsetTimeTypeAdapter extends TypeAdapter<OffsetTime> {
-    private DateTimeFormatter formatter;
+public class OffsetTimeTypeAdapter extends StringTypeAdapter<OffsetTime> {
 
     public OffsetTimeTypeAdapter() {
         this(DateTimeFormatter.ISO_OFFSET_TIME);
     }
 
     public OffsetTimeTypeAdapter(DateTimeFormatter formatter) {
-        this.formatter = formatter;
-    }
-
-    @Override
-    public OffsetTime read(JsonReader in) throws IOException {
-        try {
-            if (in.peek() == JsonToken.NULL) {
-                in.nextNull();
-                return null;
-            } else {
-                return OffsetTime.parse(in.nextString(), formatter);
-            }
-
-        } catch (DateTimeParseException e) {
-            throw new JsonParseException("invalid time", e);
-        }
-    }
-
-    @Override
-    public void write(JsonWriter out, OffsetTime value) throws IOException {
-        if (value == null) {
-            out.nullValue();
-        } else {
-            String text = value.format(formatter);
-            out.value(text);
-        }
+        super("time", string -> OffsetTime.parse(string, formatter), value -> value.format(formatter));
     }
 }
