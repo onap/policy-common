@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be559b99_406374cd",
+        "filename": "capabilities/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-03-12T14:16:43Z",
+      "side": 0,
+      "message": "After removing these jacoco blocks, I don\u0027t see any jacoco-related issues in my Eclipse, so I just removed them altogether.  However, if others start seeing issues after this review is merged, then we can add this section back into the new profile in the top-level pom.",
+      "revId": "0b7b9cf9d557a649ab7931179b2c25d8474171b7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
