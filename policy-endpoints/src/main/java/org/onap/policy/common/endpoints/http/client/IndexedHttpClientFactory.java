@@ -95,13 +95,12 @@ class IndexedHttpClientFactory implements HttpClientFactory {
             return;
         }
 
-        boolean https = props.getBoolean(PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, false);
-
         try {
             HttpClient client = this.build(BusTopicParams.builder()
                 .clientName(clientName)
-                .useHttps(https)
-                .allowSelfSignedCerts(https)
+                .useHttps(props.getBoolean(PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, false))
+                .allowSelfSignedCerts(
+                    props.getBoolean(PolicyEndPointProperties.PROPERTY_ALLOW_SELF_SIGNED_CERTIFICATES_SUFFIX, false))
                 .hostname(props.getString(PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, null))
                 .port(port)
                 .basePath(props.getString(PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX, null))
