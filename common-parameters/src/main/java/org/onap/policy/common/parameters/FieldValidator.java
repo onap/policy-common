@@ -242,7 +242,7 @@ public class FieldValidator extends ValueValidator {
      * @param fieldName field whose "getter" is to be identified
      * @return the field's "getter" method, or {@code null} if it is not found
      */
-    private Method getAccessor(Class<?> clazz, String fieldName) {
+    protected Method getAccessor(Class<?> clazz, String fieldName) {
         String capname = StringUtils.capitalize(fieldName);
         Method accessor2 = getMethod(clazz, "get" + capname);
         if (accessor2 != null) {
@@ -259,7 +259,7 @@ public class FieldValidator extends ValueValidator {
      * @param methodName name of the method of interest
      * @return the method, or {@code null} if it is not found
      */
-    private Method getMethod(Class<?> clazz, String methodName) {
+    protected Method getMethod(Class<?> clazz, String methodName) {
         for (Method method : clazz.getMethods()) {
             if (methodName.equals(method.getName()) && validMethod(method)) {
                 return method;
