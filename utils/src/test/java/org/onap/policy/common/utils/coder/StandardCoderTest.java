@@ -1,8 +1,8 @@
-/*
+/*-
  * ============LICENSE_START=======================================================
  * ONAP PAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.utils.coder;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -263,6 +264,8 @@ public class StandardCoderTest {
 
     @Test
     public void testToJsonTree_testFromJsonJsonElementClassT() throws Exception {
+        assertThat(coder.fromJson((JsonElement) null, MyMap.class)).isNull();
+
         MyMap map = new MyMap();
         map.props = new LinkedHashMap<>();
         map.props.put("jel keyA", "jel valueA");
@@ -275,6 +278,34 @@ public class StandardCoderTest {
 
         assertNotNull(result);
         assertEquals("{jel keyA=jel valueA, jel keyB=jel valueB}", result.toString());
+    }
+
+    @Test
+    public void testFromJsonStringClassT() throws Exception {
+        assertThat(coder.fromJson((String) null, MyMap.class)).isNull();
+
+        String json = "{'props': {'str keyA': 'str valueA', 'str keyB':'str valueB'}}".replace('\'', '"');
+
+        Object result = coder.fromJson(json, MyMap.class);
+
+        assertNotNull(result);
+        assertEquals("{str keyA=str valueA, str keyB=str valueB}", result.toString());
+
+        assertThatThrownBy(() -> coder.fromJson("", MyMap.class)).isInstanceOf(CoderException.class)
+                        .hasMessageContaining("empty");
+    }
+
+    @Test
+    public void testFromJsonReaderClassT() throws Exception {
+        String json = "{'props': {'str keyA': 'str valueA', 'str keyB':'str valueB'}}".replace('\'', '"');
+
+        Object result = coder.fromJson(new StringReader(json), MyMap.class);
+
+        assertNotNull(result);
+        assertEquals("{str keyA=str valueA, str keyB=str valueB}", result.toString());
+
+        assertThatThrownBy(() -> coder.fromJson(new StringReader(""), MyMap.class)).isInstanceOf(CoderException.class)
+                        .hasMessageContaining("empty");
     }
 
     @Test
