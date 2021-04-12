@@ -1,0 +1,216 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73af1c3b_db076f19",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-12T18:05:01Z",
+      "side": 1,
+      "message": "could use for-each syntax and avoid \"i\":\n\n  for(customOption: customOptions)",
+      "range": {
+        "startLine": 103,
+        "startChar": 17,
+        "endLine": 103,
+        "endChar": 57
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a43c74f1_5b2d91d5",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-12T18:05:01Z",
+      "side": 1,
+      "message": "remove this and replace with \", e\" as an argument, so the stack trace isn\u0027t lost",
+      "range": {
+        "startLine": 133,
+        "startChar": 84,
+        "endLine": 133,
+        "endChar": 104
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a52d2409_fc4d9312",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-12T18:05:01Z",
+      "side": 1,
+      "message": "why not just use string concatenation?",
+      "range": {
+        "startLine": 168,
+        "startChar": 29,
+        "endLine": 168,
+        "endChar": 78
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0434f5e3_428c2dfd",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-12T18:05:01Z",
+      "side": 1,
+      "message": "replace with StringUtils.isBlank()\n\nsame comment on lines 229, 240, \u0026 270",
+      "range": {
+        "startLine": 211,
+        "startChar": 15,
+        "endLine": 211,
+        "endChar": 99
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "042ff534_0e5d919a",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/cmd/TestCommandLineArguments.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-12T18:05:01Z",
+      "side": 1,
+      "message": "can delete this comment",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 3
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9fe339f9_fa65e584",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/cmd/TestCommandLineArguments.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-12T18:05:01Z",
+      "side": 1,
+      "message": "use assertThat(xxx).startsWith(yyy)\n\nsame comment below for startsWith() and contains()",
+      "range": {
+        "startLine": 50,
+        "startChar": 8,
+        "endLine": 50,
+        "endChar": 18
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "804fd54a_d5988fe4",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/cmd/TestCommandLineArguments.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-12T18:05:01Z",
+      "side": 1,
+      "message": "sonar: define a constant for this",
+      "range": {
+        "startLine": 101,
+        "startChar": 36,
+        "endLine": 101,
+        "endChar": 105
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1adb895b_5cacc352",
+        "filename": "utils/src/test/resources/cmdFiles/configuration.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-12T18:05:01Z",
+      "side": 1,
+      "message": "newline",
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7edfd77c_67a1da98",
+        "filename": "utils/src/test/resources/cmdFiles/property.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-12T18:05:01Z",
+      "side": 1,
+      "message": "newline",
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2e89364d_ca293ff1",
+        "filename": "utils/src/test/resources/version.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-12T18:05:01Z",
+      "side": 1,
+      "message": "newline",
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
