@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cf5fb695_4088cd19",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-13T12:14:33Z",
+      "side": 1,
+      "message": "don\u0027t need this - isBlank will check for it",
+      "range": {
+        "startLine": 241,
+        "startChar": 12,
+        "endLine": 241,
+        "endChar": 32
+      },
+      "revId": "11e1369a0c5aab3b21aa3f3c00e9df12ea1f35d0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "344f596c_69ee49b5",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 271,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-13T12:14:33Z",
+      "side": 1,
+      "message": "sonar prefers a shorter lambda here: StringUtils::isNotBlank",
+      "range": {
+        "startLine": 271,
+        "startChar": 42,
+        "endLine": 271,
+        "endChar": 73
+      },
+      "revId": "11e1369a0c5aab3b21aa3f3c00e9df12ea1f35d0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5ad911d_6603d154",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/cmd/TestCommandLineArguments.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-04-13T12:14:33Z",
+      "side": 1,
+      "message": "good!",
+      "revId": "11e1369a0c5aab3b21aa3f3c00e9df12ea1f35d0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
