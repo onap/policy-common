@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aafc38ee_8916b4f5",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-04-13T13:29:58Z",
+      "side": 1,
+      "message": "should there be an option p in constructor at line 70 ?",
+      "revId": "1cb818e3cbd6154762f908be8698317fa10fbc49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48456908_8226612c",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-04-13T13:29:58Z",
+      "side": 1,
+      "message": "question(s): is this unreachable if all options are covered in code? null or exception (indicating abnormal behavior) ?",
+      "revId": "1cb818e3cbd6154762f908be8698317fa10fbc49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
