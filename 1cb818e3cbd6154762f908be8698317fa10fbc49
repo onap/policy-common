@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0b6ea99b_45f25505",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2021-04-13T13:39:03Z",
+      "side": 1,
+      "message": "\"p\" is quite common, but two classes (from Distribution and Api) don\u0027t use it, so not on default constructor.",
+      "parentUuid": "aafc38ee_8916b4f5",
+      "revId": "1cb818e3cbd6154762f908be8698317fa10fbc49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "48456908_8226612c",
         "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2021-04-13T13:29:58Z",
       "side": 1,
       "message": "question(s): is this unreachable if all options are covered in code? null or exception (indicating abnormal behavior) ?",
+      "revId": "1cb818e3cbd6154762f908be8698317fa10fbc49",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d055cd4a_54995d30",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 160,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2021-04-13T13:39:03Z",
+      "side": 1,
+      "message": "I don\u0027t know what was the idea of person who created this code first, but when I tried to split parse and actual execute of parsed parameters, it was creating too much conflict on other repositores. It returns null most of the time, returning String only for when version or help are called in. Returning null means the parse went successfully for any option that is not help or version.",
+      "parentUuid": "48456908_8226612c",
       "revId": "1cb818e3cbd6154762f908be8698317fa10fbc49",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
