@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "efabf1c4_c654ef90",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2021-04-13T10:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73af1c3b_db076f19",
+      "range": {
+        "startLine": 103,
+        "startChar": 17,
+        "endLine": 103,
+        "endChar": 57
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a43c74f1_5b2d91d5",
         "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
         "patchSetId": 1
@@ -45,6 +69,30 @@
       "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8aea3a64_86872f44",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2021-04-13T10:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a43c74f1_5b2d91d5",
+      "range": {
+        "startLine": 133,
+        "startChar": 84,
+        "endLine": 133,
+        "endChar": 104
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "bb2c0fad_54800616",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2021-04-13T10:23:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a52d2409_fc4d9312",
+      "range": {
+        "startLine": 168,
+        "startChar": 29,
+        "endLine": 168,
+        "endChar": 78
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0434f5e3_428c2dfd",
         "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
         "patchSetId": 1
@@ -91,6 +163,30 @@
       "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0312e833_c35786ec",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/cmd/CommandLineArgumentsHandler.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2021-04-13T10:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0434f5e3_428c2dfd",
+      "range": {
+        "startLine": 211,
+        "startChar": 15,
+        "endLine": 211,
+        "endChar": 99
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +213,30 @@
     },
     {
       "key": {
+        "uuid": "7072ff7c_0af6d275",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/cmd/TestCommandLineArguments.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2021-04-13T10:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "042ff534_0e5d919a",
+      "range": {
+        "startLine": 33,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 3
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "9fe339f9_fa65e584",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/cmd/TestCommandLineArguments.java",
         "patchSetId": 1
@@ -137,6 +257,30 @@
       "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac12c8f4_17a10240",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/cmd/TestCommandLineArguments.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2021-04-13T10:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9fe339f9_fa65e584",
+      "range": {
+        "startLine": 50,
+        "startChar": 8,
+        "endLine": 50,
+        "endChar": 18
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -163,6 +307,30 @@
     },
     {
       "key": {
+        "uuid": "de161894_b83dc01f",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/cmd/TestCommandLineArguments.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2021-04-13T10:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "804fd54a_d5988fe4",
+      "range": {
+        "startLine": 101,
+        "startChar": 36,
+        "endLine": 101,
+        "endChar": 105
+      },
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1adb895b_5cacc352",
         "filename": "utils/src/test/resources/cmdFiles/configuration.json",
         "patchSetId": 1
@@ -177,6 +345,24 @@
       "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4c3e65ec_3bdc0a70",
+        "filename": "utils/src/test/resources/cmdFiles/configuration.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2021-04-13T10:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1adb895b_5cacc352",
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -197,6 +383,24 @@
     },
     {
       "key": {
+        "uuid": "8dc039ad_4dfbabe0",
+        "filename": "utils/src/test/resources/cmdFiles/property.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2021-04-13T10:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7edfd77c_67a1da98",
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "2e89364d_ca293ff1",
         "filename": "utils/src/test/resources/version.txt",
         "patchSetId": 1
@@ -211,6 +415,24 @@
       "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "748870f3_5f73109e",
+        "filename": "utils/src/test/resources/version.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2021-04-13T10:23:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2e89364d_ca293ff1",
+      "revId": "2460cf8fbcfe0673d9db672bac0e6c0f349a184e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
