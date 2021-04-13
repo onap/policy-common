@@ -1,8 +1,8 @@
-/*-
+/*
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,7 +40,6 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.gson.DoubleConverter;
 import org.onap.policy.common.gson.GsonMessageBodyHandler;
 
@@ -342,17 +341,8 @@ public class StandardCoder implements Coder {
      * @param json json string to be decoded
      * @param clazz class of object to be decoded
      * @return the object represented by the given json string
-     * @throws CoderException if the source is empty
      */
-    protected <T> T fromJson(String json, Class<T> clazz) throws CoderException {
-        if (json == null) {
-            return null;
-        }
-
-        if (StringUtils.isBlank(json)) {
-            throw new CoderException("source string is empty");
-        }
-
+    protected <T> T fromJson(String json, Class<T> clazz) {
         return convertFromDouble(clazz, gson.fromJson(json, clazz));
     }
 
@@ -362,16 +352,9 @@ public class StandardCoder implements Coder {
      * @param source source from which to read the json string to be decoded
      * @param clazz class of object to be decoded
      * @return the object represented by the given json string
-     * @throws CoderException if the source is empty
      */
-    protected <T> T fromJson(Reader source, Class<T> clazz) throws CoderException {
-        T object = gson.fromJson(source, clazz);
-
-        if (object == null) {
-            throw new CoderException("source is empty");
-        }
-
-        return convertFromDouble(clazz, object);
+    protected <T> T fromJson(Reader source, Class<T> clazz) {
+        return convertFromDouble(clazz, gson.fromJson(source, clazz));
     }
 
     /**
