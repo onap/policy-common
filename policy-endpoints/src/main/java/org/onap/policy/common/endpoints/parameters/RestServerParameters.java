@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
- *  Modifications Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,28 +21,33 @@
 
 package org.onap.policy.common.endpoints.parameters;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import lombok.Getter;
 import org.onap.policy.common.parameters.ParameterGroupImpl;
-import org.onap.policy.common.parameters.annotations.Min;
-import org.onap.policy.common.parameters.annotations.NotBlank;
-import org.onap.policy.common.parameters.annotations.NotNull;
 
 /**
  * Class to hold all parameters needed for rest server.
  *
  * @author Ajith Sreekumar (ajith.sreekumar@est.tech)
  */
-@NotNull
-@NotBlank
+@org.onap.policy.common.parameters.annotations.NotNull
+@org.onap.policy.common.parameters.annotations.NotBlank
 @Getter
 public class RestServerParameters extends ParameterGroupImpl {
+    @NotBlank
     private String host;
 
-    @Min(value = 1)
+    @org.onap.policy.common.parameters.annotations.Min(1)
+    @Min(1)
     private int port;
 
+    @NotBlank
     private String userName;
+
+    @NotBlank
     private String password;
+
     private boolean https;
     private boolean aaf;
 

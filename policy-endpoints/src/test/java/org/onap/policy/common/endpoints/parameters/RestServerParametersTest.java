@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
- *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
 
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,12 +22,14 @@
 
 package org.onap.policy.common.endpoints.parameters;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.onap.policy.common.parameters.BeanValidator2;
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.utils.coder.Coder;
 import org.onap.policy.common.utils.coder.StandardCoder;
@@ -54,6 +56,8 @@ public class RestServerParametersTest {
         assertEquals(CommonTestData.REST_SERVER_PASS, restServerParameters.getPassword());
         assertEquals(CommonTestData.REST_SERVER_HTTPS, restServerParameters.isHttps());
         assertEquals(CommonTestData.REST_SERVER_AAF, restServerParameters.isAaf());
+
+        assertThat(new BeanValidator2().validate(restServerParameters)).isNull();
     }
 
     @Test
@@ -73,6 +77,8 @@ public class RestServerParametersTest {
         final GroupValidationResult result = restServerParameters.validate();
         assertNull(result.getResult());
         assertTrue(result.isValid());
+
+        assertThat(new BeanValidator2().validate(restServerParameters)).isNull();
     }
 
     @Test
@@ -83,5 +89,7 @@ public class RestServerParametersTest {
         final GroupValidationResult result = restServerParameters.validate();
         assertFalse(result.isValid());
         assertTrue(result.getResult().contains("parameter group has status INVALID"));
+
+        assertThat(new BeanValidator2().validate(restServerParameters)).isEqualTo("host (null): must not be blank");
     }
 }
