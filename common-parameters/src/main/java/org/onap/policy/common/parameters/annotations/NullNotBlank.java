@@ -18,44 +18,38 @@
  * ============LICENSE_END=========================================================
  */
 
-package org.onap.policy.common.parameters;
+package org.onap.policy.common.parameters.annotations;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.TYPE_USE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+import javax.validation.Constraint;
+import javax.validation.Payload;
+import org.onap.policy.common.parameters.NullNotBlankValidator;
 
 /**
- * Implementation of a parameter group.
+ * Indicates that a field (i.e., String) may not be empty, but may be {@code null}.
  */
-@Getter
-@Setter
-public class ParameterGroupImpl implements ParameterGroup {
-    /**
-     * Group name. Note: this MUST not be "private" or it will not be validated.
-     */
-    @NotNull
-    @NotBlank
-    protected String name;
+@Retention(RUNTIME)
+@Target({FIELD, TYPE_USE})
+@Constraint(validatedBy = {NullNotBlankValidator.class})
+public @interface NullNotBlank {
 
     /**
-     * Constructs the object, with a {@code null} name.
+     * The error message.
      */
-    public ParameterGroupImpl() {
-        this.name = null;
-    }
+    String message() default "must not be blank";
 
     /**
-     * Constructs the object.
-     *
-     * @param name the group's name
+     * The groups.
      */
-    public ParameterGroupImpl(String name) {
-        this.name = name;
-    }
+    Class<?>[] groups() default {};
 
-    @Override
-    public GroupValidationResult validate() {
-        return new GroupValidationResult(this);
-    }
+    /**
+     * The payload.
+     */
+    Class<? extends Payload>[] payload() default {};
 }

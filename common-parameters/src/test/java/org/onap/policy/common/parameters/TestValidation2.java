@@ -29,18 +29,18 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import org.junit.Test;
+import org.onap.policy.common.parameters.annotations.Max;
+import org.onap.policy.common.parameters.annotations.Min;
+import org.onap.policy.common.parameters.annotations.NotBlank;
+import org.onap.policy.common.parameters.annotations.NotNull;
 import org.onap.policy.common.parameters.testclasses.TestParametersL00;
 import org.onap.policy.common.parameters.testclasses.TestParametersL10;
 
 /**
- * Tests validation using annotations from javax.validation.
+ * Tests validation using annotations from policy-common.
  */
-public class TestValidation {
+public class TestValidation2 {
     private static final String L0_PARAMETERS = "l0Parameters";
 
     private static final String NOT_BLANK_STRING_MESSAGE =
@@ -262,7 +262,7 @@ public class TestValidation {
     @Test
     public void testParameterValidationResult_NotNull() throws Exception {
         ParameterValidationResult result = new ParameterValidationResult(
-                        TestValidation.class.getDeclaredField(NOT_NULL_STRING_NAME), null);
+                        TestValidation2.class.getDeclaredField(NOT_NULL_STRING_NAME), null);
         assertEquals(ValidationStatus.INVALID, result.getStatus());
         assertEquals(NULL_STRING_MESSAGE, result.getResult());
 
@@ -272,23 +272,23 @@ public class TestValidation {
         assertEquals(NULL_STRING_MESSAGE, result.getResult());
 
         // non-null should be OK
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(NOT_NULL_STRING_NAME), "");
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(NOT_NULL_STRING_NAME), "");
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
 
         // non-null should be OK
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(NOT_NULL_STRING_NAME), "abc");
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(NOT_NULL_STRING_NAME), "abc");
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
 
         /*
          * Check plain object fields, too.
          */
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(NOT_NULL_OBJECT_NAME), null);
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(NOT_NULL_OBJECT_NAME), null);
         assertEquals(ValidationStatus.INVALID, result.getStatus());
         assertEquals("field 'notNullObject' type 'java.lang.Object' value 'null' INVALID, is null\n".replace('\'', '"'),
                         result.getResult());
 
         // non-null should be OK
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(NOT_NULL_OBJECT_NAME),
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(NOT_NULL_OBJECT_NAME),
                         new Object());
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
 
@@ -314,29 +314,29 @@ public class TestValidation {
     @Test
     public void testParameterValidationResult_NotBlank() throws Exception {
         ParameterValidationResult result =
-                        new ParameterValidationResult(TestValidation.class.getDeclaredField(NOT_BLANK_STRING_NAME), "");
+            new ParameterValidationResult(TestValidation2.class.getDeclaredField(NOT_BLANK_STRING_NAME), "");
         assertEquals(ValidationStatus.INVALID, result.getStatus());
         assertEquals(NOT_BLANK_STRING_MESSAGE, result.getResult());
 
         // spaces only
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(NOT_BLANK_STRING_NAME), " \t");
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(NOT_BLANK_STRING_NAME), " \t");
         assertEquals(ValidationStatus.INVALID, result.getStatus());
 
         // null should be OK
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(NOT_BLANK_STRING_NAME), null);
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(NOT_BLANK_STRING_NAME), null);
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
 
         // null should be OK
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(NOT_BLANK_STRING_NAME), "abc");
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(NOT_BLANK_STRING_NAME), "abc");
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
 
         /*
          * Check plain object fields, too.
          */
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(NOT_BLANK_OBJECT_NAME), null);
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(NOT_BLANK_OBJECT_NAME), null);
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
 
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(NOT_BLANK_OBJECT_NAME),
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(NOT_BLANK_OBJECT_NAME),
                         new Object());
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
 
@@ -355,40 +355,40 @@ public class TestValidation {
     @Test
     public void testParameterValidationResult_Min() throws Exception {
         ParameterValidationResult result =
-                        new ParameterValidationResult(TestValidation.class.getDeclaredField(MIN_LONG_NAME), 9L);
+                        new ParameterValidationResult(TestValidation2.class.getDeclaredField(MIN_LONG_NAME), 9L);
         assertEquals(ValidationStatus.INVALID, result.getStatus());
         assertEquals("field 'minLong' type 'long' value '9' INVALID, must be >= 10\n".replace('\'', '"'),
                         result.getResult());
 
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(MIN_LONG_NAME), -2);
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(MIN_LONG_NAME), -2);
         assertEquals(ValidationStatus.INVALID, result.getStatus());
         assertEquals("field 'minLong' type 'long' value '-2' INVALID, must be >= 10\n".replace('\'', '"'),
                         result.getResult());
 
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(MIN_LONG_NAME), 10L);
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(MIN_LONG_NAME), 10L);
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
 
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(MIN_LONG_NAME), 11);
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(MIN_LONG_NAME), 11);
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
     }
 
     @Test
     public void testParameterValidationResult_Max() throws Exception {
         ParameterValidationResult result =
-                        new ParameterValidationResult(TestValidation.class.getDeclaredField(MAX_LONG_NAME), 11L);
+                        new ParameterValidationResult(TestValidation2.class.getDeclaredField(MAX_LONG_NAME), 11L);
         assertEquals(ValidationStatus.INVALID, result.getStatus());
         assertEquals("field 'maxLong' type 'long' value '11' INVALID, must be <= 10\n".replace('\'', '"'),
                         result.getResult());
 
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(MAX_LONG_NAME), 20);
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(MAX_LONG_NAME), 20);
         assertEquals(ValidationStatus.INVALID, result.getStatus());
         assertEquals("field 'maxLong' type 'long' value '20' INVALID, must be <= 10\n".replace('\'', '"'),
                         result.getResult());
 
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(MAX_LONG_NAME), 10L);
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(MAX_LONG_NAME), 10L);
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
 
-        result = new ParameterValidationResult(TestValidation.class.getDeclaredField(MAX_LONG_NAME), 9);
+        result = new ParameterValidationResult(TestValidation2.class.getDeclaredField(MAX_LONG_NAME), 9);
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
     }
 

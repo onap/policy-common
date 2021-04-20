@@ -23,10 +23,10 @@ package org.onap.policy.common.parameters;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-import org.onap.policy.common.parameters.annotations.NotNull;
 
 /**
  * Validator of a value.
@@ -107,7 +107,8 @@ public class ValueValidator {
         if (annot != null) {
             checkers.add(checker);
 
-            if (annotClass == NotNull.class) {
+            if (annotClass == NotNull.class
+                            || annotClass == org.onap.policy.common.parameters.annotations.NotNull.class) {
                 setNullAllowed(false);
             }
         }

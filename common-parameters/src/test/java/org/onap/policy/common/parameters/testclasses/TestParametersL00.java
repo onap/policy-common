@@ -24,6 +24,8 @@ package org.onap.policy.common.parameters.testclasses;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.parameters.ParameterConstants;
@@ -37,10 +39,14 @@ public class TestParametersL00 extends ParameterGroupImpl {
     private static final String A_CONSTANT = "A Constant";
 
     private int l00IntField = 0;
+    @NotNull
     private String l00StringField = "Legal " + this.getClass().getName();
+    @Valid
     private TestParametersL10 l00L10Nested = new TestParametersL10("l00L10Nested");
+    @Valid
     private TestParametersLGeneric l00LGenericNested = new TestParametersLGeneric("l00LGenericNested");
-    private Map<String, TestParametersLGeneric> l00LGenericNestedMap = new LinkedHashMap<>();
+    @NotNull
+    private Map<@NotNull String, @NotNull @Valid TestParametersLGeneric> l00LGenericNestedMap = new LinkedHashMap<>();
     private boolean isSomeFlag;
     private boolean someNonIsFlag;
 

@@ -29,11 +29,11 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.Collection;
 import java.util.Map;
+import javax.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.onap.policy.common.parameters.annotations.NotNull;
 
 /**
  * Validator of the contents of a field, supporting the parameter annotations.
@@ -105,7 +105,9 @@ public class FieldValidator extends ValueValidator {
         }
 
         // determine if null is allowed
-        if (field.getAnnotation(NotNull.class) != null || clazz.getAnnotation(NotNull.class) != null) {
+        if (field.getAnnotation(NotNull.class) != null || clazz.getAnnotation(NotNull.class) != null
+                        || field.getAnnotation(org.onap.policy.common.parameters.annotations.NotNull.class) != null
+                        || clazz.getAnnotation(org.onap.policy.common.parameters.annotations.NotNull.class) != null) {
             setNullAllowed(false);
         }
     }

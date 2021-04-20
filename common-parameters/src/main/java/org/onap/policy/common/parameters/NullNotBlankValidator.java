@@ -1,8 +1,8 @@
-/*
+/*-
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,42 +20,15 @@
 
 package org.onap.policy.common.parameters;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
+import org.apache.commons.lang3.StringUtils;
+import org.onap.policy.common.parameters.annotations.NullNotBlank;
 
-/**
- * Implementation of a parameter group.
- */
-@Getter
-@Setter
-public class ParameterGroupImpl implements ParameterGroup {
-    /**
-     * Group name. Note: this MUST not be "private" or it will not be validated.
-     */
-    @NotNull
-    @NotBlank
-    protected String name;
-
-    /**
-     * Constructs the object, with a {@code null} name.
-     */
-    public ParameterGroupImpl() {
-        this.name = null;
-    }
-
-    /**
-     * Constructs the object.
-     *
-     * @param name the group's name
-     */
-    public ParameterGroupImpl(String name) {
-        this.name = name;
-    }
+public class NullNotBlankValidator implements ConstraintValidator<NullNotBlank, String> {
 
     @Override
-    public GroupValidationResult validate() {
-        return new GroupValidationResult(this);
+    public boolean isValid(String value, ConstraintValidatorContext context) {
+        return (value == null || !StringUtils.isBlank(value));
     }
 }

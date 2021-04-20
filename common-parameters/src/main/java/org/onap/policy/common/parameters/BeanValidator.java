@@ -24,13 +24,13 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Map.Entry;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import org.apache.commons.lang3.StringUtils;
-import org.onap.policy.common.parameters.annotations.Max;
-import org.onap.policy.common.parameters.annotations.Min;
-import org.onap.policy.common.parameters.annotations.NotBlank;
-import org.onap.policy.common.parameters.annotations.NotNull;
-import org.onap.policy.common.parameters.annotations.Pattern;
-import org.onap.policy.common.parameters.annotations.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +72,15 @@ public class BeanValidator {
      * @param validator where to add the validators
      */
     protected void addValidators(ValueValidator validator) {
+        validator.addAnnotation(org.onap.policy.common.parameters.annotations.NotNull.class, this::verNotNull);
         validator.addAnnotation(NotNull.class, this::verNotNull);
+        validator.addAnnotation(org.onap.policy.common.parameters.annotations.NotBlank.class, this::verNotBlank);
+        validator.addAnnotation(org.onap.policy.common.parameters.annotations.NullNotBlank.class, this::verNotBlank);
+        validator.addAnnotation(org.onap.policy.common.parameters.annotations.Max.class, this::verMax);
+        validator.addAnnotation(org.onap.policy.common.parameters.annotations.Min.class, this::verMin);
+        validator.addAnnotation(org.onap.policy.common.parameters.annotations.Pattern.class, this::verRegex);
+        validator.addAnnotation(org.onap.policy.common.parameters.annotations.Valid.class, this::verCascade);
+
         validator.addAnnotation(NotBlank.class, this::verNotBlank);
         validator.addAnnotation(Max.class, this::verMax);
         validator.addAnnotation(Min.class, this::verMin);
@@ -143,18 +151,45 @@ public class BeanValidator {
      * @param value value to be verified
      * @return {@code true} if the next check should be performed, {@code false} otherwise
      */
+    public boolean verRegex(BeanValidationResult result, String fieldName,
+                    org.onap.policy.common.parameters.annotations.Pattern annot, Object value) {
+        return verRegex(result, fieldName, annot.regexp(), value);
+    }
+
+    /**
+     * Verifies that the value matches a regular expression.
+     *
+     * @param result where to add the validation result
+     * @param fieldName field whose value is being verified
+     * @param annot annotation against which the value is being verified
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
+     */
     public boolean verRegex(BeanValidationResult result, String fieldName, Pattern annot, Object value) {
+        return verRegex(result, fieldName, annot.regexp(), value);
+    }
+
+    /**
+     * Verifies that the value matches a regular expression.
+     *
+     * @param result where to add the validation result
+     * @param fieldName field whose value is being verified
+     * @param regexp regular expression against which the value is being verified
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
+     */
+    public boolean verRegex(BeanValidationResult result, String fieldName, String regexp, Object value) {
         try {
-            if (value instanceof String && com.google.re2j.Pattern.matches(annot.regexp(), value.toString())) {
+            if (value instanceof String && com.google.re2j.Pattern.matches(regexp, value.toString())) {
                 return true;
             }
 
         } catch (RuntimeException e) {
-            logger.warn("validation error for regular expression: {}", annot.regexp(), e);
+            logger.warn("validation error for regular expression: {}", regexp, e);
         }
 
         ObjectValidationResult result2 = new ObjectValidationResult(fieldName, xlate(value), ValidationStatus.INVALID,
-                        "does not match regular expression " + annot.regexp());
+                        "does not match regular expression " + regexp);
         result.addResult(result2);
         return false;
     }
@@ -168,19 +203,46 @@ public class BeanValidator {
      * @param value value to be verified
      * @return {@code true} if the next check should be performed, {@code false} otherwise
      */
+    public boolean verMax(BeanValidationResult result, String fieldName,
+                    org.onap.policy.common.parameters.annotations.Max annot, Object value) {
+        return verMax(result, fieldName, annot.value(), value);
+    }
+
+    /**
+     * Verifies that the value is <= the minimum value.
+     *
+     * @param result where to add the validation result
+     * @param fieldName field whose value is being verified
+     * @param annot annotation against which the value is being verified
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
+     */
     public boolean verMax(BeanValidationResult result, String fieldName, Max annot, Object value) {
+        return verMax(result, fieldName, annot.value(), value);
+    }
+
+    /**
+     * Verifies that the value is <= the minimum value.
+     *
+     * @param result where to add the validation result
+     * @param fieldName field whose value is being verified
+     * @param max maximum against which the value is being verified
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
+     */
+    public boolean verMax(BeanValidationResult result, String fieldName, long max, Object value) {
         if (!(value instanceof Number)) {
             return true;
         }
 
         Number num = (Number) value;
         if (num instanceof Integer || num instanceof Long) {
-            if (num.longValue() <= annot.value()) {
+            if (num.longValue() <= max) {
                 return true;
             }
 
         } else if (num instanceof Float || num instanceof Double) {
-            if (num.doubleValue() <= annot.value()) {
+            if (num.doubleValue() <= max) {
                 return true;
             }
 
@@ -189,9 +251,23 @@ public class BeanValidator {
         }
 
         ObjectValidationResult result2 = new ObjectValidationResult(fieldName, xlate(value), ValidationStatus.INVALID,
-                        "exceeds the maximum value: " + annot.value());
+                        "exceeds the maximum value: " + max);
         result.addResult(result2);
         return false;
+    }
+
+    /**
+     * Verifies that the value is >= the minimum value.
+     *
+     * @param result where to add the validation result
+     * @param fieldName field whose value is being verified
+     * @param annot annotation against which the value is being verified
+     * @param value value to be verified
+     * @return {@code true} if the next check should be performed, {@code false} otherwise
+     */
+    public boolean verMin(BeanValidationResult result, String fieldName,
+                    org.onap.policy.common.parameters.annotations.Min annot, Object value) {
+        return verMin(result, fieldName, annot.value(), value);
     }
 
     /**

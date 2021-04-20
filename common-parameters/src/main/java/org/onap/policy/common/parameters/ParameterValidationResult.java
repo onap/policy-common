@@ -23,10 +23,11 @@ package org.onap.policy.common.parameters;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import org.onap.policy.common.parameters.annotations.Max;
-import org.onap.policy.common.parameters.annotations.Min;
-import org.onap.policy.common.parameters.annotations.NotBlank;
-import org.onap.policy.common.parameters.annotations.NotNull;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * This class holds the result of the validation of a parameter.
@@ -51,13 +52,17 @@ public class ParameterValidationResult implements ValidationResult {
         this.parameterValue = parameterValue;
 
         if (parameterValue == null) {
-            if (getAnyAnnotation(field, NotNull.class) != null) {
+            if (getAnyAnnotation(field, NotNull.class) != null
+                    || getAnyAnnotation(field, org.onap.policy.common.parameters.annotations.NotNull.class) != null) {
                 setResult(ValidationStatus.INVALID, "is null");
             }
 
         } else if (parameterValue instanceof String) {
-            if (getAnyAnnotation(field, NotBlank.class) != null && parameterValue.toString().trim().isEmpty()) {
-                setResult(ValidationStatus.INVALID, "must be a non-blank string");
+            if (getAnyAnnotation(field, NotBlank.class) != null
+                    || getAnyAnnotation(field, org.onap.policy.common.parameters.annotations.NotBlank.class) != null) {
+                if (StringUtils.isBlank(parameterValue.toString())) {
+                    setResult(ValidationStatus.INVALID, "must be a non-blank string");
+                }
             }
 
         } else if (parameterValue instanceof Number) {
@@ -76,6 +81,13 @@ public class ParameterValidationResult implements ValidationResult {
         Min minAnnot = field.getAnnotation(Min.class);
         if (minAnnot != null && ((Number) parameterValue).longValue() < minAnnot.value()) {
             setResult(ValidationStatus.INVALID, "must be >= " + minAnnot.value());
+            return;
+        }
+
+        org.onap.policy.common.parameters.annotations.Min minAnnot2 =
+                        field.getAnnotation(org.onap.policy.common.parameters.annotations.Min.class);
+        if (minAnnot2 != null && ((Number) parameterValue).longValue() < minAnnot2.value()) {
+            setResult(ValidationStatus.INVALID, "must be >= " + minAnnot2.value());
         }
     }
 
@@ -89,6 +101,13 @@ public class ParameterValidationResult implements ValidationResult {
         Max maxAnnot = field.getAnnotation(Max.class);
         if (maxAnnot != null && ((Number) parameterValue).longValue() > maxAnnot.value()) {
             setResult(ValidationStatus.INVALID, "must be <= " + maxAnnot.value());
+            return;
+        }
+
+        org.onap.policy.common.parameters.annotations.Max maxAnnot2 =
+                        field.getAnnotation(org.onap.policy.common.parameters.annotations.Max.class);
+        if (maxAnnot2 != null && ((Number) parameterValue).longValue() > maxAnnot2.value()) {
+            setResult(ValidationStatus.INVALID, "must be <= " + maxAnnot2.value());
         }
     }
 

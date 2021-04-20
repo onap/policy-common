@@ -61,9 +61,9 @@ public class TestBeanValidator {
         // validate something that has no annotations
         assertTrue(validator.validateTop(TOP, validator).isValid());
 
-        @NotNull
         @Getter
         class Data {
+            @NotNull
             String strValue;
         }
 

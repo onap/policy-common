@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
- *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@
 
 package org.onap.policy.common.endpoints.parameters;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -33,6 +34,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
+import org.onap.policy.common.parameters.BeanValidator2;
 import org.onap.policy.common.parameters.GroupValidationResult;
 import org.onap.policy.common.utils.coder.Coder;
 import org.onap.policy.common.utils.coder.CoderException;
@@ -55,6 +57,8 @@ public class TopicParameterGroupTest {
         assertTrue(validationResult.isValid());
         assertEquals(CommonTestData.TOPIC_PARAMS, topicParameterGroup.getTopicSinks());
         assertEquals(CommonTestData.TOPIC_PARAMS, topicParameterGroup.getTopicSources());
+
+        assertThat(new BeanValidator2().validate(topicParameterGroup)).isNull();
 
         // these should default to true
         assertTrue(new TopicParameters().isManaged());
@@ -81,6 +85,8 @@ public class TopicParameterGroupTest {
         final GroupValidationResult result = topicParameterGroup.validate();
         assertNull(result.getResult());
         assertTrue(result.isValid());
+
+        assertThat(new BeanValidator2().validate(topicParameterGroup)).isNull();
     }
 
     @Test
@@ -91,6 +97,9 @@ public class TopicParameterGroupTest {
         final GroupValidationResult result = topicParameterGroup.validate();
         assertFalse(result.isValid());
         assertTrue(result.getResult().contains("INVALID"));
+
+        assertThat(new BeanValidator2().validate(topicParameterGroup))
+                        .contains("topicSources", "item 0", "topicCommInfrastructure", "null", "must not be blank");
     }
 
     @Test
@@ -101,6 +110,9 @@ public class TopicParameterGroupTest {
         final GroupValidationResult result = topicParameterGroup.validate();
         assertTrue(result.getResult().contains("Mandatory parameters are missing"));
         assertFalse(result.isValid());
+
+        assertThat(new BeanValidator2().validate(topicParameterGroup))
+                        .contains("topicSources", "item 0", "servers", "must not be empty");
     }
 
     @Test
@@ -113,6 +125,8 @@ public class TopicParameterGroupTest {
         assertTrue(result.isValid());
         assertTrue(checkIfAllParamsNotEmpty(topicParameterGroup.getTopicSinks()));
         assertTrue(checkIfAllParamsNotEmpty(topicParameterGroup.getTopicSources()));
+
+        assertThat(new BeanValidator2().validate(topicParameterGroup)).isNull();
     }
 
     /**

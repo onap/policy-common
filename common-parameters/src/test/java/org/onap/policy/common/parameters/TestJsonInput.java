@@ -21,6 +21,7 @@
 
 package org.onap.policy.common.parameters;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -47,6 +48,7 @@ public class TestJsonInput {
 
         GroupValidationResult validationResult = testParameterGroup.validate();
         assertTrue(validationResult.isValid());
+        assertThat(new BeanValidator2().validate(testParameterGroup)).isNull();
         assertEquals("l00NameFromFile", testParameterGroup.getName());
 
         String expectedResult = new String(Files.readAllBytes(

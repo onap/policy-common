@@ -26,7 +26,7 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import org.junit.Test;
 
-public class ExceptionTest {
+public class TestExceptions {
     private static final String PARAMETER_EXCEPTION = "Parameter Exception";
     private static final String EXCEPTION_OBJECT = "Exception Object";
 
