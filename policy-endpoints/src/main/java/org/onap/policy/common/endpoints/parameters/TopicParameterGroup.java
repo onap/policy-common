@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
- *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.onap.policy.common.parameters.GroupValidationResult;
+import org.onap.policy.common.parameters.BeanValidationResult;
 import org.onap.policy.common.parameters.ParameterGroupImpl;
 import org.onap.policy.common.parameters.ValidationStatus;
 import org.onap.policy.common.parameters.annotations.NotBlank;
@@ -53,8 +53,8 @@ public class TopicParameterGroup extends ParameterGroupImpl {
      * {@inheritDoc}.
      */
     @Override
-    public GroupValidationResult validate() {
-        GroupValidationResult result = super.validate();
+    public BeanValidationResult validate() {
+        BeanValidationResult result = super.validate();
         if (result.isValid()) {
             StringBuilder errorMsg = new StringBuilder();
             StringBuilder missingSourceParams = checkMissingMandatoryParams(topicSources);

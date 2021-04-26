@@ -1,7 +1,7 @@
 /*
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
- *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,25 +21,17 @@
 
 package org.onap.policy.common.parameters;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import org.junit.Test;
 import org.onap.policy.common.parameters.annotations.Max;
 import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
-import org.onap.policy.common.parameters.testclasses.TestParametersL00;
-import org.onap.policy.common.parameters.testclasses.TestParametersL10;
+import org.onap.policy.common.parameters.annotations.Valid;
 
 public class TestValidation {
-    private static final String L0_PARAMETERS = "l0Parameters";
-
     private static final String NOT_BLANK_STRING_MESSAGE =
                     "field 'notBlankString' type 'java.lang.String' value '' INVALID, must be a non-blank string\n"
                                     .replace('\'', '"');
@@ -74,177 +66,15 @@ public class TestValidation {
     private long maxLong;
 
     @Test
-    public void testValidationOk() throws IOException {
-        TestParametersL00 l0Parameters = new TestParametersL00(L0_PARAMETERS);
-
-        GroupValidationResult validationResult = l0Parameters.validate();
-        assertTrue(validationResult.isValid());
-        assertTrue(validationResult.isClean());
-        assertNull(validationResult.getResult());
-        assertEquals(l0Parameters, validationResult.getParameterGroup());
-        assertEquals(l0Parameters.getName(), validationResult.getName());
-
-        String expectedResult = new String(Files.readAllBytes(
-                        Paths.get("src/test/resources/expectedValidationResults/TestParametersL0_0_OK.txt")))
-                                        .replaceAll("\\s+", "");
-        assertEquals(expectedResult, validationResult.getResult("", "  ", true).replaceAll("\\s+", ""));
-    }
-
-    @Test
-    public void testValidationObservation() throws IOException {
-        TestParametersL00 l0Parameters = new TestParametersL00(L0_PARAMETERS);
-
-        l0Parameters.triggerValidationStatus(ValidationStatus.OBSERVATION, 3);
-
-        String expectedResult = new String(Files.readAllBytes(
-                        Paths.get("src/test/resources/expectedValidationResults/TestParametersL0_3_Observation.txt")))
-                                        .replaceAll("\\s+", "");
-
-        GroupValidationResult validationResult = l0Parameters.validate();
-        assertTrue(validationResult.isValid());
-        assertFalse(validationResult.isClean());
-        assertEquals(expectedResult, validationResult.getResult().replaceAll("\\s+", ""));
-
-        l0Parameters.triggerValidationStatus(ValidationStatus.CLEAN, 3);
-        l0Parameters.triggerValidationStatus(ValidationStatus.OBSERVATION, 2);
-
-        expectedResult = new String(Files.readAllBytes(
-                        Paths.get("src/test/resources/expectedValidationResults/TestParametersL0_2_Observation.txt")))
-                                        .replaceAll("\\s+", "");
-
-        validationResult = l0Parameters.validate();
-        assertTrue(validationResult.isValid());
-        assertEquals(expectedResult, validationResult.getResult().replaceAll("\\s+", ""));
-
-        l0Parameters.triggerValidationStatus(ValidationStatus.CLEAN, 3);
-        l0Parameters.triggerValidationStatus(ValidationStatus.OBSERVATION, 1);
-
-        expectedResult = new String(Files.readAllBytes(
-                        Paths.get("src/test/resources/expectedValidationResults/TestParametersL0_1_Observation.txt")))
-                                        .replaceAll("\\s+", "");
-
-        validationResult = l0Parameters.validate();
-        assertTrue(validationResult.isValid());
-        assertEquals(expectedResult, validationResult.getResult().replaceAll("\\s+", ""));
-
-        l0Parameters.triggerValidationStatus(ValidationStatus.CLEAN, 3);
-        l0Parameters.triggerValidationStatus(ValidationStatus.OBSERVATION, 0);
-
-        validationResult = l0Parameters.validate();
-        assertTrue(validationResult.isValid());
-        assertEquals(null, validationResult.getResult());
-    }
-
-    @Test
-    public void testValidationWarning() throws IOException {
-        TestParametersL00 l0Parameters = new TestParametersL00(L0_PARAMETERS);
-
-        l0Parameters.triggerValidationStatus(ValidationStatus.WARNING, 3);
-
-        String expectedResult = new String(Files.readAllBytes(
-                        Paths.get("src/test/resources/expectedValidationResults/TestParametersL0_3_Warning.txt")))
-                                        .replaceAll("\\s+", "");
-
-        GroupValidationResult validationResult = l0Parameters.validate();
-        assertTrue(validationResult.isValid());
-        assertEquals(expectedResult, validationResult.getResult().replaceAll("\\s+", ""));
-
-        l0Parameters.triggerValidationStatus(ValidationStatus.CLEAN, 3);
-        l0Parameters.triggerValidationStatus(ValidationStatus.WARNING, 2);
-
-        expectedResult = new String(Files.readAllBytes(
-                        Paths.get("src/test/resources/expectedValidationResults/TestParametersL0_2_Warning.txt")))
-                                        .replaceAll("\\s+", "");
-
-        validationResult = l0Parameters.validate();
-        assertTrue(validationResult.isValid());
-        assertEquals(expectedResult, validationResult.getResult().replaceAll("\\s+", ""));
-
-        l0Parameters.triggerValidationStatus(ValidationStatus.CLEAN, 3);
-        l0Parameters.triggerValidationStatus(ValidationStatus.WARNING, 1);
-
-        expectedResult = new String(Files.readAllBytes(
-                        Paths.get("src/test/resources/expectedValidationResults/TestParametersL0_1_Warning.txt")))
-                                        .replaceAll("\\s+", "");
-
-        validationResult = l0Parameters.validate();
-        assertTrue(validationResult.isValid());
-        assertEquals(expectedResult, validationResult.getResult().replaceAll("\\s+", ""));
-
-        l0Parameters.triggerValidationStatus(ValidationStatus.CLEAN, 3);
-        l0Parameters.triggerValidationStatus(ValidationStatus.WARNING, 0);
-
-        validationResult = l0Parameters.validate();
-        assertTrue(validationResult.isValid());
-        assertEquals(null, validationResult.getResult());
-    }
-
-    @Test
-    public void testValidationInvalid() throws IOException {
-        TestParametersL00 l0Parameters = new TestParametersL00(L0_PARAMETERS);
-
-        l0Parameters.triggerValidationStatus(ValidationStatus.INVALID, 3);
-
-        String expectedResult = new String(Files.readAllBytes(
-                        Paths.get("src/test/resources/expectedValidationResults/TestParametersL0_3_Invalid.txt")))
-                                        .replaceAll("\\s+", "");
-
-        GroupValidationResult validationResult = l0Parameters.validate();
-        assertFalse(validationResult.isValid());
-        assertEquals(expectedResult, validationResult.getResult().replaceAll("\\s+", ""));
-
-        l0Parameters.triggerValidationStatus(ValidationStatus.CLEAN, 3);
-        l0Parameters.triggerValidationStatus(ValidationStatus.INVALID, 2);
-
-        expectedResult = new String(Files.readAllBytes(
-                        Paths.get("src/test/resources/expectedValidationResults/TestParametersL0_2_Invalid.txt")))
-                                        .replaceAll("\\s+", "");
-
-        validationResult = l0Parameters.validate();
-        assertFalse(validationResult.isValid());
-        assertEquals(expectedResult, validationResult.getResult().replaceAll("\\s+", ""));
-
-        l0Parameters.triggerValidationStatus(ValidationStatus.CLEAN, 3);
-        l0Parameters.triggerValidationStatus(ValidationStatus.INVALID, 1);
-
-        expectedResult = new String(Files.readAllBytes(
-                        Paths.get("src/test/resources/expectedValidationResults/TestParametersL0_1_Invalid.txt")))
-                                        .replaceAll("\\s+", "");
-
-        validationResult = l0Parameters.validate();
-        assertFalse(validationResult.isValid());
-        assertEquals(expectedResult, validationResult.getResult().replaceAll("\\s+", ""));
-
-        l0Parameters.triggerValidationStatus(ValidationStatus.CLEAN, 3);
-        l0Parameters.triggerValidationStatus(ValidationStatus.INVALID, 0);
-
-        validationResult = l0Parameters.validate();
-        assertTrue(validationResult.isValid());
-        assertEquals(null, validationResult.getResult());
-    }
-
-    @Test
-    public void testValidationEmptySubGroup() {
-        TestParametersL10 l10Parameters = new TestParametersL10("l10Parameters");
-
-        l10Parameters.setL10LGenericNested0(null);
-
-        GroupValidationResult validationResult = l10Parameters.validate();
-        assertTrue(validationResult.isValid());
-
-        assertTrue(validationResult.getResult("", "", true).contains("UNDEFINED"));
-    }
-
-    @Test
     public void testGetValidationResult() {
         Contained item = new Contained();
         item.setName("item");
 
         Container cont = new Container();
         cont.item = item;
-        GroupValidationResult result = cont.validate();
+        BeanValidationResult result = cont.validate();
         assertEquals(ValidationStatus.INVALID, result.getStatus());
-        assertTrue(result.getResult().contains(">= 1"));
+        assertThat(result.getResult()).contains("minimum");
 
         item.minInt = 1000;
         result = cont.validate();
@@ -253,7 +83,7 @@ public class TestValidation {
         cont.item = null;
         result = cont.validate();
         assertEquals(ValidationStatus.INVALID, result.getStatus());
-        assertTrue(result.getResult().contains("is null"));
+        assertThat(result.getResult()).contains("is null");
     }
 
     @Test
@@ -429,6 +259,7 @@ public class TestValidation {
 
     private static class Container extends ParameterGroupImpl {
         @NotNull
+        @Valid
         private Contained item;
 
         public Container() {

@@ -1,3 +1,0 @@
-parameter group "l0Parameters" type "org.onap.policy.common.parameters.testclasses.TestParametersL00" OBSERVATION, parameter group has status OBSERVATION
-  field "l00IntField" type "int" value "2" OBSERVATION, this field has been set to 2
-  field "l00StringField" type "java.lang.String" value "aString" OBSERVATION, this value for name is unhelpful

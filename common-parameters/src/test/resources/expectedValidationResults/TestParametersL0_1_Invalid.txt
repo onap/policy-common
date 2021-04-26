@@ -1,3 +1,0 @@
-parameter group "l0Parameters" type "org.onap.policy.common.parameters.testclasses.TestParametersL00" INVALID, parameter group has status INVALID
-  field "l00IntField" type "int" value "-1" INVALID, l00IntField must be a positive integer
-  field "l00StringField" type "java.lang.String" value "" INVALID, l00StringField must be a non-blank string
