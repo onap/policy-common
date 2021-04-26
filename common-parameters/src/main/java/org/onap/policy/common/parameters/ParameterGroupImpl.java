@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,9 +34,9 @@ import org.onap.policy.common.parameters.annotations.NotNull;
 @Setter
 public class ParameterGroupImpl implements ParameterGroup {
     /**
-     * Group name. Note: this MUST not be "private" or it will not be validated.
+     * Group name.
      */
-    protected String name;
+    private String name;
 
     /**
      * Constructs the object, with a {@code null} name.
@@ -55,7 +55,7 @@ public class ParameterGroupImpl implements ParameterGroup {
     }
 
     @Override
-    public GroupValidationResult validate() {
-        return new GroupValidationResult(this);
+    public BeanValidationResult validate() {
+        return new BeanValidator().validateTop(getClass().getSimpleName(), this);
     }
 }
