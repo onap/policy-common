@@ -256,7 +256,8 @@ public class BeanValidator {
             return true;
         }
 
-        BeanValidationResult result2 = validateTop(fieldName, value);
+        BeanValidationResult result2 = (value instanceof ParameterGroup ? ((ParameterGroup) value).validate()
+                        : validateTop(fieldName, value));
 
         if (result2.isClean()) {
             return true;
