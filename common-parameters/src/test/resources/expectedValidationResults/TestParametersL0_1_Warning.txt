@@ -1,3 +1,0 @@
-parameter group "l0Parameters" type "org.onap.policy.common.parameters.testclasses.TestParametersL00" WARNING, parameter group has status WARNING
-  field "l00IntField" type "int" value "3" WARNING, values greater than 2 are not recommended
-  field "l00StringField" type "java.lang.String" value "l00StringField" WARNING, using the field name for the parameter value is dangerous

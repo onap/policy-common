@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,8 @@ public class ObjectValidationResult extends ValidationResultImpl {
      *
      * @param name name of the object of this result
      * @param object object being validated
+     * @param status result status
+     * @param message result message
      */
     public ObjectValidationResult(String name, Object object, ValidationStatus status, String message) {
         super(name, object, status, message);
