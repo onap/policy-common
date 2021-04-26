@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.parameters;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
@@ -91,6 +92,10 @@ public class TestBeanValidationResult {
 
         assertEquals(INITIAL_INDENT + BEAN_INVALID_MSG + MID_INDENT + cleanMsg + MID_INDENT + invalidMsg,
                         bean.getResult(INITIAL_INDENT, NEXT_INDENT, true));
+
+        bean = new BeanValidationResult(NAME, OBJECT);
+        assertFalse(bean.addResult(MY_LIST, "hello", ValidationStatus.INVALID, TEXT1));
+        assertThat(bean.getResult()).contains("\"" + MY_LIST + "\" value \"hello\" INVALID, " + TEXT1);
     }
 
     @Test

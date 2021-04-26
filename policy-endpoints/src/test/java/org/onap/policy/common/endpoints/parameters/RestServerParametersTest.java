@@ -1,8 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
- *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
-
+ *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +21,14 @@
 
 package org.onap.policy.common.endpoints.parameters;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
-import org.onap.policy.common.parameters.GroupValidationResult;
+import org.onap.policy.common.parameters.ValidationResult;
 import org.onap.policy.common.utils.coder.Coder;
 import org.onap.policy.common.utils.coder.StandardCoder;
 
@@ -46,7 +46,7 @@ public class RestServerParametersTest {
     public void test() {
         final RestServerParameters restServerParameters =
                 testData.toObject(testData.getRestServerParametersMap(false), RestServerParameters.class);
-        final GroupValidationResult validationResult = restServerParameters.validate();
+        final ValidationResult validationResult = restServerParameters.validate();
         assertTrue(validationResult.isValid());
         assertEquals(CommonTestData.REST_SERVER_HOST, restServerParameters.getHost());
         assertEquals(CommonTestData.REST_SERVER_PORT, restServerParameters.getPort());
@@ -60,7 +60,7 @@ public class RestServerParametersTest {
     public void testValidate() {
         final RestServerParameters restServerParameters =
             testData.toObject(testData.getRestServerParametersMap(false), RestServerParameters.class);
-        final GroupValidationResult result = restServerParameters.validate();
+        final ValidationResult result = restServerParameters.validate();
         assertNull(result.getResult());
         assertTrue(result.isValid());
     }
@@ -70,7 +70,7 @@ public class RestServerParametersTest {
         String json = testData.getParameterGroupAsString(
             "src/test/resources/org/onap/policy/common/endpoints/parameters/RestServerParameters_valid.json");
         RestServerParameters restServerParameters = coder.decode(json, RestServerParameters.class);
-        final GroupValidationResult result = restServerParameters.validate();
+        final ValidationResult result = restServerParameters.validate();
         assertNull(result.getResult());
         assertTrue(result.isValid());
     }
@@ -80,8 +80,8 @@ public class RestServerParametersTest {
         String json = testData.getParameterGroupAsString(
             "src/test/resources/org/onap/policy/common/endpoints/parameters/RestServerParameters_invalid.json");
         RestServerParameters restServerParameters = coder.decode(json, RestServerParameters.class);
-        final GroupValidationResult result = restServerParameters.validate();
+        final ValidationResult result = restServerParameters.validate();
         assertFalse(result.isValid());
-        assertTrue(result.getResult().contains("parameter group has status INVALID"));
+        assertThat(result.getResult()).contains("item has status INVALID");
     }
 }

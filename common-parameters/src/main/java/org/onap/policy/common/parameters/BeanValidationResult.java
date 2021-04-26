@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ *  Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,6 +68,19 @@ public class BeanValidationResult extends ValidationResultImpl {
     }
 
     /**
+     * Adds a result to this result.
+     * @param name name of the object of this result
+     * @param object object being validated
+     * @param status status of the new result
+     * @param message new result message
+     * @return {@code true} if the status is {@code null} or valid, {@code false} if the
+     *         status is invalid
+     */
+    public boolean addResult(String name, Object object, ValidationStatus status, String message) {
+        return addResult(new ObjectValidationResult(name, object, status, message));
+    }
+
+    /**
      * Validates that a sub-object within the bean is not {@code null}.
      *
      * @param subName name of the sub-object
@@ -116,7 +129,7 @@ public class BeanValidationResult extends ValidationResultImpl {
         BeanValidationResult result = new BeanValidationResult(listName, null);
         for (T item : list) {
             if (item == null) {
-                result.addResult(new ObjectValidationResult("item", item, ValidationStatus.INVALID, "null"));
+                result.addResult("item", item, ValidationStatus.INVALID, "null");
             } else {
                 result.addResult(itemValidator.apply(item));
             }

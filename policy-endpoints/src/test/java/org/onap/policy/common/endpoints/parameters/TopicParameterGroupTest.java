@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
- *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
-import org.onap.policy.common.parameters.GroupValidationResult;
+import org.onap.policy.common.parameters.ValidationResult;
 import org.onap.policy.common.utils.coder.Coder;
 import org.onap.policy.common.utils.coder.CoderException;
 import org.onap.policy.common.utils.coder.StandardCoder;
@@ -51,7 +51,7 @@ public class TopicParameterGroupTest {
     public void test() throws CoderException {
         final TopicParameterGroup topicParameterGroup =
                 testData.toObject(testData.getTopicParameterGroupMap(false), TopicParameterGroup.class);
-        final GroupValidationResult validationResult = topicParameterGroup.validate();
+        final ValidationResult validationResult = topicParameterGroup.validate();
         assertTrue(validationResult.isValid());
         assertEquals(CommonTestData.TOPIC_PARAMS, topicParameterGroup.getTopicSinks());
         assertEquals(CommonTestData.TOPIC_PARAMS, topicParameterGroup.getTopicSources());
@@ -68,7 +68,7 @@ public class TopicParameterGroupTest {
     public void testValidate() {
         final TopicParameterGroup topicParameterGroup =
             testData.toObject(testData.getTopicParameterGroupMap(false), TopicParameterGroup.class);
-        final GroupValidationResult result = topicParameterGroup.validate();
+        final ValidationResult result = topicParameterGroup.validate();
         assertNull(result.getResult());
         assertTrue(result.isValid());
     }
@@ -78,7 +78,7 @@ public class TopicParameterGroupTest {
         String json = testData.getParameterGroupAsString(
             "src/test/resources/org/onap/policy/common/endpoints/parameters/TopicParameters_valid.json");
         TopicParameterGroup topicParameterGroup = coder.decode(json, TopicParameterGroup.class);
-        final GroupValidationResult result = topicParameterGroup.validate();
+        final ValidationResult result = topicParameterGroup.validate();
         assertNull(result.getResult());
         assertTrue(result.isValid());
     }
@@ -88,7 +88,7 @@ public class TopicParameterGroupTest {
         String json = testData.getParameterGroupAsString(
             "src/test/resources/org/onap/policy/common/endpoints/parameters/TopicParameters_invalid.json");
         TopicParameterGroup topicParameterGroup = coder.decode(json, TopicParameterGroup.class);
-        final GroupValidationResult result = topicParameterGroup.validate();
+        final ValidationResult result = topicParameterGroup.validate();
         assertFalse(result.isValid());
         assertTrue(result.getResult().contains("INVALID"));
     }
@@ -98,7 +98,7 @@ public class TopicParameterGroupTest {
         String json = testData.getParameterGroupAsString(
             "src/test/resources/org/onap/policy/common/endpoints/parameters/TopicParameters_missing_mandatory.json");
         TopicParameterGroup topicParameterGroup = coder.decode(json, TopicParameterGroup.class);
-        final GroupValidationResult result = topicParameterGroup.validate();
+        final ValidationResult result = topicParameterGroup.validate();
         assertTrue(result.getResult().contains("Mandatory parameters are missing"));
         assertFalse(result.isValid());
     }
@@ -108,7 +108,7 @@ public class TopicParameterGroupTest {
         String json = testData.getParameterGroupAsString(
             "src/test/resources/org/onap/policy/common/endpoints/parameters/TopicParameters_all_params.json");
         TopicParameterGroup topicParameterGroup = coder.decode(json, TopicParameterGroup.class);
-        final GroupValidationResult result = topicParameterGroup.validate();
+        final ValidationResult result = topicParameterGroup.validate();
         assertNull(result.getResult());
         assertTrue(result.isValid());
         assertTrue(checkIfAllParamsNotEmpty(topicParameterGroup.getTopicSinks()));
