@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,7 +96,7 @@ public class YamlMessageBodyHandler implements MessageBodyReader<Object>, Messag
     public void writeTo(Object object, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
                     MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException {
 
-        try (OutputStreamWriter writer = new OutputStreamWriter(entityStream, StandardCharsets.UTF_8)) {
+        try (var writer = new OutputStreamWriter(entityStream, StandardCharsets.UTF_8)) {
             translator.toYaml(writer, object);
         }
     }
@@ -121,7 +121,7 @@ public class YamlMessageBodyHandler implements MessageBodyReader<Object>, Messag
     public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations, MediaType mediaType,
                     MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException {
 
-        try (InputStreamReader streamReader = new InputStreamReader(entityStream, StandardCharsets.UTF_8)) {
+        try (var streamReader = new InputStreamReader(entityStream, StandardCharsets.UTF_8)) {
             Class<?> clazz = (Class<?>) genericType;
             return translator.fromYaml(streamReader, clazz);
 

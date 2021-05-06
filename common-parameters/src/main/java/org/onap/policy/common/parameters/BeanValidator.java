@@ -55,7 +55,7 @@ public class BeanValidator {
      * @return the validation result
      */
     public BeanValidationResult validateTop(String name, Object object) {
-        BeanValidationResult result = new BeanValidationResult(name, object);
+        var result = new BeanValidationResult(name, object);
         if (object == null) {
             return result;
         }
@@ -94,7 +94,7 @@ public class BeanValidator {
      */
     private void validateFields(BeanValidationResult result, Object object, Class<?> clazz) {
         for (Field field : clazz.getDeclaredFields()) {
-            FieldValidator validator = makeFieldValidator(clazz, field);
+            var validator = makeFieldValidator(clazz, field);
             validator.validateField(result, object);
         }
     }
@@ -337,8 +337,8 @@ public class BeanValidator {
 
         Collection<?> list = (Collection<?>) value;
 
-        BeanValidationResult result2 = new BeanValidationResult(fieldName, value);
-        int count = 0;
+        var result2 = new BeanValidationResult(fieldName, value);
+        var count = 0;
         for (Object item : list) {
             itemValidator.validateValue(result2, String.valueOf(count++), item);
         }
@@ -370,12 +370,12 @@ public class BeanValidator {
 
         Map<?, ?> map = (Map<?, ?>) value;
 
-        BeanValidationResult result2 = new BeanValidationResult(fieldName, value);
+        var result2 = new BeanValidationResult(fieldName, value);
 
         for (Entry<?, ?> entry : map.entrySet()) {
             String name = getEntryName(entry);
 
-            BeanValidationResult result3 = new BeanValidationResult(name, entry);
+            var result3 = new BeanValidationResult(name, entry);
             keyValidator.validateValue(result3, "key", entry.getKey());
             valueValidator.validateValue(result3, "value", entry.getValue());
 
@@ -399,7 +399,7 @@ public class BeanValidator {
      * @return a name for the entry
      */
     protected <K, V> String getEntryName(Map.Entry<K, V> entry) {
-        K key = entry.getKey();
+        var key = entry.getKey();
         if (key == null) {
             return "";
         }

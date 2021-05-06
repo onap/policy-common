@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ public class DmaapPropertyUtils {
 
         for (Map.Entry<String, String> ent : PROP_TO_DME.entrySet()) {
             String propName = ent.getKey();
-            String value = props.getString(propName, null);
+            var value = props.getString(propName, null);
 
             if (!StringUtils.isBlank(value)) {
                 String dmeName = ent.getValue();

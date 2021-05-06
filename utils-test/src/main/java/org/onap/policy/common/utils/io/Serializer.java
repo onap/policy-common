@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,8 +51,8 @@ public class Serializer {
      * @throws IOException if an error occurs
      */
     public static <T> byte[] serialize(T object) throws IOException {
-        try (ByteArrayOutputStream out = factory.makeByteArrayOutputStream()) {
-            try (ObjectOutputStream oos = factory.makeObjectOutputStream(out)) {
+        try (var out = factory.makeByteArrayOutputStream()) {
+            try (var oos = factory.makeObjectOutputStream(out)) {
                 /*
                  * writeObject() is final and mockito can't mock final methods. In
                  * addition, powermock seemed to be having difficulty with the junit test
@@ -75,8 +75,8 @@ public class Serializer {
      */
     private static <T> T deserialize(Class<T> clazz, byte[] data) throws IOException {
 
-        try (ByteArrayInputStream in = factory.makeByteArrayInputStream(data);
-                        ObjectInputStream ois = factory.makeObjectInputStream(in)) {
+        try (var in = factory.makeByteArrayInputStream(data);
+                        var ois = factory.makeObjectInputStream(in)) {
             /*
              * readObject() is final and mockito can't mock final methods. In addition,
              * powermock seemed to be having difficulty with the junit test class as well,

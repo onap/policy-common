@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
                 return uebTopicSources.get(busTopicParams.getTopic());
             }
 
-            UebTopicSource uebTopicSource = makeSource(busTopicParams);
+            var uebTopicSource = makeSource(busTopicParams);
 
             if (busTopicParams.isManaged()) {
                 uebTopicSources.put(busTopicParams.getTopic(), uebTopicSource);
@@ -120,7 +120,7 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
 
         String topicPrefix = PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS + "." + topic;
 
-        PropertyUtils props = new PropertyUtils(properties, topicPrefix,
+        var props = new PropertyUtils(properties, topicPrefix,
             (name, value, ex) -> logger.warn("{}: {} {} is in invalid format for topic {} ", this, name, value, topic));
 
         String servers = properties.getProperty(topicPrefix + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX);
@@ -129,7 +129,7 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
             return;
         }
 
-        UebTopicSource uebTopicSource = this.build(UebPropertyUtils.makeBuilder(props, topic, servers)
+        var uebTopicSource = this.build(UebPropertyUtils.makeBuilder(props, topic, servers)
                 .consumerGroup(props.getString(
                                 PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_GROUP_SUFFIX, null))
                 .consumerInstance(props.getString(
@@ -209,8 +209,6 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("IndexedUebTopicSourceFactory []");
-        return builder.toString();
+        return "IndexedUebTopicSourceFactory []";
     }
 }

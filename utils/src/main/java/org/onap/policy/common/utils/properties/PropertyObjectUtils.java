@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,13 +78,13 @@ public class PropertyObjectUtils {
         final int lastComp = names.length - 1;
 
         // process all but the final component
-        for (int comp = 0; comp < lastComp; ++comp) {
+        for (var comp = 0; comp < lastComp; ++comp) {
             node = getNode(node, names[comp]);
         }
 
         // process the final component
         String name = names[lastComp];
-        Matcher matcher = NAME_PAT.matcher(name);
+        var matcher = NAME_PAT.matcher(name);
 
         if (!matcher.find()) {
             // no subscript
@@ -95,7 +94,7 @@ public class PropertyObjectUtils {
 
         // subscripted
         List<Object> array = getArray(node, name.substring(0, matcher.start()));
-        int index = Integer.parseInt(matcher.group(1));
+        var index = Integer.parseInt(matcher.group(1));
         expand(array, index);
         array.set(index, value);
     }
@@ -109,7 +108,7 @@ public class PropertyObjectUtils {
      */
     @SuppressWarnings("unchecked")
     private static Map<String, Object> getNode(Map<String, Object> map, String name) {
-        Matcher matcher = NAME_PAT.matcher(name);
+        var matcher = NAME_PAT.matcher(name);
 
         if (!matcher.find()) {
             // no subscript
@@ -118,7 +117,7 @@ public class PropertyObjectUtils {
 
         // subscripted
         List<Object> array = getArray(map, name.substring(0, matcher.start()));
-        int index = Integer.parseInt(matcher.group(1));
+        var index = Integer.parseInt(matcher.group(1));
         expand(array, index);
 
         Object item = array.get(index);

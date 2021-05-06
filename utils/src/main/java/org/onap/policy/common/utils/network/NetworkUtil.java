@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -113,7 +113,7 @@ public class NetworkUtil {
      */
     public static boolean isTcpPortOpen(String host, int port, int retries, long interval)
             throws InterruptedException {
-        int retry = 0;
+        var retry = 0;
         while (retry < retries) {
             /*
              * As with the server socket, this is only used to see if the port is open,

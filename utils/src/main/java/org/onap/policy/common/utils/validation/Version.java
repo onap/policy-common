@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP COMMON
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,6 @@
 
 package org.onap.policy.common.utils.validation;
 
-import com.google.re2j.Matcher;
 import com.google.re2j.Pattern;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -56,7 +55,7 @@ public class Version implements Comparable<Version> {
      * @param versionString the version string
      */
     public Version(@NonNull final String versionString) {
-        Version newVersion = makeVersion("String", "constructor", versionString);
+        var newVersion = makeVersion("String", "constructor", versionString);
 
         if (newVersion != null) {
             this.major = newVersion.major;
@@ -79,7 +78,7 @@ public class Version implements Comparable<Version> {
      *         that does not match the major.minor.patch form)
      */
     public static Version makeVersion(String type, String name, String versionText) {
-        Matcher matcher = VERSION_PAT.matcher(versionText);
+        var matcher = VERSION_PAT.matcher(versionText);
         if (!matcher.matches()) {
             logger.info("invalid version for {} {}: {}", type, name, versionText);
             return null;
@@ -113,7 +112,7 @@ public class Version implements Comparable<Version> {
 
     @Override
     public int compareTo(Version other) {
-        int result = Integer.compare(major, other.major);
+        var result = Integer.compare(major, other.major);
         if (result != 0) {
             return result;
         }

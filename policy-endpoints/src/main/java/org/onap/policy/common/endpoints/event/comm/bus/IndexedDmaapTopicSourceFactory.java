@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
                 return dmaapTopicSources.get(busTopicParams.getTopic());
             }
 
-            DmaapTopicSource dmaapTopicSource = makeSource(busTopicParams);
+            var dmaapTopicSource = makeSource(busTopicParams);
 
             if (busTopicParams.isManaged()) {
                 dmaapTopicSources.put(busTopicParams.getTopic(), dmaapTopicSource);
@@ -117,7 +117,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
 
         String topicPrefix = PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "." + topic;
 
-        PropertyUtils props = new PropertyUtils(properties, topicPrefix,
+        var props = new PropertyUtils(properties, topicPrefix,
             (name, value, ex) -> logger.warn("{}: {} {} is in invalid format for topic {} ", this, name, value, topic));
 
         String servers = properties.getProperty(topicPrefix + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX);

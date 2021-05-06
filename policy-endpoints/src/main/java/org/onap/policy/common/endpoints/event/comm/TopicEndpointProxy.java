@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -365,7 +365,7 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         final List<Startable> endpoints = this.getEndpoints();
 
-        boolean success = true;
+        var success = true;
         for (final Startable endpoint : endpoints) {
             try {
                 success = endpoint.start() && success;
@@ -391,7 +391,7 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         final List<Startable> endpoints = this.getEndpoints();
 
-        boolean success = true;
+        var success = true;
         for (final Startable endpoint : endpoints) {
             try {
                 success = endpoint.stop() && success;

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -159,7 +159,7 @@ public abstract class TopicBase implements Topic {
     protected boolean broadcast(String message) {
         List<TopicListener> snapshotListeners = this.snapshotTopicListeners();
 
-        boolean success = true;
+        var success = true;
         for (TopicListener topicListener : snapshotListeners) {
             try {
                 topicListener.onTopicEvent(this.getTopicCommInfrastructure(), this.topic, message);
@@ -245,7 +245,7 @@ public abstract class TopicBase implements Topic {
 
     @Override
     public synchronized String[] getRecentEvents() {
-        String[] events = new String[recentEvents.size()];
+        var events = new String[recentEvents.size()];
         return recentEvents.toArray(events);
     }
 

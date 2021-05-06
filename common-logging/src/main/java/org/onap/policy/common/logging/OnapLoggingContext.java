@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -143,7 +143,7 @@ public class OnapLoggingContext {
      * with key "TransactionElapsedTime".
      */
     public void transactionEnded() {
-        Instant transactionEndTime = Instant.now();
+        var transactionEndTime = Instant.now();
         setTransactionEndTimestamp(transactionEndTime);
         setTransactionElapsedTime(transactionEndTime);
     }
@@ -163,7 +163,7 @@ public class OnapLoggingContext {
      * "MetricElapsedTime".
      */
     public void metricEnded() {
-        Instant metricEndTime = Instant.now();
+        var metricEndTime = Instant.now();
         setMetricEndTimestamp(metricEndTime);
         setMetricElapsedTime(metricEndTime);
     }
@@ -449,7 +449,7 @@ public class OnapLoggingContext {
      * @param transactionStartTime transaction start time
      */
     public void setTransactionBeginTimestamp(Instant transactionStartTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT);
+        var sdf = new SimpleDateFormat(TIME_FORMAT);
         context.put(TRANSACTION_BEGIN_TIME_STAMP, sdf.format(Date.from(transactionStartTime)));
     }
 
@@ -468,7 +468,7 @@ public class OnapLoggingContext {
      * @param transactionEndTime transaction end time
      */
     public void setTransactionEndTimestamp(Instant transactionEndTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT);
+        var sdf = new SimpleDateFormat(TIME_FORMAT);
         context.put(TRANSACTION_END_TIME_STAMP, sdf.format(Date.from(transactionEndTime)));
     }
 
@@ -510,7 +510,7 @@ public class OnapLoggingContext {
      * @param metricStartTime metric start time
      */
     public void setMetricBeginTimestamp(Instant metricStartTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT);
+        var sdf = new SimpleDateFormat(TIME_FORMAT);
         context.put(METRIC_BEGIN_TIME_STAMP, sdf.format(Date.from(metricStartTime)));
     }
 
@@ -529,7 +529,7 @@ public class OnapLoggingContext {
      * @param metricEndTime metric end time
      */
     public void setMetricEndTimestamp(Instant metricEndTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat(TIME_FORMAT);
+        var sdf = new SimpleDateFormat(TIME_FORMAT);
         context.put(METRIC_END_TIME_STAMP, sdf.format(Date.from(metricEndTime)));
     }
 

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * Modifications Copyright (C) 2019 Nordix Foundation.
  * ================================================================================
@@ -112,7 +112,7 @@ public class JerseyClient implements HttpClient {
         this.client = detmClient();
 
         if (!StringUtils.isBlank(this.userName) && !StringUtils.isBlank(this.password)) {
-            HttpAuthenticationFeature authFeature = HttpAuthenticationFeature.basic(userName, password);
+            var authFeature = HttpAuthenticationFeature.basic(userName, password);
             this.client.register(authFeature);
         }
 
@@ -127,7 +127,7 @@ public class JerseyClient implements HttpClient {
     private Client detmClient() throws NoSuchAlgorithmException, KeyManagementException {
         if (this.https) {
             ClientBuilder clientBuilder;
-            SSLContext sslContext = SSLContext.getInstance("TLSv1.2");
+            var sslContext = SSLContext.getInstance("TLSv1.2");
             if (this.selfSignedCerts) {
                 sslContext.init(null, NetworkUtil.getAlwaysTrustingManager(), new SecureRandom());
 
@@ -195,7 +195,7 @@ public class JerseyClient implements HttpClient {
 
     @Override
     public Future<Response> get(InvocationCallback<Response> callback, Map<String, Object> headers) {
-        Builder builder = getWebTarget().request();
+        var builder = getWebTarget().request();
         if (headers != null) {
             headers.forEach(builder::header);
         }
@@ -310,7 +310,7 @@ public class JerseyClient implements HttpClient {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
         builder.append("JerseyClient [name=");
         builder.append(name);
         builder.append(", https=");
@@ -338,7 +338,7 @@ public class JerseyClient implements HttpClient {
     }
 
     private Builder getBuilder(String path, Map<String, Object> headers) {
-        Builder builder = getWebTarget().path(path).request();
+        var builder = getWebTarget().path(path).request();
         for (Entry<String, Object> header : headers.entrySet()) {
             builder.header(header.getKey(), header.getValue());
         }
