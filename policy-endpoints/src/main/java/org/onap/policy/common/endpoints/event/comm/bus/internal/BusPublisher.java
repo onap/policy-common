@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
@@ -25,7 +25,6 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 import com.att.nsa.apiClient.http.HttpClient.ConnectionType;
 import com.att.nsa.cambria.client.CambriaBatchingPublisher;
 import com.att.nsa.cambria.client.CambriaClientBuilders;
-import com.att.nsa.cambria.client.CambriaClientBuilders.PublisherBuilder;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -79,7 +78,7 @@ public interface BusPublisher {
          */
         public CambriaPublisherWrapper(BusTopicParams busTopicParams) {
 
-            PublisherBuilder builder = new CambriaClientBuilders.PublisherBuilder();
+            var builder = new CambriaClientBuilders.PublisherBuilder();
 
             builder.usingHosts(busTopicParams.getServers()).onTopic(busTopicParams.getTopic());
 
@@ -237,8 +236,13 @@ public interface BusPublisher {
 
             try {
                 this.publisher.close(1, TimeUnit.SECONDS);
+
+            } catch (InterruptedException e) {
+                logger.warn("{}: CLOSE FAILED", this, e);
+                Thread.currentThread().interrupt();
+
             } catch (Exception e) {
-                logger.warn("{}: CLOSE FAILED because of {}", this, e.getMessage(), e);
+                logger.warn("{}: CLOSE FAILED", this, e);
             }
         }
 

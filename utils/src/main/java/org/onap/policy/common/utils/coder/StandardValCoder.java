@@ -1,6 +1,6 @@
 /*--
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ *  Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ public class StandardValCoder extends StandardCoder {
 
     @Override
     protected String toJson(@NonNull Object object) {
-        StringWriter output = new StringWriter();
+        var output = new StringWriter();
         toJson(output, object);
         return output.toString();
     }
@@ -89,7 +89,7 @@ public class StandardValCoder extends StandardCoder {
 
     @Override
     protected <T> T fromJson(String json, Class<T> clazz) {
-        StringReader reader = new StringReader(json);
+        var reader = new StringReader(json);
         return convertFromDouble(clazz, gson.fromJson(validatorApi.createJsonReader(validator, reader), clazz));
     }
 

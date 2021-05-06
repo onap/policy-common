@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,11 +74,11 @@ public abstract class NoopTopicFactory<T extends NoopTopicEndpoint> extends Topi
      */
     @Override
     protected boolean isManaged(String topicName, Properties properties) {
-        String managedString =
+        var managedString =
             properties.getProperty(getTopicsPropertyName()
                 + "." + topicName + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
 
-        boolean managed = true;
+        var managed = true;
         if (managedString != null && !managedString.isEmpty()) {
             managed = Boolean.parseBoolean(managedString);
         }

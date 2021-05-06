@@ -121,7 +121,7 @@ public class FieldValidator extends ValueValidator {
             return;
         }
 
-        AnnotatedType tannot = field.getAnnotatedType();
+        var tannot = field.getAnnotatedType();
         if (!(tannot instanceof AnnotatedParameterizedType)) {
             return;
         }
@@ -131,7 +131,7 @@ public class FieldValidator extends ValueValidator {
             return;
         }
 
-        ItemValidator itemValidator = new ItemValidator(validator, targs[0]);
+        var itemValidator = new ItemValidator(validator, targs[0]);
         if (itemValidator.isEmpty()) {
             return;
         }
@@ -149,7 +149,7 @@ public class FieldValidator extends ValueValidator {
             return;
         }
 
-        AnnotatedType tannot = field.getAnnotatedType();
+        var tannot = field.getAnnotatedType();
         if (!(tannot instanceof AnnotatedParameterizedType)) {
             return;
         }
@@ -159,8 +159,8 @@ public class FieldValidator extends ValueValidator {
             return;
         }
 
-        ItemValidator keyValidator = new ItemValidator(validator, targs[0]);
-        ItemValidator valueValidator = new ItemValidator(validator, targs[1]);
+        var keyValidator = new ItemValidator(validator, targs[0]);
+        var valueValidator = new ItemValidator(validator, targs[1]);
         if (keyValidator.isEmpty() && valueValidator.isEmpty()) {
             return;
         }
@@ -226,7 +226,7 @@ public class FieldValidator extends ValueValidator {
     public <T extends Annotation> T getAnnotation(Class<T> annotClass) {
 
         // field annotation takes precedence over class annotation
-        T annot = field.getAnnotation(annotClass);
+        var annot = field.getAnnotation(annotClass);
         if (annot != null) {
             setFieldAnnotated(true);
             return annot;
@@ -243,8 +243,8 @@ public class FieldValidator extends ValueValidator {
      * @return the field's "getter" method, or {@code null} if it is not found
      */
     private Method getAccessor(Class<?> clazz, String fieldName) {
-        String capname = StringUtils.capitalize(fieldName);
-        Method accessor2 = getMethod(clazz, "get" + capname);
+        var capname = StringUtils.capitalize(fieldName);
+        var accessor2 = getMethod(clazz, "get" + capname);
         if (accessor2 != null) {
             return accessor2;
         }

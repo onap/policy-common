@@ -56,7 +56,7 @@ public class TopicParameterGroup extends ParameterGroupImpl {
     public BeanValidationResult validate() {
         BeanValidationResult result = super.validate();
         if (result.isValid()) {
-            StringBuilder errorMsg = new StringBuilder();
+            var errorMsg = new StringBuilder();
             StringBuilder missingSourceParams = checkMissingMandatoryParams(topicSources);
             if (missingSourceParams.length() > 0) {
                 errorMsg.append(missingSourceParams.append("missing in topicSources. "));
@@ -75,7 +75,7 @@ public class TopicParameterGroup extends ParameterGroupImpl {
     }
 
     private StringBuilder checkMissingMandatoryParams(List<TopicParameters> topicParametersList) {
-        StringBuilder missingParams = new StringBuilder();
+        var missingParams = new StringBuilder();
         for (TopicParameters topicParameters : topicParametersList) {
             if (StringUtils.isBlank(topicParameters.getTopic())) {
                 missingParams.append("topic, ");

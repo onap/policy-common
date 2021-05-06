@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018, 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018, 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,13 +87,13 @@ public class ComponentAdmin implements ComponentAdminMBean {
         try {
             logger.debug("Registering {} MBean", name);
 
-            MBeanServer mbeanServer = findMBeanServer();
+            var mbeanServer = findMBeanServer();
 
             if (mbeanServer == null) {
                 return;
             }
 
-            ObjectName objectName = new ObjectName(name);
+            var objectName = new ObjectName(name);
 
             if (mbeanServer.isRegistered(objectName)) {
                 logger.debug("Unregistering a previously registered {} MBean", name);

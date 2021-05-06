@@ -82,7 +82,7 @@ public class ResourceRegistrationEntity implements Serializable {
      */
     @PrePersist
     public void prePersist() {
-        Date date = MonitorTime.getInstance().getDate();
+        var date = MonitorTime.getInstance().getDate();
         this.createdDate = date;
         this.lastUpdated = date;
     }

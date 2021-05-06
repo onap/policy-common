@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ public class OnapLoggingUtils {
      */
     public static OnapLoggingContext getLoggingContextForRequest(HttpServletRequest request,
         OnapLoggingContext baseContext) {
-        OnapLoggingContext requestContext = new OnapLoggingContext(baseContext);
+        var requestContext = new OnapLoggingContext(baseContext);
         if (request.getLocalAddr() != null) { // may be null in junit tests
             requestContext.setServerIpAddress(request.getLocalAddr());
         }
@@ -72,7 +72,7 @@ public class OnapLoggingUtils {
             return format;
         }
         int index;
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
         String[] token = format.split("[{][}]");
         for (index = 0; index < arguments.length; index++) {
             if (index < token.length) {

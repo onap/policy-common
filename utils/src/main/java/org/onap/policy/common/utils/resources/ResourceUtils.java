@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2020 Nordix Foundation.
- *  Modifications Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -66,7 +66,7 @@ public abstract class ResourceUtils {
      */
     public static URL getUrl4Resource(final String resourceName) {
         // Check the local fine system first
-        final URL urlToResource = getLocalFile(resourceName);
+        final var urlToResource = getLocalFile(resourceName);
 
         // Check if this is a local file
         if (urlToResource != null) {
@@ -92,8 +92,8 @@ public abstract class ResourceUtils {
         }
 
         // Read the stream contents in to an output stream
-        final ByteArrayOutputStream resourceOutputStreamBuffer = new ByteArrayOutputStream();
-        final byte[] resourceBuffer = new byte[BYTE_BUFFER_LENGH];
+        final var resourceOutputStreamBuffer = new ByteArrayOutputStream();
+        final var resourceBuffer = new byte[BYTE_BUFFER_LENGH];
         int length;
         try {
             while ((length = resourceStream.read(resourceBuffer)) != -1) {
@@ -116,7 +116,7 @@ public abstract class ResourceUtils {
      */
     public static InputStream getResourceAsStream(final String resourceName) {
         // Find a URL to the resource first
-        final URL urlToResource = getUrl4Resource(resourceName);
+        final var urlToResource = getUrl4Resource(resourceName);
 
         // Check if the resource exists
         if (urlToResource == null) {
@@ -143,11 +143,11 @@ public abstract class ResourceUtils {
      */
     public static URL getUrlResource(final String resourceName) {
         try {
-            final ClassLoader classLoader = ResourceUtils.class.getClassLoader();
+            final var classLoader = ResourceUtils.class.getClassLoader();
 
             final String[] fileParts = resourceName.split("/");
             // Read the resource
-            URL url = classLoader.getResource(resourceName);
+            var url = classLoader.getResource(resourceName);
 
             // Check if the resource is defined
             if (url != null) {
@@ -178,8 +178,8 @@ public abstract class ResourceUtils {
     public static URL getLocalFile(final String resourceName) {
         try {
             // Input might already be in URL format
-            final URL ret = new URL(resourceName);
-            final File f = new File(ret.toURI());
+            final var ret = new URL(resourceName);
+            final var f = new File(ret.toURI());
             if (f.exists()) {
                 return ret;
             }
@@ -188,10 +188,10 @@ public abstract class ResourceUtils {
         }
 
         try {
-            final File f = new File(resourceName);
+            final var f = new File(resourceName);
             // Check if the file exists
             if (f.exists()) {
-                final URL urlret = f.toURI().toURL();
+                final var urlret = f.toURI().toURL();
                 LOGGER.debug("resource \"{}\" was found on the local file system", f.toURI().toURL());
                 return urlret;
             } else {
@@ -215,7 +215,7 @@ public abstract class ResourceUtils {
             return null;
         }
 
-        URL modelFileUrl = getUrl4Resource(resource);
+        var modelFileUrl = getUrl4Resource(resource);
         if (modelFileUrl != null) {
             return modelFileUrl.getPath();
         } else {
@@ -231,7 +231,7 @@ public abstract class ResourceUtils {
      */
     public static Set<String> getDirectoryContents(final String resourceDirectoryName) {
         // Find the location of the resource, is it in a Jar or on the local file system?
-        URL directoryUrl = ResourceUtils.getUrl4Resource(resourceDirectoryName);
+        var directoryUrl = ResourceUtils.getUrl4Resource(resourceDirectoryName);
 
         if (directoryUrl == null) {
             LOGGER.debug("resource \"{}\" was not found", resourceDirectoryName);
@@ -259,7 +259,7 @@ public abstract class ResourceUtils {
      */
     public static Set<String> getDirectoryContentsLocal(final URL localResourceDirectoryUrl,
             final String resourceDirectoryName) {
-        File localDirectory = new File(localResourceDirectoryUrl.getFile());
+        var localDirectory = new File(localResourceDirectoryUrl.getFile());
 
         if (!localDirectory.isDirectory()) {
             LOGGER.debug("resource \"{}\" is not a directory", resourceDirectoryName);
@@ -290,12 +290,12 @@ public abstract class ResourceUtils {
             final String resourceDirectoryName) {
         String dirNameWithSlash = resourceDirectoryName + "/";
         int minLength = dirNameWithSlash.length() + 1;
-        File jarResourceDirectory = new File(jarResourceDirectoryUrl.getPath());
+        var jarResourceDirectory = new File(jarResourceDirectoryUrl.getPath());
         String jarFileName = jarResourceDirectory.getParent().replaceFirst("^file:", "").replaceFirst("!.*$", "");
 
         Set<String> localDirectorySet = new TreeSet<>();
 
-        try (JarFile jarFile = new JarFile(jarFileName)) {
+        try (var jarFile = new JarFile(jarFileName)) {
             Enumeration<JarEntry> entries = jarFile.entries();
 
             while (entries.hasMoreElements()) {

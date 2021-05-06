@@ -1,7 +1,7 @@
 /*
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
- *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ public class ParameterValidationResult implements ValidationResult {
      * @param parameterValue field's value
      */
     private void checkMinValue(final Field field, final Object parameterValue) {
-        Min minAnnot = field.getAnnotation(Min.class);
+        var minAnnot = field.getAnnotation(Min.class);
         if (minAnnot != null && ((Number) parameterValue).longValue() < minAnnot.value()) {
             setResult(ValidationStatus.INVALID, "must be >= " + minAnnot.value());
         }
@@ -86,7 +86,7 @@ public class ParameterValidationResult implements ValidationResult {
      * @param parameterValue field's value
      */
     private void checkMaxValue(final Field field, final Object parameterValue) {
-        Max maxAnnot = field.getAnnotation(Max.class);
+        var maxAnnot = field.getAnnotation(Max.class);
         if (maxAnnot != null && ((Number) parameterValue).longValue() > maxAnnot.value()) {
             setResult(ValidationStatus.INVALID, "must be <= " + maxAnnot.value());
         }
@@ -102,7 +102,7 @@ public class ParameterValidationResult implements ValidationResult {
      * @return the field's annotation, or {@code null} if it does not exist
      */
     private static <T extends Annotation> T getAnyAnnotation(final Field field, Class<T> annotClass) {
-        T annot = field.getAnnotation(annotClass);
+        var annot = field.getAnnotation(annotClass);
         if (annot != null) {
             return annot;
         }
@@ -157,7 +157,7 @@ public class ParameterValidationResult implements ValidationResult {
             return null;
         }
 
-        StringBuilder validationResultBuilder = new StringBuilder();
+        var validationResultBuilder = new StringBuilder();
 
         validationResultBuilder.append(initialIndentation);
         validationResultBuilder.append("field \"");

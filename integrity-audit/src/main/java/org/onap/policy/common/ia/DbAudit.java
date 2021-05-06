@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -123,7 +123,7 @@ public class DbAudit {
          * nodes. Since the audit is run in a round-robin, every instance will be compared against
          * every other instance.
          */
-        IntegrityAuditEntity myIae = dbDao.getMyIntegrityAuditEntity();
+        var myIae = dbDao.getMyIntegrityAuditEntity();
 
         if (myIae == null) {
 
@@ -267,7 +267,7 @@ public class DbAudit {
      * @return DAO properties for the given DB node
      */
     private Properties getTheirDaoProperties(IntegrityAuditEntity iae) {
-        Properties theirProperties = new Properties();
+        var theirProperties = new Properties();
 
         theirProperties.put(IntegrityAuditProperties.DB_DRIVER, iae.getJdbcDriver());
         theirProperties.put(IntegrityAuditProperties.DB_URL, iae.getJdbcUrl());
@@ -294,7 +294,7 @@ public class DbAudit {
             logger.debug("dbAudit: Second comparison; traversing classNameSet, size=" + classNameSet.size());
         }
 
-        int errorCount = 0;
+        var errorCount = 0;
 
         for (String clazzName : classNameSet) {
 
@@ -327,7 +327,7 @@ public class DbAudit {
                     IntegrityAuditEntity myIae, String clazzName, Set<Object> keySet, Map<Object, Object> myEntries)
                     throws IntegrityAuditException {
 
-        int errorCount = 0;
+        var errorCount = 0;
         for (IntegrityAuditEntity iae : iaeList) {
             if (iae.getId() == myIae.getId()) {
                 if (logger.isDebugEnabled()) {
@@ -363,7 +363,7 @@ public class DbAudit {
             return 0;
         }
 
-        StringBuilder keyBuilder = new StringBuilder();
+        var keyBuilder = new StringBuilder();
         for (Object key : misMatchedKeySet) {
             keyBuilder.append(key.toString());
             keyBuilder.append(", ");

@@ -85,11 +85,11 @@ class IndexedHttpClientFactory implements HttpClientFactory {
     private void addClient(ArrayList<HttpClient> clientList, String clientName, Properties properties) {
         String clientPrefix = PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + clientName;
 
-        PropertyUtils props = new PropertyUtils(properties, clientPrefix,
+        var props = new PropertyUtils(properties, clientPrefix,
             (name, value, ex) ->
                 logger.warn("{}: {} {} is in invalid format for http client {} ", this, name, value, clientName));
 
-        int port = props.getInteger(PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, -1);
+        var port = props.getInteger(PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, -1);
         if (port < 0) {
             logger.warn("No HTTP port for client in {}", clientName);
             return;

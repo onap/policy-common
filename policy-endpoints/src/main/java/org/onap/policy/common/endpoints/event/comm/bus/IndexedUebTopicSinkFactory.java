@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -114,7 +114,7 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
 
         String topicPrefix = PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS + "." + topic;
 
-        PropertyUtils props = new PropertyUtils(properties, topicPrefix,
+        var props = new PropertyUtils(properties, topicPrefix,
             (name, value, ex) -> logger.warn("{}: {} {} is in invalid format for topic {} ", this, name, value, topic));
 
         String servers = properties.getProperty(topicPrefix + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX);
@@ -194,9 +194,7 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("IndexedUebTopicSinkFactory []");
-        return builder.toString();
+        return "IndexedUebTopicSinkFactory []";
     }
 
 }

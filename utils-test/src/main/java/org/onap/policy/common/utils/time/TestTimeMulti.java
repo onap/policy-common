@@ -282,7 +282,7 @@ public class TestTimeMulti extends TestTime {
             return;
         }
 
-        SleepItem item = new SleepItem(this, sleepMs, Thread.currentThread());
+        var item = new SleepItem(this, sleepMs, Thread.currentThread());
         enqueue(item);
 
         // wait for the item to fire

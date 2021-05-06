@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -301,8 +301,8 @@ public class PolicyLogger {
 
         setMdcHostInfo();
 
-        Instant startTime = Instant.now();
-        Instant endTime = Instant.now();
+        var startTime = Instant.now();
+        var endTime = Instant.now();
 
         seTimeStamps(startTime, endTime);
 
@@ -334,8 +334,8 @@ public class PolicyLogger {
         MDC.put(MDC_INSTANCE_UUID, "");
         MDC.put(MDC_ALERT_SEVERITY, "");
 
-        Instant startTime = Instant.now();
-        Instant endTime = Instant.now();
+        var startTime = Instant.now();
+        var endTime = Instant.now();
 
         seTimeStamps(startTime, endTime);
 
@@ -348,7 +348,7 @@ public class PolicyLogger {
     }
 
     private static void seTimeStamps(Instant startTime, Instant endTime) {
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        var sdf = new SimpleDateFormat(DATE_FORMAT);
 
         String formatedTime = sdf.format(Date.from(startTime));
         MDC.put(BEGIN_TIME_STAMP, formatedTime);
@@ -874,7 +874,7 @@ public class PolicyLogger {
         if (eventTracker == null) {
             eventTracker = new EventTrackInfo();
         }
-        EventData event = new EventData();
+        var event = new EventData();
         event.setRequestId(eventId);
         event.setStartTime(Instant.now());
         eventTracker.storeEventData(event);
@@ -1007,7 +1007,7 @@ public class PolicyLogger {
             return;
         }
 
-        EventData event = eventTracker.getEventDataByRequestId(eventId);
+        var event = eventTracker.getEventDataByRequestId(eventId);
 
         if (event != null) {
             Instant endTime = event.getEndTime();
@@ -1035,7 +1035,7 @@ public class PolicyLogger {
             return;
         }
 
-        EventData event = eventTracker.getEventDataByRequestId(eventId.toString());
+        var event = eventTracker.getEventDataByRequestId(eventId.toString());
 
         if (event != null) {
             Instant endTime = event.getEndTime();
@@ -1226,13 +1226,13 @@ public class PolicyLogger {
      * @param arguments the messages
      */
     private static String getNormalizedStackTrace(Throwable throwable, String... arguments) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
+        var sw = new StringWriter();
+        var pw = new PrintWriter(sw);
         throwable.printStackTrace(pw);
         String newStValue = sw.toString().replace('|', '!').replace("\n", " - ");
         int curSize = arguments == null ? 0 : arguments.length;
-        StringBuilder newArgument = new StringBuilder();
-        for (int i = 0; i < curSize; i++) {
+        var newArgument = new StringBuilder();
+        for (var i = 0; i < curSize; i++) {
             newArgument.append(arguments[i]);
             newArgument.append(":");
         }
@@ -1246,7 +1246,7 @@ public class PolicyLogger {
     private static void startCleanUp() {
 
         if (!isEventTrackerRunning) {
-            EventTrackInfoHandler ttrcker = new EventTrackInfoHandler();
+            var ttrcker = new EventTrackInfoHandler();
             timer = new Timer(true);
             timer.scheduleAtFixedRate(ttrcker, timerDelayTime, checkInterval);
             debugLogger.info("EventTrackInfoHandler begins! : {}", new Date());
@@ -1279,7 +1279,7 @@ public class PolicyLogger {
      */
     public static LoggerType init(Properties properties) {
 
-        Properties loggerProperties = getLoggerProperties(properties);
+        var loggerProperties = getLoggerProperties(properties);
 
         // fetch and verify definitions of some properties
         try {
@@ -1321,7 +1321,7 @@ public class PolicyLogger {
     }
 
     private static int getIntProp(Properties properties, String propName, int defaultValue) {
-        final int propValue = Integer.parseInt(properties.getProperty(propName, String.valueOf(defaultValue)));
+        final var propValue = Integer.parseInt(properties.getProperty(propName, String.valueOf(defaultValue)));
 
         debugLogger.info("{} value: {}", propName, propValue);
 

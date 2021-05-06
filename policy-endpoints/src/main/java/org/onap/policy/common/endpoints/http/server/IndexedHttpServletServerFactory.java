@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,7 +58,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
             return servers.get(port);
         }
 
-        JettyJerseyServer server = new JettyJerseyServer(name, https, host, port, contextPath, swagger);
+        var server = new JettyJerseyServer(name, https, host, port, contextPath, swagger);
         if (managed) {
             servers.put(port, server);
         }
@@ -99,7 +99,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
             return servers.get(port);
         }
 
-        JettyStaticResourceServer server = new JettyStaticResourceServer(name, https, host, port, contextPath);
+        var server = new JettyStaticResourceServer(name, https, host, port, contextPath);
         if (managed) {
             servers.put(port, server);
         }
@@ -111,22 +111,21 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
 
         String servicePrefix = PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + serviceName;
 
-        PropertyUtils props = new PropertyUtils(properties, servicePrefix,
+        var props = new PropertyUtils(properties, servicePrefix,
             (name, value, ex) -> logger
                         .warn("{}: {} {} is in invalid format for http service {} ", this, name, value, serviceName));
 
-        int servicePort = props.getInteger(PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, -1);
+        var servicePort = props.getInteger(PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, -1);
         if (servicePort < 0) {
             logger.warn("No HTTP port for service in {}", serviceName);
             return;
         }
 
-        final String hostName = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, null);
-        final String contextUriPath =
-                        props.getString(PolicyEndPointProperties.PROPERTY_HTTP_CONTEXT_URIPATH_SUFFIX, null);
-        boolean managed = props.getBoolean(PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, true);
-        boolean swagger = props.getBoolean(PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX, false);
-        boolean https = props.getBoolean(PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, false);
+        final var hostName = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, null);
+        final var contextUriPath = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_CONTEXT_URIPATH_SUFFIX, null);
+        var managed = props.getBoolean(PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, true);
+        var swagger = props.getBoolean(PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX, false);
+        var https = props.getBoolean(PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, false);
 
         // create the service
         HttpServletServer service = build(serviceName, https, hostName, servicePort, contextUriPath, swagger, managed);
@@ -135,7 +134,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
         setSerializationProvider(props, service);
         setAuthentication(props, service, contextUriPath);
 
-        final String restUriPath = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_REST_URIPATH_SUFFIX, null);
+        final var restUriPath = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_REST_URIPATH_SUFFIX, null);
 
         addFilterClasses(props, service, restUriPath);
         addServletClasses(props, service, restUriPath);
@@ -146,7 +145,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
 
     private void setSerializationProvider(PropertyUtils props, HttpServletServer service) {
 
-        final String classProv = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER, null);
+        final var classProv = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER, null);
 
         if (!StringUtils.isBlank(classProv)) {
             service.setSerializationProvider(classProv);
@@ -156,10 +155,10 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
     private void setAuthentication(PropertyUtils props, HttpServletServer service, final String contextUriPath) {
         /* authentication method either AAF or HTTP Basic Auth */
 
-        boolean aaf = props.getBoolean(PolicyEndPointProperties.PROPERTY_AAF_SUFFIX, false);
-        final String userName = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, null);
-        final String password = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, null);
-        final String authUriPath = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_AUTH_URIPATH_SUFFIX, null);
+        final var aaf = props.getBoolean(PolicyEndPointProperties.PROPERTY_AAF_SUFFIX, false);
+        final var userName = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, null);
+        final var password = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, null);
+        final var authUriPath = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_AUTH_URIPATH_SUFFIX, null);
 
         if (aaf) {
             service.setAafAuthentication(contextUriPath);
@@ -170,7 +169,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
 
     private void addFilterClasses(PropertyUtils props, HttpServletServer service, final String restUriPath) {
 
-        final String filterClasses =
+        final var filterClasses =
                         props.getString(PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX, null);
 
         if (!StringUtils.isBlank(filterClasses)) {
@@ -182,7 +181,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
 
     private void addServletClasses(PropertyUtils props, HttpServletServer service, final String restUriPath) {
 
-        final String restClasses = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX, null);
+        final var restClasses = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX, null);
 
         if (!StringUtils.isBlank(restClasses)) {
             for (String restClass : restClasses.split(SPACES_COMMA_SPACES)) {
@@ -193,7 +192,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
 
     private void addServletPackages(PropertyUtils props, HttpServletServer service, final String restUriPath) {
 
-        final String restPackages = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_REST_PACKAGES_SUFFIX, null);
+        final var restPackages = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_REST_PACKAGES_SUFFIX, null);
 
         if (!StringUtils.isBlank(restPackages)) {
             for (String restPackage : restPackages.split(SPACES_COMMA_SPACES)) {

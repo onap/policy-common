@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP - Common Modules
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -495,7 +495,7 @@ public class BeanConfigurator {
      * @throws PropertyAccessException if a "get" method cannot be identified
      */
     private Method getGetter(Field field, Property prop) throws PropertyAccessException {
-        String capnm = StringUtils.capitalize(field.getName());
+        var capnm = StringUtils.capitalize(field.getName());
 
         try {
             return getGetter(field, "get" + capnm);

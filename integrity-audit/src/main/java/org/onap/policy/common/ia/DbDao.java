@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,14 +31,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceUnitUtil;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import javax.persistence.metamodel.ManagedType;
-import javax.persistence.metamodel.Metamodel;
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
 import org.onap.policy.common.logging.flexlogger.FlexLogger;
 import org.onap.policy.common.logging.flexlogger.Logger;
@@ -132,7 +129,7 @@ public class DbDao {
      */
     private void validateProperties(String resourceName, String persistenceUnit, Properties properties)
             throws IntegrityAuditPropertiesException {
-        StringBuilder badparams = new StringBuilder();
+        var badparams = new StringBuilder();
         if (IntegrityAudit.parmsAreBad(resourceName, persistenceUnit, properties, badparams)) {
             String msg = "DbDao: Bad parameters: badparams" + badparams;
             throw new IntegrityAuditPropertiesException(msg);
@@ -158,9 +155,9 @@ public class DbDao {
     public Map<Object, Object> getAllMyEntries(String className) {
         logger.debug("getAllMyEntries: Entering, className=" + className);
         HashMap<Object, Object> resultMap = new HashMap<>();
-        EntityManager em = emf.createEntityManager();
+        var em = emf.createEntityManager();
         try {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
+            var cb = em.getCriteriaBuilder();
             CriteriaQuery<Object> cq = cb.createQuery();
             Root<?> rootEntry = cq.from(Class.forName(className));
             CriteriaQuery<Object> all = cq.select(rootEntry);
@@ -168,7 +165,7 @@ public class DbDao {
             List<Object> objectList = allQuery.getResultList();
             // Now create the map
 
-            PersistenceUnitUtil util = emf.getPersistenceUnitUtil();
+            var util = emf.getPersistenceUnitUtil();
             for (Object o : objectList) {
                 Object key = util.getIdentifier(o);
                 resultMap.put(key, o);
@@ -192,7 +189,7 @@ public class DbDao {
         logger.debug("getAllMyEntries: Entering, className=" + className + ",\n keySet=" + keySet);
 
         HashMap<Object, Object> resultMap = new HashMap<>();
-        EntityManager em = emf.createEntityManager();
+        var em = emf.createEntityManager();
         try {
             Class<?> clazz = Class.forName(className);
             for (Object key : keySet) {
@@ -221,17 +218,17 @@ public class DbDao {
         logger.debug("getAllEntries: Entering, persistenceUnit=" + persistenceUnit + ",\n className=" + className);
         HashMap<Object, Object> resultMap = new HashMap<>();
 
-        EntityManagerFactory theEmf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
-        EntityManager em = theEmf.createEntityManager();
+        var theEmf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
+        var em = theEmf.createEntityManager();
         try {
-            CriteriaBuilder cb = em.getCriteriaBuilder();
+            var cb = em.getCriteriaBuilder();
             CriteriaQuery<Object> cq = cb.createQuery();
             Root<?> rootEntry = cq.from(Class.forName(className));
             CriteriaQuery<Object> all = cq.select(rootEntry);
             TypedQuery<Object> allQuery = em.createQuery(all);
             List<Object> objectList = allQuery.getResultList();
 
-            PersistenceUnitUtil util = theEmf.getPersistenceUnitUtil();
+            var util = theEmf.getPersistenceUnitUtil();
             for (Object o : objectList) {
                 Object key = util.getIdentifier(o);
                 resultMap.put(key, o);
@@ -262,8 +259,8 @@ public class DbDao {
             Set<Object> keySet) {
         logger.debug("getAllEntries: Entering, persistenceUnit=" + persistenceUnit + ",\n properties= " + properties
                 + ",\n className=" + className + ",\n keySet= " + keySet);
-        EntityManagerFactory theEmf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
-        EntityManager em = theEmf.createEntityManager();
+        var theEmf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
+        var em = theEmf.createEntityManager();
         HashMap<Object, Object> resultMap = new HashMap<>();
         try {
             Class<?> clazz = Class.forName(className);
@@ -296,7 +293,7 @@ public class DbDao {
         logger.debug("getIntegrityAuditEntities: Entering, persistenceUnit=" + persistenceUnit + ",\n nodeType= "
                 + nodeType);
         try {
-            EntityManager em = emf.createEntityManager();
+            var em = emf.createEntityManager();
             // Start a transaction
             EntityTransaction et = em.getTransaction();
 
@@ -304,7 +301,7 @@ public class DbDao {
 
             // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
             // found, create a new entry
-            Query iaequery = em
+            var iaequery = em
                     .createQuery("Select i from IntegrityAuditEntity i where i.persistenceUnit=:pu and i.nodeType=:nt");
             iaequery.setParameter("pu", persistenceUnit);
             iaequery.setParameter("nt", nodeType);
@@ -357,7 +354,7 @@ public class DbDao {
      */
     public IntegrityAuditEntity getIntegrityAuditEntity(long id) throws DbDaoTransactionException {
         try {
-            EntityManager em = emf.createEntityManager();
+            var em = emf.createEntityManager();
 
             // Start a transaction
             EntityTransaction et = em.getTransaction();
@@ -385,7 +382,7 @@ public class DbDao {
     public Set<String> getPersistenceClassNames() {
         logger.debug("DbDao: getPersistenceClassNames() entry");
         HashSet<String> returnList = new HashSet<>();
-        final Metamodel mm = emf.getMetamodel();
+        final var mm = emf.getMetamodel();
         logger.debug("\n" + persistenceUnit + " persistence unit classes:");
         for (final ManagedType<?> managedType : mm.getManagedTypes()) {
             Class<?> clazz = managedType.getJavaType();
@@ -496,7 +493,7 @@ public class DbDao {
                     BiConsumer<EntityManager, IntegrityAuditEntity> updater) throws DbDaoTransactionException {
         try {
 
-            EntityManager em = emf.createEntityManager();
+            var em = emf.createEntityManager();
 
             // Start a transaction
             EntityTransaction et = em.getTransaction();
@@ -582,7 +579,7 @@ public class DbDao {
                 throw new DbDaoTransactionException(msg);
             }
 
-            EntityManager em = emf.createEntityManager();
+            var em = emf.createEntityManager();
             // Start a transaction
             EntityTransaction et = em.getTransaction();
 
@@ -590,7 +587,7 @@ public class DbDao {
 
             // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
             // found, create a new entry
-            Query iaequery = em.createQuery("Delete from IntegrityAuditEntity");
+            var iaequery = em.createQuery("Delete from IntegrityAuditEntity");
 
             int returnCode = iaequery.executeUpdate();
 
@@ -650,7 +647,7 @@ public class DbDao {
                 /*
                  * Define query
                  */
-                Query query = em.createQuery(
+                var query = em.createQuery(
                         "Select i from IntegrityAuditEntity i where i.persistenceUnit=:pu and i.nodeType=:nt");
                 query.setParameter("pu", persistenceUnit);
                 query.setParameter("nt", nodeType);
@@ -703,7 +700,7 @@ public class DbDao {
                 continue;
             }
 
-            IntegrityAuditEntity integrityAuditEntity = (IntegrityAuditEntity) o;
+            var integrityAuditEntity = (IntegrityAuditEntity) o;
             if (integrityAuditEntity.getResourceName().equals(resourceName)) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("changeDesignated: Designating resourceName="

@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,7 +38,7 @@ public class PropertyException extends Exception {
 
     /**
      * Constructor.
-     * 
+     *
      * @param propName name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}
      */
@@ -51,7 +51,7 @@ public class PropertyException extends Exception {
 
     /**
      * Constructor.
-     * 
+     *
      * @param propnm name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}
      * @param message error message
@@ -65,7 +65,7 @@ public class PropertyException extends Exception {
 
     /**
      * Constructor.
-     * 
+     *
      * @param propnm name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}
      * @param cause cause of the exception
@@ -79,7 +79,7 @@ public class PropertyException extends Exception {
 
     /**
      * Constructor.
-     * 
+     *
      * @param propnm name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}
      * @param message error message
@@ -94,7 +94,7 @@ public class PropertyException extends Exception {
 
     /**
      * Get the property name.
-     * 
+     *
      * @return name of the property for which the exception was thrown, or {@code null} if
      *         no name was provided
      */
@@ -104,7 +104,7 @@ public class PropertyException extends Exception {
 
     /**
      * Get the field name.
-     * 
+     *
      * @return name of the field for which the exception was thrown, or {@code null} if no
      *         field was provided
      */
@@ -114,7 +114,7 @@ public class PropertyException extends Exception {
 
     /**
      * Make the message.
-     * 
+     *
      * @param propnm name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}
      * @param message error message, never {@code null}
@@ -126,13 +126,13 @@ public class PropertyException extends Exception {
 
     /**
      * Make the message.
-     * 
+     *
      * @param propnm name of the property causing the exception, or {@code null}
      * @param fieldName name of the field causing the exception, or {@code null}
      * @return an error message composed of the two items
      */
     private static String makeMessage(String propnm, String fieldName) {
-        StringBuilder bldr = new StringBuilder(50);
+        var bldr = new StringBuilder(50);
 
         if (propnm == null) {
             bldr.append("property exception");

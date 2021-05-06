@@ -47,7 +47,7 @@ public class InstantAsMillisTypeAdapter extends TypeAdapter<Instant> {
             in.nextNull();
             return null;
         } else {
-            long millis = in.nextLong();
+            var millis = in.nextLong();
             return Instant.ofEpochMilli(millis);
         }
     }

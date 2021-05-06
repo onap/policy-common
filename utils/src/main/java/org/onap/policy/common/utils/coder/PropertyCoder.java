@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP PAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,12 +55,12 @@ public class PropertyCoder {
      * @return a class T object
      */
     public <T> T decode(String json, String keyProperty, Class<T> clazz) {
-        JsonElement jsonElement = GSON.fromJson(json, JsonElement.class);
+        var jsonElement = GSON.fromJson(json, JsonElement.class);
         return new MyDecoder(jsonElement, keyProperty).decrypt(jsonElement, clazz);
     }
 
     public <T> T decode(Reader reader, String keyProperty, Class<T> clazz) {
-        JsonElement jsonElement = GSON.fromJson(reader, JsonElement.class);
+        var jsonElement = GSON.fromJson(reader, JsonElement.class);
         return new MyDecoder(jsonElement, keyProperty).decrypt(jsonElement, clazz);
     }
 
@@ -71,9 +71,9 @@ public class PropertyCoder {
             if (!jsonElement.isJsonObject()) {
                 return;
             }
-            JsonObject jsonObject = jsonElement.getAsJsonObject();
+            var jsonObject = jsonElement.getAsJsonObject();
             // Use keyProperty from input to retrieve secretKey
-            String secretKey = jsonObject.get(keyProperty).getAsString();
+            var secretKey = jsonObject.get(keyProperty).getAsString();
             if (!StringUtils.isBlank(secretKey)) {
                 crypto = new CryptoUtils(secretKey);
             }
@@ -97,7 +97,7 @@ public class PropertyCoder {
             if (!jsonElement.getAsJsonPrimitive().isString()) {
                 return jsonElement;
             }
-            String value = jsonElement.getAsString();
+            var value = jsonElement.getAsString();
             if (!value.startsWith("enc:")) {
                 return jsonElement;
             }
@@ -111,7 +111,7 @@ public class PropertyCoder {
             if (crypto == null) {
                 return jsonArray;
             }
-            JsonArray newArray = new JsonArray();
+            var newArray = new JsonArray();
             for (JsonElement element: jsonArray) {
                 newArray.add(decrypt(element));
             }
@@ -122,11 +122,11 @@ public class PropertyCoder {
             if (crypto == null) {
                 return jsonObject;
             }
-            JsonObject newObject = new JsonObject();
+            var newObject = new JsonObject();
             Set<Entry<String, JsonElement>> entrySet = jsonObject.entrySet();
             for (Map.Entry<String, JsonElement> entry : entrySet) {
                 String key = entry.getKey();
-                JsonElement jsonElement = decrypt(entry.getValue());
+                var jsonElement = decrypt(entry.getValue());
                 newObject.add(key, jsonElement);
             }
             return newObject;

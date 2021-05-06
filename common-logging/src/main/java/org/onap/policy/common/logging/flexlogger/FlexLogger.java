@@ -186,7 +186,7 @@ public class FlexLogger extends SecurityManager {
      * loads the logger properties.
      */
     private static LoggerType initlogger() {
-        LoggerType loggerType = LoggerType.EELF;
+        var loggerType = LoggerType.EELF;
         Properties properties = null;
 
         try {
@@ -196,7 +196,7 @@ public class FlexLogger extends SecurityManager {
             if (properties != null) {
                 String overrideLogbackLevel = properties.getProperty("override.logback.level.setup");
                 displayMessage("FlexLogger:overrideLogbackLevel => " + overrideLogbackLevel);
-                String loggerTypeString = properties.getProperty("logger.type");
+                var loggerTypeString = properties.getProperty("logger.type");
                 if ("EELF".equalsIgnoreCase(loggerTypeString) && "TRUE".equalsIgnoreCase(overrideLogbackLevel)) {
                     displayMessage("FlexLogger: start listener.");
                     properties = PropertyUtil.getProperties("config/policyLogger.properties",
@@ -234,8 +234,8 @@ public class FlexLogger extends SecurityManager {
             String auditLevel = properties.getProperty("audit.level");
             String errorLevel = properties.getProperty("error.level");
 
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS+00:00");
-            Instant startTime = Instant.now();
+            var sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS+00:00");
+            var startTime = Instant.now();
             String formatedTime = sdf.format(Date.from(startTime));
             displayMessage("FlexLogger.propertiesChanged : called at time : " + formatedTime);
             displayMessage("FlexLogger.propertiesChanged : debugLevel : " + debugLevel);

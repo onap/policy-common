@@ -2,7 +2,7 @@
  * ============LICENSE_START====================================================
  * Common Utils-Test
  * =============================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018, 2021 AT&T Intellectual Property. All rights reserved.
  * =============================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ public class ExceptionsTester extends ThrowablesTester {
      *             if the constructed objects fail to pass various tests
      */
     public <T extends Exception> int testAllException(final Class<T> claz) {
-        int ncons = 0;
+        var ncons = 0;
 
         ncons += testAllThrowable(claz);
         ncons += testException(claz);
@@ -111,8 +111,8 @@ public class ExceptionsTester extends ThrowablesTester {
             return 0;
         }
 
-        Exception cause = new Exception(EXPECTED_EXCEPTION_MSG);
-        T ex = newInstance(cons, cause);
+        var cause = new Exception(EXPECTED_EXCEPTION_MSG);
+        var ex = newInstance(cons, cause);
 
         assertNotNull(ex.toString());
         assertEquals(ex.getMessage(), ex.getMessage());
@@ -151,8 +151,8 @@ public class ExceptionsTester extends ThrowablesTester {
             return 0;
         }
 
-        Exception cause = new Exception(EXPECTED_EXCEPTION_MSG);
-        T ex = newInstance(cons, "world", cause);
+        var cause = new Exception(EXPECTED_EXCEPTION_MSG);
+        var ex = newInstance(cons, "world", cause);
 
         assertNotNull(ex.toString());
         assertEquals("world", ex.getMessage());

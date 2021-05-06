@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -155,13 +155,13 @@ public class StateManagement {
                             resourceName);
             logger.debug("StateManagement: {}() operation started, resourceName = {}", methodName, resourceName);
 
-            final EntityManager em = emf.createEntityManager();
+            final var em = emf.createEntityManager();
 
-            try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
+            try (var emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
 
                 logger.debug(FIND_MESSAGE, resourceName);
 
-                final StateManagementEntity sm = findStateManagementEntity(em, resourceName);
+                final var sm = findStateManagementEntity(em, resourceName);
                 String changed = updateState.update(sm);
 
                 em.persist(sm);
@@ -197,7 +197,7 @@ public class StateManagement {
                     throws StateManagementException {
 
         setState(actionName, resourceName, sm -> {
-            final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
+            final var stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
                             sm.getAvailStatus(), sm.getStandbyStatus(), actionName);
 
             sm.setAdminState(stateElement.getEndingAdminState());
@@ -292,7 +292,7 @@ public class StateManagement {
         AtomicReference<String> newStatus = new AtomicReference<>();
 
         setState(PROMOTE_ACTION, resourceName, sm -> {
-            final StateElement stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
+            final var stateElement = st.getEndingState(sm.getAdminState(), sm.getOpState(),
                             sm.getAvailStatus(), sm.getStandbyStatus(), PROMOTE_ACTION);
 
             sm.setAdminState(stateElement.getEndingAdminState());
@@ -357,8 +357,8 @@ public class StateManagement {
 
         logger.debug("StateManagement(6/1/16): {} for resourceName {}", methodName, resourceName);
 
-        final EntityManager em = emf.createEntityManager();
-        try (final EntityMgrCloser emc = new EntityMgrCloser(em)) {
+        final var em = emf.createEntityManager();
+        try (final var emc = new EntityMgrCloser(em)) {
             final TypedQuery<StateManagementEntity> query =
                     em.createQuery(GET_STATE_MANAGEMENT_ENTITY_QUERY, StateManagementEntity.class);
 
@@ -369,7 +369,7 @@ public class StateManagement {
                     query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
             if (!resourceList.isEmpty()) {
                 // exist
-                final StateManagementEntity stateManagementEntity = resourceList.get(0);
+                final var stateManagementEntity = resourceList.get(0);
                 // refresh the object from DB in case cached data was returned
                 em.refresh(stateManagementEntity);
                 function.accept(stateManagementEntity);
@@ -458,14 +458,14 @@ public class StateManagement {
                     query.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList();
             if (!resourceList.isEmpty()) {
                 // exist
-                final StateManagementEntity stateManagementEntity = resourceList.get(0);
+                final var stateManagementEntity = resourceList.get(0);
                 // refresh the object from DB in case cached data was returned
                 em.refresh(stateManagementEntity);
                 stateManagementEntity.setModifiedDate(MonitorTime.getInstance().getDate());
                 return stateManagementEntity;
             } else {
                 // not exist - create one
-                final StateManagementEntity stateManagementEntity = new StateManagementEntity();
+                final var stateManagementEntity = new StateManagementEntity();
                 stateManagementEntity.setResourceName(otherResourceName);
                 stateManagementEntity.setAdminState(UNLOCKED);
                 stateManagementEntity.setOpState(ENABLED);
@@ -474,8 +474,7 @@ public class StateManagement {
                 return stateManagementEntity;
             }
         } catch (final Exception ex) {
-            final String message = "findStateManagementEntity exception";
-            throw new EntityRetrievalException(message, ex);
+            throw new EntityRetrievalException("findStateManagementEntity exception", ex);
         }
     }
 
@@ -489,9 +488,9 @@ public class StateManagement {
         /*
          * Start transaction
          */
-        final EntityManager em = emf.createEntityManager();
+        final var em = emf.createEntityManager();
 
-        try (EntityMgrCloser emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
+        try (var emc = new EntityMgrCloser(em); MyTransaction et = new MyTransaction(em)) {
             final TypedQuery<StateManagementEntity> stateManagementEntityListQuery =
                     em.createQuery("SELECT p FROM StateManagementEntity p", StateManagementEntity.class);
             final List<StateManagementEntity> stateManagementEntityList = stateManagementEntityListQuery

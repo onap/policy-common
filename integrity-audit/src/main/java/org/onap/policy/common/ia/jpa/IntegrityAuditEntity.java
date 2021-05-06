@@ -100,7 +100,7 @@ public class IntegrityAuditEntity implements Serializable {
      */
     @PrePersist
     public void prePersist() {
-        Date date = AuditorTime.getInstance().getDate();
+        var date = AuditorTime.getInstance().getDate();
         this.createdDate = date;
         this.lastUpdated = date;
     }

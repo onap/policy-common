@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,9 +64,9 @@ public class PropertyUtil {
      */
     public static Properties getProperties(File file) throws IOException {
         // create an InputStream (may throw a FileNotFoundException)
-        try (FileInputStream fis = new FileInputStream(file)) {
+        try (var fis = new FileInputStream(file)) {
             // create the properties instance
-            Properties rval = new Properties();
+            var rval = new Properties();
 
             // load properties (may throw an IOException)
             rval.load(fis);
@@ -202,7 +202,7 @@ public class PropertyUtil {
                 lastModified = timestamp;
 
                 // Save old set, and initial set of changed properties.
-                Properties oldProperties = properties;
+                var oldProperties = properties;
                 HashSet<String> changedProperties = new HashSet<>(oldProperties.stringPropertyNames());
 
                 // Fetch the list of listeners that we will potentially notify,
@@ -238,7 +238,7 @@ public class PropertyUtil {
                     for (final Listener notify : listeners) {
                         // Copy 'properties' and 'changedProperties', so it doesn't
                         // cause problems if the recipient makes changes.
-                        final Properties tmpProperties = (Properties) (properties.clone());
+                        final var tmpProperties = (Properties) (properties.clone());
                         final HashSet<String> tmpChangedProperties = new HashSet<>(changedProperties);
 
                         // Do the notification in a separate thread, so blocking
@@ -276,7 +276,7 @@ public class PropertyUtil {
 
         // Convert the file to a canonical form in order to avoid the situation
         // where different names refer to the same file.
-        File tempFile = file.getCanonicalFile();
+        var tempFile = file.getCanonicalFile();
 
         // See if there is an existing registration. The 'synchronized' block
         // is needed to handle the case where a new listener is added at about
