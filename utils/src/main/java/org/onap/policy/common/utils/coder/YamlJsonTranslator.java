@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ public class YamlJsonTranslator {
      * @return YAML representing the original object
      */
     public String toYaml(Object object) {
-        StringWriter output = new StringWriter();
+        var output = new StringWriter();
         toYaml(output, object);
         return output.toString();
     }
@@ -98,8 +98,8 @@ public class YamlJsonTranslator {
      * @param object POJO to be translated
      */
     public void toYaml(Writer target, Object object) {
-        DumperOptions dumper = new DumperOptions();
-        Serializer serializer = new Serializer(new Emitter(target, dumper), new Resolver(), dumper, null);
+        var dumper = new DumperOptions();
+        var serializer = new Serializer(new Emitter(target, dumper), new Resolver(), dumper, null);
 
         try {
             serializer.open();
@@ -140,7 +140,7 @@ public class YamlJsonTranslator {
      * @return a POJO representing the YAML read from the reader
      */
     public <T> T fromYaml(Reader source, Class<T> clazz) {
-        Node node = new Yaml().compose(source);
+        var node = new Yaml().compose(source);
         return fromJson(makeJson(node), clazz);
     }
 
@@ -281,7 +281,7 @@ public class YamlJsonTranslator {
     protected JsonArray makeJsonArray(SequenceNode node) {
         List<Node> nodes = node.getValue();
 
-        JsonArray array = new JsonArray(nodes.size());
+        var array = new JsonArray(nodes.size());
         nodes.forEach(subnode -> array.add(makeJson(subnode)));
 
         return array;
@@ -294,10 +294,10 @@ public class YamlJsonTranslator {
      * @return a gson element corresponding to the node
      */
     protected JsonObject makeJsonObject(MappingNode node) {
-        JsonObject obj = new JsonObject();
+        var obj = new JsonObject();
 
         for (NodeTuple tuple : node.getValue()) {
-            Node key = tuple.getKeyNode();
+            var key = tuple.getKeyNode();
             String skey = ((ScalarNode) key).getValue();
 
             obj.add(skey, makeJson(tuple.getValueNode()));
@@ -314,7 +314,7 @@ public class YamlJsonTranslator {
      */
     protected JsonElement makeJsonPrim(ScalarNode node) {
         try {
-            Tag tag = node.getTag();
+            var tag = node.getTag();
 
             if (tag == Tag.INT) {
                 return new JsonPrimitive(Long.valueOf(node.getValue()));

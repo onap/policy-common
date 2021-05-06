@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2021 Nordix Foundation.
+ *  Modifications Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +24,6 @@ package org.onap.policy.common.utils.cmd;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
@@ -184,9 +184,9 @@ public class CommandLineArgumentsHandler {
      * @return the help string
      */
     public String help() {
-        final HelpFormatter helpFormatter = new HelpFormatter();
-        final StringWriter stringWriter = new StringWriter();
-        final PrintWriter printWriter = new PrintWriter(stringWriter);
+        final var helpFormatter = new HelpFormatter();
+        final var stringWriter = new StringWriter();
+        final var printWriter = new PrintWriter(stringWriter);
         final String cmdLineSyntax = this.helpClassName + " [options...]";
 
         helpFormatter.printHelp(printWriter, HELP_LINE_LENGTH, cmdLineSyntax, "options", options, 0, 0, "");
@@ -243,13 +243,13 @@ public class CommandLineArgumentsHandler {
         }
 
         // The file name refers to a resource on the local file system
-        final URL fileUrl = ResourceUtils.getUrl4Resource(fileName);
+        final var fileUrl = ResourceUtils.getUrl4Resource(fileName);
         if (fileUrl == null) {
             throw new CommandLineException(fileTag + FILE_MESSAGE_PREAMBLE + fileName + "\" does not exist");
         }
 
         try {
-            Path path = Path.of(fileUrl.toURI());
+            var path = Path.of(fileUrl.toURI());
             if (!Files.isRegularFile(path)) {
                 throw new CommandLineException(fileTag + FILE_MESSAGE_PREAMBLE + fileName + "\" is not a normal file");
             }

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,7 +106,7 @@ public class CryptoUtils implements CryptoCoder {
      * @return The encrypted String
      */
     public static String encrypt(String value, String secretKey) {
-        SecretKeySpec keySpec = readSecretKeySpec(secretKey);
+        var keySpec = readSecretKeySpec(secretKey);
         return encryptValue(value, keySpec);
     }
 
@@ -119,10 +119,10 @@ public class CryptoUtils implements CryptoCoder {
             return value;
         }
         try {
-            Cipher cipher = Cipher.getInstance(ALGORITHM_DETAILS);
-            byte[] iv = new byte[IV_BLOCK_SIZE_IN_BYTES];
+            var cipher = Cipher.getInstance(ALGORITHM_DETAILS);
+            var iv = new byte[IV_BLOCK_SIZE_IN_BYTES];
             RANDOM.nextBytes(iv);
-            GCMParameterSpec ivspec = new GCMParameterSpec(TAG_SIZE_IN_BITS, iv);
+            var ivspec = new GCMParameterSpec(TAG_SIZE_IN_BITS, iv);
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivspec);
 
             return "enc:" + DatatypeConverter.printBase64Binary(
@@ -157,7 +157,7 @@ public class CryptoUtils implements CryptoCoder {
      * @return The String decrypted if string begin with 'enc:'
      */
     public static String decrypt(String value, String secretKey) {
-        SecretKeySpec keySpec = readSecretKeySpec(secretKey);
+        var keySpec = readSecretKeySpec(secretKey);
         if (keySpec != null) {
             return decryptValue(value, keySpec);
         } else {
@@ -173,11 +173,11 @@ public class CryptoUtils implements CryptoCoder {
             throw new IllegalArgumentException("Invalid size on input value");
         }
         try {
-            String pureValue = value.substring(4);
+            var pureValue = value.substring(4);
             byte[] encryptedValue = DatatypeConverter.parseBase64Binary(pureValue);
 
-            Cipher cipher = Cipher.getInstance(ALGORITHM_DETAILS);
-            GCMParameterSpec ivspec = new GCMParameterSpec(TAG_SIZE_IN_BITS,
+            var cipher = Cipher.getInstance(ALGORITHM_DETAILS);
+            var ivspec = new GCMParameterSpec(TAG_SIZE_IN_BITS,
                     ArrayUtils.subarray(encryptedValue, 0, IV_BLOCK_SIZE_IN_BYTES));
             byte[] realData = ArrayUtils.subarray(encryptedValue, IV_BLOCK_SIZE_IN_BYTES, encryptedValue.length);
 

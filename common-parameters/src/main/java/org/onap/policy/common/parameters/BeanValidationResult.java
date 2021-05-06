@@ -88,7 +88,7 @@ public class BeanValidationResult extends ValidationResultImpl {
      * @return {@code true} if the value is not null, {@code false} otherwise
      */
     public boolean validateNotNull(String subName, Object subObject) {
-        ObjectValidationResult result = new ObjectValidationResult(subName, subObject);
+        var result = new ObjectValidationResult(subName, subObject);
 
         if (result.validateNotNull()) {
             return true;
@@ -126,7 +126,7 @@ public class BeanValidationResult extends ValidationResultImpl {
             return true;
         }
 
-        BeanValidationResult result = new BeanValidationResult(listName, null);
+        var result = new BeanValidationResult(listName, null);
         for (T item : list) {
             if (item == null) {
                 result.addResult("item", item, ValidationStatus.INVALID, "null");
@@ -158,7 +158,7 @@ public class BeanValidationResult extends ValidationResultImpl {
             return true;
         }
 
-        BeanValidationResult result = new BeanValidationResult(mapName, null);
+        var result = new BeanValidationResult(mapName, null);
         for (Entry<String, V> ent : map.entrySet()) {
             entryValidator.accept(result, ent);
         }
@@ -186,7 +186,7 @@ public class BeanValidationResult extends ValidationResultImpl {
             return null;
         }
 
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
 
         builder.append(initialIndentation);
         builder.append('"');

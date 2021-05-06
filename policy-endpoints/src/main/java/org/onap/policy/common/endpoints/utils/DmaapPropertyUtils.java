@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,12 +26,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams.TopicParamsBuilder;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 
 public class DmaapPropertyUtils {
+    private static final Pattern COMMA_SPACE_PAT = Pattern.compile("\\s*,\\s*");
 
     /**
      * Maps a topic property to a DME property.
@@ -86,7 +88,7 @@ public class DmaapPropertyUtils {
 
         for (Map.Entry<String, String> ent : PROP_TO_DME.entrySet()) {
             String propName = ent.getKey();
-            String value = props.getString(propName, null);
+            var value = props.getString(propName, null);
 
             if (!StringUtils.isBlank(value)) {
                 String dmeName = ent.getValue();
@@ -94,7 +96,7 @@ public class DmaapPropertyUtils {
             }
         }
 
-        final List<String> serverList = new ArrayList<>(Arrays.asList(servers.split("\\s*,\\s*")));
+        final List<String> serverList = new ArrayList<>(Arrays.asList(COMMA_SPACE_PAT.split(servers)));
 
         return BusTopicParams.builder()
                     .servers(serverList)

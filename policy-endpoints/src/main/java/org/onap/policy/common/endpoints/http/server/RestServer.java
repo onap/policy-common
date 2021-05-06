@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
- *  Modifications Copyright (C) 2019-2020 AT&T Intellectual Property.
+ *  Modifications Copyright (C) 2019-2021 AT&T Intellectual Property.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,7 +78,7 @@ public class RestServer extends ServiceManagerContainer {
      * @return the properties object
      */
     protected Properties getServerProperties(RestServerParameters restServerParameters, String names) {
-        final Properties props = new Properties();
+        final var props = new Properties();
         props.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES, restServerParameters.getName());
 
         final String svcpfx =
@@ -111,7 +111,7 @@ public class RestServer extends ServiceManagerContainer {
      * @return the provider class names
      */
     private String getProviderClassNames(Class<?>[] jaxrsProviders) {
-        StringBuilder names = new StringBuilder();
+        var names = new StringBuilder();
 
         for (Class<?> prov : jaxrsProviders) {
             if (names.length() > 0) {

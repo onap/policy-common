@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +38,8 @@ import org.slf4j.LoggerFactory;
  * The StateTransition class coordinates all state transitions.
  */
 public class StateTransition {
+    private static final Pattern COMMA_PAT = Pattern.compile(",");
+
     private static final String DEPENDENCY_FAILED = "dependency.failed";
 
     private static final String ANY_DISABLED_ANY_COLDSTANDBY = "${1},disabled,${3},coldstandby,";
@@ -165,7 +168,7 @@ public class StateTransition {
         }
 
 
-        StateElement stateElement = new StateElement();
+        var stateElement = new StateElement();
 
         // dependency,failed is stored as dependency.failed in StateTable
         String availStatus2 = availStatus;
@@ -177,7 +180,7 @@ public class StateTransition {
         String value = STATE_TABLE.get(key);
 
         if (value != null) {
-            String[] parts = value.split(",", 5);
+            String[] parts = COMMA_PAT.split(value, 5);
             stateElement.setEndingAdminState(parts[0].trim());
             stateElement.setEndingOpState(parts[1].trim());
             stateElement.setEndingAvailStatus(parts[2].trim().replace(".", ","));

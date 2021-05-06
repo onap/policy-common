@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,13 @@
 
 package org.onap.policy.common.logging;
 
+import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 public class OnapLoggingUtils {
+
+    private static final Pattern COMMA_PAT = Pattern.compile(",");
+    private static final Pattern CURLS_PAT = Pattern.compile("[{][}]");
 
     private OnapLoggingUtils() {
         // Private constructor to prevent subclassing
@@ -37,7 +41,7 @@ public class OnapLoggingUtils {
      */
     public static OnapLoggingContext getLoggingContextForRequest(HttpServletRequest request,
         OnapLoggingContext baseContext) {
-        OnapLoggingContext requestContext = new OnapLoggingContext(baseContext);
+        var requestContext = new OnapLoggingContext(baseContext);
         if (request.getLocalAddr() != null) { // may be null in junit tests
             requestContext.setServerIpAddress(request.getLocalAddr());
         }
@@ -45,7 +49,7 @@ public class OnapLoggingUtils {
         // otherwise from remote address in the request
         String forwarded = request.getHeader("X-Forwarded-For");
         if (forwarded != null && forwarded.trim().length() > 0) {
-            forwarded = forwarded.trim().split(",")[0];
+            forwarded = COMMA_PAT.split(forwarded.trim())[0];
             requestContext.setClientIpAddress(forwarded);
         } else if (request.getRemoteAddr() != null) { // may be null in junit tests
             requestContext.setClientIpAddress(request.getRemoteAddr());
@@ -72,8 +76,8 @@ public class OnapLoggingUtils {
             return format;
         }
         int index;
-        StringBuilder builder = new StringBuilder();
-        String[] token = format.split("[{][}]");
+        var builder = new StringBuilder();
+        String[] token = CURLS_PAT.split(format);
         for (index = 0; index < arguments.length; index++) {
             if (index < token.length) {
                 builder.append(token[index]);

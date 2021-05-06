@@ -70,7 +70,7 @@ public class SelfSignedKeyStore {
         keystoreName = System.getProperty("user.dir") + "/" + relativePath;
 
         // use existing file if it isn't too old
-        File keystore = new File(keystoreName);
+        var keystore = new File(keystoreName);
         if (keystore.exists()) {
             if (System.currentTimeMillis() < keystore.lastModified()
                             + TimeUnit.MILLISECONDS.convert(5, TimeUnit.HOURS)) {
@@ -85,7 +85,7 @@ public class SelfSignedKeyStore {
          * dropping the trailing comma.
          */
         String sanName = getKeystoreSanName();
-        String subAltNames = ResourceUtils.getResourceAsString(sanName);
+        var subAltNames = ResourceUtils.getResourceAsString(sanName);
         if (subAltNames == null) {
             throw new FileNotFoundException(sanName);
         }
@@ -96,7 +96,7 @@ public class SelfSignedKeyStore {
         // build up the "keytool" command
 
         // @formatter:off
-        ProcessBuilder builder = new ProcessBuilder("keytool", "-genkeypair",
+        var builder = new ProcessBuilder("keytool", "-genkeypair",
                         "-alias", "policy@policy.onap.org",
                         "-validity", "1",
                         "-keyalg", "RSA",

@@ -2,7 +2,7 @@
  * ============LICENSE_START====================================================
  * Common Utils-Test
  * =============================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * =============================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,7 +110,7 @@ public class ExtractAppender extends AppenderBase<ILoggingEvent> {
             }
 
             for (Pattern p : patterns.values()) {
-                Matcher matcher = p.matcher(msg);
+                var matcher = p.matcher(msg);
 
                 if (matcher.find()) {
                     addGroupMatch(matcher);
@@ -129,7 +129,7 @@ public class ExtractAppender extends AppenderBase<ILoggingEvent> {
     private void addGroupMatch(final Matcher mat) {
         int ngroups = mat.groupCount();
 
-        for (int x = 1; x <= ngroups; ++x) {
+        for (var x = 1; x <= ngroups; ++x) {
             String txt = mat.group(x);
 
             if (txt != null) {

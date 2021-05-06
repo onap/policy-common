@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.http.client.internal.JerseyClient;
@@ -38,6 +39,7 @@ import org.slf4j.LoggerFactory;
  * HTTP client factory implementation indexed by name.
  */
 class IndexedHttpClientFactory implements HttpClientFactory {
+    private static final Pattern COMMA_SPACE_PAT = Pattern.compile("\\s*,\\s*");
 
     /**
      * Logger.
@@ -75,7 +77,7 @@ class IndexedHttpClientFactory implements HttpClientFactory {
             return clientList;
         }
 
-        for (String clientName : clientNames.split("\\s*,\\s*")) {
+        for (String clientName : COMMA_SPACE_PAT.split(clientNames)) {
             addClient(clientList, clientName, properties);
         }
 
@@ -85,11 +87,11 @@ class IndexedHttpClientFactory implements HttpClientFactory {
     private void addClient(ArrayList<HttpClient> clientList, String clientName, Properties properties) {
         String clientPrefix = PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + "." + clientName;
 
-        PropertyUtils props = new PropertyUtils(properties, clientPrefix,
+        var props = new PropertyUtils(properties, clientPrefix,
             (name, value, ex) ->
                 logger.warn("{}: {} {} is in invalid format for http client {} ", this, name, value, clientName));
 
-        int port = props.getInteger(PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, -1);
+        var port = props.getInteger(PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, -1);
         if (port < 0) {
             logger.warn("No HTTP port for client in {}", clientName);
             return;

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,13 @@ package org.onap.policy.common.endpoints.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams.TopicParamsBuilder;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 
 public class UebPropertyUtils {
+    private static final Pattern COMMA_SPACE_PAT = Pattern.compile("\\s*,\\s*");
 
     private UebPropertyUtils() {
         // do nothing
@@ -44,7 +46,7 @@ public class UebPropertyUtils {
      */
     public static TopicParamsBuilder makeBuilder(PropertyUtils props, String topic, String servers) {
 
-        final List<String> serverList = new ArrayList<>(Arrays.asList(servers.split("\\s*,\\s*")));
+        final List<String> serverList = new ArrayList<>(Arrays.asList(COMMA_SPACE_PAT.split(servers)));
 
         return BusTopicParams.builder()
                     .servers(serverList)

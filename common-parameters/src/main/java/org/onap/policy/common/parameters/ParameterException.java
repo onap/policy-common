@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
+ *  Modifications Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,15 +85,15 @@ public class ParameterException extends Exception {
 
     /**
      * Build a cascaded message from an exception and all its nested exceptions.
-     * 
+     *
      * @param throwable the top level exception
      * @return cascaded message string
      */
     public static String buildCascadedMessage(final Throwable throwable) {
-        final StringBuilder builder = new StringBuilder();
+        final var builder = new StringBuilder();
         builder.append(throwable.getMessage());
 
-        for (Throwable t = throwable; t != null; t = t.getCause()) {
+        for (var t = throwable; t != null; t = t.getCause()) {
             builder.append("\ncaused by: ");
             builder.append(t.getMessage());
         }

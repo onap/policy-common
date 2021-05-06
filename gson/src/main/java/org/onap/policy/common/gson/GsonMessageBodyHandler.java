@@ -116,7 +116,7 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
     public void writeTo(Object object, Class<?> type, Type genericType, Annotation[] annotations, MediaType mediaType,
                     MultivaluedMap<String, Object> httpHeaders, OutputStream entityStream) throws IOException {
 
-        try (OutputStreamWriter writer = new OutputStreamWriter(entityStream, StandardCharsets.UTF_8)) {
+        try (var writer = new OutputStreamWriter(entityStream, StandardCharsets.UTF_8)) {
             Type jsonType = (type.equals(genericType) ? type : genericType);
             gson.toJson(object, jsonType, writer);
         }
@@ -152,7 +152,7 @@ public class GsonMessageBodyHandler implements MessageBodyReader<Object>, Messag
     public Object readFrom(Class<Object> type, Type genericType, Annotation[] annotations, MediaType mediaType,
                     MultivaluedMap<String, String> httpHeaders, InputStream entityStream) throws IOException {
 
-        try (InputStreamReader streamReader = new InputStreamReader(entityStream, StandardCharsets.UTF_8)) {
+        try (var streamReader = new InputStreamReader(entityStream, StandardCharsets.UTF_8)) {
             Type jsonType = (type.equals(genericType) ? type : genericType);
             return gson.fromJson(streamReader, jsonType);
         }

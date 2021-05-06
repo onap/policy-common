@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ package org.onap.policy.common.gson.internal;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -78,7 +77,7 @@ public class JacksonTypeAdapter<T> extends TypeAdapter<T> {
         JsonElement tree = delegate.toJsonTree(value);
 
         if (tree.isJsonObject()) {
-            JsonObject jsonObj = tree.getAsJsonObject();
+            var jsonObj = tree.getAsJsonObject();
 
             // serialize each item from the value into the target tree
             for (Serializer serializer : serializers) {
@@ -92,10 +91,10 @@ public class JacksonTypeAdapter<T> extends TypeAdapter<T> {
     @Override
     public T read(JsonReader in) throws IOException {
         JsonElement tree = elementAdapter.read(in);
-        T object = delegate.fromJsonTree(tree);
+        var object = delegate.fromJsonTree(tree);
 
         if (tree.isJsonObject()) {
-            JsonObject jsonObj = tree.getAsJsonObject();
+            var jsonObj = tree.getAsJsonObject();
 
             // deserialize each item from the tree into the target object
             for (Deserializer dser : deserializers) {

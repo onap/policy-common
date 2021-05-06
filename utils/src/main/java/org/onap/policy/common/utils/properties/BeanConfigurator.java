@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP - Common Modules
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.utils.properties;
 
+import com.google.re2j.Pattern;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -45,6 +46,7 @@ import org.onap.policy.common.utils.properties.exception.PropertyMissingExceptio
  * <i>accept</i> includes the "empty" option.
  */
 public class BeanConfigurator {
+    private static final Pattern COMMA_PAT = Pattern.compile(",");
 
     /**
      * The "empty" option that may appear within the {@link Property}'s <i>accept</i>
@@ -414,7 +416,7 @@ public class BeanConfigurator {
      * @return {@code true} if the <i>accept</i> attribute includes "empty"
      */
     protected boolean isEmptyOk(Property prop) {
-        for (String option : prop.accept().split(",")) {
+        for (String option : COMMA_PAT.split(prop.accept())) {
             if (ACCEPT_EMPTY.equals(option)) {
                 return true;
             }
@@ -495,7 +497,7 @@ public class BeanConfigurator {
      * @throws PropertyAccessException if a "get" method cannot be identified
      */
     private Method getGetter(Field field, Property prop) throws PropertyAccessException {
-        String capnm = StringUtils.capitalize(field.getName());
+        var capnm = StringUtils.capitalize(field.getName());
 
         try {
             return getGetter(field, "get" + capnm);

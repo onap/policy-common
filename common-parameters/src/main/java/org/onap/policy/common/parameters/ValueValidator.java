@@ -103,7 +103,7 @@ public class ValueValidator {
      * @param checker function to validate the value
      */
     public <T extends Annotation> void addAnnotation(Class<T> annotClass, Checker checker) {
-        T annot = getAnnotation(annotClass);
+        var annot = getAnnotation(annotClass);
         if (annot != null) {
             checkers.add(checker);
 
@@ -122,7 +122,7 @@ public class ValueValidator {
      * @param checker function to validate the value
      */
     public <T extends Annotation> void addAnnotation(Class<T> annotClass, CheckerWithAnnot<T> checker) {
-        T annot = getAnnotation(annotClass);
+        var annot = getAnnotation(annotClass);
         if (annot != null) {
             checkers.add((result, fieldName, value) -> checker.test(result, fieldName, annot, value));
         }

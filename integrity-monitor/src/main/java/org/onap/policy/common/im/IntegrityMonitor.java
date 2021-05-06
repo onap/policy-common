@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.LongConsumer;
 import java.util.function.Supplier;
+import java.util.regex.Pattern;
 import javax.management.JMX;
 import javax.management.MBeanServerConnection;
 import javax.persistence.EntityManager;
@@ -42,7 +43,6 @@ import javax.persistence.EntityTransaction;
 import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
 import javax.persistence.Persistence;
-import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
@@ -62,6 +62,9 @@ import org.slf4j.LoggerFactory;
 public class IntegrityMonitor {
 
     private static final Logger logger = LoggerFactory.getLogger(IntegrityMonitor.class.getName());
+
+    private static final Pattern COMMA_PAT = Pattern.compile(",");
+    private static final Pattern SEMICOLON_PAT = Pattern.compile(";");
 
     // only allow one instance of IntegrityMonitor
     private static IntegrityMonitor instance = null;
@@ -212,7 +215,7 @@ public class IntegrityMonitor {
         // singleton check since this constructor can be called from a child or
         // sub-class
         if (instance != null) {
-            String msg = "IM object exists and only one instance allowed";
+            var msg = "IM object exists and only one instance allowed";
             logger.error("{}", msg);
             throw new IntegrityMonitorException("IntegrityMonitor constructor exception: " + msg);
         }
@@ -466,7 +469,7 @@ public class IntegrityMonitor {
     private static String getJmxUrlFromProps() throws IntegrityMonitorException {
 
         // get the jmx remote port and construct the JMX URL
-        Properties systemProps = System.getProperties();
+        var systemProps = System.getProperties();
         String jmxPort = systemProps.getProperty("com.sun.management.jmxremote.port");
         String jmxErrMsg;
         if (jmxPort == null) {
@@ -475,7 +478,7 @@ public class IntegrityMonitor {
             throw new IntegrityMonitorException("getJmxUrl exception: " + jmxErrMsg);
         }
 
-        int port = 0;
+        var port = 0;
         try {
             port = Integer.parseInt(jmxPort);
         } catch (NumberFormatException e) {
@@ -490,12 +493,12 @@ public class IntegrityMonitor {
                 jmxFqdn = InetAddress.getLocalHost().getCanonicalHostName();
             }
         } catch (Exception e) {
-            String msg = "getJmxUrl could not get hostname";
+            var msg = "getJmxUrl could not get hostname";
             logger.error("{}", msg, e);
             throw new IntegrityMonitorException("getJmxUrl Exception: " + msg);
         }
         if (jmxFqdn == null) {
-            String msg = "getJmxUrl encountered null hostname";
+            var msg = "getJmxUrl encountered null hostname";
             logger.error("{}", msg);
             throw new IntegrityMonitorException("getJmxUrl error: " + msg);
         }
@@ -663,7 +666,7 @@ public class IntegrityMonitor {
     private void checkForwardProgress(String dep, ForwardProgressEntity forwardProgressEntity,
             StateManagementEntity stateManagementEntity) {
         if (forwardProgressEntity != null && stateManagementEntity != null) {
-            Date date = MonitorTime.getInstance().getDate();
+            var date = MonitorTime.getInstance().getDate();
             long diffMs = date.getTime() - forwardProgressEntity.getLastUpdated().getTime();
             logger.debug("IntegrityMonitor.stateCheck(): diffMs = {}", diffMs);
 
@@ -762,7 +765,7 @@ public class IntegrityMonitor {
         ArrayList<ForwardProgressEntity> fpList = new ArrayList<>();
 
         withinTransaction("getAllForwardProgessEntity DB read failed with exception: ", () -> {
-            Query fquery = em.createQuery("Select e from ForwardProgressEntity e");
+            var fquery = em.createQuery("Select e from ForwardProgressEntity e");
             fquery.setLockMode(LockModeType.NONE).setFlushMode(FlushModeType.COMMIT).getResultList()
                     .forEach(obj -> fpList.add((ForwardProgressEntity) obj));
             return null;
@@ -773,7 +776,7 @@ public class IntegrityMonitor {
         }
 
         logger.debug("getAllForwardProgressEntity: fpList.size(): {}", fpList.size());
-        int index = 0;
+        var index = 0;
         for (ForwardProgressEntity fpe : fpList) {
             logger.debug("getAllForwardProgressEntity: fpList.get({}).getResourceName(): {}", index++,
                     fpe.getResourceName());
@@ -861,7 +864,7 @@ public class IntegrityMonitor {
         synchronized (dependencyCheckLock) {
 
             // Start with the error message empty
-            StringBuilder errorMsg = new StringBuilder();
+            var errorMsg = new StringBuilder();
 
             /*
              * Before we check dependency groups we need to check subsystemTest.
@@ -948,7 +951,7 @@ public class IntegrityMonitor {
      * @return {@code true} if the dependencies are OK, {@code false} otherwise
      */
     private boolean checkDependencies(StringBuilder errorMsg) {
-        boolean dependencyOk = true;
+        var dependencyOk = true;
 
         // check state of resources in dependency groups
         for (String group : depGroups) {
@@ -978,12 +981,12 @@ public class IntegrityMonitor {
             // ignore empty group
             return false;
         }
-        String[] dependencies = group.split(",");
+        String[] dependencies = COMMA_PAT.split(group);
         if (logger.isDebugEnabled()) {
             logger.debug("group dependencies = {}", Arrays.toString(dependencies));
         }
-        int realDepCount = 0;
-        int failDepCount = 0;
+        var realDepCount = 0;
+        var failDepCount = 0;
         for (String dep : dependencies) {
             dep = dep.trim();
             if (dep.isEmpty()) {
@@ -1170,26 +1173,31 @@ public class IntegrityMonitor {
                      * An entity has reported that it is not well. We must not allow the the forward progress counter to
                      * advance.
                      */
-                    String msg = "allNotWellMap:";
-                    for (Entry<String, String> entry : allNotWellMap.entrySet()) {
-                        msg = msg.concat("\nkey = " + entry.getKey() + " msg = " + entry.getValue());
-                    }
+                    var msg = new StringBuilder("allNotWellMap:");
+                    buildMapString(msg, allNotWellMap);
                     logger.error("endTransaction: allNotWellMap is NOT EMPTY.  Not advancing forward"
                             + "progress counter. \n{}\n", msg);
                     return;
                 }
 
                 if (logger.isDebugEnabled() && getAllSeemsWellMap() != null && !(getAllSeemsWellMap().isEmpty())) {
-                    String msg = "allSeemsWellMap:";
-                    for (Entry<String, String> entry : allSeemsWellMap.entrySet()) {
-                        msg = msg.concat("\nkey = " + entry.getKey() + " msg = " + entry.getValue());
-                    }
+                    var msg = new StringBuilder("allSeemsWellMap:");
+                    buildMapString(msg, allSeemsWellMap);
                     logger.debug("endTransaction: allNotWellMap IS EMPTY and allSeemsWellMap is NOT EMPTY.  "
                             + "Advancing forward progress counter. \n{}\n", msg);
                 }
             }
             // increment local FPC
             fpCounter++;
+        }
+    }
+
+    private void buildMapString(StringBuilder msg, Map<String, String> map) {
+        for (Entry<String, String> entry : map.entrySet()) {
+            msg.append("\nkey = ");
+            msg.append(entry.getKey());
+            msg.append(" msg = ");
+            msg.append(entry.getValue());
         }
     }
 
@@ -1280,7 +1288,7 @@ public class IntegrityMonitor {
         // site_1.pdp_2
         String depGroupsValue = prop.getProperty(IntegrityMonitorProperties.DEPENDENCY_GROUPS);
         if (!StringUtils.isBlank(depGroupsValue)) {
-            depGroups = depGroupsValue.split(";");
+            depGroups = SEMICOLON_PAT.split(depGroupsValue);
             if (logger.isDebugEnabled()) {
                 logger.debug("dependency groups property = {}", Arrays.toString(depGroups));
             }
@@ -1478,7 +1486,7 @@ public class IntegrityMonitor {
             return;
         }
 
-        Date date = MonitorTime.getInstance().getDate();
+        var date = MonitorTime.getInstance().getDate();
         long timeSinceLastStateAudit = date.getTime() - lastStateAuditTime.getTime();
         if (timeSinceLastStateAudit < stateAuditIntervalMs) {
             logger.debug("IntegrityMonitor.stateAudit(): Not time to run. returning");
@@ -1497,7 +1505,7 @@ public class IntegrityMonitor {
      */
     public void executeStateAudit() {
         logger.debug("IntegrityMonitor.executeStateAudit(): entry");
-        Date date = MonitorTime.getInstance().getDate();
+        var date = MonitorTime.getInstance().getDate();
 
         // Get all entries in the forwardprogressentity table
         List<ForwardProgressEntity> fpList = getAllForwardProgressEntity();
@@ -1606,7 +1614,7 @@ public class IntegrityMonitor {
     private void disableEntity(String dep) {
         try {
             // create instance of StateMangement class for dependent
-            StateManagement depStateManager = new StateManagement(emf, dep);
+            var depStateManager = new StateManagement(emf, dep);
             if (!depStateManager.getOpState().equals(StateManagement.DISABLED)) {
                 logger.debug("Forward progress not detected for dependent resource {}. Setting dependent's "
                         + "state to disable failed.", dep);
@@ -1742,7 +1750,7 @@ public class IntegrityMonitor {
         logger.debug("executeRefreshStateAudit(): entry");
         synchronized (refreshStateAuditLock) {
             logger.debug("refreshStateAudit: entry");
-            Date now = MonitorTime.getInstance().getDate();
+            var now = MonitorTime.getInstance().getDate();
             long nowMs = now.getTime();
             long lastTimeMs = refreshStateAuditLastRunDate.getTime();
             logger.debug("refreshStateAudit: ms since last run = {}", nowMs - lastTimeMs);

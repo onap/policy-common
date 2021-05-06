@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -157,7 +157,7 @@ public class StandardCoder implements Coder {
     @Override
     public void encode(OutputStream target, Object object) throws CoderException {
         try {
-            Writer wtr = makeWriter(target);
+            var wtr = makeWriter(target);
             toJson(wtr, object);
 
             // flush, but don't close
@@ -170,7 +170,7 @@ public class StandardCoder implements Coder {
 
     @Override
     public void encode(File target, Object object) throws CoderException {
-        try (Writer wtr = makeWriter(target)) {
+        try (var wtr = makeWriter(target)) {
             toJson(wtr, object);
 
             // no need to flush or close here
@@ -212,7 +212,7 @@ public class StandardCoder implements Coder {
 
     @Override
     public <T> T decode(File source, Class<T> clazz) throws CoderException {
-        try (Reader input = makeReader(source)) {
+        try (var input = makeReader(source)) {
             return fromJson(input, clazz);
 
         } catch (RuntimeException | IOException e) {

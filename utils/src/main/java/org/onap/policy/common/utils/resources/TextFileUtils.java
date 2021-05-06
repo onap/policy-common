@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
- *  Modifications Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ public abstract class TextFileUtils {
      * @throws IOException on errors reading text from the file
      */
     public static String getTextFileAsString(final String textFilePath) throws IOException {
-        final File textFile = new File(textFilePath);
+        final var textFile = new File(textFilePath);
         return Files.readString(textFile.toPath());
     }
 
@@ -62,7 +62,7 @@ public abstract class TextFileUtils {
      * @throws IOException on errors reading text from the file
      */
     public static void putStringAsTextFile(final String outString, final String textFilePath) throws IOException {
-        final File textFile = new File(textFilePath);
+        final var textFile = new File(textFilePath);
         if (!textFile.getParentFile().exists()) {
             textFile.getParentFile().mkdirs();
         }
@@ -100,9 +100,9 @@ public abstract class TextFileUtils {
      * @throws IOException on errors reading text from the file
      */
     public static String getReaderAsString(final Reader textReader) throws IOException {
-        final StringBuilder builder = new StringBuilder();
+        final var builder = new StringBuilder();
         int charsRead = -1;
-        final char[] chars = new char[READER_CHAR_BUFFER_SIZE_4096];
+        final var chars = new char[READER_CHAR_BUFFER_SIZE_4096];
         do {
             charsRead = textReader.read(chars);
             if (charsRead > 0) {

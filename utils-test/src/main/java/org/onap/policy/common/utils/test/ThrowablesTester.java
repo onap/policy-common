@@ -2,7 +2,7 @@
  * ============LICENSE_START====================================================
  * Common Utils-Test
  * =============================================================================
- * Copyright (C) 2018, 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018, 2020-2021 AT&T Intellectual Property. All rights reserved.
  * =============================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ public class ThrowablesTester {
      */
     public final <T extends Throwable> int testAllThrowable(
                     final Class<T> claz) {
-        int ncons = 0;
+        var ncons = 0;
 
         ncons += testDefault(claz);
         ncons += testString(claz);
@@ -112,7 +112,7 @@ public class ThrowablesTester {
             return 0;
         }
 
-        T ex = newInstance(cons);
+        var ex = newInstance(cons);
 
         assertNotNull(ex.toString());
         assertNull(ex.getMessage());
@@ -151,7 +151,7 @@ public class ThrowablesTester {
             return 0;
         }
 
-        T ex = newInstance(cons, "hello");
+        var ex = newInstance(cons, "hello");
 
         assertNotNull(ex.toString());
         assertEquals("hello", ex.getMessage());
@@ -191,7 +191,7 @@ public class ThrowablesTester {
             return 0;
         }
 
-        T ex = newInstance(cons, CAUSE);
+        var ex = newInstance(cons, CAUSE);
 
         assertEquals(ex.getMessage(), ex.getMessage());
         assertNotNull(ex.toString());
@@ -231,7 +231,7 @@ public class ThrowablesTester {
             return 0;
         }
 
-        T ex = newInstance(cons, "world", CAUSE);
+        var ex = newInstance(cons, "world", CAUSE);
 
         assertNotNull(ex.toString());
         assertEquals("world", ex.getMessage());
@@ -382,7 +382,7 @@ public class ThrowablesTester {
      */
     public final <T extends Throwable> void testSuppressStack(
                     final Constructor<T> cons) {
-        T ex = newInstance(cons, "yes,yes", CAUSE, true, true);
+        var ex = newInstance(cons, "yes,yes", CAUSE, true, true);
 
         ex.addSuppressed(SUPPRESSED);
 
@@ -420,7 +420,7 @@ public class ThrowablesTester {
      */
     public final <T extends Throwable> void testSuppressNoStack(
                     final Constructor<T> cons) {
-        T ex = newInstance(cons, "yes,no", CAUSE, true, false);
+        var ex = newInstance(cons, "yes,no", CAUSE, true, false);
 
         ex.addSuppressed(SUPPRESSED);
 
@@ -458,7 +458,7 @@ public class ThrowablesTester {
      */
     public final <T extends Throwable> void testNoSuppressStack(
                     final Constructor<T> cons) {
-        T ex = newInstance(cons, "no,yes", CAUSE, false, true);
+        var ex = newInstance(cons, "no,yes", CAUSE, false, true);
 
         ex.addSuppressed(SUPPRESSED);
 
@@ -494,7 +494,7 @@ public class ThrowablesTester {
      */
     public final <T extends Throwable> void testNoSuppressNoStack(
                     final Constructor<T> cons) {
-        T ex = newInstance(cons, "no,no", CAUSE, false, false);
+        var ex = newInstance(cons, "no,no", CAUSE, false, false);
 
         ex.addSuppressed(SUPPRESSED);
 

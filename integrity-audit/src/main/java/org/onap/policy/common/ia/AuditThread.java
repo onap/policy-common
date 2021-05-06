@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,6 @@ package org.onap.policy.common.ia;
 
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
@@ -149,10 +148,12 @@ public class AuditThread extends Thread {
              */
             runUntilInterrupted();
 
+        } catch (InterruptedException e) {
+            handleAuditLoopException(e);
+            Thread.currentThread().interrupt();
+
         } catch (Exception e) {
-            String msg = "AuditThread.run: Could not start audit loop. Exception thrown; message=" + e.getMessage();
-            logger.error(MessageCodes.EXCEPTION_ERROR, e, msg);
-            integrityAudit.setThreadInitialized(false);
+            handleAuditLoopException(e);
         }
 
         dbDao.destroy();
@@ -160,16 +161,22 @@ public class AuditThread extends Thread {
         logger.info("AuditThread.run: Exiting");
     }
 
-    private void runUntilInterrupted() throws InterruptedException {
-        boolean auditCompleted = false;
+    private void handleAuditLoopException(Exception exception) {
+        String msg = "AuditThread.run: Could not start audit loop. Exception thrown; message=" + exception.getMessage();
+        logger.error(MessageCodes.EXCEPTION_ERROR, exception, msg);
+        integrityAudit.setThreadInitialized(false);
+    }
 
-        DbAudit dbAudit = new DbAudit(dbDao);
+    private void runUntilInterrupted() throws InterruptedException {
+        var auditCompleted = false;
+
+        var dbAudit = new DbAudit(dbDao);
 
         IntegrityAuditEntity entityCurrentlyDesignated;
         IntegrityAuditEntity thisEntity;
         integrityAudit.setThreadInitialized(true); // An exception will set it to false
 
-        boolean interrupted = false;
+        var interrupted = false;
 
         while (!interrupted) {
             try {
@@ -210,6 +217,7 @@ public class AuditThread extends Thread {
                 if (isInterruptedException(e)) {
                     String msg = "AuditThread.run loop - Exception thrown: " + e.getMessage() + "; Stopping.";
                     logger.error(MessageCodes.EXCEPTION_ERROR, e, msg);
+                    Thread.currentThread().interrupt();
                     interrupted = true;
 
                 } else {
@@ -347,10 +355,10 @@ public class AuditThread extends Thread {
 
         IntegrityAuditEntity thisEntity = null;
 
-        int designatedEntityIndex = -1;
-        int entityIndex = 0;
-        int priorCandidateIndex = -1;
-        int subsequentCandidateIndex = -1;
+        var designatedEntityIndex = -1;
+        var entityIndex = 0;
+        var priorCandidateIndex = -1;
+        var subsequentCandidateIndex = -1;
 
         for (IntegrityAuditEntity integrityAuditEntity : integrityAuditEntityList) {
 
@@ -561,7 +569,7 @@ public class AuditThread extends Thread {
          */
         List<IntegrityAuditEntity> integrityAuditEntityList =
                 dbDao.getIntegrityAuditEntities(this.persistenceUnit, this.nodeType);
-        int listSize = integrityAuditEntityList.size();
+        var listSize = integrityAuditEntityList.size();
         if (logger.isDebugEnabled()) {
             logger.debug("getIntegrityAuditEntityList: Got " + listSize + " IntegrityAuditEntity records");
         }
@@ -634,10 +642,10 @@ public class AuditThread extends Thread {
                     + integrityAuditEntity.getLastUpdated());
         }
 
-        boolean stale = false;
+        var stale = false;
 
-        Date currentTime = AuditorTime.getInstance().getDate();
-        Date lastUpdated = integrityAuditEntity.getLastUpdated();
+        var currentTime = AuditorTime.getInstance().getDate();
+        var lastUpdated = integrityAuditEntity.getLastUpdated();
 
         /*
          * If lastUpdated is null, we assume that the audit never ran for that node.
@@ -690,8 +698,8 @@ public class AuditThread extends Thread {
 
         long timeDifference;
 
-        Date currentTime = AuditorTime.getInstance().getDate();
-        Date lastUpdated = thisEntity.getLastUpdated();
+        var currentTime = AuditorTime.getInstance().getDate();
+        var lastUpdated = thisEntity.getLastUpdated();
 
         long lastUpdatedTime = lastUpdated.getTime();
         timeDifference = currentTime.getTime() - lastUpdatedTime;

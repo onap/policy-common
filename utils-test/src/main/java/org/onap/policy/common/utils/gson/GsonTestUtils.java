@@ -27,12 +27,10 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import com.google.re2j.Matcher;
 import com.google.re2j.Pattern;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -127,7 +125,7 @@ public class GsonTestUtils {
      */
     public void compareGson(Object object, File expected) {
         // file is not required to have a full path - find it via getResource()
-        URL url = object.getClass().getResource(expected.getName());
+        var url = object.getClass().getResource(expected.getName());
         if (url == null) {
             throw new JsonParseException(new FileNotFoundException(expected.getName()));
         }
@@ -197,7 +195,7 @@ public class GsonTestUtils {
      * @return the text, after interpolating the script elements
      */
     public String applyScripts(String text, Object object) {
-        Matcher mat = SCRIPT_PAT.matcher(text);
+        var mat = SCRIPT_PAT.matcher(text);
         if (!mat.find()) {
             // contains no script elements - just return it as is
             return text;
@@ -209,8 +207,8 @@ public class GsonTestUtils {
         context.set("obj", object);
 
         // work our way through the text, interpolating script elements as we go
-        StringBuilder bldr = new StringBuilder();
-        int ilast = 0;
+        var bldr = new StringBuilder();
+        var ilast = 0;
         mat.reset();
         while (mat.find(ilast)) {
             // append segment that appears between last match and this
@@ -275,7 +273,7 @@ public class GsonTestUtils {
      * @return a new object, without the null items
      */
     public JsonObject reorder(JsonObject jsonObj) {
-        JsonObject newjo = new JsonObject();
+        var newjo = new JsonObject();
 
         // sort the keys before copying to the new object
         List<Entry<String, JsonElement>> sortedSet = new ArrayList<>(jsonObj.entrySet());
@@ -301,7 +299,7 @@ public class GsonTestUtils {
      * @return a new array, with null items removed from all elements
      */
     public JsonArray reorder(JsonArray jsonArray) {
-        JsonArray newarr = new JsonArray();
+        var newarr = new JsonArray();
         for (JsonElement ent : jsonArray) {
             newarr.add(reorder(ent));
         }

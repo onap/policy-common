@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import static org.junit.Assert.assertFalse;
 
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -51,6 +52,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
 
     private static Logger logger = FlexLogger.getLogger(DbAuditTest.class);
 
+    private static final Pattern COMMA_PAT = Pattern.compile(",");
     private static final String RESOURCE_NAME = "pdp1";
 
     private EntityManagerFactory emf2;
@@ -238,7 +240,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
         assertFalse(dbglog.getExtracted().isEmpty());
 
         String mismatchIndex = dbglog.getExtracted().get(dbglog.getExtracted().size() - 1);
-        int mismatchEntries = mismatchIndex.trim().split(",").length;
+        int mismatchEntries = COMMA_PAT.split(mismatchIndex.trim()).length;
         logger.info("mismatchTest: mismatchIndex found: '" + mismatchIndex + "'" + " mismatachEntries = "
                 + mismatchEntries);
 

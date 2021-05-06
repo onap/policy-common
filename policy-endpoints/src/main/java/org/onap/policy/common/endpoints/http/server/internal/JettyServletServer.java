@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019-2020 Nordix Foundation.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
@@ -165,8 +165,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
         this.jettyServer = new Server();
 
-        CustomRequestLog requestLog =
-                        new CustomRequestLog(new Slf4jRequestLogWriter(), CustomRequestLog.EXTENDED_NCSA_FORMAT);
+        var requestLog = new CustomRequestLog(new Slf4jRequestLogWriter(), CustomRequestLog.EXTENDED_NCSA_FORMAT);
         this.jettyServer.setRequestLog(requestLog);
 
         if (https) {
@@ -230,7 +229,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
             }
         }
 
-        HttpConfiguration https = new HttpConfiguration();
+        var https = new HttpConfiguration();
         https.addCustomizer(new SecureRequestCustomizer());
 
         return new ServerConnector(jettyServer, sslContextFactory, new HttpConnectionFactory(https));
@@ -267,22 +266,22 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
             srvltPath = "/*";
         }
 
-        final HashLoginService hashLoginService = new HashLoginService();
-        final UserStore userStore = new UserStore();
+        final var hashLoginService = new HashLoginService();
+        final var userStore = new UserStore();
         userStore.addUser(user, Credential.getCredential(password), new String[] {"user"});
         hashLoginService.setUserStore(userStore);
         hashLoginService.setName(this.connector.getName() + "-login-service");
 
-        Constraint constraint = new Constraint();
+        var constraint = new Constraint();
         constraint.setName(Constraint.__BASIC_AUTH);
         constraint.setRoles(new String[] {"user"});
         constraint.setAuthenticate(true);
 
-        ConstraintMapping constraintMapping = new ConstraintMapping();
+        var constraintMapping = new ConstraintMapping();
         constraintMapping.setConstraint(constraint);
         constraintMapping.setPathSpec(srvltPath);
 
-        ConstraintSecurityHandler securityHandler = new ConstraintSecurityHandler();
+        var securityHandler = new ConstraintSecurityHandler();
         securityHandler.setAuthenticator(new BasicAuthenticator());
         securityHandler.setRealmName(this.connector.getName() + "-realm");
         securityHandler.addConstraintMapping(constraintMapping);
@@ -313,6 +312,11 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
             }
 
             this.jettyServer.join();
+
+        } catch (InterruptedException e) {
+            logger.error("{}: error found while bringing up server", this, e);
+            Thread.currentThread().interrupt();
+
         } catch (Exception e) {
             logger.error("{}: error found while bringing up server", this, e);
         }
@@ -519,7 +523,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        var builder = new StringBuilder();
         builder.append("JettyServer [name=").append(name).append(", host=").append(host).append(", port=").append(port)
                 .append(", user=").append(user).append(", password=").append(password != null).append(", contextPath=")
                 .append(contextPath).append(", jettyServer=").append(jettyServer).append(", context=")

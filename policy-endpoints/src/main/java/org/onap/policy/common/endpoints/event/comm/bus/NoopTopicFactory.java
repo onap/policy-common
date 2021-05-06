@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 
@@ -32,6 +33,7 @@ import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
  * Noop Topic Factory.
  */
 public abstract class NoopTopicFactory<T extends NoopTopicEndpoint> extends TopicBaseHashedFactory<T> {
+    private static final Pattern COMMA_SPACE_PAT = Pattern.compile("\\s*,\\s*");
 
     /**
      * Get Topics Property Name.
@@ -50,7 +52,7 @@ public abstract class NoopTopicFactory<T extends NoopTopicEndpoint> extends Topi
             return new ArrayList<>();
         }
 
-        return Arrays.asList(topics.split("\\s*,\\s*"));
+        return Arrays.asList(COMMA_SPACE_PAT.split(topics));
     }
 
     /**
@@ -66,7 +68,7 @@ public abstract class NoopTopicFactory<T extends NoopTopicEndpoint> extends Topi
             servers = CommInfrastructure.NOOP.toString();
         }
 
-        return new ArrayList<>(Arrays.asList(servers.split("\\s*,\\s*")));
+        return new ArrayList<>(Arrays.asList(COMMA_SPACE_PAT.split(servers)));
     }
 
     /**
@@ -74,11 +76,11 @@ public abstract class NoopTopicFactory<T extends NoopTopicEndpoint> extends Topi
      */
     @Override
     protected boolean isManaged(String topicName, Properties properties) {
-        String managedString =
+        var managedString =
             properties.getProperty(getTopicsPropertyName()
                 + "." + topicName + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX);
 
-        boolean managed = true;
+        var managed = true;
         if (managedString != null && !managedString.isEmpty()) {
             managed = Boolean.parseBoolean(managedString);
         }

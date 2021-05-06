@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.InlineDmaapTopicSink;
@@ -38,6 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
 
+    private static final Pattern COMMA_SPACE_PAT = Pattern.compile("\\s*,\\s*");
     private static final String MISSING_TOPIC = "A topic must be provided";
 
     /**
@@ -62,7 +64,7 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
                 return dmaapTopicWriters.get(busTopicParams.getTopic());
             }
 
-            DmaapTopicSink dmaapTopicSink = makeSink(busTopicParams);
+            var dmaapTopicSink = makeSink(busTopicParams);
 
             if (busTopicParams.isManaged()) {
                 dmaapTopicWriters.put(busTopicParams.getTopic(), dmaapTopicSink);
@@ -93,7 +95,7 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
 
         List<DmaapTopicSink> newDmaapTopicSinks = new ArrayList<>();
         synchronized (this) {
-            for (String topic : writeTopics.split("\\s*,\\s*")) {
+            for (String topic : COMMA_SPACE_PAT.split(writeTopics)) {
                 addTopic(newDmaapTopicSinks, properties, topic);
             }
             return newDmaapTopicSinks;
@@ -108,7 +110,7 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
 
         String topicPrefix = PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS + "." + topic;
 
-        PropertyUtils props = new PropertyUtils(properties, topicPrefix,
+        var props = new PropertyUtils(properties, topicPrefix,
             (name, value, ex) -> logger.warn("{}: {} {} is in invalid format for topic {} ", this, name, value, topic));
 
         String servers = properties.getProperty(topicPrefix + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX);
@@ -117,7 +119,7 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
             return;
         }
 
-        DmaapTopicSink dmaapTopicSink = this.build(DmaapPropertyUtils.makeBuilder(props, topic, servers)
+        var dmaapTopicSink = this.build(DmaapPropertyUtils.makeBuilder(props, topic, servers)
                 .partitionId(props.getString(PolicyEndPointProperties.PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX, null))
                 .build());
 

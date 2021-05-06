@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.SingleThreadedDmaapTopicSource;
@@ -38,6 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 
 class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
+    private static final Pattern COMMA_SPACE_PAT = Pattern.compile("\\s*,\\s*");
     private static final String MISSING_TOPIC = "A topic must be provided";
 
     /**
@@ -62,7 +64,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
                 return dmaapTopicSources.get(busTopicParams.getTopic());
             }
 
-            DmaapTopicSource dmaapTopicSource = makeSource(busTopicParams);
+            var dmaapTopicSource = makeSource(busTopicParams);
 
             if (busTopicParams.isManaged()) {
                 dmaapTopicSources.put(busTopicParams.getTopic(), dmaapTopicSource);
@@ -82,7 +84,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
 
         List<DmaapTopicSource> dmaapTopicSourceLst = new ArrayList<>();
         synchronized (this) {
-            for (String topic : readTopics.split("\\s*,\\s*")) {
+            for (String topic : COMMA_SPACE_PAT.split(readTopics)) {
                 addTopic(dmaapTopicSourceLst, properties, topic);
             }
         }
@@ -117,7 +119,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
 
         String topicPrefix = PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "." + topic;
 
-        PropertyUtils props = new PropertyUtils(properties, topicPrefix,
+        var props = new PropertyUtils(properties, topicPrefix,
             (name, value, ex) -> logger.warn("{}: {} {} is in invalid format for topic {} ", this, name, value, topic));
 
         String servers = properties.getProperty(topicPrefix + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX);
