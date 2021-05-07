@@ -34,6 +34,29 @@
       "revId": "1d0aaaa5b31719c1718700bb0d1a99c413fd513c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7dbc1a9e_946babf9",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/IndexedUebTopicSourceFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2021-05-07T12:33:26Z",
+      "side": 1,
+      "message": "Seems like someone just missed the StringBuilder actually appending the variable uebTopicSources variable. Or perhaps decided it was too large a string to dump??",
+      "range": {
+        "startLine": 214,
+        "startChar": 8,
+        "endLine": 214,
+        "endChar": 49
+      },
+      "revId": "1d0aaaa5b31719c1718700bb0d1a99c413fd513c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
