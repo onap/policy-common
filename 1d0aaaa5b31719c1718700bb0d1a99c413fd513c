@@ -57,6 +57,30 @@
       "revId": "1d0aaaa5b31719c1718700bb0d1a99c413fd513c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "15619aae_98d6422f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/IndexedUebTopicSourceFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-05-07T14:46:57Z",
+      "side": 1,
+      "message": "probably - appears that\u0027s the way it is in the other IndexedXxx factories, too.  Created https://jira.onap.org/browse/POLICY-3298 to add the map keys to the string.",
+      "parentUuid": "7dbc1a9e_946babf9",
+      "range": {
+        "startLine": 214,
+        "startChar": 8,
+        "endLine": 214,
+        "endChar": 49
+      },
+      "revId": "1d0aaaa5b31719c1718700bb0d1a99c413fd513c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
