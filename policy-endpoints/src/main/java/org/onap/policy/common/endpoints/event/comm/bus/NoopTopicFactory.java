@@ -20,12 +20,12 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
+import com.google.re2j.Pattern;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Pattern;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 

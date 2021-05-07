@@ -21,11 +21,11 @@
 
 package org.onap.policy.common.endpoints.http.server;
 
+import com.google.re2j.Pattern;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
-import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
 import org.onap.policy.common.endpoints.http.server.internal.JettyStaticResourceServer;
