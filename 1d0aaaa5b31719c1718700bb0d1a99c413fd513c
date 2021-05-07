@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b8dd6fc8_03a28be2",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/EventData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2021-05-07T06:58:37Z",
+      "side": 1,
+      "message": "I didn\u0027t know this was added to Java, not sure I like it but I guess Sonar knows best!",
+      "revId": "1d0aaaa5b31719c1718700bb0d1a99c413fd513c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
