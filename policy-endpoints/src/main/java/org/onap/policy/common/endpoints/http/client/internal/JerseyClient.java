@@ -22,6 +22,7 @@
 
 package org.onap.policy.common.endpoints.http.client.internal;
 
+import com.google.re2j.Pattern;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -29,7 +30,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Future;
-import java.util.regex.Pattern;
 import javax.net.ssl.SSLContext;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;

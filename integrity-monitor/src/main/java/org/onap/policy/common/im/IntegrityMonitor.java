@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.im;
 
+import com.google.re2j.Pattern;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +35,6 @@ import java.util.function.Consumer;
 import java.util.function.IntConsumer;
 import java.util.function.LongConsumer;
 import java.util.function.Supplier;
-import java.util.regex.Pattern;
 import javax.management.JMX;
 import javax.management.MBeanServerConnection;
 import javax.persistence.EntityManager;

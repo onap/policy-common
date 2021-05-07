@@ -20,7 +20,7 @@
 
 package org.onap.policy.common.logging;
 
-import java.util.regex.Pattern;
+import com.google.re2j.Pattern;
 import javax.servlet.http.HttpServletRequest;
 
 public class OnapLoggingUtils {
