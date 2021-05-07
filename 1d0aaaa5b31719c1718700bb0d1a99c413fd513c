@@ -16,6 +16,24 @@
       "revId": "1d0aaaa5b31719c1718700bb0d1a99c413fd513c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7e970a1d_9104e64a",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/EventData.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-05-07T12:20:17Z",
+      "side": 1,
+      "message": "agreed, but as Pam always says, easier to just fix it than to fight it.  I even found a case where it complained, even though it couldn\u0027t actually determine the correct type because the method it called had a parameterized return type!  - I filed a report with sonarcloud about that one.",
+      "parentUuid": "b8dd6fc8_03a28be2",
+      "revId": "1d0aaaa5b31719c1718700bb0d1a99c413fd513c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
