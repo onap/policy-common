@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
@@ -62,9 +62,56 @@ public interface BusConsumer {
     public void close();
 
     /**
+     * Consumer the handles fetch() failures by sleeping.
+     */
+    public abstract static class FetchingBusConsumer implements BusConsumer {
+        private static Logger logger = LoggerFactory.getLogger(FetchingBusConsumer.class);
+
+        /**
+         * fetch timeout.
+         */
+        protected int fetchTimeout;
+
+        /**
+         * close condition.
+         */
+        private CountDownLatch closeCondition = new CountDownLatch(1);
+
+        /**
+         * Constructs the object.
+         *
+         * @param busTopicParams - The parameters for the bus topic
+         */
+        protected FetchingBusConsumer(BusTopicParams busTopicParams) {
+            this.fetchTimeout = busTopicParams.getFetchTimeout();
+        }
+
+        /**
+         * Causes the thread to sleep; invoked after fetch() fails.  If the consumer is closed,
+         * or the thread is interrupted while sleeping, then this may return prematurely.
+         */
+        protected void sleepAfterFetchFailure() {
+            try {
+                if (this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS)) {
+                    logger.info("{}: consumer closed - aborting sleep", this);
+                }
+
+            } catch (InterruptedException e) {
+                logger.warn("{}: interrupted while handling fetch error", this, e);
+                Thread.currentThread().interrupt();
+            }
+        }
+
+        @Override
+        public void close() {
+            this.closeCondition.countDown();
+        }
+    }
+
+    /**
      * Cambria based consumer.
      */
-    public static class CambriaConsumerWrapper implements BusConsumer {
+    public static class CambriaConsumerWrapper extends FetchingBusConsumer {
 
         /**
          * logger.
@@ -80,16 +127,6 @@ public interface BusConsumer {
          * Cambria client.
          */
         private final CambriaConsumer consumer;
-
-        /**
-         * fetch timeout.
-         */
-        protected int fetchTimeout;
-
-        /**
-         * close condition.
-         */
-        protected CountDownLatch closeCondition = new CountDownLatch(1);
 
         /**
          * Cambria Consumer Wrapper.
@@ -108,8 +145,7 @@ public interface BusConsumer {
          * @throws MalformedURLException - Malformed URL exception
          */
         public CambriaConsumerWrapper(BusTopicParams busTopicParams) {
-
-            this.fetchTimeout = busTopicParams.getFetchTimeout();
+            super(busTopicParams);
 
             this.builder = new CambriaClientBuilders.ConsumerBuilder();
 
@@ -155,19 +191,9 @@ public interface BusConsumer {
             }
         }
 
-        private void sleepAfterFetchFailure() {
-            try {
-                this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS); //NOSONAR
-
-            } catch (InterruptedException e) {
-                logger.warn("{}: interrupted while handling fetch error", this, e);
-                Thread.currentThread().interrupt();
-            }
-        }
-
         @Override
         public void close() {
-            this.closeCondition.countDown();
+            super.close();
             this.consumer.close();
         }
 
@@ -180,7 +206,7 @@ public interface BusConsumer {
     /**
      * MR based consumer.
      */
-    public abstract class DmaapConsumerWrapper implements BusConsumer {
+    public abstract class DmaapConsumerWrapper extends FetchingBusConsumer {
 
         /**
          * logger.
@@ -191,16 +217,6 @@ public interface BusConsumer {
          * Name of the "protocol" property.
          */
         protected static final String PROTOCOL_PROP = "Protocol";
-
-        /**
-         * fetch timeout.
-         */
-        protected int fetchTimeout;
-
-        /**
-         * close condition.
-         */
-        protected CountDownLatch closeCondition = new CountDownLatch(1);
 
         /**
          * MR Consumer.
@@ -225,8 +241,7 @@ public interface BusConsumer {
          * @throws MalformedURLException URL should be valid
          */
         protected DmaapConsumerWrapper(BusTopicParams busTopicParams) throws MalformedURLException {
-
-            this.fetchTimeout = busTopicParams.getFetchTimeout();
+            super(busTopicParams);
 
             if (busTopicParams.isTopicInvalid()) {
                 throw new IllegalArgumentException("No topic for DMaaP");
@@ -277,19 +292,9 @@ public interface BusConsumer {
             }
         }
 
-        private void sleepAfterFetchFailure() {
-            try {
-                this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS); //NOSONAR
-
-            } catch (InterruptedException e) {
-                logger.warn("{}: interrupted while handling fetch error", this, e);
-                Thread.currentThread().interrupt();
-            }
-        }
-
         @Override
         public void close() {
-            this.closeCondition.countDown();
+            super.close();
             this.consumer.close();
         }
 
