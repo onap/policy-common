@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -33,6 +34,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import org.apache.commons.collections4.IteratorUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,14 +45,65 @@ import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.Camb
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapAafConsumerWrapper;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapConsumerWrapper;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapDmeConsumerWrapper;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FetchingBusConsumer;
 import org.powermock.reflect.Whitebox;
 
 public class BusConsumerTest extends TopicTestBase {
+
+    private static final int SHORT_TIMEOUT_MILLIS = 10;
+    private static final int LONG_TIMEOUT_MILLIS = 3000;
 
     @Before
     @Override
     public void setUp() {
         super.setUp();
+    }
+
+    @Test
+    public void testFetchingBusConsumerSleepAfterFetchFailure() throws InterruptedException {
+
+        var cons = new FetchingBusConsumer(makeBuilder().fetchTimeout(SHORT_TIMEOUT_MILLIS).build()) {
+
+            private CountDownLatch started = new CountDownLatch(1);
+
+            @Override
+            protected void sleepAfterFetchFailure() {
+                started.countDown();
+                super.sleepAfterFetchFailure();
+            }
+
+            @Override
+            public Iterable<String> fetch() throws IOException {
+                return null;
+            }
+        };
+
+        // full sleep
+        long tstart = System.currentTimeMillis();
+        cons.sleepAfterFetchFailure();
+        assertThat(System.currentTimeMillis() - tstart).isGreaterThanOrEqualTo(SHORT_TIMEOUT_MILLIS);
+
+        // close while sleeping - sleep should halt prematurely
+        cons.fetchTimeout = LONG_TIMEOUT_MILLIS;
+        cons.started = new CountDownLatch(1);
+        Thread thread = new Thread(cons::sleepAfterFetchFailure);
+        tstart = System.currentTimeMillis();
+        thread.start();
+        cons.started.await();
+        cons.close();
+        thread.join();
+        assertThat(System.currentTimeMillis() - tstart).isLessThan(LONG_TIMEOUT_MILLIS);
+
+        // interrupt while sleeping - sleep should halt prematurely
+        cons.fetchTimeout = LONG_TIMEOUT_MILLIS;
+        cons.started = new CountDownLatch(1);
+        thread = new Thread(cons::sleepAfterFetchFailure);
+        tstart = System.currentTimeMillis();
+        thread.start();
+        cons.started.await();
+        thread.interrupt();
+        thread.join();
+        assertThat(System.currentTimeMillis() - tstart).isLessThan(LONG_TIMEOUT_MILLIS);
     }
 
     @Test
