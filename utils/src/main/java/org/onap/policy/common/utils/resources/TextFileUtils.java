@@ -28,6 +28,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import org.apache.commons.io.IOUtils;
 
 /**
  * The Class TextFileUtils is class that provides useful functions for handling text files. Functions to read and write
@@ -36,7 +37,6 @@ import java.nio.file.Files;
  * @author Liam Fallon (liam.fallon@est.tech)
  */
 public abstract class TextFileUtils {
-    private static final int READER_CHAR_BUFFER_SIZE_4096 = 4096;
 
     private TextFileUtils() {
         // This class cannot be initialized
@@ -100,15 +100,6 @@ public abstract class TextFileUtils {
      * @throws IOException on errors reading text from the file
      */
     public static String getReaderAsString(final Reader textReader) throws IOException {
-        final var builder = new StringBuilder();
-        int charsRead = -1;
-        final var chars = new char[READER_CHAR_BUFFER_SIZE_4096];
-        do {
-            charsRead = textReader.read(chars);
-            if (charsRead > 0) {
-                builder.append(chars, 0, charsRead);
-            }
-        } while (charsRead > 0);
-        return builder.toString();
+        return IOUtils.toString(textReader);
     }
 }

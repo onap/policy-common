@@ -196,7 +196,7 @@ class IndexedUebTopicSinkFactory implements UebTopicSinkFactory {
 
     @Override
     public String toString() {
-        return "IndexedUebTopicSinkFactory []";
+        return "IndexedUebTopicSinkFactory " + uebTopicSinks.keySet();
     }
 
 }

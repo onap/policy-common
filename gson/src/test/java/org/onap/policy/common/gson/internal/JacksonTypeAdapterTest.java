@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.ToString;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -138,6 +139,7 @@ public class JacksonTypeAdapterTest {
         assertEquals("read text", data);
     }
 
+    @ToString
     private static class Data {
         private String id;
         private String value;
@@ -154,11 +156,6 @@ public class JacksonTypeAdapterTest {
         public Data(String id, String value) {
             this.id = id;
             this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return "Data [id=" + id + ", value=" + value + "]";
         }
     }
 

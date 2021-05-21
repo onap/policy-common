@@ -157,21 +157,13 @@ public class ParameterValidationResult implements ValidationResult {
             return null;
         }
 
-        var validationResultBuilder = new StringBuilder();
-
-        validationResultBuilder.append(initialIndentation);
-        validationResultBuilder.append("field \"");
-        validationResultBuilder.append(getName());
-        validationResultBuilder.append("\" type \"");
-        validationResultBuilder.append(field.getType().getName());
-        validationResultBuilder.append("\" value \"");
-        validationResultBuilder.append(parameterValue);
-        validationResultBuilder.append("\" ");
-        validationResultBuilder.append(getStatus());
-        validationResultBuilder.append(", ");
-        validationResultBuilder.append(message);
-        validationResultBuilder.append('\n');
-
-        return validationResultBuilder.toString();
+        return initialIndentation
+            + "field \"" + getName()
+            + "\" type \"" + field.getType().getName()
+            + "\" value \"" + parameterValue
+            + "\" " + getStatus()
+            + ", "
+            + message
+            + '\n';
     }
 }

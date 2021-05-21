@@ -190,7 +190,7 @@ class IndexedDmaapTopicSinkFactory implements DmaapTopicSinkFactory {
 
     @Override
     public String toString() {
-        return "IndexedDmaapTopicSinkFactory []";
+        return "IndexedDmaapTopicSinkFactory " + dmaapTopicWriters.keySet();
     }
 
 }

@@ -21,8 +21,11 @@
 
 package org.onap.policy.common.endpoints.http.server;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import lombok.ToString;
 import org.onap.policy.common.endpoints.http.server.aaf.AafAuthFilter;
 import org.onap.policy.common.endpoints.parameters.RestServerParameters;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
@@ -34,6 +37,7 @@ import org.onap.policy.common.utils.services.ServiceManagerContainer;
  *
  * @author Ram Krishna Verma (ram.krishna.verma@est.tech)
  */
+@ToString
 public class RestServer extends ServiceManagerContainer {
 
     /**
@@ -111,17 +115,7 @@ public class RestServer extends ServiceManagerContainer {
      * @return the provider class names
      */
     private String getProviderClassNames(Class<?>[] jaxrsProviders) {
-        var names = new StringBuilder();
-
-        for (Class<?> prov : jaxrsProviders) {
-            if (names.length() > 0) {
-                names.append(',');
-            }
-
-            names.append(prov.getName());
-        }
-
-        return names.toString();
+        return String.join(",", Arrays.stream(jaxrsProviders).map(Class::getName).collect(Collectors.toList()));
     }
 
     private String getValue(final String value) {
@@ -129,11 +123,6 @@ public class RestServer extends ServiceManagerContainer {
             return System.getenv(value.substring(2, value.length() - 1));
         }
         return value;
-    }
-
-    @Override
-    public String toString() {
-        return "RestServer [servers=" + servers + "]";
     }
 
     /**

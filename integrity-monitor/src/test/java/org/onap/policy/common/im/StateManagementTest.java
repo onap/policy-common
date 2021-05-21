@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -287,16 +287,9 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
             return null;
         }
 
-        final StringBuilder b = new StringBuilder();
-
-        b.append(sm.getAdminState());
-        b.append(',');
-        b.append(sm.getOpState());
-        b.append(',');
-        b.append(sm.getAvailStatus());
-        b.append(',');
-        b.append(sm.getStandbyStatus());
-
-        return b.toString();
+        return sm.getAdminState()
+            + ',' + sm.getOpState()
+            + ',' + sm.getAvailStatus()
+            + ',' + sm.getStandbyStatus();
     }
 }

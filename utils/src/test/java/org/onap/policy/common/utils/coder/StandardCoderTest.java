@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP PAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,6 +52,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import lombok.ToString;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -358,13 +359,9 @@ public class StandardCoderTest {
     }
 
 
+    @ToString
     private static class MyObject {
         private String abc;
-
-        @Override
-        public String toString() {
-            return "MyObject [abc=" + abc + "]";
-        }
     }
 
     public static class MyMap {
