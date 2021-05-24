@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javax.ws.rs.core.MediaType;
+import lombok.ToString;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.http.server.YamlMessageBodyHandler;
@@ -212,6 +213,7 @@ public class YamlMessageBodyHandlerTest {
         }
     }
 
+    @ToString
     public static class MyObject {
         private int id;
 
@@ -221,11 +223,6 @@ public class YamlMessageBodyHandlerTest {
 
         public MyObject(int id) {
             this.id = id;
-        }
-
-        @Override
-        public String toString() {
-            return "MyObject [id=" + id + "]";
         }
     }
 

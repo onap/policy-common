@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import lombok.ToString;
 
 /**
  * Factory used with test Data.
@@ -54,6 +55,7 @@ public class DataAdapterFactory implements TypeAdapterFactory {
     /**
      * Object handled by this factory.
      */
+    @ToString
     public static class Data {
         private int id;
 
@@ -72,16 +74,12 @@ public class DataAdapterFactory implements TypeAdapterFactory {
         public void setId(int id) {
             this.id = id;
         }
-
-        @Override
-        public String toString() {
-            return "Data [id=" + id + "]";
-        }
     }
 
     /**
      * Object derived from Data.
      */
+    @ToString(callSuper = true)
     public static class DerivedData extends Data {
         private String text;
 
@@ -100,11 +98,6 @@ public class DataAdapterFactory implements TypeAdapterFactory {
 
         public void setText(String text) {
             this.text = text;
-        }
-
-        @Override
-        public String toString() {
-            return "DerivedData [text=" + text + ", toString()=" + super.toString() + "]";
         }
     }
 

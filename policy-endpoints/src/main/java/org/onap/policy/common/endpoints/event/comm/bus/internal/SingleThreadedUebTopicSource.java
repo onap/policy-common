@@ -66,10 +66,8 @@ public class SingleThreadedUebTopicSource extends SingleThreadedBusTopicSource i
 
     @Override
     public String toString() {
-        var builder = new StringBuilder();
-        builder.append("SingleThreadedUebTopicSource [getTopicCommInfrastructure()=")
-                .append(getTopicCommInfrastructure()).append(", toString()=").append(super.toString()).append("]");
-        return builder.toString();
+        return "SingleThreadedUebTopicSource [getTopicCommInfrastructure()=" + getTopicCommInfrastructure()
+            + ", toString()=" + super.toString() + "]";
     }
 
 }

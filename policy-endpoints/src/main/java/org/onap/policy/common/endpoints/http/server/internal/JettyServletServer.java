@@ -24,6 +24,7 @@ package org.onap.policy.common.endpoints.http.server.internal;
 
 import java.util.EnumSet;
 import javax.servlet.DispatcherType;
+import lombok.ToString;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
 import org.eclipse.jetty.security.HashLoginService;
@@ -50,6 +51,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Http Server implementation using Embedded Jetty.
  */
+@ToString
 public abstract class JettyServletServer implements HttpServletServer, Runnable {
 
     /**
@@ -120,6 +122,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     /**
      * Start condition.
      */
+    @ToString.Exclude
     protected Object startCondition = new Object();
 
     /**
@@ -519,17 +522,6 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     @Override
     public void addServletResource(String servletPath, String resourceBase) {
         throw new UnsupportedOperationException("addServletResource()" + NOT_SUPPORTED);
-    }
-
-    @Override
-    public String toString() {
-        var builder = new StringBuilder();
-        builder.append("JettyServer [name=").append(name).append(", host=").append(host).append(", port=").append(port)
-                .append(", user=").append(user).append(", password=").append(password != null).append(", contextPath=")
-                .append(contextPath).append(", jettyServer=").append(jettyServer).append(", context=")
-                .append(this.context).append(", connector=").append(connector).append(", jettyThread=")
-                .append(jettyThread).append("]");
-        return builder.toString();
     }
 
 }

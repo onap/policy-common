@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import com.google.gson.JsonElement;
 import java.lang.reflect.GenericArrayType;
 import java.util.LinkedList;
 import java.util.TreeMap;
+import lombok.ToString;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -102,6 +103,7 @@ public class JacksonExclusionStrategyTest {
     /**
      * Used to verify that no fields are exposed.
      */
+    @ToString
     public static class Data {
         private int id;
         public String text;
@@ -121,13 +123,9 @@ public class JacksonExclusionStrategyTest {
         public void setText(String text) {
             this.text = text;
         }
-
-        @Override
-        public String toString() {
-            return "Data [id=" + id + ", text=" + text + "]";
-        }
     }
 
+    @ToString(callSuper = true)
     public static class Derived extends Data {
         protected String value;
 
@@ -137,11 +135,6 @@ public class JacksonExclusionStrategyTest {
 
         public void setValue(String value) {
             this.value = value;
-        }
-
-        @Override
-        public String toString() {
-            return "Derived [value=" + value + ", " + super.toString() + "]";
         }
     }
 

@@ -208,7 +208,7 @@ class IndexedDmaapTopicSourceFactory implements DmaapTopicSourceFactory {
 
     @Override
     public String toString() {
-        return "IndexedDmaapTopicSourceFactory []";
+        return "IndexedDmaapTopicSourceFactory " + dmaapTopicSources.keySet();
     }
 
 }

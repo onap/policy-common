@@ -21,11 +21,14 @@
 
 package org.onap.policy.common.endpoints.report;
 
+import lombok.ToString;
+
 /**
  * Class to represent health check report of a service.
  *
  * @author Ram Krishna Verma (ram.krishna.verma@ericsson.com)
  */
+@ToString
 public class HealthCheckReport {
 
     private String name;
@@ -122,22 +125,5 @@ public class HealthCheckReport {
      */
     public void setMessage(final String message) {
         this.message = message;
-    }
-
-    @Override
-    public String toString() {
-        final var builder = new StringBuilder();
-        builder.append("Report [name=");
-        builder.append(getName());
-        builder.append(", url=");
-        builder.append(getUrl());
-        builder.append(", healthy=");
-        builder.append(isHealthy());
-        builder.append(", code=");
-        builder.append(getCode());
-        builder.append(", message=");
-        builder.append(getMessage());
-        builder.append("]");
-        return builder.toString();
     }
 }

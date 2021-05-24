@@ -258,9 +258,9 @@ public class JettyJerseyServer extends JettyServletServer {
 
     @Override
     public String toString() {
-        var builder = new StringBuilder();
-        builder.append("JettyJerseyServer [Jerseyservlets=").append(servlets).append(", swaggerId=").append(swaggerId)
-                .append(", toString()=").append(super.toString()).append("]");
-        return builder.toString();
+        return "JettyJerseyServer [Jerseyservlets=" + servlets
+            + ", swaggerId=" + swaggerId
+            + ", toString()=" + super.toString()
+            + "]";
     }
 }

@@ -74,10 +74,8 @@ public class InlineUebTopicSink extends InlineBusTopicSink implements UebTopicSi
 
     @Override
     public String toString() {
-        var builder = new StringBuilder();
-        builder.append("InlineUebTopicSink [getTopicCommInfrastructure()=").append(getTopicCommInfrastructure())
-                .append(", toString()=").append(super.toString()).append("]");
-        return builder.toString();
+        return "InlineUebTopicSink [getTopicCommInfrastructure()=" + getTopicCommInfrastructure() + ", toString()="
+                        + super.toString() + "]";
     }
 
     @Override

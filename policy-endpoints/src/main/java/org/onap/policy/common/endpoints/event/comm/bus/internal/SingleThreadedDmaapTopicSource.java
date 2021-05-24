@@ -128,12 +128,10 @@ public class SingleThreadedDmaapTopicSource extends SingleThreadedBusTopicSource
 
     @Override
     public String toString() {
-        var builder = new StringBuilder();
-        builder.append("SingleThreadedDmaapTopicSource [userName=").append(userName).append(", password=")
-                .append((password == null || password.isEmpty()) ? "-" : password.length())
-                .append(", getTopicCommInfrastructure()=").append(getTopicCommInfrastructure()).append(", toString()=")
-                .append(super.toString()).append("]");
-        return builder.toString();
+        return "SingleThreadedDmaapTopicSource [userName=" + userName
+            + ", password=" + (password == null || password.isEmpty() ? "-" : password.length())
+            + ", getTopicCommInfrastructure()=" + getTopicCommInfrastructure()
+            + ", toString()=" + super.toString() + "]";
     }
 
 

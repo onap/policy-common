@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +32,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import java.util.Map;
 import java.util.TreeMap;
+import lombok.ToString;
 import org.junit.Test;
 import org.onap.policy.common.gson.annotation.GsonJsonAnyGetter;
 import org.onap.policy.common.gson.annotation.GsonJsonAnySetter;
@@ -117,6 +118,7 @@ public class JacksonMethodAdapterFactoryTest {
         assertEquals("{'id':500,'nested':{'value':'bye bye'}}".replace('\'', '"'), result);
     }
 
+    @ToString
     protected static class Data {
         private int id;
         private String text;
@@ -142,13 +144,9 @@ public class JacksonMethodAdapterFactoryTest {
         public void unused(String text) {
             // do nothing
         }
-
-        @Override
-        public String toString() {
-            return "Data [id=" + id + ", text=" + text + "]";
-        }
     }
 
+    @ToString(callSuper = true)
     protected static class Derived extends Data {
 
         // overrides private field from Data
@@ -173,11 +171,6 @@ public class JacksonMethodAdapterFactoryTest {
             }
 
             map.put(key, value);
-        }
-
-        @Override
-        public String toString() {
-            return "Derived [text=" + text + ", map=" + map + ", toString()=" + super.toString() + "]";
         }
     }
 
@@ -258,6 +251,7 @@ public class JacksonMethodAdapterFactoryTest {
     /**
      * Used to test serialization of non-static nested classes.
      */
+    @ToString
     protected static class Container {
         private int id;
         private Nested nested;
@@ -283,12 +277,8 @@ public class JacksonMethodAdapterFactoryTest {
             return nested;
         }
 
-        @Override
-        public String toString() {
-            return "Container [id=" + id + ", nested=" + nested + "]";
-        }
 
-
+        @ToString
         protected class Nested {
             private String value;
 
@@ -298,11 +288,6 @@ public class JacksonMethodAdapterFactoryTest {
 
             public String getValue() {
                 return value;
-            }
-
-            @Override
-            public String toString() {
-                return "Nested [value=" + value + "]";
             }
         }
     }

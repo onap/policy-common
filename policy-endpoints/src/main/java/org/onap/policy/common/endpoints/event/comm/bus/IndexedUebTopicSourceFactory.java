@@ -211,6 +211,6 @@ class IndexedUebTopicSourceFactory implements UebTopicSourceFactory {
 
     @Override
     public String toString() {
-        return "IndexedUebTopicSourceFactory []";
+        return "IndexedUebTopicSourceFactory " + uebTopicSources.keySet();
     }
 }

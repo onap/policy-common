@@ -38,6 +38,7 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
@@ -51,6 +52,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Http Client implementation using a Jersey Client.
  */
+@ToString
 public class JerseyClient implements HttpClient {
     private static final Pattern COMMA_PAT = Pattern.compile(",");
 
@@ -308,35 +310,6 @@ public class JerseyClient implements HttpClient {
     @Override
     public String getBaseUrl() {
         return baseUrl;
-    }
-
-    @Override
-    public String toString() {
-        var builder = new StringBuilder();
-        builder.append("JerseyClient [name=");
-        builder.append(name);
-        builder.append(", https=");
-        builder.append(https);
-        builder.append(", selfSignedCerts=");
-        builder.append(selfSignedCerts);
-        builder.append(", hostname=");
-        builder.append(hostname);
-        builder.append(", port=");
-        builder.append(port);
-        builder.append(", basePath=");
-        builder.append(basePath);
-        builder.append(", userName=");
-        builder.append(userName);
-        builder.append(", password=");
-        builder.append(password);
-        builder.append(", client=");
-        builder.append(client);
-        builder.append(", baseUrl=");
-        builder.append(baseUrl);
-        builder.append(", alive=");
-        builder.append(alive);
-        builder.append("]");
-        return builder.toString();
     }
 
     private Builder getBuilder(String path, Map<String, Object> headers) {

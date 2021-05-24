@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.ToString;
 import org.junit.Test;
 import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.onap.policy.common.gson.annotation.GsonJsonProperty;
@@ -137,6 +138,7 @@ public class JacksonFieldAdapterFactoryTest {
         return text.replaceFirst("@\\w+", "@");
     }
 
+    @ToString
     private static class Data {
         @GsonJsonProperty("my-id")
         private int id;
@@ -155,21 +157,12 @@ public class JacksonFieldAdapterFactoryTest {
         public void setId(int id) {
             this.id = id;
         }
-
-        @Override
-        public String toString() {
-            return "Data [id=" + id + ", text=" + text + "]";
-        }
     }
 
+    @ToString(callSuper = true)
     private static class Derived extends Data {
         // not serialized
         private String unserialized;
-
-        @Override
-        public String toString() {
-            return "Derived [unserialized=" + unserialized + ", toString()=" + super.toString() + "]";
-        }
     }
 
     private static class DataList {
