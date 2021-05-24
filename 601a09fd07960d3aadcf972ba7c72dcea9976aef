@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c937ea56_7c7f9ac5",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/IndexedDmaapTopicSinkFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-05-24T15:29:56Z",
+      "side": 1,
+      "message": "good idea!",
+      "revId": "601a09fd07960d3aadcf972ba7c72dcea9976aef",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
