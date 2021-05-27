@@ -36,7 +36,7 @@ import org.apache.commons.io.IOUtils;
  *
  * @author Liam Fallon (liam.fallon@est.tech)
  */
-public abstract class TextFileUtils {
+public class TextFileUtils {
 
     private TextFileUtils() {
         // This class cannot be initialized
