@@ -1,0 +1,9 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Jim Hahn <jrh3@att.com>
+Code-Review+2: Liam Fallon <liam.fallon@est.tech>
+Code-Review+2: Ajith Sreekumar <ajith.sreekumar@bell.ca>
+Submitted-by: Ajith Sreekumar <ajith.sreekumar@bell.ca>
+Submitted-at: Fri, 28 May 2021 11:21:57 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/policy/common/+/121577
+Project: policy/common
+Branch: refs/heads/master
