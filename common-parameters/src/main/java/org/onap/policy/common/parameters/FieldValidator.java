@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.parameters;
 
+import com.google.gson.annotations.SerializedName;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedParameterizedType;
 import java.lang.reflect.AnnotatedType;
@@ -58,6 +59,11 @@ public class FieldValidator extends ValueValidator {
     private final Field field;
 
     /**
+     * Name of the field when serialized (i.e., as the client would know it).
+     */
+    private final String serializedName;
+
+    /**
      * Method to retrieve the field's value.
      */
     private Method accessor;
@@ -76,8 +82,12 @@ public class FieldValidator extends ValueValidator {
 
         String fieldName = field.getName();
         if (fieldName.contains("$")) {
+            serializedName = fieldName;
             return;
         }
+
+        SerializedName serAnnot = field.getAnnotation(SerializedName.class);
+        serializedName = (serAnnot != null ? serAnnot.value() : fieldName);
 
         validator.addValidators(this);
         addListValidator(validator);
@@ -184,7 +194,7 @@ public class FieldValidator extends ValueValidator {
         // get the value
         Object value = getValue(object, accessor);
 
-        validateValue(result, field.getName(), value);
+        validateValue(result, serializedName, value);
     }
 
     /**

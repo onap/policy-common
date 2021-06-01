@@ -23,6 +23,7 @@ package org.onap.policy.common.parameters;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+import com.google.gson.annotations.SerializedName;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -55,6 +56,7 @@ public class TestFieldValidator extends ValidatorUtil {
     @Getter
     private Map<@NotBlank String, @Min(1) Integer> intMap;
 
+    @SerializedName("annotated_key_map")
     @Getter
     private Map<@NotBlank String, Integer> annotatedKeyMap;
 
@@ -205,7 +207,7 @@ public class TestFieldValidator extends ValidatorUtil {
 
         annotatedKeyMap = Map.of(" ", -10);
         validator.validateField(result, this);
-        assertThat(result.getResult()).contains("blank").doesNotContain("-10");
+        assertThat(result.getResult()).contains("annotated_key_map", "blank").doesNotContain("-10");
 
         // only the value is annotated
         validator = new FieldValidator(bean, TestFieldValidator.class, getField("annotatedValueMap"));
@@ -218,7 +220,7 @@ public class TestFieldValidator extends ValidatorUtil {
 
         annotatedValueMap = Map.of(" ", -10);
         validator.validateField(result, this);
-        assertThat(result.getResult()).doesNotContain("blank").contains("\" \"", "-10");
+        assertThat(result.getResult()).doesNotContain("blank").contains("annotatedValueMap", "\" \"", "-10");
     }
 
     @Test
