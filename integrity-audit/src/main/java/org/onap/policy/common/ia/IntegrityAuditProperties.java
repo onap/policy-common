@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,10 @@
 
 package org.onap.policy.common.ia;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IntegrityAuditProperties {
 
     public static final int DEFAULT_AUDIT_PERIOD_SECONDS = -1; // Audit does not run
@@ -38,9 +42,4 @@ public class IntegrityAuditProperties {
         PDP_XACML, PDP_DROOLS, PAP, PAP_ADMIN, LOGPARSER, BRMS_GATEWAY, ASTRA_GATEWAY, ELK_SERVER, PYPDP
 
     }
-
-    private IntegrityAuditProperties() {
-
-    }
-
 }

@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.onap.policy.common.parameters.annotations.NotNull;
 
@@ -34,6 +35,7 @@ import org.onap.policy.common.parameters.annotations.NotNull;
  * Note: this currently does not support Min/Max validation of "short" or "byte"; these
  * annotations are simply ignored for these types.
  */
+@NoArgsConstructor
 public class ValueValidator {
 
     /**
@@ -54,14 +56,6 @@ public class ValueValidator {
      * Object as their input parameter.
      */
     protected List<Checker> checkers = new ArrayList<>(10);
-
-
-    /**
-     * Constructs the object.
-     */
-    public ValueValidator() {
-        // do nothing
-    }
 
     /**
      * Determines if the validator has anything to check.

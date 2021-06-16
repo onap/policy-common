@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import lombok.Getter;
 import org.onap.policy.common.gson.annotation.GsonJsonAnyGetter;
 import org.onap.policy.common.gson.annotation.GsonJsonAnySetter;
 import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
@@ -79,22 +80,15 @@ public class ClassWalker {
      * Method having {@link GsonJsonAnyGetter} annotation. Overwritten as new "any-getters"
      * are identified.
      */
+    @Getter
     private Method anyGetter = null;
 
     /**
      * Method having {@link GsonJsonAnySetter} annotation. Overwritten as new "any-setters"
      * are identified.
      */
+    @Getter
     private Method anySetter = null;
-
-
-    public Method getAnyGetter() {
-        return anyGetter;
-    }
-
-    public Method getAnySetter() {
-        return anySetter;
-    }
 
     /**
      * Gets the names of input properties that are not being ignored.

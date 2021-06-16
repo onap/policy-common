@@ -25,17 +25,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Converter for Double values. By default, GSON treats all Objects that are numbers, as
  * Double. This converts Doubles to Integer or Long, if possible. It converts stand-alone
  * Doubles, as well as those found within Arrays and Maps.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class DoubleConverter {
-
-    private DoubleConverter() {
-        // do nothing
-    }
 
     /**
      * Performs in-place conversion of all values in a list.

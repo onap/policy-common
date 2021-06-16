@@ -25,6 +25,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * The parameter service makes ONAP PF parameter groups available to all classes in a JVM.
@@ -37,15 +39,10 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author Liam Fallon (liam.fallon@ericsson.com)
  */
-public abstract class ParameterService {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ParameterService {
     // The map holding the parameters
     private static Map<String, ParameterGroup> parameterGroupMap = new ConcurrentHashMap<>();
-
-    /**
-     * This class is an abstract static class that cannot be extended.
-     */
-    private ParameterService() {
-    }
 
     /**
      * Register a parameter group with the parameter service.
@@ -53,9 +50,7 @@ public abstract class ParameterService {
      * @param parameterGroup the parameter group
      */
     public static void register(final ParameterGroup parameterGroup) {
-        if (!parameterGroupMap.containsKey(parameterGroup.getName())) {
-            parameterGroupMap.put(parameterGroup.getName(), parameterGroup);
-        } else {
+        if (parameterGroupMap.putIfAbsent(parameterGroup.getName(), parameterGroup) != null) {
             throw new ParameterRuntimeException(
                             "\"" + parameterGroup.getName() + "\" already registered in parameter service");
         }
@@ -81,9 +76,7 @@ public abstract class ParameterService {
      * @param parameterGroupName the name of the parameter group
      */
     public static void deregister(final String parameterGroupName) {
-        if (parameterGroupMap.containsKey(parameterGroupName)) {
-            parameterGroupMap.remove(parameterGroupName);
-        } else {
+        if (parameterGroupMap.remove(parameterGroupName) == null) {
             throw new ParameterRuntimeException("\"" + parameterGroupName + "\" not registered in parameter service");
         }
     }
@@ -121,7 +114,7 @@ public abstract class ParameterService {
      * @return true if the parameter is defined
      */
     public static boolean contains(final String parameterGroupName) {
-        return parameterGroupMap.containsKey(parameterGroupName) && parameterGroupMap.get(parameterGroupName) != null;
+        return parameterGroupMap.get(parameterGroupName) != null;
     }
 
     /**

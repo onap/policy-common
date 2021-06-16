@@ -21,6 +21,8 @@
 
 package org.onap.policy.common.parameters;
 
+import lombok.Getter;
+
 /**
  * Exception thrown oon parameter reading, validation, and check errors.
  *
@@ -30,6 +32,7 @@ public class ParameterException extends Exception {
     private static final long serialVersionUID = -8507246953751956974L;
 
     // The object on which the exception was thrown
+    @Getter
     private final transient Object object;
 
     /**
@@ -99,14 +102,5 @@ public class ParameterException extends Exception {
         }
 
         return builder.toString();
-    }
-
-    /**
-     * Get the object on which the exception was thrown.
-     *
-     * @return The object on which the exception was thrown
-     */
-    public Object getObject() {
-        return object;
     }
 }

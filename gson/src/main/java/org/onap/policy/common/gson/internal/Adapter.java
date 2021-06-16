@@ -29,6 +29,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 import java.util.function.Supplier;
+import lombok.Getter;
 import org.onap.policy.common.gson.annotation.GsonJsonProperty;
 
 /**
@@ -49,6 +50,7 @@ public class Adapter {
     /**
      * Name of the property within the json structure containing the item.
      */
+    @Getter
     private final String propName;
 
     /**
@@ -69,6 +71,7 @@ public class Adapter {
     /**
      * Name of the item being lifted - used when throwing exceptions.
      */
+    @Getter
     private final String fullName;
 
     /**
@@ -141,14 +144,6 @@ public class Adapter {
      */
     public Object fromJsonTree(JsonElement tree) {
         return reader.getConverter().fromJsonTree(tree);
-    }
-
-    public final String getPropName() {
-        return propName;
-    }
-
-    public final String getFullName() {
-        return fullName;
     }
 
     /**

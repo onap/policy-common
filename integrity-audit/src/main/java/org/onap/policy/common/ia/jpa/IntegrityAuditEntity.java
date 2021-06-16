@@ -35,6 +35,10 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 /*
  * The Entity class to for management of IntegrityAudits
  */
@@ -44,15 +48,20 @@ import org.onap.policy.common.ia.AuditorTime;
 @Table(name = "IntegrityAuditEntity")
 @NamedQuery(name = " IntegrityAuditEntity.findAll", query = "SELECT e FROM IntegrityAuditEntity e ")
 @NamedQuery(name = "IntegrityAuditEntity.deleteAll", query = "DELETE FROM IntegrityAuditEntity WHERE 1=1")
-
+@NoArgsConstructor
+@Getter
+@Setter
 public class IntegrityAuditEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private static boolean isUnitTesting;
+    @Getter
+    @Setter
+    private static boolean unitTesting;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
+    @Setter(AccessLevel.PRIVATE)
     private long id;
 
     @Column(name = "persistenceUnit", nullable = false)
@@ -90,11 +99,6 @@ public class IntegrityAuditEntity implements Serializable {
     @Column(name = "lastUpdated")
     private Date lastUpdated;
 
-
-    public IntegrityAuditEntity() {
-        // Empty constructor
-    }
-
     /**
      * Pre persist.
      */
@@ -108,106 +112,6 @@ public class IntegrityAuditEntity implements Serializable {
     @PreUpdate
     public void preUpdate() {
         this.lastUpdated = AuditorTime.getInstance().getDate();
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public String getPersistenceUnit() {
-        return persistenceUnit;
-    }
-
-    public void setPersistenceUnit(String persistenceUnit) {
-        this.persistenceUnit = persistenceUnit;
-    }
-
-    public String getSite() {
-        return site;
-    }
-
-    public void setSite(String site) {
-        this.site = site;
-    }
-
-    public String getNodeType() {
-        return nodeType;
-    }
-
-    public void setNodeType(String nodeType) {
-        this.nodeType = nodeType;
-    }
-
-    public String getResourceName() {
-        return resourceName;
-    }
-
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
-    }
-
-    public boolean isDesignated() {
-        return designated;
-    }
-
-    public void setDesignated(boolean designated) {
-        this.designated = designated;
-    }
-
-    public String getJdbcDriver() {
-        return jdbcDriver;
-    }
-
-    public void setJdbcDriver(String jdbcDriver) {
-        this.jdbcDriver = jdbcDriver;
-    }
-
-    public String getJdbcUrl() {
-        return jdbcUrl;
-    }
-
-    public void setJdbcUrl(String jdbcUrl) {
-        this.jdbcUrl = jdbcUrl;
-    }
-
-    public String getJdbcUser() {
-        return jdbcUser;
-    }
-
-    public void setJdbcUser(String jdbcUser) {
-        this.jdbcUser = jdbcUser;
-    }
-
-    public String getJdbcPassword() {
-        return jdbcPassword;
-    }
-
-    public void setJdbcPassword(String jdbcPassword) {
-        this.jdbcPassword = jdbcPassword;
-    }
-
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
-    }
-
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(Date created) {
-        this.createdDate = created;
-    }
-
-    public static boolean isUnitTesting() {
-        return isUnitTesting;
-    }
-
-    public static void setUnitTesting(boolean isUnitTesting) {
-        IntegrityAuditEntity.isUnitTesting = isUnitTesting;
     }
 
     private void writeObject(ObjectOutputStream out) throws IOException {

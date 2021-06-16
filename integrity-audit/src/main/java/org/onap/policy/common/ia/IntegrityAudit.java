@@ -21,6 +21,8 @@
 package org.onap.policy.common.ia;
 
 import java.util.Properties;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.ia.IntegrityAuditProperties.NodeTypeEnum;
 import org.onap.policy.common.logging.flexlogger.FlexLogger;
@@ -34,8 +36,12 @@ public class IntegrityAudit {
 
     private static final Logger logger = FlexLogger.getLogger(IntegrityAudit.class);
 
-    private static boolean isUnitTesting;
-    private boolean isThreadInitialized = false;
+    @Getter
+    @Setter
+    private static boolean unitTesting;
+
+    @Getter
+    private boolean threadInitialized = false;
 
     AuditThread auditThread = null;
 
@@ -54,6 +60,7 @@ public class IntegrityAudit {
      * indicated period
      *
      */
+    @Getter
     private int integrityAuditPeriodSeconds;
 
     /**
@@ -91,13 +98,6 @@ public class IntegrityAudit {
         }
         logger.info("Constructor: Exiting");
 
-    }
-
-    /**
-     * Used during JUnit testing by AuditPeriodTest.java
-     */
-    public int getIntegrityAuditPeriodSeconds() {
-        return integrityAuditPeriodSeconds;
     }
 
     /**
@@ -237,21 +237,9 @@ public class IntegrityAudit {
         logger.info("stopAuditThread: Exiting");
     }
 
-    public boolean isThreadInitialized() {
-        return isThreadInitialized;
-    }
-
     public void setThreadInitialized(boolean isThreadInitialized) {
         logger.info("setThreadInitialized: Setting isThreadInitialized=" + isThreadInitialized);
-        this.isThreadInitialized = isThreadInitialized;
-    }
-
-    public static boolean isUnitTesting() {
-        return isUnitTesting;
-    }
-
-    public static void setUnitTesting(boolean isUnitTesting) {
-        IntegrityAudit.isUnitTesting = isUnitTesting;
+        this.threadInitialized = isThreadInitialized;
     }
 
     /**
