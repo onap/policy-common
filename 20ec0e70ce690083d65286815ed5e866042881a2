@@ -34,6 +34,24 @@
       "revId": "20ec0e70ce690083d65286815ed5e866042881a2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28070960_126c5e23",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/EventData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-06-17T17:56:04Z",
+      "side": 1,
+      "message": "this case is weird, as it supports the following:\n\n  eventData.equals(\"some-request-id\")",
+      "parentUuid": "a145da49_c39732a4",
+      "revId": "20ec0e70ce690083d65286815ed5e866042881a2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
