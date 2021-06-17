@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1423d1b_a7fcfea6",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/EventData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-06-17T15:53:19Z",
+      "side": 1,
+      "message": "because of this case, can\u0027t use lombok for this :-(",
+      "revId": "20ec0e70ce690083d65286815ed5e866042881a2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
