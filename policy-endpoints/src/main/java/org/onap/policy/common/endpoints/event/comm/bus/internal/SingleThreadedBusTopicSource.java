@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018-2019 Samsung Electronics Co., Ltd.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
@@ -25,6 +25,7 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.UUID;
+import lombok.Getter;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.BusTopicSource;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
@@ -50,21 +51,25 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
     /**
      * Bus consumer group.
      */
+    @Getter
     protected final String consumerGroup;
 
     /**
      * Bus consumer instance.
      */
+    @Getter
     protected final String consumerInstance;
 
     /**
      * Bus fetch timeout.
      */
+    @Getter
     protected final int fetchTimeout;
 
     /**
      * Bus fetch limit.
      */
+    @Getter
     protected final int fetchLimit;
 
     /**
@@ -270,29 +275,8 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
     }
 
     @Override
-    public String getConsumerGroup() {
-        return consumerGroup;
-    }
-
-    @Override
-    public String getConsumerInstance() {
-        return consumerInstance;
-    }
-
-    @Override
     public void shutdown() {
         this.stop();
         this.topicListeners.clear();
     }
-
-    @Override
-    public int getFetchTimeout() {
-        return fetchTimeout;
-    }
-
-    @Override
-    public int getFetchLimit() {
-        return fetchLimit;
-    }
-
 }

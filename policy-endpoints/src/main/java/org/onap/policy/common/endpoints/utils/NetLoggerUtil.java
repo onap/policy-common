@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.utils;
 
+import lombok.Getter;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.features.NetLoggerFeatureProviders;
 import org.onap.policy.common.utils.services.FeatureApiUtils;
@@ -37,7 +38,8 @@ public class NetLoggerUtil {
      * Loggers.
      */
     private static final Logger logger = LoggerFactory.getLogger(NetLoggerUtil.class);
-    private static final Logger netLogger = LoggerFactory.getLogger("network");
+    @Getter
+    private static final Logger networkLogger = LoggerFactory.getLogger("network");
 
     /**
      * Constant for the system line separator.
@@ -52,15 +54,6 @@ public class NetLoggerUtil {
     }
 
     /**
-     * Get Network Logger.
-     *
-     * @return logger instance
-     */
-    public static Logger getNetworkLogger() {
-        return netLogger;
-    }
-
-    /**
      * Logs a message to the network logger.
      *
      * @param type can either be IN or OUT
@@ -69,7 +62,7 @@ public class NetLoggerUtil {
      * @param message message to be logged
      */
     public static void log(EventType type, CommInfrastructure protocol, String topic, String message) {
-        log(netLogger, type, protocol, topic, message);
+        log(networkLogger, type, protocol, topic, message);
     }
 
     /**
@@ -85,7 +78,7 @@ public class NetLoggerUtil {
                     String message) {
         if (eventLogger == null) {
             logger.debug("the logger is null, defaulting to network logger");
-            eventLogger = netLogger;
+            eventLogger = networkLogger;
         }
 
         if (featureBeforeLog(eventLogger, type, protocol, topic, message)) {

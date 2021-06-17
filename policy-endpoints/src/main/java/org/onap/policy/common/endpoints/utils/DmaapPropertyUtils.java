@@ -27,12 +27,15 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams.TopicParamsBuilder;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 
-public class DmaapPropertyUtils {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class DmaapPropertyUtils {
     private static final Pattern COMMA_SPACE_PAT = Pattern.compile("\\s*,\\s*");
 
     /**
@@ -65,10 +68,6 @@ public class DmaapPropertyUtils {
                         PolicyEndPointProperties.DME2_SESSION_STICKINESS_REQUIRED_PROPERTY);
 
         PROP_TO_DME = Collections.unmodifiableMap(map);
-    }
-
-    private DmaapPropertyUtils() {
-        // do nothing
     }
 
     /**

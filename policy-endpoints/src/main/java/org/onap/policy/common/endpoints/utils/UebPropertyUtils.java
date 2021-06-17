@@ -24,16 +24,15 @@ import com.google.re2j.Pattern;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams.TopicParamsBuilder;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class UebPropertyUtils {
     private static final Pattern COMMA_SPACE_PAT = Pattern.compile("\\s*,\\s*");
-
-    private UebPropertyUtils() {
-        // do nothing
-    }
 
     /**
      * Makes a topic builder, configuring it with properties that are common to both

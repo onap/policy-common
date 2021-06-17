@@ -38,13 +38,13 @@ import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.InvocationCallback;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.Response;
+import lombok.Getter;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.http.client.HttpClient;
-import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.onap.policy.common.utils.network.NetworkUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +52,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Http Client implementation using a Jersey Client.
  */
+@Getter
 @ToString
 public class JerseyClient implements HttpClient {
     private static final Pattern COMMA_PAT = Pattern.compile(",");
@@ -264,52 +265,6 @@ public class JerseyClient implements HttpClient {
     @Override
     public synchronized boolean isAlive() {
         return this.alive;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public boolean isHttps() {
-        return https;
-    }
-
-    @Override
-    public boolean isSelfSignedCerts() {
-        return selfSignedCerts;
-    }
-
-    @Override
-    public String getHostname() {
-        return hostname;
-    }
-
-    @Override
-    public int getPort() {
-        return port;
-    }
-
-    @Override
-    public String getBasePath() {
-        return basePath;
-    }
-
-    @Override
-    public String getUserName() {
-        return userName;
-    }
-
-    @GsonJsonIgnore
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getBaseUrl() {
-        return baseUrl;
     }
 
     private Builder getBuilder(String path, Map<String, Object> headers) {

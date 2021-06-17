@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,11 @@
 
 package org.onap.policy.common.endpoints.properties;
 
-public class PolicyEndPointProperties {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class PolicyEndPointProperties {
 
     /* Generic property suffixes */
 
@@ -145,9 +149,4 @@ public class PolicyEndPointProperties {
      * Definition of No limit fetching.
      */
     public static final int NO_LIMIT_FETCH = -1;
-
-
-    private PolicyEndPointProperties() {
-        // do nothing
-    }
 }

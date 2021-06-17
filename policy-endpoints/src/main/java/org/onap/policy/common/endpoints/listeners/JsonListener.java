@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,8 @@
 
 package org.onap.policy.common.endpoints.listeners;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.utils.coder.Coder;
@@ -34,6 +36,7 @@ import org.slf4j.LoggerFactory;
  * Listens for messages received on a topic, in JSON format, decodes them into a
  * {@link StandardCoderObject}, and then offers the objects to the subclass.
  */
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class JsonListener implements TopicListener {
     private static final Logger logger = LoggerFactory.getLogger(JsonListener.class);
 
@@ -41,13 +44,6 @@ public abstract class JsonListener implements TopicListener {
      * Used to decode the event.
      */
     private static final Coder coder = new StandardCoder();
-
-    /**
-     * Constructs the object.
-     */
-    protected JsonListener() {
-        super();
-    }
 
     @Override
     public void onTopicEvent(CommInfrastructure infra, String topic, String event) {
