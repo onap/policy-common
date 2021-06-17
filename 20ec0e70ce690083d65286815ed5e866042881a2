@@ -16,6 +16,24 @@
       "revId": "20ec0e70ce690083d65286815ed5e866042881a2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a145da49_c39732a4",
+        "filename": "common-logging/src/main/java/org/onap/policy/common/logging/eelf/EventData.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2021-06-17T17:02:44Z",
+      "side": 1,
+      "message": "I thought the fields are already compared in the lombok equals as well. In that case, we may just remove this check.",
+      "parentUuid": "c1423d1b_a7fcfea6",
+      "revId": "20ec0e70ce690083d65286815ed5e866042881a2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
