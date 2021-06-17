@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f8e35272_bd2bea55",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/NetLoggerUtil.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-06-17T16:15:25Z",
+      "side": 1,
+      "message": "renamed, so that the getter method matches the original name of the method",
+      "range": {
+        "startLine": 42,
+        "startChar": 32,
+        "endLine": 42,
+        "endChar": 46
+      },
+      "revId": "2bcb3ad9fe35ec2a1428f8b6e23ace6b796d9a98",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
