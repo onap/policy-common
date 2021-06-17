@@ -33,6 +33,10 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 /*
  * The Entity class to persist a policy object ForwardProgress
  */
@@ -43,7 +47,9 @@ import org.onap.policy.common.im.MonitorTime;
 @NamedQuery(name = " ForwardProgressEntity.findAll", query = "SELECT e FROM ForwardProgressEntity e ")
 @NamedQuery(name = "ForwardProgressEntity.deleteAll", query = "DELETE FROM ForwardProgressEntity WHERE 1=1")
 // @SequenceGenerator(name="seqForwardProgress", initialValue=1, allocationSize=1)
-
+@Getter
+@Setter
+@NoArgsConstructor
 public class ForwardProgressEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -51,6 +57,7 @@ public class ForwardProgressEntity implements Serializable {
     // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seqForwardProgress")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "forwardProgressId")
+    @Setter(AccessLevel.NONE)
     private long forwardProgressId;
 
     @Column(name = "resourceName", nullable = false, length = 100, unique = true)
@@ -67,10 +74,6 @@ public class ForwardProgressEntity implements Serializable {
     @Column(name = "last_updated")
     private Date lastUpdated;
 
-    public ForwardProgressEntity() {
-        // default constructor
-    }
-
     /**
      * PrePersist callback method.
      */
@@ -85,58 +88,5 @@ public class ForwardProgressEntity implements Serializable {
     @PreUpdate
     public void preUpdate() {
         this.lastUpdated = MonitorTime.getInstance().getDate();
-    }
-
-    /**
-     * Get the forward progress Id.
-     *
-     * @return the Id
-     */
-    public long getForwardProgressId() {
-        return forwardProgressId;
-    }
-
-    public String getResourceName() {
-        return this.resourceName;
-    }
-
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
-    }
-
-    /**
-     * Get the fpcCount.
-     *
-     * @return the fpcCount
-     */
-    public long getFpcCount() {
-        return fpcCount;
-    }
-
-    /**
-     * Set the fpcCount.
-     *
-     * @param fpcCount the fpcCount to set
-     */
-    public void setFpcCount(long fpcCount) {
-        this.fpcCount = fpcCount;
-    }
-
-    /**
-     * Get the lastUpdated.
-     *
-     * @return the lastUpdated
-     */
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    /**
-     * Set the lastUpdated.
-     *
-     * @param lastUpdated the lastUpdated to set
-     */
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 }

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,17 @@
 
 package org.onap.policy.common.logging.flexlogger;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Utilities to display messages. These are generally used while logging is being
  * configured, or when logging being directed to System.out. As a result, it directly
  * writes to System.out rather than to a logger.
  */
-public class DisplayUtils {
 
-    private DisplayUtils() {
-        // do nothing
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class DisplayUtils {
 
     /*
      * As the comment above says, these purposely write to System.out rather than a

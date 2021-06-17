@@ -21,7 +21,9 @@
 package org.onap.policy.common.logging.eelf;
 
 import java.time.Instant;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -29,31 +31,13 @@ import lombok.Setter;
  */
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class EventData {
 
     private String requestId = null;
     private Instant startTime = null;
     private Instant endTime = null;
-
-    // Default constructor takes no arguments.
-    // Is empty because instance variables are assigned
-    // their default values upon declaration.
-    public EventData() {
-        // See above comments for the reason this constructor is empty
-    }
-
-    /**
-     * Create an instance.
-     *
-     * @param requestId the request ID
-     * @param startTime the start time
-     * @param endTime the end time
-     */
-    public EventData(String requestId, Instant startTime, Instant endTime) {
-        this.requestId = requestId;
-        this.startTime = startTime;
-        this.endTime = endTime;
-    }
 
     @Override
     public String toString() {

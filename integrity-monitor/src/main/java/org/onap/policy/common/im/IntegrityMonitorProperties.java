@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018, 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018, 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,11 @@
 
 package org.onap.policy.common.im;
 
-public class IntegrityMonitorProperties {
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class IntegrityMonitorProperties {
 
     public static final String DB_DRIVER = "javax.persistence.jdbc.driver";
     public static final String DB_URL = "javax.persistence.jdbc.url";
@@ -54,8 +58,4 @@ public class IntegrityMonitorProperties {
     // AllSeemsWell types
     public static final Boolean ALLNOTWELL = Boolean.FALSE;
     public static final Boolean ALLSEEMSWELL = Boolean.TRUE;
-
-    private IntegrityMonitorProperties() {
-        // Private constructor to prevent subclassing
-    }
 }

@@ -61,6 +61,10 @@ import java.util.Timer;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentMap;
 import java.util.function.Consumer;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.logging.OnapLoggingUtils;
 import org.onap.policy.common.logging.flexlogger.LoggerType;
@@ -69,6 +73,7 @@ import org.slf4j.MDC;
 /**
  * PolicyLogger contains all the static methods for EELF logging.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class PolicyLogger {
 
     private static EELFLogger errorLogger = EELFManager.getErrorLogger();
@@ -110,6 +115,8 @@ public class PolicyLogger {
     // size drops to this point, stop the Timer
     private static int stopCheckPoint = 2500;
 
+    @Getter
+    @Setter
     private static boolean isOverrideLogbackLevel = false;
 
     private static Level debugLevel = Level.INFO;
@@ -131,10 +138,6 @@ public class PolicyLogger {
                 PolicyLogger.error(MessageCodes.EXCEPTION_ERROR, e, POLICY_LOGGER, "UnknownHostException");
             }
         }
-    }
-
-    private PolicyLogger() {
-
     }
 
     public static synchronized Level getDebugLevel() {
@@ -1393,24 +1396,6 @@ public class PolicyLogger {
             default:
                 return LoggerType.EELF;
         }
-    }
-
-
-    /**
-     * Returns true for overriding logback levels; returns false for not.
-     */
-    public static boolean isOverrideLogbackLevel() {
-
-        return isOverrideLogbackLevel;
-    }
-
-    /**
-     * Sets true for overriding logback levels; sets false for not.
-     */
-    public static void setOverrideLogbackLevel(boolean odl) {
-
-        isOverrideLogbackLevel = odl;
-
     }
 
     /**
