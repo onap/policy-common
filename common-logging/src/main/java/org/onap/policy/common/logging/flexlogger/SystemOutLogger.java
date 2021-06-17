@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import com.att.eelf.configuration.EELFLogger.Level;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.UUID;
+import lombok.Getter;
 import org.onap.policy.common.logging.OnapLoggingUtils;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.eelf.PolicyLogger;
@@ -33,16 +34,17 @@ import org.onap.policy.common.logging.eelf.PolicyLogger;
 /**
  * SystemOutLogger implements all the methods of interface Logger by calling System.out.println
  */
+@Getter
 public class SystemOutLogger implements Logger, Serializable {
 
     private static final long serialVersionUID = 4956408061058933929L;
     private String className = "";
-    private boolean isDebugEnabled = true;
-    private boolean isInfoEnabled = true;
-    private boolean isWarnEnabled = true;
-    private boolean isErrorEnabled = true;
-    private boolean isAuditEnabled = true;
-    private boolean isMetricsEnabled = true;
+    private boolean debugEnabled = true;
+    private boolean infoEnabled = true;
+    private boolean warnEnabled = true;
+    private boolean errorEnabled = true;
+    private boolean auditEnabled = true;
+    private boolean metricsEnabled = true;
     private String transId = UUID.randomUUID().toString();
 
     /**
@@ -77,35 +79,35 @@ public class SystemOutLogger implements Logger, Serializable {
     private void initLevel() {
 
         if (PolicyLogger.getDebugLevel() == Level.DEBUG) {
-            isDebugEnabled = true;
-            isInfoEnabled = true;
-            isWarnEnabled = true;
+            debugEnabled = true;
+            infoEnabled = true;
+            warnEnabled = true;
         } else {
-            isDebugEnabled = false;
+            debugEnabled = false;
         }
 
         if (PolicyLogger.getDebugLevel() == Level.INFO) {
-            isInfoEnabled = true;
-            isWarnEnabled = true;
-            isDebugEnabled = false;
+            infoEnabled = true;
+            warnEnabled = true;
+            debugEnabled = false;
         }
 
         if (PolicyLogger.getDebugLevel() == Level.OFF) {
-            isInfoEnabled = false;
-            isWarnEnabled = false;
-            isDebugEnabled = false;
+            infoEnabled = false;
+            warnEnabled = false;
+            debugEnabled = false;
         }
 
         if (PolicyLogger.getErrorLevel() == Level.OFF) {
-            isErrorEnabled = false;
+            errorEnabled = false;
         }
 
         if (PolicyLogger.getAuditLevel() == Level.OFF) {
-            isAuditEnabled = false;
+            auditEnabled = false;
         }
 
         if (PolicyLogger.getMetricsLevel() == Level.OFF) {
-            isMetricsEnabled = false;
+            metricsEnabled = false;
         }
     }
 
@@ -117,15 +119,6 @@ public class SystemOutLogger implements Logger, Serializable {
 
         displayMessage(transId);
         this.transId = transId;
-    }
-
-    /**
-     * Returns transaction Id.
-     */
-    @Override
-    public String getTransId() {
-
-        return transId;
     }
 
     /**
@@ -342,68 +335,6 @@ public class SystemOutLogger implements Logger, Serializable {
     @Override
     public void trace(Object message, Throwable throwable) {
         displayMessage(transId + "|" + className + " : " + message + ":" + throwable);
-    }
-
-    /**
-     * Returns true for debug enabled, or false for not.
-     *
-     * @return boolean
-     */
-    @Override
-    public boolean isDebugEnabled() {
-        return isDebugEnabled;
-    }
-
-    /**
-     * Returns true for warn enabled, or false for not.
-     *
-     * @return boolean
-     */
-    @Override
-    public boolean isWarnEnabled() {
-        return isWarnEnabled;
-    }
-
-    /**
-     * Returns true for info enabled, or false for not.
-     *
-     * @return boolean
-     */
-    @Override
-    public boolean isInfoEnabled() {
-        return isInfoEnabled;
-    }
-
-    /**
-     * Returns true for error enabled, or false for not.
-     *
-     * @return boolean
-     */
-    @Override
-    public boolean isErrorEnabled() {
-        return isErrorEnabled;
-    }
-
-    /**
-     * Returns true for audit enabled, or false for not.
-     *
-     * @return boolean
-     */
-    @Override
-    public boolean isAuditEnabled() {
-
-        return isAuditEnabled;
-    }
-
-    /**
-     * Returns true for metrics enabled, or false for not.
-     *
-     * @return boolean
-     */
-    @Override
-    public boolean isMetricsEnabled() {
-
-        return isMetricsEnabled;
     }
 
     /**

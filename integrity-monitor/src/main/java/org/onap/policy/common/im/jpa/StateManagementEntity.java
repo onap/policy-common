@@ -35,6 +35,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.onap.policy.common.im.MonitorTime;
 
@@ -45,7 +46,7 @@ import org.onap.policy.common.im.MonitorTime;
 
 @Getter
 @Setter
-
+@NoArgsConstructor
 public class StateManagementEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -80,10 +81,6 @@ public class StateManagementEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modifiedDate", nullable = false)
     private Date modifiedDate;
-
-    public StateManagementEntity() {
-        // default constructor
-    }
 
     @PrePersist
     public void prePersist() {

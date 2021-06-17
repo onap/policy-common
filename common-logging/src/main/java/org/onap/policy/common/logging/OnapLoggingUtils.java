@@ -22,15 +22,14 @@ package org.onap.policy.common.logging;
 
 import com.google.re2j.Pattern;
 import javax.servlet.http.HttpServletRequest;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-public class OnapLoggingUtils {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class OnapLoggingUtils {
 
     private static final Pattern COMMA_PAT = Pattern.compile(",");
     private static final Pattern CURLS_PAT = Pattern.compile("[{][}]");
-
-    private OnapLoggingUtils() {
-        // Private constructor to prevent subclassing
-    }
 
     /**
      * Get the ONAPLoggingContext for a request.

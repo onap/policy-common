@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@
 
 package org.onap.policy.common.logging.nsa;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.onap.policy.common.logging.nsa.impl.SharedContext;
 import org.onap.policy.common.logging.nsa.impl.Slf4jLoggingContext;
 
@@ -27,6 +29,7 @@ import org.onap.policy.common.logging.nsa.impl.Slf4jLoggingContext;
  * A factory for setting up a LoggingContext.
  *
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoggingContextFactory {
     public static class Builder {
 
@@ -46,9 +49,5 @@ public class LoggingContextFactory {
         public LoggingContext build() {
             return forShared ? new SharedContext(baseContext) : new Slf4jLoggingContext(baseContext);
         }
-    }
-
-    private LoggingContextFactory() {
-        // do nothing
     }
 }

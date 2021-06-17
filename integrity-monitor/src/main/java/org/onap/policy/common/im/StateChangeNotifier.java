@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017, 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017, 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.im;
 
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 /*
@@ -43,6 +44,7 @@ import org.slf4j.LoggerFactory;
  * StateManagement class.
  *
  */
+@Getter
 public class StateChangeNotifier {
     private static final Logger logger = LoggerFactory.getLogger(StateChangeNotifier.class);
     // The observable class
@@ -70,13 +72,5 @@ public class StateChangeNotifier {
         if (logger.isDebugEnabled()) {
             logger.debug("handleStateChange, message: {}", this.message);
         }
-    }
-
-    public StateManagement getStateManagement() {
-        return stateManagement;
-    }
-
-    public String getMessage() {
-        return message;
     }
 }
