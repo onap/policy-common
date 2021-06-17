@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2016-2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2019 Nordix Foundation.
- *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@
 
 package org.onap.policy.common.utils.validation;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,15 +31,10 @@ import org.slf4j.LoggerFactory;
  * The Class Assertions is a static class that is used as a shorthand for assertions in the source code.
  * It throws runtime exceptions on assertion fails.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Assertions {
     // Logger for this class
     private static final Logger LOGGER = LoggerFactory.getLogger(Assertions.class);
-
-    /**
-     * Private constructor used to prevent sub class instantiation.
-     */
-    private Assertions() {
-    }
 
     /**
      * Gets the validation message for a string parameter.

@@ -28,6 +28,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.io.IOUtils;
 
 /**
@@ -36,11 +38,8 @@ import org.apache.commons.io.IOUtils;
  *
  * @author Liam Fallon (liam.fallon@est.tech)
  */
-public class TextFileUtils {
-
-    private TextFileUtils() {
-        // This class cannot be initialized
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class TextFileUtils {
 
     /**
      * Method to return the contents of a text file as a string.

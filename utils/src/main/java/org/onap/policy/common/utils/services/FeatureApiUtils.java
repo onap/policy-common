@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,15 +23,14 @@ package org.onap.policy.common.utils.services;
 import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Utilities for use with "feature APIs".
  */
-public class FeatureApiUtils {
-
-    private FeatureApiUtils() {
-        // do nothing
-    }
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class FeatureApiUtils {
 
     /**
      * Applies a function on each feature provider, stopping as soon as one returns true.

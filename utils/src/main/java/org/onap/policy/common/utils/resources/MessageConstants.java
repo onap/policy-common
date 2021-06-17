@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2020 Bell Canada. All rights reserved.
+ *  Modifications Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +21,14 @@
 
 package org.onap.policy.common.utils.resources;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Common messages to be used by all components.
  */
-public class MessageConstants {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class MessageConstants {
 
     public static final String POLICY_API = "policy-api";
     public static final String POLICY_PAP = "policy-pap";
@@ -35,8 +40,4 @@ public class MessageConstants {
 
     public static final String START_SUCCESS_MSG = "Started %s service successfully.";
     public static final String START_FAILURE_MSG = "Start of %s service failed.";
-
-    private MessageConstants() {
-        super();
-    }
 }

@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -243,7 +243,7 @@ public class IntegrityAuditTestBase {
 
         // Clean up the DB
         try (EntityTransCloser etc = new EntityTransCloser(em.getTransaction())) {
-            EntityTransaction et = etc.getTransation();
+            EntityTransaction et = etc.getTransaction();
 
             em.createQuery("Delete from IntegrityAuditEntity").executeUpdate();
 
@@ -290,7 +290,7 @@ public class IntegrityAuditTestBase {
                 EntityTransCloser etc = new EntityTransCloser(emc.getManager().getTransaction())) {
 
             EntityManager entmgr = emc.getManager();
-            EntityTransaction entrans = etc.getTransation();
+            EntityTransaction entrans = etc.getTransaction();
 
             // Clean up the DB
             entmgr.createQuery("Delete from " + tableName).executeUpdate();

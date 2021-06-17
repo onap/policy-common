@@ -25,21 +25,20 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * Utilities for generating POJOs from Properties.
  */
-public class PropertyObjectUtils {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class PropertyObjectUtils {
 
     public static final Logger logger = LoggerFactory.getLogger(PropertyObjectUtils.class);
     private static final Pattern NAME_PAT = Pattern.compile("\\[(\\d{1,3})\\]$");
     private static final Pattern DOT_PAT = Pattern.compile("[.]");
-
-    private PropertyObjectUtils() {
-        // do nothing
-    }
 
     /**
      * Converts a set of properties to a Map. Supports json-path style property names with

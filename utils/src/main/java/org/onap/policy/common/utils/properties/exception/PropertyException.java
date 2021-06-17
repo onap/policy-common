@@ -20,9 +20,12 @@
 
 package org.onap.policy.common.utils.properties.exception;
 
+import lombok.Getter;
+
 /**
  * Exception associated with a Property.
  */
+@Getter
 public class PropertyException extends Exception {
     private static final long serialVersionUID = 1L;
 
@@ -90,26 +93,6 @@ public class PropertyException extends Exception {
 
         this.propertyName = propnm;
         this.fieldName = fieldName;
-    }
-
-    /**
-     * Get the property name.
-     *
-     * @return name of the property for which the exception was thrown, or {@code null} if
-     *         no name was provided
-     */
-    public String getPropertyName() {
-        return propertyName;
-    }
-
-    /**
-     * Get the field name.
-     *
-     * @return name of the field for which the exception was thrown, or {@code null} if no
-     *         field was provided
-     */
-    public String getFieldName() {
-        return fieldName;
     }
 
     /**
