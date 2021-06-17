@@ -34,6 +34,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+import lombok.AllArgsConstructor;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.emitter.Emitter;
@@ -56,6 +57,7 @@ import org.yaml.snakeyaml.serializer.Serializer;
  * translation. In addition, the {@link #convertFromDouble(Class, Object)} method should
  * be overridden with an appropriate conversion method.
  */
+@AllArgsConstructor
 public class YamlJsonTranslator {
 
     /**
@@ -68,15 +70,6 @@ public class YamlJsonTranslator {
      */
     public YamlJsonTranslator() {
         this(new Gson());
-    }
-
-    /**
-     * Constructs the object.
-     *
-     * @param gson the Gson object to be used to serialize and de-serialize
-     */
-    public YamlJsonTranslator(Gson gson) {
-        this.gson = gson;
     }
 
     /**

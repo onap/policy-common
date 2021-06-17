@@ -530,7 +530,7 @@ public class StateManagement {
         @Override
         public void commit() {
             synchronized (FLUSHLOCK) {
-                if (getTransation().isActive()) {
+                if (getTransaction().isActive()) {
                     super.commit();
                 }
             }
@@ -539,7 +539,7 @@ public class StateManagement {
         @Override
         public void rollback() {
             synchronized (FLUSHLOCK) {
-                if (getTransation().isActive()) {
+                if (getTransaction().isActive()) {
                     super.rollback();
                 }
             }

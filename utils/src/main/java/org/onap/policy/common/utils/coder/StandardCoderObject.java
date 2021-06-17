@@ -22,12 +22,16 @@ package org.onap.policy.common.utils.coder;
 
 import com.google.gson.JsonElement;
 import java.io.Serializable;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  * Object type used by the {@link StandardCoder}. Different serialization tools have
  * different "standard objects". For instance, GSON uses {@link JsonElement}. This class
  * wraps that object so that it can be used without exposing the object, itself.
  */
+@AllArgsConstructor
 public class StandardCoderObject implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -38,6 +42,7 @@ public class StandardCoderObject implements Serializable {
      * this should not be transient, but since it isn't serializable, we're stuck with it
      * until there's time to address the issue
      */
+    @Getter(AccessLevel.PROTECTED)
     private final transient JsonElement data;
 
     /**
@@ -45,24 +50,6 @@ public class StandardCoderObject implements Serializable {
      */
     public StandardCoderObject() {
         data = null;
-    }
-
-    /**
-     * Constructs the object.
-     *
-     * @param data data wrapped by this object.
-     */
-    protected StandardCoderObject(JsonElement data) {
-        this.data = data;
-    }
-
-    /**
-     * Gets the data wrapped by this.
-     *
-     * @return the data wrapped by this
-     */
-    protected JsonElement getData() {
-        return data;
     }
 
     /**

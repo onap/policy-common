@@ -2,14 +2,14 @@
  * ============LICENSE_START=======================================================
  * Common Utils
  * ================================================================================
- * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,6 +21,7 @@
 package org.onap.policy.common.utils.jpa;
 
 import javax.persistence.EntityManager;
+import lombok.Getter;
 
 /**
  * Wrapper for an <i>EntityManager</i>, providing auto-close functionality. This is useful in
@@ -31,29 +32,21 @@ public class EntityMgrCloser implements AutoCloseable {
     /**
      * The wrapped manager.
      */
-    private final EntityManager em;
+    @Getter
+    private final EntityManager manager;
 
     /**
      * Construct an instance with the EntityManager.
-     * 
+     *
      * @param em manager to be auto-closed
      */
     public EntityMgrCloser(EntityManager em) {
-        this.em = em;
-    }
-
-    /**
-     * Gets the EntityManager wrapped within this object.
-     * 
-     * @return the associated EntityManager
-     */
-    public EntityManager getManager() {
-        return em;
+        this.manager = em;
     }
 
     @Override
     public void close() {
-        em.close();
+        manager.close();
     }
 
 }

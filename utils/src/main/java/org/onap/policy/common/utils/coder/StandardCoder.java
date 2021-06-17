@@ -40,12 +40,14 @@ import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
+import lombok.AllArgsConstructor;
 import org.onap.policy.common.gson.DoubleConverter;
 import org.onap.policy.common.gson.GsonMessageBodyHandler;
 
 /**
  * JSON encoder and decoder using the "standard" mechanism, which is currently gson.
  */
+@AllArgsConstructor
 public class StandardCoder implements Coder {
 
     /**
@@ -81,14 +83,6 @@ public class StandardCoder implements Coder {
      */
     public StandardCoder() {
         this(GSON_STD, GSON_STD_PRETTY);
-    }
-
-    /**
-     * Constructs the object.
-     */
-    protected StandardCoder(Gson gson, Gson gsonPretty) {
-        this.gson = gson;
-        this.gsonPretty = gsonPretty;
     }
 
     @Override
@@ -377,19 +371,13 @@ public class StandardCoder implements Coder {
     /**
      * Adapter for standard objects.
      */
+    @AllArgsConstructor
     protected static class StandardTypeAdapter extends TypeAdapter<StandardCoderObject> {
 
         /**
          * Used to read/write a JsonElement.
          */
         private static TypeAdapter<JsonElement> elementAdapter = new Gson().getAdapter(JsonElement.class);
-
-        /**
-         * Constructs the object.
-         */
-        public StandardTypeAdapter() {
-            super();
-        }
 
         @Override
         public void write(JsonWriter out, StandardCoderObject value) throws IOException {

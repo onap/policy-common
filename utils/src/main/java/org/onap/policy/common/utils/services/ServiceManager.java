@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP PAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,8 @@ package org.onap.policy.common.utils.services;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.onap.policy.common.capabilities.Startable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +39,7 @@ public class ServiceManager implements Startable {
     /**
      * Manager name.
      */
+    @Getter
     private final String name;
 
     /**
@@ -63,10 +66,6 @@ public class ServiceManager implements Startable {
      */
     public ServiceManager(String name) {
         this.name = name;
-    }
-
-    public String getName() {
-        return name;
     }
 
     /**
@@ -204,16 +203,11 @@ public class ServiceManager implements Startable {
     /**
      * Service information.
      */
+    @AllArgsConstructor
     private static class Service {
         private String stepName;
         private RunnableWithEx starter;
         private RunnableWithEx stopper;
-
-        public Service(String stepName, RunnableWithEx starter, RunnableWithEx stopper) {
-            this.stepName = stepName;
-            this.starter = starter;
-            this.stopper = stopper;
-        }
     }
 
     /*

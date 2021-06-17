@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
- *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +21,16 @@
 
 package org.onap.policy.common.utils.validation;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * Class to provide utility methods for common parameter validations.
  *
  * @author Ram Krishna Verma (ram.krishna.verma@ericsson.com)
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ParameterValidationUtils {
-
-    private ParameterValidationUtils() {
-
-    }
 
     /**
      * Validates the given string input.
