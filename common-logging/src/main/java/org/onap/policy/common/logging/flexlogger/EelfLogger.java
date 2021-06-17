@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ package org.onap.policy.common.logging.flexlogger;
 import com.att.eelf.configuration.EELFLogger.Level;
 import java.io.Serializable;
 import java.util.UUID;
+import lombok.Getter;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.eelf.PolicyLogger;
 
@@ -34,6 +35,7 @@ public class EelfLogger implements Logger, Serializable {
 
     private static final long serialVersionUID = 5385586713941277192L;
     private String className = "";
+    @Getter
     private String transId = UUID.randomUUID().toString();
 
     /**
@@ -132,14 +134,6 @@ public class EelfLogger implements Logger, Serializable {
 
         PolicyLogger.setTransId(transId);
         this.transId = transId;
-    }
-
-    /**
-     * Returns transaction Id for logging.
-     */
-    @Override
-    public String getTransId() {
-        return transId;
     }
 
     /**

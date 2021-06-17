@@ -32,23 +32,23 @@ import java.util.Properties;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * This class provides utilities to read properties from a properties file, and optionally get
  * notifications of future changes.
  */
-public class PropertyUtil {
+public final class PropertyUtil {
 
+
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     protected static class LazyHolder {
         /**
          * Timer thread.  Will not be allocated by the JVM until it is first referenced.
          * This may be overridden by junit tests.
          */
         private static Timer timer = new Timer("PropertyUtil-Timer", true);
-
-        private LazyHolder() {
-            super();
-        }
     }
 
     // this table maps canonical file into a 'ListenerRegistration' instance

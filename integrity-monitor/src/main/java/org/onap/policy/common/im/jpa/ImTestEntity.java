@@ -33,6 +33,10 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.onap.policy.common.im.MonitorTime;
 
 @Entity
@@ -40,7 +44,9 @@ import org.onap.policy.common.im.MonitorTime;
 @NamedQuery(name = " ImTestEntity.findAll", query = "SELECT e FROM ImTestEntity e ")
 @NamedQuery(name = "ImTestEntity.deleteAll", query = "DELETE FROM ImTestEntity WHERE 1=1")
 // @SequenceGenerator(name="seqImTest", initialValue=1, allocationSize=1)
-
+@Getter
+@Setter
+@NoArgsConstructor
 public class ImTestEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -48,6 +54,7 @@ public class ImTestEntity implements Serializable {
     // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seqImTest")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ImTestId")
+    @Setter(AccessLevel.NONE)
     private long imTestId;
 
     @Column(name = "created_by", nullable = false, length = 255)
@@ -64,10 +71,6 @@ public class ImTestEntity implements Serializable {
     @Column(name = "modified_date", nullable = false)
     private Date modifiedDate;
 
-    public ImTestEntity() {
-        // default constructor
-    }
-
     /**
      * PrePersist callback method.
      */
@@ -81,77 +84,5 @@ public class ImTestEntity implements Serializable {
     @PreUpdate
     public void preUpdate() {
         this.modifiedDate = MonitorTime.getInstance().getDate();
-    }
-
-    /**
-     * Get the Im test Id.
-     *
-     * @return the Id
-     */
-    public long getImTestId() {
-        return imTestId;
-    }
-
-    /**
-     * Get the createdBy.
-     *
-     * @return the createdBy
-     */
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
-    /**
-     * Set the createdBy.
-     *
-     * @param createdBy the createdBy to set
-     */
-    public void setCreatedBy(String createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    /**
-     * Get the modifiedBy.
-     *
-     * @return the modifiedBy
-     */
-    public String getModifiedBy() {
-        return modifiedBy;
-    }
-
-    /**
-     * Set the ModifiedBy.
-     *
-     * @param modifiedBy the modifiedBy to set
-     */
-    public void setModifiedBy(String modifiedBy) {
-        this.modifiedBy = modifiedBy;
-    }
-
-    /**
-     * Get the modifiedDate.
-     *
-     * @return the modifiedDate
-     */
-    public Date getModifiedDate() {
-        return modifiedDate;
-    }
-
-    /**
-     * Set the modifiedDate.
-     *
-     * @param modifiedDate the modifiedDate to set
-     */
-    public void setModifiedDate(Date modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
-
-    /**
-     * Get the createdDate.
-     *
-     * @return the createdDate
-     */
-    public Date getCreatedDate() {
-        return createdDate;
     }
 }

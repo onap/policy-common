@@ -22,12 +22,14 @@ package org.onap.policy.common.logging.eelf;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import lombok.Getter;
 
 /**
  * EventTrackInfo contains a ConcurrentHashMap of EventData.
  */
 public class EventTrackInfo {
 
+    @Getter
     private final ConcurrentMap<String, EventData> eventInfo;
 
     /**
@@ -79,12 +81,5 @@ public class EventTrackInfo {
         if (eventInfo != null) {
             eventInfo.remove(eventId);
         }
-    }
-
-    /**
-     * Returns a ConcurrentHashMap of EventData.
-     */
-    public ConcurrentMap<String, EventData> getEventInfo() {
-        return eventInfo;
     }
 }

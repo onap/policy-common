@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2020 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018, 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,8 @@
 package org.onap.policy.common.logging.eelf;
 
 import java.util.EnumMap;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * ErrorCodeMap contains a HashMap of ErrorCodeInfo (error code and error description).
@@ -32,7 +34,8 @@ import java.util.EnumMap;
  * 500 – business process errors
  * 900 – unknown errors
  */
-public class ErrorCodeMap {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ErrorCodeMap {
 
     private static final EnumMap<MessageCodes, ErrorCodeInfo> hm = new EnumMap<>(MessageCodes.class);
 
@@ -91,10 +94,6 @@ public class ErrorCodeMap {
             new ErrorCodeInfo(ERROR_SCHEMA_INVALID, ERROR_SCHEMA_INVALID_DESCRIPTION));
         hm.put(MessageCodes.ERROR_UNKNOWN, new ErrorCodeInfo(ERROR_UNKNOWN, ERROR_UNKNOWN_DESCRIPTION));
         hm.put(MessageCodes.ERROR_AUDIT, new ErrorCodeInfo(ERROR_AUDIT, ERROR_AUDIT_DESCRIPTION));
-    }
-
-    private ErrorCodeMap() {
-        // Private constructor to prevent subclassing
     }
 
     public static ErrorCodeInfo getErrorCodeInfo(MessageCodes messageCode) {

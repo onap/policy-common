@@ -33,6 +33,10 @@ import javax.persistence.PreUpdate;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.onap.policy.common.im.MonitorTime;
 /*
  * The Entity class to persist a policy object ResourceRegistration
@@ -43,7 +47,9 @@ import org.onap.policy.common.im.MonitorTime;
 @NamedQuery(name = " ResourceRegistrationEntity.findAll", query = "SELECT e FROM ResourceRegistrationEntity e ")
 @NamedQuery(name = "ResourceRegistrationEntity.deleteAll", query = "DELETE FROM ResourceRegistrationEntity WHERE 1=1")
 // @SequenceGenerator(name="seqResourceRegistration", initialValue=1, allocationSize=1)
-
+@Getter
+@Setter
+@NoArgsConstructor
 public class ResourceRegistrationEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
@@ -51,6 +57,7 @@ public class ResourceRegistrationEntity implements Serializable {
     // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seqResourceRegistration")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ResourceRegistrationId")
+    @Setter(AccessLevel.NONE)
     private long resourceRegistrationId;
 
     @Column(name = "resourceName", nullable = false, length = 100, unique = true)
@@ -73,10 +80,6 @@ public class ResourceRegistrationEntity implements Serializable {
     @Column(name = "last_updated")
     private Date lastUpdated;
 
-    public ResourceRegistrationEntity() {
-        // default constructor
-    }
-
     /**
      * PrePersist callback method.
      */
@@ -90,73 +93,5 @@ public class ResourceRegistrationEntity implements Serializable {
     @PreUpdate
     public void preUpdate() {
         this.lastUpdated = MonitorTime.getInstance().getDate();
-    }
-
-    /**
-     * Get the resource registration Id.
-     *
-     * @return the Id
-     */
-    public long getResourceRegistrationId() {
-        return resourceRegistrationId;
-    }
-
-    public String getResourceName() {
-        return this.resourceName;
-    }
-
-    public void setResourceName(String resourceName) {
-        this.resourceName = resourceName;
-    }
-
-    public String getResourceUrl() {
-        return this.resourceUrl;
-    }
-
-    public void setResourceUrl(String resourceUrl) {
-        this.resourceUrl = resourceUrl;
-    }
-
-    public String getSite() {
-        return this.site;
-    }
-
-    public void setSite(String site) {
-        this.site = site;
-    }
-
-    public String getNodeType() {
-        return this.nodeType;
-    }
-
-    public void setNodeType(String nodeType) {
-        this.nodeType = nodeType;
-    }
-
-    /**
-     * Get the createdDate.
-     *
-     * @return the createdDate
-     */
-    public Date getCreatedDate() {
-        return createdDate;
-    }
-
-    /**
-     * Get the lastUpdated.
-     *
-     * @return the lastUpdated
-     */
-    public Date getLastUpdated() {
-        return lastUpdated;
-    }
-
-    /**
-     * Set the lastUpdated.
-     *
-     * @param lastUpdated the lastUpdated to set
-     */
-    public void setLastUpdated(Date lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 }

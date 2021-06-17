@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2017-2018, 2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2018, 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,11 @@
 
 package org.onap.policy.common.logging.eelf;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-public class OnapConfigProperties {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class OnapConfigProperties {
 
     /**
      * The Date-time of the start of a transaction.
@@ -81,8 +84,4 @@ public class OnapConfigProperties {
     public static final String SERVER_NAME = "ServerName";
 
     public static final String INVOCATION_ID = "InvocationID";
-
-    private OnapConfigProperties() {
-        // do nothing
-    }
 }

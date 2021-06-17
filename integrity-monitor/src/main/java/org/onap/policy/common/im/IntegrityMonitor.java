@@ -44,6 +44,8 @@ import javax.persistence.FlushModeType;
 import javax.persistence.LockModeType;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.onap.policy.common.im.jmx.ComponentAdmin;
@@ -104,6 +106,7 @@ public class IntegrityMonitor {
 
     public static final long CYCLE_INTERVAL_MILLIS = 1000L;
 
+    @Getter
     private StateManagement stateManager = null;
 
     /**
@@ -162,7 +165,9 @@ public class IntegrityMonitor {
     // For non-lead subsystems, the dependency_group property will be absent.
     private static String[] depGroups = null;
 
-    private static boolean isUnitTesting = false;
+    @Getter
+    @Setter
+    private static boolean unitTesting = false;
 
     // can turn on health checking of dependents via jmx test() call by setting
     // this property to true
@@ -198,7 +203,9 @@ public class IntegrityMonitor {
     private final Object refreshStateAuditLock = new Object();
     private final Object imFlushLock = new Object();
 
+    @Getter
     private Map<String, String> allSeemsWellMap;
+    @Getter
     private Map<String, String> allNotWellMap;
 
     /**
@@ -1254,11 +1261,6 @@ public class IntegrityMonitor {
         }
     }
 
-    // retrieve state manager reference
-    public final StateManagement getStateManager() {
-        return this.stateManager;
-    }
-
     /**
      * Read and validate properties.
      *
@@ -1894,14 +1896,6 @@ public class IntegrityMonitor {
         return (value < 0 ? -1 : value * 1000L);
     }
 
-    public Map<String, String> getAllSeemsWellMap() {
-        return allSeemsWellMap;
-    }
-
-    public Map<String, String> getAllNotWellMap() {
-        return allNotWellMap;
-    }
-
     // these methods may be overridden by junit tests
 
     /**
@@ -1929,17 +1923,5 @@ public class IntegrityMonitor {
      */
     protected String getPersistenceUnit() {
         return PERSISTENCE_UNIT;
-    }
-
-    /*
-     * The remaining methods are used by JUnit tests.
-     */
-
-    public static boolean isUnitTesting() {
-        return isUnitTesting;
-    }
-
-    public static void setUnitTesting(boolean isUnitTesting) {
-        IntegrityMonitor.isUnitTesting = isUnitTesting;
     }
 }
