@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
+import lombok.Getter;
 
 /**
  * Scheduled executor service that uses {@link TestTimeMulti} to execute its tasks. Note:
@@ -48,6 +49,7 @@ public class PseudoScheduledExecutorService implements ScheduledExecutorService 
      * {@code True} if {@link #shutdown()} or {@link #shutdownNow()} has been called,
      * {@code false} otherwise.
      */
+    @Getter
     private boolean shutdown = false;
 
     /**
@@ -77,11 +79,6 @@ public class PseudoScheduledExecutorService implements ScheduledExecutorService 
         shutdown = true;
         return currentTime.cancelItems(this).stream().map(item -> ((RunnableItem) item).getAction())
                         .collect(Collectors.toList());
-    }
-
-    @Override
-    public boolean isShutdown() {
-        return shutdown;
     }
 
     @Override
