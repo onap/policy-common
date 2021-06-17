@@ -37,6 +37,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
@@ -48,6 +51,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Utilities used to test encoding and decoding of Policy objects.
  */
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class GsonTestUtils {
 
     private static final Logger logger = LoggerFactory.getLogger(GsonTestUtils.class);
@@ -65,6 +69,7 @@ public class GsonTestUtils {
     /**
      * Used to encode and decode an object via gson.
      */
+    @Getter
     private Gson gson;
 
     /**
@@ -74,19 +79,6 @@ public class GsonTestUtils {
         GsonTestUtils other = new GsonTestUtilsBuilder().build();
 
         gson = other.gson;
-    }
-
-    /**
-     * Constructs the object.
-     *
-     * @param gson used to encode via gson
-     */
-    protected GsonTestUtils(Gson gson) {
-        this.gson = gson;
-    }
-
-    public Gson getGson() {
-        return gson;
     }
 
     /**
