@@ -25,23 +25,19 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
 /**
  * Utilities for testing serialization and de-serialization of objects.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Serializer {
 
     /**
      * Factory to access various objects. May be overridden for junit tests.
      */
     private static Factory factory = new Factory();
-
-    /**
-     * The constructor.
-     */
-    private Serializer() {
-
-    }
 
     /**
      * Serializes an object into a byte array.

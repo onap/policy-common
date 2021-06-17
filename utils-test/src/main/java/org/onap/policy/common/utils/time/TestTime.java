@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Common Utils-Test
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,26 +22,20 @@ package org.onap.policy.common.utils.time;
 
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicLong;
+import lombok.NoArgsConstructor;
 
 /**
  * "Current" time, when running junit tests. This is intended to be injected into classes
  * under test, to replace their {@link CurrentTime} objects. When {@link #sleep(long)} is
  * invoked, it simply advances the notion of "current" time and returns immediately.
  */
+@NoArgsConstructor
 public class TestTime extends CurrentTime {
 
     /**
      * "Current" time, in milliseconds, used by tests.
      */
     private AtomicLong tcur = new AtomicLong(System.currentTimeMillis());
-
-    /**
-     *  Constructor.
-     *
-     */
-    public TestTime() {
-        super();
-    }
 
     @Override
     public long getMillis() {
