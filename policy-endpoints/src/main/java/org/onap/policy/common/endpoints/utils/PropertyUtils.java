@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,13 @@
 package org.onap.policy.common.endpoints.utils;
 
 import java.util.Properties;
+import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  * Utilities for extracting property values and converting them to other types.
  */
+@AllArgsConstructor
 public class PropertyUtils {
     /**
      * Properties on which to work.
@@ -41,20 +43,6 @@ public class PropertyUtils {
      * Function to invoke if a property value is invalid.
      */
     private TriConsumer<String, String, Exception> invalidHandler;
-
-
-    /**
-     * Constructs the object.
-     *
-     * @param properties properties on which to work
-     * @param prefix prefix to prepend to property names
-     * @param invalidHandler function to invoke if a property value is invalid
-     */
-    public PropertyUtils(Properties properties, String prefix, TriConsumer<String, String, Exception> invalidHandler) {
-        this.properties = properties;
-        this.prefix = prefix;
-        this.invalidHandler = invalidHandler;
-    }
 
     /**
      * Gets a string property.

@@ -23,12 +23,15 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.apache.commons.collections4.queue.CircularFifoQueue;
 import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Getter
 public abstract class TopicBase implements Topic {
 
     /**
@@ -72,6 +75,7 @@ public abstract class TopicBase implements Topic {
     /**
      * All my subscribers for new message notifications.
      */
+    @Getter(AccessLevel.NONE)
     protected final ArrayList<TopicListener> topicListeners = new ArrayList<>();
 
     /**
@@ -216,31 +220,6 @@ public abstract class TopicBase implements Topic {
             logger.warn("{}: cannot after unlocking because of {}", this, e.getMessage(), e);
             return false;
         }
-    }
-
-    @Override
-    public boolean isLocked() {
-        return this.locked;
-    }
-
-    @Override
-    public String getTopic() {
-        return topic;
-    }
-
-    @Override
-    public String getEffectiveTopic() {
-        return effectiveTopic;
-    }
-
-    @Override
-    public boolean isAlive() {
-        return this.alive;
-    }
-
-    @Override
-    public List<String> getServers() {
-        return servers;
     }
 
     @Override

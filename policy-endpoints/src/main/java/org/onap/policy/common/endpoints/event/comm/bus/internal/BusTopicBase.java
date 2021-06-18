@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,11 +21,13 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
+import lombok.Getter;
 import org.onap.policy.common.endpoints.event.comm.bus.ApiKeyEnabled;
 
 /**
  * Bus Topic Base.
  */
+@Getter
 public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
 
     /**
@@ -66,34 +68,6 @@ public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
         this.apiSecret = busTopicParams.getApiSecret();
         this.useHttps = busTopicParams.isUseHttps();
         this.allowSelfSignedCerts = busTopicParams.isAllowSelfSignedCerts();
-    }
-
-    @Override
-    public String getApiKey() {
-        return apiKey;
-    }
-
-    @Override
-    public String getApiSecret() {
-        return apiSecret;
-    }
-
-    /**
-     * Is using HTTPS.
-     *
-     * @return if using https
-     */
-    public boolean isUseHttps() {
-        return useHttps;
-    }
-
-    /**
-     * Is self signed certificates allowed.
-     *
-     * @return if self signed certificates are allowed
-     */
-    public boolean isAllowSelfSignedCerts() {
-        return allowSelfSignedCerts;
     }
 
     protected boolean anyNullOrEmpty(String... args) {

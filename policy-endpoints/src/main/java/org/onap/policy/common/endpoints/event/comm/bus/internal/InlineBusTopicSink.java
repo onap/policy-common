@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018-2019 Samsung Electronics Co., Ltd.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
 * ================================================================================
@@ -23,6 +23,8 @@
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import java.util.UUID;
+import lombok.Getter;
+import lombok.Setter;
 import org.onap.policy.common.endpoints.event.comm.bus.BusTopicSink;
 import org.onap.policy.common.endpoints.utils.NetLoggerUtil;
 import org.onap.policy.common.endpoints.utils.NetLoggerUtil.EventType;
@@ -44,7 +46,9 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
     /**
      * The partition key to publish to.
      */
-    protected String partitionId;
+    @Getter
+    @Setter
+    protected String partitionKey;
 
     /**
      * Message bus publisher.
@@ -68,9 +72,9 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
         super(busTopicParams);
 
         if (busTopicParams.isPartitionIdInvalid()) {
-            this.partitionId = UUID.randomUUID().toString();
+            this.partitionKey = UUID.randomUUID().toString();
         } else {
-            this.partitionId = busTopicParams.getPartitionId();
+            this.partitionKey = busTopicParams.getPartitionId();
         }
     }
 
@@ -139,7 +143,7 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
 
             NetLoggerUtil.log(EventType.OUT, this.getTopicCommInfrastructure(), this.topic, message);
 
-            publisher.send(this.partitionId, message);
+            publisher.send(this.partitionKey, message);
             broadcast(message);
         } catch (Exception e) {
             logger.warn("{}: cannot send because of {}", this, e.getMessage(), e);
@@ -147,16 +151,6 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
         }
 
         return true;
-    }
-
-    @Override
-    public void setPartitionKey(String partitionKey) {
-        this.partitionId = partitionKey;
-    }
-
-    @Override
-    public String getPartitionKey() {
-        return this.partitionId;
     }
 
     @Override
@@ -188,6 +182,7 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
 
     @Override
     public String toString() {
-        return "InlineBusTopicSink [partitionId=" + partitionId + ", alive=" + alive + ", publisher=" + publisher + "]";
+        return "InlineBusTopicSink [partitionId=" + partitionKey + ", alive=" + alive + ", publisher=" + publisher
+                        + "]";
     }
 }

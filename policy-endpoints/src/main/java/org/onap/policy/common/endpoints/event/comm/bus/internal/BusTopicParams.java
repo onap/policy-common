@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2018 Samsung Electronics Co., Ltd. All rights reserved.
- * Modifications Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2018-2019, 2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,9 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import java.util.List;
 import java.util.Map;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -78,6 +80,7 @@ public class BusTopicParams {
     private String clientName;
     private String hostname;
     private String basePath;
+    @Getter
     private String serializationProvider;
 
     public static TopicParamsBuilder builder() {
@@ -165,16 +168,10 @@ public class BusTopicParams {
         return additionalProps != null;
     }
 
-    public String getSerializationProvider() {
-        return serializationProvider;
-    }
-
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class TopicParamsBuilder {
 
         final BusTopicParams params = new BusTopicParams();
-
-        private TopicParamsBuilder() {
-        }
 
         public TopicParamsBuilder servers(List<String> servers) {
             this.params.servers = servers;

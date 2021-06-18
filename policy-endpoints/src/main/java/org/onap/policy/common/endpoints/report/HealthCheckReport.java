@@ -21,6 +21,8 @@
 
 package org.onap.policy.common.endpoints.report;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 /**
@@ -28,6 +30,8 @@ import lombok.ToString;
  *
  * @author Ram Krishna Verma (ram.krishna.verma@ericsson.com)
  */
+@Getter
+@Setter
 @ToString
 public class HealthCheckReport {
 
@@ -36,94 +40,4 @@ public class HealthCheckReport {
     private boolean healthy;
     private int code;
     private String message;
-
-    /**
-     * Returns the name of this report.
-     *
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Set the name of this report.
-     *
-     * @param name the name to set
-     */
-    public void setName(final String name) {
-        this.name = name;
-    }
-
-    /**
-     * Returns the url of this report.
-     *
-     * @return the url
-     */
-    public String getUrl() {
-        return url;
-    }
-
-    /**
-     * Set the url of this report.
-     *
-     * @param url the url to set
-     */
-    public void setUrl(final String url) {
-        this.url = url;
-    }
-
-    /**
-     * Returns the health status of this report.
-     *
-     * @return the healthy
-     */
-    public boolean isHealthy() {
-        return healthy;
-    }
-
-    /**
-     * Set the health status of this report.
-     *
-     * @param healthy the healthy to set
-     */
-    public void setHealthy(final boolean healthy) {
-        this.healthy = healthy;
-    }
-
-    /**
-     * Returns the code of this report.
-     *
-     * @return the code
-     */
-    public int getCode() {
-        return code;
-    }
-
-    /**
-     * Set the code of this report.
-     *
-     * @param code the code to set
-     */
-    public void setCode(final int code) {
-        this.code = code;
-    }
-
-    /**
-     * Returns the message of this report.
-     *
-     * @return the message
-     */
-    public String getMessage() {
-        return message;
-    }
-
-    /**
-     * Set the message of this report.
-     *
-     * @param message the message to set
-     */
-    public void setMessage(final String message) {
-        this.message = message;
-    }
 }

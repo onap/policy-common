@@ -24,6 +24,7 @@ package org.onap.policy.common.endpoints.http.server.internal;
 
 import java.util.EnumSet;
 import javax.servlet.DispatcherType;
+import lombok.Getter;
 import lombok.ToString;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
@@ -44,7 +45,6 @@ import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.onap.aaf.cadi.filter.CadiFilter;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
-import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,26 +72,31 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     /**
      * Server name.
      */
+    @Getter
     protected final String name;
 
     /**
      * Server host address.
      */
+    @Getter
     protected final String host;
 
     /**
      * Server port to bind.
      */
+    @Getter
     protected final int port;
 
     /**
      * Server auth user name.
      */
+    @Getter
     protected String user;
 
     /**
      * Server auth password name.
      */
+    @Getter
     protected String password;
 
     /**
@@ -459,49 +464,6 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         }
 
         return false;
-    }
-
-    @Override
-    public int getPort() {
-        return this.port;
-    }
-
-    /**
-     * Get name.
-     *
-     * @return the name
-     */
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Get host.
-     *
-     * @return the host
-     */
-    public String getHost() {
-        return host;
-    }
-
-    /**
-     * Get user.
-     *
-     * @return the user
-     */
-    public String getUser() {
-        return user;
-    }
-
-    /**
-     * Get password.
-     *
-     * @return the password
-     */
-    @GsonJsonIgnore
-    public String getPassword() {
-        return password;
     }
 
     @Override

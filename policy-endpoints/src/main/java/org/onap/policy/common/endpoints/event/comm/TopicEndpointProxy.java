@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import lombok.Getter;
 import org.onap.policy.common.capabilities.Startable;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSink;
@@ -53,11 +54,13 @@ class TopicEndpointProxy implements TopicEndpoint {
     /**
      * Is this element locked boolean.
      */
+    @Getter
     private volatile boolean locked = false;
 
     /**
      * Is this element alive boolean.
      */
+    @Getter
     private volatile boolean alive = false;
 
     @Override
@@ -435,11 +438,6 @@ class TopicEndpointProxy implements TopicEndpoint {
     }
 
     @Override
-    public boolean isAlive() {
-        return this.alive;
-    }
-
-    @Override
     public boolean lock() {
         boolean shouldLock;
 
@@ -481,11 +479,6 @@ class TopicEndpointProxy implements TopicEndpoint {
         }
 
         return true;
-    }
-
-    @Override
-    public boolean isLocked() {
-        return this.locked;
     }
 
     @Override

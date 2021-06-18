@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,6 +21,8 @@
 
 package org.onap.policy.common.endpoints.listeners;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.utils.coder.Coder;
 import org.onap.policy.common.utils.coder.CoderException;
@@ -35,6 +37,7 @@ import org.slf4j.LoggerFactory;
  *
  * @param <T> type of message/POJO this handles
  */
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class ScoListener<T> {
 
     private static final Logger logger = LoggerFactory.getLogger(ScoListener.class);
@@ -48,15 +51,6 @@ public abstract class ScoListener<T> {
      * Class of message this handles.
      */
     private final Class<T> clazz;
-
-    /**
-     * Constructs the object.
-     *
-     * @param clazz class of message this handles
-     */
-    protected ScoListener(Class<T> clazz) {
-        this.clazz = clazz;
-    }
 
     /**
      * Receives an event, translates it into the desired type of object, and passes it to
