@@ -27,6 +27,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import javax.net.ssl.TrustManager;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.apache.commons.net.util.TrustManagerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +36,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Network Utilities.
  */
-public class NetworkUtil {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class NetworkUtil {
 
     public static final Logger logger = LoggerFactory.getLogger(NetworkUtil.class.getName());
 
@@ -48,10 +51,6 @@ public class NetworkUtil {
      * A trust manager that always trusts certificates.
      */
     private static final TrustManager[] ALWAYS_TRUST_MANAGER = { TrustManagerUtils.getAcceptAllTrustManager() };
-
-    private NetworkUtil() {
-        // Empty constructor
-    }
 
     /**
      * Allocates an available port on which a server may listen.

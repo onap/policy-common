@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Common Utils
  * ================================================================================
- * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@ public class EntityTransCloserTest {
     public void testEntityTransCloser() {
         EntityTransCloser entityTransCloser = new EntityTransCloser(trans);
 
-        assertEquals(trans, entityTransCloser.getTransation());
+        assertEquals(trans, entityTransCloser.getTransaction());
 
         // verify that transaction was started
         verify(trans).begin();
@@ -72,7 +72,7 @@ public class EntityTransCloserTest {
     @Test
     public void testGetTransation() {
         try (EntityTransCloser t = new EntityTransCloser(trans)) {
-            assertEquals(trans, t.getTransation());
+            assertEquals(trans, t.getTransaction());
         }
     }
 

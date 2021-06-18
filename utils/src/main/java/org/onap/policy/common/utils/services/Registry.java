@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,8 @@ package org.onap.policy.common.utils.services;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +31,7 @@ import org.slf4j.LoggerFactory;
  * This is a simple object registry, similar in spirit to JNDI, but suitable for use in a
  * stand-alone JVM.
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Registry {
     private static final Logger logger = LoggerFactory.getLogger(Registry.class);
 
@@ -38,13 +41,6 @@ public class Registry {
      * Registry map.
      */
     private Map<String, Object> name2object = new ConcurrentHashMap<>();
-
-    /**
-     * Constructs the object.
-     */
-    private Registry() {
-        super();
-    }
 
     /**
      * Registers an object.

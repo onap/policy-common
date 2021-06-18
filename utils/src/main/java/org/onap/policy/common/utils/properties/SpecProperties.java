@@ -21,10 +21,13 @@
 package org.onap.policy.common.utils.properties;
 
 import java.util.Properties;
+import lombok.AccessLevel;
+import lombok.Getter;
 
 /**
  * Properties with an optional specialization (e.g., session name, controller name).
  */
+@Getter(AccessLevel.PROTECTED)
 public class SpecProperties extends Properties {
     private static final long serialVersionUID = 1L;
 
@@ -97,14 +100,6 @@ public class SpecProperties extends Properties {
         }
 
         return super.getProperty(key);
-    }
-
-    protected String getPrefix() {
-        return prefix;
-    }
-
-    protected String getSpecPrefix() {
-        return specPrefix;
     }
 
     @Override

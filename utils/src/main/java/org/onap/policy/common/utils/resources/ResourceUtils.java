@@ -34,6 +34,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +43,8 @@ import org.slf4j.LoggerFactory;
  * This is common utility class with static methods for handling Java resources on the class path. It is an abstract
  * class to prevent any direct instantiation and private constructor to prevent extending this class.
  */
-public abstract class ResourceUtils {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class ResourceUtils {
     // Get a reference to the logger
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceUtils.class);
 
@@ -53,13 +56,6 @@ public abstract class ResourceUtils {
     // Resource types
     private static final String FILE_PROTOCOL = "file";
     private static final String JAR_PROTOCOL = "jar";
-
-    /**
-     * Private constructor used to prevent sub class instantiation.
-     */
-    private ResourceUtils() {
-        // Prevent construction of this class
-    }
 
     /**
      * Method to resolve a resource; the local file system is checked first and then the class path is checked.
