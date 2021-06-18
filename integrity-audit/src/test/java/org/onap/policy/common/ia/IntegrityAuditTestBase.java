@@ -304,8 +304,7 @@ public class IntegrityAuditTestBase {
      * Verifies that items appear within the log, in order. A given item may appear more than once.
      * In addition, the log may contain extra items; those are ignored.
      *
-     * @param textre regular expression used to extract an item from a line in the log. The first
-     *        "capture" group of the regular expression is assumed to contain the extracted item
+     * @param app where data has been logged
      * @param items items that should be matched by the items extracted from the log, in order
      * @throws IOException if an IO error occurs
      * @throws AssertionError if the desired items were not all found

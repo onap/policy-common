@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2020 Nordix Foundation.
+ *  Modifications Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,9 +85,9 @@ public class JettyStaticResourceServer extends JettyServletServer {
      *
      * @throws IllegalArgumentException if invalid arguments are provided
      */
-    protected synchronized ServletHolder getDefaultServlet(String servPath) {
+    protected synchronized ServletHolder getDefaultServlet(String servletPath) {
 
-        return servlets.computeIfAbsent(servPath, key -> context.addServlet(DefaultServlet.class, servPath));
+        return servlets.computeIfAbsent(servletPath, key -> context.addServlet(DefaultServlet.class, servletPath));
     }
 
     @Override
