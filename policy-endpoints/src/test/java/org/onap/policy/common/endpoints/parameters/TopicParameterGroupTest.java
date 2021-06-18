@@ -120,7 +120,7 @@ public class TopicParameterGroupTest {
      * Any parameters added to @link TopicParameters or @link BusTopicParams must be added to
      * TopicParameters_all_params.json.
      *
-     * @param topicParameters topic parameters
+     * @param topicParametersList list of topic parameters
      * @return true if all parameters are not empty (if string) or true (if boolean)
      * @throws Exception the exception
      */
