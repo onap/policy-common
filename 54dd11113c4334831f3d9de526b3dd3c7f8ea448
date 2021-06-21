@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "950fc7dd_f1198200",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/validation/ParameterGroupConstraint.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 7565
+      },
+      "writtenOn": "2021-06-21T14:50:51Z",
+      "side": 1,
+      "message": "currently I am not using annotation in methods, and not sure if it will be used in the future, so I have removed it.",
+      "parentUuid": "a6ced2bd_3c4bcf33",
+      "range": {
+        "startLine": 33,
+        "startChar": 9,
+        "endLine": 33,
+        "endChar": 27
+      },
+      "revId": "54dd11113c4334831f3d9de526b3dd3c7f8ea448",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "95f7bb5f_24888496",
         "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/validation/ParameterGroupConstraint.java",
         "patchSetId": 2
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "52fb6318_652a5670",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/validation/ParameterGroupConstraint.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 7565
+      },
+      "writtenOn": "2021-06-21T14:50:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95f7bb5f_24888496",
+      "revId": "54dd11113c4334831f3d9de526b3dd3c7f8ea448",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "cd958ef9_2c83d32a",
         "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/validation/ParameterGroupValidator.java",
         "patchSetId": 2
@@ -56,6 +98,24 @@
       "revId": "54dd11113c4334831f3d9de526b3dd3c7f8ea448",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ce4e9cca_d2bc1712",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/validation/ParameterGroupValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 7565
+      },
+      "writtenOn": "2021-06-21T14:50:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd958ef9_2c83d32a",
+      "revId": "54dd11113c4334831f3d9de526b3dd3c7f8ea448",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
