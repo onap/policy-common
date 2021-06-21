@@ -22,6 +22,30 @@
       "revId": "c67c39a914b56474d06999856a899bcbbf22a892",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77ac13c4_27962fbd",
+        "filename": "common-parameters/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-06-21T21:01:18Z",
+      "side": 1,
+      "message": "maybe it should go in policy-parent and the new dependency added to the dependencyManagement section of the same pom",
+      "parentUuid": "a7e60a4f_8a52c285",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 17
+      },
+      "revId": "c67c39a914b56474d06999856a899bcbbf22a892",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
