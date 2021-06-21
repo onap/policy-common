@@ -30,6 +30,10 @@
     <name>${project.artifactId}</name>
     <description>[${project.parent.artifactId}] module provides common property and parameter handling the ONAP Policy Framework</description>
 
+    <properties>
+        <jakarta-api.version>2.0.2</jakarta-api.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.google.re2j</groupId>
@@ -71,6 +75,11 @@
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>${jakarta-api.version}</version>
         </dependency>
     </dependencies>
 </project>
