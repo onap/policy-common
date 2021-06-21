@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a6ced2bd_3c4bcf33",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/validation/ParameterGroupConstraint.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-06-21T14:17:27Z",
+      "side": 1,
+      "message": "do we anticipate that methods would be annotated?",
+      "range": {
+        "startLine": 33,
+        "startChar": 9,
+        "endLine": 33,
+        "endChar": 27
+      },
+      "revId": "54dd11113c4334831f3d9de526b3dd3c7f8ea448",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "95f7bb5f_24888496",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/validation/ParameterGroupConstraint.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-06-21T14:17:27Z",
+      "side": 1,
+      "message": "missing newline at the end of the file",
+      "revId": "54dd11113c4334831f3d9de526b3dd3c7f8ea448",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cd958ef9_2c83d32a",
+        "filename": "common-parameters/src/main/java/org/onap/policy/common/parameters/validation/ParameterGroupValidator.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-06-21T14:17:27Z",
+      "side": 1,
+      "message": "missing newline at the end of the file",
+      "revId": "54dd11113c4334831f3d9de526b3dd3c7f8ea448",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
