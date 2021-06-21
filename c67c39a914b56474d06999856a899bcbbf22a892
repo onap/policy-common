@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a7e60a4f_8a52c285",
+        "filename": "common-parameters/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2021-06-21T20:55:44Z",
+      "side": 1,
+      "message": "May be this could have gone to top level pom in policy/common to make it available to other submodules.",
+      "range": {
+        "startLine": 33,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 17
+      },
+      "revId": "c67c39a914b56474d06999856a899bcbbf22a892",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
