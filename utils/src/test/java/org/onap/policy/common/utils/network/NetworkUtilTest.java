@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-utils
  * ================================================================================
- * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.utils.network;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
@@ -89,6 +90,15 @@ public class NetworkUtilTest {
             new Accepter(localSocket).start();
             assertTrue(NetworkUtil.isTcpPortOpen(LOCALHOST, localPort, 5, 1000L));
         }
+    }
+
+    @Test
+    public void testGenUniqueName() {
+        String name = NetworkUtil.genUniqueName(LOCALHOST);
+        assertThat(name).isNotBlank().isNotEqualTo(LOCALHOST);
+
+        // second call should generate a different value
+        assertThat(NetworkUtil.genUniqueName(LOCALHOST)).isNotEqualTo(name);
     }
 
     /**

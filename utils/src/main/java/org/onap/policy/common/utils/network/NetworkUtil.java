@@ -26,6 +26,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.UUID;
 import javax.net.ssl.TrustManager;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -169,5 +170,16 @@ public final class NetworkUtil {
         }
 
         return "127.0.0.1";
+    }
+
+    /**
+     * Generates a globally unique name, typically for use in PDP messages, to uniquely
+     * identify a PDP (or PAP), regardless on what cluster it resides.
+     *
+     * @param prefix text to be prepended to the generated value
+     * @return a globally unique name
+     */
+    public static String genUniqueName(String prefix) {
+        return prefix + "-" + UUID.randomUUID();
     }
 }
