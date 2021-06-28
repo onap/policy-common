@@ -38,7 +38,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "IaTestEntity")
 @NamedQueries({@NamedQuery(name = " IaTestEntity.findAll", query = "SELECT e FROM IaTestEntity e "),
-        @NamedQuery(name = "IaTestEntity.deleteAll", query = "DELETE FROM IaTestEntity WHERE 1=1")})
+    @NamedQuery(name = "IaTestEntity.deleteAll", query = "DELETE FROM IaTestEntity WHERE 1=1")})
 
 public class IaTestEntity implements Serializable {
     private static final long serialVersionUID = 1L;
