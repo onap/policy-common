@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c15ec33e_3e3db5a6",
+        "filename": "integrity-audit/src/test/java/org/onap/policy/common/ia/jpa/IaTestEntity.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-06-28T14:29:54Z",
+      "side": 1,
+      "message": "wow, checkstyle is really getting picky",
+      "revId": "5f6e5f99d065ecc578265262f01afd71cabbd54c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
