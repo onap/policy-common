@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Monitor
  * ================================================================================
- * Copyright (C) 2017-2018, 2020-2021 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,50 +20,49 @@
 
 package org.onap.policy.common.im.jpa;
 
+import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQuery;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import lombok.AccessLevel;
+import javax.persistence.PreUpdate;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.onap.policy.common.im.MonitorTime;
 
-@Entity
-@Table(name = "ForwardProgressEntity")
-@NamedQuery(name = " ForwardProgressEntity.findAll", query = "SELECT e FROM ForwardProgressEntity e ")
-@NamedQuery(name = "ForwardProgressEntity.deleteAll", query = "DELETE FROM ForwardProgressEntity WHERE 1=1")
-// @SequenceGenerator(name="seqForwardProgress", initialValue=1, allocationSize=1)
+/*
+ * Superclass of Entities having create and update timestamps.
+ */
+@MappedSuperclass
 @Getter
 @Setter
 @NoArgsConstructor
-public class ForwardProgressEntity extends DateEntity {
+public class DateEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id
-    // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seqForwardProgress")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "forwardProgressId")
-    @Setter(AccessLevel.NONE)
-    private long forwardProgressId;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "created_date", updatable = false)
+    private Date createdDate;
 
-    @Column(name = "resourceName", nullable = false, length = 100, unique = true)
-    private String resourceName;
-
-    @Column(name = "fpc_count", nullable = false)
-    private long fpcCount;
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "last_updated")
+    private Date lastUpdated;
 
     /**
      * PrePersist callback method.
      */
     @PrePersist
-    @Override
     public void prePersist() {
-        this.fpcCount = 0;
-        super.prePersist();
+        var date = MonitorTime.getInstance().getDate();
+        this.createdDate = date;
+        this.lastUpdated = date;
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.lastUpdated = MonitorTime.getInstance().getDate();
     }
 }
