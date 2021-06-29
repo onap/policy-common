@@ -20,24 +20,17 @@
 
 package org.onap.policy.common.im.jpa;
 
-import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
-import javax.persistence.PrePersist;
-import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.onap.policy.common.im.MonitorTime;
 /*
  * The Entity class to persist a policy object ResourceRegistration
  */
@@ -50,7 +43,7 @@ import org.onap.policy.common.im.MonitorTime;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ResourceRegistrationEntity implements Serializable {
+public class ResourceRegistrationEntity extends DateEntity {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -71,27 +64,4 @@ public class ResourceRegistrationEntity implements Serializable {
 
     @Column(name = "nodeType", nullable = true, length = 50)
     private String nodeType;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "created_date", updatable = false)
-    private Date createdDate;
-
-    @Temporal(TemporalType.TIMESTAMP)
-    @Column(name = "last_updated")
-    private Date lastUpdated;
-
-    /**
-     * PrePersist callback method.
-     */
-    @PrePersist
-    public void prePersist() {
-        var date = MonitorTime.getInstance().getDate();
-        this.createdDate = date;
-        this.lastUpdated = date;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.lastUpdated = MonitorTime.getInstance().getDate();
-    }
 }
