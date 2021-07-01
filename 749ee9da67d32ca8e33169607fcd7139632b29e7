@@ -16,6 +16,24 @@
       "revId": "749ee9da67d32ca8e33169607fcd7139632b29e7",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "576543f6_a3b8c913",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-07-01T15:54:25Z",
+      "side": 0,
+      "message": "I would be OK with that, but then any dmaap logs would not have anything obvious to identify the request as coming from PAP, PDPs, etc.\n\nI just pushed a patch with a little more straight-forward logic.  Is that satisfactory?\n\nof course, we could discard this review altogether and do one of the following:\n1) use helm chart to generate a UUID for the consumerInstance (as suggested in the other review); or\n2) modify the PAP code to force the consumerInstance to a UUID for the topic of interest\n\nthoughts?",
+      "parentUuid": "77ac0539_f34591dd",
+      "revId": "749ee9da67d32ca8e33169607fcd7139632b29e7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
