@@ -25,6 +25,8 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.BusTopicSource;
@@ -81,6 +83,14 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
      * Independent thread reading message over my topic.
      */
     protected Thread busPollerThread;
+
+    /**
+     * Used to indicate that {@link #stop()} has been called. Initially, it so indicates
+     * (i.e., because {@link #start()} has not been called yet). Replaced with a new,
+     * unfinished latch when start() is invoked, decremented when stop() is invoked. Never
+     * null.
+     */
+    private CountDownLatch stopped = new CountDownLatch(0);
 
 
     /**
@@ -178,6 +188,7 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
                 try {
                     this.init();
                     this.alive = true;
+                    this.stopped = new CountDownLatch(1);
                     this.busPollerThread = makePollerThread();
                     this.busPollerThread.setName(this.getTopicCommInfrastructure() + "-source-" + this.getTopic());
                     busPollerThread.start();
@@ -205,10 +216,11 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
         logger.info("{}: stopping", this);
 
         synchronized (this) {
-            BusConsumer consumerCopy = this.consumer;
+            final BusConsumer consumerCopy = this.consumer;
 
             this.alive = false;
             this.consumer = null;
+            this.stopped.countDown();
 
             if (consumerCopy != null) {
                 try {
@@ -229,11 +241,41 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
      */
     @Override
     public void run() {
+        long exceptionWaitTime = fetchTimeout == PolicyEndPointProperties.NO_TIMEOUT_MS_FETCH
+                        ? PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH
+                        : fetchTimeout;
+
         while (this.alive) {
+            long begin = System.currentTimeMillis();
+            long remaining = 0;
+
             try {
                 fetchAllMessages();
             } catch (IOException | RuntimeException e) {
                 logger.error("{}: cannot fetch", this, e);
+                remaining = begin + exceptionWaitTime - System.currentTimeMillis();
+            }
+
+            try {
+                if (remaining > 0) {
+                    /*
+                     * fetch failed too quickly, which might indicate that we're in a
+                     * fast-fail loop, so we force it to wait the full fetch time
+                     */
+                    CountDownLatch stopper;
+                    synchronized (this) {
+                        stopper = this.stopped;
+                    }
+
+                    logger.info("{}: sleeping {}ms", this, remaining);
+                    if (stopper.await(remaining, TimeUnit.MILLISECONDS)) {
+                        logger.info("{}: stop() called - sleep terminated");
+                    }
+                }
+
+            } catch (InterruptedException e) {
+                logger.warn("{}: sleep interrupted", this, e);
+                Thread.currentThread().interrupt();
             }
         }
 
