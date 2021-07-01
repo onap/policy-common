@@ -73,6 +73,11 @@ public interface BusConsumer {
         protected int fetchTimeout;
 
         /**
+         * Time to sleep on a fetch failure.
+         */
+        private int sleepTime;
+
+        /**
          * Counted down when {@link #close()} is invoked.
          */
         private CountDownLatch closeCondition = new CountDownLatch(1);
@@ -85,6 +90,8 @@ public interface BusConsumer {
          */
         protected FetchingBusConsumer(BusTopicParams busTopicParams) {
             this.fetchTimeout = busTopicParams.getFetchTimeout();
+            this.sleepTime = (this.fetchTimeout <= 0 ? PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH
+                            : this.fetchTimeout);
         }
 
         /**
@@ -93,7 +100,8 @@ public interface BusConsumer {
          */
         protected void sleepAfterFetchFailure() {
             try {
-                if (this.closeCondition.await(this.fetchTimeout, TimeUnit.MILLISECONDS)) {
+                logger.info("{}: backoff for {}ms", this, sleepTime);
+                if (this.closeCondition.await(this.sleepTime, TimeUnit.MILLISECONDS)) {
                     logger.info("{}: closed while handling fetch error", this);
                 }
 
@@ -185,8 +193,7 @@ public interface BusConsumer {
             try {
                 return this.consumer.fetch();
             } catch (final IOException e) { //NOSONAR
-                logger.error("{}: cannot fetch because of {} - backoff for {} ms.", this, e.getMessage(),
-                        this.fetchTimeout);
+                logger.error("{}: cannot fetch because of {}", this, e.getMessage());
                 sleepAfterFetchFailure();
                 throw e;
             }
