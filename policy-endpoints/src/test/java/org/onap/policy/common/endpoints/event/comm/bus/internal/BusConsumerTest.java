@@ -46,6 +46,7 @@ import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.Dmaa
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapConsumerWrapper;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapDmeConsumerWrapper;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FetchingBusConsumer;
+import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.powermock.reflect.Whitebox;
 
 public class BusConsumerTest extends TopicTestBase {
@@ -60,9 +61,29 @@ public class BusConsumerTest extends TopicTestBase {
     }
 
     @Test
+    public void testFetchingBusConsumer() throws InterruptedException {
+        // should not be negative
+        var cons = new FetchingBusConsumerImpl(makeBuilder().fetchTimeout(-1).build());
+        assertThat(cons.getSleepTime()).isEqualTo(PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH);
+
+        // should not be zero
+        cons = new FetchingBusConsumerImpl(makeBuilder().fetchTimeout(0).build());
+        assertThat(cons.getSleepTime()).isEqualTo(PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH);
+
+        // should not be too large
+        cons = new FetchingBusConsumerImpl(
+                        makeBuilder().fetchTimeout(PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH + 100).build());
+        assertThat(cons.getSleepTime()).isEqualTo(PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH);
+
+        // should not be what was specified
+        cons = new FetchingBusConsumerImpl(makeBuilder().fetchTimeout(100).build());
+        assertThat(cons.getSleepTime()).isEqualTo(100);
+    }
+
+    @Test
     public void testFetchingBusConsumerSleepAfterFetchFailure() throws InterruptedException {
 
-        var cons = new FetchingBusConsumer(makeBuilder().fetchTimeout(SHORT_TIMEOUT_MILLIS).build()) {
+        var cons = new FetchingBusConsumerImpl(makeBuilder().fetchTimeout(SHORT_TIMEOUT_MILLIS).build()) {
 
             private CountDownLatch started = new CountDownLatch(1);
 
@@ -70,11 +91,6 @@ public class BusConsumerTest extends TopicTestBase {
             protected void sleepAfterFetchFailure() {
                 started.countDown();
                 super.sleepAfterFetchFailure();
-            }
-
-            @Override
-            public Iterable<String> fetch() throws IOException {
-                return null;
             }
         };
 
@@ -277,5 +293,17 @@ public class BusConsumerTest extends TopicTestBase {
     @Test(expected = IllegalArgumentException.class)
     public void testDmaapDmeConsumerWrapper_InvalidPartner() throws Exception {
         new DmaapDmeConsumerWrapper(makeBuilder().partner(null).build());
+    }
+
+    private static class FetchingBusConsumerImpl extends FetchingBusConsumer {
+
+        protected FetchingBusConsumerImpl(BusTopicParams busTopicParams) {
+            super(busTopicParams);
+        }
+
+        @Override
+        public Iterable<String> fetch() throws IOException {
+            return null;
+        }
     }
 }
