@@ -34,6 +34,24 @@
       "revId": "749ee9da67d32ca8e33169607fcd7139632b29e7",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c9ac1d06_743f973e",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-07-01T19:01:31Z",
+      "side": 0,
+      "message": "It is good as you have it in your last push, Jim, thank you.",
+      "parentUuid": "576543f6_a3b8c913",
+      "revId": "749ee9da67d32ca8e33169607fcd7139632b29e7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
