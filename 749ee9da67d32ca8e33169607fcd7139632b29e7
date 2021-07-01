@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "77ac0539_f34591dd",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedBusTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-07-01T14:54:11Z",
+      "side": 0,
+      "message": "I think you could just replace NetworkUtil.getHostname() with UUID.randomUUID().toString() (for all cases) and keep the code simpler, I don\u0027t think there are side effects.",
+      "revId": "749ee9da67d32ca8e33169607fcd7139632b29e7",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
