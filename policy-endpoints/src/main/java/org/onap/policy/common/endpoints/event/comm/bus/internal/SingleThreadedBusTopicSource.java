@@ -94,15 +94,20 @@ public abstract class SingleThreadedBusTopicSource extends BusTopicBase
 
         super(busTopicParams);
 
-        if (busTopicParams.isConsumerGroupInvalid()) {
+        if (busTopicParams.isConsumerGroupInvalid() && busTopicParams.isConsumerInstanceInvalid()) {
             this.consumerGroup = UUID.randomUUID().toString();
+            this.consumerInstance = NetworkUtil.getHostname();
+
+        } else if (busTopicParams.isConsumerGroupInvalid()) {
+            this.consumerGroup = UUID.randomUUID().toString();
+            this.consumerInstance = busTopicParams.getConsumerInstance();
+
+        } else if (busTopicParams.isConsumerInstanceInvalid()) {
+            this.consumerGroup = busTopicParams.getConsumerGroup();
+            this.consumerInstance = UUID.randomUUID().toString();
+
         } else {
             this.consumerGroup = busTopicParams.getConsumerGroup();
-        }
-
-        if (busTopicParams.isConsumerInstanceInvalid()) {
-            this.consumerInstance = NetworkUtil.getHostname();
-        } else {
             this.consumerInstance = busTopicParams.getConsumerInstance();
         }
 

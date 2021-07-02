@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2018-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -44,6 +45,7 @@ import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
+import org.onap.policy.common.utils.network.NetworkUtil;
 
 public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     private Thread thread;
@@ -160,12 +162,30 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
 
     @Test
     public void testSingleThreadedBusTopicSource() {
+        // Note: if the value contains "-", it's probably a UUID
+
         // verify that different wrappers can be built
-        new SingleThreadedBusTopicSourceImpl(makeBuilder().consumerGroup(null).build());
-        new SingleThreadedBusTopicSourceImpl(makeBuilder().consumerInstance(null).build());
-        new SingleThreadedBusTopicSourceImpl(makeBuilder().fetchTimeout(-1).build());
-        assertThatCode(() -> new SingleThreadedBusTopicSourceImpl(makeBuilder().fetchLimit(-1).build()))
-                        .doesNotThrowAnyException();
+        source = new SingleThreadedBusTopicSourceImpl(makeBuilder().build());
+        assertThat(source.getConsumerGroup()).isEqualTo(MY_CONS_GROUP);
+        assertThat(source.getConsumerInstance()).isEqualTo(MY_CONS_INST);
+
+        // group is null => group is UUID, instance is as provided
+        source = new SingleThreadedBusTopicSourceImpl(makeBuilder().consumerGroup(null).build());
+        assertThat(source.getConsumerGroup()).contains("-").isNotEqualTo(NetworkUtil.getHostname());
+        assertThat(source.getConsumerInstance()).isEqualTo(MY_CONS_INST);
+
+        // instance is null => group is as provided, instance is UUID
+        source = new SingleThreadedBusTopicSourceImpl(makeBuilder().consumerInstance(null).build());
+        assertThat(source.getConsumerGroup()).isEqualTo(MY_CONS_GROUP);
+        assertThat(source.getConsumerInstance()).contains("-").isNotEqualTo(NetworkUtil.getHostname());
+
+        // group & instance are null => group is UUID, instance is hostname
+        source = new SingleThreadedBusTopicSourceImpl(makeBuilder().consumerGroup(null).consumerInstance(null).build());
+        assertThat(source.getConsumerGroup()).contains("-").isNotEqualTo(NetworkUtil.getHostname());
+        assertThat(source.getConsumerInstance()).isEqualTo(NetworkUtil.getHostname());
+
+        assertThatCode(() -> new SingleThreadedBusTopicSourceImpl(
+                        makeBuilder().fetchLimit(-1).fetchTimeout(-1).build())).doesNotThrowAnyException();
     }
 
     @Test
