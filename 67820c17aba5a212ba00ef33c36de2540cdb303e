@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c771bcd8_07523743",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-07-02T14:01:15Z",
+      "side": 1,
+      "message": "if you have a chance, reword the commit message a little to be more accurate, I think you inherited this one from the amend to the previous one.",
+      "revId": "67820c17aba5a212ba00ef33c36de2540cdb303e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a8a418d6_7a5972bc",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-07-02T14:01:15Z",
+      "side": 1,
+      "message": "Optional: if you get a chance, may be level to warn would be better.  May be good to add the sleepTime to the toString() for troubleshooting.",
+      "revId": "67820c17aba5a212ba00ef33c36de2540cdb303e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
