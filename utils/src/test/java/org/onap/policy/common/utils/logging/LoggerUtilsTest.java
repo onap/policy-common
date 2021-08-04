@@ -20,7 +20,7 @@
 *
 */
 
-package org.onap.policy.common.logging;
+package org.onap.policy.common.utils.logging;
 
 import static org.junit.Assert.assertTrue;
 
