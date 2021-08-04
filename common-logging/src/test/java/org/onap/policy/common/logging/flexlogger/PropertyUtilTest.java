@@ -20,9 +20,9 @@
 
 package org.onap.policy.common.logging.flexlogger;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
@@ -37,11 +37,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.logging.flexlogger.PropertyUtil.Listener;
 import org.powermock.reflect.Whitebox;
 
@@ -55,13 +55,13 @@ public class PropertyUtilTest {
     private Timer timer;
     private TestListener testListener;
     
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         saveTimer = Whitebox.getInternalState(PropertyUtil.LazyHolder.class, TIMER_FIELD);
         
     }
     
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         Whitebox.setInternalState(PropertyUtil.LazyHolder.class, TIMER_FIELD, saveTimer);
         
@@ -70,7 +70,7 @@ public class PropertyUtilTest {
     /**
      * Perform test case set up.
      */
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         task = null;
         timer = mock(Timer.class);
@@ -90,7 +90,7 @@ public class PropertyUtilTest {
         fileOutputStream.close();
     }
 
-    @After
+    @AfterEach
     public void tearDown() throws IOException {
         PropertyUtil.stopListening(FILE, testListener);
         FILE.delete();

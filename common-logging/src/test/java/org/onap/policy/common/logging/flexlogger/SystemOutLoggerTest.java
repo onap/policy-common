@@ -3,7 +3,7 @@
  * ONAP-Logging
  * ================================================================================
  * Copyright (C) 2018 Ericsson. All rights reserved.
- * Modifications Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,15 +22,15 @@
 package org.onap.policy.common.logging.flexlogger;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.att.eelf.configuration.EELFLogger.Level;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.util.UUID;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.eelf.PolicyLogger;
 
@@ -307,7 +307,7 @@ public class SystemOutLoggerTest {
         try {
             System.setOut(ps);
             systemOutLogger.recordMetricEvent("eventId", "rule");
-            assertTrue(baos.toString(), baos.toString().contains("SystemOutLoggerTest : eventId:eventIdmessage:rule"));
+            assertTrue(baos.toString().contains("SystemOutLoggerTest : eventId:eventIdmessage:rule"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -426,8 +426,8 @@ public class SystemOutLoggerTest {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.debug("1", new NullPointerException());
-            assertTrue(baos.toString(),
-                    baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
+            assertTrue(
+                  baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -443,8 +443,8 @@ public class SystemOutLoggerTest {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.error("1", new NullPointerException());
-            assertTrue(baos.toString(),
-                    baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
+            assertTrue(
+                  baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -460,7 +460,7 @@ public class SystemOutLoggerTest {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.info("1", new NullPointerException());
-            assertTrue(baos.toString(),
+            assertTrue(
                     baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
             System.out.flush();
@@ -477,7 +477,7 @@ public class SystemOutLoggerTest {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.warn("1", new NullPointerException());
-            assertTrue(baos.toString(),
+            assertTrue(
                     baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
             System.out.flush();
@@ -494,7 +494,7 @@ public class SystemOutLoggerTest {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.trace(1, new NullPointerException());
-            assertTrue(baos.toString(),
+            assertTrue(
                     baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
             System.out.flush();
@@ -511,7 +511,7 @@ public class SystemOutLoggerTest {
             System.setOut(ps);
             systemOutLogger.setTransId("transactionId");
             systemOutLogger.audit("1", new NullPointerException());
-            assertTrue(baos.toString(),
+            assertTrue(
                     baos.toString().contains("transactionId|SystemOutLoggerTest : 1:java.lang.NullPointerException"));
         } finally {
             System.out.flush();
@@ -532,7 +532,7 @@ public class SystemOutLoggerTest {
         try {
             System.setOut(ps);
             systemOutLogger.postMdcInfoForTriggeredRule("transactionId");
-            assertTrue(baos.toString(), baos.toString().contains("transactionId"));
+            assertTrue(baos.toString().contains("transactionId"));
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -547,7 +547,7 @@ public class SystemOutLoggerTest {
         try {
             System.setOut(ps);
             systemOutLogger.postMdcInfoForEvent(1);
-            assertTrue(baos.toString(), baos.toString().contains("1"));
+            assertTrue(baos.toString().contains("1"));
         } finally {
             System.out.flush();
             System.setOut(old);

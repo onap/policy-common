@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP-Logging
  * ================================================================================
- * Copyright (C) 2018 Ericsson. All rights reserved.
+ * Copyright (C) 2018, 2021 Ericsson. All rights reserved.
  * Modifications Copyright (C) 2020 AT&T.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,10 +21,10 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.logging.eelf.ErrorCodeMap.ErrorCodeInfo;
 
 public class ErrorCodeMapTest {
@@ -54,8 +54,8 @@ public class ErrorCodeMapTest {
     @Test
     public void testErrorCodeInfoGetErrorDesc() {
         ErrorCodeInfo errorCodeInfo = ErrorCodeMap.getErrorCodeInfo(MessageCodes.EXCEPTION_ERROR);
-        assertEquals("This is an exception error message during the process. Please check the error message for detail "
-                + "information", errorCodeInfo.getErrorDesc());
+        assertEquals("This is an exception error message during the process. "
+                + "Please check the error message for detail information", errorCodeInfo.getErrorDesc());
     }
 
 }

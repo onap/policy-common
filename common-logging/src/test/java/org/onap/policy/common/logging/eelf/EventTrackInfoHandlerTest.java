@@ -20,13 +20,14 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Instant;
 import java.util.concurrent.ConcurrentMap;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
 
 public class EventTrackInfoHandlerTest {
 
@@ -41,7 +42,7 @@ public class EventTrackInfoHandlerTest {
 
     private EventTrackInfoHandler hdlr;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         tracker = PolicyLogger.getEventTracker();
         info = tracker.getEventInfo();
@@ -50,7 +51,7 @@ public class EventTrackInfoHandlerTest {
     /**
      * Perform set up for test cases.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         info.clear();
 

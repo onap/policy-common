@@ -22,22 +22,19 @@
 
 package org.onap.policy.common.logging;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@RunWith(MockitoJUnitRunner.class)
 public class LoggerUtilsTest {
     protected static final Logger logger = LoggerFactory.getLogger(LoggerUtilsTest.class);
 
     private LoggerUtils util;
 
-    @Before
+    @BeforeEach
     public void setup() {
         this.util = new LoggerUtils(logger);
     }

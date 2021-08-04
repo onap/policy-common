@@ -21,10 +21,10 @@
 package org.onap.policy.common.parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,8 +32,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestBeanValidationResult {
     private static final String TEXT1 = "abc";
@@ -59,7 +59,7 @@ public class TestBeanValidationResult {
     /**
      * Sets up.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         clean = new ObjectValidationResult(TEXT1, 10);
         cleanMsg = clean.getResult("", "", true);
@@ -95,7 +95,7 @@ public class TestBeanValidationResult {
 
         bean = new BeanValidationResult(NAME, OBJECT);
         assertFalse(bean.addResult(MY_LIST, "hello", ValidationStatus.INVALID, TEXT1));
-        assertThat(bean.getResult()).contains("\"" + MY_LIST + "\" value \"hello\" INVALID, " + TEXT1);
+        assertThat(bean.getResult()).contains("\"" + MY_LIST + "\" value \"hello\" INVALID, " + TEXT1); 
     }
 
     @Test
