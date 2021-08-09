@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Nordix Foundation.
+ * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -114,6 +115,15 @@ public interface HttpServletServer extends Startable {
     void addServletResource(String servletPath, String resourceBase);
 
     /**
+     * Add a prometheus metrics servlet and initializes default metrics if enabled.
+     *
+     * @param servletPath servlet path
+     * @param initializeDefaultMetrics to initialize default metrics in prometheus.
+     *
+     */
+    void addMetricsServlet(String servletPath, boolean initializeDefaultMetrics);
+
+    /**
      * Blocking start of the http server.
      *
      * @param maxWaitTime max time to wait for the start to take place
@@ -123,4 +133,5 @@ public interface HttpServletServer extends Startable {
      * @throws InterruptedException if the blocking operation is interrupted
      */
     boolean waitedStart(long maxWaitTime) throws InterruptedException;
+
 }
