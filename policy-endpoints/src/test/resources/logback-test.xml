@@ -35,7 +35,7 @@
         <appender-ref ref="testAppender" />
     </logger>
     
-    <root level="WARN">
+    <root level="DEBUG">
         <appender-ref ref="STDOUT"/>
     </root>
 

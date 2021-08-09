@@ -25,7 +25,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServlet;
 import lombok.ToString;
+import org.apache.commons.lang3.tuple.Pair;
 import org.onap.policy.common.endpoints.http.server.aaf.AafAuthFilter;
 import org.onap.policy.common.endpoints.parameters.RestServerParameters;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
@@ -57,18 +59,31 @@ public class RestServer extends ServiceManagerContainer {
     public RestServer(final RestServerParameters restServerParameters, Class<? extends AafAuthFilter> aafFilter,
                     Class<?>... jaxrsProviders) {
 
+        this(restServerParameters, aafFilter, null, jaxrsProviders);
+    }
+
+    /**
+     * Constructs the object.
+     *
+     * @param restServerParameters the rest server parameters
+     * @param aafFilter class of object to use to filter AAF requests, or {@code null}
+     * @param servlets a pair with servlet path as the key and the servlet class as value, or {@code null}
+     * @param jaxrsProviders classes providing the services
+     */
+    public RestServer(final RestServerParameters restServerParameters, Class<? extends AafAuthFilter> aafFilter,
+        Pair<String, Class<? extends HttpServlet>> servlets, Class<?>... jaxrsProviders) {
+
         if (jaxrsProviders.length == 0) {
             throw new IllegalArgumentException("no providers specified");
         }
 
         this.servers = factory.getServerFactory()
-                        .build(getServerProperties(restServerParameters, getProviderClassNames(jaxrsProviders)));
+                        .build(getServerProperties(restServerParameters, servlets, getProviderClassNames(jaxrsProviders)));
 
         for (HttpServletServer server : this.servers) {
             if (aafFilter != null && server.isAaf()) {
                 server.addFilterClass(null, aafFilter.getName());
             }
-
             addAction("REST " + server.getName(), server::start, server::stop);
         }
     }
@@ -82,6 +97,19 @@ public class RestServer extends ServiceManagerContainer {
      * @return the properties object
      */
     protected Properties getServerProperties(RestServerParameters restServerParameters, String names) {
+        return getServerProperties(restServerParameters, null, names);
+    }
+
+    /**
+     * Creates the server properties object using restServerParameters.
+     *
+     * @param restServerParameters the rest server parameters
+     * @param servlets a pair with servlet path as the key and the servlet class as value, or {@code null}
+     * @param names comma-separated list of classes providing the services
+     *
+     * @return the properties object
+     */
+    protected Properties getServerProperties(RestServerParameters restServerParameters, Pair<String, Class<? extends HttpServlet>> servlets, String names) {
         final var props = new Properties();
         props.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES, restServerParameters.getName());
 
@@ -105,6 +133,14 @@ public class RestServer extends ServiceManagerContainer {
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER,
                         String.join(",", GsonMessageBodyHandler.class.getName(), YamlMessageBodyHandler.class.getName(),
                                         JsonExceptionMapper.class.getName(), YamlExceptionMapper.class.getName()));
+        if (null != servlets) {
+            props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_URIPATH_SUFFIX,
+                servlets.getKey());
+            props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_CLASS_SUFFIX,
+                servlets.getValue().getName());
+        }
+        props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_PROMETHEUS_SUFFIX,
+            String.valueOf(restServerParameters.isPrometheus()));
         return props;
     }
 
