@@ -45,6 +45,7 @@ public class RestServerParameters extends ParameterGroupImpl {
     private String password;
     private boolean https;
     private boolean aaf;
+    private boolean exportMetrics;
 
     public RestServerParameters() {
         super(RestServerParameters.class.getSimpleName());

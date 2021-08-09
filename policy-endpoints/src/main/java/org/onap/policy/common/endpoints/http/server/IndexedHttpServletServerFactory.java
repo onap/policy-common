@@ -137,8 +137,10 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
         final var restUriPath = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_REST_URIPATH_SUFFIX, null);
 
         addFilterClasses(props, service, restUriPath);
-        addServletClasses(props, service, restUriPath);
+        addRestServletClasses(props, service, restUriPath);
         addServletPackages(props, service, restUriPath);
+
+        addServletClass(props, service);
 
         serviceList.add(service);
     }
@@ -179,14 +181,22 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
         }
     }
 
-    private void addServletClasses(PropertyUtils props, HttpServletServer service, final String restUriPath) {
-
+    private void addRestServletClasses(PropertyUtils props, HttpServletServer service, final String restUriPath) {
         final var restClasses = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX, null);
 
         if (!StringUtils.isBlank(restClasses)) {
             for (String restClass : COMMA_SPACE_PAT.split(restClasses)) {
                 service.addServletClass(restUriPath, restClass);
             }
+        }
+    }
+
+    private void addServletClass(PropertyUtils props, HttpServletServer service) {
+        var servletClass = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_CLASS_SUFFIX, null);
+        var servletUriPath = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_URIPATH_SUFFIX, null);
+
+        if (!StringUtils.isBlank(servletClass) && !StringUtils.isBlank(servletUriPath)) {
+            service.addStdServletClass(servletUriPath, servletClass);
         }
     }
 

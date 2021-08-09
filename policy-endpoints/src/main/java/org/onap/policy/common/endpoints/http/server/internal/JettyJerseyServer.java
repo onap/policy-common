@@ -22,8 +22,6 @@
 package org.onap.policy.common.endpoints.http.server.internal;
 
 import io.swagger.jersey.config.JerseyJaxrsConfig;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ServerProperties;
@@ -81,11 +79,6 @@ public class JettyJerseyServer extends JettyServletServer {
     protected static Logger logger = LoggerFactory.getLogger(JettyJerseyServer.class);
 
     /**
-     * Container for servlets.
-     */
-    protected final Map<String, ServletHolder> servlets = new HashMap<>();
-
-    /**
      * Swagger ID.
      */
     protected String swaggerId = null;
@@ -121,7 +114,8 @@ public class JettyJerseyServer extends JettyServletServer {
      */
     protected void attachSwaggerServlet(boolean https) {
 
-        ServletHolder swaggerServlet = context.addServlet(JerseyJaxrsConfig.class, "/");
+        //ServletHolder swaggerServlet = context.addServlet(JerseyJaxrsConfig.class, "/");
+        ServletHolder swaggerServlet = getServlet(JerseyJaxrsConfig.class, "/");
 
         String hostname = this.connector.getHost();
         if (StringUtils.isBlank(hostname) || hostname.equals(NetworkUtil.IPV4_WILDCARD_ADDRESS)) {
@@ -149,15 +143,10 @@ public class JettyJerseyServer extends JettyServletServer {
      * @throws IllegalArgumentException if invalid arguments are provided
      */
     protected synchronized ServletHolder getServlet(String servletPath) {
-
-        return servlets.computeIfAbsent(servletPath, key -> {
-
-            ServletHolder jerseyServlet =
-                    context.addServlet(org.glassfish.jersey.servlet.ServletContainer.class, servletPath);
-            jerseyServlet.setInitOrder(0);
-
-            return jerseyServlet;
-        });
+        ServletHolder jerseyServlet =
+                super.getServlet(org.glassfish.jersey.servlet.ServletContainer.class, servletPath);
+        jerseyServlet.setInitOrder(0);
+        return jerseyServlet;
     }
 
     @Override
