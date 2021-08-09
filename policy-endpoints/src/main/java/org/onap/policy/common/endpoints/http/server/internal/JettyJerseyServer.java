@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019-2020 Nordix Foundation.
+ * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,8 @@
 
 package org.onap.policy.common.endpoints.http.server.internal;
 
+import io.prometheus.client.exporter.MetricsServlet;
+import io.prometheus.client.hotspot.DefaultExports;
 import io.swagger.jersey.config.JerseyJaxrsConfig;
 import java.util.HashMap;
 import java.util.Map;
@@ -220,6 +223,16 @@ public class JettyJerseyServer extends JettyServletServer {
         }
     }
 
+    @Override
+    public void addMetricsServlet(String servletPath, boolean initializeDefaultMetrics) {
+        // Expose Promtheus metrics.
+        context.addServlet(new ServletHolder(new MetricsServlet()), servletPath);
+        if (initializeDefaultMetrics) {
+            // Add metrics about CPU, JVM memory etc.
+            DefaultExports.initialize();
+        }
+    }
+
     /**
      * Adds "standard" parameters to the initParameter set. Sets swagger parameters, if specified, and sets the class
      * provider property. This can be invoked multiple times, but only the first actually causes any changes to the
@@ -263,4 +276,5 @@ public class JettyJerseyServer extends JettyServletServer {
             + ", toString()=" + super.toString()
             + "]";
     }
+
 }
