@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019-2020 Nordix Foundation.
- * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
+ * Modifications Copyright (C) 2020-2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,15 @@
 
 package org.onap.policy.common.endpoints.http.server.internal;
 
+import io.prometheus.client.exporter.MetricsServlet;
+import io.prometheus.client.hotspot.DefaultExports;
 import java.util.EnumSet;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.DispatcherType;
+import javax.servlet.Servlet;
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.ToString;
 import org.eclipse.jetty.security.ConstraintMapping;
 import org.eclipse.jetty.security.ConstraintSecurityHandler;
@@ -40,6 +46,7 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.Slf4jRequestLogWriter;
 import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
@@ -125,6 +132,11 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     protected Thread jettyThread;
 
     /**
+     * Container for default servlets.
+     */
+    protected final Map<String, ServletHolder> servlets = new HashMap<>();
+
+    /**
      * Start condition.
      */
     @ToString.Exclude
@@ -207,6 +219,18 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         }
 
         context.addFilter(filterClass, tempFilterPath, EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
+    }
+
+    protected ServletHolder getServlet(@NonNull  Class<? extends Servlet> servlet, @NonNull  String servletPath) {
+        synchronized (servlets) {
+            return servlets.computeIfAbsent(servletPath, key -> context.addServlet(servlet, servletPath));
+        }
+    }
+
+    protected ServletHolder getServlet(String servletClass, String servletPath) {
+        synchronized (servlets) {
+            return servlets.computeIfAbsent(servletPath, key -> context.addServlet(servletClass, servletPath));
+        }
     }
 
     /**
@@ -472,8 +496,29 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     }
 
     @Override
-    public void addServletClass(String servletPath, String restClass) {
+    public void addServletClass(String servletPath, String servletClass) {
         throw new UnsupportedOperationException("addServletClass()" + NOT_SUPPORTED);
+    }
+
+    @Override
+    public void addStdServletClass(@NonNull String servletPath, @NonNull String plainServletClass) {
+        this.getServlet(plainServletClass, servletPath);
+    }
+
+    @Override
+    public void setPrometheus(String metricsPath) {
+        this.getServlet(MetricsServlet.class, metricsPath);
+        DefaultExports.initialize();
+    }
+
+    @Override
+    public boolean isPrometheus() {
+        for (ServletHolder servlet : context.getServletHandler().getServlets()) {
+            if (MetricsServlet.class.getName().equals(servlet.getClassName())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
