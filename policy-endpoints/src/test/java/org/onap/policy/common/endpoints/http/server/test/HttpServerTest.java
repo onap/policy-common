@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Nordix Foundation.
+ * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +32,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
+import io.prometheus.client.exporter.MetricsServlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -56,6 +58,9 @@ import org.slf4j.LoggerFactory;
  * HttpServletServer JUNIT tests.
  */
 public class HttpServerTest {
+    private static final String JVM_MEMORY_BYTES_USED = "jvm_memory_bytes_used";
+    private static final String METRICS_URI = "/metrics";
+    private static final String PROMETHEUS = "prometheus";
     private static final String LOCALHOST = "localhost";
     private static final String JSON_MEDIA = "application/json";
     private static final String YAML_MEDIA = YamlMessageBodyHandler.APPLICATION_YAML;
@@ -209,6 +214,79 @@ public class HttpServerTest {
 
         String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, JSON_MEDIA, reqText);
         assertEquals(reqText, response);
+    }
+
+    /**
+     * This test checks a server from a plain java servlet (note it uses prometheus as the sample server).
+     */
+    @Test
+    public void testStdServletServer() throws Exception {
+        logger.info("-- testStdServletServer() --");
+
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+            .build(PROMETHEUS, LOCALHOST, port, "/", false, true);
+
+        server.addStdServletClass("/prom-generic-servlet/metrics", MetricsServlet.class.getName());
+        server.waitedStart(5000);
+
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+        assertTrue(server.isPrometheus());
+
+        String response = http(portUrl + "/prom-generic-servlet/metrics");
+        assertThat(response).contains(JVM_MEMORY_BYTES_USED);
+    }
+
+    /**
+     * This test explicitly creates a prometheus server.
+     */
+    @Test
+    public void testExplicitPrometheusServer() throws Exception {
+        logger.info("-- testPrometheusServer() --");
+
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+            .build(PROMETHEUS, LOCALHOST, port, "/", false, true);
+        server.setPrometheus(METRICS_URI);
+        server.waitedStart(5000);
+
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+        assertTrue(server.isPrometheus());
+
+        String response = http(portUrl + METRICS_URI);
+        assertThat(response).contains(JVM_MEMORY_BYTES_USED);
+    }
+
+    /**
+     * This test is an all-in-one for a single server: prometheus, jax-rs, servlet, swagger, and filters.
+     */
+    @Test
+    public void testPrometheusJaxRsFilterSwaggerServer() throws Exception {
+        logger.info("-- testPrometheusServer() --");
+
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+            .build(PROMETHEUS, LOCALHOST, port, "/", true, true);
+
+        server.addServletClass("/*", RestEchoService.class.getName());
+        server.addFilterClass("/*", TestFilter.class.getName());
+        server.setPrometheus(METRICS_URI);
+
+        server.waitedStart(5000);
+
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+        assertTrue(server.isPrometheus());
+
+        String response = http(portUrl + METRICS_URI);
+        assertThat(response).contains(JVM_MEMORY_BYTES_USED);
+
+        RestEchoReqResp request = new RestEchoReqResp();
+        request.setRequestId(100);
+        request.setText(SOME_TEXT);
+        String reqText = gson.toJson(request);
+
+        response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, JSON_MEDIA, reqText);
+        assertEquals(reqText, response);
+
+        response = http(portUrl + SWAGGER_JSON);
+        assertThat(response).contains("Swagger Server");
     }
 
     @Test

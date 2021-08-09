@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Nordix Foundation.
+ * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -90,6 +91,14 @@ public interface HttpServletServer extends Startable {
     void addServletClass(String servletPath, String restClass);
 
     /**
+     * Adds a Java Servlet.
+     *
+     * @param servletPath servlet path
+     * @param plainServletClass servlet class
+     */
+    void addStdServletClass(String servletPath, String plainServletClass);
+
+    /**
      * Adds a package containing JAX-RS classes to serve REST requests.
      *
      * @param servletPath servlet path
@@ -123,4 +132,14 @@ public interface HttpServletServer extends Startable {
      * @throws InterruptedException if the blocking operation is interrupted
      */
     boolean waitedStart(long maxWaitTime) throws InterruptedException;
+
+    /**
+     * Are prometheus metrics enabled?.
+     */
+    public boolean isPrometheus();
+
+    /**
+     * Enable prometheus metrics.
+     */
+    public void setPrometheus(String metricsPath);
 }
