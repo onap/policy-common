@@ -23,8 +23,10 @@ package org.onap.policy.common.endpoints.http.server;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServlet;
 import lombok.ToString;
 import org.onap.policy.common.endpoints.http.server.aaf.AafAuthFilter;
 import org.onap.policy.common.endpoints.parameters.RestServerParameters;
@@ -57,6 +59,20 @@ public class RestServer extends ServiceManagerContainer {
     public RestServer(final RestServerParameters restServerParameters, Class<? extends AafAuthFilter> aafFilter,
                     Class<?>... jaxrsProviders) {
 
+        this(restServerParameters, aafFilter, null, jaxrsProviders);
+    }
+
+    /**
+     * Constructs the object.
+     *
+     * @param restServerParameters the rest server parameters
+     * @param aafFilter class of object to use to filter AAF requests, or {@code null}
+     * @param servlets a map with servlet path as the key and the servlet class as value, or {@code null}
+     * @param jaxrsProviders classes providing the services
+     */
+    public RestServer(final RestServerParameters restServerParameters, Class<? extends AafAuthFilter> aafFilter,
+        Map<String, Class<? extends HttpServlet>> servlets, Class<?>... jaxrsProviders) {
+
         if (jaxrsProviders.length == 0) {
             throw new IllegalArgumentException("no providers specified");
         }
@@ -68,7 +84,9 @@ public class RestServer extends ServiceManagerContainer {
             if (aafFilter != null && server.isAaf()) {
                 server.addFilterClass(null, aafFilter.getName());
             }
-
+            if (null != servlets && !servlets.isEmpty()) {
+                server.addServlets(servlets);
+            }
             addAction("REST " + server.getName(), server::start, server::stop);
         }
     }
