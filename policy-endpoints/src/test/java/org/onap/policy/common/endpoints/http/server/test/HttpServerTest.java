@@ -31,6 +31,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
+import io.prometheus.client.exporter.MetricsServlet;
+import io.prometheus.client.hotspot.DefaultExports;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -209,6 +211,83 @@ public class HttpServerTest {
 
         String response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, JSON_MEDIA, reqText);
         assertEquals(reqText, response);
+    }
+
+    /**
+     * This test checks a server from a plain java servlet (note it uses prometheus as the sample server).
+     */
+    @Test
+    public void testStdServletServer() throws Exception {
+        logger.info("-- testStdServletServer() --");
+
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+            .build("prometheus", LOCALHOST, port, "/", false, true);
+
+        server.addStdServletClass("/prom-generic-servlet/metrics", MetricsServlet.class.getName());
+        DefaultExports.initialize();
+        server.waitedStart(5000);
+
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+        assertTrue(server.isPrometheus());
+
+        String response = http(portUrl + "/prom-generic-servlet/metrics");
+        assertThat(response).contains("jvm_classes_loaded");
+    }
+
+    /**
+     * This test explicitly creates a prometheus server.
+     */
+    @Test
+    public void testExplicitPrometheusServer() throws Exception {
+        logger.info("-- testPrometheusServer() --");
+
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+            .build("prometheus", LOCALHOST, port, "/", false, true);
+
+        server.setPrometheus("/metrics");
+        DefaultExports.initialize();
+        server.waitedStart(5000);
+
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+        assertTrue(server.isPrometheus());
+
+        String response = http(portUrl + "/metrics");
+        assertThat(response).contains("jvm_classes_loaded");
+    }
+
+    /**
+     * This test is an all-in-one for a single server: prometheus, jax-rs, servlet, swagger, and filters.
+     */
+    @Test
+    public void testPrometheusJaxRsFilterSwaggerServer() throws Exception {
+        logger.info("-- testPrometheusServer() --");
+
+        HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
+            .build("prometheus", LOCALHOST, port, "/", true, true);
+
+        server.addServletClass("/*", RestEchoService.class.getName());
+        server.addFilterClass("/*", TestFilter.class.getName());
+
+        server.setPrometheus("/metrics");
+        DefaultExports.initialize();
+        server.waitedStart(5000);
+
+        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
+        assertTrue(server.isPrometheus());
+
+        String response = http(portUrl + "/metrics");
+        assertThat(response).contains("jvm_classes_loaded");
+
+        RestEchoReqResp request = new RestEchoReqResp();
+        request.setRequestId(100);
+        request.setText(SOME_TEXT);
+        String reqText = gson.toJson(request);
+
+        response = http(portUrl + JUNIT_ECHO_FULL_REQUEST, JSON_MEDIA, reqText);
+        assertEquals(reqText, response);
+
+        response = http(portUrl + SWAGGER_JSON);
+        assertThat(response).contains("Swagger Server");
     }
 
     @Test

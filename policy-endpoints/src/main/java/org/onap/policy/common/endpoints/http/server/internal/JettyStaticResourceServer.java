@@ -21,8 +21,6 @@
 
 package org.onap.policy.common.endpoints.http.server.internal;
 
-import java.util.HashMap;
-import java.util.Map;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jetty.servlet.DefaultServlet;
@@ -57,11 +55,6 @@ public class JettyStaticResourceServer extends JettyServletServer {
     protected static Logger logger = LoggerFactory.getLogger(JettyStaticResourceServer.class);
 
     /**
-     * Container for default servlets.
-     */
-    protected final Map<String, ServletHolder> servlets = new HashMap<>();
-
-    /**
      * Constructor.
      *
      * @param name name
@@ -86,14 +79,13 @@ public class JettyStaticResourceServer extends JettyServletServer {
      * @throws IllegalArgumentException if invalid arguments are provided
      */
     protected synchronized ServletHolder getDefaultServlet(String servletPath) {
-
-        return servlets.computeIfAbsent(servletPath, key -> context.addServlet(DefaultServlet.class, servletPath));
+        return super.getServlet(DefaultServlet.class, servletPath);
     }
 
     @Override
-    public synchronized void addServletResource(String servletPath, String resoureBase) {
+    public synchronized void addServletResource(String servletPath, String resourceBase) {
 
-        if (StringUtils.isBlank(resoureBase)) {
+        if (StringUtils.isBlank(resourceBase)) {
             throw new IllegalArgumentException("No resourceBase provided");
         }
 
@@ -103,7 +95,7 @@ public class JettyStaticResourceServer extends JettyServletServer {
 
         ServletHolder defaultServlet = this.getDefaultServlet(servletPath);
 
-        defaultServlet.setInitParameter(SERVLET_HOLDER_RESOURCE_BASE, resoureBase);
+        defaultServlet.setInitParameter(SERVLET_HOLDER_RESOURCE_BASE, resourceBase);
         defaultServlet.setInitParameter(SERVLET_HOLDER_DIR_ALLOWED, "false");
         defaultServlet.setInitParameter(SERVLET_HOLDER_PATH_INFO_ONLY, "true");
 

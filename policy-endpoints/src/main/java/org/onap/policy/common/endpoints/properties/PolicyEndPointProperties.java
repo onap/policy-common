@@ -96,8 +96,12 @@ public final class PolicyEndPointProperties {
     public static final String PROPERTY_HTTP_REST_PACKAGES_SUFFIX = ".restPackages";
     public static final String PROPERTY_HTTP_REST_URIPATH_SUFFIX = ".restUriPath";
 
+    public static final String PROPERTY_HTTP_SERVLET_URIPATH_SUFFIX = ".servletUriPath";
+    public static final String PROPERTY_HTTP_SERVLET_CLASS_SUFFIX = ".servletClass";
+
     public static final String PROPERTY_HTTP_HTTPS_SUFFIX = ".https";
     public static final String PROPERTY_HTTP_SWAGGER_SUFFIX = ".swagger";
+    public static final String PROPERTY_HTTP_PROMETHEUS_SUFFIX = ".prometheus";
 
     public static final String PROPERTY_HTTP_SERIALIZATION_PROVIDER = ".serialization.provider";
 
