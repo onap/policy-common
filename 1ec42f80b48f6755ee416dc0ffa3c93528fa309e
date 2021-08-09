@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f5e491fb_bc3ad403",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 4903
+      },
+      "writtenOn": "2021-08-09T11:24:53Z",
+      "side": 1,
+      "message": "This will bring up the prometheus metrics of the respective PF component on \u003cip\u003e:\u003cport\u003e/metrics \nDoes this look ok, or should we go with the usual url, e.g: \u003cip\u003e:\u003cport\u003e/policy/api/v1/metrics ?\nI prefer the first option, as such versioning and all isn\u0027t really needed and is always going to be a simple get call for metrics.",
+      "range": {
+        "startLine": 143,
+        "startChar": 35,
+        "endLine": 143,
+        "endChar": 43
+      },
+      "revId": "1ec42f80b48f6755ee416dc0ffa3c93528fa309e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77c5f963_07f611dc",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 4903
+      },
+      "writtenOn": "2021-08-09T11:24:53Z",
+      "side": 1,
+      "message": "I have defaulted this to true here, which means DefaultMetrics like CPU/Memory etc are exposed by default for all Policy components.\nWe can choose to configure this defaultMetrics to true/false, as well as the metrics itself maybe if everyone thinks all of this should be configurable.\nFor e.g., we can add a new field \"exportMetrics\" : true/false, and \"exportDefaultMetrics\": true/false in the individual Policy components\u0027 startup config file.",
+      "range": {
+        "startLine": 143,
+        "startChar": 46,
+        "endLine": 143,
+        "endChar": 50
+      },
+      "revId": "1ec42f80b48f6755ee416dc0ffa3c93528fa309e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
