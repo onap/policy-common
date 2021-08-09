@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Nordix Foundation.
+ * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,8 @@
 
 package org.onap.policy.common.endpoints.http.server;
 
+import java.util.Map;
+import javax.servlet.http.HttpServlet;
 import org.onap.policy.common.capabilities.Startable;
 
 /**
@@ -114,6 +117,14 @@ public interface HttpServletServer extends Startable {
     void addServletResource(String servletPath, String resourceBase);
 
     /**
+     * Adds servlets with its corresponding servletPath.
+     *
+     * @param servlets a map with servlet path as the key and the servlet class as value
+     *
+     */
+    void addServlets(Map<String, Class<? extends HttpServlet>> servlets);
+
+    /**
      * Blocking start of the http server.
      *
      * @param maxWaitTime max time to wait for the start to take place
@@ -123,4 +134,5 @@ public interface HttpServletServer extends Startable {
      * @throws InterruptedException if the blocking operation is interrupted
      */
     boolean waitedStart(long maxWaitTime) throws InterruptedException;
+
 }
