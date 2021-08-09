@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019-2020 Nordix Foundation.
- * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
+ * Modifications Copyright (C) 2020-2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,10 @@
 package org.onap.policy.common.endpoints.http.server.internal;
 
 import java.util.EnumSet;
+import java.util.Map;
+import java.util.Map.Entry;
 import javax.servlet.DispatcherType;
+import javax.servlet.http.HttpServlet;
 import lombok.Getter;
 import lombok.ToString;
 import org.eclipse.jetty.security.ConstraintMapping;
@@ -207,6 +210,13 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         }
 
         context.addFilter(filterClass, tempFilterPath, EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
+    }
+
+    @Override
+    public void addServlets(Map<String, Class<? extends HttpServlet>> servlets) {
+        for (Entry<String, Class<? extends HttpServlet>> servletEntry : servlets.entrySet()) {
+            context.addServlet(servletEntry.getValue(), servletEntry.getKey());
+        }
     }
 
     /**
