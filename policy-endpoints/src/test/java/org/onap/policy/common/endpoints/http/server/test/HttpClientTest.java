@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,7 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
+import io.prometheus.client.exporter.MetricsServlet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -377,7 +378,12 @@ public class HttpClientTest {
     public void testHttpAuthClientProps() throws Exception {
         final Properties httpProperties = new Properties();
 
+        /* PAP and PDP services */
+
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES, "PAP,PDP");
+
+        /* PAP server service configuration */
+
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
                         + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, LOCALHOST);
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
@@ -394,8 +400,15 @@ public class HttpClientTest {
                         PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
                                         + PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX,
                         TestFilter.class.getName());
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
                         + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
+                        + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_CLASS_SUFFIX, MetricsServlet.class.getName());
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
+                                           + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_URIPATH_SUFFIX,
+                                   "/pap/test/random/metrics");
+
+        /* PDP server service configuration */
 
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PDP
                         + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, LOCALHOST);
@@ -409,10 +422,19 @@ public class HttpClientTest {
                         PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PDP
                                         + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX,
                         RestMockHealthCheck.class.getName());
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PDP
                         + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PDP
+                                           + PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX, "true");
+        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PDP
+            + PolicyEndPointProperties.PROPERTY_HTTP_PROMETHEUS_SUFFIX, "true");
+
+        /* PDP and PAP client services */
 
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES, "PAP,PDP");
+
+        /* PAP client service configuration */
+
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
                         + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, LOCALHOST);
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
@@ -428,12 +450,12 @@ public class HttpClientTest {
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PAP
                         + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
 
+        /* PDP client service configuration */
+
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
                         + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, LOCALHOST);
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
                         + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, "7778");
-        httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
-                        + PolicyEndPointProperties.PROPERTY_HTTP_URL_SUFFIX, "pdp");
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
                         + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, FALSE_STRING);
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_CLIENT_SERVICES + DOT_PDP
@@ -460,14 +482,27 @@ public class HttpClientTest {
         assertEquals(200, response.getStatus());
 
         final HttpClient clientPdp = HttpClientFactoryInstance.getClientFactory().get("PDP");
-        response = clientPdp.get("test");
+
+        response = clientPdp.get("pdp/test");
         assertEquals(500, response.getStatus());
+
+        response = clientPdp.get("metrics");
+        assertEquals(200, response.getStatus());
+
+        response = clientPdp.get("swagger.json");
+        assertEquals(200, response.getStatus());
 
         assertFalse(MyGsonProvider.hasWrittenSome());
 
         // try with empty path
         response = clientPap.get("");
         assertEquals(200, response.getStatus());
+
+        response = clientPap.get("random/metrics");
+        assertEquals(200, response.getStatus());
+
+        response = clientPap.get("metrics");
+        assertEquals(404, response.getStatus());
 
         // try it asynchronously, too
         MyCallback callback = new MyCallback();

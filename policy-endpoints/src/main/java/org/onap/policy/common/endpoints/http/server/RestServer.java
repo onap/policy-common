@@ -2,6 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2019 Nordix Foundation.
  *  Modifications Copyright (C) 2019-2021 AT&T Intellectual Property.
+ *  Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +24,7 @@ package org.onap.policy.common.endpoints.http.server;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import lombok.ToString;
@@ -105,6 +107,13 @@ public class RestServer extends ServiceManagerContainer {
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER,
                         String.join(",", GsonMessageBodyHandler.class.getName(), YamlMessageBodyHandler.class.getName(),
                                         JsonExceptionMapper.class.getName(), YamlExceptionMapper.class.getName()));
+
+        props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_URIPATH_SUFFIX,
+            Optional.ofNullable(restServerParameters.getServletUriPath()).orElse(""));
+        props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_CLASS_SUFFIX,
+            Optional.ofNullable(restServerParameters.getServletClass()).orElse(""));
+        props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_PROMETHEUS_SUFFIX,
+            String.valueOf(restServerParameters.isPrometheus()));
         return props;
     }
 
