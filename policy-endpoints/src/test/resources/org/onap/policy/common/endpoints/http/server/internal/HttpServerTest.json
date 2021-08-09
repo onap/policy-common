@@ -3,5 +3,6 @@
     "alive": false,
     "host": "localhost",
     "name": "echo",
-    "port": ${obj.port}
+    "port": ${obj.port},
+    "prometheus":false
 }

@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
@@ -31,6 +33,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import io.prometheus.client.exporter.MetricsServlet;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
@@ -48,6 +51,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import lombok.Getter;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -69,6 +73,7 @@ import org.onap.policy.common.utils.network.NetworkUtil;
 import org.powermock.reflect.Whitebox;
 
 public class RestServerTest {
+    private static final String METRICS_URI = "/metrics";
     private static final String SERVER1 = "my-server-A";
     private static final String SERVER2 = "my-server-B";
     private static final String FACTORY_FIELD = "factory";
@@ -231,6 +236,39 @@ public class RestServerTest {
         assertEquals(String.join(",", GsonMessageBodyHandler.class.getName(), YamlMessageBodyHandler.class.getName(),
                         JsonExceptionMapper.class.getName(), YamlExceptionMapper.class.getName()),
                         props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER));
+        assertEquals("false", props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_PROMETHEUS_SUFFIX));
+    }
+
+    @Test
+    public void testExplicitPrometheusAddedToProperty() {
+        when(params.isPrometheus()).thenReturn(true);
+        rest = new RestServer(params, Filter.class, Provider1.class, Provider2.class);
+        ArgumentCaptor<Properties> cap = ArgumentCaptor.forClass(Properties.class);
+        verify(serverFactory).build(cap.capture());
+
+        Properties props = cap.getValue();
+        String svcpfx = PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + PARAM_NAME;
+
+        assertEquals("true", props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_PROMETHEUS_SUFFIX));
+        assertNull(props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_URIPATH_SUFFIX));
+        assertNull(props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_CLASS_SUFFIX));
+    }
+
+    @Test
+    public void testStandardSevletAddedToProperty() {
+        rest = new RestServer(params, Filter.class, Pair.of(METRICS_URI, MetricsServlet.class), Provider1.class,
+            Provider2.class);
+        ArgumentCaptor<Properties> cap = ArgumentCaptor.forClass(Properties.class);
+        verify(serverFactory).build(cap.capture());
+
+        Properties props = cap.getValue();
+        String svcpfx = PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + PARAM_NAME;
+
+        assertEquals("false", props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_PROMETHEUS_SUFFIX));
+        assertEquals(METRICS_URI,
+            props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_URIPATH_SUFFIX));
+        assertEquals(MetricsServlet.class.getName(),
+            props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_CLASS_SUFFIX));
     }
 
     @Test
