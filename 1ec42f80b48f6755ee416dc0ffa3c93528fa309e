@@ -25,6 +25,40 @@
     },
     {
       "key": {
+        "uuid": "d639c6f3_a0cb1a2a",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-08-10T00:53:43Z",
+      "side": 1,
+      "message": "blank line between dependencies to follow existing layout convention in file",
+      "revId": "1ec42f80b48f6755ee416dc0ffa3c93528fa309e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e583439_44691d86",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-08-10T00:53:43Z",
+      "side": 1,
+      "message": "See my general comment about generic servlet support (which will cover metrics plus other uses).",
+      "revId": "1ec42f80b48f6755ee416dc0ffa3c93528fa309e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f5e491fb_bc3ad403",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
         "patchSetId": 1
@@ -89,6 +123,47 @@
         "endLine": 143,
         "endChar": 43
       },
+      "revId": "1ec42f80b48f6755ee416dc0ffa3c93528fa309e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "41352ad9_5dac4675",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-08-10T00:53:43Z",
+      "side": 1,
+      "message": "This also relates to my comment about keeping it generic when it constructing the server.   In general, I think we don\u0027t want to force a \"prometheus\" servlet every time we build a new server.   For example a component, ie. drools or apex may use n\u003e1 servers and all of those servers will add the \"/metrics\" servlet endpoint.",
+      "parentUuid": "9c611747_074fefb0",
+      "range": {
+        "startLine": 143,
+        "startChar": 35,
+        "endLine": 143,
+        "endChar": 43
+      },
+      "revId": "1ec42f80b48f6755ee416dc0ffa3c93528fa309e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c953d528_20102fa3",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/internal/JettyJerseyServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-08-10T00:53:43Z",
+      "side": 1,
+      "message": "In theory this class is for the JAX-RS Jersey implementation.   I was thinking that this could go into the parent class, JettyServletServer which I think is the right level of abstraction for it.   I said previously if we can add generic servlet support to that class (similar to the Filter ones), I think that would be better.\n\nAn user can define properties as used in the factory provided that somebody passes the Servlet class name in configuration (ie. MetricsServlet for prometheus) and will bring it up.\n\nI think for the DefaultExports.initialize() we don\u0027t need to worry at this level, provided that this is a library.   An specific component will configure the endpoint to use the prometheus MetricServlet and can it their own code to call it or not if they choose to do so.    One shortcoming from putting it here is that it will get call multiple times, one per server created.   I think it is better to leave that decision to the specific component using this library.",
       "revId": "1ec42f80b48f6755ee416dc0ffa3c93528fa309e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
