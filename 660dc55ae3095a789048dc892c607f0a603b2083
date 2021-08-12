@@ -22,6 +22,30 @@
       "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3b932173_a2d1bc32",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-08-12T15:49:57Z",
+      "side": 1,
+      "message": "I think the easy configuration for api and pap servers is to use a \"prometheus\" boolean in the configuration.   For example with the properties configuration changes in a drools-pdp the telemetry server that is currently configured like this:\n\nhttp.server.services.CONFIG.host\u003d${envd:TELEMETRY_HOST}\nhttp.server.services.CONFIG.port\u003d9696\nhttp.server.services.CONFIG.userName\u003d${envd:TELEMETRY_USER}\nhttp.server.services.CONFIG.password\u003d${envd:TELEMETRY_PASSWORD}\nhttp.server.services.CONFIG.restPackages\u003dorg.onap.policy.drools.server.restful\nhttp.server.services.CONFIG.managed\u003dfalse\nhttp.server.services.CONFIG.swagger\u003dtrue\nhttp.server.services.CONFIG.https\u003dfalse\nhttp.server.services.CONFIG.aaf\u003d${envd:AAF:false}\nhttp.server.services.CONFIG.serialization.provider\u003dorg.onap.policy.common.gson.JacksonHandler,org.onap.policy.common.endpoints.http.server.YamlJacksonHandler\n\nI would add a property line:\n\nhttp.server.services.CONFIG.prometheus\u003dtrue\n\nto get it started attached to the telemetry server.   The approach I took here was similar to the aaf or https flag in the properties.\n\nI was thinking but didn\u0027t add it to the patch that there would be an equivalent in RestServerParameters that api, pap, etc .. would use instead.\n\nThe other option is the generic one as you said passing the servletPath and servletClass as in some of the junits which is also possible via the properties in drools, but would need some additional work for the RestServerParameters.    In the code when somebody uses the the prometheus boolean flag under the hood sets the servletpath and class.  I think it is prefereble though for our existing configuration just use the boolean to make config more clear.\n\nAjith, Ram, what are your thoughts?",
+      "parentUuid": "2192d615_a0bf765c",
+      "range": {
+        "startLine": 105,
+        "startChar": 25,
+        "endLine": 105,
+        "endChar": 44
+      },
+      "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
