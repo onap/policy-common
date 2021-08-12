@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7a4cc0bb_3e763990",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2021-08-12T16:50:43Z",
+      "side": 1,
+      "message": "I think we don\u0027t need to have specific handling for metrics if we are already building a generic way to add any servlet to the rest server.",
+      "range": {
+        "startLine": 174,
+        "startChar": 4,
+        "endLine": 178,
+        "endChar": 5
+      },
+      "revId": "1088f63a169e0c515b754ca91907802d6daa39e0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}

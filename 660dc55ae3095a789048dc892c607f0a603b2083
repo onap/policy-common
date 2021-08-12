@@ -46,6 +46,30 @@
       "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f43fc1d6_427545ab",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2021-08-12T16:50:43Z",
+      "side": 1,
+      "message": "I think we need to go with one option:\n1) Have a generic way to add \"any\" servlet (including metric) using the servletPath \u0026 servletClass in components. And the servletPath \u0026 servletClass are provided to RestServer in the constructor itself based on a config at component level to enable/disable metrics.\n2) Just have a configuration to enable/disable metrics in components. And the servletPath \u0026 servletClass are hard coded in RestServer.\n\nFrom our side, we are okay to go either way. But it\u0027s not worth doing both of them.",
+      "parentUuid": "3b932173_a2d1bc32",
+      "range": {
+        "startLine": 105,
+        "startChar": 25,
+        "endLine": 105,
+        "endChar": 44
+      },
+      "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
