@@ -166,6 +166,30 @@
       "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a7c33da_a562ed69",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-08-13T19:16:20Z",
+      "side": 1,
+      "message": "Thanks Ram, I am ok if that is yours or Ajith preference to just pass the RestServer the servletPath and servletClass.   I would still like for drools to keep it as I had in the patch.   Wrt drools moving to RestServer and json, it is not viable, it would cause loss of functionality, ie. embedding environment variables, encrypted values, etc .. and cascading effects making configuration more complex.   I\u0027m OOO till Thursday, but I think more or less we are aligned.",
+      "parentUuid": "3ac684d1_411117ef",
+      "range": {
+        "startLine": 105,
+        "startChar": 25,
+        "endLine": 105,
+        "endChar": 44
+      },
+      "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
