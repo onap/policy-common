@@ -142,6 +142,30 @@
       "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3ac684d1_411117ef",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2021-08-13T18:32:01Z",
+      "side": 1,
+      "message": "Thanks for the explanation Jorge! First of all, very well captured 😊\n\nOnly risk with above examples is, some one can configure \n\nhttp.server.services.CONFIG.prometheus\u003dfalse\n\nAnd additionally provide\nhttp.server.services.CONFIG.http.servletUriPath\u003d/metrics\nhttp.server.services.CONFIG.http.servletClass\u003dio.prometheus.client.exporter.MetricsServlet\n\nThen, even if the prometheus flag is disabled. The metrics servlet will be up \u0026 running.\n\nApex-pdp is not using the RestServer directly as well. But we thought it\u0027s better to keep that aligned with other policy components and created the task for it - https://jira.onap.org/browse/POLICY-3539\n\nMay be you can take the same approach with drools-pdp too. That will simplify the RestServer class and keep it generic.\n\nAnyways, one possible solution to support both possibilities - the components using RestServer can pass the servletPath \u0026 servletClass in the constructor. And later on while building the properties file, RestServer can add that along with other parameters passed via RestServerParameters.\n\nI will suggest to sync up and finalize this over a call next week. Thanks!",
+      "parentUuid": "bf3d8a3a_814ec7a0",
+      "range": {
+        "startLine": 105,
+        "startChar": 25,
+        "endLine": 105,
+        "endChar": 44
+      },
+      "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
