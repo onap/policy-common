@@ -118,6 +118,30 @@
       "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf3d8a3a_814ec7a0",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2021-08-13T17:39:49Z",
+      "side": 1,
+      "message": "I think as you said, it makes sense to pass the servlet as a parameter to the RestServer as I am looking at it now.  I see that the RestServer needs all variable information in the constructor for the httpservletfactory to use it. . \n\nI think based on that you will need to modify this method in RestServer to accommodate those arguments in the constructor:\nhttps://git.onap.org/policy/common/tree/policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java#n84\n\nI can see that the resulting properties being machine generated you can get by generating a more complex properties file to be used.    \n\nNote thought that drools does not use restserver and relies directly on properties directly, so the rest server code does not apply to it (uses directly the .properties files and the HttpServletServerFactory)\n\nFrom provisioning point of view, for drools, I would like to keep the contents for patch 7 that solves for us a variety of configurations I am interesting in supporting directly from the properties file:\n\nFor example, if I want to support the metrics with and existing server, I will add the following to the existing properties:\n\n# Example 1 - add metrics globally to an existing REST server at \"/metrics\" endpoint \n# This will be the common case.\nhttp.server.services.CONFIG.prometheus\u003dtrue  .\n\nIf I want a different servlet than the default prometheus, may be you extend it, or want to change the default path, I would add instead of the prometheus boolean, the following to an existing server:\n\n# Example 2 - add metrics to an existing REST server at different endpoint:\nhttp.server.services.CONFIG.http.servletUriPath\u003d/any/path/for/metrics\nhttp.server.services.CONFIG.http.servletClass\u003dio.prometheus.client.exporter.MetricsServlet\n\nExample 2 also applies to any servlet, this is the generic way.\n\n# Example 3 - If I wanted to support an individual server dedicated to metrics only for example in port 7777, I would just add the configuration based on examples 1 and 2.\n\nNow, back to your question, with regards to the RestServer, I think you are right, you need to pass all variable parameters to the RestServer, or at least the ones that you want to set the underlying properties for a configuration that matches the json.   I will most likely be OK with what you choose to do there, but I would like to preserve previous functionality as I described in examples above for drools that is present in patch 7 that was removed.",
+      "parentUuid": "6d5f4d0d_81d9c6d8",
+      "range": {
+        "startLine": 105,
+        "startChar": 25,
+        "endLine": 105,
+        "endChar": 44
+      },
+      "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
