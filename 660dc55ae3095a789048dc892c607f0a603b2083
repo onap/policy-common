@@ -94,6 +94,30 @@
       "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d5f4d0d_81d9c6d8",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 4903
+      },
+      "writtenOn": "2021-08-13T09:22:27Z",
+      "side": 1,
+      "message": "I agree with all of your comments Jorge. It is best to just have a simple flag \"exportMetrics\" or \"prometheus\" something like that in the component config/properties file. \nThe only question was\n - Based on the flag, isn\u0027t it better for the components to pass the servletPath and servletClass when the policy-endpoints support it (probably in the RestServer constructor - similar to how we pass Aaf**Filter class today - https://github.com/onap/policy-api/blob/master/main/src/main/java/org/onap/policy/api/main/startstop/ApiActivator.java#L77 )\n(Reiterating to make sure there is no misunderstanding)\nIf I understand your comments correctly, you are of the opinion that we shouldn\u0027t go as mentioned above, but the servletPath and servletClass for prometheus should be hardcoded in the policy-common based on just the flag set by individual components (We are just adding the initial support for generic standard servlets in policy-common for future, but for prometheus, we do not intend to use it directly from individual components). If this is the case, I probably have to revert to patchset 7.",
+      "parentUuid": "32b69d81_cba3b542",
+      "range": {
+        "startLine": 105,
+        "startChar": 25,
+        "endLine": 105,
+        "endChar": 44
+      },
+      "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
