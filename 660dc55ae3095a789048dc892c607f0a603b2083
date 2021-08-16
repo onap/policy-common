@@ -190,6 +190,30 @@
       "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "de0d8710_a144ece0",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 4903
+      },
+      "writtenOn": "2021-08-16T17:54:38Z",
+      "side": 1,
+      "message": "Thanks Jorge for clarifying.\nI have reverted to the changes you had in patchset7.\nAlso made some changes to this file to populate the properties.",
+      "parentUuid": "1a7c33da_a562ed69",
+      "range": {
+        "startLine": 105,
+        "startChar": 25,
+        "endLine": 105,
+        "endChar": 44
+      },
+      "revId": "660dc55ae3095a789048dc892c607f0a603b2083",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
