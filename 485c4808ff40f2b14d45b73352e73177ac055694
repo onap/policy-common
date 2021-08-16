@@ -45,6 +45,46 @@
       "revId": "485c4808ff40f2b14d45b73352e73177ac055694",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a1c9950_41ae8ef9",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/http/server/test/HttpClientTest.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-08-16T18:29:46Z",
+      "side": 1,
+      "message": "oh my - good catch!",
+      "range": {
+        "startLine": 403,
+        "startChar": 74,
+        "endLine": 403,
+        "endChar": 80
+      },
+      "revId": "485c4808ff40f2b14d45b73352e73177ac055694",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f40c1d68_f289b7c8",
+        "filename": "policy-endpoints/src/test/resources/logback-test.xml",
+        "patchSetId": 10
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-08-16T18:29:46Z",
+      "side": 1,
+      "message": "how much output does this generate?",
+      "revId": "485c4808ff40f2b14d45b73352e73177ac055694",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
