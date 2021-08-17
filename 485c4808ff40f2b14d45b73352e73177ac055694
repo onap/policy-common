@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fa2e18f6_b2c5255a",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/IndexedHttpServletServerFactory.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2021-08-17T14:14:19Z",
+      "side": 1,
+      "message": "Sounds good to me, thanks!",
+      "parentUuid": "348f4e0d_6846df6d",
+      "range": {
+        "startLine": 144,
+        "startChar": 8,
+        "endLine": 144,
+        "endChar": 38
+      },
+      "revId": "485c4808ff40f2b14d45b73352e73177ac055694",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e778622b_f96d13e4",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
         "patchSetId": 10
@@ -36,6 +60,30 @@
       "writtenOn": "2021-08-16T17:54:38Z",
       "side": 1,
       "message": "As suggested in one of the comments, providing this here in the constructor.\nIf the servletPath and servletClass are also to be provided via restServerParameters, then this can be avoided as well.",
+      "range": {
+        "startLine": 74,
+        "startChar": 8,
+        "endLine": 74,
+        "endChar": 59
+      },
+      "revId": "485c4808ff40f2b14d45b73352e73177ac055694",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0a4ac01_910fb6ab",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/RestServer.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2021-08-17T14:14:19Z",
+      "side": 1,
+      "message": "Agree with your suggestion, let\u0027s go through RestServerParameters and allow it to be configurable by admins.",
+      "parentUuid": "e778622b_f96d13e4",
       "range": {
         "startLine": 74,
         "startChar": 8,
