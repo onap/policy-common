@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "607d4e17_09fc87b6",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-08-18T14:05:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a4e4ecf_cd1058e7",
+      "range": {
+        "startLine": 43,
+        "startChar": 9,
+        "endLine": 43,
+        "endChar": 43
+      },
+      "revId": "1ec42f80b48f6755ee416dc0ffa3c93528fa309e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d639c6f3_a0cb1a2a",
         "filename": "policy-endpoints/pom.xml",
         "patchSetId": 1
@@ -56,6 +80,24 @@
       "revId": "1ec42f80b48f6755ee416dc0ffa3c93528fa309e",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e8ab15b_612cc864",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/http/server/HttpServletServer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 811
+      },
+      "writtenOn": "2021-08-18T14:05:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0e583439_44691d86",
+      "revId": "1ec42f80b48f6755ee416dc0ffa3c93528fa309e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
