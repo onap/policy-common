@@ -16,6 +16,24 @@
       "revId": "e20ecd95c1045e4bad26dfb67ef2c2e755b9892d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5009ee22_b048aa01",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/parameters/RestServerParameters.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 4903
+      },
+      "writtenOn": "2021-08-18T09:28:04Z",
+      "side": 1,
+      "message": "oh I was asking about the defaultConfig file of individual components, having this flag as true.\nMaking it true here is fine as well(less/no work at component level then 😊)",
+      "parentUuid": "08117a1b_94e1c7bb",
+      "revId": "e20ecd95c1045e4bad26dfb67ef2c2e755b9892d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
