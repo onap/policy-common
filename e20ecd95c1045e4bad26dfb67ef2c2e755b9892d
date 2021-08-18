@@ -34,6 +34,24 @@
       "revId": "e20ecd95c1045e4bad26dfb67ef2c2e755b9892d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac5048d9_a5ec6200",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/parameters/RestServerParameters.java",
+        "patchSetId": 12
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 4903
+      },
+      "writtenOn": "2021-08-18T11:31:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5009ee22_b048aa01",
+      "revId": "e20ecd95c1045e4bad26dfb67ef2c2e755b9892d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
