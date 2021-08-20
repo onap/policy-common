@@ -23,13 +23,15 @@
 package org.onap.policy.common.utils.logging;
 
 import ch.qos.logback.classic.LoggerContext;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Marker;
 import org.slf4j.MarkerFactory;
 
-
-public class LoggerUtils {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public final class LoggerUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoggerUtils.class);
 
@@ -70,17 +72,6 @@ public class LoggerUtils {
      */
     public static final Marker TRANSACTION_LOG_MARKER = MarkerFactory.getMarker(TRANSACTION_LOG_MARKER_NAME);
 
-    /**
-     * Logger delegate.
-     */
-    private final Logger mlogger;
-
-    /**
-     * Constructor.
-     */
-    public LoggerUtils(final Logger loggerP) {
-        this.mlogger = checkNotNull(loggerP);
-    }
 
     /**
      * Set the log level of a logger.
@@ -110,19 +101,5 @@ public class LoggerUtils {
         logger.setLevel(ch.qos.logback.classic.Level.toLevel(loggerLevel, logger.getLevel()));  // NOSONAR
 
         return logger.getLevel().toString();
-    }
-
-    /**
-     * Dependency-free nullcheck.
-     *
-     * @param in  to be checked
-     * @param <T> argument (and return) type
-     * @return input arg
-     */
-    private static <T> T checkNotNull(final T in) {
-        if (in == null) {
-            throw new NullPointerException();
-        }
-        return in;
     }
 }

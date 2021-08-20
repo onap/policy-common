@@ -24,23 +24,15 @@ package org.onap.policy.common.utils.logging;
 
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @RunWith(MockitoJUnitRunner.class)
 public class LoggerUtilsTest {
     protected static final Logger logger = LoggerFactory.getLogger(LoggerUtilsTest.class);
-
-    private LoggerUtils util;
-
-    @Before
-    public void setup() {
-        this.util = new LoggerUtils(logger);
-    }
 
     @Test
     public void testMarker() {
