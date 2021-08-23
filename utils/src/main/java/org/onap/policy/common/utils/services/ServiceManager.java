@@ -23,6 +23,7 @@ package org.onap.policy.common.utils.services;
 import java.util.Deque;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.concurrent.atomic.AtomicBoolean;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.onap.policy.common.capabilities.Startable;
@@ -50,7 +51,7 @@ public class ServiceManager implements Startable {
     /**
      * {@code True} if the services are currently running, {@code false} otherwise.
      */
-    private boolean running;
+    private final AtomicBoolean running = new AtomicBoolean(false);
 
     /**
      * Constructs the object, with a default name.
@@ -77,7 +78,7 @@ public class ServiceManager implements Startable {
      * @return this manager
      */
     public synchronized ServiceManager addAction(String stepName, RunnableWithEx starter, RunnableWithEx stopper) {
-        if (running) {
+        if (isAlive()) {
             throw new IllegalStateException(name + " is already running; cannot add " + stepName);
         }
 
@@ -94,7 +95,7 @@ public class ServiceManager implements Startable {
      * @return this manager
      */
     public synchronized ServiceManager addService(String stepName, Startable service) {
-        if (running) {
+        if (isAlive()) {
             throw new IllegalStateException(name + " is already running; cannot add " + stepName);
         }
 
@@ -103,13 +104,13 @@ public class ServiceManager implements Startable {
     }
 
     @Override
-    public synchronized boolean isAlive() {
-        return running;
+    public boolean isAlive() {
+        return running.get();
     }
 
     @Override
     public synchronized boolean start() {
-        if (running) {
+        if (isAlive()) {
             throw new IllegalStateException(name + " is already running");
         }
 
@@ -134,7 +135,7 @@ public class ServiceManager implements Startable {
 
         if (ex == null) {
             logger.info("{} started", name);
-            running = true;
+            running.set(true);
             return true;
         }
 
@@ -151,11 +152,11 @@ public class ServiceManager implements Startable {
 
     @Override
     public synchronized boolean stop() {
-        if (!running) {
+        if (!isAlive()) {
             throw new IllegalStateException(name + " is not running");
         }
 
-        running = false;
+        running.set(false);
         rewind(items);
 
         return true;
