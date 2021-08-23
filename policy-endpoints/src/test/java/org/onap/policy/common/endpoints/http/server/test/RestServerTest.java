@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP
  * ================================================================================
- * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +40,12 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Base64;
+import java.util.List;
 import java.util.Properties;
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -105,7 +110,7 @@ public class RestServerTest {
 
         initRealParams();
 
-        realRest = new RestServer(params, null, RealProvider.class) {
+        realRest = new RestServer(params, (Class<AafAuthFilter>) null, RealProvider.class) {
             @Override
             protected Properties getServerProperties(RestServerParameters restServerParameters, String names) {
                 Properties props = super.getServerProperties(restServerParameters, names);
@@ -167,6 +172,19 @@ public class RestServerTest {
     }
 
     @Test
+    public void testRestServerSet() {
+        rest = new RestServer(params, List.of(Filter.class, Filter2.class), List.of(Provider1.class, Provider2.class));
+
+        rest.start();
+        verify(server1).start();
+        verify(server2).start();
+
+        rest.stop();
+        verify(server1).stop();
+        verify(server2).stop();
+    }
+
+    @Test
     public void testRestServer_NoAaf() {
         rest = new RestServer(params, Filter.class, Provider1.class, Provider2.class);
         verify(server1, never()).addFilterClass(any(), any());
@@ -199,7 +217,7 @@ public class RestServerTest {
         when(server1.isAaf()).thenReturn(true);
         when(server2.isAaf()).thenReturn(true);
 
-        rest = new RestServer(params, null, Provider1.class, Provider2.class);
+        rest = new RestServer(params, (Class<AafAuthFilter>) null, Provider1.class, Provider2.class);
 
         verify(server1, never()).addFilterClass(any(), any());
         verify(server2, never()).addFilterClass(any(), any());
@@ -362,6 +380,14 @@ public class RestServerTest {
         @Override
         protected String getPermissionInstance(HttpServletRequest request) {
             return "";
+        }
+    }
+
+    private static class Filter2 implements javax.servlet.Filter {
+        @Override
+        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+                        throws IOException, ServletException {
+            // do nothing
         }
     }
 
