@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
+import javax.servlet.Filter;
 import lombok.ToString;
 import org.onap.policy.common.endpoints.http.server.aaf.AafAuthFilter;
 import org.onap.policy.common.endpoints.parameters.RestServerParameters;
@@ -59,7 +60,28 @@ public class RestServer extends ServiceManagerContainer {
     public RestServer(final RestServerParameters restServerParameters, Class<? extends AafAuthFilter> aafFilter,
                     Class<?>... jaxrsProviders) {
 
-        if (jaxrsProviders.length == 0) {
+        this(restServerParameters, makeFilterList(aafFilter), Arrays.asList(jaxrsProviders));
+    }
+
+    private static List<Class<? extends Filter>> makeFilterList(Class<? extends AafAuthFilter> aafFilter) {
+        if (aafFilter == null) {
+            return List.of();
+        } else {
+            return List.of(aafFilter);
+        }
+    }
+
+    /**
+     * Constructs the object.
+     *
+     * @param restServerParameters the rest server parameters
+     * @param filters class of object to use to filter requests, or {@code null}
+     * @param jaxrsProviders classes providing the services
+     */
+    public RestServer(final RestServerParameters restServerParameters, List<Class<? extends Filter>> filters,
+                    List<Class<?>> jaxrsProviders) {
+
+        if (jaxrsProviders.isEmpty()) {
             throw new IllegalArgumentException("no providers specified");
         }
 
@@ -67,8 +89,10 @@ public class RestServer extends ServiceManagerContainer {
                         .build(getServerProperties(restServerParameters, getProviderClassNames(jaxrsProviders)));
 
         for (HttpServletServer server : this.servers) {
-            if (aafFilter != null && server.isAaf()) {
-                server.addFilterClass(null, aafFilter.getName());
+            for (Class<? extends Filter> filter : filters) {
+                if (!AafAuthFilter.class.isAssignableFrom(filter) || server.isAaf()) {
+                    server.addFilterClass(null, filter.getName());
+                }
             }
 
             addAction("REST " + server.getName(), server::start, server::stop);
@@ -123,8 +147,8 @@ public class RestServer extends ServiceManagerContainer {
      * @param jaxrsProviders classes providing the services
      * @return the provider class names
      */
-    private String getProviderClassNames(Class<?>[] jaxrsProviders) {
-        return String.join(",", Arrays.stream(jaxrsProviders).map(Class::getName).collect(Collectors.toList()));
+    private String getProviderClassNames(List<Class<?>> jaxrsProviders) {
+        return String.join(",", jaxrsProviders.stream().map(Class::getName).collect(Collectors.toList()));
     }
 
     private String getValue(final String value) {
