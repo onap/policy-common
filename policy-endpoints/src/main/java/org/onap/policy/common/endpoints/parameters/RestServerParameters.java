@@ -46,7 +46,7 @@ public class RestServerParameters extends ParameterGroupImpl {
     private String password;
     private boolean https;
     private boolean aaf;
-    private boolean prometheus = true;
+    private boolean prometheus;
     private String servletClass;
     private String servletUriPath;
 
