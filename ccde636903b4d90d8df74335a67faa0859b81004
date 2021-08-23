@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1cdce9fa_dda3ec7c",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/parameters/RestServerParameters.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2021-08-23T16:18:42Z",
+      "side": 1,
+      "message": "I would have preferred having it true by default. So that changes in all component, csit \u0026 oom are avoided. But, I see that you have already raised a review for components config. So, let\u0027s go ahead with this.",
+      "range": {
+        "startLine": 49,
+        "startChar": 20,
+        "endLine": 49,
+        "endChar": 30
+      },
+      "revId": "ccde636903b4d90d8df74335a67faa0859b81004",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    }
+  ]
+}
