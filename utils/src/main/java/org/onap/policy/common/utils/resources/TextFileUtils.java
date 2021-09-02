@@ -31,6 +31,8 @@ import java.nio.file.Files;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * The Class TextFileUtils is class that provides useful functions for handling text files. Functions to read and write
@@ -40,6 +42,7 @@ import org.apache.commons.io.IOUtils;
  */
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TextFileUtils {
+    private static final Logger logger = LoggerFactory.getLogger(TextFileUtils.class);
 
     /**
      * Method to return the contents of a text file as a string.
@@ -100,5 +103,36 @@ public final class TextFileUtils {
      */
     public static String getReaderAsString(final Reader textReader) throws IOException {
         return IOUtils.toString(textReader);
+    }
+
+    /**
+     * Creates a temporary file, only accessible by the owner.
+     *
+     * @param prefix file name prefix
+     * @param suffix file name suffix
+     * @return a new, temporary file
+     * @throws IOException if an error occurs
+     */
+    public static File createTempFile(String prefix, String suffix) throws IOException {
+        /*
+         * Disabling sonar, because setDefaultPermissions() will set the permissions of
+         * the file.
+         */
+        var file = File.createTempFile(prefix, suffix); // NOSONAR
+
+        setDefaultPermissions(file);
+
+        return file;
+    }
+
+    /**
+     * Sets permissions on a file or directory so that only the owner can access it.
+     *
+     * @param file file or directory on which permissions are to be set
+     */
+    public static void setDefaultPermissions(File file) {
+        if (!file.setReadable(true, true) || !file.setWritable(true, true) || !file.setExecutable(true, true)) {
+            logger.warn("cannot set permissions for {}", file);
+        }
     }
 }

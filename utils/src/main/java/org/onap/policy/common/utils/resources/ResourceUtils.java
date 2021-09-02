@@ -23,11 +23,11 @@
 package org.onap.policy.common.utils.resources;
 
 import com.google.re2j.Pattern;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Set;
@@ -36,6 +36,7 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,9 +50,6 @@ public final class ResourceUtils {
     private static final Logger LOGGER = LoggerFactory.getLogger(ResourceUtils.class);
 
     private static final Pattern SLASH_PAT = Pattern.compile("/");
-
-    // The length of byte buffers used to read resources into strings
-    private static final int BYTE_BUFFER_LENGH = 1024;
 
     // Resource types
     private static final String FILE_PROTOCOL = "file";
@@ -90,20 +88,13 @@ public final class ResourceUtils {
             return null;
         }
 
-        // Read the stream contents in to an output stream
-        final var resourceOutputStreamBuffer = new ByteArrayOutputStream();
-        final var resourceBuffer = new byte[BYTE_BUFFER_LENGH];
-        int length;
-        try {
-            while ((length = resourceStream.read(resourceBuffer)) != -1) {
-                resourceOutputStreamBuffer.write(resourceBuffer, 0, length);
-            }
+        // Read the stream contents, closing when done
+        try (var streamCloser = resourceStream) {
+            return IOUtils.toString(resourceStream, StandardCharsets.UTF_8);
         } catch (final IOException e) {
             LOGGER.debug("error reading resource stream {}", resourceName, e);
             return null;
         }
-
-        return resourceOutputStreamBuffer.toString();
     }
 
     /**
