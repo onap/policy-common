@@ -94,7 +94,7 @@ public final class ResourceUtils {
         final var resourceOutputStreamBuffer = new ByteArrayOutputStream();
         final var resourceBuffer = new byte[BYTE_BUFFER_LENGH];
         int length;
-        try {
+        try (var streamCloser = resourceStream) {
             while ((length = resourceStream.read(resourceBuffer)) != -1) {
                 resourceOutputStreamBuffer.write(resourceBuffer, 0, length);
             }

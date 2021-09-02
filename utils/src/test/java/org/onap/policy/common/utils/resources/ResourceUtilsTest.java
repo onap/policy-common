@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
- *  Modifications Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  *  Modifications Copyright (C) 2020-2021 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,7 +30,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
@@ -183,45 +182,26 @@ public class ResourceUtilsTest {
      * Test get resource as stream.
      */
     @Test
-    public void testGetResourceAsStream() {
-        InputStream theStream = ResourceUtils.getResourceAsStream(tmpDir.getAbsolutePath());
-        assertNotNull(theStream);
+    public void testGetResourceAsStream() throws IOException {
+        verifyStream(tmpDir.getAbsolutePath());
+        verifyStream(tmpEmptyFile.getAbsolutePath());
+        verifyStream(tmpUsedFile.getAbsolutePath());
+        verifyStream(jarDirResource);
+        verifyStream(jarFileResource);
+        verifyStream(PATH_DIR_RESOURCE);
+        verifyStream(PATH_FILE_RESOURCE);
+        verifyStream(RESOURCES_PATH + PATH_DIR_RESOURCE);
+        verifyStream(RESOURCES_PATH + PATH_FILE_RESOURCE);
+        assertNull(ResourceUtils.getResourceAsStream(NON_EXISTENT_RESOURCE));
+        assertNull(ResourceUtils.getResourceAsStream(INVALID_RESOURCE));
+        assertNull(ResourceUtils.getResourceAsStream(null));
+        verifyStream("");
+    }
 
-        theStream = ResourceUtils.getResourceAsStream(tmpEmptyFile.getAbsolutePath());
-        assertNotNull(theStream);
-
-        theStream = ResourceUtils.getResourceAsStream(tmpUsedFile.getAbsolutePath());
-        assertNotNull(theStream);
-
-        theStream = ResourceUtils.getResourceAsStream(jarDirResource);
-        assertNotNull(theStream);
-
-        theStream = ResourceUtils.getResourceAsStream(jarFileResource);
-        assertNotNull(theStream);
-
-        theStream = ResourceUtils.getResourceAsStream(PATH_DIR_RESOURCE);
-        assertNotNull(theStream);
-
-        theStream = ResourceUtils.getResourceAsStream(PATH_FILE_RESOURCE);
-        assertNotNull(theStream);
-
-        theStream = ResourceUtils.getResourceAsStream(RESOURCES_PATH + PATH_DIR_RESOURCE);
-        assertNotNull(theStream);
-
-        theStream = ResourceUtils.getResourceAsStream(RESOURCES_PATH + PATH_FILE_RESOURCE);
-        assertNotNull(theStream);
-
-        theStream = ResourceUtils.getResourceAsStream(NON_EXISTENT_RESOURCE);
-        assertNull(theStream);
-
-        theStream = ResourceUtils.getResourceAsStream(INVALID_RESOURCE);
-        assertNull(theStream);
-
-        theStream = ResourceUtils.getResourceAsStream(null);
-        assertNull(theStream);
-
-        theStream = ResourceUtils.getResourceAsStream("");
-        assertNotNull(theStream);
+    private void verifyStream(String path) throws IOException {
+        try (var theStream = ResourceUtils.getResourceAsStream(path)) {
+            assertNotNull(theStream);
+        }
     }
 
     /**
