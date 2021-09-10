@@ -123,7 +123,7 @@ public class SelfSignedKeyStoreTest {
     @Test
     public void testSelfSignedKeyStoreStringKeytoolFailure() throws Exception {
         assertThatThrownBy(() -> new SelfSignedKeyStore("target/unknown/path/to/keystore"))
-                        .isInstanceOf(IOException.class).hasMessageContaining("keytool exited with");
+                        .isInstanceOf(IOException.class).hasMessageContaining("keytool");
     }
 
     @Test
@@ -141,7 +141,7 @@ public class SelfSignedKeyStoreTest {
 
         // try again using the original relative path - should fail, as it's now deeper
         assertThatThrownBy(() -> new SelfSignedKeyStore(relpath)).isInstanceOf(IOException.class)
-                        .hasMessageContaining("keytool exited with");
+                        .hasMessageContaining("keytool");
     }
 
     private static void delete(File file) {
