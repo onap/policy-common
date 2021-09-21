@@ -26,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -78,52 +77,25 @@ public class SelfSignedKeyStoreTest {
     }
 
     /**
-     * Tests the constructor, when the keystore already exists.
+     * Tests the constructor, when the resource file is not found.
      */
     @Test
-    public void testSelfSignedKeyStoreStringExists() throws Exception {
-        new SelfSignedKeyStore();
-        assertThat(defaultKeystore).exists();
-
-        // change the timestamp on the keystore so it's a little old, but not too old
-        defaultKeystore.setLastModified(
-                        System.currentTimeMillis() - TimeUnit.MILLISECONDS.convert(10, TimeUnit.MINUTES));
-        long tcurrent = defaultKeystore.lastModified();
-
-        // this should not recreate the keystore, thus the timestamp should be unchanged
-        new SelfSignedKeyStore();
-        assertThat(defaultKeystore.lastModified()).isEqualTo(tcurrent);
-
-        // change the timestamp on the keystore so it's too old
-        defaultKeystore.setLastModified(
-                        System.currentTimeMillis() - TimeUnit.MILLISECONDS.convert(1000, TimeUnit.HOURS));
-        tcurrent = defaultKeystore.lastModified();
-
-        // this should recreate the keystore
-        new SelfSignedKeyStore();
-        assertThat(defaultKeystore.lastModified()).isGreaterThan(tcurrent);
-    }
-
-    /**
-     * Tests the constructor, when the SAN file is not found.
-     */
-    @Test
-    public void testSelfSignedKeyStoreStringNoSanFile() throws Exception {
+    public void testSelfSignedKeyStoreStringNoResourceFile() throws Exception {
         assertThatThrownBy(() -> new SelfSignedKeyStore() {
             @Override
-            protected String getKeystoreSanName() {
-                return "unknown/san/file.txt";
+            protected String getKeystoreResourceName() {
+                return "unknown/resource/file.jks";
             }
-        }).isInstanceOf(FileNotFoundException.class).hasMessageContaining("file.txt");
+        }).isInstanceOf(FileNotFoundException.class).hasMessageContaining("file.jks");
     }
 
     /**
-     * Tests the constructor, when keytool fails.
+     * Tests the constructor, when copy fails.
      */
     @Test
-    public void testSelfSignedKeyStoreStringKeytoolFailure() throws Exception {
+    public void testSelfSignedKeyStoreStringCopyFailure() throws Exception {
         assertThatThrownBy(() -> new SelfSignedKeyStore("target/unknown/path/to/keystore"))
-                        .isInstanceOf(IOException.class).hasMessageContaining("keytool exited with");
+                        .isInstanceOf(IOException.class);
     }
 
     @Test
@@ -140,8 +112,7 @@ public class SelfSignedKeyStoreTest {
         assertThat(defaultKeystore).exists();
 
         // try again using the original relative path - should fail, as it's now deeper
-        assertThatThrownBy(() -> new SelfSignedKeyStore(relpath)).isInstanceOf(IOException.class)
-                        .hasMessageContaining("keytool exited with");
+        assertThatThrownBy(() -> new SelfSignedKeyStore(relpath)).isInstanceOf(IOException.class);
     }
 
     private static void delete(File file) {
