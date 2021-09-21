@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8a36c33b_73a8a70e",
+        "filename": "utils-test/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2021-09-21T13:35:06Z",
+      "side": 1,
+      "message": "I recall long ago the bouncycastle had security problems and should not be used. Let\u0027s just confirm using the CWE profile in policy/parent. Then again, this is test code so maybe add \"test\" to the dependency if it does still have security issues??",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 21
+      },
+      "revId": "6141fbe02048a8f7f834ca97bc6837a7b366cac3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
