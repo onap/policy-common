@@ -29,7 +29,6 @@ import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 public class SelfSignedKeyStoreTest {
@@ -56,7 +55,6 @@ public class SelfSignedKeyStoreTest {
         delete(defaultKeystore);
     }
 
-    @Ignore
     @Test
     public void testSelfSignedKeyStore() throws Exception {
         SelfSignedKeyStore ks = new SelfSignedKeyStore();
@@ -65,7 +63,6 @@ public class SelfSignedKeyStoreTest {
         assertThat(defaultKeystore).exists();
     }
 
-    @Ignore
     @Test
     public void testSelfSignedKeyStoreString() throws IOException, InterruptedException {
         String relName = "target/my-keystore";
@@ -83,7 +80,6 @@ public class SelfSignedKeyStoreTest {
     /**
      * Tests the constructor, when the keystore already exists.
      */
-    @Ignore
     @Test
     public void testSelfSignedKeyStoreStringExists() throws Exception {
         new SelfSignedKeyStore();
@@ -122,16 +118,14 @@ public class SelfSignedKeyStoreTest {
     }
 
     /**
-     * Tests the constructor, when keytool fails.
+     * Tests the constructor, when write fails.
      */
-    @Ignore
     @Test
-    public void testSelfSignedKeyStoreStringKeytoolFailure() throws Exception {
+    public void testSelfSignedKeyStoreStringWriteFailure() throws Exception {
         assertThatThrownBy(() -> new SelfSignedKeyStore("target/unknown/path/to/keystore"))
-                        .isInstanceOf(IOException.class).hasMessageContaining("keytool exited with");
+                        .isInstanceOf(IOException.class);
     }
 
-    @Ignore
     @Test
     public void testGetKeystoreName() throws Exception {
         String relpath = SelfSignedKeyStore.RELATIVE_PATH;
@@ -146,8 +140,7 @@ public class SelfSignedKeyStoreTest {
         assertThat(defaultKeystore).exists();
 
         // try again using the original relative path - should fail, as it's now deeper
-        assertThatThrownBy(() -> new SelfSignedKeyStore(relpath)).isInstanceOf(IOException.class)
-                        .hasMessageContaining("keytool exited with");
+        assertThatThrownBy(() -> new SelfSignedKeyStore(relpath)).isInstanceOf(IOException.class);
     }
 
     private static void delete(File file) {

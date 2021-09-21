@@ -40,6 +40,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-fips</artifactId>
+            <version>1.0.5</version>
+        </dependency>
+        <dependency>
             <groupId>com.google.re2j</groupId>
             <artifactId>re2j</artifactId>
         </dependency>
