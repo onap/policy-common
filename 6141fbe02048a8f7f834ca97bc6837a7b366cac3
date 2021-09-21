@@ -22,6 +22,30 @@
       "revId": "6141fbe02048a8f7f834ca97bc6837a7b366cac3",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "468885c3_7ee5b73e",
+        "filename": "utils-test/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 7886
+      },
+      "writtenOn": "2021-09-21T14:20:39Z",
+      "side": 1,
+      "message": "not surprising.  I don\u0027t think it\u0027s an issue here, as utils-test should not be included in any production code, thus bouncycastle should not be included (as a transitive dependency) in any production code either.  May give a false positive in one of the tools, though.\n\nNonetheless, if you want to stick with keytool and fix the staging job env, that\u0027s your call.  I have not found any alternative to keytool, for doing this programmatically, other than bouncycastle.\n\nOne other option would be to manually create a self-signed jks file and include it within this repo.  The SelfSignedKeyStore class could be modified to use that so that other junits continue to work.  You\u0027d still have to update the keystore occasionally, but at least it would only appear within one repo.  In addition, the private key could be given a 10-year life so it doesn\u0027t have to be updated very frequently.",
+      "parentUuid": "8a36c33b_73a8a70e",
+      "range": {
+        "startLine": 43,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 21
+      },
+      "revId": "6141fbe02048a8f7f834ca97bc6837a7b366cac3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
