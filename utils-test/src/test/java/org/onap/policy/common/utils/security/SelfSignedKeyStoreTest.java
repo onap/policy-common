@@ -118,12 +118,12 @@ public class SelfSignedKeyStoreTest {
     }
 
     /**
-     * Tests the constructor, when keytool fails.
+     * Tests the constructor, when write fails.
      */
     @Test
-    public void testSelfSignedKeyStoreStringKeytoolFailure() throws Exception {
+    public void testSelfSignedKeyStoreStringWriteFailure() throws Exception {
         assertThatThrownBy(() -> new SelfSignedKeyStore("target/unknown/path/to/keystore"))
-                        .isInstanceOf(IOException.class).hasMessageContaining("keytool exited with");
+                        .isInstanceOf(IOException.class);
     }
 
     @Test
@@ -140,8 +140,7 @@ public class SelfSignedKeyStoreTest {
         assertThat(defaultKeystore).exists();
 
         // try again using the original relative path - should fail, as it's now deeper
-        assertThatThrownBy(() -> new SelfSignedKeyStore(relpath)).isInstanceOf(IOException.class)
-                        .hasMessageContaining("keytool exited with");
+        assertThatThrownBy(() -> new SelfSignedKeyStore(relpath)).isInstanceOf(IOException.class);
     }
 
     private static void delete(File file) {

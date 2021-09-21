@@ -22,11 +22,34 @@ package org.onap.policy.common.utils.security;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.ProcessBuilder.Redirect;
+import java.math.BigInteger;
 import java.nio.file.Files;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import lombok.Getter;
+import org.bouncycastle.asn1.x500.X500Name;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.GeneralName;
+import org.bouncycastle.asn1.x509.GeneralNames;
+import org.bouncycastle.asn1.x509.SubjectPublicKeyInfo;
+import org.bouncycastle.cert.X509CertificateHolder;
+import org.bouncycastle.cert.X509v3CertificateBuilder;
+import org.bouncycastle.cert.jcajce.JcaX509CertificateConverter;
+import org.bouncycastle.jcajce.provider.BouncyCastleFipsProvider;
+import org.bouncycastle.operator.ContentSigner;
+import org.bouncycastle.operator.OperatorCreationException;
+import org.bouncycastle.operator.jcajce.JcaContentSignerBuilder;
 import org.onap.policy.common.utils.resources.ResourceUtils;
 
 /**
@@ -70,49 +93,63 @@ public class SelfSignedKeyStore {
         keystoreName = System.getProperty("user.dir") + "/" + relativePath;
 
         // use existing file if it isn't too old
-        var keystore = new File(keystoreName);
-        if (keystore.exists()) {
-            if (System.currentTimeMillis() < keystore.lastModified()
+        var keystoreFile = new File(keystoreName);
+        if (keystoreFile.exists()) {
+            if (System.currentTimeMillis() < keystoreFile.lastModified()
                             + TimeUnit.MILLISECONDS.convert(5, TimeUnit.HOURS)) {
                 return;
             }
 
-            Files.delete(keystore.toPath());
+            Files.delete(keystoreFile.toPath());
         }
 
         /*
          * Read the list of subject-alternative names, joining the lines with commas, and
          * dropping the trailing comma.
          */
-        String sanName = getKeystoreSanName();
-        var subAltNames = ResourceUtils.getResourceAsString(sanName);
-        if (subAltNames == null) {
-            throw new FileNotFoundException(sanName);
+        String sanFileName = getKeystoreSanName();
+        var sanString = ResourceUtils.getResourceAsString(sanFileName);
+        if (sanString == null) {
+            throw new FileNotFoundException(sanFileName);
         }
 
-        subAltNames = subAltNames.replace("\r", "").replace("\n", ",");
-        subAltNames = "SAN=" + subAltNames.substring(0, subAltNames.length() - 1);
+        var sanArray = sanString.replace("DNS:", "").replace("\r", "").split("\n");
+        GeneralName[] nameArray = Arrays.stream(sanArray).map(name -> new GeneralName(GeneralName.dNSName, name))
+                        .collect(Collectors.toList()).toArray(new GeneralName[0]);
+        final var names = new GeneralNames(nameArray);
 
-        // build up the "keytool" command
+        try (var ostr = new FileOutputStream(keystoreFile)) {
+            var keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+            keyPairGenerator.initialize(2048);
+            final var keyPair = keyPairGenerator.generateKeyPair();
 
-        // @formatter:off
-        var builder = new ProcessBuilder("keytool", "-genkeypair",
-                        "-alias", "policy@policy.onap.org",
-                        "-validity", "1",
-                        "-keyalg", "RSA",
-                        "-dname", "C=US, O=ONAP, OU=OSAAF, OU=policy@policy.onap.org:DEV, CN=policy",
-                        "-keystore", keystoreName,
-                        "-keypass", PRIVATE_KEY_PASSWORD,
-                        "-storepass", KEYSTORE_PASSWORD,
-                        "-ext", subAltNames);
-        // @formatter:on
+            final long tcur = System.currentTimeMillis();
 
-        Process proc = builder.redirectOutput(Redirect.INHERIT).redirectError(Redirect.INHERIT).start();
-        proc.waitFor();
+            final var dn = new X500Name("C=US, O=ONAP, OU=OSAAF, OU=policy@policy.onap.org:DEV, CN=policy");
+            final var serial = BigInteger.valueOf(new SecureRandom().nextInt());
+            final var notBefore = new Date(tcur);
+            final var notAfter = new Date(tcur + TimeUnit.MILLISECONDS.convert(365, TimeUnit.DAYS));
+            final var pubKeyInfo = SubjectPublicKeyInfo.getInstance(keyPair.getPublic().getEncoded());
 
-        int exitCode = proc.exitValue();
-        if (exitCode != 0) {
-            throw new IOException("keytool exited with " + exitCode);
+            ContentSigner signer = new JcaContentSignerBuilder("SHA256WithRSA")
+                            .setProvider(new BouncyCastleFipsProvider()).build(keyPair.getPrivate());
+
+            X509CertificateHolder holder = new X509v3CertificateBuilder(dn, serial, notBefore, notAfter, dn, pubKeyInfo)
+                            .addExtension(Extension.subjectAlternativeName, false, names).build(signer);
+
+            var cert = new JcaX509CertificateConverter().setProvider(new BouncyCastleFipsProvider())
+                            .getCertificate(holder);
+            final Certificate[] chain = {cert};
+
+            var keystore = KeyStore.getInstance("PKCS12");
+            keystore.load(null, null);
+            keystore.setKeyEntry("policy@policy.onap.org", keyPair.getPrivate(), PRIVATE_KEY_PASSWORD.toCharArray(),
+                            chain);
+
+            keystore.store(ostr, KEYSTORE_PASSWORD.toCharArray());
+
+        } catch (NoSuchAlgorithmException | OperatorCreationException | CertificateException | KeyStoreException e) {
+            throw new IOException("cannot create certificate", e);
         }
     }
 
