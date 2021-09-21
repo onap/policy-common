@@ -20,13 +20,12 @@
 
 package org.onap.policy.common.utils.security;
 
-import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.lang.ProcessBuilder.Redirect;
-import java.nio.file.Files;
-import java.util.concurrent.TimeUnit;
+import java.io.InputStream;
 import lombok.Getter;
+import org.eclipse.persistence.tools.file.FileUtil;
 import org.onap.policy.common.utils.resources.ResourceUtils;
 
 /**
@@ -39,17 +38,16 @@ public class SelfSignedKeyStore {
     public static final String RELATIVE_PATH = "target/test-classes/policy-keystore";
 
     /**
-     * File containing subject-alternative names (i.e., list of servers that may use this
-     * keystore).
+     * File resource, containing keystore, to use.
      */
-    private static final String KEYSTORE_SAN = "keystore_san.txt";
+    private static final String KEYSTORE_RESOURCE = "selfSignedKey.jks";
 
     @Getter
     private final String keystoreName;
 
 
     /**
-     * Generates the keystore, if it does not exist or if it's more than a few hours old.
+     * Generates the keystore.
      *
      * @throws IOException if an I/O error occurs
      * @throws InterruptedException if an interrupt occurs
@@ -59,7 +57,7 @@ public class SelfSignedKeyStore {
     }
 
     /**
-     * Generates the keystore, if it does not exist or if it's more than a few hours old.
+     * Generates the keystore.
      *
      * @param relativePath path to the keystore, relative to the "user.dir" system
      *        property
@@ -69,56 +67,21 @@ public class SelfSignedKeyStore {
     public SelfSignedKeyStore(String relativePath) throws IOException, InterruptedException {
         keystoreName = System.getProperty("user.dir") + "/" + relativePath;
 
-        // use existing file if it isn't too old
-        var keystore = new File(keystoreName);
-        if (keystore.exists()) {
-            if (System.currentTimeMillis() < keystore.lastModified()
-                            + TimeUnit.MILLISECONDS.convert(5, TimeUnit.HOURS)) {
-                return;
-            }
-
-            Files.delete(keystore.toPath());
+        String resourceName = getKeystoreResourceName();
+        InputStream resource = ResourceUtils.getResourceAsStream(resourceName);
+        if (resource == null) {
+            throw new FileNotFoundException(resourceName);
         }
 
-        /*
-         * Read the list of subject-alternative names, joining the lines with commas, and
-         * dropping the trailing comma.
-         */
-        String sanName = getKeystoreSanName();
-        var subAltNames = ResourceUtils.getResourceAsString(sanName);
-        if (subAltNames == null) {
-            throw new FileNotFoundException(sanName);
-        }
-
-        subAltNames = subAltNames.replace("\r", "").replace("\n", ",");
-        subAltNames = "SAN=" + subAltNames.substring(0, subAltNames.length() - 1);
-
-        // build up the "keytool" command
-
-        // @formatter:off
-        var builder = new ProcessBuilder("keytool", "-genkeypair",
-                        "-alias", "policy@policy.onap.org",
-                        "-validity", "1",
-                        "-keyalg", "RSA",
-                        "-dname", "C=US, O=ONAP, OU=OSAAF, OU=policy@policy.onap.org:DEV, CN=policy",
-                        "-keystore", keystoreName,
-                        "-keypass", PRIVATE_KEY_PASSWORD,
-                        "-storepass", KEYSTORE_PASSWORD,
-                        "-ext", subAltNames);
-        // @formatter:on
-
-        Process proc = builder.redirectOutput(Redirect.INHERIT).redirectError(Redirect.INHERIT).start();
-        proc.waitFor();
-
-        int exitCode = proc.exitValue();
-        if (exitCode != 0) {
-            throw new IOException("keytool exited with " + exitCode);
+        try (var input = resource;
+                        var output = new FileOutputStream(keystoreName)) {
+            FileUtil.copy(input, output);
         }
     }
 
     // may be overridden by junit tests
 
-    protected String getKeystoreSanName() {
-        return KEYSTORE_SAN;
+    protected String getKeystoreResourceName() {
+        return KEYSTORE_RESOURCE;
     }
 }
