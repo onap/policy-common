@@ -312,7 +312,7 @@ public class ResourceUtilsTest {
                         normalizePath(resultD2.iterator().next()));
 
         Set<String> resultJ0 = ResourceUtils.getDirectoryContents("com");
-        assertEquals(189, resultJ0.size());
+        assertTrue(resultJ0.contains("com/google/gson/"));
         assertEquals("com/google/", normalizePath(resultJ0.iterator().next()));
 
         Set<String> resultJ1 = ResourceUtils.getDirectoryContents("com/google/gson");
