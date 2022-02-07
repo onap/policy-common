@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0f81e68d_400076ce",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/PrometheusUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-02-07T14:43:52Z",
+      "side": 1,
+      "message": "I think plurals are most common with counters (ie. http_requests defined by prom team), could we rename to policy_executions? it will also match the plurals form in line 38.",
+      "revId": "4884888dc415f2e1d8796aabf3691136a21dce66",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
