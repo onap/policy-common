@@ -16,6 +16,24 @@
       "revId": "4884888dc415f2e1d8796aabf3691136a21dce66",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8cc7e171_e5fdc7f6",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/PrometheusUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 159
+      },
+      "writtenOn": "2022-02-07T14:46:58Z",
+      "side": 1,
+      "message": "Sure Jorge, will amend the patch",
+      "parentUuid": "0f81e68d_400076ce",
+      "revId": "4884888dc415f2e1d8796aabf3691136a21dce66",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
