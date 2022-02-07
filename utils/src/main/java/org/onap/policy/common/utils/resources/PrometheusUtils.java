@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2022 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2022 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@
 package org.onap.policy.common.utils.resources;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -39,6 +41,16 @@ public class PrometheusUtils {
      * Policy Deployments Metric Help Message.
      */
     public static final String POLICY_DEPLOYMENT_HELP = "The total number of policy deployments.";
+
+    /**
+     * Policy Execution Metric Name.
+     */
+    public static final String POLICY_EXECUTION_METRIC = "policy_execution";
+
+    /**
+     * Policy Execution Metric Help Message.
+     */
+    public static final String POLICY_EXECUTION_HELP = "The total number of TOSCA policy executions.";
 
     /**
      * Metric label for arbitrary operations (eg. deploy, undeploy, execute).
@@ -65,4 +77,19 @@ public class PrometheusUtils {
      */
     public static final String STATUS_METRIC_LABEL = "status";
 
+    /**
+     * Prometheus namespace values mapping to the supported PDP types.
+     */
+    public enum PdpType {
+        PDPD("pdpd"),
+        PDPA("pdpa"),
+        PDPX("pdpx");
+
+        @Getter
+        private final String namespace;
+
+        PdpType(String namespace) {
+            this.namespace = namespace;
+        }
+    }
 }
