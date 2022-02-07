@@ -41,6 +41,16 @@ public class PrometheusUtils {
     public static final String POLICY_DEPLOYMENT_HELP = "The total number of policy deployments.";
 
     /**
+     * Policy Execution Metric Name.
+     */
+    public static final String POLICY_EXECUTION_METRIC = "policy_execution";
+
+    /**
+     * Policy Execution Metric Help Message.
+     */
+    public static final String POLICY_EXECUTION_HELP = "The total number of TOSCA policy executions.";
+
+    /**
      * Metric label for arbitrary operations (eg. deploy, undeploy, execute).
      */
     public static final String OPERATION_METRIC_LABEL = "operation";
