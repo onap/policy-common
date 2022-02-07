@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c05028b8_6d8bf066",
+        "filename": "utils/src/main/java/org/onap/policy/common/utils/resources/PrometheusUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 4903
+      },
+      "writtenOn": "2022-02-07T11:56:07Z",
+      "side": 1,
+      "message": "Update License.",
+      "revId": "d614a4597d3fce69a367a5d50eacf297d3b3c3f6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
