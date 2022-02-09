@@ -53,6 +53,18 @@ public class PrometheusUtils {
     public static final String POLICY_EXECUTION_HELP = "The total number of TOSCA policy executions.";
 
     /**
+     * Policy Execution Latency in Seconds Metric Name.
+     * This metric name is not to be used as a counter.
+     */
+    public static final String POLICY_EXECUTIONS_LATENCY_SECONDS_METRIC = "policy_executions_latency_seconds";
+
+    /**
+     * Policy Execution Latency in Seconds Metric Help message.
+     */
+    public static final String POLICY_EXECUTIONS_LATENCY_SECONDS_HELP =
+                                    "The latency in seconds of TOSCA policy executions.";
+
+    /**
      * Metric label for arbitrary operations (eg. deploy, undeploy, execute).
      */
     public static final String OPERATION_METRIC_LABEL = "operation";
