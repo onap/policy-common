@@ -62,6 +62,7 @@
         <module>integrity-audit</module>
         <module>integrity-monitor</module>
         <module>policy-endpoints</module>
+        <module>spring-utils</module>
     </modules>
 
     <dependencyManagement>
