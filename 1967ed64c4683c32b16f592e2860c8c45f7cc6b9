@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3619693e_fce2a054",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-02-14T22:46:39Z",
+      "side": 1,
+      "message": "Can these be placed Ram in some place or way that does not cause components that do not use spring boot to have to carry them in their final product? besides bulking the final product for those, CDS comes to my mind in drools-apps that may be using different spring versions of transitive dependencies that I am wondering they may conflict.   Thoughts?",
+      "revId": "1967ed64c4683c32b16f592e2860c8c45f7cc6b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
