@@ -16,6 +16,24 @@
       "revId": "1967ed64c4683c32b16f592e2860c8c45f7cc6b9",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1a36214_957f0e52",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 7565
+      },
+      "writtenOn": "2022-02-15T10:56:13Z",
+      "side": 1,
+      "message": "My small suggestion: \"org.springframework.boot\" is a collections of \"org.springframework\" libraries. Maybe we could insert only the necessary \"org.springframework\" libraries rather than \"org.springframework.boot\" collections. (E.g. org.springframework:spring-core and org.springframework:spring-web)",
+      "parentUuid": "3619693e_fce2a054",
+      "revId": "1967ed64c4683c32b16f592e2860c8c45f7cc6b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
