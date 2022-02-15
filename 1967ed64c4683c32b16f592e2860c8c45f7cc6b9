@@ -109,6 +109,24 @@
     },
     {
       "key": {
+        "uuid": "75affb72_6092ab12",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2022-02-15T18:41:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f199b221_59ee47ad",
+      "revId": "1967ed64c4683c32b16f592e2860c8c45f7cc6b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "494040fb_886ab11d",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/YamlHttpMessageConverter.java",
         "patchSetId": 2
