@@ -73,6 +73,24 @@
     },
     {
       "key": {
+        "uuid": "375c7bb6_52159739",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-02-15T14:41:18Z",
+      "side": 1,
+      "message": "Thanks Ram, I would vote for #1, a new spring-utils module.",
+      "parentUuid": "9359b9aa_39a9ee5e",
+      "revId": "1967ed64c4683c32b16f592e2860c8c45f7cc6b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "494040fb_886ab11d",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/YamlHttpMessageConverter.java",
         "patchSetId": 2
