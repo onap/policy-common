@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "adbe9682_e2ed2b65",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2022-02-15T14:11:32Z",
+      "side": 1,
+      "message": "Echo Jorge\u0027s concerns, the drools/xacml don\u0027t use spring boot and I would not want to have to go and exclude them.",
+      "parentUuid": "d1a36214_957f0e52",
+      "revId": "1967ed64c4683c32b16f592e2860c8c45f7cc6b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "494040fb_886ab11d",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/YamlHttpMessageConverter.java",
         "patchSetId": 2
