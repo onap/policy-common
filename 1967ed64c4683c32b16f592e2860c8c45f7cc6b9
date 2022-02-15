@@ -34,6 +34,52 @@
       "revId": "1967ed64c4683c32b16f592e2860c8c45f7cc6b9",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "494040fb_886ab11d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/YamlHttpMessageConverter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 7565
+      },
+      "writtenOn": "2022-02-15T11:19:13Z",
+      "side": 1,
+      "message": "OutputStreamWriter should be managed by the try-with-resources statement:\ntry (var writer \u003d getWriter(outputMessage)) {",
+      "range": {
+        "startLine": 75,
+        "startChar": 8,
+        "endLine": 75,
+        "endChar": 46
+      },
+      "revId": "1967ed64c4683c32b16f592e2860c8c45f7cc6b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a8d47f3_6621742c",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/YamlHttpMessageConverter.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 7565
+      },
+      "writtenOn": "2022-02-15T11:19:13Z",
+      "side": 1,
+      "message": "InputStreamReader should be managed by the try-with-resources statement:\ntry (var reader \u003d getReader(inputMessage)) {",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 45
+      },
+      "revId": "1967ed64c4683c32b16f592e2860c8c45f7cc6b9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
