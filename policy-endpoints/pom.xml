@@ -1,9 +1,9 @@
 <!--
   ============LICENSE_START=======================================================
-   Copyright (C) 2018 Ericsson. All rights reserved.
-   Modifications Copyright (C) 2018-2021 AT&T Intellectual Property. All rights reserved.
-   Modifications Copyright (C) 2019-2020 Nordix Foundation.
-   Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
+   Copyright (C) 2022 Ericsson. All rights reserved.
+   Modifications Copyright (C) 2018-2022 AT&T Intellectual Property. All rights reserved.
+   Modifications Copyright (C) 2019-2022 Nordix Foundation.
+   Modifications Copyright (C) 2022 Bell Canada. All rights reserved.
   ================================================================================
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@
         <cambria.version>1.2.1-oss</cambria.version>
         <http.client.version>4.5.5</http.client.version>
         <http.core.version>4.4.4</http.core.version>
+        <version.kafka>3.0.0</version.kafka>
     </properties>
 
     <dependencies>
@@ -236,5 +237,17 @@
             <scope>provided</scope>
         </dependency>
 
+         <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-clients</artifactId>
+            <version>${version.kafka}</version>
+            <exclusions>
+                <!-- The default Zookeeper version in Kafka has vulnerabilities -->
+                <exclusion>
+                    <groupId>org.apache.zookeeper</groupId>
+                    <artifactId>zookeeper</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
     </dependencies>
 </project>

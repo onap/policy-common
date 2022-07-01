@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2022 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +27,8 @@ import org.onap.policy.common.capabilities.Lockable;
 import org.onap.policy.common.capabilities.Startable;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSource;
+import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicSink;
+import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSink;
@@ -160,6 +163,14 @@ public interface TopicEndpoint extends Startable, Lockable {
     NoopTopicSource getNoopTopicSource(String topicName);
 
     /**
+     * Get the Kafka Source for the given topic name.
+     *
+     * @param topicName the topic name.
+     * @return the Kafka Source.
+     */
+    KafkaTopicSource getKafkaTopicSource(String topicName);
+
+    /**
      * Get the Topic Sinks for the given topic name.
      *
      * @param topicNames the topic names
@@ -237,6 +248,18 @@ public interface TopicEndpoint extends Startable, Lockable {
     DmaapTopicSink getDmaapTopicSink(String topicName);
 
     /**
+     * Get the KAFKA Topic Source for the given topic name.
+     *
+     * @param topicName the topic name
+     *
+     * @return the Topic Source
+     * @throws IllegalStateException if the entity is in an invalid state, for example multiple
+     *         TopicReaders for a topic name and communication infrastructure
+     * @throws IllegalArgumentException if invalid parameters are present
+     */
+    KafkaTopicSink getKafkaTopicSink(String topicName);
+
+    /**
      * Gets only the UEB Topic Sources.
      *
      * @return the UEB Topic Source List
@@ -249,6 +272,13 @@ public interface TopicEndpoint extends Startable, Lockable {
      * @return the DMAAP Topic Source List
      */
     List<DmaapTopicSource> getDmaapTopicSources();
+
+    /**
+     * Gets only the KAFKA Topic Sources.
+     *
+     * @return the KAFKA Topic Source List
+     */
+    List<KafkaTopicSource> getKafkaTopicSources();
 
     /**
      * Gets only the NOOP Topic Sources.
@@ -272,9 +302,17 @@ public interface TopicEndpoint extends Startable, Lockable {
     List<DmaapTopicSink> getDmaapTopicSinks();
 
     /**
+     * Gets only the KAFKA Topic Sinks.
+     *
+     * @return the KAFKA Topic Sinks List
+     */
+    List<KafkaTopicSink> getKafkaTopicSinks();
+
+    /**
      * Gets only the NOOP Topic Sinks.
      *
      * @return the NOOP Topic Sinks List
      */
     List<NoopTopicSink> getNoopTopicSinks();
+
 }

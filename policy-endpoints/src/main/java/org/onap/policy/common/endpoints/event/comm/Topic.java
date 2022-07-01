@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2019 Samsung Electronics Co., Ltd.
+ * Copyright (C) 2022 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +44,10 @@ public interface Topic extends TopicRegisterable, Startable, Lockable {
          * DMAAP Communication Infrastructure.
          */
         DMAAP,
+        /**
+         * KAFKA Communication Infrastructure.
+         */
+        KAFKA,
         /**
          * NOOP for internal use only.
          */
