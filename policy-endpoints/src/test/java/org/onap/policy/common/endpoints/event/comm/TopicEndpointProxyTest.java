@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2022 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +37,8 @@ import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicPropertyBuilder;
+import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicFactories;
+import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicPropertyBuilder;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicPropertyBuilder;
 import org.onap.policy.common.endpoints.event.comm.bus.UebTopicFactories;
@@ -55,6 +58,9 @@ public class TopicEndpointProxyTest {
 
     private static final String DMAAP_SOURCE_TOPIC = "dmaap-source";
     private static final String DMAAP_SINK_TOPIC = "dmaap-sink";
+
+    private static final String KAFKA_SOURCE_TOPIC = "kafka-source";
+    private static final String KAFKA_SINK_TOPIC = "kafka-sink";
 
     private Properties configuration = new Properties();
     private TopicParameterGroup group = new TopicParameterGroup();
@@ -102,6 +108,18 @@ public class TopicEndpointProxyTest {
         configuration.putAll(dmaapSinkBuilder.build());
         group.getTopicSinks().add(dmaapSinkBuilder.getParams());
 
+        KafkaTopicPropertyBuilder kafkaSourceBuilder =
+                new KafkaTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_KAFKA_SOURCE_TOPICS)
+                        .makeTopic(KAFKA_SOURCE_TOPIC);
+        configuration.putAll(kafkaSourceBuilder.build());
+        group.getTopicSources().add(kafkaSourceBuilder.getParams());
+
+        KafkaTopicPropertyBuilder kafkaSinkBuilder =
+                new KafkaTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_KAFKA_SINK_TOPICS)
+                        .makeTopic(KAFKA_SINK_TOPIC);
+        configuration.putAll(kafkaSinkBuilder.build());
+        group.getTopicSinks().add(kafkaSinkBuilder.getParams());
+
         TopicParameters invalidCommInfraParams =
                 new NoopTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_NOOP_SOURCE_TOPICS)
                         .makeTopic(NOOP_SOURCE_TOPIC).getParams();
@@ -116,20 +134,22 @@ public class TopicEndpointProxyTest {
 
     private <T extends Topic> boolean allSources(List<T> topics) {
         return exists(topics, NOOP_SOURCE_TOPIC) && exists(topics, UEB_SOURCE_TOPIC)
-                && exists(topics, DMAAP_SOURCE_TOPIC);
+                && exists(topics, DMAAP_SOURCE_TOPIC) && exists(topics, KAFKA_SOURCE_TOPIC);
     }
 
     private <T extends Topic> boolean allSinks(List<T> topics) {
-        return exists(topics, NOOP_SINK_TOPIC) && exists(topics, UEB_SINK_TOPIC) && exists(topics, DMAAP_SINK_TOPIC);
+        return exists(topics, NOOP_SINK_TOPIC) && exists(topics, UEB_SINK_TOPIC) && exists(topics, DMAAP_SINK_TOPIC)
+                && exists(topics, KAFKA_SINK_TOPIC);
     }
 
     private <T extends Topic> boolean anySource(List<T> topics) {
         return exists(topics, NOOP_SOURCE_TOPIC) || exists(topics, UEB_SOURCE_TOPIC)
-                || exists(topics, DMAAP_SOURCE_TOPIC);
+                || exists(topics, DMAAP_SOURCE_TOPIC) || exists(topics, KAFKA_SOURCE_TOPIC);
     }
 
     private <T extends Topic> boolean anySink(List<T> topics) {
-        return exists(topics, NOOP_SINK_TOPIC) || exists(topics, UEB_SINK_TOPIC) || exists(topics, DMAAP_SINK_TOPIC);
+        return exists(topics, NOOP_SINK_TOPIC) || exists(topics, UEB_SINK_TOPIC) || exists(topics, DMAAP_SINK_TOPIC)
+                || exists(topics, KAFKA_SINK_TOPIC);
     }
 
     /**
@@ -145,6 +165,9 @@ public class TopicEndpointProxyTest {
 
         DmaapTopicFactories.getSinkFactory().destroy();
         DmaapTopicFactories.getSourceFactory().destroy();
+
+        KafkaTopicFactories.getSinkFactory().destroy();
+        KafkaTopicFactories.getSourceFactory().destroy();
     }
 
     @Test
@@ -163,7 +186,7 @@ public class TopicEndpointProxyTest {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSource> sources = manager.addTopicSources(group.getTopicSources());
-        assertSame(3, sources.size());
+        assertSame(4, sources.size());
 
         assertTrue(allSources(sources));
         assertFalse(anySink(sources));
@@ -174,7 +197,7 @@ public class TopicEndpointProxyTest {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSource> sources = manager.addTopicSources(configuration);
-        assertSame(3, sources.size());
+        assertSame(4, sources.size());
 
         assertTrue(allSources(sources));
         assertFalse(anySink(sources));
@@ -185,7 +208,7 @@ public class TopicEndpointProxyTest {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSink> sinks = manager.addTopicSinks(group.getTopicSinks());
-        assertSame(3, sinks.size());
+        assertSame(4, sinks.size());
 
         assertFalse(anySource(sinks));
         assertTrue(allSinks(sinks));
@@ -196,7 +219,7 @@ public class TopicEndpointProxyTest {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSink> sinks = manager.addTopicSinks(configuration);
-        assertSame(3, sinks.size());
+        assertSame(4, sinks.size());
 
         assertFalse(anySource(sinks));
         assertTrue(allSinks(sinks));
@@ -207,7 +230,7 @@ public class TopicEndpointProxyTest {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<Topic> topics = manager.addTopics(configuration);
-        assertSame(6, topics.size());
+        assertSame(8, topics.size());
 
         assertTrue(allSources(topics));
         assertTrue(allSinks(topics));
@@ -218,7 +241,7 @@ public class TopicEndpointProxyTest {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<Topic> topics = manager.addTopics(group);
-        assertSame(6, topics.size());
+        assertSame(8, topics.size());
 
         assertTrue(allSources(topics));
         assertTrue(allSinks(topics));
@@ -257,7 +280,7 @@ public class TopicEndpointProxyTest {
         manager.addTopicSinks(configuration);
 
         List<TopicSource> sources = manager.getTopicSources();
-        assertSame(3, sources.size());
+        assertSame(4, sources.size());
 
         assertTrue(allSources(sources));
         assertFalse(anySink(sources));
@@ -271,7 +294,7 @@ public class TopicEndpointProxyTest {
         manager.addTopicSinks(configuration);
 
         List<TopicSink> sinks = manager.getTopicSinks();
-        assertSame(3, sinks.size());
+        assertSame(4, sinks.size());
 
         assertFalse(anySource(sinks));
         assertTrue(allSinks(sinks));
@@ -361,6 +384,7 @@ public class TopicEndpointProxyTest {
         assertSame(NOOP_SOURCE_TOPIC, manager.getTopicSource(CommInfrastructure.NOOP, NOOP_SOURCE_TOPIC).getTopic());
         assertSame(UEB_SOURCE_TOPIC, manager.getTopicSource(CommInfrastructure.UEB, UEB_SOURCE_TOPIC).getTopic());
         assertSame(DMAAP_SOURCE_TOPIC, manager.getTopicSource(CommInfrastructure.DMAAP, DMAAP_SOURCE_TOPIC).getTopic());
+        assertSame(KAFKA_SOURCE_TOPIC, manager.getTopicSource(CommInfrastructure.KAFKA, KAFKA_SOURCE_TOPIC).getTopic());
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> manager.getTopicSource(CommInfrastructure.NOOP, NOOP_SINK_TOPIC));
@@ -368,6 +392,8 @@ public class TopicEndpointProxyTest {
                 .isThrownBy(() -> manager.getTopicSource(CommInfrastructure.UEB, UEB_SINK_TOPIC));
         assertThatIllegalStateException()
                 .isThrownBy(() -> manager.getTopicSource(CommInfrastructure.DMAAP, DMAAP_SINK_TOPIC));
+        assertThatIllegalStateException()
+                .isThrownBy(() -> manager.getTopicSource(CommInfrastructure.KAFKA, KAFKA_SINK_TOPIC));
     }
 
     @Test
@@ -378,6 +404,7 @@ public class TopicEndpointProxyTest {
         assertSame(NOOP_SINK_TOPIC, manager.getTopicSink(CommInfrastructure.NOOP, NOOP_SINK_TOPIC).getTopic());
         assertSame(UEB_SINK_TOPIC, manager.getTopicSink(CommInfrastructure.UEB, UEB_SINK_TOPIC).getTopic());
         assertSame(DMAAP_SINK_TOPIC, manager.getTopicSink(CommInfrastructure.DMAAP, DMAAP_SINK_TOPIC).getTopic());
+        assertSame(KAFKA_SINK_TOPIC, manager.getTopicSink(CommInfrastructure.KAFKA, KAFKA_SINK_TOPIC).getTopic());
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> manager.getTopicSink(CommInfrastructure.NOOP, NOOP_SOURCE_TOPIC));
@@ -385,6 +412,8 @@ public class TopicEndpointProxyTest {
                 .isThrownBy(() -> manager.getTopicSink(CommInfrastructure.UEB, UEB_SOURCE_TOPIC));
         assertThatIllegalStateException()
                 .isThrownBy(() -> manager.getTopicSink(CommInfrastructure.DMAAP, DMAAP_SOURCE_TOPIC));
+        assertThatIllegalStateException()
+                .isThrownBy(() -> manager.getTopicSink(CommInfrastructure.KAFKA, KAFKA_SOURCE_TOPIC));
     }
 
     @Test
@@ -396,6 +425,7 @@ public class TopicEndpointProxyTest {
 
         assertThatIllegalStateException().isThrownBy(() -> manager.getUebTopicSource(NOOP_SOURCE_TOPIC));
         assertThatIllegalStateException().isThrownBy(() -> manager.getUebTopicSource(DMAAP_SOURCE_TOPIC));
+        assertThatIllegalStateException().isThrownBy(() -> manager.getUebTopicSource(KAFKA_SOURCE_TOPIC));
 
         assertThatIllegalArgumentException().isThrownBy(() -> manager.getUebTopicSource(null));
         assertThatIllegalArgumentException().isThrownBy(() -> manager.getUebTopicSource(""));
@@ -410,6 +440,7 @@ public class TopicEndpointProxyTest {
 
         assertThatIllegalStateException().isThrownBy(() -> manager.getUebTopicSink(NOOP_SINK_TOPIC));
         assertThatIllegalStateException().isThrownBy(() -> manager.getUebTopicSink(DMAAP_SINK_TOPIC));
+        assertThatIllegalStateException().isThrownBy(() -> manager.getUebTopicSink(KAFKA_SINK_TOPIC));
 
         assertThatIllegalArgumentException().isThrownBy(() -> manager.getUebTopicSink(null));
         assertThatIllegalArgumentException().isThrownBy(() -> manager.getUebTopicSink(""));
@@ -469,5 +500,35 @@ public class TopicEndpointProxyTest {
 
         assertThatIllegalArgumentException().isThrownBy(() -> manager.getNoopTopicSink(null));
         assertThatIllegalArgumentException().isThrownBy(() -> manager.getNoopTopicSink(""));
+    }
+
+    @Test
+    public void testGetKafkaTopicSource() {
+        TopicEndpoint manager = new TopicEndpointProxy();
+        manager.addTopicSources(configuration);
+
+        assertSame(KAFKA_SOURCE_TOPIC, manager.getKafkaTopicSource(KAFKA_SOURCE_TOPIC).getTopic());
+
+        assertThatIllegalStateException().isThrownBy(() -> manager.getKafkaTopicSource(DMAAP_SOURCE_TOPIC));
+        assertThatIllegalStateException().isThrownBy(() -> manager.getKafkaTopicSource(UEB_SOURCE_TOPIC));
+        assertThatIllegalStateException().isThrownBy(() -> manager.getKafkaTopicSource(NOOP_SOURCE_TOPIC));
+
+        assertThatIllegalArgumentException().isThrownBy(() -> manager.getKafkaTopicSource(null));
+        assertThatIllegalArgumentException().isThrownBy(() -> manager.getKafkaTopicSource(""));
+    }
+
+    @Test
+    public void testGetKafkaTopicSink() {
+        TopicEndpoint manager = new TopicEndpointProxy();
+        manager.addTopicSinks(configuration);
+
+        assertSame(NOOP_SINK_TOPIC, manager.getNoopTopicSink(NOOP_SINK_TOPIC).getTopic());
+
+        assertThatIllegalStateException().isThrownBy(() -> manager.getKafkaTopicSink(DMAAP_SINK_TOPIC));
+        assertThatIllegalStateException().isThrownBy(() -> manager.getKafkaTopicSink(UEB_SINK_TOPIC));
+        assertThatIllegalStateException().isThrownBy(() -> manager.getKafkaTopicSink(NOOP_SINK_TOPIC));
+
+        assertThatIllegalArgumentException().isThrownBy(() -> manager.getKafkaTopicSink(null));
+        assertThatIllegalArgumentException().isThrownBy(() -> manager.getKafkaTopicSink(""));
     }
 }

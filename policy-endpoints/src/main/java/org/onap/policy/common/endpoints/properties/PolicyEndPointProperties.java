@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2022 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,6 +79,11 @@ public final class PolicyEndPointProperties {
 
     public static final String PROPERTY_NOOP_SOURCE_TOPICS = "noop.source.topics";
     public static final String PROPERTY_NOOP_SINK_TOPICS = "noop.sink.topics";
+
+    /* KAFKA Properties */
+
+    public static final String PROPERTY_KAFKA_SOURCE_TOPICS = "kafka.source.topics";
+    public static final String PROPERTY_KAFKA_SINK_TOPICS = "kafka.sink.topics";
 
     /* HTTP Server Properties */
 

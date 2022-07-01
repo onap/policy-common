@@ -5,6 +5,7 @@
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
+ * Copyright (C) 2022 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +32,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.common.record.CompressionType;
 import org.onap.dmaap.mr.client.impl.MRSimplerBatchPublisher;
 import org.onap.dmaap.mr.client.response.MRPublisherResponse;
 import org.onap.dmaap.mr.test.clients.ProtocolTypeConstants;
@@ -139,6 +145,75 @@ public interface BusPublisher {
         @Override
         public String toString() {
             return "CambriaPublisherWrapper []";
+        }
+
+    }
+
+    /**
+     * Kafka based library publisher.
+     */
+    public static class KafkaPublisherWrapper implements BusPublisher {
+
+        private static Logger logger = LoggerFactory.getLogger(KafkaPublisherWrapper.class);
+
+        /**
+         * The actual Kafka publisher.
+         */
+        private KafkaProducer producer;
+
+        /**
+         * Constructor.
+         *
+         * @param busTopicParams topic parameters
+         */
+        public KafkaPublisherWrapper(BusTopicParams busTopicParams) {
+
+            //Setup Properties for Kafka Producer
+            Properties kafkaProps = new Properties();
+            this.producer = new KafkaProducer(kafkaProps);
+        }
+
+        @Override
+        public boolean send(String partitionId, String message) {
+            if (message == null) {
+                throw new IllegalArgumentException("No message provided");
+            }
+
+            try {
+                //Use a Random number to generate message keys
+                Random randomKey = new Random();
+
+                //Create the record
+                ProducerRecord<String, String> record =
+                        new ProducerRecord<String, String>(
+                                "POLICY-ACRUNTIME-PARTICIPANT",    //Topic name
+                                String.valueOf(randomKey.nextInt(1000)),
+                                message
+                        );
+
+                this.producer.send(record);
+            } catch (Exception e) {
+                logger.warn("{}: SEND of {} cannot be performed because of {}", this, message, e.getMessage(), e);
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public void close() {
+            logger.info("{}: CLOSE", this);
+
+            try {
+                this.producer.close();
+            } catch (Exception e) {
+                logger.warn("{}: CLOSE FAILED because of {}", this, e.getMessage(), e);
+            }
+        }
+
+
+        @Override
+        public String toString() {
+            return "KafkaPublisherWrapper []";
         }
 
     }

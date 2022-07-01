@@ -46,6 +46,7 @@ import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.Dmaa
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapConsumerWrapper;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapDmeConsumerWrapper;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FetchingBusConsumer;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.KafkaConsumerWrapper;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.powermock.reflect.Whitebox;
 
@@ -293,6 +294,57 @@ public class BusConsumerTest extends TopicTestBase {
     @Test(expected = IllegalArgumentException.class)
     public void testDmaapDmeConsumerWrapper_InvalidPartner() throws Exception {
         new DmaapDmeConsumerWrapper(makeBuilder().partner(null).build());
+    }
+
+    @Test
+    public void testKafkaConsumerWrapper() throws Exception {
+        // verify that different wrappers can be built
+        assertThatCode(() -> new KafkaConsumerWrapper(makeBuilder().build())).doesNotThrowAnyException();
+    }
+
+    /*@Test(expected = IllegalArgumentException.class)
+    public void testKafkaConsumerWrapper_InvalidTopic() throws Exception {
+        new KafkaConsumerWrapper(makeBuilder().topic(null).build());
+    }*/
+
+    @Test
+    public void testKafkaConsumerWrapperFetch() throws Exception {
+        KafkaConsumerWrapper kafka = new KafkaConsumerWrapper(makeBuilder().build());
+        //MRConsumerImpl cons = mock(MRConsumerImpl.class);
+
+        kafka.fetchTimeout = 5;
+        /*kafka.consumer = cons;
+
+        // null return
+        when(cons.fetchWithReturnConsumerResponse()).thenReturn(null);
+        assertFalse(dmaap.fetch().iterator().hasNext());
+
+        // with messages, 200
+        List<String> lst = Arrays.asList(MY_MESSAGE, MY_MESSAGE2);
+        MRConsumerResponse resp = new MRConsumerResponse();
+        resp.setResponseCode("200");
+        resp.setActualMessages(lst);
+        //when(cons.fetchWithReturnConsumerResponse()).thenReturn(resp);
+
+        assertEquals(lst, IteratorUtils.toList(kafka.fetch().iterator()));
+
+        // null messages
+        resp.setActualMessages(null);
+        when(cons.fetchWithReturnConsumerResponse()).thenReturn(resp);
+
+        assertFalse(kafka.fetch().iterator().hasNext());
+
+        // with messages, NOT 200
+        resp.setResponseCode("400");
+        resp.setActualMessages(lst);
+        when(cons.fetchWithReturnConsumerResponse()).thenReturn(resp);
+
+        assertEquals(lst, IteratorUtils.toList(dmaap.fetch().iterator()));*/
+    }
+
+    @Test
+    public void testKafkaConsumerWrapperToString() throws Exception {
+        assertNotNull(new KafkaConsumerWrapper(makeBuilder().build()) {}.toString());
     }
 
     private static class FetchingBusConsumerImpl extends FetchingBusConsumer {

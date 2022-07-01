@@ -35,6 +35,23 @@
     "topicCommInfrastructure" : "DMAAP"
   }, {
     "servers" : [ "my-server" ],
+    "topic" : "kafka-source",
+    "effectiveTopic" : "my-effective-topic",
+    "recentEvents" : [ ],
+    "alive" : false,
+    "locked" : false,
+    "apiKey" : "my-api-key",
+    "apiSecret" : "my-api-secret",
+    "useHttps" : true,
+    "allowSelfSignedCerts" : true,
+    "consumerGroup" : "my-cons-group",
+    "consumerInstance" : "my-cons-inst",
+    "fetchTimeout" : 101,
+    "fetchLimit" : 100,
+    "topicCommInfrastructure" : "KAFKA"
+  }, {
+    "servers" : [ "my-server" ],
+    "servers" : [ "my-server" ],
     "topic" : "noop-source",
     "effectiveTopic" : "noop-source",
     "recentEvents" : [ ],
@@ -69,6 +86,23 @@
     "topicCommInfrastructure" : "DMAAP",
     "partitionKey" : "my-partition"
   }, {
+    "servers" : [ "my-server" ],
+    "topic" : "kafka-sink",
+    "effectiveTopic" : "my-effective-topic",
+    "recentEvents" : [ ],
+    "alive" : false,
+    "locked" : false,
+    "apiKey" : "my-api-key",
+    "apiSecret" : "my-api-secret",
+    "useHttps" : true,
+    "allowSelfSignedCerts" : true,
+    "topicCommInfrastructure" : "KAFKA",
+    "partitionKey" : "my-partition"
+  }, {
+    "servers" : [ "my-server" ],
+    "topic" : "noop-sink",
+    "effectiveTopic" : "noop-sink",
+    "recentEvents" : [ ],
     "servers" : [ "my-server" ],
     "topic" : "noop-sink",
     "effectiveTopic" : "noop-sink",

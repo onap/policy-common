@@ -236,5 +236,10 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.13</artifactId>
+            <version>2.7.0</version>
+        </dependency>
     </dependencies>
 </project>
