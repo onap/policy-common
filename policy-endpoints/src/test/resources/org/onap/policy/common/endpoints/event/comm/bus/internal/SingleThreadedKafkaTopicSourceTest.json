@@ -1,0 +1,10 @@
+{
+  "servers" : [ "svra", "svrb" ],
+  "topic" : "my-topic",
+  "effectiveTopic" : "my-effective-topic",
+  "recentEvents" : [ ],
+  "alive" : false,
+  "locked" : false,
+  "useHttps" : true,
+  "topicCommInfrastructure" : "KAFKA"
+}

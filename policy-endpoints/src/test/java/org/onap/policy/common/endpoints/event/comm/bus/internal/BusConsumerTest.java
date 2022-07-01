@@ -46,6 +46,7 @@ import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.Dmaa
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapConsumerWrapper;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapDmeConsumerWrapper;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FetchingBusConsumer;
+import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.KafkaConsumerWrapper;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.powermock.reflect.Whitebox;
 
@@ -293,6 +294,17 @@ public class BusConsumerTest extends TopicTestBase {
     @Test(expected = IllegalArgumentException.class)
     public void testDmaapDmeConsumerWrapper_InvalidPartner() throws Exception {
         new DmaapDmeConsumerWrapper(makeBuilder().partner(null).build());
+    }
+
+    @Test
+    public void testKafkaConsumerWrapper() throws Exception {
+        // verify that different wrappers can be built
+        assertThatCode(() -> new KafkaConsumerWrapper(makeBuilder().build())).doesNotThrowAnyException();
+    }
+
+    @Test
+    public void testKafkaConsumerWrapperToString() throws Exception {
+        assertNotNull(new KafkaConsumerWrapper(makeBuilder().build()) {}.toString());
     }
 
     private static class FetchingBusConsumerImpl extends FetchingBusConsumer {
