@@ -2,6 +2,244 @@
   "comments": [
     {
       "key": {
+        "uuid": "5a98b84d_ea3c19d2",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "update license",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4a9b0562_dcbfe134",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "We should use \"kafka-clients\" library instead.   The dependency used here is for OSGI, that we don\u0027t use for policy.",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b19dc812_160cf3c8",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/KafkaTopicSourceFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "Delete references to UEB",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "680df686_2d30fc96",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/KafkaTopicSourceFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "apiKey and apiSecret makes sense when using UEB. but does the kafka clients library support it?",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6fbea03b_a2664d69",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "add a \"// TODO\" here to indicate not implemented yet, or throw an \"IllegalStateException\" and add comment.",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e2997e4_c74bf59d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "add // TODO ?",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "97664daa_bb15c0bf",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "\"ACRUNTIME-PARTICIPANT\" make it agnostic to components.",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff5b4ee0_7a3a8cfe",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "can you use try-with-resources to autoclose the stream?",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d3053942_25099e98",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineKafkaTopicSink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "I dont think apiKey and secret applies to kafka client ?",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "92e91a03_a77da058",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "same q about apiKey and apiSecret ?",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ffef09f_3a8c37f5",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "consumerInstance, is such a similar concept for kafka client as for ueb or dmaap ?",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "decc01f7_55d2e0c5",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "same q for fetchTimeout and fetchLimit, are there equivalents for kafka client ?",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff172cbd_93a9fecd",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "and for these too , same q ..",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5e725b2_c7d5f5c3",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/KafkaPropertyUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-14T20:14:17Z",
+      "side": 1,
+      "message": "wondering if all these configurations apply to kafka client ?",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bcae49d9_c60bb15e",
         "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/KafkaTopicSourceTest.java",
         "patchSetId": 1
