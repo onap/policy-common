@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "272b3008_6af1e446",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a98b84d_ea3c19d2",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4a9b0562_dcbfe134",
         "filename": "policy-endpoints/pom.xml",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "58c8330e_ef2e25af",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done. Changed to kafka-clients library and added an exclusion on ZooKeeper.",
+      "parentUuid": "4a9b0562_dcbfe134",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "82d33d45_1a688ed0",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/KafkaTopicSourceFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b19dc812_160cf3c8",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "680df686_2d30fc96",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/KafkaTopicSourceFactory.java",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48248fd5_00844235",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/KafkaTopicSourceFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "680df686_2d30fc96",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "ab53728b_e6efac4d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done. Added a TODO, as the Consumer handling will be taken exclusively in later commit.",
+      "parentUuid": "6fbea03b_a2664d69",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "7e2997e4_c74bf59d",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
         "patchSetId": 1
@@ -101,6 +191,24 @@
       "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba5181a7_9d540e0f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done. Added a TODO, as the Publisher handling will be taken exclusively in later commit.",
+      "parentUuid": "7e2997e4_c74bf59d",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "e91de4e6_4ce949ea",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "97664daa_bb15c0bf",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ff5b4ee0_7a3a8cfe",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
         "patchSetId": 1
@@ -135,6 +261,24 @@
       "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dabe4715_b8435308",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff5b4ee0_7a3a8cfe",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "73741e64_40ee8e50",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineKafkaTopicSink.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done. Removed apiKey, apiSecret references, as the properties are not generic and are not applicable to Kafka clients.",
+      "parentUuid": "d3053942_25099e98",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "92e91a03_a77da058",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSource.java",
         "patchSetId": 1
@@ -169,6 +331,24 @@
       "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "62a3dc3e_9b2675f5",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92e91a03_a77da058",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -189,6 +369,24 @@
     },
     {
       "key": {
+        "uuid": "7f57477e_72edcd48",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Removed these properties. Will be adding group.id (A unique string that identifies the consumer group this consumer belongs to. This property is required if the consumer uses either the group management functionality by using subscribe(topic) or the Kafka-based offset management strategy.) and relevant consumer group properties in upcoming commit",
+      "parentUuid": "6ffef09f_3a8c37f5",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "decc01f7_55d2e0c5",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSource.java",
         "patchSetId": 1
@@ -203,6 +401,24 @@
       "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8506afcc_a0c57447",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done. fetch.min.bytes, fetch.max.bytes and max.partition.fetch.bytes are the properties that are applicable. Will add all relevant properties in upcoming reviews. The minimum/maximum amount of data the server should return for a fetch request.",
+      "parentUuid": "decc01f7_55d2e0c5",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -223,6 +439,24 @@
     },
     {
       "key": {
+        "uuid": "5274df34_4656fe8f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ff172cbd_93a9fecd",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e5e725b2_c7d5f5c3",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/KafkaPropertyUtils.java",
         "patchSetId": 1
@@ -237,6 +471,24 @@
       "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1e06ea56_b206a81d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/KafkaPropertyUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5e725b2_c7d5f5c3",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -263,6 +515,30 @@
     },
     {
       "key": {
+        "uuid": "a4ce3dcd_53a31d78",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/KafkaTopicSourceTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bcae49d9_c60bb15e",
+      "range": {
+        "startLine": 30,
+        "startChar": 16,
+        "endLine": 30,
+        "endChar": 20
+      },
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "48a9227a_aaf59b96",
         "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumerTest.java",
         "patchSetId": 1
@@ -277,6 +553,24 @@
       "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bd2ce12c_afd08959",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 308,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48a9227a_aaf59b96",
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -303,6 +597,30 @@
     },
     {
       "key": {
+        "uuid": "0e6a03c4_71bae01b",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 316,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b75fdc44_4dd6c382",
+      "range": {
+        "startLine": 316,
+        "startChar": 0,
+        "endLine": 316,
+        "endChar": 2
+      },
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "49e6177e_93c70313",
         "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSourceTest.java",
         "patchSetId": 1
@@ -323,6 +641,30 @@
       "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73a079c8_3117eef6",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSourceTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-19T10:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "49e6177e_93c70313",
+      "range": {
+        "startLine": 62,
+        "startChar": 0,
+        "endLine": 62,
+        "endChar": 1
+      },
+      "revId": "567db5e1b48a70cef63f236fc6297144d5c0c38a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
