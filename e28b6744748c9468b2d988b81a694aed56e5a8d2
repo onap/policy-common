@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "404edca7_07f8d9b1",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/IndexedKafkaTopicSinkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-21T14:59:32Z",
+      "side": 1,
+      "message": "I think we want the \"isManaged() check and \"managed\" property.   This property is common to all endpoints and means if the TopicEndpointManager handles their lifetime as in a set or it is the application.   It has relevance.   So the comment is to add back the \"managed\" functionality.",
+      "revId": "e28b6744748c9468b2d988b81a694aed56e5a8d2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "28255e49_e551e930",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/KafkaPropertyUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-07-21T14:59:32Z",
+      "side": 1,
+      "message": "The \"effectiveTopic\" and \"managed\" are important to be added as they are global, there is some other functionality that handles it, probably these 2 could be added with no harm at this point so we don\u0027t forget.",
+      "revId": "e28b6744748c9468b2d988b81a694aed56e5a8d2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
