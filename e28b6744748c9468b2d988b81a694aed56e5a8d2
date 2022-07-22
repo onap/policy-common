@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "c3b74503_470f3e9c",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/IndexedKafkaTopicSinkFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-22T19:16:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "404edca7_07f8d9b1",
+      "revId": "e28b6744748c9468b2d988b81a694aed56e5a8d2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "28255e49_e551e930",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/KafkaPropertyUtils.java",
         "patchSetId": 2
@@ -33,6 +51,24 @@
       "revId": "e28b6744748c9468b2d988b81a694aed56e5a8d2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80054a42_bd34547c",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/utils/KafkaPropertyUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-07-22T19:16:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28255e49_e551e930",
+      "revId": "e28b6744748c9468b2d988b81a694aed56e5a8d2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
