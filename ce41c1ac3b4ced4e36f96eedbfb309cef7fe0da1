@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "827d9dc7_da658870",
+        "filename": "policy-endpoints/pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2022-07-28T16:07:29Z",
+      "side": 1,
+      "message": "When you have Kafka as a managed dependency in the parent/integration, you can remove this line.",
+      "range": {
+        "startLine": 242,
+        "startChar": 0,
+        "endLine": 242,
+        "endChar": 4
+      },
+      "revId": "ce41c1ac3b4ced4e36f96eedbfb309cef7fe0da1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
