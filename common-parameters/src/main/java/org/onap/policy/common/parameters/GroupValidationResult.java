@@ -77,7 +77,7 @@ public class GroupValidationResult extends CommonGroupValidationResult {
      * Construct a validation result for a field, updating "this" status.
      *
      * @param field The parameter field
-     * @param ParameterGroup The parameter group containing the field
+     * @param parameterGroup The parameter group containing the field
      * @return the validation result
      * @throws Exception on accessing private fields
      */
@@ -92,7 +92,7 @@ public class GroupValidationResult extends CommonGroupValidationResult {
      * Construct a validation result for a field.
      *
      * @param field The parameter field
-     * @param ParameterGroup The parameter group containing the field
+     * @param parameterGroup The parameter group containing the field
      * @return the validation result
      * @throws Exception on accessing private fields
      */
@@ -136,7 +136,7 @@ public class GroupValidationResult extends CommonGroupValidationResult {
      * Get the value of a field in an object using a getter found with reflection.
      *
      * @param targetObject The object on which to read the field value
-     * @param fieldName The name of the field
+     * @param field The name of the field
      * @return The field value
      */
     private Object getObjectField(final Object targetObject, final Field field) {
