@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020,2022 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -98,7 +98,6 @@ public class DbDao {
      * @param resourceName the resource name
      * @param persistenceUnit the persistence unit
      * @param properties the properties
-     * @param lastUpdateDate may be {@code null}
      * @param altDbUrl may be {@code null}
      * @throws IntegrityAuditException if an error occurs
      */

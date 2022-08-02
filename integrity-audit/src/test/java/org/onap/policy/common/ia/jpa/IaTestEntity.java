@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * Integrity Audit
  * ================================================================================
- * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2017-2020,2022 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,7 +38,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "IaTestEntity")
 @NamedQueries({@NamedQuery(name = " IaTestEntity.findAll", query = "SELECT e FROM IaTestEntity e "),
-        @NamedQuery(name = "IaTestEntity.deleteAll", query = "DELETE FROM IaTestEntity WHERE 1=1")})
+    @NamedQuery(name = "IaTestEntity.deleteAll", query = "DELETE FROM IaTestEntity WHERE 1=1")})
 
 public class IaTestEntity implements Serializable {
     private static final long serialVersionUID = 1L;
