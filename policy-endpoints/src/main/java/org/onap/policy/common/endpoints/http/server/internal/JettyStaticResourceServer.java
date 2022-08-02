@@ -79,7 +79,7 @@ public class JettyStaticResourceServer extends JettyServletServer {
     /**
      * Retrieves cached default servlet based on servlet path.
      *
-     * @param servletPath servlet path
+     * @param servPath servlet path
      * @return the jetty servlet holder
      *
      * @throws IllegalArgumentException if invalid arguments are provided
