@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "085b17f4_7309f702",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/resources/ResourceUtilsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 3239
+      },
+      "writtenOn": "2022-08-03T15:03:24Z",
+      "side": 1,
+      "message": "extra space",
+      "range": {
+        "startLine": 349,
+        "startChar": 6,
+        "endLine": 349,
+        "endChar": 7
+      },
+      "revId": "66583a21f9bd338c7eca66025d59a69e0e406988",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
