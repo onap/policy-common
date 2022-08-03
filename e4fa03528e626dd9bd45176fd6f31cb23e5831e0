@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "66cf5a8b_e32d6a49",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-08-03T14:28:15Z",
+      "side": 1,
+      "message": "3.2.1 ?",
+      "revId": "e4fa03528e626dd9bd45176fd6f31cb23e5831e0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d627e3ef_d2e822ca",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-08-03T14:28:15Z",
+      "side": 1,
+      "message": "license ?",
+      "revId": "e4fa03528e626dd9bd45176fd6f31cb23e5831e0",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
