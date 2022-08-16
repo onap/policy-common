@@ -1,0 +1,4 @@
+distribution_type: 'maven'
+version: '1.8.3'
+project: 'policy-common'
+log_dir: 'policy-common-maven-stage-honolulu/518/'
