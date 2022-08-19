@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "395eb89a_ea463789",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2022-08-19T11:49:33Z",
+      "side": 1,
+      "message": "Actually I just merged parent - do you want to patch this with 3.3.4-SNAPSHOT?\nSame would apply after merging this review.",
+      "revId": "72606da6ec83436b9d0635b9aa9d52cf9b50f367",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
