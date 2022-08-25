@@ -1,8 +1,8 @@
 /*
  * ============LICENSE_START=======================================================
- * ONAP Policy Engine - Common Modules
+ * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2022 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,8 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_KAFKA_SOURCE_TOPICS;
+import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_KAFKA_SINK_TOPICS;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX;
 
 import java.util.Arrays;
@@ -34,14 +33,11 @@ import java.util.Properties;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
-import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 
-public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<KafkaTopicSource> {
+public class KafkaTopicSinkFactoryTest extends KafkaTopicFactoryTestBase<KafkaTopicSink> {
 
-    private SourceFactory factory;
-
+    private SinkFactory factory;
     public static final String KAFKA_SERVER = "localhost:9092";
 
     /**
@@ -52,7 +48,7 @@ public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<Kafka
     public void setUp() {
         super.setUp();
 
-        factory = new SourceFactory();
+        factory = new SinkFactory();
     }
 
     @After
@@ -62,11 +58,25 @@ public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<Kafka
 
     @Test
     @Override
+    public void testBuildBusTopicParams() {
+        super.testBuildBusTopicParams();
+        super.testBuildBusTopicParams_Ex();
+    }
+
+    @Test
+    @Override
+    public void testBuildListOfStringString() {
+        super.testBuildListOfStringString();
+
+        // check parameters that were used
+        BusTopicParams params = getLastParams();
+        assertEquals(false, params.isAllowSelfSignedCerts());
+    }
+
+    @Test
+    @Override
     public void testBuildProperties() {
-
-        initFactory();
-
-        List<KafkaTopicSource> topics = buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build());
+        List<KafkaTopicSink> topics = buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build());
         assertEquals(1, topics.size());
         assertEquals(MY_TOPIC, topics.get(0).getTopic());
         assertEquals(MY_EFFECTIVE_TOPIC, topics.get(0).getEffectiveTopic());
@@ -77,6 +87,17 @@ public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<Kafka
         assertEquals(Arrays.asList(KAFKA_SERVER), params.getServers());
         assertEquals(MY_TOPIC, params.getTopic());
         assertEquals(MY_EFFECTIVE_TOPIC, params.getEffectiveTopic());
+        assertEquals(MY_PARTITION, params.getPartitionId());
+
+        List<KafkaTopicSink> topics2 = buildTopics(makePropBuilder().makeTopic(TOPIC3)
+            .removeTopicProperty(PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX).build());
+        assertEquals(1, topics2.size());
+        assertEquals(TOPIC3, topics2.get(0).getTopic());
+        assertEquals(topics2.get(0).getTopic(), topics2.get(0).getEffectiveTopic());
+
+        initFactory();
+
+        assertEquals(1, buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build()).size());
     }
 
     @Test
@@ -99,7 +120,7 @@ public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<Kafka
 
     @Test
     public void testToString() {
-        assertTrue(factory.toString().startsWith("IndexedKafkaTopicSourceFactory ["));
+        assertTrue(factory.toString().startsWith("IndexedKafkaTopicSinkFactory ["));
     }
 
     @Override
@@ -108,21 +129,21 @@ public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<Kafka
             factory.destroy();
         }
 
-        factory = new SourceFactory();
+        factory = new SinkFactory();
     }
 
     @Override
-    protected List<KafkaTopicSource> buildTopics(Properties properties) {
+    protected List<KafkaTopicSink> buildTopics(Properties properties) {
         return factory.build(properties);
     }
 
     @Override
-    protected KafkaTopicSource buildTopic(BusTopicParams params) {
+    protected KafkaTopicSink buildTopic(BusTopicParams params) {
         return factory.build(params);
     }
 
     @Override
-    protected KafkaTopicSource buildTopic(List<String> servers, String topic) {
+    protected KafkaTopicSink buildTopic(List<String> servers, String topic) {
         return factory.build(servers, topic);
     }
 
@@ -137,12 +158,12 @@ public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<Kafka
     }
 
     @Override
-    protected List<KafkaTopicSource> getInventory() {
+    protected List<KafkaTopicSink> getInventory() {
         return factory.inventory();
     }
 
     @Override
-    protected KafkaTopicSource getTopic(String topic) {
+    protected KafkaTopicSink getTopic(String topic) {
         return factory.get(topic);
     }
 
@@ -153,19 +174,19 @@ public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<Kafka
 
     @Override
     protected TopicPropertyBuilder makePropBuilder() {
-        return new KafkaTopicPropertyBuilder(PROPERTY_KAFKA_SOURCE_TOPICS);
+        return new KafkaTopicPropertyBuilder(PROPERTY_KAFKA_SINK_TOPICS);
     }
 
     /**
-     * Factory that records the parameters of all of the sources it creates.
+     * Factory that records the parameters of all of the sinks it creates.
      */
-    private static class SourceFactory extends IndexedKafkaTopicSourceFactory {
+    private static class SinkFactory extends IndexedKafkaTopicSinkFactory {
         private Deque<BusTopicParams> params = new LinkedList<>();
 
         @Override
-        protected KafkaTopicSource makeSource(BusTopicParams busTopicParams) {
+        protected KafkaTopicSink makeSink(BusTopicParams busTopicParams) {
             params.add(busTopicParams);
-            return super.makeSource(busTopicParams);
+            return super.makeSink(busTopicParams);
         }
     }
 }

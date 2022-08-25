@@ -1,11 +1,19 @@
 {
-  "servers" : [ "svra", "svrb" ],
-  "topic" : "my-topic",
-  "effectiveTopic" : "my-effective-topic",
-  "recentEvents" : [ ],
-  "alive" : false,
-  "locked" : false,
-  "useHttps" : true,
-  "topicCommInfrastructure" : "KAFKA",
-  "partitionKey" : "my-partition"
+  "servers": [
+    "svra",
+    "svrb"
+  ],
+  "topic": "my-topic",
+  "effectiveTopic": "my-effective-topic",
+  "recentEvents": [],
+  "alive": false,
+  "locked": false,
+  "useHttps": false,
+  "topicCommInfrastructure": "KAFKA",
+  "partitionKey": "my-partition",
+  "additionalProps": {
+    "security.protocol": "SASL_PLAINTEXT",
+    "sasl.mechanism": "SCRAM-SHA-512",
+    "sasl.jaas.config": "org.apache.kafka.common.security.plain.PlainLoginModule required username=abc password=abc serviceName=kafka;"
+  }
 }

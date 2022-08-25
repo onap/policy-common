@@ -24,9 +24,13 @@ package org.onap.policy.common.endpoints.utils;
 import com.google.re2j.Pattern;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams.TopicParamsBuilder;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
@@ -47,7 +51,7 @@ public class KafkaPropertyUtils {
     public static TopicParamsBuilder makeBuilder(PropertyUtils props, String topic, String servers) {
 
         final List<String> serverList = new ArrayList<>(Arrays.asList(COMMA_SPACE_PAT.split(servers)));
-        //TODO More Kafka properties to be added
+
         return BusTopicParams.builder()
                     .servers(serverList)
                     .topic(topic)

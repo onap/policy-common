@@ -32,6 +32,8 @@ import java.security.GeneralSecurityException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
@@ -42,6 +44,8 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
+import org.apache.kafka.common.TopicPartition;
 import org.onap.dmaap.mr.client.MRClientFactory;
 import org.onap.dmaap.mr.client.impl.MRConsumerImpl;
 import org.onap.dmaap.mr.client.impl.MRConsumerImpl.MRConsumerImplBuilder;
@@ -235,10 +239,13 @@ public interface BusConsumer {
          */
         private static Logger logger = LoggerFactory.getLogger(KafkaConsumerWrapper.class);
 
+        private static final String KEY_DESERIALIZER = "org.apache.kafka.common.serialization.StringDeserializer";
+
         /**
          * Kafka consumer.
          */
-        private KafkaConsumer<String, String> consumer;
+        protected KafkaConsumer<String, String> consumer;
+        protected Properties kafkaProps;
 
         /**
          * Kafka Consumer Wrapper.
@@ -250,20 +257,67 @@ public interface BusConsumer {
          * @throws GeneralSecurityException - Security exception
          * @throws MalformedURLException - Malformed URL exception
          */
-        public KafkaConsumerWrapper(BusTopicParams busTopicParams) {
+        public KafkaConsumerWrapper(BusTopicParams busTopicParams) throws MalformedURLException {
             super(busTopicParams);
+
+            if (busTopicParams.isTopicInvalid()) {
+                throw new IllegalArgumentException("No topic for Kafka");
+            }
+
+            //Setup Properties for consumer
+            kafkaProps = new Properties();
+            kafkaProps.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                    busTopicParams.getServers().get(0));
+
+            if (busTopicParams.isAdditionalPropsValid()) {
+                for (Map.Entry<String, String> entry : busTopicParams.getAdditionalProps().entrySet()) {
+                    kafkaProps.put(entry.getKey(), entry.getValue());
+                }
+            }
+
+            if (kafkaProps.get(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG) == null) {
+                kafkaProps.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KEY_DESERIALIZER);
+            }
+            if (kafkaProps.get(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG) == null) {
+                kafkaProps.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KEY_DESERIALIZER);
+            }
+            if (kafkaProps.get(ConsumerConfig.GROUP_ID_CONFIG) == null) {
+                kafkaProps.setProperty(ConsumerConfig.GROUP_ID_CONFIG, busTopicParams.getConsumerGroup());
+            }
+            consumer = new KafkaConsumer<>(kafkaProps);
+            //Subscribe to the topic
+            consumer.subscribe(Arrays.asList(busTopicParams.getTopic()));
         }
 
         @Override
         public Iterable<String> fetch() throws IOException {
-            // TODO: Not implemented yet
-            return new ArrayList<>();
+            ConsumerRecords<String, String> records = this.consumer.poll(Duration.ofMillis(fetchTimeout));
+            if (records == null || records.count() <= 0) {
+                return Collections.emptyList();
+            }
+            List<String> messages = new ArrayList<>(records.count());
+            try {
+                for (TopicPartition partition : records.partitions()) {
+                    List<ConsumerRecord<String, String>> partitionRecords = records.records(partition);
+                    for (ConsumerRecord<String, String> record : partitionRecords) {
+                        messages.add(record.value());
+                    }
+                    long lastOffset = partitionRecords.get(partitionRecords.size() - 1).offset();
+                    consumer.commitSync(Collections.singletonMap(partition, new OffsetAndMetadata(lastOffset + 1)));
+                }
+            } catch (Exception e) {
+                logger.error("{}: cannot fetch because of {}", this, e.getMessage());
+                sleepAfterFetchFailure();
+                throw e;
+            }
+            return messages;
         }
 
         @Override
         public void close() {
             super.close();
             this.consumer.close();
+            logger.info("Kafka Consumer exited {}", this);
         }
 
         @Override

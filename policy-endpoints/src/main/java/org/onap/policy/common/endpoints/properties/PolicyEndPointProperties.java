@@ -129,7 +129,6 @@ public final class PolicyEndPointProperties {
     public static final String DME2_SUBCONTEXT_PATH_PROPERTY = "SubContextPath";
     public static final String DME2_SESSION_STICKINESS_REQUIRED_PROPERTY = "sessionstickinessrequired";
 
-
     /* Topic Sink Values */
 
     /**
