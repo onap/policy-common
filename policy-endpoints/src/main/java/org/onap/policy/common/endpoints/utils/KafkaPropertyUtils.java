@@ -47,7 +47,7 @@ public class KafkaPropertyUtils {
     public static TopicParamsBuilder makeBuilder(PropertyUtils props, String topic, String servers) {
 
         final List<String> serverList = new ArrayList<>(Arrays.asList(COMMA_SPACE_PAT.split(servers)));
-        //TODO More Kafka properties to be added
+
         return BusTopicParams.builder()
                     .servers(serverList)
                     .topic(topic)
