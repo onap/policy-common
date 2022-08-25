@@ -84,6 +84,12 @@ public final class PolicyEndPointProperties {
 
     public static final String PROPERTY_KAFKA_SOURCE_TOPICS = "kafka.source.topics";
     public static final String PROPERTY_KAFKA_SINK_TOPICS = "kafka.sink.topics";
+    public static final String PROPERTY_KAFKA_SECURITY_PROTOCOL = "security.protocol";
+    public static final String PROPERTY_KAFKA_SASL_MECHANISM = "properties.sasl.mechanism";
+    public static final String PROPERTY_KAFKA_JAAS_CONFIG = "properties.sasl.jaas.config";
+    public static final String DEFAULT_ACKS_CONFIG = "1";
+    public static final String DEFAULT_RETRY_BACKOFF_MS_CONFIG = "150";
+    public static final String DEFAULT_RETRIES_CONFIG = "3";
 
     /* HTTP Server Properties */
 
@@ -128,7 +134,6 @@ public final class PolicyEndPointProperties {
     public static final String DME2_SERVICE_NAME_PROPERTY = "ServiceName";
     public static final String DME2_SUBCONTEXT_PATH_PROPERTY = "SubContextPath";
     public static final String DME2_SESSION_STICKINESS_REQUIRED_PROPERTY = "sessionstickinessrequired";
-
 
     /* Topic Sink Values */
 

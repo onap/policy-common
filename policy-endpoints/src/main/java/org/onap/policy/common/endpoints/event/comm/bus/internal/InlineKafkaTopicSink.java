@@ -18,6 +18,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
+import java.util.Map;
 import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicSink;
 import org.slf4j.Logger;
@@ -34,6 +35,8 @@ public class InlineKafkaTopicSink extends InlineBusTopicSink implements KafkaTop
      */
     private static Logger logger = LoggerFactory.getLogger(InlineKafkaTopicSink.class);
 
+    protected Map<String, String> additionalProps = null;
+
     /**
      * Argument-based KAFKA Topic Writer instantiation. BusTopicParams contains below mentioned
      * attributes.
@@ -47,6 +50,7 @@ public class InlineKafkaTopicSink extends InlineBusTopicSink implements KafkaTop
      */
     public InlineKafkaTopicSink(BusTopicParams busTopicParams) {
         super(busTopicParams);
+        this.additionalProps = busTopicParams.getAdditionalProps();
     }
 
     /**
@@ -59,6 +63,7 @@ public class InlineKafkaTopicSink extends InlineBusTopicSink implements KafkaTop
                 .servers(this.servers)
                 .topic(this.effectiveTopic)
                 .useHttps(this.useHttps)
+                .additionalProps(this.additionalProps)
                 .build());
         logger.info("{}: KAFKA SINK created", this);
     }
