@@ -34,8 +34,11 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import org.apache.commons.collections4.IteratorUtils;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.junit.Before;
 import org.junit.Test;
 import org.onap.dmaap.mr.client.impl.MRConsumerImpl;
@@ -299,12 +302,46 @@ public class BusConsumerTest extends TopicTestBase {
     @Test
     public void testKafkaConsumerWrapper() throws Exception {
         // verify that different wrappers can be built
-        assertThatCode(() -> new KafkaConsumerWrapper(makeBuilder().build())).doesNotThrowAnyException();
+        assertThatCode(() -> new KafkaConsumerWrapper(makeKafkaBuilder().build())).doesNotThrowAnyException();
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testKafkaConsumerWrapper_InvalidTopic() throws Exception {
+        new KafkaConsumerWrapper(makeBuilder().topic(null).build());
+    }
+
+    @Test(expected = java.lang.IllegalStateException.class)
+    public void testKafkaConsumerWrapperFetch() throws Exception {
+
+        //Setup Properties for consumer
+        Properties kafkaProps = new Properties();
+        kafkaProps.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+        kafkaProps.setProperty(ConsumerConfig.GROUP_ID_CONFIG, "test");
+        kafkaProps.setProperty("enable.auto.commit", "true");
+        kafkaProps.setProperty("auto.commit.interval.ms", "1000");
+        kafkaProps.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,
+            "org.apache.kafka.common.serialization.StringDeserializer");
+        kafkaProps.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,
+            "org.apache.kafka.common.serialization.StringDeserializer");
+        kafkaProps.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+        kafkaProps.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+
+        KafkaConsumerWrapper kafka = new KafkaConsumerWrapper(makeKafkaBuilder().build());
+        KafkaConsumer<String, String> consumer = new KafkaConsumer<>(kafkaProps);
+        kafka.consumer = consumer;
+
+        assertFalse(kafka.fetch().iterator().hasNext());
+        consumer.close();
+    }
+
+    @Test
+    public void testKafkaConsumerWrapperClose() throws Exception {
+        assertThatCode(() -> new KafkaConsumerWrapper(makeKafkaBuilder().build()).close()).doesNotThrowAnyException();
     }
 
     @Test
     public void testKafkaConsumerWrapperToString() throws Exception {
-        assertNotNull(new KafkaConsumerWrapper(makeBuilder().build()) {}.toString());
+        assertNotNull(new KafkaConsumerWrapper(makeKafkaBuilder().build()) {}.toString());
     }
 
     private static class FetchingBusConsumerImpl extends FetchingBusConsumer {
