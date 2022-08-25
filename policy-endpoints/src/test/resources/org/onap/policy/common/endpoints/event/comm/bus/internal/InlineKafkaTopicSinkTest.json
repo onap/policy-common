@@ -5,7 +5,8 @@
   "recentEvents" : [ ],
   "alive" : false,
   "locked" : false,
-  "useHttps" : true,
+  "useHttps" : false,
   "topicCommInfrastructure" : "KAFKA",
-  "partitionKey" : "my-partition"
+  "partitionKey" : "my-partition",
+  "additionalProps": {"security.protocol":"SASL_PLAINTEXT", "sasl.mechanism":"SCRAM-SHA-512", "sasl.jaas.config":"org.apache.kafka.common.security.plain.PlainLoginModule required username=abc password=abc serviceName=kafka;"}
 }
