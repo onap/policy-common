@@ -32,7 +32,7 @@ import org.onap.policy.common.endpoints.parameters.TopicParameters;
 
 public class KafkaTopicPropertyBuilder extends TopicPropertyBuilder {
 
-    public static final String SERVER = "my-server";
+    public static final String SERVER = "localhost:9092";
     public static final String TOPIC2 = "my-topic-2";
 
     @Getter
