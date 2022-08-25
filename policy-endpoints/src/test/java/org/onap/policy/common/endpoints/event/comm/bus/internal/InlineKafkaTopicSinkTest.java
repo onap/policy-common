@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Copyright (C) 2022 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,8 +31,8 @@ import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 
-public class SingleThreadedKafkaTopicSourceTest extends TopicTestBase {
-    private SingleThreadedKafkaTopicSource source;
+public class InlineKafkaTopicSinkTest extends TopicTestBase {
+    private InlineKafkaTopicSink sink;
 
     /**
      * Creates the object to be tested.
@@ -42,28 +42,30 @@ public class SingleThreadedKafkaTopicSourceTest extends TopicTestBase {
     public void setUp() {
         super.setUp();
 
-        source = new SingleThreadedKafkaTopicSource(makeKafkaBuilder().build());
+        sink = new InlineKafkaTopicSink(makeKafkaBuilder().build());
     }
 
     @After
     public void tearDown() {
-        source.shutdown();
-    }
-
-    public void testSerialize() {
-        assertThatCode(() -> new GsonTestUtils().compareGson(source, SingleThreadedKafkaTopicSourceTest.class))
-                        .doesNotThrowAnyException();
+        sink.shutdown();
     }
 
     @Test
     public void testToString() {
-        assertTrue(source.toString().startsWith("SingleThreadedKafkaTopicSource ["));
-        source.shutdown();
+        assertTrue(sink.toString().startsWith("InlineKafkaTopicSink ["));
+    }
+
+    @Test
+    public void testInit() {
+        // nothing null
+        sink = new InlineKafkaTopicSink(makeKafkaBuilder().build());
+        sink.init();
+        assertThatCode(() -> sink.shutdown()).doesNotThrowAnyException();
     }
 
     @Test
     public void testGetTopicCommInfrastructure() {
-        assertEquals(CommInfrastructure.KAFKA, source.getTopicCommInfrastructure());
+        assertEquals(CommInfrastructure.KAFKA, sink.getTopicCommInfrastructure());
     }
 
 }
