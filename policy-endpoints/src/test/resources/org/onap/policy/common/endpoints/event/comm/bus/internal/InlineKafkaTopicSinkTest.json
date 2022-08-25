@@ -7,5 +7,6 @@
   "locked" : false,
   "useHttps" : true,
   "topicCommInfrastructure" : "KAFKA",
-  "partitionKey" : "my-partition"
+  "partitionKey" : "my-partition",
+  "additionalProps": {"security.protocol":"SASL_PLAINTEXT", "sasl.mechanism":"SCRAM-SHA-512", "sasl.jaas.config":"${JAASLOGIN}"}
 }

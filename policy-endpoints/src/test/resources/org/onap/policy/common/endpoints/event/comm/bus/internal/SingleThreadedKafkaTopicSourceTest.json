@@ -6,5 +6,6 @@
   "alive" : false,
   "locked" : false,
   "useHttps" : true,
-  "topicCommInfrastructure" : "KAFKA"
+  "topicCommInfrastructure" : "KAFKA",
+  "additionalProps": {"security.protocol":"SASL_PLAINTEXT", "sasl.mechanism":"SCRAM-SHA-512", "sasl.jaas.config":"${JAASLOGIN}"}
 }

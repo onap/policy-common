@@ -32,16 +32,22 @@ import java.security.GeneralSecurityException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.kafka.clients.CommonClientConfigs;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.OffsetAndMetadata;
+import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.config.SaslConfigs;
 import org.onap.dmaap.mr.client.MRClientFactory;
 import org.onap.dmaap.mr.client.impl.MRConsumerImpl;
 import org.onap.dmaap.mr.client.impl.MRConsumerImpl.MRConsumerImplBuilder;
@@ -235,10 +241,16 @@ public interface BusConsumer {
          */
         private static Logger logger = LoggerFactory.getLogger(KafkaConsumerWrapper.class);
 
+        private static final String KEY_SERIALIZER = "org.apache.kafka.common.serialization.StringDeserializer";
+        private static final String PARTITION_CONFIG = "org.apache.kafka.clients.consumer.RoundRobinAssignor";
+        private static final String GROUP = "policy-group";
+        private static final String AUTO_OFFSET_CONFIG = "earliest";
+
         /**
          * Kafka consumer.
          */
-        private KafkaConsumer<String, String> consumer;
+        protected KafkaConsumer<String, String> consumer;
+        protected Properties kafkaProps;
 
         /**
          * Kafka Consumer Wrapper.
@@ -250,20 +262,88 @@ public interface BusConsumer {
          * @throws GeneralSecurityException - Security exception
          * @throws MalformedURLException - Malformed URL exception
          */
-        public KafkaConsumerWrapper(BusTopicParams busTopicParams) {
+        public KafkaConsumerWrapper(BusTopicParams busTopicParams) throws MalformedURLException {
             super(busTopicParams);
+
+            if (busTopicParams.isTopicInvalid()) {
+                throw new IllegalArgumentException("No topic for Kafka");
+            }
+
+            //Setup Properties for consumer
+            kafkaProps = new Properties();
+            kafkaProps.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                    busTopicParams.getServers().get(0));
+
+            kafkaProps.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KEY_SERIALIZER);
+            kafkaProps.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KEY_SERIALIZER);
+            kafkaProps.setProperty(ConsumerConfig.GROUP_ID_CONFIG, GROUP);
+            kafkaProps.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+            kafkaProps.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, AUTO_OFFSET_CONFIG);
+            kafkaProps.setProperty(ConsumerConfig.PARTITION_ASSIGNMENT_STRATEGY_CONFIG, PARTITION_CONFIG);
+
+            if (busTopicParams.isAdditionalPropsValid()) {
+                addAdditionalProps(busTopicParams);
+            }
+
+            consumer = new KafkaConsumer<>(kafkaProps);
+            //Subscribe to the topic
+            consumer.subscribe(Arrays.asList(busTopicParams.getTopic()));
         }
 
         @Override
         public Iterable<String> fetch() throws IOException {
-            // TODO: Not implemented yet
-            return new ArrayList<>();
+            ConsumerRecords<String, String> records = this.consumer.poll(Duration.ofMillis(fetchTimeout));
+            try {
+                if (records != null && records.count() > 0) {
+                    List<String> messages = new ArrayList<>(records.count());
+                    for (TopicPartition partition : records.partitions()) {
+                        messages.clear();
+                        List<ConsumerRecord<String, String>> partitionRecords = records.records(partition);
+                        for (ConsumerRecord<String, String> record : partitionRecords) {
+                            messages.add(record.value());
+                        }
+                        long lastOffset = partitionRecords.get(partitionRecords.size() - 1).offset();
+                        consumer.commitSync(Collections.singletonMap(partition, new OffsetAndMetadata(lastOffset + 1)));
+                        return messages;
+                    }
+                } else {
+                    logger.debug("no record from this polling.");
+                }
+            } catch (Exception e) {
+                logger.error("Kafka Fetch failed with exception.", e);
+            } finally {
+                consumer.close();
+                logger.info("Kafka Consumer exited");
+            }
+            return Collections.emptyList();
+        }
+
+        private void addAdditionalProps(BusTopicParams busTopicParams) {
+            String securityProtocol = busTopicParams.getAdditionalProps()
+                .get(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG);
+            if (securityProtocol != null) {
+                kafkaProps.setProperty(CommonClientConfigs.SECURITY_PROTOCOL_CONFIG, securityProtocol);
+            }
+
+            String saslMechanism = busTopicParams.getAdditionalProps().get(SaslConfigs.SASL_MECHANISM);
+            if (saslMechanism != null) {
+                kafkaProps.setProperty(SaslConfigs.SASL_MECHANISM, saslMechanism);
+            }
+
+            String saslJaasConfig = busTopicParams.getAdditionalProps().get(SaslConfigs.SASL_JAAS_CONFIG);
+            if (saslJaasConfig != null) {
+                kafkaProps.setProperty(SaslConfigs.SASL_JAAS_CONFIG, saslJaasConfig);
+            }
         }
 
         @Override
         public void close() {
             super.close();
-            this.consumer.close();
+            try {
+                fetch();
+            } catch (IOException e) {
+                logger.error("Kafka Fetch failed with exception.", e);
+            }
         }
 
         @Override

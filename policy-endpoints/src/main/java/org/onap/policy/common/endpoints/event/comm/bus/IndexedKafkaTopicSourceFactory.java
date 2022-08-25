@@ -65,6 +65,7 @@ class IndexedKafkaTopicSourceFactory implements KafkaTopicSourceFactory {
             }
 
             var kafkaTopicSource = makeSource(busTopicParams);
+
             kafkaTopicSources.put(busTopicParams.getTopic(), kafkaTopicSource);
 
             return kafkaTopicSource;

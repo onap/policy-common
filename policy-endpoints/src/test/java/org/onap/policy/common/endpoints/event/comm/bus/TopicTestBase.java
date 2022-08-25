@@ -59,6 +59,8 @@ public class TopicTestBase {
 
     public static final String ROUTE_PROP = "routeOffer";
     public static final String MY_ROUTE = "my-route";
+    public static final String MY_SERIALIZER = "org.apache.kafka.common.serialization.StringSerializer";
+    public static final int KAFKA_PORT = 9092;
 
     /**
      * Message used within exceptions that are expected.
@@ -76,6 +78,11 @@ public class TopicTestBase {
     protected List<String> servers;
 
     /**
+     * Servers to be added to the parameter builder.
+     */
+    protected List<String> kafkaServers;
+
+    /**
      * Parameter builder used to build topic parameters.
      */
     protected TopicParamsBuilder builder;
@@ -89,13 +96,14 @@ public class TopicTestBase {
         addProps.put("my-key-B", "my-value-B");
 
         servers = Arrays.asList("svra", "svrb");
+        kafkaServers = Arrays.asList("localhost:9092", "10.1.2.3:9092");
 
         builder = makeBuilder();
     }
 
     /**
      * Makes a fully populated parameter builder.
-     * 
+     *
      * @return a new parameter builder
      */
     public TopicParamsBuilder makeBuilder() {
@@ -117,6 +125,32 @@ public class TopicTestBase {
                         .fetchLimit(MY_FETCH_LIMIT).fetchTimeout(MY_FETCH_TIMEOUT).hostname(MY_HOST).latitude(MY_LAT)
                         .longitude(MY_LONG).managed(true).partitionId(MY_PARTITION).partner(MY_PARTNER)
                         .password(MY_PASS).port(MY_PORT).servers(servers).topic(MY_TOPIC)
-                        .effectiveTopic(MY_EFFECTIVE_TOPIC).useHttps(true).userName(MY_USERNAME);
+                        .effectiveTopic(MY_EFFECTIVE_TOPIC).useHttps(true).userName(MY_USERNAME)
+                        .serializationProvider(MY_SERIALIZER);
+    }
+
+    /**
+     * Makes a fully populated parameter builder.
+     *
+     * @return a new parameter builder
+     */
+    public TopicParamsBuilder makeKafkaBuilder() {
+        return makeKafkaBuilder(addProps, kafkaServers);
+    }
+
+    /**
+     * Makes a fully populated parameter builder.
+     *
+     * @param addProps additional properties to be added to the builder
+     * @param servers servers to be added to the builder
+     * @return a new parameter builder
+     */
+    public TopicParamsBuilder makeKafkaBuilder(Map<String, String> addProps, List<String> servers) {
+
+        return BusTopicParams.builder().additionalProps(addProps).basePath(MY_BASE_PATH).clientName(MY_CLIENT_NAME)
+                        .consumerGroup(MY_CONS_GROUP).consumerInstance(MY_CONS_INST).environment(MY_ENV)
+                        .hostname(MY_HOST).partitionId(MY_PARTITION).partner(MY_PARTNER)
+                        .port(KAFKA_PORT).servers(servers).topic(MY_TOPIC)
+                        .effectiveTopic(MY_EFFECTIVE_TOPIC).useHttps(false);
     }
 }
