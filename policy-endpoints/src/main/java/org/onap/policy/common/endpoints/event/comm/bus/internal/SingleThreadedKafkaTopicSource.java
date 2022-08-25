@@ -18,6 +18,7 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
+import java.net.MalformedURLException;
 import org.onap.policy.common.endpoints.event.comm.Topic;
 import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicSource;
 
@@ -35,19 +36,25 @@ public class SingleThreadedKafkaTopicSource extends SingleThreadedBusTopicSource
      */
     public SingleThreadedKafkaTopicSource(BusTopicParams busTopicParams) {
         super(busTopicParams);
-        this.init();
+        try {
+            this.init();
+        } catch (Exception e) {
+            throw new IllegalArgumentException("ERROR during init in kafka-source: cannot create topic " + topic, e);
+        }
     }
 
     /**
      * Initialize the Cambria client.
      */
     @Override
-    public void init() {
-        this.consumer = new BusConsumer.KafkaConsumerWrapper(BusTopicParams.builder()
+    public void init() throws MalformedURLException {
+        BusTopicParams.TopicParamsBuilder builder = BusTopicParams.builder()
                 .servers(this.servers)
                 .topic(this.effectiveTopic)
-                .useHttps(this.useHttps)
-                .build());
+                .consumerGroup(this.consumerGroup)
+                .useHttps(this.useHttps);
+
+        this.consumer = new BusConsumer.KafkaConsumerWrapper(builder.build());
     }
 
     @Override

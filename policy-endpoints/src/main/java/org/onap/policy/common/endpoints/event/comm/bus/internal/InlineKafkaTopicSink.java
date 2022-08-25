@@ -55,11 +55,7 @@ public class InlineKafkaTopicSink extends InlineBusTopicSink implements KafkaTop
     @Override
     public void init() {
 
-        this.publisher = new BusPublisher.KafkaPublisherWrapper(BusTopicParams.builder()
-                .servers(this.servers)
-                .topic(this.effectiveTopic)
-                .useHttps(this.useHttps)
-                .build());
+        this.publisher = new BusPublisher.KafkaPublisherWrapper(this.servers, this.effectiveTopic);
         logger.info("{}: KAFKA SINK created", this);
     }
 

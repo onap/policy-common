@@ -32,6 +32,7 @@ import java.security.GeneralSecurityException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
@@ -235,10 +236,12 @@ public interface BusConsumer {
          */
         private static Logger logger = LoggerFactory.getLogger(KafkaConsumerWrapper.class);
 
+        private static final String KEY_SERIALIZER = "org.apache.kafka.common.serialization.StringDeserializer";
+
         /**
          * Kafka consumer.
          */
-        private KafkaConsumer<String, String> consumer;
+        KafkaConsumer<String, String> consumer;
 
         /**
          * Kafka Consumer Wrapper.
@@ -250,14 +253,46 @@ public interface BusConsumer {
          * @throws GeneralSecurityException - Security exception
          * @throws MalformedURLException - Malformed URL exception
          */
-        public KafkaConsumerWrapper(BusTopicParams busTopicParams) {
+        public KafkaConsumerWrapper(BusTopicParams busTopicParams) throws MalformedURLException {
             super(busTopicParams);
+
+            if (busTopicParams.isTopicInvalid()) {
+                throw new IllegalArgumentException("No topic for Kafka");
+            }
+
+            //Setup Properties for consumer
+            Properties kafkaProps = new Properties();
+            kafkaProps.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
+                    busTopicParams.getServers().get(0));
+
+            kafkaProps.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, KEY_SERIALIZER);
+            kafkaProps.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, KEY_SERIALIZER);
+            kafkaProps.setProperty(ConsumerConfig.GROUP_ID_CONFIG, busTopicParams.getConsumerGroup());
+            kafkaProps.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");
+            kafkaProps.setProperty(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");
+
+            consumer = new KafkaConsumer<>(kafkaProps);
+            //Subscribe to the topic
+            consumer.subscribe(Arrays.asList(busTopicParams.getTopic()));
         }
 
         @Override
         public Iterable<String> fetch() throws IOException {
-            // TODO: Not implemented yet
-            return new ArrayList<>();
+            //Poll with timeout of 100 milli seconds
+            ConsumerRecords<String, String> messages = this.consumer.poll(Duration.ofMillis(100));
+
+            if (messages == null) {
+                logger.warn("{}: Kafka NULL response received", this);
+                sleepAfterFetchFailure();
+                return new ArrayList<>();
+            } else {
+                final LinkedList<String> msgs = new LinkedList<>();
+                for (ConsumerRecord<String, String> message : messages) {
+                    logger.info("Kafka consumer received: {}", message);
+                    msgs.add(message.value());
+                }
+                return msgs;
+            }
         }
 
         @Override
