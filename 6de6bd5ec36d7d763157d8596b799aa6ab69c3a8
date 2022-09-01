@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1d951c4f_97f3cd10",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-01T15:13:35Z",
+      "side": 1,
+      "message": "add \"protected\"",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4415bcb6_62969914",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-01T15:13:35Z",
+      "side": 1,
+      "message": "Is there a concept of consumer group or consumer id? that is very useful when there is multiple servers to control who and who doesn\u0027t get kafka messages.",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b0bf6ddb_817bdfee",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-01T15:13:35Z",
+      "side": 1,
+      "message": "Question: For the other FetchingBusConsumer, we go by this for the timeout:  busTopicParams.getFetchTimeout(), so it is provisionable, not hardcoded as here.    In ueb and dmaap, the poll under the hood will block will bock for that amount of time \"busTopicParams.getFetchTimeout()\" which is typically 15+ seconds if there is no data, if there\u0027s data earlier it will return back immediately as there\u0027s data.    I would like to understand if the KafkaConsumer has the same behavior, ideally we would want the same behavior if that was a possibility to keep generic code simpler.",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "922dbb86_093261c2",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-01T15:13:35Z",
+      "side": 1,
+      "message": "This method should be used when for example kafka server is down (when IOExceptions and staff of that sort occurs) as we don\u0027t want to keep trying to connect to a server that is down.   Is this the situation here with messages being null ?",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ca8f58d7_de0ff937",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-01T15:13:35Z",
+      "side": 1,
+      "message": "Use Collections.emptyList() or List.of()",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fad58be4_b48c2ce8",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-01T15:13:35Z",
+      "side": 1,
+      "message": "List\u003cString\u003e msgs instead ?",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd2aebd3_268699d0",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-01T15:13:35Z",
+      "side": 1,
+      "message": "In theory when a close is issue, that should trigger the fetch to return.  Not a comment, informational, not sure if you tested it out.",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "68ede1d4_0ededf5c",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-01T15:13:35Z",
+      "side": 1,
+      "message": "Is partition used in any way, do we need to worry about what partition to send to?",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6f9555f7_d6dc48bb",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-01T15:13:35Z",
+      "side": 1,
+      "message": "this could be placed at the class level to avoid recreating it.",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35b5d80d_a1cc4906",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-01T15:13:35Z",
+      "side": 1,
+      "message": "does the randomKey.nextInt(x) is to guarantee uniqueness ?   may it collide on the kafka server side with other producer records from other pods if they happen to have the same id?   I guess my question is what it is the purpose for this on the record, and ask if there is a potential collision with other from other servers.   An UUID will guarantee uniqueness as another possibility (the 0-1000 range may turn small).  Other possibility is to use a timestamp concatenated with an increasing counter, if we want to be able to easily see ordering on these messages if we have to debug for some reason.",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
