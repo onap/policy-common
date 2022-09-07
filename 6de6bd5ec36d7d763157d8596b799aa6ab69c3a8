@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "55e8d6aa_2d58185d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 244,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-07T08:11:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d951c4f_97f3cd10",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4415bcb6_62969914",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3e15d089_e92907b7",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-07T08:11:33Z",
+      "side": 1,
+      "message": "Yes, there is a consumer group configuration for Kafka. Making this Consumer Group ID point to below Kafka configuration to mark it unique across of policy components\nkafka:\n    consumer:\n      groupId: policy-group",
+      "parentUuid": "4415bcb6_62969914",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "2e54fd53_280235bb",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 282,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-07T08:11:33Z",
+      "side": 1,
+      "message": "Behavior is same with Apache Kafka, used fetchTimeout from FetchingBusConsumer class, from which KafkaConsumerWrapper extends.",
+      "parentUuid": "b0bf6ddb_817bdfee",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "922dbb86_093261c2",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
         "patchSetId": 1
@@ -67,6 +121,24 @@
       "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3d8ecd27_b9262c5e",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-07T08:11:33Z",
+      "side": 1,
+      "message": "Removed the call for sleepAfterFetchFailure() and have re-written the handling here",
+      "parentUuid": "922dbb86_093261c2",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -87,6 +159,24 @@
     },
     {
       "key": {
+        "uuid": "a6d095fb_992a6547",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 287,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-07T08:11:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ca8f58d7_de0ff937",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fad58be4_b48c2ce8",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
         "patchSetId": 1
@@ -101,6 +191,24 @@
       "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a3c1b051_d3275876",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 289,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-07T08:11:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fad58be4_b48c2ce8",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -121,6 +229,24 @@
     },
     {
       "key": {
+        "uuid": "000d1014_93ec35bc",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-07T08:11:33Z",
+      "side": 1,
+      "message": "Called the fetch function from close, which in the finally block will close the consumer. Hope this implementation is ok, Or Did i misunderstand the comment.",
+      "parentUuid": "dd2aebd3_268699d0",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "68ede1d4_0ededf5c",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
         "patchSetId": 1
@@ -135,6 +261,24 @@
       "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87280a04_503b44e6",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-07T08:11:33Z",
+      "side": 1,
+      "message": "PartitionId is not used for sending Kafka messages for now. PartitionId is not used in this function, since this is a overridden function from Interface BusPublisher, input parameters are left as it is.",
+      "parentUuid": "68ede1d4_0ededf5c",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -155,6 +299,24 @@
     },
     {
       "key": {
+        "uuid": "62ef52e2_2274c02f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-07T08:11:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f9555f7_d6dc48bb",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "35b5d80d_a1cc4906",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
         "patchSetId": 1
@@ -169,6 +331,24 @@
       "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c75230ac_5f54e187",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-07T08:11:33Z",
+      "side": 1,
+      "message": "Changed the key to \"key: String \u003d UUID.randomUUID().toString()\", similar to implementation in CDS.\nThis Key is an optional input parameter in ProducerRecord, It can either be null, a randomKey or a fixed value.\nIf no partition is specified but a key is present a partition will be chosen using a hash of the key. If neither key nor partition is present a partition will be assigned in a round-robin fashion. If a fixed key is provided, then records will be sent to the same partition to which the first record is sent, usually for a strict ordering.\n\nThe record also has an associated timestamp. If the user did not provide a timestamp, the producer will stamp the record with its current time.\nwe need to use below constructor for this case, but i think we can leave timestamp for this implementation.\nProducerRecord(String topic, Integer partition, Long timestamp, K key, V value)\nCreates a record with a specified timestamp to be sent to a specified topic and partition",
+      "parentUuid": "35b5d80d_a1cc4906",
+      "revId": "6de6bd5ec36d7d763157d8596b799aa6ab69c3a8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
