@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "25fe11cc_ee15db4d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-08T13:40:25Z",
+      "side": 1,
+      "message": "I think we will want this provisionable instead of hardcoded matching the existing dmaap as if it behaves as DMaaP sharing the same consumer group, components will be stealing messages from each other if the consumer group is the same for all.",
+      "revId": "6b94e06219a95b7be243389afc03de0e67674f9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ed9d8ba1_da1ea159",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-08T13:40:25Z",
+      "side": 1,
+      "message": "can reduce the nested-ness and avoid sonars with this code after 296 and remove this if:\n\nif (records \u003d\u003d null || records.count() \u003c\u003d 0) return Collections.emptyList();",
+      "revId": "6b94e06219a95b7be243389afc03de0e67674f9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a44761a_b2ffdac3",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-08T13:40:25Z",
+      "side": 1,
+      "message": "Is this a problem that only handles 1 partition, the first one? if there are more than 1 the return at line 137 will return in line 137.   Is it possible to have more than 1 partition here in this context?",
+      "revId": "6b94e06219a95b7be243389afc03de0e67674f9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dbc833c5_f64879f3",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-08T13:40:25Z",
+      "side": 1,
+      "message": "may be logger.trace, or perhaps better remove the line all together, this could be very verbose at runtime.",
+      "revId": "6b94e06219a95b7be243389afc03de0e67674f9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8baf80b_8f12474a",
+        "filename": "policy-endpoints/src/test/resources/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineKafkaTopicSinkTest.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-08T13:40:25Z",
+      "side": 1,
+      "message": "I think we\u0027ll need these properties on the PolicyEndpointProperties.java, I don\u0027t recall the exact name where we have the all the constants used in properties files for endpoints.   It would be one to have a test that uses the .properties files method of configuration to make sure that it works and it can read these properties for kafka.",
+      "revId": "6b94e06219a95b7be243389afc03de0e67674f9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
