@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "2c1a49e0_f58b0f18",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-12T16:14:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "25fe11cc_ee15db4d",
+      "revId": "6b94e06219a95b7be243389afc03de0e67674f9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ed9d8ba1_da1ea159",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
         "patchSetId": 3
@@ -33,6 +51,24 @@
       "revId": "6b94e06219a95b7be243389afc03de0e67674f9d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "670d1ccd_74000783",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 297,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-12T16:14:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ed9d8ba1_da1ea159",
+      "revId": "6b94e06219a95b7be243389afc03de0e67674f9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "fe45c687_e994dd34",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-12T16:14:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0a44761a_b2ffdac3",
+      "revId": "6b94e06219a95b7be243389afc03de0e67674f9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "dbc833c5_f64879f3",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
         "patchSetId": 3
@@ -70,6 +124,24 @@
     },
     {
       "key": {
+        "uuid": "6284cda7_1b8cd3e7",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-12T16:14:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbc833c5_f64879f3",
+      "revId": "6b94e06219a95b7be243389afc03de0e67674f9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f8baf80b_8f12474a",
         "filename": "policy-endpoints/src/test/resources/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineKafkaTopicSinkTest.json",
         "patchSetId": 3
@@ -84,6 +156,24 @@
       "revId": "6b94e06219a95b7be243389afc03de0e67674f9d",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e8b03f9_28085f69",
+        "filename": "policy-endpoints/src/test/resources/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineKafkaTopicSinkTest.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-12T16:14:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f8baf80b_8f12474a",
+      "revId": "6b94e06219a95b7be243389afc03de0e67674f9d",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
