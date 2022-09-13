@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "126431b5_3ef73f43",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-13T21:56:17Z",
+      "side": 1,
+      "message": "No need for \"[POLICY]\" , that\u0027s only required for OOM reviews.",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f89300fa_10384706",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
         "patchSetId": 4
@@ -13,6 +30,108 @@
       "writtenOn": "2022-09-13T13:23:04Z",
       "side": 1,
       "message": "Is this right? Only the last iteration of the for loop will contain the entries.",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6312293_c96ec5e7",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-13T21:56:17Z",
+      "side": 1,
+      "message": "I think you don\u0027t need this if and could do \"return messages;\" here, messages will always be instantiated at this point with or without messages.",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a97e90c0_1ce2256f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-13T21:56:17Z",
+      "side": 1,
+      "message": "If we get an IOException here, ie. kafka server is unreachable, will be good to invoke similar functionality as in sleepAfterFailure() to await trying to reach the server for a little bit (see other examples) in this file.   This had to be done for dmaap in the past to avoid overwhelming the server with connection requests that could not serve.",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "590878f2_4118e5b8",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-13T21:56:17Z",
+      "side": 1,
+      "message": "why it is trying to do a fetch()?  this is typically and action started programmatically by a managing layer, for example a graceful shutdown of the process, probably shouldn\u0027t delay it in such case.",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8847c530_57b7e08f",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-13T21:56:17Z",
+      "side": 1,
+      "message": "could add this to info log logger.info(\" .. {}:, this).",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d42c9e3_c8a570f8",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-13T21:56:17Z",
+      "side": 1,
+      "message": "It would be good to add policy endpoint properties for kafka for this properties:  ACKS_CONFIG RETRY_BACKOFF_MS_CONFIG RETRIES_CONFIG.\nThe retries may be a little high for such short interval in backoff I think, may be 3 is good.",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5d23abfc_700bb80b",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/properties/PolicyEndPointProperties.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-13T21:56:17Z",
+      "side": 1,
+      "message": "what does it mean the username, password here?   I think we may get flagged security wise by embedding passwords in cleartext here.\nI think in general, provided these are defaults, the actual default values don\u0027t need to go into this file, they can go where they are used, I supposed the one in line 92 is for junits.\nThe property names lines 87-89 are good.",
       "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
