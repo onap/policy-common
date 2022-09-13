@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f89300fa_10384706",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2022-09-13T13:23:04Z",
+      "side": 1,
+      "message": "Is this right? Only the last iteration of the for loop will contain the entries.",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3ca8ef30_32720ea4",
         "filename": "policy-endpoints/src/test/resources/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineKafkaTopicSinkTest.json",
         "patchSetId": 4
