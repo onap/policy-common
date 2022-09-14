@@ -36,6 +36,24 @@
     },
     {
       "key": {
+        "uuid": "ab175f16_5f39a3e2",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 302,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-14T09:01:49Z",
+      "side": 1,
+      "message": "Done. Thank you. Did-not realize i am clearing the messages.",
+      "parentUuid": "f89300fa_10384706",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d6312293_c96ec5e7",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
         "patchSetId": 4
@@ -161,6 +179,30 @@
     },
     {
       "key": {
+        "uuid": "86219346_8abc0b0b",
+        "filename": "policy-endpoints/src/test/resources/org/onap/policy/common/endpoints/event/comm/bus/internal/InlineKafkaTopicSinkTest.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-14T09:01:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ca8ef30_32720ea4",
+      "range": {
+        "startLine": 11,
+        "startChar": 0,
+        "endLine": 11,
+        "endChar": 17
+      },
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d4a116b_075d2855",
         "filename": "policy-endpoints/src/test/resources/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSourceTest.json",
         "patchSetId": 4
@@ -181,6 +223,30 @@
       "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cef3a95a_599c24c8",
+        "filename": "policy-endpoints/src/test/resources/org/onap/policy/common/endpoints/event/comm/bus/internal/SingleThreadedKafkaTopicSourceTest.json",
+        "patchSetId": 4
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-14T09:01:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1d4a116b_075d2855",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 17
+      },
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
