@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "1848306d_14255b31",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2022-09-16T16:26:28Z",
+      "side": 1,
+      "message": "What action did you take on Jorge\u0027s comment?",
+      "parentUuid": "b0f5fe78_1772723f",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a97e90c0_1ce2256f",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
         "patchSetId": 4
@@ -139,6 +157,24 @@
       "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "18943b84_17dd80f5",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2022-09-16T16:26:28Z",
+      "side": 1,
+      "message": "What action did you take on Jorge\u0027s comment?",
+      "parentUuid": "01209ae4_24f5c40b",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     },
     {
       "key": {
@@ -177,6 +213,24 @@
     },
     {
       "key": {
+        "uuid": "36884ace_5b00d36b",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2022-09-16T16:26:28Z",
+      "side": 1,
+      "message": "What action did you take on Jorge\u0027s comment?",
+      "parentUuid": "44d8a7aa_b14f21d4",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "8847c530_57b7e08f",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
         "patchSetId": 4
@@ -209,6 +263,24 @@
       "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4b135a78_bbf1f98b",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2022-09-16T16:26:28Z",
+      "side": 1,
+      "message": "What action did you take on Jorge\u0027s comment?",
+      "parentUuid": "957c700f_3ab2f028",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     },
     {
       "key": {
@@ -247,6 +319,24 @@
     },
     {
       "key": {
+        "uuid": "07f112c4_da0f70da",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2022-09-16T16:26:28Z",
+      "side": 1,
+      "message": "What action did you take on Jorge\u0027s comment?",
+      "parentUuid": "7734bd65_7b2110a6",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "5d23abfc_700bb80b",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/properties/PolicyEndPointProperties.java",
         "patchSetId": 4
@@ -279,6 +369,24 @@
       "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4d14d34c_747641ee",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/properties/PolicyEndPointProperties.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2022-09-16T16:26:28Z",
+      "side": 1,
+      "message": "What action did you take on Jorge\u0027s comment?",
+      "parentUuid": "30042aeb_99b7169d",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     },
     {
       "key": {
