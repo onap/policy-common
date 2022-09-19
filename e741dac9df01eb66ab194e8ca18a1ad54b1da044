@@ -125,6 +125,24 @@
     },
     {
       "key": {
+        "uuid": "0b75cdd2_e6c153ae",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-19T10:26:07Z",
+      "side": 1,
+      "message": "Removed return of emptyList when there are no messages.",
+      "parentUuid": "1848306d_14255b31",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a97e90c0_1ce2256f",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
         "patchSetId": 4
@@ -175,6 +193,24 @@
       "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "060edc27_488f267a",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 313,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-19T10:26:07Z",
+      "side": 1,
+      "message": "Calling sleepAfterFetchFailure() in case of an exception, as this function is accessible to this class. This function will await for a sleeptime. Hope this is fine.",
+      "parentUuid": "18943b84_17dd80f5",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -231,6 +267,24 @@
     },
     {
       "key": {
+        "uuid": "f377af92_86e17bcd",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-19T10:26:07Z",
+      "side": 1,
+      "message": "Removed final fetch from here, and will immediately close the consumer as as well as super class close for countDown.",
+      "parentUuid": "36884ace_5b00d36b",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8847c530_57b7e08f",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
         "patchSetId": 4
@@ -281,6 +335,24 @@
       "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "457dfed1_79290706",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-19T10:26:07Z",
+      "side": 1,
+      "message": "Updated the logger info",
+      "parentUuid": "4b135a78_bbf1f98b",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
@@ -337,6 +409,24 @@
     },
     {
       "key": {
+        "uuid": "027a2eca_f21afb04",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-19T10:26:07Z",
+      "side": 1,
+      "message": "Added properties to PolicyEndPointProperties, and made Retries_config as 3",
+      "parentUuid": "07f112c4_da0f70da",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d23abfc_700bb80b",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/properties/PolicyEndPointProperties.java",
         "patchSetId": 4
@@ -387,6 +477,24 @@
       "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f3b545ee_db17f252",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/properties/PolicyEndPointProperties.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-19T10:26:07Z",
+      "side": 1,
+      "message": "Removed, These values are not needed, as we pick kafka security configuration from additional properties defined in topic configuration, populated into bustopicparams.",
+      "parentUuid": "4d14d34c_747641ee",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     },
     {
       "key": {
