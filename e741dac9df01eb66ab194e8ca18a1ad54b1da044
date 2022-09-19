@@ -427,6 +427,24 @@
     },
     {
       "key": {
+        "uuid": "7ce589bd_b2e9602d",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-19T19:48:55Z",
+      "side": 1,
+      "message": "Oh, what I meant is that these could be configurable externally in a configuration file.   For example see in here:\n\nhttps://git.onap.org/policy/drools-applications/tree/controlloop/common/feature-controlloop-management/src/main/feature/config/POLICY-CL-MGT-topic.properties\n\nI was thinking, there would be properties for these that we could make accessible external via configuration.   For example in the URL above:\n\ndmaap.sink.topics\u003dPOLICY-CL-MGT\ndmaap.sink.topics.POLICY-CL-MGT.servers\u003d${envd:DMAAP_SERVERS}\ndmaap.sink.topics.POLICY-CL-MGT.https\u003d${envd:DMAAP_HTTPS:true}\ndmaap.sink.topics.POLICY-CL-MGT.https\u003d${envd:DMAAP_HTTPS:true}\ndmaap.sink.topics.POLICY-CL-MGT.retryBackOff\u003dxxx                \u003c--- **\n\nIn any case, do not worry about it for this review, could be added later.",
+      "parentUuid": "027a2eca_f21afb04",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d23abfc_700bb80b",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/properties/PolicyEndPointProperties.java",
         "patchSetId": 4

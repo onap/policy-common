@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "20780cff_55af5fc2",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/properties/PolicyEndPointProperties.java",
+        "patchSetId": 8
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 477
+      },
+      "writtenOn": "2022-09-19T19:48:55Z",
+      "side": 1,
+      "message": "This is what I meant in my previous comment to have in the defaults and use them instead in the code in the previous file:\n\npublic static final String PROPERTY_KAFKA_SINK_ACKS_CONFIG \u003d \"kafka.sink.acks.config\";\npublic static final String PROPERTY_KAFKA_SINK_MS_CONFIG \u003d \"...\";\npublic static final String PROPERTY_KAFKA_SINK_RETRIES_CONFIG \u003d \"...\";",
+      "revId": "4782f5baa8d32dc1c9aa449a11f4b1923802de06",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
