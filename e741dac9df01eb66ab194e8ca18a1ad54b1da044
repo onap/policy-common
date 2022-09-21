@@ -445,6 +445,24 @@
     },
     {
       "key": {
+        "uuid": "c98d323f_db00ca66",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 7504
+      },
+      "writtenOn": "2022-09-21T10:11:05Z",
+      "side": 1,
+      "message": "Squeezed in all kafka configuration parameters in additional properties of topics, so that, they become configurable, and Kafka and set default for those configuration parameters that are not provided. Hope this approach looks better for reuse across policy components, please comment.\n\n     topicSources:\n        -\n          topic: policy-acruntime-participant\n          servers:\n            - localhost:9092\n          topicCommInfrastructure: kafka\n          fetchTimeout: 15000\n          useHttps: true\n          additionalProps:\n            group-id: policy-group\n            key.deserializer: org.apache.kafka.common.serialization.StringDeserializer\n            value.deserializer: org.apache.kafka.common.serialization.StringDeserializer\n            partition.assignment.strategy: org.apache.kafka.clients.consumer.RoundRobinAssignor\n            enable.auto.commit: false\n            auto.offset.reset: earliest\n            security.protocol: SASL_PLAINTEXT\n            properties.sasl.mechanism: SCRAM-SHA-512\n            properties.sasl.jaas.config: ${JAASLOGIN}\n\n      topicSinks:\n        -\n          topic: policy-acruntime-participant\n          servers:\n            - localhost:9092\n          topicCommInfrastructure: kafka\n          useHttps: true\n          additionalProps:\n            key.serializer: org.apache.kafka.common.serialization.StringSerializer\n            value.serializer: org.apache.kafka.common.serialization.StringSerializer\n            acks: 1\n            retry.backoff.ms: 150\n            retries: 3\n            security.protocol: SASL_PLAINTEXT\n            properties.sasl.mechanism: SCRAM-SHA-512\n            properties.sasl.jaas.config: ${JAASLOGIN}\n\nOr simply security.protocol: PLAINTEXT for basic-auth",
+      "parentUuid": "7ce589bd_b2e9602d",
+      "revId": "e741dac9df01eb66ab194e8ca18a1ad54b1da044",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5d23abfc_700bb80b",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/properties/PolicyEndPointProperties.java",
         "patchSetId": 4
