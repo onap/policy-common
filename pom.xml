@@ -47,9 +47,6 @@
         <releases.path>content/repositories/releases/</releases.path>
         <snapshots.path>content/repositories/snapshots/</snapshots.path>
         <staging.path>content/repositories/staging/</staging.path>
-
-        <!-- Project common dependency versions -->
-        <commons-lang3.version>3.4</commons-lang3.version>
     </properties>
 
     <modules>
@@ -64,16 +61,6 @@
         <module>policy-endpoints</module>
         <module>spring-utils</module>
     </modules>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commons-lang3.version}</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <build>
         <plugins>

@@ -461,11 +461,15 @@ public class DbAudit {
                     + "\n    Entry 1 (short prefix style): " + resourceName1 + ": "
                     + new ReflectionToStringBuilder(entry1, ToStringStyle.SHORT_PREFIX_STYLE).toString()
                     + "\n    Entry 2 (short prefix style): " + resourceName2 + ": "
-                    + new ReflectionToStringBuilder(entry2, ToStringStyle.SHORT_PREFIX_STYLE).toString()
+                    + (entry2 != null
+                        ? new ReflectionToStringBuilder(entry2, ToStringStyle.SHORT_PREFIX_STYLE).toString()
+                        : "null")
                     + "\n    Entry 1 (recursive style): " + resourceName1 + ": "
                     + new ReflectionToStringBuilder(entry1, new RecursiveToStringStyle()).toString()
                     + "\n    Entry 2 (recursive style): " + resourceName2 + ": "
-                    + new ReflectionToStringBuilder(entry2, new RecursiveToStringStyle()).toString();
+                    + (entry2 != null
+                        ? new ReflectionToStringBuilder(entry2, new RecursiveToStringStyle()).toString()
+                        : "null");
             logger.debug(msg);
 
         } catch (ClassNotFoundException e) {
