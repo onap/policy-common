@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8f8b220a_f90e0bce",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2022-10-19T09:44:52Z",
+      "side": 0,
+      "message": "Using the managed version of commons-lang3 from policy/parent.",
+      "revId": "94206bf0220c569eef0bd959179ccd7e57ff1eaa",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}

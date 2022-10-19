@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "02a1d02a_fe5bcc5b",
+        "filename": "integrity-audit/src/main/java/org/onap/policy/common/ia/DbAudit.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2022-10-19T09:44:52Z",
+      "side": 1,
+      "message": "The new version of commons-lang3 does not tolerate null values being passed.",
+      "revId": "7f1a3a44ca4ac555e235f66a7801328ecb98c2b5",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
