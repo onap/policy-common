@@ -37,7 +37,6 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>${version.javax.bind}</version>
         </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
