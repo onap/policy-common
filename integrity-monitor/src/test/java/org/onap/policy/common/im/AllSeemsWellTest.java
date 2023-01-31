@@ -3,6 +3,7 @@
  * Integrity Monitor
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Modificaitons Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,9 +34,9 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class AllSeemsWellTest extends IntegrityMonitorTestBase {
     private static final String ALL_SEEMS_WELL_MSG = "'AllSeemsWellTest - ALLSEEMSWELL'";
@@ -93,7 +94,7 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
             }
         };
 
-        Whitebox.setInternalState(IntegrityMonitor.class, IM_INSTANCE_FIELD, im);
+        ReflectionTestUtils.setField(IntegrityMonitor.class, IM_INSTANCE_FIELD, im);
     }
 
     @After

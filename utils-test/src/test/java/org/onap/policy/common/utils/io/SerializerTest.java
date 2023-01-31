@@ -3,6 +3,7 @@
  * ONAP Policy Engine - Common Modules
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Modificaitons Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +42,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.policy.common.utils.io.Serializer.Factory;
-import org.powermock.reflect.Whitebox;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class SerializerTest {
     private static final String FACTORY = "factory";
@@ -53,12 +54,12 @@ public class SerializerTest {
 
     @BeforeClass
     public static void setUpBeforeClass() {
-        saveFactory = Whitebox.getInternalState(Serializer.class, FACTORY);
+        saveFactory = (Factory) ReflectionTestUtils.getField(Serializer.class, FACTORY);
     }
 
     @AfterClass
     public static void tearDownAfterClass() {
-        Whitebox.setInternalState(Serializer.class, FACTORY, saveFactory);
+        ReflectionTestUtils.setField(Serializer.class, FACTORY, saveFactory);
     }
 
     @Before
@@ -376,7 +377,7 @@ public class SerializerTest {
      * @param factory new factory to be set
      */
     private void setFactory(Factory factory) {
-        Whitebox.setInternalState(Serializer.class, FACTORY, factory);
+        ReflectionTestUtils.setField(Serializer.class, FACTORY, factory);
     }
 
     /**

@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
+ * Modificaitons Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -175,6 +176,7 @@ public class JacksonExclusionStrategyTest {
     /**
      * Used to verify that JsonElements are not managed.
      */
+    @SuppressWarnings("deprecation")
     public static class MyJson extends JsonElement {
         @Override
         public JsonElement deepCopy() {

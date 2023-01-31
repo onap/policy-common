@@ -3,6 +3,7 @@
  * Integrity Monitor
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Modificaitons Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,9 +41,9 @@ import org.junit.Test;
 import org.onap.policy.common.im.jpa.ForwardProgressEntity;
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
-import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.util.ReflectionTestUtils;
 
 /*
  * All JUnits are designed to run in the local development environment
@@ -906,7 +907,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
             }
         };
 
-        Whitebox.setInternalState(IntegrityMonitor.class, IM_INSTANCE_FIELD, im);
+        ReflectionTestUtils.setField(IntegrityMonitor.class, IM_INSTANCE_FIELD, im);
 
         // wait for the monitor thread to start
         waitCycles(1);

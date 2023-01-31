@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +74,7 @@ import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.gson.GsonMessageBodyHandler;
 import org.onap.policy.common.utils.coder.StandardCoder;
 import org.onap.policy.common.utils.network.NetworkUtil;
-import org.powermock.reflect.Whitebox;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class RestServerTest {
     private static final String METRICS_URI = "/metrics";
@@ -104,7 +105,7 @@ public class RestServerTest {
      */
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
-        saveFactory = Whitebox.getInternalState(RestServer.class, FACTORY_FIELD);
+        saveFactory = (Factory) ReflectionTestUtils.getField(RestServer.class, FACTORY_FIELD);
 
         realPort = NetworkUtil.allocPort();
 
@@ -132,7 +133,7 @@ public class RestServerTest {
      */
     @AfterClass
     public static void tearDownAfterClass() {
-        Whitebox.setInternalState(RestServer.class, FACTORY_FIELD, saveFactory);
+        ReflectionTestUtils.setField(RestServer.class, FACTORY_FIELD, saveFactory);
 
         realRest.stop();
     }
@@ -155,7 +156,7 @@ public class RestServerTest {
         when(server1.getName()).thenReturn(SERVER1);
         when(server2.getName()).thenReturn(SERVER2);
 
-        Whitebox.setInternalState(RestServer.class, FACTORY_FIELD, factory);
+        ReflectionTestUtils.setField(RestServer.class, FACTORY_FIELD, factory);
     }
 
     @Test

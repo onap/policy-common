@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +52,7 @@ import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.Dmaa
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FetchingBusConsumer;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.KafkaConsumerWrapper;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
-import org.powermock.reflect.Whitebox;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class BusConsumerTest extends TopicTestBase {
 
@@ -151,7 +152,7 @@ public class BusConsumerTest extends TopicTestBase {
         when(inner.fetch()).thenReturn(lst);
 
         CambriaConsumerWrapper cons = new CambriaConsumerWrapper(builder.build());
-        Whitebox.setInternalState(cons, "consumer", inner);
+        ReflectionTestUtils.setField(cons, "consumer", inner);
 
         assertEquals(lst, IteratorUtils.toList(cons.fetch().iterator()));
 

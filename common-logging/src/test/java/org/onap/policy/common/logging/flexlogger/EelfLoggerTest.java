@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2018 Ericsson. All rights reserved.
  * Modifications Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +36,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.eelf.PolicyLogger;
-import org.powermock.reflect.Whitebox;
 import org.slf4j.MDC;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class EelfLoggerTest {
 
@@ -92,7 +93,7 @@ public class EelfLoggerTest {
     @Test
     public void testDebugObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.debug("message");
         Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
         Mockito.when(mockLogger.isDebugEnabled()).thenReturn(true);
@@ -103,7 +104,7 @@ public class EelfLoggerTest {
     @Test
     public void testErrorObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
         eelfLogger.error("message");
         Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
         Mockito.when(mockLogger.isErrorEnabled()).thenReturn(true);
@@ -114,7 +115,7 @@ public class EelfLoggerTest {
     @Test
     public void testInfoObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.info("message");
         Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
         Mockito.when(mockLogger.isInfoEnabled()).thenReturn(true);
@@ -125,7 +126,7 @@ public class EelfLoggerTest {
     @Test
     public void testWarnObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.warn("message");
         Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
         Mockito.when(mockLogger.isWarnEnabled()).thenReturn(true);
@@ -136,7 +137,7 @@ public class EelfLoggerTest {
     @Test
     public void testTraceObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.trace("message");
         Mockito.verify(mockLogger).trace(MessageCodes.GENERAL_INFO, "message");
     }
@@ -144,7 +145,7 @@ public class EelfLoggerTest {
     @Test
     public void testIsDebugEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isDebugEnabled()).thenReturn(false).thenReturn(true);
         assertFalse(eelfLogger.isDebugEnabled());
         assertTrue(eelfLogger.isDebugEnabled());
@@ -154,7 +155,7 @@ public class EelfLoggerTest {
     @Test
     public void testIsInfoEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isInfoEnabled()).thenReturn(false).thenReturn(true);
         assertFalse(eelfLogger.isInfoEnabled());
         assertTrue(eelfLogger.isInfoEnabled());
@@ -163,7 +164,7 @@ public class EelfLoggerTest {
     @Test
     public void testIsWarnEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isWarnEnabled()).thenReturn(false).thenReturn(true);
         assertFalse(eelfLogger.isWarnEnabled());
         assertTrue(eelfLogger.isWarnEnabled());
@@ -172,7 +173,7 @@ public class EelfLoggerTest {
     @Test
     public void testIsErrorEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
         Mockito.when(mockLogger.isErrorEnabled()).thenReturn(false).thenReturn(true);
         assertFalse(eelfLogger.isErrorEnabled());
         assertTrue(eelfLogger.isErrorEnabled());
@@ -195,7 +196,7 @@ public class EelfLoggerTest {
     @Test
     public void testIsTraceEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isDebugEnabled()).thenReturn(false).thenReturn(true);
         assertFalse(eelfLogger.isTraceEnabled());
         assertTrue(eelfLogger.isTraceEnabled());
@@ -211,7 +212,7 @@ public class EelfLoggerTest {
     @Test
     public void testDebugObjectThrowable() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.debug("message", new NullPointerException());
         Mockito.verify(mockLogger).debug((MessageCodes) Mockito.any(),
                 Mockito.startsWith("message:java.lang.NullPointerException"));
@@ -220,7 +221,7 @@ public class EelfLoggerTest {
     @Test
     public void testErrorObjectThrowable() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
         eelfLogger.error("message", new NullPointerException());
         Mockito.verify(mockLogger).error((MessageCodes) Mockito.any(),
                 Mockito.startsWith("message:java.lang.NullPointerException"));
@@ -230,7 +231,7 @@ public class EelfLoggerTest {
     @Test
     public void testInfoObjectThrowable() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.info("message", new NullPointerException());
         Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
         Mockito.when(mockLogger.isInfoEnabled()).thenReturn(true);
@@ -241,7 +242,7 @@ public class EelfLoggerTest {
     @Test
     public void testWarnObjectThrowable() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.warn("message", new NullPointerException());
         Mockito.verify(mockLogger).warn((MessageCodes) Mockito.any(),
                 Mockito.startsWith("message:java.lang.NullPointerException"));
@@ -250,7 +251,7 @@ public class EelfLoggerTest {
     @Test
     public void testTraceObjectThrowable() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.trace("message", new NullPointerException());
         Mockito.verify(mockLogger).trace("{}", "message");
     }
@@ -258,7 +259,7 @@ public class EelfLoggerTest {
     @Test
     public void testAuditObjectThrowable() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "auditLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "auditLogger", mockLogger);
         eelfLogger.audit("message", new NullPointerException());
         Mockito.verify(mockLogger).info("{}", "message");
     }
@@ -330,7 +331,7 @@ public class EelfLoggerTest {
     @Test
     public void testMetrics() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "metricsLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "metricsLogger", mockLogger);
         eelfLogger.metrics(1);
         Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
         Mockito.when(mockLogger.isInfoEnabled()).thenReturn(true);
@@ -342,7 +343,7 @@ public class EelfLoggerTest {
     @Test
     public void testErrorMessageCodesThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
         eelfLogger.error(MessageCodes.GENERAL_ERROR, new NullPointerException(), "str1", "str2");
         Mockito.verify(mockLogger).error((MessageCodes) Mockito.any(),
                 Mockito.startsWith("str1:str2:java.lang.NullPointerException"));
@@ -351,7 +352,7 @@ public class EelfLoggerTest {
     @Test
     public void testErrorMessageCodesStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "errorLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
         eelfLogger.error(MessageCodes.GENERAL_ERROR, "str1", "str2");
         Mockito.verify(mockLogger).error(MessageCodes.GENERAL_ERROR, "str1", "str2");
 
@@ -366,7 +367,7 @@ public class EelfLoggerTest {
     @Test
     public void testWarnMessageCodesStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.warn(MessageCodes.GENERAL_ERROR, "str1", "str2");
         Mockito.verify(mockLogger).warn(MessageCodes.GENERAL_ERROR, "str1", "str2");
     }
@@ -374,7 +375,7 @@ public class EelfLoggerTest {
     @Test
     public void testWarnMessageCodesThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
-        Whitebox.setInternalState(PolicyLogger.class, "debugLogger", mockLogger);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.warn(MessageCodes.GENERAL_ERROR, new NullPointerException(), "str1", "str2");
         Mockito.verify(mockLogger).warn((MessageCodes) Mockito.any(),
                 Mockito.startsWith("str1:str2:java.lang.NullPointerException"));

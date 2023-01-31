@@ -3,6 +3,7 @@
  * Integrity Audit
  * ================================================================================
  * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,8 +47,8 @@ import org.onap.policy.common.utils.jpa.EntityTransCloser;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
 import org.onap.policy.common.utils.time.CurrentTime;
 import org.onap.policy.common.utils.time.TestTime;
-import org.powermock.reflect.Whitebox;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.util.ReflectionTestUtils;
 
 /**
  * All JUnits are designed to run in the local development environment where they have write
@@ -177,6 +178,7 @@ public class IntegrityAuditTestBase {
      * @param dbUrl the URL to the DB
      * @throws IOException if an IO error occurs
      */
+    @SuppressWarnings("unchecked")
     protected static void setUpBeforeClass(String dbUrl) throws IOException {
 
         // truncate the logs
@@ -188,7 +190,7 @@ public class IntegrityAuditTestBase {
         IntegrityAuditTestBase.dbUrl = dbUrl;
 
         // save data that we have to restore at the end of the test
-        savedTime = Whitebox.getInternalState(AuditorTime.class, TIME_SUPPLY_FIELD);
+        savedTime = (Supplier<CurrentTime>) ReflectionTestUtils.getField(AuditorTime.class, TIME_SUPPLY_FIELD);
         savedDebugLevel = debugLogger.getLevel();
         savedErrorLevel = errorLogger.getLevel();
 
@@ -208,7 +210,7 @@ public class IntegrityAuditTestBase {
         // done
         em = emf.createEntityManager();
 
-        Whitebox.setInternalState(AuditorTime.class, TIME_SUPPLY_FIELD, timeSupplier);
+        ReflectionTestUtils.setField(AuditorTime.class, TIME_SUPPLY_FIELD, timeSupplier);
         debugLogger.setLevel(Level.DEBUG);
         errorLogger.setLevel(Level.ERROR);
     }
@@ -220,7 +222,7 @@ public class IntegrityAuditTestBase {
 
         IntegrityAudit.setUnitTesting(false);
 
-        Whitebox.setInternalState(AuditorTime.class, TIME_SUPPLY_FIELD, savedTime);
+        ReflectionTestUtils.setField(AuditorTime.class, TIME_SUPPLY_FIELD, savedTime);
         debugLogger.setLevel(savedDebugLevel);
         errorLogger.setLevel(savedErrorLevel);
 

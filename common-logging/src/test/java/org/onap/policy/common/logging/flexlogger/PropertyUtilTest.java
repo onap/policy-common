@@ -3,13 +3,14 @@
  * ONAP-Logging
  * ================================================================================
  * Copyright (C) 2018-2020 Ericsson, AT&T. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,28 +44,28 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.onap.policy.common.logging.flexlogger.PropertyUtil.Listener;
-import org.powermock.reflect.Whitebox;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class PropertyUtilTest {
 
     private static final String TIMER_FIELD = "timer";
     private static final File FILE = new File("target/test.properties");
     private static Timer saveTimer;
-    
+
     private TimerTask task;
     private Timer timer;
     private TestListener testListener;
-    
+
     @BeforeClass
     public static void setUpBeforeClass() {
-        saveTimer = Whitebox.getInternalState(PropertyUtil.LazyHolder.class, TIMER_FIELD);
-        
+        saveTimer = (Timer) ReflectionTestUtils.getField(PropertyUtil.LazyHolder.class, TIMER_FIELD);
+
     }
-    
+
     @AfterClass
     public static void tearDownAfterClass() {
-        Whitebox.setInternalState(PropertyUtil.LazyHolder.class, TIMER_FIELD, saveTimer);
-        
+        ReflectionTestUtils.setField(PropertyUtil.LazyHolder.class, TIMER_FIELD, saveTimer);
+
     }
 
     /**
@@ -74,15 +75,15 @@ public class PropertyUtilTest {
     public void setUp() throws IOException {
         task = null;
         timer = mock(Timer.class);
-        Whitebox.setInternalState(PropertyUtil.LazyHolder.class, TIMER_FIELD, timer);
-        
+        ReflectionTestUtils.setField(PropertyUtil.LazyHolder.class, TIMER_FIELD, timer);
+
         doAnswer(args -> {
             task = args.getArgument(0, TimerTask.class);
             return null;
         }).when(timer).schedule(any(TimerTask.class), anyLong(), anyLong());
-        
+
         testListener = new TestListener();
-        
+
         FileOutputStream fileOutputStream = new FileOutputStream(FILE);
         Properties properties = new Properties();
         properties.put("testProperty", "testValue");
@@ -95,7 +96,7 @@ public class PropertyUtilTest {
         PropertyUtil.stopListening(FILE, testListener);
         FILE.delete();
     }
-    
+
     @Test
     public void testTimer() {
         assertNotNull(saveTimer);

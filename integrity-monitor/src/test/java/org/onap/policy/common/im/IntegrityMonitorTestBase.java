@@ -3,6 +3,7 @@
  * Integrity Audit
  * ================================================================================
  * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Modificaitons Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,9 +36,9 @@ import org.onap.policy.common.utils.jpa.EntityTransCloser;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
 import org.onap.policy.common.utils.time.CurrentTime;
 import org.onap.policy.common.utils.time.TestTime;
-import org.powermock.reflect.Whitebox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.test.util.ReflectionTestUtils;
 
 /**
  * All JUnits are designed to run in the local development environment where they have write
@@ -153,7 +154,7 @@ public class IntegrityMonitorTestBase {
         IntegrityMonitor.setUnitTesting(true);
 
         testTime = new TestTime();
-        Whitebox.setInternalState(MonitorTime.class, TIME_INSTANCE_FIELD, testTime);
+        ReflectionTestUtils.setField(MonitorTime.class, TIME_INSTANCE_FIELD, testTime);
 
         properties = new Properties();
         properties.put(IntegrityMonitorProperties.DB_DRIVER, DB_DRIVER);
@@ -187,7 +188,7 @@ public class IntegrityMonitorTestBase {
             systemProps.put(JMX_PORT_PROP, savedJmxPort);
         }
 
-        Whitebox.setInternalState(MonitorTime.class, TIME_INSTANCE_FIELD, savedTime);
+        ReflectionTestUtils.setField(MonitorTime.class, TIME_INSTANCE_FIELD, savedTime);
 
         IntegrityMonitor.setUnitTesting(false);
 

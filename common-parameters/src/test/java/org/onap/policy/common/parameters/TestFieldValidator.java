@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -223,6 +224,7 @@ public class TestFieldValidator extends ValidatorUtil {
         assertThat(result.getResult()).doesNotContain("blank").contains("annotatedValueMap", "\" \"", "-10");
     }
 
+    @SuppressWarnings("deprecation")
     @Test
     public void testValidateField_testGetValue() {
         // unannotated

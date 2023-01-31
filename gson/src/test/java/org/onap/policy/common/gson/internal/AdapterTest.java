@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +43,7 @@ import org.onap.policy.common.gson.annotation.GsonJsonProperty;
 import org.onap.policy.common.gson.internal.Adapter.Factory;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.Data;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.DerivedData;
-import org.powermock.reflect.Whitebox;
+import org.springframework.test.util.ReflectionTestUtils;
 
 public class AdapterTest {
     private static final String GET_INVALID_NAME = "get$InvalidName";
@@ -83,12 +84,12 @@ public class AdapterTest {
 
     @BeforeClass
     public static void setUpBeforeClass() {
-        saveFactory = Whitebox.getInternalState(Adapter.class, FACTORY_FIELD);
+        saveFactory = (Factory) ReflectionTestUtils.getField(Adapter.class, FACTORY_FIELD);
     }
 
     @After
     public void tearDown() {
-        Whitebox.setInternalState(Adapter.class, FACTORY_FIELD, saveFactory);
+        ReflectionTestUtils.setField(Adapter.class, FACTORY_FIELD, saveFactory);
     }
 
     @Test
@@ -98,7 +99,7 @@ public class AdapterTest {
         // return an invalid field name
         Factory factory = mock(Factory.class);
         when(factory.getName(any(Field.class))).thenReturn("$invalidFieldName");
-        Whitebox.setInternalState(Adapter.class, FACTORY_FIELD, factory);
+        ReflectionTestUtils.setField(Adapter.class, FACTORY_FIELD, factory);
         assertFalse(Adapter.isManaged(field(VALUE_NAME)));
     }
 
@@ -108,7 +109,7 @@ public class AdapterTest {
 
         // return an invalid method name
         Factory factory = mock(Factory.class);
-        Whitebox.setInternalState(Adapter.class, FACTORY_FIELD, factory);
+        ReflectionTestUtils.setField(Adapter.class, FACTORY_FIELD, factory);
 
         when(factory.getName(any(Method.class))).thenReturn(GET_INVALID_NAME);
         assertFalse(Adapter.isManaged(mget(GET_VALUE_NAME)));
@@ -240,7 +241,7 @@ public class AdapterTest {
         // return an invalid field name
         Factory factory = mock(Factory.class);
         when(factory.getName(any(Field.class))).thenReturn("$invalidFieldName");
-        Whitebox.setInternalState(Adapter.class, FACTORY_FIELD, factory);
+        ReflectionTestUtils.setField(Adapter.class, FACTORY_FIELD, factory);
         assertEquals(null, Adapter.detmPropName(field(VALUE_NAME)));
     }
 
@@ -257,7 +258,7 @@ public class AdapterTest {
 
         // return an invalid method name
         Factory factory = mock(Factory.class);
-        Whitebox.setInternalState(Adapter.class, FACTORY_FIELD, factory);
+        ReflectionTestUtils.setField(Adapter.class, FACTORY_FIELD, factory);
 
         when(factory.getName(any(Method.class))).thenReturn(GET_INVALID_NAME);
         assertEquals(null, Adapter.detmGetterPropName(mget(GET_VALUE_NAME)));
@@ -273,7 +274,7 @@ public class AdapterTest {
 
         // return an invalid method name
         Factory factory = mock(Factory.class);
-        Whitebox.setInternalState(Adapter.class, FACTORY_FIELD, factory);
+        ReflectionTestUtils.setField(Adapter.class, FACTORY_FIELD, factory);
 
         when(factory.getName(any(Method.class))).thenReturn(SET_INVALID_NAME);
         assertEquals(null, Adapter.detmSetterPropName(mset(SET_VALUE_NAME)));
