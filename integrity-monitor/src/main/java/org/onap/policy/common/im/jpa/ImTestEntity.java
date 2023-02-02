@@ -3,6 +3,7 @@
  * Integrity Monitor
  * ================================================================================
  * Copyright (C) 2017-2018, 2020-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +28,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -41,9 +43,11 @@ import org.onap.policy.common.im.MonitorTime;
 
 @Entity
 @Table(name = "ImTestEntity")
-@NamedQuery(name = " ImTestEntity.findAll", query = "SELECT e FROM ImTestEntity e ")
-@NamedQuery(name = "ImTestEntity.deleteAll", query = "DELETE FROM ImTestEntity WHERE 1=1")
-// @SequenceGenerator(name="seqImTest", initialValue=1, allocationSize=1)
+@NamedQueries({
+    @NamedQuery(name = " ImTestEntity.findAll", query = "SELECT e FROM ImTestEntity e "),
+    @NamedQuery(name = "ImTestEntity.deleteAll", query = "DELETE FROM ImTestEntity WHERE 1=1")
+})
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -51,7 +55,6 @@ public class ImTestEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seqImTest")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ImTestId")
     @Setter(AccessLevel.NONE)

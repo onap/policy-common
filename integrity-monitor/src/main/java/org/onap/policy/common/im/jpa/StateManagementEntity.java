@@ -42,7 +42,6 @@ import org.onap.policy.common.im.MonitorTime;
 @Entity
 @Table(name = "StateManagementEntity")
 @NamedQuery(name = "StateManagementEntity.findAll", query = "SELECT e FROM StateManagementEntity e")
-// @SequenceGenerator(name="seqSM", initialValue=1, allocationSize=1)
 
 @Getter
 @Setter
@@ -51,7 +50,6 @@ public class StateManagementEntity implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seqSM")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     @Getter(AccessLevel.NONE)

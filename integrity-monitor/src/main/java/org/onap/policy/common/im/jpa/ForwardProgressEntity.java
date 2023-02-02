@@ -3,6 +3,7 @@
  * Integrity Monitor
  * ================================================================================
  * Copyright (C) 2017-2018, 2020-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +26,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -35,9 +37,10 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "ForwardProgressEntity")
-@NamedQuery(name = " ForwardProgressEntity.findAll", query = "SELECT e FROM ForwardProgressEntity e ")
-@NamedQuery(name = "ForwardProgressEntity.deleteAll", query = "DELETE FROM ForwardProgressEntity WHERE 1=1")
-// @SequenceGenerator(name="seqForwardProgress", initialValue=1, allocationSize=1)
+@NamedQueries({
+    @NamedQuery(name = " ForwardProgressEntity.findAll", query = "SELECT e FROM ForwardProgressEntity e "),
+    @NamedQuery(name = "ForwardProgressEntity.deleteAll", query = "DELETE FROM ForwardProgressEntity WHERE 1=1")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -45,7 +48,6 @@ public class ForwardProgressEntity extends DateEntity {
     private static final long serialVersionUID = 1L;
 
     @Id
-    // @GeneratedValue(strategy = GenerationType.SEQUENCE, generator="seqForwardProgress")
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "forwardProgressId")
     @Setter(AccessLevel.NONE)
