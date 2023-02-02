@@ -4,6 +4,7 @@
   Integrity Monitor
   ================================================================================
   Copyright (C) 2017, 2019 AT&T Intellectual Property. All rights reserved.
+  Modifications Copyright (C) 2023 Nordix Foundation.
   ================================================================================
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -19,11 +20,11 @@
   ============LICENSE_END=========================================================
   -->
 
-<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
     <persistence-unit name="schemaPU" transaction-type="RESOURCE_LOCAL">
-    <!-- Limited use for generating the DB and schema files for imtest DB - uses eclipselink -->
-        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <!-- Limited use for generating the DB and schema files for imtest DB - uses hibernate -->
         <class>org.onap.policy.common.im.jpa.ImTestEntity</class>
         <class>org.onap.policy.common.im.jpa.StateManagementEntity</class>
         <class>org.onap.policy.common.im.jpa.ForwardProgressEntity</class>
@@ -36,7 +37,6 @@
 
     <persistence-unit name="operationalPU" transaction-type="RESOURCE_LOCAL">
     <!-- For operational use -->
-        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
         <class>org.onap.policy.common.im.jpa.ImTestEntity</class>
         <class>org.onap.policy.common.im.jpa.StateManagementEntity</class>
         <class>org.onap.policy.common.im.jpa.ForwardProgressEntity</class>

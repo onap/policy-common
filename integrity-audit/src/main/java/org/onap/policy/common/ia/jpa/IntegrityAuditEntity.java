@@ -3,6 +3,7 @@
  * Integrity Audit
  * ================================================================================
  * Copyright (C) 2017-2018, 2020-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +30,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -46,8 +48,10 @@ import org.onap.policy.common.ia.AuditorTime;
 
 @Entity
 @Table(name = "IntegrityAuditEntity")
-@NamedQuery(name = " IntegrityAuditEntity.findAll", query = "SELECT e FROM IntegrityAuditEntity e ")
-@NamedQuery(name = "IntegrityAuditEntity.deleteAll", query = "DELETE FROM IntegrityAuditEntity WHERE 1=1")
+@NamedQueries({
+    @NamedQuery(name = " IntegrityAuditEntity.findAll", query = "SELECT e FROM IntegrityAuditEntity e "),
+    @NamedQuery(name = "IntegrityAuditEntity.deleteAll", query = "DELETE FROM IntegrityAuditEntity WHERE 1=1")
+})
 @NoArgsConstructor
 @Getter
 @Setter
