@@ -25,6 +25,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import lombok.AccessLevel;
@@ -37,8 +38,12 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "ResourceRegistrationEntity")
-@NamedQuery(name = " ResourceRegistrationEntity.findAll", query = "SELECT e FROM ResourceRegistrationEntity e ")
-@NamedQuery(name = "ResourceRegistrationEntity.deleteAll", query = "DELETE FROM ResourceRegistrationEntity WHERE 1=1")
+@NamedQueries({
+    @NamedQuery(name = " ResourceRegistrationEntity.findAll", query = "SELECT e FROM ResourceRegistrationEntity e "),
+    @NamedQuery(
+        name = "ResourceRegistrationEntity.deleteAll",
+        query = "DELETE FROM ResourceRegistrationEntity WHERE 1=1")
+})
 // @SequenceGenerator(name="seqResourceRegistration", initialValue=1, allocationSize=1)
 @Getter
 @Setter

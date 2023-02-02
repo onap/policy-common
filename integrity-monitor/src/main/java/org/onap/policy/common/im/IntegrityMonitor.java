@@ -47,7 +47,6 @@ import javax.persistence.TypedQuery;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.onap.policy.common.im.jmx.ComponentAdmin;
 import org.onap.policy.common.im.jmx.ComponentAdminMBean;
 import org.onap.policy.common.im.jmx.JmxAgentConnection;
@@ -241,17 +240,7 @@ public class IntegrityMonitor {
         //
         // Create the entity manager factory
         //
-        if (!properties.containsKey(PersistenceUnitProperties.ECLIPSELINK_PERSISTENCE_XML)) {
-            properties.setProperty(PersistenceUnitProperties.ECLIPSELINK_PERSISTENCE_XML, "META-INF/persistenceIM.xml");
-        }
         emf = Persistence.createEntityManagerFactory(getPersistenceUnit(), properties);
-        //
-        // Did it get created?
-        //
-        if (emf == null) {
-            logger.error("Error creating IM entity manager factory with persistence unit: {}", getPersistenceUnit());
-            throw new IntegrityMonitorException("Unable to create IM Entity Manager Factory");
-        }
 
         // add entry to forward progress and resource registration tables in DB
 

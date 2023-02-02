@@ -27,6 +27,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -41,8 +42,10 @@ import org.onap.policy.common.im.MonitorTime;
 
 @Entity
 @Table(name = "ImTestEntity")
-@NamedQuery(name = " ImTestEntity.findAll", query = "SELECT e FROM ImTestEntity e ")
-@NamedQuery(name = "ImTestEntity.deleteAll", query = "DELETE FROM ImTestEntity WHERE 1=1")
+@NamedQueries({
+    @NamedQuery(name = " ImTestEntity.findAll", query = "SELECT e FROM ImTestEntity e "),
+    @NamedQuery(name = "ImTestEntity.deleteAll", query = "DELETE FROM ImTestEntity WHERE 1=1")
+})
 // @SequenceGenerator(name="seqImTest", initialValue=1, allocationSize=1)
 @Getter
 @Setter
