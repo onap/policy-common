@@ -31,7 +31,6 @@ import java.util.concurrent.TimeUnit;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import org.eclipse.persistence.config.PersistenceUnitProperties;
 import org.onap.policy.common.utils.jpa.EntityTransCloser;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
 import org.onap.policy.common.utils.time.CurrentTime;
@@ -165,7 +164,6 @@ public class IntegrityMonitorTestBase {
         properties.put(IntegrityMonitorProperties.NODE_TYPE, NODE_TYPE);
         properties.put(IntegrityMonitorProperties.REFRESH_STATE_AUDIT_INTERVAL_MS,
                 String.valueOf(REFRESH_INTERVAL_MS));
-        properties.setProperty(PersistenceUnitProperties.ECLIPSELINK_PERSISTENCE_XML, "META-INF/persistenceIM.xml");
 
         emf = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT, makeProperties());
 
