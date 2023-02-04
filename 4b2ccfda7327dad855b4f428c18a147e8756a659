@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "f701bd1d_b641d83b",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/jpa/ForwardProgressEntity.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2023-02-04T18:17:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f6139ce_60a665d1",
+      "range": {
+        "startLine": 44,
+        "startChar": 0,
+        "endLine": 44,
+        "endChar": 82
+      },
+      "revId": "4b2ccfda7327dad855b4f428c18a147e8756a659",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b4551b8c_0314eab4",
         "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/jpa/ImTestEntity.java",
         "patchSetId": 2
@@ -42,6 +66,24 @@
     },
     {
       "key": {
+        "uuid": "84b2689d_dd71449d",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/jpa/ImTestEntity.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2023-02-04T18:17:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b4551b8c_0314eab4",
+      "revId": "4b2ccfda7327dad855b4f428c18a147e8756a659",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5a2cd03c_06ee941b",
         "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/jpa/ImTestEntity.java",
         "patchSetId": 2
@@ -56,6 +98,24 @@
       "revId": "4b2ccfda7327dad855b4f428c18a147e8756a659",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "da61a09a_36d12732",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/jpa/ImTestEntity.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2023-02-04T18:17:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5a2cd03c_06ee941b",
+      "revId": "4b2ccfda7327dad855b4f428c18a147e8756a659",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
