@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cbc7b4b4_41616f89",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/jpa/ForwardProgressEntity.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2023-02-06T13:56:10Z",
+      "side": 1,
+      "message": "here\u0027s a comment annotation",
+      "revId": "4626a3f2dcf23b868629eadb9c9a7084f9367062",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baeb5d51_18b75645",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/jpa/ResourceRegistrationEntity.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2023-02-06T13:56:10Z",
+      "side": 1,
+      "message": "same",
+      "revId": "4626a3f2dcf23b868629eadb9c9a7084f9367062",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e418e88c_a076138c",
+        "filename": "integrity-monitor/src/main/java/org/onap/policy/common/im/jpa/ResourceRegistrationEntity.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2023-02-06T13:56:10Z",
+      "side": 1,
+      "message": "same",
+      "revId": "4626a3f2dcf23b868629eadb9c9a7084f9367062",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
