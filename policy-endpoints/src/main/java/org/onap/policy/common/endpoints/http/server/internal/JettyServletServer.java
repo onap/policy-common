@@ -239,32 +239,32 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      * @return the server connector
      */
     public ServerConnector httpsConnector() {
-        SslContextFactory sslContextFactory = new SslContextFactory.Server();
+        SslContextFactory.Server sslContextFactoryServer = new SslContextFactory.Server();
 
         String keyStore = System.getProperty(SYSTEM_KEYSTORE_PROPERTY_NAME);
         if (keyStore != null) {
-            sslContextFactory.setKeyStorePath(keyStore);
+            sslContextFactoryServer.setKeyStorePath(keyStore);
 
             String ksPassword = System.getProperty(SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
             if (ksPassword != null) {
-                sslContextFactory.setKeyStorePassword(ksPassword);
+                sslContextFactoryServer.setKeyStorePassword(ksPassword);
             }
         }
 
         String trustStore = System.getProperty(SYSTEM_TRUSTSTORE_PROPERTY_NAME);
         if (trustStore != null) {
-            sslContextFactory.setTrustStorePath(trustStore);
+            sslContextFactoryServer.setTrustStorePath(trustStore);
 
             String tsPassword = System.getProperty(SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
             if (tsPassword != null) {
-                sslContextFactory.setTrustStorePassword(tsPassword);
+                sslContextFactoryServer.setTrustStorePassword(tsPassword);
             }
         }
 
         var https = new HttpConfiguration();
         https.addCustomizer(new SecureRequestCustomizer());
 
-        return new ServerConnector(jettyServer, sslContextFactory, new HttpConnectionFactory(https));
+        return new ServerConnector(jettyServer, sslContextFactoryServer, new HttpConnectionFactory(https));
     }
 
     public ServerConnector httpConnector() {

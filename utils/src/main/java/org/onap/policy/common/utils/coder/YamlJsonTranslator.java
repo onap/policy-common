@@ -21,6 +21,7 @@
 package org.onap.policy.common.utils.coder;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -31,10 +32,12 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
 import lombok.AllArgsConstructor;
+import org.onap.policy.common.gson.InstantTypeAdapter;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.emitter.Emitter;
@@ -69,7 +72,9 @@ public class YamlJsonTranslator {
      * Constructs the object.
      */
     public YamlJsonTranslator() {
-        this(new Gson());
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Instant.class, new InstantTypeAdapter());
+        gson = builder.create();
     }
 
     /**

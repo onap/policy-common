@@ -18,20 +18,20 @@
   limitations under the License.
   ============LICENSE_END=========================================================
   -->
-
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project
+        xmlns="http://maven.apache.org/POM/4.0.0"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+                            http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <parent>
         <groupId>org.onap.policy.common</groupId>
         <artifactId>common-modules</artifactId>
         <version>1.12.1-SNAPSHOT</version>
     </parent>
-
     <artifactId>gson</artifactId>
     <description>Common Utilities</description>
     <packaging>jar</packaging>
-
     <dependencies>
         <dependency>
             <groupId>com.google.re2j</groupId>
@@ -49,6 +49,10 @@
         <dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax.ws.rs</groupId>
+            <artifactId>javax.ws.rs-api</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
