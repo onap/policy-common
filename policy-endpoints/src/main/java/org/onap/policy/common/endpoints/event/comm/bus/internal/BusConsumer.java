@@ -299,8 +299,8 @@ public interface BusConsumer {
             try {
                 for (TopicPartition partition : records.partitions()) {
                     List<ConsumerRecord<String, String>> partitionRecords = records.records(partition);
-                    for (ConsumerRecord<String, String> record : partitionRecords) {
-                        messages.add(record.value());
+                    for (ConsumerRecord<String, String> partitionRecord : partitionRecords) {
+                        messages.add(partitionRecord.value());
                     }
                     long lastOffset = partitionRecords.get(partitionRecords.size() - 1).offset();
                     consumer.commitSync(Collections.singletonMap(partition, new OffsetAndMetadata(lastOffset + 1)));
