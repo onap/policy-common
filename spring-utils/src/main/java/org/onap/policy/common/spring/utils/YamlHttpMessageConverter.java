@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2022 Bell Canada. All rights reserved.
+ *  Copyright (C) 2022-2023 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,14 +73,14 @@ public class YamlHttpMessageConverter extends AbstractGenericHttpMessageConverte
     protected final void writeInternal(Object object, @Nullable Type type, HttpOutputMessage outputMessage)
         throws IOException {
         try (var writer = getWriter(outputMessage)) {
-            writeInternal(object, type, writer);
+            writeInternal(object, writer);
             writer.flush();
         } catch (Exception ex) {
             throw new HttpMessageNotWritableException("Could not write YAML: " + ex.getMessage(), ex);
         }
     }
 
-    private void writeInternal(Object object, @Nullable Type type, Writer writer) {
+    private void writeInternal(Object object, Writer writer) {
         TRANSLATOR.toYaml(writer, object);
     }
 
@@ -101,7 +101,8 @@ public class YamlHttpMessageConverter extends AbstractGenericHttpMessageConverte
     }
 
     private static Charset getCharset(HttpHeaders headers) {
-        Charset charset = (headers.getContentType() == null ? null : headers.getContentType().getCharset());
+        MediaType contentType = headers.getContentType();
+        Charset charset = (contentType == null ? null : contentType.getCharset());
         return (charset != null ? charset : DEFAULT_CHARSET);
     }
 }
