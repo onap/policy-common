@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "73070520_bb65cb01",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2023-02-24T10:10:13Z",
+      "side": 1,
+      "message": "Please update copyright date.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 1
+      },
+      "revId": "107e39d29c5baa32d44aedbd208a9792cf4351c9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81e4bc07_e86e43d5",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2023-02-24T10:10:13Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 1
+      },
+      "revId": "107e39d29c5baa32d44aedbd208a9792cf4351c9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f686c0d_0d7f1300",
+        "filename": "spring-utils/src/main/java/org/onap/policy/common/spring/utils/YamlHttpMessageConverter.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2023-02-24T10:10:13Z",
+      "side": 1,
+      "message": "And here",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 1
+      },
+      "revId": "107e39d29c5baa32d44aedbd208a9792cf4351c9",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
