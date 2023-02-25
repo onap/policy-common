@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "0d89a128_003d9a1e",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 57
+      },
+      "writtenOn": "2023-02-25T15:35:23Z",
+      "side": 1,
+      "message": "2020-2023 indicates there were changes in all 4 years. which is not true.\n2020,2023 indicates there were changes in 2020 and 2023. which is true and what should be done here in this case.\nThat\u0027s why you see the difference. \nIf next year someone makes a change, then it would be: 2020, 2023-2024\nwhich shows all the years a change was made. Make sense?",
+      "parentUuid": "bc6ae3ee_754b7906",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "130df428a6ff226339a2e8a4c29e8496830964f6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3dd2943f_f405b864",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
         "patchSetId": 6
