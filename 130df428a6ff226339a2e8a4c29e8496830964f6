@@ -73,6 +73,30 @@
     },
     {
       "key": {
+        "uuid": "d5515b78_4970f664",
+        "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumer.java",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 2787
+      },
+      "writtenOn": "2023-02-27T09:41:42Z",
+      "side": 1,
+      "message": "Sorry Suresh for my very short initial comment. Pam\u0027s explanation is correct.",
+      "parentUuid": "0d89a128_003d9a1e",
+      "range": {
+        "startLine": 7,
+        "startChar": 31,
+        "endLine": 7,
+        "endChar": 40
+      },
+      "revId": "130df428a6ff226339a2e8a4c29e8496830964f6",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3dd2943f_f405b864",
         "filename": "policy-endpoints/src/main/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusPublisher.java",
         "patchSetId": 6
