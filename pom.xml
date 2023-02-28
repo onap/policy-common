@@ -25,13 +25,13 @@
     <parent>
         <groupId>org.onap.policy.parent</groupId>
         <artifactId>integration</artifactId>
-        <version>3.7.1</version>
+        <version>3.7.2-SNAPSHOT</version>
         <relativePath />
     </parent>
 
     <groupId>org.onap.policy.common</groupId>
     <artifactId>common-modules</artifactId>
-    <version>1.12.1-SNAPSHOT</version>
+    <version>1.12.2-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
