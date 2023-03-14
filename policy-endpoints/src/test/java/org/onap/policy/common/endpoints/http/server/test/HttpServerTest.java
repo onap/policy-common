@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2020 Nordix Foundation.
+ * Modifications Copyright (C) 2020,2023 Nordix Foundation.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -382,6 +382,7 @@ public class HttpServerTest {
         server.addFilterClass("/*", TestFilter.class.getName());
 
         // ensure we can serialize the server
+        new GsonTestUtils().compareGson(server, HttpServerTest.class);
         assertThatCode(() -> new GsonTestUtils().compareGson(server, HttpServerTest.class)).doesNotThrowAnyException();
     }
 
@@ -423,7 +424,7 @@ public class HttpServerTest {
         logger.info("-- testMultipleServers() --");
 
         HttpServletServer server1 = HttpServletServerFactoryInstance.getServerFactory()
-                        .build("echo-1", false, LOCALHOST, port, "/", true, true);
+                        .build("echo-1", false, LOCALHOST, port, false, "/", true, true);
         server1.addServletPackage("/*", this.getClass().getPackage().getName());
         server1.waitedStart(5000);
 
@@ -523,7 +524,7 @@ public class HttpServerTest {
         logger.info("-- testSingleStaticResourceServer() --");
 
         HttpServletServer staticServer = HttpServletServerFactoryInstance.getServerFactory()
-                .buildStaticResourceServer("Static Resources Server", false, LOCALHOST, port, "/", true);
+                .buildStaticResourceServer("Static Resources Server", false, LOCALHOST, port, false, "/", true);
         Throwable thrown = catchThrowable(() -> staticServer.addServletResource("/*", null));
         assertThat(thrown).isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("No resourceBase provided");
@@ -560,7 +561,7 @@ public class HttpServerTest {
         logger.info("-- testMultiStaticResourceServer() --");
 
         HttpServletServer staticResourceServer = HttpServletServerFactoryInstance.getServerFactory()
-                .buildStaticResourceServer("Static Resources Server", false, LOCALHOST, port, "/", true);
+                .buildStaticResourceServer("Static Resources Server", false, LOCALHOST, port, false, "/", true);
         staticResourceServer.addServletResource("/root/*",
                 HttpServerTest.class.getClassLoader().getResource("webapps/root").toExternalForm());
         staticResourceServer.addServletResource("/alt-root/*",
@@ -585,7 +586,7 @@ public class HttpServerTest {
         logger.info("-- testMultiTypesServer() --");
 
         HttpServletServer staticResourceServer = HttpServletServerFactoryInstance.getServerFactory()
-                .buildStaticResourceServer("Static Resources Server", false, LOCALHOST, port, "/", true);
+                .buildStaticResourceServer("Static Resources Server", false, LOCALHOST, port, false, "/", true);
         staticResourceServer.addServletResource("/root/*",
                 HttpServerTest.class.getClassLoader().getResource("webapps/root").toExternalForm());
         staticResourceServer.waitedStart(5000);

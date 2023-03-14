@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2019 Nordix Foundation.
+ *  Copyright (C) 2019,2023 Nordix Foundation.
  *  Modifications Copyright (C) 2019-2021 AT&T Intellectual Property.
  *  Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
@@ -58,7 +58,7 @@ public class RestServer extends ServiceManagerContainer {
      * @param jaxrsProviders classes providing the services
      */
     public RestServer(final RestServerParameters restServerParameters, Class<? extends AafAuthFilter> aafFilter,
-                    Class<?>... jaxrsProviders) {
+        Class<?>... jaxrsProviders) {
 
         this(restServerParameters, makeFilterList(aafFilter), Arrays.asList(jaxrsProviders));
     }
@@ -79,14 +79,14 @@ public class RestServer extends ServiceManagerContainer {
      * @param jaxrsProviders classes providing the services
      */
     public RestServer(final RestServerParameters restServerParameters, List<Class<? extends Filter>> filters,
-                    List<Class<?>> jaxrsProviders) {
+        List<Class<?>> jaxrsProviders) {
 
         if (jaxrsProviders.isEmpty()) {
             throw new IllegalArgumentException("no providers specified");
         }
 
         this.servers = factory.getServerFactory()
-                        .build(getServerProperties(restServerParameters, getProviderClassNames(jaxrsProviders)));
+            .build(getServerProperties(restServerParameters, getProviderClassNames(jaxrsProviders)));
 
         for (HttpServletServer server : this.servers) {
             for (Class<? extends Filter> filter : filters) {
@@ -112,11 +112,11 @@ public class RestServer extends ServiceManagerContainer {
         props.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES, restServerParameters.getName());
 
         final String svcpfx =
-                        PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + restServerParameters.getName();
+            PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + "." + restServerParameters.getName();
 
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_HOST_SUFFIX, restServerParameters.getHost());
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX,
-                        Integer.toString(restServerParameters.getPort()));
+            Integer.toString(restServerParameters.getPort()));
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_REST_CLASSES_SUFFIX, names);
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "false");
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX, "true");
@@ -125,12 +125,14 @@ public class RestServer extends ServiceManagerContainer {
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX,
             getValue(restServerParameters.getPassword()));
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX,
-                        String.valueOf(restServerParameters.isHttps()));
+            String.valueOf(restServerParameters.isHttps()));
+        props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SNI_HOST_CHECK_SUFFIX,
+            String.valueOf(restServerParameters.isSniHostCHeck()));
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_AAF_SUFFIX,
-                        String.valueOf(restServerParameters.isAaf()));
+            String.valueOf(restServerParameters.isAaf()));
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER,
-                        String.join(",", GsonMessageBodyHandler.class.getName(), YamlMessageBodyHandler.class.getName(),
-                                        JsonExceptionMapper.class.getName(), YamlExceptionMapper.class.getName()));
+            String.join(",", GsonMessageBodyHandler.class.getName(), YamlMessageBodyHandler.class.getName(),
+                JsonExceptionMapper.class.getName(), YamlExceptionMapper.class.getName()));
 
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_URIPATH_SUFFIX,
             Optional.ofNullable(restServerParameters.getServletUriPath()).orElse(""));

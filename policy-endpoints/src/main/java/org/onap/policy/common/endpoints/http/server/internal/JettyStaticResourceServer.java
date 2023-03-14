@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2020 Nordix Foundation.
+ *  Copyright (C) 2020,2023 Nordix Foundation.
  *  Modifications Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -61,13 +61,14 @@ public class JettyStaticResourceServer extends JettyServletServer {
      * @param https enable https?
      * @param host host server host
      * @param port port server port
+     * @param sniHostCheck SNI Host checking flag
      * @param contextPath context path
-     *
      * @throws IllegalArgumentException in invalid arguments are provided
      */
-    public JettyStaticResourceServer(String name, boolean https, String host, int port, String contextPath) {
+    public JettyStaticResourceServer(String name, boolean https, String host, int port, boolean sniHostCheck,
+        String contextPath) {
 
-        super(name, https, host, port, contextPath);
+        super(name, https, host, port, sniHostCheck, contextPath);
     }
 
     /**

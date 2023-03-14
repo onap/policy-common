@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
+ * Modifications Copyright 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -120,7 +121,7 @@ public class HttpClientTest {
         /* echo server - https + basic auth */
 
         final HttpServletServer echoServerAuth = HttpServletServerFactoryInstance.getServerFactory()
-                        .build("echo", true, LOCALHOST, 6667, "/", false, true);
+                        .build("echo", true, LOCALHOST, 6667, false, "/", false, true);
         echoServerAuth.setBasicAuthentication("x", "y", null);
         echoServerAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
         echoServerAuth.addFilterClass("/*", TestFilter.class.getName());

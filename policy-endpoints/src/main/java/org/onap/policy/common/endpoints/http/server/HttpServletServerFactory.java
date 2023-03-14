@@ -3,7 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2020 Nordix Foundation.
+ * Modifications Copyright (C) 2020,2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,14 +36,15 @@ public interface HttpServletServerFactory {
      * @param https use secured http over tls connection
      * @param host binding host
      * @param port port
+     * @param sniHostCheck SNI Host checking flag
      * @param contextPath server base path
      * @param swagger enable swagger documentation
      * @param managed is it managed by infrastructure
      * @return http server
      * @throws IllegalArgumentException when invalid parameters are provided
      */
-    HttpServletServer build(String name, boolean https, String host, int port, String contextPath, boolean swagger,
-        boolean managed);
+    HttpServletServer build(String name, boolean https, String host, int port, boolean sniHostCheck, String contextPath,
+        boolean swagger, boolean managed);
 
     /**
      * Builds an http rest server with support for servlets.
@@ -75,13 +76,14 @@ public interface HttpServletServerFactory {
      * @param https use secured http over tls connection
      * @param host binding host
      * @param port port
+     * @param sniHostCheck SNI Host checking flag
      * @param contextPath server base path
      * @param managed is it managed by infrastructure
      * @return http server
      * @throws IllegalArgumentException when invalid parameters are provided
      */
-    HttpServletServer buildStaticResourceServer(String name, boolean https, String host, int port, String contextPath,
-            boolean managed);
+    HttpServletServer buildStaticResourceServer(String name, boolean https, String host, int port, boolean sniHostCheck,
+        String contextPath, boolean managed);
 
     /**
      * Gets a server based on the port.

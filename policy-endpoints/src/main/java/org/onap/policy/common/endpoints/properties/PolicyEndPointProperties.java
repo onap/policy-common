@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
- * Copyright (C) 2022 Nordix Foundation.
+ * Copyright (C) 2022,2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -108,6 +108,7 @@ public final class PolicyEndPointProperties {
 
     public static final String PROPERTY_HTTP_HTTPS_SUFFIX = ".https";
     public static final String PROPERTY_HTTP_SWAGGER_SUFFIX = ".swagger";
+    public static final String PROPERTY_HTTP_SNI_HOST_CHECK_SUFFIX = ".sniHostCheck";
 
     public static final String PROPERTY_HTTP_SERIALIZATION_PROVIDER = ".serialization.provider";
 

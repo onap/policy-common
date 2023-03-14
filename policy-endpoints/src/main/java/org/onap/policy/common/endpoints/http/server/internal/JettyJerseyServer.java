@@ -3,7 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2019-2020 Nordix Foundation.
+ * Modifications Copyright (C) 2019-2020,2023 Nordix Foundation.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,13 +66,13 @@ public class JettyJerseyServer extends JettyServletServer {
      * Jersey GSON Classes Init Param Value.
      */
     protected static final String JERSEY_GSON_INIT_CLASSNAMES_PARAM_VALUE =
-                    String.join(",", GsonMessageBodyHandler.class.getName(), JsonExceptionMapper.class.getName());
+        String.join(",", GsonMessageBodyHandler.class.getName(), JsonExceptionMapper.class.getName());
 
     /**
      * Jersey Swagger Classes Init Param Value.
      */
     protected static final String SWAGGER_INIT_CLASSNAMES_PARAM_VALUE =
-            "io.swagger.jaxrs.listing.ApiListingResource," + "io.swagger.jaxrs.listing.SwaggerSerializers";
+        "io.swagger.jaxrs.listing.ApiListingResource," + "io.swagger.jaxrs.listing.SwaggerSerializers";
 
     /**
      * Logger.
@@ -96,14 +96,15 @@ public class JettyJerseyServer extends JettyServletServer {
      * @param https enable https?
      * @param host host server host
      * @param port port server port
+     * @param sniHostCheck SNI Host checking flag
      * @param swagger support swagger?
      * @param contextPath context path
-     *
      * @throws IllegalArgumentException in invalid arguments are provided
      */
-    public JettyJerseyServer(String name, boolean https, String host, int port, String contextPath, boolean swagger) {
+    public JettyJerseyServer(String name, boolean https, String host, int port, boolean sniHostCheck,
+        String contextPath, boolean swagger) {
 
-        super(name, https, host, port, contextPath);
+        super(name, https, host, port, sniHostCheck, contextPath);
         if (swagger) {
             this.swaggerId = "swagger-" + this.port;
             attachSwaggerServlet(https);
@@ -123,7 +124,7 @@ public class JettyJerseyServer extends JettyServletServer {
         }
 
         swaggerServlet.setInitParameter(SWAGGER_API_BASEPATH,
-                ((https) ? "https://" : "http://") + hostname + ":" + this.connector.getPort() + "/");
+            ((https) ? "https://" : "http://") + hostname + ":" + this.connector.getPort() + "/");
         swaggerServlet.setInitParameter(SWAGGER_CONTEXT_ID, swaggerId);
         swaggerServlet.setInitParameter(SWAGGER_SCANNER_ID, swaggerId);
         swaggerServlet.setInitParameter(SWAGGER_PRETTY_PRINT, "true");
@@ -144,7 +145,7 @@ public class JettyJerseyServer extends JettyServletServer {
      */
     protected synchronized ServletHolder getServlet(String servletPath) {
         ServletHolder jerseyServlet =
-                super.getServlet(org.glassfish.jersey.servlet.ServletContainer.class, servletPath);
+            super.getServlet(org.glassfish.jersey.servlet.ServletContainer.class, servletPath);
         jerseyServlet.setInitOrder(0);
         return jerseyServlet;
     }

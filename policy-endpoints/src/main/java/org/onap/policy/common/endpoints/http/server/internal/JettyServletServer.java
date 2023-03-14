@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2019-2020 Nordix Foundation.
+ * Modifications Copyright (C) 2019-2020,2023 Nordix Foundation.
  * Modifications Copyright (C) 2020-2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,9 +65,9 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      * Keystore/Truststore system property names.
      */
     public static final String SYSTEM_KEYSTORE_PROPERTY_NAME = "javax.net.ssl.keyStore";
-    public static final String SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME = "javax.net.ssl.keyStorePassword"; //NOSONAR
+    public static final String SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME = "javax.net.ssl.keyStorePassword"; // NOSONAR
     public static final String SYSTEM_TRUSTSTORE_PROPERTY_NAME = "javax.net.ssl.trustStore";
-    public static final String SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME = "javax.net.ssl.trustStorePassword"; //NOSONAR
+    public static final String SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME = "javax.net.ssl.trustStorePassword"; // NOSONAR
 
     /**
      * Logger.
@@ -93,6 +93,12 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      */
     @Getter
     protected final int port;
+
+    /**
+     * Should SNI host checking be done.
+     */
+    @Getter
+    protected boolean sniHostCheck;
 
     /**
      * Server auth user name.
@@ -148,11 +154,13 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      * @param name server name
      * @param host server host
      * @param port server port
+     * @param sniHostCheck SNI Host checking flag
      * @param contextPath context path
      *
      * @throws IllegalArgumentException if invalid parameters are passed in
      */
-    protected JettyServletServer(String name, boolean https, String host, int port, String contextPath) {
+    protected JettyServletServer(String name, boolean https, String host, int port, boolean sniHostCheck,
+        String contextPath) {
         String srvName = name;
 
         if (srvName == null || srvName.isEmpty()) {
@@ -177,6 +185,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
         this.host = srvHost;
         this.port = port;
+        this.sniHostCheck = sniHostCheck;
 
         this.contextPath = ctxtPath;
 
@@ -203,8 +212,8 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         this.jettyServer.setHandler(context);
     }
 
-    protected JettyServletServer(String name, String host, int port, String contextPath) {
-        this(name, false, host, port, contextPath);
+    protected JettyServletServer(String name, String host, int port, boolean sniHostCheck, String contextPath) {
+        this(name, false, host, port, sniHostCheck, contextPath);
     }
 
     @Override
@@ -221,7 +230,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         context.addFilter(filterClass, tempFilterPath, EnumSet.of(DispatcherType.INCLUDE, DispatcherType.REQUEST));
     }
 
-    protected ServletHolder getServlet(@NonNull  Class<? extends Servlet> servlet, @NonNull  String servletPath) {
+    protected ServletHolder getServlet(@NonNull Class<? extends Servlet> servlet, @NonNull String servletPath) {
         synchronized (servlets) {
             return servlets.computeIfAbsent(servletPath, key -> context.addServlet(servlet, servletPath));
         }
@@ -239,32 +248,35 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      * @return the server connector
      */
     public ServerConnector httpsConnector() {
-        SslContextFactory sslContextFactory = new SslContextFactory.Server();
+        SslContextFactory.Server sslContextFactoryServer = new SslContextFactory.Server();
 
         String keyStore = System.getProperty(SYSTEM_KEYSTORE_PROPERTY_NAME);
         if (keyStore != null) {
-            sslContextFactory.setKeyStorePath(keyStore);
+            sslContextFactoryServer.setKeyStorePath(keyStore);
 
             String ksPassword = System.getProperty(SYSTEM_KEYSTORE_PASSWORD_PROPERTY_NAME);
             if (ksPassword != null) {
-                sslContextFactory.setKeyStorePassword(ksPassword);
+                sslContextFactoryServer.setKeyStorePassword(ksPassword);
             }
         }
 
         String trustStore = System.getProperty(SYSTEM_TRUSTSTORE_PROPERTY_NAME);
         if (trustStore != null) {
-            sslContextFactory.setTrustStorePath(trustStore);
+            sslContextFactoryServer.setTrustStorePath(trustStore);
 
             String tsPassword = System.getProperty(SYSTEM_TRUSTSTORE_PASSWORD_PROPERTY_NAME);
             if (tsPassword != null) {
-                sslContextFactory.setTrustStorePassword(tsPassword);
+                sslContextFactoryServer.setTrustStorePassword(tsPassword);
             }
         }
 
-        var https = new HttpConfiguration();
-        https.addCustomizer(new SecureRequestCustomizer());
 
-        return new ServerConnector(jettyServer, sslContextFactory, new HttpConnectionFactory(https));
+        var httpsConfiguration = new HttpConfiguration();
+        SecureRequestCustomizer src = new SecureRequestCustomizer();
+        src.setSniHostCheck(sniHostCheck);
+        httpsConfiguration.addCustomizer(src);
+
+        return new ServerConnector(jettyServer, sslContextFactoryServer, new HttpConnectionFactory(httpsConfiguration));
     }
 
     public ServerConnector httpConnector() {
@@ -300,13 +312,17 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
         final var hashLoginService = new HashLoginService();
         final var userStore = new UserStore();
-        userStore.addUser(user, Credential.getCredential(password), new String[] {"user"});
+        userStore.addUser(user, Credential.getCredential(password), new String[] {
+            "user"
+        });
         hashLoginService.setUserStore(userStore);
         hashLoginService.setName(this.connector.getName() + "-login-service");
 
         var constraint = new Constraint();
         constraint.setName(Constraint.__BASIC_AUTH);
-        constraint.setRoles(new String[] {"user"});
+        constraint.setRoles(new String[] {
+            "user"
+        });
         constraint.setAuthenticate(true);
 
         var constraintMapping = new ConstraintMapping();

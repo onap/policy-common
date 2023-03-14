@@ -3,7 +3,7 @@
  * ONAP Policy Engine - Common Modules
  * ================================================================================
  * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2020 Nordix Foundation.
+ * Modifications Copyright (C) 2020,2023 Nordix Foundation.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -52,14 +52,14 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
     protected HashMap<Integer, HttpServletServer> servers = new HashMap<>();
 
     @Override
-    public synchronized HttpServletServer build(String name, boolean https, String host, int port, String contextPath,
-        boolean swagger, boolean managed) {
+    public synchronized HttpServletServer build(String name, boolean https, String host, int port, boolean sniHostCheck,
+        String contextPath, boolean swagger, boolean managed) {
 
         if (servers.containsKey(port)) {
             return servers.get(port);
         }
 
-        var server = new JettyJerseyServer(name, https, host, port, contextPath, swagger);
+        var server = new JettyJerseyServer(name, https, host, port, sniHostCheck, contextPath, swagger);
         if (managed) {
             servers.put(port, server);
         }
@@ -70,7 +70,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
     @Override
     public synchronized HttpServletServer build(String name, String host, int port, String contextPath, boolean swagger,
         boolean managed) {
-        return build(name, false, host, port, contextPath, swagger, managed);
+        return build(name, false, host, port, false, contextPath, swagger, managed);
     }
 
     @Override
@@ -91,16 +91,14 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
         return serviceList;
     }
 
-
-
     @Override
     public HttpServletServer buildStaticResourceServer(String name, boolean https, String host, int port,
-            String contextPath, boolean managed) {
+        boolean sniHostCheck, String contextPath, boolean managed) {
         if (servers.containsKey(port)) {
             return servers.get(port);
         }
 
-        var server = new JettyStaticResourceServer(name, https, host, port, contextPath);
+        var server = new JettyStaticResourceServer(name, https, host, port, sniHostCheck, contextPath);
         if (managed) {
             servers.put(port, server);
         }
@@ -114,7 +112,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
 
         var props = new PropertyUtils(properties, servicePrefix,
             (name, value, ex) -> logger
-                        .warn("{}: {} {} is in invalid format for http service {} ", this, name, value, serviceName));
+                .warn("{}: {} {} is in invalid format for http service {} ", this, name, value, serviceName));
 
         var servicePort = props.getInteger(PolicyEndPointProperties.PROPERTY_HTTP_PORT_SUFFIX, -1);
         if (servicePort < 0) {
@@ -127,9 +125,11 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
         var managed = props.getBoolean(PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, true);
         var swagger = props.getBoolean(PolicyEndPointProperties.PROPERTY_HTTP_SWAGGER_SUFFIX, false);
         var https = props.getBoolean(PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX, false);
+        var sniHostCheck = props.getBoolean(PolicyEndPointProperties.PROPERTY_HTTP_SNI_HOST_CHECK_SUFFIX, false);
 
         // create the service
-        HttpServletServer service = build(serviceName, https, hostName, servicePort, contextUriPath, swagger, managed);
+        HttpServletServer service =
+            build(serviceName, https, hostName, servicePort, sniHostCheck, contextUriPath, swagger, managed);
 
         // configure the service
         setSerializationProvider(props, service);
@@ -180,7 +180,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
     private void addFilterClasses(PropertyUtils props, HttpServletServer service, final String restUriPath) {
 
         final var filterClasses =
-                        props.getString(PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX, null);
+            props.getString(PolicyEndPointProperties.PROPERTY_HTTP_FILTER_CLASSES_SUFFIX, null);
 
         if (!StringUtils.isBlank(filterClasses)) {
             for (String filterClass : COMMA_SPACE_PAT.split(filterClasses)) {
