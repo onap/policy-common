@@ -22,13 +22,13 @@
 
 package org.onap.policy.common.endpoints.http.server.internal;
 
-import io.prometheus.client.exporter.MetricsServlet;
 import io.prometheus.client.hotspot.DefaultExports;
+import io.prometheus.client.servlet.jakarta.exporter.MetricsServlet;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.Servlet;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-import javax.servlet.DispatcherType;
-import javax.servlet.Servlet;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
@@ -72,7 +72,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     /**
      * Logger.
      */
-    private static Logger logger = LoggerFactory.getLogger(JettyServletServer.class);
+    private static final Logger logger = LoggerFactory.getLogger(JettyServletServer.class);
 
     private static final String NOT_SUPPORTED = " is not supported on this type of jetty server";
 
@@ -101,7 +101,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     protected boolean sniHostCheck;
 
     /**
-     * Server auth user name.
+     * Server auth username.
      */
     @Getter
     protected String user;
@@ -146,7 +146,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
      * Start condition.
      */
     @ToString.Exclude
-    protected Object startCondition = new Object();
+    protected final Object startCondition = new Object();
 
     /**
      * Constructor.
