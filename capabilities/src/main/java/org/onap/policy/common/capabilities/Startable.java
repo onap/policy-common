@@ -3,6 +3,7 @@
  * policy-core
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,33 +30,33 @@ public interface Startable {
      * Start operation. This operation starts the entity.
      * 
      * @return boolean. true if the start operation was successful, otherwise false.
-     * @throws IllegalStateException. if the element is in a state that conflicts with the start
+     * @throws IllegalStateException if the element is in a state that conflicts with the start
      *         operation.
      */
-    public boolean start();
+    boolean start();
 
     /**
      * Stop operation. The entity can be restarted again by invoking the start operation.
      * 
      * @return boolean. true if the stop operation was successful, otherwise false.
-     * @throws IllegalStateException. if the element is in a state that conflicts with the stop
+     * @throws IllegalStateException if the element is in a state that conflicts with the stop
      *         operation.
      */
-    public boolean stop();
+    boolean stop();
 
     /**
      * shutdown operation. The terminate operation yields the entity unusuable. It cannot be
      * (re)started.
      * 
-     * @throws IllegalStateException. if the element is in a state that conflicts with the stop
+     * @throws IllegalStateException if the element is in a state that conflicts with the stop
      *         operation.
      */
-    public void shutdown();
+    void shutdown();
 
     /**
      * Checks if the entity is alive.
      * 
      * @return boolean. true if alive, otherwise false
      */
-    public boolean isAlive();
+    boolean isAlive();
 }

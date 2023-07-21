@@ -3,6 +3,7 @@
  * Integrity Audit
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +21,7 @@
 
 package org.onap.policy.common.ia;
 
+import jakarta.persistence.Table;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,7 +31,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
-import javax.persistence.Table;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.builder.RecursiveToStringStyle;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
@@ -459,13 +460,13 @@ public class DbAudit {
             String tableName = entityClass.getAnnotation(Table.class).name();
             String msg = "\nDB Audit Error: " + "\n    Table Name: " + tableName
                     + "\n    Entry 1 (short prefix style): " + resourceName1 + ": "
-                    + new ReflectionToStringBuilder(entry1, ToStringStyle.SHORT_PREFIX_STYLE).toString()
+                    + new ReflectionToStringBuilder(entry1, ToStringStyle.SHORT_PREFIX_STYLE)
                     + "\n    Entry 2 (short prefix style): " + resourceName2 + ": "
                     + (entry2 != null
                         ? new ReflectionToStringBuilder(entry2, ToStringStyle.SHORT_PREFIX_STYLE).toString()
                         : "null")
                     + "\n    Entry 1 (recursive style): " + resourceName1 + ": "
-                    + new ReflectionToStringBuilder(entry1, new RecursiveToStringStyle()).toString()
+                    + new ReflectionToStringBuilder(entry1, new RecursiveToStringStyle())
                     + "\n    Entry 2 (recursive style): " + resourceName2 + ": "
                     + (entry2 != null
                         ? new ReflectionToStringBuilder(entry2, new RecursiveToStringStyle()).toString()

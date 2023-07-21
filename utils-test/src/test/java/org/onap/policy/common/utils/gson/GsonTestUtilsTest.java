@@ -34,6 +34,7 @@ import com.google.gson.JsonParseException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import lombok.Getter;
 import lombok.ToString;
 import org.apache.commons.jexl3.JexlException;
 import org.junit.Before;

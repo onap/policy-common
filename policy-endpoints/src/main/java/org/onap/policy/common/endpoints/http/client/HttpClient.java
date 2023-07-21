@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +21,12 @@
 
 package org.onap.policy.common.endpoints.http.client;
 
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.InvocationCallback;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.Response;
 import java.util.Map;
 import java.util.concurrent.Future;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.InvocationCallback;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
 import org.onap.policy.common.capabilities.Startable;
 
 /**
@@ -193,9 +194,9 @@ public interface HttpClient extends Startable {
     String getBasePath();
 
     /**
-     * Get the user name.
+     * Get the username.
      *
-     * @return the user name
+     * @return the username
      */
     String getUserName();
 

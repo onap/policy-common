@@ -20,6 +20,8 @@
 
 package org.onap.policy.common.utils.cmd;
 
+import java.io.Serial;
+
 /**
  * Exception used for CommandLineArguments class.
  *
@@ -31,6 +33,7 @@ public class CommandLineException extends Exception {
     /**
      * Generated serialVersionUID.
      */
+    @Serial
     private static final long serialVersionUID = -1200607308084606425L;
 
     /**

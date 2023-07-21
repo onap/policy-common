@@ -100,7 +100,7 @@ public class CommandLineArgumentsHandler {
      */
     public CommandLineArgumentsHandler(String helpClassName, String component, Option... customOptions) {
         this(helpClassName, component);
-        if (customOptions != null && customOptions.length > 0) {
+        if (customOptions != null) {
             for (Option option : customOptions) {
                 options.addOption(option);
             }
@@ -108,7 +108,7 @@ public class CommandLineArgumentsHandler {
     }
 
     /**
-     * Construct the options with brand new options for the CLI editor.
+     * Construct the options with brand-new options for the CLI editor.
      */
     public CommandLineArgumentsHandler(String helpClassName, String component, Options options) {
         this.options = options;

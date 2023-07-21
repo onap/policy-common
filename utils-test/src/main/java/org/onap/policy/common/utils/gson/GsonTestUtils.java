@@ -31,10 +31,8 @@ import com.google.re2j.Pattern;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map.Entry;
 import lombok.AccessLevel;
@@ -100,7 +98,6 @@ public class GsonTestUtils {
      *
      * @param object the object to be encoded
      * @param expected the expected value
-     * @throws Exception if the file cannot be read
      */
     public void compareGson(Object object, Class<?> expected) {
         compareGson(object, new File(expected.getSimpleName() + ".json"));
@@ -113,7 +110,6 @@ public class GsonTestUtils {
      *
      * @param object the object to be encoded
      * @param expected the expected value
-     * @throws Exception if the file cannot be read
      */
     public void compareGson(Object object, File expected) {
         // file is not required to have a full path - find it via getResource()
@@ -173,7 +169,7 @@ public class GsonTestUtils {
      * @throws IOException if an error occurs
      */
     protected String readFile(File file) throws IOException {
-        return new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
+        return Files.readString(file.toPath());
     }
 
 
@@ -269,7 +265,7 @@ public class GsonTestUtils {
 
         // sort the keys before copying to the new object
         List<Entry<String, JsonElement>> sortedSet = new ArrayList<>(jsonObj.entrySet());
-        Collections.sort(sortedSet, (left, right) -> left.getKey().compareTo(right.getKey()));
+        sortedSet.sort(Entry.comparingByKey());
 
         for (Entry<String, JsonElement> ent : sortedSet) {
             JsonElement val = ent.getValue();

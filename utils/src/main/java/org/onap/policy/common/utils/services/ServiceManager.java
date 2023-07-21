@@ -213,7 +213,7 @@ public class ServiceManager implements Startable {
 
     /*
      * Cannot use a plain Runnable, because it can't throw exceptions. Could use a
-     * Callable, instead, but then all of the lambda expressions become rather messy, thus
+     * Callable, instead, but then all the lambda expressions become rather messy, thus
      * we'll stick with RunnableWithEx, and just disable the sonar warning.
      */
     @FunctionalInterface
