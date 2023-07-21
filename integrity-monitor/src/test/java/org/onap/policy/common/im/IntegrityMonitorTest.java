@@ -25,14 +25,14 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
+import jakarta.persistence.TemporalType;
 import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import javax.persistence.EntityTransaction;
-import javax.persistence.Query;
-import javax.persistence.TemporalType;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;

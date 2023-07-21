@@ -3,6 +3,7 @@
  * Integrity Monitor
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +21,16 @@
 
 package org.onap.policy.common.im;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.FlushModeType;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.TypedQuery;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.FlushModeType;
-import javax.persistence.LockModeType;
-import javax.persistence.TypedQuery;
 import org.onap.policy.common.im.exceptions.EntityRetrievalException;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
 import org.onap.policy.common.utils.jpa.EntityMgrCloser;
@@ -377,7 +378,7 @@ public class StateManagement {
                 notFound.run();
             }
         } catch (final Exception ex) {
-            logger.error("StateManagement: {} exception: {}", methodName, ex.toString(), ex);
+            logger.error("StateManagement: {} exception: {}", methodName, ex.getMessage(), ex);
         }
 
     }

@@ -22,12 +22,12 @@
 
 package org.onap.policy.common.endpoints.http.server;
 
+import jakarta.servlet.Filter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
-import javax.servlet.Filter;
 import lombok.ToString;
 import org.onap.policy.common.endpoints.http.server.aaf.AafAuthFilter;
 import org.onap.policy.common.endpoints.parameters.RestServerParameters;
@@ -150,7 +150,7 @@ public class RestServer extends ServiceManagerContainer {
      * @return the provider class names
      */
     private String getProviderClassNames(List<Class<?>> jaxrsProviders) {
-        return String.join(",", jaxrsProviders.stream().map(Class::getName).collect(Collectors.toList()));
+        return jaxrsProviders.stream().map(Class::getName).collect(Collectors.joining(","));
     }
 
     private String getValue(final String value) {

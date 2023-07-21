@@ -56,6 +56,7 @@ import org.onap.policy.common.utils.resources.ResourceUtils;
  * Keystore, containing a self-signed certificate, valid for one day (see the argument to
  * the "-valid" flag below). For use in junit tests.
  */
+@Getter
 public class SelfSignedKeyStore {
     public static final String KEYSTORE_PASSWORD = "Pol1cy_0nap";
     public static final String PRIVATE_KEY_PASSWORD = KEYSTORE_PASSWORD;
@@ -67,7 +68,6 @@ public class SelfSignedKeyStore {
      */
     private static final String KEYSTORE_SAN = "keystore_san.txt";
 
-    @Getter
     private final String keystoreName;
 
 
@@ -115,7 +115,7 @@ public class SelfSignedKeyStore {
 
         var sanArray = sanString.replace("DNS:", "").replace("\r", "").split("\n");
         GeneralName[] nameArray = Arrays.stream(sanArray).map(name -> new GeneralName(GeneralName.dNSName, name))
-                        .collect(Collectors.toList()).toArray(new GeneralName[0]);
+                        .toList().toArray(new GeneralName[0]);
         final var names = new GeneralNames(nameArray);
 
         try (var ostr = new FileOutputStream(keystoreFile)) {

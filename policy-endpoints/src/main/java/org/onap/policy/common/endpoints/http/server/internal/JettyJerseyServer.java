@@ -22,10 +22,11 @@
 
 package org.onap.policy.common.endpoints.http.server.internal;
 
-import io.swagger.jersey.config.JerseyJaxrsConfig;
 import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.glassfish.jersey.server.ServerProperties;
+import org.glassfish.jersey.servlet.ServletContainer;
 import org.onap.policy.common.endpoints.http.server.JsonExceptionMapper;
 import org.onap.policy.common.gson.GsonMessageBodyHandler;
 import org.onap.policy.common.utils.network.NetworkUtil;
@@ -37,7 +38,7 @@ import org.slf4j.LoggerFactory;
  *
  * <p>Note: the serialization provider will always be added to the server's class providers, as will the swagger
  * providers (assuming swagger has been enabled). This happens whether {@link #addServletClass(String, String)} is used
- * or {@link #addServletPackage(String, String)} is used. Thus it's possible to have both the server's class provider
+ * or {@link #addServletPackage(String, String)} is used. Thus, it's possible to have both the server's class provider
  * property and the server's package provider property populated.
  */
 public class JettyJerseyServer extends JettyServletServer {
@@ -67,12 +68,6 @@ public class JettyJerseyServer extends JettyServletServer {
      */
     protected static final String JERSEY_GSON_INIT_CLASSNAMES_PARAM_VALUE =
         String.join(",", GsonMessageBodyHandler.class.getName(), JsonExceptionMapper.class.getName());
-
-    /**
-     * Jersey Swagger Classes Init Param Value.
-     */
-    protected static final String SWAGGER_INIT_CLASSNAMES_PARAM_VALUE =
-        "io.swagger.jaxrs.listing.ApiListingResource," + "io.swagger.jaxrs.listing.SwaggerSerializers";
 
     /**
      * Logger.
@@ -116,7 +111,10 @@ public class JettyJerseyServer extends JettyServletServer {
      */
     protected void attachSwaggerServlet(boolean https) {
 
-        ServletHolder swaggerServlet = getServlet(JerseyJaxrsConfig.class, "/");
+        ServletContextHandler handler = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
+        handler.setContextPath("/");
+
+        ServletHolder swaggerServlet = handler.addServlet(ServletContainer.class, "/*");
 
         String hostname = this.connector.getHost();
         if (StringUtils.isBlank(hostname) || hostname.equals(NetworkUtil.IPV4_WILDCARD_ADDRESS)) {
@@ -226,8 +224,8 @@ public class JettyJerseyServer extends JettyServletServer {
         initClasses = classProvider;
 
         if (this.swaggerId != null) {
-            initClasses += "," + SWAGGER_INIT_CLASSNAMES_PARAM_VALUE;
-
+            jerseyServlet.setInitParameter("jersey.config.server.provider.packages",
+                "io.swagger.v3.jaxrs2.integration.resources,io.swagger.sample.resource");
             jerseyServlet.setInitParameter(SWAGGER_CONTEXT_ID, swaggerId);
             jerseyServlet.setInitParameter(SWAGGER_SCANNER_ID, swaggerId);
         }

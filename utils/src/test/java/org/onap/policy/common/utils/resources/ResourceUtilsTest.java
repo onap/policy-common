@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
- *  Modifications Copyright (C) 2020-2021 Nordix Foundation.
+ *  Modifications Copyright (C) 2020-2021, 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,12 +77,12 @@ public class ResourceUtilsTest {
     }
 
     /**
-     * Cleandown resource utils test.
+     * Clean resource utils test.
      */
     @After
-    public void cleandownResourceUtilsTest() {
-        tmpEmptyFile.delete();
-        tmpUsedFile.delete();
+    public void cleanDownResourceUtilsTest() {
+        assertTrue(tmpEmptyFile.delete());
+        assertTrue(tmpUsedFile.delete());
     }
 
     /**
@@ -312,8 +312,8 @@ public class ResourceUtilsTest {
                 normalizePath(resultD2.iterator().next()));
 
         Set<String> resultJ0 = ResourceUtils.getDirectoryContents("com");
-        assertTrue(resultJ0.contains("com/google/gson/"));
-        assertEquals("com/google/", normalizePath(resultJ0.iterator().next()));
+        assertTrue(resultJ0.contains("com/worldturner/medeia/"));
+        assertEquals("com/worldturner/", normalizePath(resultJ0.iterator().next()));
 
         Set<String> resultJ1 = ResourceUtils.getDirectoryContents("com/google/gson");
         assertTrue(resultJ1.size() > 1);

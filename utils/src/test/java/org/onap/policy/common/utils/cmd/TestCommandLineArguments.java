@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2021 Nordix Foundation.
+ *  Copyright (C) 2021, 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,7 +81,7 @@ public class TestCommandLineArguments {
     @Test
     public void testParse_ShouldThrowExceptionWhenFileNameNull() {
         String[] nullArgs = {"-c", null};
-        assertThatThrownBy(() -> testCmd.parse(nullArgs)).hasMessage(ERR_MSG_INVALID_ARGS).hasRootCauseMessage(null);
+        assertThatThrownBy(() -> testCmd.parse(nullArgs)).hasMessage(ERR_MSG_INVALID_ARGS);
     }
 
     @Test
