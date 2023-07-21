@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +26,13 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import com.google.gson.JsonObject;
+import jakarta.ws.rs.core.MediaType;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
-import javax.ws.rs.core.MediaType;
 import lombok.ToString;
 import org.junit.Test;
 import org.onap.policy.common.endpoints.http.server.YamlJacksonHandler;
@@ -66,7 +68,7 @@ public class YamlJacksonHandlerTest {
         ByteArrayOutputStream outstr = new ByteArrayOutputStream();
         hdlr.writeTo(data, Data.class, Data.class, null, null, null, outstr);
 
-        assertEquals("abc: def\nhello: world\nmyId: 100\nvalue: a value\n", outstr.toString("UTF-8"));
+        assertEquals("abc: def\nhello: world\nmyId: 100\nvalue: a value\n", outstr.toString(StandardCharsets.UTF_8));
 
         /*
          * Ensure everything deserializes as expected.

@@ -3,6 +3,7 @@
  * Integrity Audit
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +29,10 @@ public class IntegrityAuditProperties {
 
     public static final int DEFAULT_AUDIT_PERIOD_SECONDS = -1; // Audit does not run
 
-    public static final String DB_DRIVER = "javax.persistence.jdbc.driver";
-    public static final String DB_URL = "javax.persistence.jdbc.url";
-    public static final String DB_USER = "javax.persistence.jdbc.user";
-    public static final String DB_PWD = "javax.persistence.jdbc.password"; //NOSONAR
+    public static final String DB_DRIVER = "jakarta.persistence.jdbc.driver";
+    public static final String DB_URL = "jakarta.persistence.jdbc.url";
+    public static final String DB_USER = "jakarta.persistence.jdbc.user";
+    public static final String DB_PWD = "jakarta.persistence.jdbc.password"; //NOSONAR
     public static final String AUDIT_PERIOD_SECONDS = "integrity_audit_period_seconds";
 
 
