@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
- * Modifications Copyright (C) 2019 Nordix Foundation.
+ * Modifications Copyright (C) 2019, 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,13 @@
 package org.onap.policy.common.endpoints.http.client.internal;
 
 import com.google.re2j.Pattern;
+import jakarta.ws.rs.client.Client;
+import jakarta.ws.rs.client.ClientBuilder;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.Invocation.Builder;
+import jakarta.ws.rs.client.InvocationCallback;
+import jakarta.ws.rs.client.WebTarget;
+import jakarta.ws.rs.core.Response;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -31,13 +38,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.concurrent.Future;
 import javax.net.ssl.SSLContext;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation.Builder;
-import javax.ws.rs.client.InvocationCallback;
-import javax.ws.rs.client.WebTarget;
-import javax.ws.rs.core.Response;
 import lombok.Getter;
 import lombok.ToString;
 import org.apache.commons.lang3.StringUtils;
@@ -60,7 +60,7 @@ public class JerseyClient implements HttpClient {
     /**
      * Logger.
      */
-    private static Logger logger = LoggerFactory.getLogger(JerseyClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(JerseyClient.class);
 
     protected static final String JERSEY_DEFAULT_SERIALIZATION_PROVIDER =
                     "org.onap.policy.common.gson.GsonMessageBodyHandler";
@@ -82,9 +82,14 @@ public class JerseyClient implements HttpClient {
     /**
      * Constructor.
      *
-     * <p>name the name https is it https or not selfSignedCerts are there self signed certs
-     * hostname the hostname port port being used basePath base context userName user
-     * password password
+     * <p>name - the name
+     * https - is it https or not
+     * selfSignedCerts - are there self-signed certs
+     * hostname - the hostname
+     * port - port being used
+     * basePath - base context
+     * userName - user credentials
+     * password - password credentials
      *
      * @param busTopicParams Input parameters object
      * @throws KeyManagementException key exception
@@ -136,9 +141,9 @@ public class JerseyClient implements HttpClient {
             if (this.selfSignedCerts) {
                 sslContext.init(null, NetworkUtil.getAlwaysTrustingManager(), new SecureRandom());
 
-                // This falls under self signed certs which is used for non-production testing environments where
+                // This falls under self-signed certs which is used for non-production testing environments where
                 // the hostname in the cert is unlikely to be crafted properly.  We always return true for the
-                // hostname verifier.  This causes a sonar vuln but we ignore it as it could cause problems in some
+                // hostname verifier.  This causes a sonar vuln, but we ignore it as it could cause problems in some
                 // testing environments.
                 clientBuilder =
                         ClientBuilder.newBuilder().sslContext(sslContext).hostnameVerifier(

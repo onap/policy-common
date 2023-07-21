@@ -3,6 +3,7 @@
   ONAP policy
   ================================================================================
   Copyright (C) 2022 Bell Canada. All rights reserved.
+  Modifications Copyright (C) 2023 Nordix Foundation.
   ================================================================================
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -43,11 +44,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-core</artifactId>
+            <version>6.0.11</version>
         </dependency>
     </dependencies>
 

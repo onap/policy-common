@@ -28,7 +28,11 @@ import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 
-import io.prometheus.client.exporter.MetricsServlet;
+import io.prometheus.client.servlet.jakarta.exporter.MetricsServlet;
+import jakarta.ws.rs.client.Entity;
+import jakarta.ws.rs.client.InvocationCallback;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -36,10 +40,6 @@ import java.util.Properties;
 import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.InvocationCallback;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import lombok.Getter;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -490,7 +490,7 @@ public class HttpClientTest {
         response = clientPdp.get("metrics");
         assertEquals(200, response.getStatus());
 
-        response = clientPdp.get("swagger.json");
+        response = clientPdp.get("openapi.json");
         assertEquals(200, response.getStatus());
 
         assertFalse(MyGsonProvider.hasWrittenSome());
@@ -534,7 +534,7 @@ public class HttpClientTest {
     }
 
 
-    class MyEntity {
+    static class MyEntity {
 
         private String myParameter;
 
@@ -552,7 +552,7 @@ public class HttpClientTest {
 
     }
 
-    class MyCallback implements InvocationCallback<Response> {
+    static class MyCallback implements InvocationCallback<Response> {
         @Getter
         private Response response;
 

@@ -22,6 +22,13 @@
 package org.onap.policy.common.im;
 
 import com.google.re2j.Pattern;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.FlushModeType;
+import jakarta.persistence.LockModeType;
+import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,13 +45,6 @@ import java.util.function.LongConsumer;
 import java.util.function.Supplier;
 import javax.management.JMX;
 import javax.management.MBeanServerConnection;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.FlushModeType;
-import javax.persistence.LockModeType;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;

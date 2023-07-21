@@ -32,7 +32,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import com.google.gson.Gson;
-import io.prometheus.client.exporter.MetricsServlet;
+import io.prometheus.client.servlet.jakarta.exporter.MetricsServlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -64,7 +64,7 @@ public class HttpServerTest {
     private static final String LOCALHOST = "localhost";
     private static final String JSON_MEDIA = "application/json";
     private static final String YAML_MEDIA = YamlMessageBodyHandler.APPLICATION_YAML;
-    private static final String SWAGGER_JSON = "/swagger.json";
+    private static final String SWAGGER_JSON = "/openapi.json";
     private static final String JUNIT_ECHO_HELLO = "/junit/echo/hello";
     private static final String JUNIT_ECHO_FULL_REQUEST = "/junit/echo/full/request";
     private static final String SOME_TEXT = "some text";
@@ -73,7 +73,7 @@ public class HttpServerTest {
     /**
      * Logger.
      */
-    private static Logger logger = LoggerFactory.getLogger(HttpServerTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(HttpServerTest.class);
 
     private static final String LOCALHOST_PREFIX = "http://localhost:";
 
@@ -286,7 +286,7 @@ public class HttpServerTest {
         assertEquals(reqText, response);
 
         response = http(portUrl + SWAGGER_JSON);
-        assertThat(response).contains("Swagger Server");
+        assertThat(response).contains("openapi");
     }
 
     @Test
@@ -409,11 +409,6 @@ public class HttpServerTest {
 
         assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
         assertEquals(1, HttpServletServerFactoryInstance.getServerFactory().inventory().size());
-
-        System.setProperty("cadi_longitude", "0.0");
-        System.setProperty("cadi_latitude", "0.0");
-        server.setAafAuthentication("/*");
-        assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAaf());
 
         HttpServletServerFactoryInstance.getServerFactory().destroy(port);
         assertEquals(0, HttpServletServerFactoryInstance.getServerFactory().inventory().size());

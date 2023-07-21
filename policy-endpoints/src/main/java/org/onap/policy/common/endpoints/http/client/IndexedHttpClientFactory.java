@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +45,7 @@ class IndexedHttpClientFactory implements HttpClientFactory {
     /**
      * Logger.
      */
-    private static Logger logger = LoggerFactory.getLogger(IndexedHttpClientFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(IndexedHttpClientFactory.class);
 
     protected HashMap<String, HttpClient> clients = new HashMap<>();
 

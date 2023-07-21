@@ -4,6 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,12 +30,12 @@ import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceException;
-import javax.persistence.QueryTimeoutException;
-import javax.persistence.TypedQuery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.PersistenceException;
+import jakarta.persistence.QueryTimeoutException;
+import jakarta.persistence.TypedQuery;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -57,7 +58,7 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
     private static final String UNLOCKED_ENABLED_NULL_PROVIDINGSERVICE = "unlocked,enabled,null,providingservice";
     private static final String TEST_RESOURCE_NAME = "test_resource1";
 
-    private static Logger logger = LoggerFactory.getLogger(StateManagementTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(StateManagementTest.class);
     //
 
     @BeforeClass
@@ -244,7 +245,7 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
 
     @Test(expected = StateManagementException.class)
     @SuppressWarnings("unchecked")
-    public void test_StateManagementInitialization_ThrowStateManagementException_ifEntityManagerthrowsAnyException()
+    public void test_StateManagementInitialization_ThrowStateManagementException_ifEntityManagerThrowsAnyException()
             throws Exception {
         final EntityManager mockedEm = getMockedEntityManager();
         final EntityManagerFactory mockedEmf = getMockedEntityManagerFactory(mockedEm);

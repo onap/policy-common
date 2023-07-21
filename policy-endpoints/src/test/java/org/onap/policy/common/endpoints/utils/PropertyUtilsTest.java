@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@
 package org.onap.policy.common.endpoints.utils;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
@@ -76,11 +78,11 @@ public class PropertyUtilsTest {
 
     @Test
     public void testGetBoolean() {
-        assertEquals(true, utils.getBoolean(".my-bool", false));
-        assertEquals(false, utils.getBoolean(".my-bool2", true));
-        assertEquals(true, utils.getBoolean(".empty-bool", true));
-        assertEquals(false, utils.getBoolean(".invalid-bool", true));
-        assertEquals(true, utils.getBoolean(".missing-bool", true));
+        assertTrue(utils.getBoolean(".my-bool", false));
+        assertFalse(utils.getBoolean(".my-bool2", true));
+        assertTrue(utils.getBoolean(".empty-bool", true));
+        assertFalse(utils.getBoolean(".invalid-bool", true));
+        assertTrue(utils.getBoolean(".missing-bool", true));
 
         assertNull(invalidName);
         assertNull(invalidValue);
