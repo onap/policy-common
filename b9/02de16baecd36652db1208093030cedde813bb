@@ -1,0 +1,8 @@
+Code-Review+2: Liam Fallon <liam.fallon@est.tech>
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Verified+1: ONAP Required GHA <releng+onap.required.gha@linuxfoundation.org>
+Submitted-by: Liam Fallon <liam.fallon@est.tech>
+Submitted-at: Mon, 11 Sep 2023 12:20:02 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/policy/common/+/135927
+Project: policy/common
+Branch: refs/heads/master
