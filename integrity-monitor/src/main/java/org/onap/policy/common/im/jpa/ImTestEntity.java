@@ -26,7 +26,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -44,11 +43,8 @@ import org.onap.policy.common.im.MonitorTime;
 
 @Entity
 @Table(name = "ImTestEntity")
-@NamedQueries({
-    @NamedQuery(name = " ImTestEntity.findAll", query = "SELECT e FROM ImTestEntity e "),
-    @NamedQuery(name = "ImTestEntity.deleteAll", query = "DELETE FROM ImTestEntity WHERE 1=1")
-})
-
+@NamedQuery(name = " ImTestEntity.findAll", query = "SELECT e FROM ImTestEntity e ")
+@NamedQuery(name = "ImTestEntity.deleteAll", query = "DELETE FROM ImTestEntity WHERE 1=1")
 @Getter
 @Setter
 @NoArgsConstructor

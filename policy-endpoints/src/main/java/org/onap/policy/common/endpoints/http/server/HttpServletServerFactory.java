@@ -30,7 +30,7 @@ import java.util.Properties;
 public interface HttpServletServerFactory {
 
     /**
-     * Builds an http or https rest server with support for servlets.
+     * Builds a http or https rest server with support for servlets.
      *
      * @param name name
      * @param https use secured http over tls connection
@@ -47,7 +47,7 @@ public interface HttpServletServerFactory {
         boolean swagger, boolean managed);
 
     /**
-     * Builds an http rest server with support for servlets.
+     * Builds a http rest server with support for servlets.
      *
      * @param name name
      * @param host binding host
@@ -70,7 +70,7 @@ public interface HttpServletServerFactory {
     List<HttpServletServer> build(Properties properties);
 
     /**
-     * Builds an http or https server to manage static resources.
+     * Builds a http or https server to manage static resources.
      *
      * @param name name
      * @param https use secured http over tls connection

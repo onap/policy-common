@@ -61,10 +61,17 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     private static final String SITE_B_PAP2 = "siteB_pap2";
 
     private static final String ENABLE_NO_DEPENDENCY_MSG =
-                    "\n\nsm.enableNoDependency()\nAdminState = {}\nOpState() = {}\n"
-                                    + "AvailStatus = {}\nStandbyStatus = {}\n";
+        """
 
-    private static Logger logger = LoggerFactory.getLogger(IntegrityMonitorTest.class);
+
+            sm.enableNoDependency()
+            AdminState = {}
+            OpState() = {}
+            AvailStatus = {}
+            StandbyStatus = {}
+            """;
+
+    private static final Logger logger = LoggerFactory.getLogger(IntegrityMonitorTest.class);
 
     /**
      * Number of monitor cycles it takes between dependency health checks.
@@ -219,8 +226,15 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         im = makeMonitor(resourceName, myProp);
 
         logger.debug(
-                "\n\ntestSanityJmx state after creating new im\n"
-                        + "AdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+            """
+
+
+                testSanityJmx state after creating new im
+                AdminState = {}
+                OpState() = {}
+                AvailStatus = {}
+                StandbyStatus = {}
+                """,
                 im.getStateManager().getAdminState(), im.getStateManager().getOpState(),
                 im.getStateManager().getAvailStatus(), im.getStateManager().getStandbyStatus());
 
@@ -245,8 +259,15 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         im = makeMonitor(resourceName, myProp);
         sm = im.getStateManager();
         logger.debug(
-                "\n\ntestSanityJmx restart with AdminState=locked"
-                        + "\nAdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+            """
+
+
+                testSanityJmx restart with AdminState=locked
+                AdminState = {}
+                OpState() = {}
+                AvailStatus = {}
+                StandbyStatus = {}
+                """,
                 sm.getAdminState(), sm.getOpState(), sm.getAvailStatus(), sm.getStandbyStatus());
         assertEquals(StateManagement.LOCKED, sm.getAdminState());
 
@@ -263,8 +284,15 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         im = makeMonitor(resourceName, myProp);
         sm = im.getStateManager();
         logger.debug(
-                "\n\ntestSanityJmx restart with AdminState=unlocked\n"
-                        + "AdminState = {}\nOpState() = {}\nAvailStatus = {}\nStandbyStatus = {}\n",
+            """
+
+
+                testSanityJmx restart with AdminState=unlocked
+                AdminState = {}
+                OpState() = {}
+                AvailStatus = {}
+                StandbyStatus = {}
+                """,
                 sm.getAdminState(), sm.getOpState(), sm.getAvailStatus(), sm.getStandbyStatus());
 
         assertEquals(StateManagement.UNLOCKED, sm.getAdminState());
@@ -540,9 +568,13 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         em.refresh(sme);
 
         logger.debug(
-                "??? -- Retrieve StateManagementEntity from database --\nsme.getResourceName() = {}\n"
-                        + "sme.getAdminState() = {}\nsme.getOpState() = {}\nsme.getAvailStatus() = {}\n"
-                        + "sme.getStandbyStatus() = {}",
+            """
+                ??? -- Retrieve StateManagementEntity from database --
+                sme.getResourceName() = {}
+                sme.getAdminState() = {}
+                sme.getOpState() = {}
+                sme.getAvailStatus() = {}
+                sme.getStandbyStatus() = {}""",
                 sme.getResourceName(), sme.getAdminState(), sme.getOpState(), sme.getAvailStatus(),
                 sme.getStandbyStatus());
 
@@ -578,9 +610,13 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
             sme1 = (StateManagementEntity) resourceList1.get(0);
             em.refresh(sme1);
             logger.debug(
-                    "??? -- Retrieve StateManagementEntity from database --\nsme1.getResourceName() = {}\n"
-                            + "sme1.getAdminState() = {}\nsme1.getOpState() = {}\nsme1.getAvailStatus() = {}\n"
-                            + "sme1.getStandbyStatus() = {}",
+                """
+                    ??? -- Retrieve StateManagementEntity from database --
+                    sme1.getResourceName() = {}
+                    sme1.getAdminState() = {}
+                    sme1.getOpState() = {}
+                    sme1.getAvailStatus() = {}
+                    sme1.getStandbyStatus() = {}""",
                     sme1.getResourceName(), sme1.getAdminState(), sme1.getOpState(), sme1.getAvailStatus(),
                     sme1.getStandbyStatus());
 
@@ -805,8 +841,14 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
             StateManagementEntity tmpSme = (StateManagementEntity) mySme;
             em.refresh(tmpSme);
             logger.debug(
-                    "\n    ResourceName: {}\n        AdminState: {}\n        OpState: {}"
-                            + "\n        AvailStatus: {}\n        StandbyStatus: {}",
+                """
+
+                        ResourceName: {}
+                            AdminState: {}
+                            OpState: {}
+                            AvailStatus: {}
+                            StandbyStatus: {}\
+                    """,
                     tmpSme.getResourceName(), tmpSme.getAdminState(), tmpSme.getOpState(), tmpSme.getAvailStatus(),
                     tmpSme.getStandbyStatus());
         }
@@ -828,8 +870,14 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
             StateManagementEntity tmpSme = (StateManagementEntity) mySme;
             em.refresh(tmpSme);
             logger.debug(
-                    "\n    ResourceName: {}" + "\n        AdminState: {}" + "\n        OpState: {}"
-                            + "\n        AvailStatus: {}" + "\n        StandbyStatus: {}",
+                """
+
+                        ResourceName: {}
+                            AdminState: {}
+                            OpState: {}
+                            AvailStatus: {}
+                            StandbyStatus: {}\
+                    """,
                     tmpSme.getResourceName(), tmpSme.getAdminState(), tmpSme.getOpState(), tmpSme.getAvailStatus(),
                     tmpSme.getStandbyStatus());
         }
@@ -868,8 +916,14 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
             em.refresh(tmpSme);
 
             logger.debug(
-                    "\n    (restart4) ResourceName: {}" + "\n        AdminState: {}" + "\n        OpState: {}"
-                            + "\n        AvailStatus: {}" + "\n        StandbyStatus: {}",
+                """
+
+                        (restart4) ResourceName: {}
+                            AdminState: {}
+                            OpState: {}
+                            AvailStatus: {}
+                            StandbyStatus: {}\
+                    """,
                     tmpSme.getResourceName(), tmpSme.getAdminState(), tmpSme.getOpState(), tmpSme.getAvailStatus(),
                     tmpSme.getStandbyStatus());
         }

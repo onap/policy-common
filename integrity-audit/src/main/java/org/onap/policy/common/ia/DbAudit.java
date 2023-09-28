@@ -317,7 +317,7 @@ public class DbAudit {
             startTime = timeCheck("Second", startTime);
         }
 
-        if (errorCount != 0) {
+        if (errorCount > 0) {
             String msg = " DB Audit: " + errorCount
                     + " errors found. A large number of errors may indicate DB replication has stopped";
             logger.error(MessageCodes.ERROR_AUDIT, msg);

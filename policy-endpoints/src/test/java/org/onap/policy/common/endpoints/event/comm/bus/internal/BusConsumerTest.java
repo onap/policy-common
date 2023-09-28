@@ -26,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -66,7 +67,7 @@ public class BusConsumerTest extends TopicTestBase {
     }
 
     @Test
-    public void testFetchingBusConsumer() throws InterruptedException {
+    public void testFetchingBusConsumer() {
         // should not be negative
         var cons = new FetchingBusConsumerImpl(makeBuilder().fetchTimeout(-1).build());
         assertThat(cons.getSleepTime()).isEqualTo(PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH);
@@ -174,7 +175,7 @@ public class BusConsumerTest extends TopicTestBase {
     @Test
     public void testCambriaConsumerWrapperClose() {
         CambriaConsumerWrapper cons = new CambriaConsumerWrapper(builder.build());
-        assertThatCode(() -> cons.close()).doesNotThrowAnyException();
+        assertThatCode(cons::close).doesNotThrowAnyException();
     }
 
     @Test
@@ -183,7 +184,7 @@ public class BusConsumerTest extends TopicTestBase {
     }
 
     @Test
-    public void testDmaapConsumerWrapper() throws Exception {
+    public void testDmaapConsumerWrapper() {
         // verify that different wrappers can be built
         assertThatCode(() -> new DmaapAafConsumerWrapper(makeBuilder().build())).doesNotThrowAnyException();
     }
@@ -229,7 +230,7 @@ public class BusConsumerTest extends TopicTestBase {
     }
 
     @Test
-    public void testDmaapConsumerWrapperClose() throws Exception {
+    public void testDmaapConsumerWrapperClose() {
         assertThatCode(() -> new DmaapAafConsumerWrapper(makeBuilder().build()).close()).doesNotThrowAnyException();
     }
 
@@ -301,18 +302,18 @@ public class BusConsumerTest extends TopicTestBase {
     }
 
     @Test
-    public void testKafkaConsumerWrapper() throws Exception {
+    public void testKafkaConsumerWrapper() {
         // verify that different wrappers can be built
         assertThatCode(() -> new KafkaConsumerWrapper(makeKafkaBuilder().build())).doesNotThrowAnyException();
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void testKafkaConsumerWrapper_InvalidTopic() throws Exception {
+    public void testKafkaConsumerWrapper_InvalidTopic() {
         new KafkaConsumerWrapper(makeBuilder().topic(null).build());
     }
 
-    @Test(expected = java.lang.IllegalStateException.class)
-    public void testKafkaConsumerWrapperFetch() throws Exception {
+    @Test
+    public void testKafkaConsumerWrapperFetch() {
 
         //Setup Properties for consumer
         Properties kafkaProps = new Properties();
@@ -331,17 +332,17 @@ public class BusConsumerTest extends TopicTestBase {
         KafkaConsumer<String, String> consumer = new KafkaConsumer<>(kafkaProps);
         kafka.consumer = consumer;
 
-        assertFalse(kafka.fetch().iterator().hasNext());
+        assertThrows(java.lang.IllegalStateException.class, () -> kafka.fetch().iterator().hasNext());
         consumer.close();
     }
 
     @Test
-    public void testKafkaConsumerWrapperClose() throws Exception {
+    public void testKafkaConsumerWrapperClose() {
         assertThatCode(() -> new KafkaConsumerWrapper(makeKafkaBuilder().build()).close()).doesNotThrowAnyException();
     }
 
     @Test
-    public void testKafkaConsumerWrapperToString() throws Exception {
+    public void testKafkaConsumerWrapperToString() {
         assertNotNull(new KafkaConsumerWrapper(makeKafkaBuilder().build()) {}.toString());
     }
 
@@ -352,7 +353,7 @@ public class BusConsumerTest extends TopicTestBase {
         }
 
         @Override
-        public Iterable<String> fetch() throws IOException {
+        public Iterable<String> fetch() {
             return null;
         }
     }

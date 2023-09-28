@@ -26,7 +26,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -35,6 +34,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.AccessLevel;
@@ -45,14 +45,14 @@ import org.onap.policy.common.ia.AuditorTime;
 
 @Entity
 @Table(name = "IntegrityAuditEntity")
-@NamedQueries({
-    @NamedQuery(name = " IntegrityAuditEntity.findAll", query = "SELECT e FROM IntegrityAuditEntity e "),
-    @NamedQuery(name = "IntegrityAuditEntity.deleteAll", query = "DELETE FROM IntegrityAuditEntity WHERE 1=1")
-})
+@NamedQuery(name = " IntegrityAuditEntity.findAll", query = "SELECT e FROM IntegrityAuditEntity e ")
+@NamedQuery(name = "IntegrityAuditEntity.deleteAll", query = "DELETE FROM IntegrityAuditEntity WHERE 1=1")
 @NoArgsConstructor
 @Getter
 @Setter
 public class IntegrityAuditEntity implements Serializable {
+
+    @Serial
     private static final long serialVersionUID = 1L;
 
     @Getter

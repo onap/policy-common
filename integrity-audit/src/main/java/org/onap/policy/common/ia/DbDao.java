@@ -43,7 +43,6 @@ import org.onap.policy.common.logging.flexlogger.Logger;
 
 /**
  * class DbDao provides the inteface to the DBs for the purpose of audits.
- *
  */
 public class DbDao {
     private static final Logger logger = FlexLogger.getLogger();
@@ -57,7 +56,7 @@ public class DbDao {
     private String nodeType;
     private Properties properties = null;
 
-    private EntityManagerFactory emf;
+    private final EntityManagerFactory emf;
 
     /*
      * Supports designation serialization.
@@ -76,14 +75,14 @@ public class DbDao {
      * DB SELECT String.
      */
     private static final String SELECT_STRING = "Select i from IntegrityAuditEntity i "
-            + "where i.resourceName=:rn and i.persistenceUnit=:pu";
+        + "where i.resourceName=:rn and i.persistenceUnit=:pu";
 
     /**
      * DbDao Constructor.
      *
-     * @param resourceName the resource name
+     * @param resourceName    the resource name
      * @param persistenceUnit the persistence unit
-     * @param properties the properties
+     * @param properties      the properties
      * @throws IntegrityAuditException if an error occurs
      */
     public DbDao(String resourceName, String persistenceUnit, Properties properties) throws IntegrityAuditException {
@@ -93,14 +92,14 @@ public class DbDao {
     /**
      * DbDao Constructor.
      *
-     * @param resourceName the resource name
+     * @param resourceName    the resource name
      * @param persistenceUnit the persistence unit
-     * @param properties the properties
-     * @param altDbUrl may be {@code null}
+     * @param properties      the properties
+     * @param altDbUrl        may be {@code null}
      * @throws IntegrityAuditException if an error occurs
      */
     protected DbDao(String resourceName, String persistenceUnit, Properties properties, String altDbUrl)
-            throws IntegrityAuditException {
+        throws IntegrityAuditException {
         logger.debug("DbDao contructor: enter");
 
         validateProperties(resourceName, persistenceUnit, properties);
@@ -122,13 +121,13 @@ public class DbDao {
     /**
      * validateProperties will validate the properties.
      *
-     * @param resourceName the rseource name
+     * @param resourceName    the rseource name
      * @param persistenceUnit the persistence unit
-     * @param properties the properties
+     * @param properties      the properties
      * @throws IntegrityAuditPropertiesException if an error occurs
      */
     private void validateProperties(String resourceName, String persistenceUnit, Properties properties)
-            throws IntegrityAuditPropertiesException {
+        throws IntegrityAuditPropertiesException {
         var badparams = new StringBuilder();
         if (IntegrityAudit.parmsAreBad(resourceName, persistenceUnit, properties, badparams)) {
             String msg = "DbDao: Bad parameters: badparams" + badparams;
@@ -143,7 +142,7 @@ public class DbDao {
         this.nodeType = properties.getProperty(IntegrityAuditProperties.NODE_TYPE).trim().toLowerCase();
         this.properties = properties;
         logger.debug("DbDao.assignProperties: exit:" + "\nresourceName: " + this.resourceName + "\npersistenceUnit: "
-                + this.persistenceUnit + "\nproperties: " + this.properties);
+            + this.persistenceUnit + "\nproperties: " + this.properties);
     }
 
     /**
@@ -157,19 +156,7 @@ public class DbDao {
         HashMap<Object, Object> resultMap = new HashMap<>();
         var em = emf.createEntityManager();
         try {
-            var cb = em.getCriteriaBuilder();
-            CriteriaQuery<Object> cq = cb.createQuery();
-            Root<?> rootEntry = cq.from(Class.forName(className));
-            CriteriaQuery<Object> all = cq.select(rootEntry);
-            TypedQuery<Object> allQuery = em.createQuery(all);
-            List<Object> objectList = allQuery.getResultList();
-            // Now create the map
-
-            var util = emf.getPersistenceUnitUtil();
-            for (Object o : objectList) {
-                Object key = util.getIdentifier(o);
-                resultMap.put(key, o);
-            }
+            getObjectsFromCriteriaBuilder(className, emf, em, resultMap);
         } catch (Exception e) {
             logger.error("getAllEntries encountered exception: ", e);
         }
@@ -182,7 +169,7 @@ public class DbDao {
      * getAllMyEntries gets all entries for a class.
      *
      * @param className the name of the class
-     * @param keySet the keys to get the entries for
+     * @param keySet    the keys to get the entries for
      * @return the map of requested entries
      */
     public Map<Object, Object> getAllMyEntries(String className, Set<Object> keySet) {
@@ -206,11 +193,11 @@ public class DbDao {
     }
 
     /**
-     * getAllEntries gets all entriesfor a particular persistence unit adn className.
+     * getAllEntries gets all entries for a particular persistence unit adn className.
      *
      * @param persistenceUnit the persistence unit
-     * @param properties the properties
-     * @param className the class name
+     * @param properties      the properties
+     * @param className       the class name
      * @return the map of entries
      */
     public Map<Object, Object> getAllEntries(String persistenceUnit, Properties properties, String className) {
@@ -220,19 +207,9 @@ public class DbDao {
 
         var theEmf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
         var em = theEmf.createEntityManager();
-        try {
-            var cb = em.getCriteriaBuilder();
-            CriteriaQuery<Object> cq = cb.createQuery();
-            Root<?> rootEntry = cq.from(Class.forName(className));
-            CriteriaQuery<Object> all = cq.select(rootEntry);
-            TypedQuery<Object> allQuery = em.createQuery(all);
-            List<Object> objectList = allQuery.getResultList();
 
-            var util = theEmf.getPersistenceUnitUtil();
-            for (Object o : objectList) {
-                Object key = util.getIdentifier(o);
-                resultMap.put(key, o);
-            }
+        try {
+            getObjectsFromCriteriaBuilder(className, theEmf, em, resultMap);
         } catch (Exception e) {
             logger.error("getAllEntries encountered exception:", e);
         }
@@ -249,16 +226,16 @@ public class DbDao {
      * getAllEntries gets all entries for a persistence unit.
      *
      * @param persistenceUnit the persistence unit
-     * @param properties the properties
-     * @param className the class name
-     * @param keySet the keys
+     * @param properties      the properties
+     * @param className       the class name
+     * @param keySet          the keys
      * @return the map of entries
      */
 
     public Map<Object, Object> getAllEntries(String persistenceUnit, Properties properties, String className,
-            Set<Object> keySet) {
+                                             Set<Object> keySet) {
         logger.debug("getAllEntries: Entering, persistenceUnit=" + persistenceUnit + ",\n properties= " + properties
-                + ",\n className=" + className + ",\n keySet= " + keySet);
+            + ",\n className=" + className + ",\n keySet= " + keySet);
         var theEmf = Persistence.createEntityManagerFactory(persistenceUnit, properties);
         var em = theEmf.createEntityManager();
         HashMap<Object, Object> resultMap = new HashMap<>();
@@ -283,34 +260,35 @@ public class DbDao {
      * unit and node type.
      *
      * @param persistenceUnit the persistence unit
-     * @param nodeType the node type
+     * @param nodeType        the node type
      * @return the list of IntegrityAuditEntity
      * @throws DbDaoTransactionException if an error occurs
      */
     @SuppressWarnings("unchecked")
     public List<IntegrityAuditEntity> getIntegrityAuditEntities(String persistenceUnit, String nodeType)
-            throws DbDaoTransactionException {
+        throws DbDaoTransactionException {
         logger.debug("getIntegrityAuditEntities: Entering, persistenceUnit=" + persistenceUnit + ",\n nodeType= "
-                + nodeType);
+            + nodeType);
         try {
-            var em = emf.createEntityManager();
-            // Start a transaction
-            EntityTransaction et = em.getTransaction();
+            List<IntegrityAuditEntity> iaeList;
+            try (var em = emf.createEntityManager()) {
+                // Start a transaction
+                EntityTransaction et = em.getTransaction();
 
-            et.begin();
+                et.begin();
 
-            // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
-            // found, create a new entry
-            var iaequery = em
+                // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
+                // found, create a new entry
+                var iaequery = em
                     .createQuery("Select i from IntegrityAuditEntity i where i.persistenceUnit=:pu and i.nodeType=:nt");
-            iaequery.setParameter("pu", persistenceUnit);
-            iaequery.setParameter("nt", nodeType);
+                iaequery.setParameter("pu", persistenceUnit);
+                iaequery.setParameter("nt", nodeType);
 
-            List<IntegrityAuditEntity> iaeList = iaequery.getResultList();
+                iaeList = iaequery.getResultList();
 
-            // commit transaction
-            et.commit();
-            em.close();
+                // commit transaction
+                et.commit();
+            }
             logger.debug("getIntegrityAuditEntities: Exit, iaeList=" + iaeList);
             return iaeList;
         } catch (Exception e) {
@@ -335,11 +313,11 @@ public class DbDao {
                 // refresh the object from DB in case cached data was returned
                 em.refresh(iae);
                 logger.info(RESOURCE_MESSAGE + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit
-                        + " exists");
+                    + " exists");
             } else {
                 // If it does not exist, log an error
                 logger.error("Attempting to setLastUpdated" + " on an entry that does not exist: resource "
-                        + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit);
+                    + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit);
             }
         });
     }
@@ -354,17 +332,18 @@ public class DbDao {
      */
     public IntegrityAuditEntity getIntegrityAuditEntity(long id) throws DbDaoTransactionException {
         try {
-            var em = emf.createEntityManager();
+            IntegrityAuditEntity iae;
+            try (var em = emf.createEntityManager()) {
 
-            // Start a transaction
-            EntityTransaction et = em.getTransaction();
+                // Start a transaction
+                EntityTransaction et = em.getTransaction();
 
-            et.begin();
+                et.begin();
 
-            IntegrityAuditEntity iae = em.find(IntegrityAuditEntity.class, id);
+                iae = em.find(IntegrityAuditEntity.class, id);
 
-            et.commit();
-            em.close();
+                et.commit();
+            }
 
             return iae;
         } catch (Exception e) {
@@ -397,7 +376,7 @@ public class DbDao {
      * Register the IntegrityAudit instance.
      *
      * @param altDbUrl alternate DB URL to be placed into the record, or {@code null} to use the
-     *        default
+     *                 default
      */
     private void register(String altDbUrl) throws DbDaoTransactionException {
 
@@ -409,12 +388,12 @@ public class DbDao {
                 // refresh the object from DB in case cached data was returned
                 em.refresh(iae2);
                 logger.info(RESOURCE_MESSAGE + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit
-                        + " exists and entry be updated");
+                    + " exists and entry be updated");
             } else {
                 // If it does not exist, we also must add teh resourceName, persistenceUnit and
                 // designated values
                 logger.info("Adding resource " + resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit
-                        + " to IntegrityAuditEntity table");
+                    + " to IntegrityAuditEntity table");
                 iae2 = new IntegrityAuditEntity();
                 iae2.setResourceName(this.resourceName);
                 iae2.setPersistenceUnit(this.persistenceUnit);
@@ -447,15 +426,15 @@ public class DbDao {
     /**
      * Set designated.
      *
-     * @param resourceName the resource name
+     * @param resourceName    the resource name
      * @param persistenceUnit the persistence unit
-     * @param desig true if is designated
+     * @param desig           true if is designated
      * @throws DbDaoTransactionException if an error occurs
      */
     public void setDesignated(String resourceName, String persistenceUnit, boolean desig)
-            throws DbDaoTransactionException {
+        throws DbDaoTransactionException {
         logger.debug("setDesignated: enter, resourceName: " + resourceName + ", persistenceUnit: " + persistenceUnit
-                + ", designated: " + desig);
+            + ", designated: " + desig);
 
         updateIae("setDesignated", resourceName, persistenceUnit, (em, iae) -> {
 
@@ -463,7 +442,7 @@ public class DbDao {
                 // refresh the object from DB in case cached data was returned
                 em.refresh(iae);
                 logger.info(RESOURCE_MESSAGE + resourceName + WITH_PERSISTENCE_MESSAGE + persistenceUnit
-                        + " exists and designated be updated");
+                    + " exists and designated be updated");
                 iae.setDesignated(desig);
 
                 em.persist(iae);
@@ -472,7 +451,7 @@ public class DbDao {
             } else {
                 // If it does not exist, log an error
                 logger.error("Attempting to setDesignated(" + desig + ") on an entry that does not exist:"
-                        + " resource " + resourceName + WITH_PERSISTENCE_MESSAGE + persistenceUnit);
+                    + " resource " + resourceName + WITH_PERSISTENCE_MESSAGE + persistenceUnit);
             }
         });
 
@@ -481,49 +460,49 @@ public class DbDao {
     /**
      * Queries for an audit entity and then updates it using an "updater" function.
      *
-     * @param methodName name of the method that invoked this
-     * @param resourceName the resource name
+     * @param methodName      name of the method that invoked this
+     * @param resourceName    the resource name
      * @param persistenceUnit the persistence unit
-     * @param updater function to update the entity; the argument will be the entity to be
-     *        updated, or {@code null} if the entity is not found
+     * @param updater         function to update the entity; the argument will be the entity to be
+     *                        updated, or {@code null} if the entity is not found
      * @return the entity that was found, or {@code null} if the entity is not found
      * @throws DbDaoTransactionException if an error occurs
      */
     private IntegrityAuditEntity updateIae(String methodName, String resourceName, String persistenceUnit,
-                    BiConsumer<EntityManager, IntegrityAuditEntity> updater) throws DbDaoTransactionException {
+                                           BiConsumer<EntityManager, IntegrityAuditEntity> updater)
+        throws DbDaoTransactionException {
         try {
 
-            var em = emf.createEntityManager();
-
-            // Start a transaction
-            EntityTransaction et = em.getTransaction();
-
-            et.begin();
-
-            // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
-            // found, create a new entry
-            TypedQuery<IntegrityAuditEntity> iaequery = em.createQuery(SELECT_STRING, IntegrityAuditEntity.class);
-            iaequery.setParameter("rn", resourceName);
-            iaequery.setParameter("pu", persistenceUnit);
-
-            List<IntegrityAuditEntity> iaeList = iaequery.getResultList();
             IntegrityAuditEntity iae;
+            try (var em = emf.createEntityManager()) {
 
-            if (!iaeList.isEmpty()) {
-                // ignores multiple results
-                iae = iaeList.get(0);
+                // Start a transaction
+                EntityTransaction et = em.getTransaction();
 
-            } else {
-                // If it does not exist
-                iae = null;
+                et.begin();
+
+                // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
+                // found, create a new entry
+                TypedQuery<IntegrityAuditEntity> iaequery = em.createQuery(SELECT_STRING, IntegrityAuditEntity.class);
+                iaequery.setParameter("rn", resourceName);
+                iaequery.setParameter("pu", persistenceUnit);
+
+                List<IntegrityAuditEntity> iaeList = iaequery.getResultList();
+
+                if (!iaeList.isEmpty()) {
+                    // ignores multiple results
+                    iae = iaeList.get(0);
+
+                } else {
+                    // If it does not exist
+                    iae = null;
+                }
+
+                updater.accept(em, iae);
+
+                // close the transaction
+                et.commit();
             }
-
-            updater.accept(em, iae);
-
-            // close the transaction
-            et.commit();
-            // close the EntityManager
-            em.close();
 
             return iae;
 
@@ -542,7 +521,7 @@ public class DbDao {
      */
     public void setLastUpdated() throws DbDaoTransactionException {
         logger.debug("setLastUpdated: enter, resourceName: " + this.resourceName + ", persistenceUnit: "
-                + this.persistenceUnit);
+            + this.persistenceUnit);
 
         updateIae("setLastUpdated", this.resourceName, this.persistenceUnit, (em, iae) -> {
 
@@ -550,7 +529,7 @@ public class DbDao {
                 // refresh the object from DB in case cached data was returned
                 em.refresh(iae);
                 logger.info(RESOURCE_MESSAGE + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit
-                        + " exists and lastUpdated be updated");
+                    + " exists and lastUpdated be updated");
                 iae.setLastUpdated(AuditorTime.getInstance().getDate());
 
                 em.persist(iae);
@@ -559,7 +538,7 @@ public class DbDao {
             } else {
                 // If it does not exist, log an error
                 logger.error("Attempting to setLastUpdated" + " on an entry that does not exist:" + " resource "
-                        + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit);
+                    + this.resourceName + WITH_PERSISTENCE_MESSAGE + this.persistenceUnit);
             }
         });
     }
@@ -574,26 +553,27 @@ public class DbDao {
 
             if (!IntegrityAudit.isUnitTesting()) {
                 String msg = DBDAO_MESSAGE + "deleteAllIntegrityAuditEntities() "
-                        + "should only be invoked during JUnit testing";
+                    + "should only be invoked during JUnit testing";
                 logger.error(msg);
                 throw new DbDaoTransactionException(msg);
             }
 
-            var em = emf.createEntityManager();
-            // Start a transaction
-            EntityTransaction et = em.getTransaction();
+            int returnCode;
+            try (var em = emf.createEntityManager()) {
+                // Start a transaction
+                EntityTransaction et = em.getTransaction();
 
-            et.begin();
+                et.begin();
 
-            // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
-            // found, create a new entry
-            var iaequery = em.createQuery("Delete from IntegrityAuditEntity");
+                // if IntegrityAuditEntity entry exists for resourceName and PU, update it. If not
+                // found, create a new entry
+                var iaequery = em.createQuery("Delete from IntegrityAuditEntity");
 
-            int returnCode = iaequery.executeUpdate();
+                returnCode = iaequery.executeUpdate();
 
-            // commit transaction
-            et.commit();
-            em.close();
+                // commit transaction
+                et.commit();
+            }
 
             logger.info("deleteAllIntegrityAuditEntities: returnCode=" + returnCode);
 
@@ -619,69 +599,65 @@ public class DbDao {
      * designations from interleaved changeDesignated() invocations from different resources
      * (entities), because it prevents "dirty" and "non-repeatable" reads.
      *
-     * <p>See http://www.objectdb.com/api/java/jpa/LockModeType
+     * <p>See www.objectdb.com/api/java/jpa/LockModeType
      *
      * <p>and
      *
-     * <p>http://stackoverflow.com/questions/2120248/how-to-synchronize-a-static-
+     * <p>stackoverflow.com/questions/2120248/how-to-synchronize-a-static-
      * variable-among-threads-running-different-instances-o
      */
     public void changeDesignated(String resourceName, String persistenceUnit, String nodeType)
-            throws DbDaoTransactionException {
+        throws DbDaoTransactionException {
 
         if (logger.isDebugEnabled()) {
             logger.debug("changeDesignated: Entering, resourceName=" + resourceName + ", persistenceUnit="
-                    + persistenceUnit + ", nodeType=" + nodeType);
+                + persistenceUnit + ", nodeType=" + nodeType);
         }
 
         long startTime = AuditorTime.getInstance().getMillis();
 
         synchronized (lock) {
+            try (var em = emf.createEntityManager()) {
+                try {
+                    em.getTransaction().begin();
 
-            EntityManager em = null;
-            try {
-
-                em = emf.createEntityManager();
-                em.getTransaction().begin();
-
-                /*
-                 * Define query
-                 */
-                var query = em.createQuery(
+                    /*
+                     * Define query
+                     */
+                    var query = em.createQuery(
                         "Select i from IntegrityAuditEntity i where i.persistenceUnit=:pu and i.nodeType=:nt");
-                query.setParameter("pu", persistenceUnit);
-                query.setParameter("nt", nodeType);
+                    query.setParameter("pu", persistenceUnit);
+                    query.setParameter("nt", nodeType);
 
-                /*
-                 * Execute query using pessimistic write lock. This ensures that if anyone else is
-                 * currently reading the records we'll throw a LockTimeoutException.
-                 */
-                setDesignatedEntity(resourceName, query);
+                    /*
+                     * Execute query using pessimistic write lock. This ensures that if anyone else is
+                     * currently reading the records we'll throw a LockTimeoutException.
+                     */
+                    setDesignatedEntity(resourceName, query);
 
-                if (logger.isDebugEnabled()) {
-                    logger.debug("changeDesignated: Committing designation to resourceName=" + resourceName);
-                }
-                em.getTransaction().commit();
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("changeDesignated: Committing designation to resourceName=" + resourceName);
+                    }
+                    em.getTransaction().commit();
 
-                /*
-                 * If we get a LockTimeoutException, no harm done really. We'll probably be
-                 * successful on the next attempt. The odds of another DbDao instance on this entity
-                 * or another entity attempting a simultaneous IntegrityAuditEntity table
-                 * read/update are pretty slim (we're only in this method for two or three
-                 * milliseconds)
-                 */
-            } catch (Exception e) {
-                if (em != null) {
-                    em.getTransaction().rollback();
-
-                    String msg = "DbDao: changeDesignated() caught Exception, message=" + e.getMessage();
-                    logger.error(msg + e);
-                    throw new DbDaoTransactionException(msg, e);
-                } else {
-                    String msg = "DbDao: changeDesignated() caught Exception, message="
+                    /*
+                     * If we get a LockTimeoutException, no harm done really. We'll probably be
+                     * successful on the next attempt. The odds of another DbDao instance on this entity
+                     * or another entity attempting a simultaneous IntegrityAuditEntity table
+                     * read/update are pretty slim (we're only in this method for two or three
+                     * milliseconds)
+                     */
+                } catch (Exception e) {
+                    String errorMsg;
+                    try {
+                        em.getTransaction().rollback();
+                        errorMsg = "DbDao: changeDesignated() caught Exception, message=" + e.getMessage();
+                    } catch (Exception rollbackException) {
+                        errorMsg = "DbDao: changeDesignated() caught Exception, message="
                             + e.getMessage() + ". Error rolling back transaction.";
-                    logger.error(msg + e);
-                    throw new DbDaoTransactionException(msg, e);
+                    }
+                    logger.error(errorMsg + e);
+                    throw new DbDaoTransactionException(errorMsg, e);
                 }
             }
 
@@ -689,31 +665,57 @@ public class DbDao {
 
         if (logger.isDebugEnabled()) {
             logger.debug("changeDesignated: Exiting; time expended="
-                            + (AuditorTime.getInstance().getMillis() - startTime) + "ms");
+                + (AuditorTime.getInstance().getMillis() - startTime) + "ms");
         }
 
     }
 
     private void setDesignatedEntity(String resourceName, Query query) {
         for (Object o : query.getResultList()) {
-            if (!(o instanceof IntegrityAuditEntity)) {
+            if (!(o instanceof IntegrityAuditEntity integrityAuditEntity)) {
                 continue;
             }
 
-            var integrityAuditEntity = (IntegrityAuditEntity) o;
             if (integrityAuditEntity.getResourceName().equals(resourceName)) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("changeDesignated: Designating resourceName="
-                            + integrityAuditEntity.getResourceName());
+                        + integrityAuditEntity.getResourceName());
                 }
                 integrityAuditEntity.setDesignated(true);
             } else {
                 if (logger.isDebugEnabled()) {
                     logger.debug("changeDesignated: Removing designation from resourceName="
-                            + integrityAuditEntity.getResourceName());
+                        + integrityAuditEntity.getResourceName());
                 }
                 integrityAuditEntity.setDesignated(false);
             }
+        }
+    }
+
+    /**
+     * Collects all objects from a criteria builder based on className.
+     *
+     * @param className type of objects for resultMap
+     * @param emf       the entity manager factory to be used
+     * @param em        entity manager to be used
+     * @param resultMap the result map for objects queried
+     * @throws ClassNotFoundException if class for criteria builder doesn't exist
+     */
+    private void getObjectsFromCriteriaBuilder(String className, EntityManagerFactory emf, EntityManager em,
+                                               HashMap<Object, Object> resultMap)
+        throws ClassNotFoundException {
+        var cb = em.getCriteriaBuilder();
+        CriteriaQuery<Object> cq = cb.createQuery();
+        Root<?> rootEntry = cq.from(Class.forName(className));
+        CriteriaQuery<Object> all = cq.select(rootEntry);
+        TypedQuery<Object> allQuery = em.createQuery(all);
+        List<Object> objectList = allQuery.getResultList();
+        // Now create the map
+
+        var util = emf.getPersistenceUnitUtil();
+        for (Object o : objectList) {
+            Object key = util.getIdentifier(o);
+            resultMap.put(key, o);
         }
     }
 

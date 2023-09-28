@@ -3,6 +3,7 @@
  * ONAP POLICY
  * ================================================================================
  * Copyright (C) 2021 AT&T Intellectual Property. All right reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,11 +43,11 @@ public abstract class LoggerMarkerFilter extends AbstractMatcherFilter<ILoggingE
             return FilterReply.DENY;
         }
 
-        if (event == null || event.getMarker() == null) {
+        if (event == null || event.getMarkerList() == null) {
             return FilterReply.DENY;
         }
 
-        if (event.getMarker().equals(marker)) {
+        if (event.getMarkerList().stream().anyMatch(mk -> mk.equals(marker))) {
             return FilterReply.ACCEPT;
         } else {
             return FilterReply.DENY;

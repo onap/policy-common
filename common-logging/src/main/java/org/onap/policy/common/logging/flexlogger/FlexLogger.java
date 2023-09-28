@@ -3,6 +3,7 @@
  * ONAP-Logging
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +45,7 @@ public class FlexLogger extends SecurityManager {
 
     // --- init logger first
     static {
-        loggerType = initlogger();
+        loggerType = initLogger();
     }
 
     /**
@@ -53,66 +54,32 @@ public class FlexLogger extends SecurityManager {
      * @param clazz the class
      */
     public static Logger getLogger(Class<?> clazz) {
-        Logger logger = null;
-        displayMessage(GET_LOGGER_PREFIX + loggerType);
-        switch (loggerType) {
-
-            case EELF:
-                logger = getEelfLogger(clazz, false);
-                break;
-            case SYSTEMOUT:
-            default:
-                logger = getSystemOutLogger();
-                break;
-        }
-
-        return logger;
-
+        return getLogger(clazz, false);
     }
 
     /**
      * Returns an instance of Logger.
      */
     public static Logger getLogger() {
-        Logger logger = null;
-        displayMessage(GET_LOGGER_PREFIX + loggerType);
-        switch (loggerType) {
-
-            case EELF:
-                logger = getEelfLogger(null, false);
-                break;
-            case SYSTEMOUT:
-            default:
-                logger = getSystemOutLogger();
-                break;
-        }
-
-        return logger;
-
+        return getLogger(null);
     }
 
     /**
      * Returns an instance of Logger.
      *
-     * @param clazz the class
+     * @param clazz            the class
      * @param isNewTransaction is a new transaction
      */
     public static Logger getLogger(Class<?> clazz, boolean isNewTransaction) {
-        Logger logger = null;
+        Logger logger;
         displayMessage(GET_LOGGER_PREFIX + loggerType);
-        switch (loggerType) {
-
-            case EELF:
-                logger = getEelfLogger(clazz, isNewTransaction);
-                break;
-            case SYSTEMOUT:
-            default:
-                logger = getSystemOutLogger();
-                break;
+        if (loggerType == LoggerType.EELF) {
+            logger = getEelfLogger(clazz, isNewTransaction);
+        } else {
+            logger = getSystemOutLogger();
         }
 
         return logger;
-
     }
 
     /**
@@ -121,20 +88,7 @@ public class FlexLogger extends SecurityManager {
      * @param isNewTransaction is a new transaction
      */
     public static Logger getLogger(boolean isNewTransaction) {
-        Logger logger = null;
-        displayMessage(GET_LOGGER_PREFIX + loggerType);
-        switch (loggerType) {
-
-            case EELF:
-                logger = getEelfLogger(null, isNewTransaction);
-                break;
-            case SYSTEMOUT:
-            default:
-                logger = getSystemOutLogger();
-                break;
-        }
-
-        return logger;
+        return getLogger(null, isNewTransaction);
     }
 
     /**
@@ -148,7 +102,7 @@ public class FlexLogger extends SecurityManager {
     /**
      * Returns an instance of EelfLogger.
      *
-     * @param clazz the class
+     * @param clazz            the class
      * @param isNewTransaction is a new transaction
      */
     private static EelfLogger getEelfLogger(Class<?> clazz, boolean isNewTransaction) {
@@ -185,7 +139,7 @@ public class FlexLogger extends SecurityManager {
     /**
      * loads the logger properties.
      */
-    private static LoggerType initlogger() {
+    private static LoggerType initLogger() {
         var loggerType = LoggerType.EELF;
         Properties properties = null;
 
@@ -193,18 +147,16 @@ public class FlexLogger extends SecurityManager {
             properties = PropertyUtil.getProperties("config/policyLogger.properties");
             displayMessage("FlexLogger:properties => " + properties);
 
-            if (properties != null) {
-                String overrideLogbackLevel = properties.getProperty("override.logback.level.setup");
-                displayMessage("FlexLogger:overrideLogbackLevel => " + overrideLogbackLevel);
-                var loggerTypeString = properties.getProperty("logger.type");
-                if ("EELF".equalsIgnoreCase(loggerTypeString) && "TRUE".equalsIgnoreCase(overrideLogbackLevel)) {
-                    displayMessage("FlexLogger: start listener.");
-                    properties = PropertyUtil.getProperties("config/policyLogger.properties",
-                            new PropertiesCallBack("FlexLogger-CallBack"));
-                }
+            String overrideLogbackLevel = properties.getProperty("override.logback.level.setup");
+            displayMessage("FlexLogger:overrideLogbackLevel => " + overrideLogbackLevel);
+            var loggerTypeString = properties.getProperty("logger.type");
+            if ("EELF".equalsIgnoreCase(loggerTypeString) && "TRUE".equalsIgnoreCase(overrideLogbackLevel)) {
+                displayMessage("FlexLogger: start listener.");
+                properties = PropertyUtil.getProperties("config/policyLogger.properties",
+                    new PropertiesCallBack("FlexLogger-CallBack"));
             }
         } catch (IOException e1) {
-            displayMessage("initlogger" + e1);
+            displayMessage("initLogger" + e1);
         } finally {
             // OK to pass no properties (null)
             loggerType = PolicyLogger.init(properties);
@@ -236,8 +188,8 @@ public class FlexLogger extends SecurityManager {
 
             var sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS+00:00");
             var startTime = Instant.now();
-            String formatedTime = sdf.format(Date.from(startTime));
-            displayMessage("FlexLogger.propertiesChanged : called at time : " + formatedTime);
+            String formattedTime = sdf.format(Date.from(startTime));
+            displayMessage("FlexLogger.propertiesChanged : called at time : " + formattedTime);
             displayMessage("FlexLogger.propertiesChanged : debugLevel : " + debugLevel);
 
             if (changedKeys != null) {

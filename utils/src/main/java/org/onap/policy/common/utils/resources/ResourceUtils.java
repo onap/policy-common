@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
- *  Modifications Copyright (C) 2020 Nordix Foundation.
+ *  Modifications Copyright (C) 2020, 2023 Nordix Foundation.
  *  Modifications Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,6 +30,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Enumeration;
+import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.jar.JarEntry;
@@ -83,13 +84,11 @@ public final class ResourceUtils {
      */
     public static String getResourceAsString(final String resourceName) {
         // Get the resource as a stream, we'll convert it to a string then
-        final InputStream resourceStream = getResourceAsStream(resourceName);
-        if (resourceStream == null) {
-            return null;
-        }
-
         // Read the stream contents, closing when done
-        try (var streamCloser = resourceStream) {
+        try (var resourceStream = getResourceAsStream(resourceName)) {
+            if (resourceStream == null) {
+                return null;
+            }
             return IOUtils.toString(resourceStream, StandardCharsets.UTF_8);
         } catch (final IOException e) {
             LOGGER.debug("error reading resource stream {}", resourceName, e);
@@ -111,7 +110,7 @@ public final class ResourceUtils {
         // Check if the resource exists
         if (urlToResource == null) {
             // No resource found
-            LOGGER.debug("cound not find resource \"{}\" : ", resourceName);
+            LOGGER.debug("could not find resource \"{}\" : ", resourceName);
             return null;
         }
 
@@ -217,7 +216,7 @@ public final class ResourceUtils {
      * Read the list of entries in a resource directory.
      *
      * @param resourceDirectoryName the name of the resource directory
-     * @return the list of entries
+     * @return a set of entries
      */
     public static Set<String> getDirectoryContents(final String resourceDirectoryName) {
         // Find the location of the resource, is it in a Jar or on the local file system?
@@ -245,7 +244,7 @@ public final class ResourceUtils {
      *
      * @param localResourceDirectoryUrl the local resource file URL
      * @param resourceDirectoryName the name of the resource directory
-     * @return a list of the directory contents
+     * @return a set of the directory contents
      */
     public static Set<String> getDirectoryContentsLocal(final URL localResourceDirectoryUrl,
             final String resourceDirectoryName) {
@@ -257,7 +256,7 @@ public final class ResourceUtils {
         }
 
         Set<String> localDirectorySet = new TreeSet<>();
-        for (File localDirectoryEntry : localDirectory.listFiles()) {
+        for (File localDirectoryEntry : Objects.requireNonNull(localDirectory.listFiles())) {
             if (localDirectoryEntry.isDirectory()) {
                 localDirectorySet
                         .add(resourceDirectoryName + File.separator + localDirectoryEntry.getName() + File.separator);
@@ -274,7 +273,7 @@ public final class ResourceUtils {
      *
      * @param jarResourceDirectoryUrl the name of the resource directory in the jar
      * @param resourceDirectoryName the name of the resource directory
-     * @return a list of the directory contents
+     * @return a set of the directory contents
      */
     public static Set<String> getDirectoryContentsJar(final URL jarResourceDirectoryUrl,
             final String resourceDirectoryName) {
@@ -286,7 +285,7 @@ public final class ResourceUtils {
         Set<String> localDirectorySet = new TreeSet<>();
 
         try (var jarFile = new JarFile(jarFileName)) {
-            Enumeration<JarEntry> entries = jarFile.entries();
+            Enumeration<JarEntry> entries = jarFile.entries(); // NOSONAR
 
             while (entries.hasMoreElements()) {
                 /*
