@@ -42,7 +42,7 @@ class IndexedKafkaTopicSourceFactory implements KafkaTopicSourceFactory {
     /**
      * Logger.
      */
-    private static Logger logger = LoggerFactory.getLogger(IndexedKafkaTopicSourceFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(IndexedKafkaTopicSourceFactory.class);
 
     /**
      * KAFKA Topic Name Index.
@@ -84,7 +84,7 @@ class IndexedKafkaTopicSourceFactory implements KafkaTopicSourceFactory {
         List<KafkaTopicSource> newKafkaTopicSources = new ArrayList<>();
         synchronized (this) {
             for (String topic : COMMA_SPACE_PAT.split(readTopics)) {
-                addTopic(newKafkaTopicSources, topic, properties);
+                addTopic(newKafkaTopicSources, topic.toLowerCase(), properties);
             }
         }
         return newKafkaTopicSources;
@@ -110,11 +110,12 @@ class IndexedKafkaTopicSourceFactory implements KafkaTopicSourceFactory {
         String topicPrefix = PolicyEndPointProperties.PROPERTY_KAFKA_SOURCE_TOPICS + "." + topic;
 
         var props = new PropertyUtils(properties, topicPrefix,
-            (name, value, ex) -> logger.warn("{}: {} {} is in invalid format for topic {} ", this, name, value, topic));
+            (name, value, ex) -> logger.warn("{}: {} {} is in invalid format for topic source {} ",
+                this, name, value, topic));
 
         String servers = properties.getProperty(topicPrefix + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX);
         if (StringUtils.isBlank(servers)) {
-            logger.error("{}: no KAFKA servers configured for sink {}", this, topic);
+            logger.error("{}: no KAFKA servers configured for source {}", this, topic);
             return;
         }
 

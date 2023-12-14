@@ -117,8 +117,8 @@ public abstract class TopicBase implements Topic {
         }
 
         this.servers = servers;
-        this.topic = topic;
-        this.effectiveTopic = effectiveTopicCopy;
+        this.topic = topic.toLowerCase();
+        this.effectiveTopic = effectiveTopicCopy.toLowerCase();
     }
 
     @Override

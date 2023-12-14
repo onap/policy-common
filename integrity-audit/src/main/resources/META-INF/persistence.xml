@@ -37,6 +37,7 @@
 
     <persistence-unit name="integrityAuditPU" transaction-type="RESOURCE_LOCAL">
         <!-- For operational use -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <class>org.onap.policy.common.ia.jpa.IntegrityAuditEntity</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>

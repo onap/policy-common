@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * Copyright (C) 2022 Nordix Foundation.
+ * Copyright (C) 2022-2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ class IndexedKafkaTopicSinkFactory implements KafkaTopicSinkFactory {
     /**
      * Logger.
      */
-    private static Logger logger = LoggerFactory.getLogger(IndexedKafkaTopicSinkFactory.class);
+    private static final Logger logger = LoggerFactory.getLogger(IndexedKafkaTopicSinkFactory.class);
 
     /**
      * KAFKA Topic Name Index.
@@ -98,7 +98,7 @@ class IndexedKafkaTopicSinkFactory implements KafkaTopicSinkFactory {
         List<KafkaTopicSink> newKafkaTopicSinks = new ArrayList<>();
         synchronized (this) {
             for (String topic : COMMA_SPACE_PAT.split(writeTopics)) {
-                addTopic(newKafkaTopicSinks, topic, properties);
+                addTopic(newKafkaTopicSinks, topic.toLowerCase(), properties);
             }
             return newKafkaTopicSinks;
         }
@@ -113,7 +113,8 @@ class IndexedKafkaTopicSinkFactory implements KafkaTopicSinkFactory {
         String topicPrefix = PolicyEndPointProperties.PROPERTY_KAFKA_SINK_TOPICS + "." + topic;
 
         var props = new PropertyUtils(properties, topicPrefix,
-            (name, value, ex) -> logger.warn("{}: {} {} is in invalid format for topic {} ", this, name, value, topic));
+            (name, value, ex) -> logger.warn("{}: {} {} is in invalid format for topic sink {} ",
+                this, name, value, topic));
 
         String servers = properties.getProperty(topicPrefix + PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX);
         if (StringUtils.isBlank(servers)) {

@@ -56,9 +56,9 @@ public class TopicSinkClient {
      * @throws TopicSinkClientException if the topic does not exist
      */
     public TopicSinkClient(final String topic) throws TopicSinkClientException {
-        final List<TopicSink> lst = getTopicSinks(topic);
+        final List<TopicSink> lst = getTopicSinks(topic.toLowerCase());
         if (lst.isEmpty()) {
-            throw new TopicSinkClientException("no sinks for topic: " + topic);
+            throw new TopicSinkClientException("no sinks for topic: " + topic.toLowerCase());
         }
 
         this.sink = lst.get(0);

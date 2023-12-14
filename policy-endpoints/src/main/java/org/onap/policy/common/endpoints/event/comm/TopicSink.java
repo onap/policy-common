@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2018 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +33,9 @@ public interface TopicSink extends Topic {
      * 
      * @return true if the send operation succeeded, false otherwise
      * @throws IllegalArgumentException an invalid message has been provided
-     * @throws IllegalStateException the entity is in an state that prevents
+     * @throws IllegalStateException the entity is in a state that prevents
      *         it from sending messages, for example, locked or stopped.
      */
-    public boolean send(String message);
+    boolean send(String message);
 
 }

@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +21,13 @@
 
 package org.onap.policy.common.endpoints.event.comm.client;
 
+import java.io.Serial;
+
 /**
  * Exception thrown by BidirectionalTopicClient class.
  */
 public class BidirectionalTopicClientException extends Exception {
+    @Serial
     private static final long serialVersionUID = 1L;
 
     public BidirectionalTopicClientException() {

@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * Copyright (C) 2022 Nordix Foundation.
+ * Copyright (C) 2022-2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,12 +33,12 @@ public class InlineKafkaTopicSink extends InlineBusTopicSink implements KafkaTop
     /**
      * Logger.
      */
-    private static Logger logger = LoggerFactory.getLogger(InlineKafkaTopicSink.class);
+    private static final Logger logger = LoggerFactory.getLogger(InlineKafkaTopicSink.class);
 
-    protected Map<String, String> additionalProps = null;
+    protected Map<String, String> additionalProps;
 
     /**
-     * Argument-based KAFKA Topic Writer instantiation. BusTopicParams contains below mentioned
+     * Argument-based KAFKA Topic Writer instantiation. BusTopicParams contains the below
      * attributes.
      *
      * <p>servers              list of KAFKA servers available for publishing
