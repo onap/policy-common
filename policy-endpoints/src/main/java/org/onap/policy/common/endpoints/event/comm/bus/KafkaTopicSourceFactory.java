@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * Copyright (C) 2022 Nordix Foundation.
+ * Copyright (C) 2022-2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,11 +28,11 @@ import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 public interface KafkaTopicSourceFactory {
 
     /**
-     * Creates an Kafka Topic Source based on properties files.
+     * Creates a Kafka Topic Source based on properties files.
      *
      * @param properties Properties containing initialization values
      *
-     * @return an Kafka Topic Source
+     * @return a Kafka Topic Source
      * @throws IllegalArgumentException if invalid parameters are present
      */
     List<KafkaTopicSource> build(Properties properties);
@@ -41,7 +41,7 @@ public interface KafkaTopicSourceFactory {
      * Instantiates a new Kafka Topic Source.
      *
      * @param busTopicParams parameters object
-     * @return an Kafka Topic Source
+     * @return a Kafka Topic Source
      */
     KafkaTopicSource build(BusTopicParams busTopicParams);
 
@@ -51,13 +51,13 @@ public interface KafkaTopicSourceFactory {
      * @param servers list of servers
      * @param topic topic name
      *
-     * @return an Kafka Topic Source
+     * @return a Kafka Topic Source
      * @throws IllegalArgumentException if invalid parameters are present
      */
     KafkaTopicSource build(List<String> servers, String topic);
 
     /**
-     * Destroys an Kafka Topic Source based on a topic.
+     * Destroys a Kafka Topic Source based on a topic.
      *
      * @param topic topic name
      * @throws IllegalArgumentException if invalid parameters are present
@@ -70,10 +70,10 @@ public interface KafkaTopicSourceFactory {
     void destroy();
 
     /**
-     * Gets an Kafka Topic Source based on topic name.
+     * Gets a Kafka Topic Source based on topic name.
      *
      * @param topic the topic name
-     * @return an Kafka Topic Source with topic name
+     * @return a Kafka Topic Source with topic name
      * @throws IllegalArgumentException if an invalid topic is provided
      * @throws IllegalStateException if the Kafka Topic Source is an incorrect state
      */
