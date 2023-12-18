@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * Copyright (C) 2022 Nordix Foundation.
+ * Copyright (C) 2022-2023 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,6 +96,8 @@ class IndexedKafkaTopicSourceFactory implements KafkaTopicSourceFactory {
                 .servers(servers)
                 .topic(topic)
                 .managed(true)
+                .fetchTimeout(PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH)
+                .fetchLimit(PolicyEndPointProperties.DEFAULT_LIMIT_FETCH)
                 .useHttps(false).build());
     }
 
@@ -117,6 +119,15 @@ class IndexedKafkaTopicSourceFactory implements KafkaTopicSourceFactory {
         }
 
         var kafkaTopicSource = this.build(KafkaPropertyUtils.makeBuilder(props, topic, servers)
+                .consumerGroup(props.getString(
+                        PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_GROUP_SUFFIX, null))
+                .consumerInstance(props.getString(
+                        PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_CONSUMER_INSTANCE_SUFFIX, null))
+                .fetchTimeout(props.getInteger(
+                        PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX,
+                        PolicyEndPointProperties.DEFAULT_TIMEOUT_MS_FETCH))
+                .fetchLimit(props.getInteger(PolicyEndPointProperties.PROPERTY_TOPIC_SOURCE_FETCH_LIMIT_SUFFIX,
+                        PolicyEndPointProperties.DEFAULT_LIMIT_FETCH))
                 .build());
 
         newKafkaTopicSources.add(kafkaTopicSource);
