@@ -3,7 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,21 +28,32 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.att.nsa.cambria.client.CambriaConsumer;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import org.apache.commons.collections4.IteratorUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.TopicPartition;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.onap.dmaap.mr.client.impl.MRConsumerImpl;
 import org.onap.dmaap.mr.client.response.MRConsumerResponse;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
@@ -60,11 +71,16 @@ public class BusConsumerTest extends TopicTestBase {
     private static final int SHORT_TIMEOUT_MILLIS = 10;
     private static final int LONG_TIMEOUT_MILLIS = 3000;
 
+    @Mock
+    KafkaConsumer<String, String> mockedKafkaConsumer;
+
     @Before
     @Override
     public void setUp() {
         super.setUp();
+        MockitoAnnotations.initMocks(this);
     }
+
 
     @Test
     public void testFetchingBusConsumer() {
@@ -335,6 +351,86 @@ public class BusConsumerTest extends TopicTestBase {
         assertThrows(java.lang.IllegalStateException.class, () -> kafka.fetch().iterator().hasNext());
         consumer.close();
     }
+
+    @Test
+    public void testFetchNoMessages() throws IOException {
+        KafkaConsumerWrapper kafkaConsumerWrapper = new KafkaConsumerWrapper(makeKafkaBuilder().build());
+        kafkaConsumerWrapper.consumer = mockedKafkaConsumer;
+
+        when(mockedKafkaConsumer.poll(any())).thenReturn(new ConsumerRecords<>(Collections.emptyMap()));
+
+        Iterable<String> result = kafkaConsumerWrapper.fetch();
+
+        verify(mockedKafkaConsumer, times(1)).poll(any());
+
+        assertThat(result != null);
+
+        assertThat(!result.iterator().hasNext());
+
+        mockedKafkaConsumer.close();
+    }
+
+    @Test
+    public void testFetchWithMessages() {
+        // Setup
+        KafkaConsumerWrapper kafkaConsumerWrapper = new KafkaConsumerWrapper(makeKafkaBuilder().build());
+        kafkaConsumerWrapper.consumer = mockedKafkaConsumer;
+
+        ConsumerRecord<String, String> record = new ConsumerRecord<>("my-effective-topic", 0, 0, "key", "value");
+        Map<TopicPartition, List<ConsumerRecord<String, String>>> recordsMap = new HashMap<>();
+        recordsMap.put(new TopicPartition("my-effective-topic", 0), Collections.singletonList(record));
+        ConsumerRecords<String, String> consumerRecords = new ConsumerRecords<>(recordsMap);
+
+        when(mockedKafkaConsumer.poll(any())).thenReturn(consumerRecords);
+
+        Iterable<String> result = kafkaConsumerWrapper.fetch();
+
+        verify(mockedKafkaConsumer, times(1)).poll(any());
+
+        verify(mockedKafkaConsumer, times(1)).commitSync(any(Map.class));
+
+        assertThat(result != null);
+
+        assertThat(result.iterator().hasNext());
+
+        assertThat(result.iterator().next().equals("value"));
+
+        mockedKafkaConsumer.close();
+    }
+
+    @Test
+    public void testFetchWithMessagesAndTraceparent() {
+        // Setup
+        KafkaConsumerWrapper kafkaConsumerWrapper = new KafkaConsumerWrapper(makeKafkaBuilder().build());
+        kafkaConsumerWrapper.consumer = mockedKafkaConsumer;
+
+        ConsumerRecord<String, String> record = new ConsumerRecord<>("my-effective-topic", 0, 0, "key", "value");
+        record.headers().add(
+                "traceparent",
+                "00-0af7651916cd43dd8448eb211c80319c-b7ad6b7169203331-01".getBytes(StandardCharsets.UTF_8)
+        );
+
+        Map<TopicPartition, List<ConsumerRecord<String, String>>> recordsMap = new HashMap<>();
+        recordsMap.put(new TopicPartition("my-effective-topic", 0), Collections.singletonList(record));
+        ConsumerRecords<String, String> consumerRecords = new ConsumerRecords<>(recordsMap);
+
+        when(mockedKafkaConsumer.poll(any())).thenReturn(consumerRecords);
+
+        Iterable<String> result = kafkaConsumerWrapper.fetch();
+
+        verify(mockedKafkaConsumer, times(1)).poll(any());
+
+        verify(mockedKafkaConsumer, times(1)).commitSync(any(Map.class));
+
+        assertThat(result != null);
+
+        assertThat(result.iterator().hasNext());
+
+        assertThat(result.iterator().next().equals("value"));
+
+        mockedKafkaConsumer.close();
+    }
+
 
     @Test
     public void testKafkaConsumerWrapperClose() {

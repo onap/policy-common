@@ -48,6 +48,7 @@ import org.apache.commons.lang3.StringUtils;
  * longitude DME2 Longitude
  * additionalProps Additional properties to pass to DME2
  * useHttps does connection use HTTPS?
+ * allowTracing is message tracing allowed?
  * allowSelfSignedCerts are self-signed certificates allow
  */
 @Getter
@@ -66,6 +67,7 @@ public class BusTopicParams {
     private int fetchTimeout;
     private int fetchLimit;
     private boolean useHttps;
+    private boolean allowTracing;
     private boolean allowSelfSignedCerts;
     private boolean managed;
 
@@ -240,6 +242,11 @@ public class BusTopicParams {
 
         public TopicParamsBuilder useHttps(boolean useHttps) {
             this.params.useHttps = useHttps;
+            return this;
+        }
+
+        public TopicParamsBuilder allowTracing(boolean allowTracing) {
+            this.params.allowTracing = allowTracing;
             return this;
         }
 

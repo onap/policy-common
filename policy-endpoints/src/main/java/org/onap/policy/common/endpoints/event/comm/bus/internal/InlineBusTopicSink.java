@@ -65,6 +65,7 @@ public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopi
      *     apiSecret api secret
      *     partitionId partition id
      *     useHttps does connection use HTTPS?
+     *     allowTracing is tracing allowed?
      *     allowSelfSignedCerts are self-signed certificates allow     *
      * @throws IllegalArgumentException if invalid parameters are passed in
      */

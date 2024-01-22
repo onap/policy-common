@@ -11,6 +11,7 @@
     "apiKey" : "my-api-key",
     "apiSecret" : "my-api-secret",
     "useHttps" : true,
+    "allowTracing": false,
     "allowSelfSignedCerts" : true,
     "consumerGroup" : "${obj.topicSources[0].consumerGroup}",
     "consumerInstance" : "${obj.topicSources[0].consumerInstance}",
@@ -27,6 +28,7 @@
     "apiKey" : "my-api-key",
     "apiSecret" : "my-api-secret",
     "useHttps" : true,
+    "allowTracing": false,
     "allowSelfSignedCerts" : true,
     "consumerGroup" : "my-cons-group",
     "consumerInstance" : "my-cons-inst",
@@ -52,6 +54,7 @@
     "apiKey" : "my-api-key",
     "apiSecret" : "my-api-secret",
     "useHttps" : true,
+    "allowTracing": false,
     "allowSelfSignedCerts" : true,
     "topicCommInfrastructure" : "UEB",
     "partitionKey" : "${obj.topicSinks[0].partitionKey}"
@@ -65,6 +68,7 @@
     "apiKey" : "my-api-key",
     "apiSecret" : "my-api-secret",
     "useHttps" : true,
+    "allowTracing": false,
     "allowSelfSignedCerts" : true,
     "topicCommInfrastructure" : "DMAAP",
     "partitionKey" : "my-partition"

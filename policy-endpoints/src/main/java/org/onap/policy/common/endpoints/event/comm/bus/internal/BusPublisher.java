@@ -26,6 +26,7 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 import com.att.nsa.apiClient.http.HttpClient.ConnectionType;
 import com.att.nsa.cambria.client.CambriaBatchingPublisher;
 import com.att.nsa.cambria.client.CambriaClientBuilders;
+import io.opentelemetry.instrumentation.kafkaclients.v2_6.TracingProducerInterceptor;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -191,6 +192,11 @@ public interface BusPublisher {
             }
             if (kafkaProps.get(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG) == null) {
                 kafkaProps.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KEY_SERIALIZER);
+            }
+
+            if (busTopicParams.isAllowTracing()) {
+                kafkaProps.setProperty(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,
+                        TracingProducerInterceptor.class.getName());
             }
 
             producer = new KafkaProducer<>(kafkaProps);

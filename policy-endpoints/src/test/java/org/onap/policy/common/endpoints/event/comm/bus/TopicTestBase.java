@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,7 +126,7 @@ public class TopicTestBase {
                         .fetchLimit(MY_FETCH_LIMIT).fetchTimeout(MY_FETCH_TIMEOUT).hostname(MY_HOST).latitude(MY_LAT)
                         .longitude(MY_LONG).managed(true).partitionId(MY_PARTITION).partner(MY_PARTNER)
                         .password(MY_PASS).port(MY_PORT).servers(servers).topic(MY_TOPIC)
-                        .effectiveTopic(MY_EFFECTIVE_TOPIC).useHttps(true).userName(MY_USERNAME)
+                        .effectiveTopic(MY_EFFECTIVE_TOPIC).useHttps(true).allowTracing(true).userName(MY_USERNAME)
                         .serializationProvider(MY_SERIALIZER);
     }
 
@@ -156,8 +157,8 @@ public class TopicTestBase {
 
         return BusTopicParams.builder().additionalProps(addProps).basePath(MY_BASE_PATH).clientName(MY_CLIENT_NAME)
                         .consumerGroup(MY_CONS_GROUP).consumerInstance(MY_CONS_INST).environment(MY_ENV)
-                        .hostname(MY_HOST).partitionId(MY_PARTITION).partner(MY_PARTNER)
+                        .hostname(MY_HOST).partitionId(MY_PARTITION).partner(MY_PARTNER).fetchTimeout(MY_FETCH_TIMEOUT)
                         .port(KAFKA_PORT).servers(servers).topic(MY_TOPIC)
-                        .effectiveTopic(MY_EFFECTIVE_TOPIC).useHttps(false);
+                        .effectiveTopic(MY_EFFECTIVE_TOPIC).useHttps(false).allowTracing(true);
     }
 }

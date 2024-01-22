@@ -5,7 +5,7 @@
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * Modifications Copyright (C) 2020,2023 Bell Canada. All rights reserved.
- * Modifications Copyright (C) 2022-2023 Nordix Foundation.
+ * Modifications Copyright (C) 2022-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,18 +26,26 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 import com.att.nsa.cambria.client.CambriaClientBuilders;
 import com.att.nsa.cambria.client.CambriaClientBuilders.ConsumerBuilder;
 import com.att.nsa.cambria.client.CambriaConsumer;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanContext;
+import io.opentelemetry.api.trace.TraceFlags;
+import io.opentelemetry.api.trace.TraceState;
+import io.opentelemetry.context.Context;
+import io.opentelemetry.instrumentation.kafkaclients.v2_6.TracingConsumerInterceptor;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
@@ -45,6 +53,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.clients.consumer.OffsetAndMetadata;
 import org.apache.kafka.common.TopicPartition;
+import org.apache.kafka.common.header.Headers;
 import org.jetbrains.annotations.NotNull;
 import org.onap.dmaap.mr.client.MRClientFactory;
 import org.onap.dmaap.mr.client.impl.MRConsumerImpl;
@@ -245,6 +254,8 @@ public interface BusConsumer {
         protected KafkaConsumer<String, String> consumer;
         protected Properties kafkaProps;
 
+        protected boolean allowTracing;
+
         /**
          * Kafka Consumer Wrapper.
          * BusTopicParam - object contains the following parameters
@@ -278,6 +289,12 @@ public interface BusConsumer {
             if (kafkaProps.get(ConsumerConfig.GROUP_ID_CONFIG) == null) {
                 kafkaProps.setProperty(ConsumerConfig.GROUP_ID_CONFIG, busTopicParams.getConsumerGroup());
             }
+            if (busTopicParams.isAllowTracing()) {
+                this.allowTracing = true;
+                kafkaProps.setProperty(ConsumerConfig.INTERCEPTOR_CLASSES_CONFIG,
+                        TracingConsumerInterceptor.class.getName());
+            }
+
             consumer = new KafkaConsumer<>(kafkaProps);
             //Subscribe to the topic
             consumer.subscribe(List.of(busTopicParams.getTopic()));
@@ -291,6 +308,10 @@ public interface BusConsumer {
             }
             List<String> messages = new ArrayList<>(records.count());
             try {
+                if (allowTracing) {
+                    createParentTraceContext(records);
+                }
+
                 for (TopicPartition partition : records.partitions()) {
                     List<ConsumerRecord<String, String>> partitionRecords = records.records(partition);
                     for (ConsumerRecord<String, String> partitionRecord : partitionRecords) {
@@ -305,6 +326,43 @@ public interface BusConsumer {
                 throw e;
             }
             return messages;
+        }
+
+        private void createParentTraceContext(ConsumerRecords<String, String> records) {
+            TraceParentInfo traceParentInfo = new TraceParentInfo();
+            for (ConsumerRecord<String, String> consumerRecord : records) {
+
+                Headers consumerRecordHeaders = consumerRecord.headers();
+                traceParentInfo = processTraceParentHeader(consumerRecordHeaders);
+            }
+
+            SpanContext spanContext = SpanContext.createFromRemoteParent(
+                    traceParentInfo.getTraceId(), traceParentInfo.getSpanId(),
+                    TraceFlags.getSampled(), TraceState.builder().build());
+
+            Context.current().with(Span.wrap(spanContext)).makeCurrent();
+        }
+
+        private TraceParentInfo processTraceParentHeader(Headers headers) {
+            TraceParentInfo traceParentInfo = new TraceParentInfo();
+            if (headers.lastHeader("traceparent") != null) {
+                traceParentInfo.setParentTraceId(new String(headers.lastHeader(
+                        "traceparent").value(), StandardCharsets.UTF_8));
+
+                String[] parts = traceParentInfo.getParentTraceId().split("-");
+                traceParentInfo.setTraceId(parts[1]);
+                traceParentInfo.setSpanId(parts[2]);
+            }
+
+            return traceParentInfo;
+        }
+
+        @Data
+        @NoArgsConstructor
+        private static class TraceParentInfo {
+            private String parentTraceId;
+            private String traceId;
+            private String spanId;
         }
 
         @Override

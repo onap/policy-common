@@ -46,6 +46,11 @@ public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
     protected boolean useHttps;
 
     /**
+     * Allow tracing.
+     */
+    protected boolean allowTracing;
+
+    /**
      * allow self signed certificates.
      */
     protected boolean allowSelfSignedCerts;
@@ -58,6 +63,7 @@ public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
      *  apiKey API Key
      *  apiSecret API Secret
      *  useHttps does connection use HTTPS?
+     *  allowTracing Is tracing allowed?
      *  allowSelfSignedCerts are self-signed certificates allow
      * @param busTopicParams holds all our parameters
      * @throws IllegalArgumentException if invalid parameters are present
@@ -67,6 +73,7 @@ public abstract class BusTopicBase extends TopicBase implements ApiKeyEnabled {
         this.apiKey = busTopicParams.getApiKey();
         this.apiSecret = busTopicParams.getApiSecret();
         this.useHttps = busTopicParams.isUseHttps();
+        this.allowTracing = busTopicParams.isAllowTracing();
         this.allowSelfSignedCerts = busTopicParams.isAllowSelfSignedCerts();
     }
 

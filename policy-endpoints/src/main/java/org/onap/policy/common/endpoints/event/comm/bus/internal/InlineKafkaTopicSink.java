@@ -63,6 +63,7 @@ public class InlineKafkaTopicSink extends InlineBusTopicSink implements KafkaTop
                 .servers(this.servers)
                 .topic(this.effectiveTopic)
                 .useHttps(this.useHttps)
+                .allowTracing(this.allowTracing)
                 .additionalProps(this.additionalProps)
                 .build());
         logger.info("{}: KAFKA SINK created", this);

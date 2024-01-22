@@ -59,6 +59,7 @@ public class InlineDmaapTopicSink extends InlineBusTopicSink implements DmaapTop
      * longitude            DME2 Longitude
      * additionalProps      Additional properties to pass to DME2
      * useHttps             does connection use HTTPS?
+     * allowTracing         is tracing allowed?
      * allowSelfSignedCerts are self-signed certificates allow
      * @param busTopicParams Contains the above mentioned parameters
      * @throws IllegalArgumentException An invalid parameter passed in
@@ -92,6 +93,7 @@ public class InlineDmaapTopicSink extends InlineBusTopicSink implements DmaapTop
                     .userName(this.userName)
                     .password(this.password)
                     .useHttps(this.useHttps)
+                    .allowTracing(this.allowTracing)
                     .allowSelfSignedCerts(this.allowSelfSignedCerts)
                     .build());
         } else {
@@ -107,6 +109,7 @@ public class InlineDmaapTopicSink extends InlineBusTopicSink implements DmaapTop
                     .longitude(this.longitude)
                     .additionalProps(this.additionalProps)
                     .useHttps(this.useHttps)
+                    .allowTracing(this.allowTracing)
                     .build());
         }
 

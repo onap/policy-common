@@ -93,7 +93,8 @@ public class SingleThreadedDmaapTopicSource extends SingleThreadedBusTopicSource
             .consumerInstance(this.consumerInstance)
             .fetchTimeout(this.fetchTimeout)
             .fetchLimit(this.fetchLimit)
-            .useHttps(this.useHttps);
+            .useHttps(this.useHttps)
+            .allowTracing(this.allowTracing);
 
         if (anyNullOrEmpty(this.userName, this.password)) {
             this.consumer = new BusConsumer.CambriaConsumerWrapper(builder

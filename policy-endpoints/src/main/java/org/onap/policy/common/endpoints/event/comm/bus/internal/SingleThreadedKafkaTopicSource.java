@@ -57,7 +57,8 @@ public class SingleThreadedKafkaTopicSource extends SingleThreadedBusTopicSource
                 .topic(this.effectiveTopic)
                 .fetchTimeout(this.fetchTimeout)
                 .consumerGroup(this.consumerGroup)
-                .useHttps(this.useHttps);
+                .useHttps(this.useHttps)
+                .allowTracing(this.allowTracing);
 
         this.consumer = new BusConsumer.KafkaConsumerWrapper(builder
                         .additionalProps(this.additionalProps)

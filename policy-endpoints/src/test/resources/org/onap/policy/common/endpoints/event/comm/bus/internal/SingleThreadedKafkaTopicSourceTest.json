@@ -9,6 +9,7 @@
   "alive": false,
   "locked": false,
   "useHttps": false,
+  "allowTracing": false,
   "topicCommInfrastructure": "KAFKA",
   "additionalProps": {
     "security.protocol": "SASL_PLAINTEXT",

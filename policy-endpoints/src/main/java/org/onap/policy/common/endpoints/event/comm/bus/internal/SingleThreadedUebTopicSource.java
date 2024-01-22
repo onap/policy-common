@@ -56,6 +56,7 @@ public class SingleThreadedUebTopicSource extends SingleThreadedBusTopicSource i
                 .fetchTimeout(this.fetchTimeout)
                 .fetchLimit(this.fetchLimit)
                 .useHttps(this.useHttps)
+                .allowTracing(this.allowTracing)
                 .allowSelfSignedCerts(this.allowSelfSignedCerts).build());
     }
 
