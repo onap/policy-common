@@ -5,7 +5,7 @@
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
  * Modifications Copyright (C) 2020,2023 Bell Canada. All rights reserved.
- * Modifications Copyright (C) 2022-2023 Nordix Foundation.
+ * Modifications Copyright (C) 2022-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,21 +29,12 @@ import com.att.nsa.cambria.client.CambriaClientBuilders;
 import io.opentelemetry.instrumentation.kafkaclients.v2_6.TracingProducerInterceptor;
 import java.net.MalformedURLException;
 import java.security.GeneralSecurityException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.onap.dmaap.mr.client.impl.MRSimplerBatchPublisher;
-import org.onap.dmaap.mr.client.response.MRPublisherResponse;
-import org.onap.dmaap.mr.test.clients.ProtocolTypeConstants;
-import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -238,203 +229,5 @@ public interface BusPublisher {
             return "KafkaPublisherWrapper []";
         }
 
-    }
-
-    /**
-     * DmaapClient library wrapper.
-     */
-    abstract class DmaapPublisherWrapper implements BusPublisher {
-
-        private static final Logger logger = LoggerFactory.getLogger(DmaapPublisherWrapper.class);
-
-        /**
-         * MR based Publisher.
-         */
-        protected MRSimplerBatchPublisher publisher;
-        protected Properties props;
-
-        /**
-         * MR Publisher Wrapper.
-         *
-         * @param servers messaging bus hosts
-         * @param topic topic
-         * @param username AAF or DME2 Login
-         * @param password AAF or DME2 Password
-         */
-        protected DmaapPublisherWrapper(ProtocolTypeConstants protocol, List<String> servers, String topic,
-                String username, String password, boolean useHttps) {
-
-            if (StringUtils.isBlank(topic)) {
-                throw new IllegalArgumentException("No topic for DMaaP");
-            }
-
-            configureProtocol(topic, protocol, servers, useHttps);
-
-            this.publisher.logTo(LoggerFactory.getLogger(MRSimplerBatchPublisher.class.getName()));
-
-            this.publisher.setUsername(username);
-            this.publisher.setPassword(password);
-
-            props = new Properties();
-
-            props.setProperty("Protocol", (useHttps ? "https" : "http"));
-            props.setProperty("contenttype", "application/json");
-            props.setProperty("username", username);
-            props.setProperty("password", password);
-
-            props.setProperty("topic", topic);
-
-            this.publisher.setProps(props);
-
-            if (protocol == ProtocolTypeConstants.AAF_AUTH) {
-                this.publisher.setHost(servers.get(0));
-            }
-
-            logger.info("{}: CREATION: using protocol {}", this, protocol.getValue());
-        }
-
-        private void configureProtocol(String topic, ProtocolTypeConstants protocol, List<String> servers,
-                boolean useHttps) {
-
-            if (protocol == ProtocolTypeConstants.AAF_AUTH) {
-                if (servers == null || servers.isEmpty()) {
-                    throw new IllegalArgumentException("No DMaaP servers or DME2 partner provided");
-                }
-
-                ArrayList<String> dmaapServers = new ArrayList<>();
-                String port = useHttps ? ":3905" : ":3904";
-                for (String server : servers) {
-                    dmaapServers.add(server + port);
-                }
-
-                this.publisher = new MRSimplerBatchPublisher.Builder().againstUrls(dmaapServers).onTopic(topic).build();
-
-                this.publisher.setProtocolFlag(ProtocolTypeConstants.AAF_AUTH.getValue());
-
-            } else if (protocol == ProtocolTypeConstants.DME2) {
-                ArrayList<String> dmaapServers = new ArrayList<>();
-                dmaapServers.add("0.0.0.0:3904");
-
-                this.publisher = new MRSimplerBatchPublisher.Builder().againstUrls(dmaapServers).onTopic(topic).build();
-
-                this.publisher.setProtocolFlag(ProtocolTypeConstants.DME2.getValue());
-
-            } else {
-                throw new IllegalArgumentException("Invalid DMaaP protocol " + protocol);
-            }
-        }
-
-        @Override
-        public void close() {
-            logger.info(LOG_CLOSE, this);
-
-            try {
-                this.publisher.close(1, TimeUnit.SECONDS);
-
-            } catch (InterruptedException e) {
-                logger.warn(LOG_CLOSE_FAILED, this, e);
-                Thread.currentThread().interrupt();
-
-            } catch (Exception e) {
-                logger.warn(LOG_CLOSE_FAILED, this, e);
-            }
-        }
-
-        @Override
-        public boolean send(String partitionId, String message) {
-            if (message == null) {
-                throw new IllegalArgumentException(NO_MESSAGE_PROVIDED);
-            }
-
-            this.publisher.setPubResponse(new MRPublisherResponse());
-            this.publisher.send(partitionId, message);
-            MRPublisherResponse response = this.publisher.sendBatchWithResponse();
-            if (response != null) {
-                logger.debug("DMaaP publisher received {} : {}", response.getResponseCode(),
-                        response.getResponseMessage());
-            }
-
-            return true;
-        }
-
-        @Override
-        public String toString() {
-            return "DmaapPublisherWrapper [" + "publisher.getAuthDate()=" + publisher.getAuthDate()
-                    + ", publisher.getAuthKey()=" + publisher.getAuthKey() + ", publisher.getHost()="
-                    + publisher.getHost() + ", publisher.getProtocolFlag()=" + publisher.getProtocolFlag()
-                    + ", publisher.getUsername()=" + publisher.getUsername() + "]";
-        }
-    }
-
-    /**
-     * DmaapClient library wrapper.
-     */
-    class DmaapAafPublisherWrapper extends DmaapPublisherWrapper {
-        /**
-         * MR based Publisher.
-         */
-        public DmaapAafPublisherWrapper(List<String> servers, String topic, String aafLogin, String aafPassword,
-                boolean useHttps) {
-
-            super(ProtocolTypeConstants.AAF_AUTH, servers, topic, aafLogin, aafPassword, useHttps);
-        }
-    }
-
-    class DmaapDmePublisherWrapper extends DmaapPublisherWrapper {
-
-        /**
-         * Constructor.
-         *
-         * @param busTopicParams topic parameters
-         */
-        public DmaapDmePublisherWrapper(BusTopicParams busTopicParams) {
-
-            super(ProtocolTypeConstants.DME2, busTopicParams.getServers(), busTopicParams.getTopic(),
-                    busTopicParams.getUserName(), busTopicParams.getPassword(), busTopicParams.isUseHttps());
-
-            String dme2RouteOffer = busTopicParams.isAdditionalPropsValid()
-                    ? busTopicParams.getAdditionalProps().get(PolicyEndPointProperties.DME2_ROUTE_OFFER_PROPERTY)
-                    : null;
-
-            validateParams(busTopicParams, dme2RouteOffer);
-
-            String serviceName = busTopicParams.getServers().get(0);
-
-            /* These are required, no defaults */
-            props.setProperty(PolicyEndPointProperties.DME2_SERVICE_NAME_PROPERTY, serviceName);
-
-            BusHelper.setCommonProperties(busTopicParams, dme2RouteOffer, props);
-
-            props.setProperty("MethodType", "POST");
-
-            if (busTopicParams.isAdditionalPropsValid()) {
-                addAdditionalProps(busTopicParams);
-            }
-
-            this.publisher.setProps(props);
-        }
-
-        private void validateParams(BusTopicParams busTopicParams, String dme2RouteOffer) {
-            BusHelper.validateBusTopicParams(busTopicParams, PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS);
-
-            if ((busTopicParams.isPartnerInvalid()) && StringUtils.isBlank(dme2RouteOffer)) {
-                throw new IllegalArgumentException("Must provide at least "
-                        + PolicyEndPointProperties.PROPERTY_DMAAP_SOURCE_TOPICS + "." + busTopicParams.getTopic()
-                        + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_PARTNER_SUFFIX + " or "
-                        + PolicyEndPointProperties.PROPERTY_DMAAP_SINK_TOPICS + "." + busTopicParams.getTopic()
-                        + PolicyEndPointProperties.PROPERTY_DMAAP_DME2_ROUTE_OFFER_SUFFIX + " for DME2");
-            }
-        }
-
-        private void addAdditionalProps(BusTopicParams busTopicParams) {
-            for (Map.Entry<String, String> entry : busTopicParams.getAdditionalProps().entrySet()) {
-                String key = entry.getKey();
-                String value = entry.getValue();
-
-                if (value != null) {
-                    props.setProperty(key, value);
-                }
-            }
-        }
     }
 }

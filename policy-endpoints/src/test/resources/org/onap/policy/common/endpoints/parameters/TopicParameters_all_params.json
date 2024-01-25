@@ -1,8 +1,8 @@
 {
     "topicSources" : [ {
-        "topic" : "POLICY-PDP-PAP1",
-        "servers" : [ "message-router2, message-router3" ],
-        "topicCommInfrastructure" : "dmaap",
+        "topic" : "policy-pdp-pap1",
+        "servers" : [ "kafka2, kafka3" ],
+        "topicCommInfrastructure" : "kafka",
         "effectiveTopic" : "my-effective-topic",
         "apiKey" : "my-api-key",
         "apiSecret" : "my-api-secret",
@@ -30,9 +30,9 @@
         "serializationProvider": "serializationProvider1"
     }],
     "topicSinks" : [ {
-        "topic" : "POLICY-PDP-PAP1",
-        "servers" : [ "message-router2, message-router3" ],
-        "topicCommInfrastructure" : "dmaap",
+        "topic" : "policy-pdp-pap1",
+        "servers" : [ "kafka2, kafka3" ],
+        "topicCommInfrastructure" : "kafka",
         "effectiveTopic" : "my-effective-topic",
         "apiKey" : "my-api-key",
         "apiSecret" : "my-api-secret",

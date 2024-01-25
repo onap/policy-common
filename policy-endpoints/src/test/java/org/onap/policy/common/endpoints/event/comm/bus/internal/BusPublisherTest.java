@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,8 +24,6 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -33,18 +32,11 @@ import static org.mockito.Mockito.when;
 
 import com.att.nsa.cambria.client.CambriaBatchingPublisher;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.concurrent.TimeUnit;
 import org.junit.Before;
 import org.junit.Test;
-import org.onap.dmaap.mr.client.impl.MRSimplerBatchPublisher;
-import org.onap.dmaap.mr.client.response.MRPublisherResponse;
-import org.onap.dmaap.mr.test.clients.ProtocolTypeConstants;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusPublisher.CambriaPublisherWrapper;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.BusPublisher.DmaapAafPublisherWrapper;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.BusPublisher.DmaapDmePublisherWrapper;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.BusPublisher.DmaapPublisherWrapper;
+
 
 public class BusPublisherTest extends TopicTestBase {
 
@@ -104,118 +96,5 @@ public class BusPublisherTest extends TopicTestBase {
         // try again, this time with an exception
         doThrow(new RuntimeException(EXPECTED)).when(pub).close();
         cambria.close();
-    }
-
-    @Test
-    public void testDmaapPublisherWrapper() {
-        // verify with different constructor arguments
-        new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASS, true);
-        new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASS, false);
-        assertThatCode(() -> new DmaapPublisherWrapper(ProtocolTypeConstants.DME2, servers, MY_TOPIC, MY_USERNAME,
-                        MY_PASS, true) {}).doesNotThrowAnyException();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapPublisherWrapper_InvalidTopic() {
-        new DmaapPublisherWrapper(ProtocolTypeConstants.DME2, servers, "", MY_USERNAME, MY_PASS, true) {};
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapPublisherWrapper_Aaf_NullServers() {
-        new DmaapAafPublisherWrapper(null, MY_TOPIC, MY_USERNAME, MY_PASS, true);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapPublisherWrapper_Aaf_NoServers() {
-        new DmaapAafPublisherWrapper(Collections.emptyList(), MY_TOPIC, MY_USERNAME, MY_PASS, true);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapPublisherWrapper_InvalidProtocol() {
-        new DmaapPublisherWrapper(ProtocolTypeConstants.HTTPNOAUTH, servers, MY_TOPIC, MY_USERNAME, MY_PASS, true) {};
-    }
-
-    @Test
-    public void testDmaapPublisherWrapperClose() throws Exception {
-        MRSimplerBatchPublisher pub = mock(MRSimplerBatchPublisher.class);
-        DmaapPublisherWrapper dmaap = new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASS, true);
-        dmaap.publisher = pub;
-
-        dmaap.close();
-        verify(pub).close(anyLong(), any(TimeUnit.class));
-
-        // close, but with exception from publisher
-        doThrow(new IOException(EXPECTED)).when(pub).close(anyLong(), any(TimeUnit.class));
-        dmaap.close();
-    }
-
-    @Test
-    public void testDmaapPublisherWrapperSend() {
-        MRSimplerBatchPublisher pub = mock(MRSimplerBatchPublisher.class);
-        DmaapPublisherWrapper dmaap = new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASS, true);
-        dmaap.publisher = pub;
-
-        // null response
-        assertTrue(dmaap.send(MY_PARTITION, MY_MESSAGE));
-        verify(pub).setPubResponse(any(MRPublisherResponse.class));
-        verify(pub).send(MY_PARTITION, MY_MESSAGE);
-
-        // with response
-        pub = mock(MRSimplerBatchPublisher.class);
-        dmaap.publisher = pub;
-
-        MRPublisherResponse resp = new MRPublisherResponse();
-        when(pub.sendBatchWithResponse()).thenReturn(resp);
-        assertTrue(dmaap.send(MY_PARTITION, MY_MESSAGE));
-        verify(pub).setPubResponse(any(MRPublisherResponse.class));
-        verify(pub).send(MY_PARTITION, MY_MESSAGE);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapPublisherWrapperSend_NullMessage() {
-        MRSimplerBatchPublisher pub = mock(MRSimplerBatchPublisher.class);
-        DmaapPublisherWrapper dmaap = new DmaapAafPublisherWrapper(servers, MY_TOPIC, MY_USERNAME, MY_PASS, true);
-        dmaap.publisher = pub;
-
-        dmaap.send(MY_PARTITION, null);
-    }
-
-    @Test
-    public void testDmaapDmePublisherWrapper() {
-        // verify with different parameters
-        new DmaapDmePublisherWrapper(makeBuilder().build());
-        new DmaapDmePublisherWrapper(makeBuilder().additionalProps(null).build());
-
-        addProps.put(ROUTE_PROP, MY_ROUTE);
-        new DmaapDmePublisherWrapper(makeBuilder().build());
-        new DmaapDmePublisherWrapper(makeBuilder().partner(null).build());
-
-        addProps.put("null-value", null);
-        assertThatCode(() -> new DmaapDmePublisherWrapper(makeBuilder().build())).doesNotThrowAnyException();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapDmePublisherWrapper_InvalidEnv() {
-        new DmaapDmePublisherWrapper(makeBuilder().environment(null).build());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapDmePublisherWrapper_InvalidAft() {
-        new DmaapDmePublisherWrapper(makeBuilder().aftEnvironment(null).build());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapDmePublisherWrapper_InvalidLat() {
-        new DmaapDmePublisherWrapper(makeBuilder().latitude(null).build());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapDmePublisherWrapper_InvalidLong() {
-        new DmaapDmePublisherWrapper(makeBuilder().longitude(null).build());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapDmePublisherWrapper_InvalidPartner() {
-        new DmaapDmePublisherWrapper(makeBuilder().partner(null).build());
     }
 }

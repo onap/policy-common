@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
- * Modifications Copyright 2023 Nordix Foundation.
+ * Modifications Copyright 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -126,8 +126,6 @@ public class HttpClientTest {
         echoServerAuth.addServletPackage("/*", HttpClientTest.class.getPackage().getName());
         echoServerAuth.addFilterClass("/*", TestFilter.class.getName());
         echoServerAuth.addFilterClass("/*", TestAuthorizationFilter.class.getName());
-        echoServerAuth.addFilterClass("/*", TestAafAuthFilter.class.getName());
-        echoServerAuth.addFilterClass("/*", TestAafGranularAuthFilter.class.getName());
         echoServerAuth.waitedStart(5000);
 
         if (!NetworkUtil.isTcpPortOpen(LOCALHOST, echoServerAuth.getPort(), 5, 10000L)) {

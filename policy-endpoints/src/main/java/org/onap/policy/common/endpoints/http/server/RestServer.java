@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2019,2023 Nordix Foundation.
+ *  Copyright (C) 2019, 2023-2024 Nordix Foundation.
  *  Modifications Copyright (C) 2019-2021 AT&T Intellectual Property.
  *  Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
@@ -29,7 +29,6 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import lombok.ToString;
-import org.onap.policy.common.endpoints.http.server.aaf.AafAuthFilter;
 import org.onap.policy.common.endpoints.parameters.RestServerParameters;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.gson.GsonMessageBodyHandler;
@@ -54,21 +53,11 @@ public class RestServer extends ServiceManagerContainer {
      * Constructs the object.
      *
      * @param restServerParameters the rest server parameters
-     * @param aafFilter class of object to use to filter AAF requests, or {@code null}
      * @param jaxrsProviders classes providing the services
      */
-    public RestServer(final RestServerParameters restServerParameters, Class<? extends AafAuthFilter> aafFilter,
+    public RestServer(final RestServerParameters restServerParameters,
         Class<?>... jaxrsProviders) {
-
-        this(restServerParameters, makeFilterList(aafFilter), Arrays.asList(jaxrsProviders));
-    }
-
-    private static List<Class<? extends Filter>> makeFilterList(Class<? extends AafAuthFilter> aafFilter) {
-        if (aafFilter == null) {
-            return List.of();
-        } else {
-            return List.of(aafFilter);
-        }
+        this(restServerParameters, null, Arrays.asList(jaxrsProviders));
     }
 
     /**
@@ -81,7 +70,7 @@ public class RestServer extends ServiceManagerContainer {
     public RestServer(final RestServerParameters restServerParameters, List<Class<? extends Filter>> filters,
         List<Class<?>> jaxrsProviders) {
 
-        if (jaxrsProviders.isEmpty()) {
+        if (jaxrsProviders == null || jaxrsProviders.isEmpty()) {
             throw new IllegalArgumentException("no providers specified");
         }
 
@@ -89,12 +78,9 @@ public class RestServer extends ServiceManagerContainer {
             .build(getServerProperties(restServerParameters, getProviderClassNames(jaxrsProviders)));
 
         for (HttpServletServer server : this.servers) {
-            for (Class<? extends Filter> filter : filters) {
-                if (!AafAuthFilter.class.isAssignableFrom(filter) || server.isAaf()) {
-                    server.addFilterClass(null, filter.getName());
-                }
+            if (filters != null && !filters.isEmpty()) {
+                filters.forEach(filter -> server.addFilterClass(null, filter.getName()));
             }
-
             addAction("REST " + server.getName(), server::start, server::stop);
         }
     }
@@ -128,8 +114,6 @@ public class RestServer extends ServiceManagerContainer {
             String.valueOf(restServerParameters.isHttps()));
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SNI_HOST_CHECK_SUFFIX,
             String.valueOf(restServerParameters.isSniHostCHeck()));
-        props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_AAF_SUFFIX,
-            String.valueOf(restServerParameters.isAaf()));
         props.setProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER,
             String.join(",", GsonMessageBodyHandler.class.getName(), YamlMessageBodyHandler.class.getName(),
                 JsonExceptionMapper.class.getName(), YamlExceptionMapper.class.getName()));

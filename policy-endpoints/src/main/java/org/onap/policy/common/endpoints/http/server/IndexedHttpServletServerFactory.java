@@ -3,7 +3,7 @@
  * ONAP Policy Engine - Common Modules
  * ================================================================================
  * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2020,2023 Nordix Foundation.
+ * Modifications Copyright (C) 2020,2023-2024 Nordix Foundation.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -133,7 +133,7 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
 
         // configure the service
         setSerializationProvider(props, service);
-        setAuthentication(props, service, contextUriPath);
+        setAuthentication(props, service);
 
         final var restUriPath = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_REST_URIPATH_SUFFIX, null);
 
@@ -156,17 +156,13 @@ class IndexedHttpServletServerFactory implements HttpServletServerFactory {
         }
     }
 
-    private void setAuthentication(PropertyUtils props, HttpServletServer service, final String contextUriPath) {
-        /* authentication method either AAF or HTTP Basic Auth */
-
-        final var aaf = props.getBoolean(PolicyEndPointProperties.PROPERTY_AAF_SUFFIX, false);
+    private void setAuthentication(PropertyUtils props, HttpServletServer service) {
+        /* authentication method HTTP Basic Auth */
         final var userName = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX, null);
         final var password = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX, null);
         final var authUriPath = props.getString(PolicyEndPointProperties.PROPERTY_HTTP_AUTH_URIPATH_SUFFIX, null);
 
-        if (aaf) {
-            service.setAafAuthentication(contextUriPath);
-        } else if (!StringUtils.isBlank(userName) && !StringUtils.isBlank(password)) {
+        if (!StringUtils.isBlank(userName) && !StringUtils.isBlank(password)) {
             service.setBasicAuthentication(userName, password, authUriPath);
         }
     }

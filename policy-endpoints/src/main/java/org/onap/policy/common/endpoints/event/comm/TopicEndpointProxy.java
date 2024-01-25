@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2022-2023 Nordix Foundation.
+ * Modifications Copyright (C) 2022-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,9 +28,6 @@ import java.util.Objects;
 import java.util.Properties;
 import lombok.Getter;
 import org.onap.policy.common.capabilities.Startable;
-import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicFactories;
-import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSink;
-import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicSource;
@@ -96,9 +93,6 @@ class TopicEndpointProxy implements TopicEndpoint {
                 case UEB:
                     sources.add(UebTopicFactories.getSourceFactory().build(param));
                     break;
-                case DMAAP:
-                    sources.add(DmaapTopicFactories.getSourceFactory().build(param));
-                    break;
                 case KAFKA:
                     sources.add(KafkaTopicFactories.getSourceFactory().build(param));
                     break;
@@ -121,14 +115,12 @@ class TopicEndpointProxy implements TopicEndpoint {
     public List<TopicSource> addTopicSources(Properties properties) {
 
         // 1. Create UEB Sources
-        // 2. Create DMAAP Sources
-        // 3. Create KAFKA Sources
-        // 4. Create NOOP Sources
+        // 2. Create KAFKA Sources
+        // 3. Create NOOP Sources
 
         List<TopicSource> sources = new ArrayList<>();
 
         sources.addAll(UebTopicFactories.getSourceFactory().build(properties));
-        sources.addAll(DmaapTopicFactories.getSourceFactory().build(properties));
         sources.addAll(KafkaTopicFactories.getSourceFactory().build(properties));
         sources.addAll(NoopTopicFactories.getSourceFactory().build(properties));
 
@@ -152,9 +144,6 @@ class TopicEndpointProxy implements TopicEndpoint {
                 case UEB:
                     sinks.add(UebTopicFactories.getSinkFactory().build(param));
                     break;
-                case DMAAP:
-                    sinks.add(DmaapTopicFactories.getSinkFactory().build(param));
-                    break;
                 case KAFKA:
                     sinks.add(KafkaTopicFactories.getSinkFactory().build(param));
                     break;
@@ -176,14 +165,12 @@ class TopicEndpointProxy implements TopicEndpoint {
     @Override
     public List<TopicSink> addTopicSinks(Properties properties) {
         // 1. Create UEB Sinks
-        // 2. Create DMAAP Sinks
-        // 3. Create KAFKA Sinks
-        // 4. Create NOOP Sinks
+        // 2. Create KAFKA Sinks
+        // 3. Create NOOP Sinks
 
         final List<TopicSink> sinks = new ArrayList<>();
 
         sinks.addAll(UebTopicFactories.getSinkFactory().build(properties));
-        sinks.addAll(DmaapTopicFactories.getSinkFactory().build(properties));
         sinks.addAll(KafkaTopicFactories.getSinkFactory().build(properties));
         sinks.addAll(NoopTopicFactories.getSinkFactory().build(properties));
 
@@ -204,7 +191,6 @@ class TopicEndpointProxy implements TopicEndpoint {
         final List<TopicSource> sources = new ArrayList<>();
 
         sources.addAll(UebTopicFactories.getSourceFactory().inventory());
-        sources.addAll(DmaapTopicFactories.getSourceFactory().inventory());
         sources.addAll(KafkaTopicFactories.getSourceFactory().inventory());
         sources.addAll(NoopTopicFactories.getSourceFactory().inventory());
 
@@ -225,12 +211,6 @@ class TopicEndpointProxy implements TopicEndpoint {
                 sources.add(Objects.requireNonNull(this.getUebTopicSource(topic)));
             } catch (final Exception e) {
                 logger.debug("No UEB source for topic: {}", topic, e);
-            }
-
-            try {
-                sources.add(Objects.requireNonNull(this.getDmaapTopicSource(topic)));
-            } catch (final Exception e) {
-                logger.debug("No DMAAP source for topic: {}", topic, e);
             }
 
             try {
@@ -255,7 +235,6 @@ class TopicEndpointProxy implements TopicEndpoint {
         final List<TopicSink> sinks = new ArrayList<>();
 
         sinks.addAll(UebTopicFactories.getSinkFactory().inventory());
-        sinks.addAll(DmaapTopicFactories.getSinkFactory().inventory());
         sinks.addAll(KafkaTopicFactories.getSinkFactory().inventory());
         sinks.addAll(NoopTopicFactories.getSinkFactory().inventory());
 
@@ -275,12 +254,6 @@ class TopicEndpointProxy implements TopicEndpoint {
                 sinks.add(Objects.requireNonNull(this.getUebTopicSink(topic)));
             } catch (final Exception e) {
                 logger.debug("No UEB sink for topic: {}", topic, e);
-            }
-
-            try {
-                sinks.add(Objects.requireNonNull(this.getDmaapTopicSink(topic)));
-            } catch (final Exception e) {
-                logger.debug("No DMAAP sink for topic: {}", topic, e);
             }
 
             try {
@@ -313,12 +286,6 @@ class TopicEndpointProxy implements TopicEndpoint {
         }
 
         try {
-            sinks.add(this.getDmaapTopicSink(topicName));
-        } catch (final Exception e) {
-            logNoSink(topicName, e);
-        }
-
-        try {
             sinks.add(this.getKafkaTopicSink(topicName));
         } catch (final Exception e) {
             logNoSink(topicName, e);
@@ -341,12 +308,6 @@ class TopicEndpointProxy implements TopicEndpoint {
 
     @GsonJsonIgnore
     @Override
-    public List<DmaapTopicSource> getDmaapTopicSources() {
-        return DmaapTopicFactories.getSourceFactory().inventory();
-    }
-
-    @GsonJsonIgnore
-    @Override
     public List<KafkaTopicSource> getKafkaTopicSources() {
         return KafkaTopicFactories.getSourceFactory().inventory();
     }
@@ -361,12 +322,6 @@ class TopicEndpointProxy implements TopicEndpoint {
     @Override
     public List<UebTopicSink> getUebTopicSinks() {
         return UebTopicFactories.getSinkFactory().inventory();
-    }
-
-    @GsonJsonIgnore
-    @Override
-    public List<DmaapTopicSink> getDmaapTopicSinks() {
-        return DmaapTopicFactories.getSinkFactory().inventory();
     }
 
     @Override
@@ -459,9 +414,6 @@ class TopicEndpointProxy implements TopicEndpoint {
         UebTopicFactories.getSourceFactory().destroy();
         UebTopicFactories.getSinkFactory().destroy();
 
-        DmaapTopicFactories.getSourceFactory().destroy();
-        DmaapTopicFactories.getSinkFactory().destroy();
-
         KafkaTopicFactories.getSourceFactory().destroy();
         KafkaTopicFactories.getSinkFactory().destroy();
 
@@ -527,7 +479,6 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         return switch (commType) {
             case UEB -> this.getUebTopicSource(topicName);
-            case DMAAP -> this.getDmaapTopicSource(topicName);
             case KAFKA -> this.getKafkaTopicSource(topicName);
             case NOOP -> this.getNoopTopicSource(topicName);
             default -> throw new UnsupportedOperationException("Unsupported " + commType.name());
@@ -546,7 +497,6 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         return switch (commType) {
             case UEB -> this.getUebTopicSink(topicName);
-            case DMAAP -> this.getDmaapTopicSink(topicName);
             case KAFKA -> this.getKafkaTopicSink(topicName);
             case NOOP -> this.getNoopTopicSink(topicName);
             default -> throw new UnsupportedOperationException("Unsupported " + commType.name());
@@ -564,11 +514,6 @@ class TopicEndpointProxy implements TopicEndpoint {
     }
 
     @Override
-    public DmaapTopicSource getDmaapTopicSource(String topicName) {
-        return DmaapTopicFactories.getSourceFactory().get(topicName);
-    }
-
-    @Override
     public KafkaTopicSource getKafkaTopicSource(String topicName) {
         return KafkaTopicFactories.getSourceFactory().get(topicName);
     }
@@ -576,11 +521,6 @@ class TopicEndpointProxy implements TopicEndpoint {
     @Override
     public NoopTopicSource getNoopTopicSource(String topicName) {
         return NoopTopicFactories.getSourceFactory().get(topicName);
-    }
-
-    @Override
-    public DmaapTopicSink getDmaapTopicSink(String topicName) {
-        return DmaapTopicFactories.getSinkFactory().get(topicName);
     }
 
     @Override

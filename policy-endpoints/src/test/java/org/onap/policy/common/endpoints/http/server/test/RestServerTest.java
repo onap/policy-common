@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,10 +35,8 @@ import static org.mockito.Mockito.when;
 
 import io.prometheus.client.servlet.jakarta.exporter.MetricsServlet;
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -68,7 +66,6 @@ import org.onap.policy.common.endpoints.http.server.RestServer;
 import org.onap.policy.common.endpoints.http.server.RestServer.Factory;
 import org.onap.policy.common.endpoints.http.server.YamlExceptionMapper;
 import org.onap.policy.common.endpoints.http.server.YamlMessageBodyHandler;
-import org.onap.policy.common.endpoints.http.server.aaf.AafAuthFilter;
 import org.onap.policy.common.endpoints.parameters.RestServerParameters;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.gson.GsonMessageBodyHandler;
@@ -111,7 +108,7 @@ public class RestServerTest {
 
         initRealParams();
 
-        realRest = new RestServer(params, (Class<AafAuthFilter>) null, RealProvider.class) {
+        realRest = new RestServer(params, RealProvider.class) {
             @Override
             protected Properties getServerProperties(RestServerParameters restServerParameters, String names) {
                 Properties props = super.getServerProperties(restServerParameters, names);
@@ -161,7 +158,7 @@ public class RestServerTest {
 
     @Test
     public void testRestServer() {
-        rest = new RestServer(params, Filter.class, Provider1.class, Provider2.class);
+        rest = new RestServer(params, Filter2.class, Provider1.class, Provider2.class);
 
         rest.start();
         verify(server1).start();
@@ -174,7 +171,7 @@ public class RestServerTest {
 
     @Test
     public void testRestServerListList() {
-        rest = new RestServer(params, List.of(Filter.class, Filter2.class), List.of(Provider1.class, Provider2.class));
+        rest = new RestServer(params, List.of(Filter2.class), List.of(Provider1.class, Provider2.class));
 
         rest.start();
         verify(server1).start();
@@ -186,52 +183,13 @@ public class RestServerTest {
     }
 
     @Test
-    public void testRestServer_NoAaf() {
-        rest = new RestServer(params, Filter.class, Provider1.class, Provider2.class);
-        verify(server1, never()).addFilterClass(any(), any());
-        verify(server2, never()).addFilterClass(any(), any());
-    }
-
-    @Test
-    public void testRestServer_OnlyOneAaf() {
-        when(server2.isAaf()).thenReturn(true);
-
-        rest = new RestServer(params, Filter.class, Provider1.class, Provider2.class);
-
-        verify(server1, never()).addFilterClass(any(), any());
-        verify(server2).addFilterClass(null, Filter.class.getName());
-    }
-
-    @Test
-    public void testRestServer_BothAaf() {
-        when(server1.isAaf()).thenReturn(true);
-        when(server2.isAaf()).thenReturn(true);
-
-        rest = new RestServer(params, Filter.class, Provider1.class, Provider2.class);
-
-        verify(server1).addFilterClass(null, Filter.class.getName());
-        verify(server2).addFilterClass(null, Filter.class.getName());
-    }
-
-    @Test
-    public void testRestServer_BothAaf_NoFilter() {
-        when(server1.isAaf()).thenReturn(true);
-        when(server2.isAaf()).thenReturn(true);
-
-        rest = new RestServer(params, (Class<AafAuthFilter>) null, Provider1.class, Provider2.class);
-
-        verify(server1, never()).addFilterClass(any(), any());
-        verify(server2, never()).addFilterClass(any(), any());
-    }
-
-    @Test
     public void testRestServer_MissingProviders() {
-        assertThatIllegalArgumentException().isThrownBy(() -> new RestServer(params, Filter.class));
+        assertThatIllegalArgumentException().isThrownBy(() -> new RestServer(params, List.of(Filter2.class), null));
     }
 
     @Test
     public void testGetServerProperties_testGetProviderNames() {
-        rest = new RestServer(params, Filter.class, Provider1.class, Provider2.class);
+        rest = new RestServer(params, Provider1.class, Provider2.class);
 
         ArgumentCaptor<Properties> cap = ArgumentCaptor.forClass(Properties.class);
         verify(serverFactory).build(cap.capture());
@@ -249,7 +207,6 @@ public class RestServerTest {
         assertEquals(USER, props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_USERNAME_SUFFIX));
         assertEquals(PASS, props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_AUTH_PASSWORD_SUFFIX));
         assertEquals("true", props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX));
-        assertEquals("true", props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_AAF_SUFFIX));
         assertEquals(String.join(",", GsonMessageBodyHandler.class.getName(), YamlMessageBodyHandler.class.getName(),
                         JsonExceptionMapper.class.getName(), YamlExceptionMapper.class.getName()),
                         props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERIALIZATION_PROVIDER));
@@ -259,7 +216,7 @@ public class RestServerTest {
     @Test
     public void testExplicitPrometheusAddedToProperty() {
         when(params.isPrometheus()).thenReturn(true);
-        rest = new RestServer(params, Filter.class, Provider1.class, Provider2.class);
+        rest = new RestServer(params, Filter2.class, Provider1.class, Provider2.class);
         ArgumentCaptor<Properties> cap = ArgumentCaptor.forClass(Properties.class);
         verify(serverFactory).build(cap.capture());
 
@@ -272,10 +229,10 @@ public class RestServerTest {
     }
 
     @Test
-    public void testStandardSevletAddedToProperty() {
+    public void testStandardServletAddedToProperty() {
         when(params.getServletUriPath()).thenReturn("/metrics");
         when(params.getServletClass()).thenReturn(MetricsServlet.class.getName());
-        rest = new RestServer(params, Filter.class, Provider1.class, Provider2.class);
+        rest = new RestServer(params, Filter2.class, Provider1.class, Provider2.class);
         ArgumentCaptor<Properties> cap = ArgumentCaptor.forClass(Properties.class);
         verify(serverFactory).build(cap.capture());
 
@@ -341,7 +298,7 @@ public class RestServerTest {
 
     @Test
     public void testToString() {
-        rest = new RestServer(params, Filter.class, Provider1.class, Provider2.class);
+        rest = new RestServer(params, Filter2.class, Provider1.class, Provider2.class);
         assertNotNull(rest.toString());
     }
 
@@ -372,22 +329,9 @@ public class RestServerTest {
         when(params.isHttps()).thenReturn(true);
     }
 
-    private static class Filter extends AafAuthFilter {
-        @Override
-        protected String getPermissionType(HttpServletRequest request) {
-            return "";
-        }
-
-        @Override
-        protected String getPermissionInstance(HttpServletRequest request) {
-            return "";
-        }
-    }
-
     private static class Filter2 implements jakarta.servlet.Filter {
         @Override
-        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-                        throws IOException, ServletException {
+        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
             // do nothing
         }
     }

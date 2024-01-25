@@ -24,7 +24,6 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
 import static org.junit.Assert.fail;
@@ -54,13 +53,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.onap.dmaap.mr.client.impl.MRConsumerImpl;
-import org.onap.dmaap.mr.client.response.MRConsumerResponse;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.CambriaConsumerWrapper;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapAafConsumerWrapper;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapConsumerWrapper;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.DmaapDmeConsumerWrapper;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FetchingBusConsumer;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.KafkaConsumerWrapper;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
@@ -197,124 +191,6 @@ public class BusConsumerTest extends TopicTestBase {
     @Test
     public void testCambriaConsumerWrapperToString() {
         assertNotNull(new CambriaConsumerWrapper(makeBuilder().build()).toString());
-    }
-
-    @Test
-    public void testDmaapConsumerWrapper() {
-        // verify that different wrappers can be built
-        assertThatCode(() -> new DmaapAafConsumerWrapper(makeBuilder().build())).doesNotThrowAnyException();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapConsumerWrapper_InvalidTopic() throws Exception {
-        new DmaapAafConsumerWrapper(makeBuilder().topic(null).build());
-    }
-
-    @Test
-    public void testDmaapConsumerWrapperFetch() throws Exception {
-        DmaapAafConsumerWrapper dmaap = new DmaapAafConsumerWrapper(makeBuilder().build());
-        MRConsumerImpl cons = mock(MRConsumerImpl.class);
-
-        dmaap.fetchTimeout = 5;
-        dmaap.consumer = cons;
-
-        // null return
-        when(cons.fetchWithReturnConsumerResponse()).thenReturn(null);
-        assertFalse(dmaap.fetch().iterator().hasNext());
-
-        // with messages, 200
-        List<String> lst = Arrays.asList(MY_MESSAGE, MY_MESSAGE2);
-        MRConsumerResponse resp = new MRConsumerResponse();
-        resp.setResponseCode("200");
-        resp.setActualMessages(lst);
-        when(cons.fetchWithReturnConsumerResponse()).thenReturn(resp);
-
-        assertEquals(lst, IteratorUtils.toList(dmaap.fetch().iterator()));
-
-        // null messages
-        resp.setActualMessages(null);
-        when(cons.fetchWithReturnConsumerResponse()).thenReturn(resp);
-
-        assertFalse(dmaap.fetch().iterator().hasNext());
-
-        // with messages, NOT 200
-        resp.setResponseCode("400");
-        resp.setActualMessages(lst);
-        when(cons.fetchWithReturnConsumerResponse()).thenReturn(resp);
-
-        assertEquals(lst, IteratorUtils.toList(dmaap.fetch().iterator()));
-    }
-
-    @Test
-    public void testDmaapConsumerWrapperClose() {
-        assertThatCode(() -> new DmaapAafConsumerWrapper(makeBuilder().build()).close()).doesNotThrowAnyException();
-    }
-
-    @Test
-    public void testDmaapConsumerWrapperToString() throws Exception {
-        assertNotNull(new DmaapConsumerWrapper(makeBuilder().build()) {}.toString());
-    }
-
-    @Test
-    public void testDmaapAafConsumerWrapper() throws Exception {
-        // verify that different wrappers can be built
-        new DmaapAafConsumerWrapper(makeBuilder().useHttps(true).build());
-        assertThatCode(() -> new DmaapAafConsumerWrapper(makeBuilder().useHttps(false).build()))
-                        .doesNotThrowAnyException();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapAafConsumerWrapper_InvalidServers() throws Exception {
-        /*
-         * Unfortunately, the MR code intercepts this and throws an exception before the
-         * wrapper gets a chance to check it, thus this test does not improve the coverage
-         * for the constructor.
-         */
-        new DmaapAafConsumerWrapper(makeBuilder().servers(Collections.emptyList()).build());
-    }
-
-    @Test
-    public void testDmaapAafConsumerWrapperToString() throws Exception {
-        assertNotNull(new DmaapAafConsumerWrapper(makeBuilder().build()).toString());
-    }
-
-    @Test
-    public void testDmaapDmeConsumerWrapper() throws Exception {
-        // verify that different wrappers can be built
-        new DmaapDmeConsumerWrapper(makeBuilder().build());
-        new DmaapDmeConsumerWrapper(makeBuilder().useHttps(true).build());
-        new DmaapDmeConsumerWrapper(makeBuilder().useHttps(false).build());
-        new DmaapDmeConsumerWrapper(makeBuilder().additionalProps(null).build());
-
-        addProps.put(ROUTE_PROP, MY_ROUTE);
-        new DmaapDmeConsumerWrapper(makeBuilder().build());
-        assertThatCode(() -> new DmaapDmeConsumerWrapper(makeBuilder().partner(null).build()))
-                        .doesNotThrowAnyException();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapDmeConsumerWrapper_InvalidEnvironment() throws Exception {
-        new DmaapDmeConsumerWrapper(makeBuilder().environment(null).build());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapDmeConsumerWrapper_InvalidAft() throws Exception {
-        new DmaapDmeConsumerWrapper(makeBuilder().aftEnvironment(null).build());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapDmeConsumerWrapper_InvalidLat() throws Exception {
-        new DmaapDmeConsumerWrapper(makeBuilder().latitude(null).build());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapDmeConsumerWrapper_InvalidLong() throws Exception {
-        new DmaapDmeConsumerWrapper(makeBuilder().longitude(null).build());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testDmaapDmeConsumerWrapper_InvalidPartner() throws Exception {
-        new DmaapDmeConsumerWrapper(makeBuilder().partner(null).build());
     }
 
     @Test

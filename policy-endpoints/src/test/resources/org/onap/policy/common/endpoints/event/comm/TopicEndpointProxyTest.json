@@ -18,24 +18,8 @@
     "fetchTimeout" : 101,
     "fetchLimit" : 100,
     "topicCommInfrastructure" : "UEB"
-  }, {
-    "servers" : [ "my-server" ],
-    "topic" : "dmaap-source",
-    "effectiveTopic" : "my-effective-topic",
-    "recentEvents" : [ ],
-    "alive" : false,
-    "locked" : false,
-    "apiKey" : "my-api-key",
-    "apiSecret" : "my-api-secret",
-    "useHttps" : true,
-    "allowTracing": false,
-    "allowSelfSignedCerts" : true,
-    "consumerGroup" : "my-cons-group",
-    "consumerInstance" : "my-cons-inst",
-    "fetchTimeout" : 101,
-    "fetchLimit" : 100,
-    "topicCommInfrastructure" : "DMAAP"
-  }, {
+  },
+    {
     "servers" : [ "my-server" ],
     "topic" : "noop-source",
     "effectiveTopic" : "noop-source",
@@ -58,21 +42,8 @@
     "allowSelfSignedCerts" : true,
     "topicCommInfrastructure" : "UEB",
     "partitionKey" : "${obj.topicSinks[0].partitionKey}"
-  }, {
-    "servers" : [ "my-server" ],
-    "topic" : "dmaap-sink",
-    "effectiveTopic" : "my-effective-topic",
-    "recentEvents" : [ ],
-    "alive" : false,
-    "locked" : false,
-    "apiKey" : "my-api-key",
-    "apiSecret" : "my-api-secret",
-    "useHttps" : true,
-    "allowTracing": false,
-    "allowSelfSignedCerts" : true,
-    "topicCommInfrastructure" : "DMAAP",
-    "partitionKey" : "my-partition"
-  }, {
+  },
+    {
     "servers" : [ "my-server" ],
     "topic" : "noop-sink",
     "effectiveTopic" : "noop-sink",

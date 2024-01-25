@@ -3,6 +3,7 @@
  * policy-management
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +42,6 @@ import lombok.Getter;
 import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
-import org.apache.commons.jexl3.JexlException;
 import org.apache.commons.jexl3.MapContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -201,24 +201,19 @@ public class GsonTestUtils {
         while (mat.find(ilast)) {
             // append segment that appears between last match and this
             int inext = mat.start();
-            bldr.append(text.substring(ilast, inext));
+            bldr.append(text, ilast, inext);
 
             // next match begins after the current match
             ilast = mat.end();
 
             // interpolate the script
             String script = mat.group(1);
-            try {
-                /*
-                 * Note: must use "eng" instead of "engineInstance" to ensure that we use
-                 * the same engine that's associated with the bindings.
-                 */
-                Object result = eng.createExpression(script).evaluate(context);
-                bldr.append(result == null ? "null" : result.toString());
-
-            } catch (JexlException e) {
-                throw new JsonParseException("cannot expand element: " + mat.group(), e);
-            }
+            /*
+             * Note: must use "eng" instead of "engineInstance" to ensure that we use
+             * the same engine that's associated with the bindings.
+             */
+            Object result = eng.createExpression(script).evaluate(context);
+            bldr.append(result == null ? "null" : result.toString());
         }
 
         // append final segment

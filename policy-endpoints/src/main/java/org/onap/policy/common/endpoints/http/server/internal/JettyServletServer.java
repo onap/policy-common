@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2019-2020,2023 Nordix Foundation.
+ * Modifications Copyright (C) 2019-2020, 2023-2024 Nordix Foundation.
  * Modifications Copyright (C) 2020-2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,13 +43,11 @@ import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.Slf4jRequestLogWriter;
-import org.eclipse.jetty.servlet.FilterHolder;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.onap.aaf.cadi.filter.CadiFilter;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -281,21 +279,6 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
     public ServerConnector httpConnector() {
         return new ServerConnector(this.jettyServer);
-    }
-
-    @Override
-    public void setAafAuthentication(String filterPath) {
-        this.addFilterClass(filterPath, CadiFilter.class.getName());
-    }
-
-    @Override
-    public boolean isAaf() {
-        for (FilterHolder filter : context.getServletHandler().getFilters()) {
-            if (CadiFilter.class.getName().equals(filter.getClassName())) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override

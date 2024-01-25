@@ -3,6 +3,5 @@
     "port": 6969,
     "userName": "username",
     "password": "password",
-    "https": true,
-    "aaf": false
+    "https": true
 }

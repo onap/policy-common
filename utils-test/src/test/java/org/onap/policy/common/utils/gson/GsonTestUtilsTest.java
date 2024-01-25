@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +36,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
-import org.apache.commons.jexl3.JexlException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -139,11 +140,7 @@ public class GsonTestUtilsTest {
         data.setText(null);
         result = utils.applyScripts("use ${obj.text} this", data);
         assertEquals("use null this", result);
-
-        assertThatThrownBy(() -> utils.applyScripts("use ${obj.text} this", null))
-                        .isInstanceOf(JsonParseException.class)
-                        .hasCauseInstanceOf(JexlException.class)
-                        .hasMessage("cannot expand element: ${obj.text}");
+        assertEquals("use null this", utils.applyScripts("use ${obj.text} this", null));
     }
 
     @Test
@@ -227,25 +224,12 @@ public class GsonTestUtilsTest {
         assertEquals("[300,{'objE':true,'objEStr':'obj-e-string'},false]".replace('\'', '"'), jsonEl.toString());
     }
 
+    @Setter
+    @Getter
     @ToString
     public static class Data {
         private int id;
         private String text;
 
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
     }
 }

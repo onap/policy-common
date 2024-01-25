@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2020,2023 Nordix Foundation.
+ *  Copyright (C) 2020, 2023-2024 Nordix Foundation.
  *  Modifications Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Jetty Server that uses DefaultServlets to support web static resources management.
+ * Jetty Server that uses DefaultServlets to support web static resources' management.
  */
 @ToString
 public class JettyStaticResourceServer extends JettyServletServer {

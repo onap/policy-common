@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2019 Nordix Foundation.
+ *  Copyright (C) 2019, 2024 Nordix Foundation.
  *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -58,15 +58,15 @@ public class TopicParameterGroup extends ParameterGroupImpl {
         if (result.isValid()) {
             var errorMsg = new StringBuilder();
             StringBuilder missingSourceParams = checkMissingMandatoryParams(topicSources);
-            if (missingSourceParams.length() > 0) {
+            if (!missingSourceParams.isEmpty()) {
                 errorMsg.append(missingSourceParams.append("missing in topicSources. "));
             }
             StringBuilder missingSinkParams = checkMissingMandatoryParams(topicSinks);
-            if (missingSinkParams.length() > 0) {
+            if (!missingSinkParams.isEmpty()) {
                 errorMsg.append(missingSinkParams.append("missing in topicSinks."));
             }
 
-            if (errorMsg.length() > 0) {
+            if (!errorMsg.isEmpty()) {
                 errorMsg.insert(0, "Mandatory parameters are missing. ");
                 result.setResult(ValidationStatus.INVALID, errorMsg.toString());
             }

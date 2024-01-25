@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2018 Samsung Electronics Co., Ltd. All rights reserved.
  * Modifications Copyright (C) 2018-2019, 2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2019, 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2019, 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,14 +33,14 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * Member variables of this Params class are as follows.
  *
- * <p>servers DMaaP servers
- * topic DMaaP Topic to be monitored
- * apiKey DMaaP API Key (optional)
- * apiSecret DMaaP API Secret (optional)
- * consumerGroup DMaaP Reader Consumer Group
- * consumerInstance DMaaP Reader Instance
- * fetchTimeout DMaaP fetch timeout
- * fetchLimit DMaaP fetch limit
+ * <p>servers Kafka servers
+ * topic Kafka Topic to be monitored
+ * apiKey Kafka API Key (optional)
+ * apiSecret Kafka API Secret (optional)
+ * consumerGroup kafka Reader Consumer Group
+ * consumerInstance Kafka Reader Instance
+ * fetchTimeout kafka fetch timeout
+ * fetchLimit Kafka fetch limit
  * environment DME2 Environment
  * aftEnvironment DME2 AFT Environment
  * partner DME2 Partner

@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
- * Copyright (C) 2022 Nordix Foundation.
+ * Copyright (C) 2022,2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,6 @@ import java.util.List;
 import java.util.Properties;
 import org.onap.policy.common.capabilities.Lockable;
 import org.onap.policy.common.capabilities.Startable;
-import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSink;
-import org.onap.policy.common.endpoints.event.comm.bus.DmaapTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSink;
@@ -37,7 +35,7 @@ import org.onap.policy.common.endpoints.parameters.TopicParameterGroup;
 import org.onap.policy.common.endpoints.parameters.TopicParameters;
 
 /**
- * Abstraction to managed the system's Networked Topic Endpoints, sources of all events input into
+ * Abstraction to manage the system's Networked Topic Endpoints, sources of all events input into
  * the System.
  */
 public interface TopicEndpoint extends Startable, Lockable {
@@ -143,18 +141,6 @@ public interface TopicEndpoint extends Startable, Lockable {
     UebTopicSource getUebTopicSource(String topicName);
 
     /**
-     * Get the DMAAP Topic Source for the given topic name.
-     *
-     * @param topicName the topic name
-     *
-     * @return the DMAAP Topic Source
-     * @throws IllegalStateException if the entity is in an invalid state, for example multiple
-     *         TopicReaders for a topic name and communication infrastructure
-     * @throws IllegalArgumentException if invalid parameters are present
-     */
-    DmaapTopicSource getDmaapTopicSource(String topicName);
-
-    /**
      * Get the Noop Source for the given topic name.
      *
      * @param topicName the topic name.
@@ -236,18 +222,6 @@ public interface TopicEndpoint extends Startable, Lockable {
     NoopTopicSink getNoopTopicSink(String topicName);
 
     /**
-     * Get the DMAAP Topic Source for the given topic name.
-     *
-     * @param topicName the topic name
-     *
-     * @return the Topic Source
-     * @throws IllegalStateException if the entity is in an invalid state, for example multiple
-     *         TopicReaders for a topic name and communication infrastructure
-     * @throws IllegalArgumentException if invalid parameters are present
-     */
-    DmaapTopicSink getDmaapTopicSink(String topicName);
-
-    /**
      * Get the KAFKA Topic Source for the given topic name.
      *
      * @param topicName the topic name
@@ -265,13 +239,6 @@ public interface TopicEndpoint extends Startable, Lockable {
      * @return the UEB Topic Source List
      */
     List<UebTopicSource> getUebTopicSources();
-
-    /**
-     * Gets only the DMAAP Topic Sources.
-     *
-     * @return the DMAAP Topic Source List
-     */
-    List<DmaapTopicSource> getDmaapTopicSources();
 
     /**
      * Gets only the KAFKA Topic Sources.
@@ -293,13 +260,6 @@ public interface TopicEndpoint extends Startable, Lockable {
      * @return the UEB Topic Sink List
      */
     List<UebTopicSink> getUebTopicSinks();
-
-    /**
-     * Gets only the DMAAP Topic Sinks.
-     *
-     * @return the DMAAP Topic Sink List
-     */
-    List<DmaapTopicSink> getDmaapTopicSinks();
 
     /**
      * Gets only the KAFKA Topic Sinks.

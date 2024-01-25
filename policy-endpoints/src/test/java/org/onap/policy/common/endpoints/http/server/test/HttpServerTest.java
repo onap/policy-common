@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2020,2023 Nordix Foundation.
+ * Modifications Copyright (C) 2020, 2023-2024 Nordix Foundation.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,6 +40,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.UUID;
 import org.apache.commons.io.IOUtils;
 import org.junit.AfterClass;
@@ -397,7 +398,6 @@ public class HttpServerTest {
         server.waitedStart(5000);
 
         assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
-        assertFalse(HttpServletServerFactoryInstance.getServerFactory().get(port).isAaf());
 
         String response = http(portUrl + JUNIT_ECHO_HELLO);
         assertEquals(HELLO, response);
@@ -525,7 +525,8 @@ public class HttpServerTest {
                 .hasMessageContaining("No resourceBase provided");
 
         staticServer.addServletResource(null,
-                HttpServerTest.class.getClassLoader().getResource("webapps/root").toExternalForm());
+                Objects.requireNonNull(HttpServerTest.class.getClassLoader().getResource("webapps/root"))
+                    .toExternalForm());
 
         thrown = catchThrowable(() -> staticServer.addServletClass("/*", RestEchoService.class.getName()));
         assertThat(thrown).isInstanceOf(UnsupportedOperationException.class)
@@ -558,9 +559,11 @@ public class HttpServerTest {
         HttpServletServer staticResourceServer = HttpServletServerFactoryInstance.getServerFactory()
                 .buildStaticResourceServer("Static Resources Server", false, LOCALHOST, port, false, "/", true);
         staticResourceServer.addServletResource("/root/*",
-                HttpServerTest.class.getClassLoader().getResource("webapps/root").toExternalForm());
+                Objects.requireNonNull(HttpServerTest.class.getClassLoader().getResource("webapps/root"))
+                    .toExternalForm());
         staticResourceServer.addServletResource("/alt-root/*",
-                HttpServerTest.class.getClassLoader().getResource("webapps/alt-root").toExternalForm());
+                Objects.requireNonNull(HttpServerTest.class.getClassLoader().getResource("webapps/alt-root"))
+                    .toExternalForm());
         staticResourceServer.waitedStart(5000);
 
         assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());
@@ -583,7 +586,8 @@ public class HttpServerTest {
         HttpServletServer staticResourceServer = HttpServletServerFactoryInstance.getServerFactory()
                 .buildStaticResourceServer("Static Resources Server", false, LOCALHOST, port, false, "/", true);
         staticResourceServer.addServletResource("/root/*",
-                HttpServerTest.class.getClassLoader().getResource("webapps/root").toExternalForm());
+                Objects.requireNonNull(HttpServerTest.class.getClassLoader().getResource("webapps/root"))
+                    .toExternalForm());
         staticResourceServer.waitedStart(5000);
 
         int port2 = port + 1;
@@ -592,7 +596,8 @@ public class HttpServerTest {
         jerseyServer.addServletPackage("/api/*", this.getClass().getPackage().getName());
 
         Throwable thrown = catchThrowable(() -> jerseyServer.addServletResource("/root/*",
-                HttpServerTest.class.getClassLoader().getResource("webapps/root").toExternalForm()));
+                Objects.requireNonNull(HttpServerTest.class.getClassLoader().getResource("webapps/root"))
+                    .toExternalForm()));
         assertThat(thrown).isInstanceOf(UnsupportedOperationException.class)
                 .hasMessageContaining("is not supported on this type of jetty server");
 
@@ -628,7 +633,7 @@ public class HttpServerTest {
     }
 
     /**
-     * Performs an http request.
+     * Performs a http request.
      *
      * @throws MalformedURLException make sure URL is good
      * @throws IOException thrown is IO exception occurs

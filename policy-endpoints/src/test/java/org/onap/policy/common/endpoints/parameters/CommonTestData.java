@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2019 Nordix Foundation.
+ *  Copyright (C) 2019, 2024 Nordix Foundation.
  *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
 
  * ================================================================================
@@ -49,9 +49,9 @@ public class CommonTestData {
     public static final boolean REST_SERVER_HTTPS = true;
     public static final boolean REST_SERVER_AAF = false;
 
-    public static final String TOPIC_NAME = "POLICY-PDP-PAP";
-    public static final String TOPIC_INFRA = "dmaap";
-    public static final String TOPIC_SERVER = "message-router";
+    public static final String TOPIC_NAME = "policy-pdp-pap";
+    public static final String TOPIC_INFRA = "kafka";
+    public static final String TOPIC_SERVER = "kafka:9092";
 
     public static final List<TopicParameters> TOPIC_PARAMS =
         Arrays.asList(getTopicParameters(TOPIC_NAME, TOPIC_INFRA, TOPIC_SERVER));

@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2020 Nordix Foundation.
+ * Modifications Copyright (C) 2020, 2024 Nordix Foundation.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -50,18 +50,6 @@ public interface HttpServletServer extends Startable {
      * @param relativeUriPath relative path
      */
     void setBasicAuthentication(String user, String password, String relativeUriPath);
-
-    /**
-     * Enables AAF based authentication.
-     *
-     * @param filterPath filter path
-     */
-    void setAafAuthentication(String filterPath);
-
-    /**
-     * Checks if AAF authentication has been enabled.
-     */
-    boolean isAaf();
 
     /**
      * Sets the serialization provider to be used when classes are added to the service.
