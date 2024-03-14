@@ -21,14 +21,13 @@
 
 package org.onap.policy.common.endpoints.event.comm.client;
 
-import java.util.Arrays;
+import jakarta.validation.constraints.NotNull;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.BlockingDeque;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.TimeUnit;
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicEndpoint;
 import org.onap.policy.common.endpoints.event.comm.TopicEndpointManager;
