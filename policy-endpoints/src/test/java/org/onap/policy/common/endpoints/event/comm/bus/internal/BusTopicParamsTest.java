@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +25,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Arrays;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.function.BiConsumer;
 import org.junit.Before;
 import org.junit.Test;
@@ -46,7 +47,7 @@ public class BusTopicParamsTest extends TopicTestBase {
 
         assertEquals(addProps, params.getAdditionalProps());
         assertEquals(MY_AFT_ENV, params.getAftEnvironment());
-        assertEquals(true, params.isAllowSelfSignedCerts());
+        assertTrue(params.isAllowSelfSignedCerts());
         assertEquals(MY_API_KEY, params.getApiKey());
         assertEquals(MY_API_SECRET, params.getApiSecret());
         assertEquals(MY_BASE_PATH, params.getBasePath());
@@ -59,7 +60,7 @@ public class BusTopicParamsTest extends TopicTestBase {
         assertEquals(MY_HOST, params.getHostname());
         assertEquals(MY_LAT, params.getLatitude());
         assertEquals(MY_LONG, params.getLongitude());
-        assertEquals(true, params.isManaged());
+        assertTrue(params.isManaged());
         assertEquals(MY_PARTITION, params.getPartitionId());
         assertEquals(MY_PARTNER, params.getPartner());
         assertEquals(MY_PASS, params.getPassword());
@@ -67,16 +68,16 @@ public class BusTopicParamsTest extends TopicTestBase {
         assertEquals(servers, params.getServers());
         assertEquals(MY_TOPIC, params.getTopic());
         assertEquals(MY_EFFECTIVE_TOPIC, params.getEffectiveTopic());
-        assertEquals(true, params.isUseHttps());
+        assertTrue(params.isUseHttps());
         assertEquals(MY_USERNAME, params.getUserName());
     }
 
     @Test
     public void testBooleanGetters() {
         // ensure that booleans are independent of each other
-        testBoolean("true:false:false", (bldr, flag) -> bldr.allowSelfSignedCerts(flag));
-        testBoolean("false:true:false", (bldr, flag) -> bldr.managed(flag));
-        testBoolean("false:false:true", (bldr, flag) -> bldr.useHttps(flag));
+        testBoolean("true:false:false", TopicParamsBuilder::allowSelfSignedCerts);
+        testBoolean("false:true:false", TopicParamsBuilder::managed);
+        testBoolean("false:false:true", TopicParamsBuilder::useHttps);
     }
 
     @Test
@@ -124,15 +125,15 @@ public class BusTopicParamsTest extends TopicTestBase {
         assertTrue(makeBuilder().port(65536).build().isPortInvalid());
         assertTrue(makeBuilder().servers(null).build().isServersInvalid());
         assertTrue(makeBuilder().servers(new LinkedList<>()).build().isServersInvalid());
-        assertTrue(makeBuilder().servers(Arrays.asList("")).build().isServersInvalid());
-        assertFalse(makeBuilder().servers(Arrays.asList("one-server")).build().isServersInvalid());
+        assertTrue(makeBuilder().servers(List.of("")).build().isServersInvalid());
+        assertFalse(makeBuilder().servers(List.of("one-server")).build().isServersInvalid());
         assertTrue(makeBuilder().topic("").build().isTopicInvalid());
         assertFalse(makeBuilder().userName("").build().isUserNameValid());
     }
 
     /**
      * Tests the boolean methods by applying a function, once with {@code false} and once
-     * with {@code true}. Verifies that all of the boolean methods return the correct
+     * with {@code true}. Verifies that all the boolean methods return the correct
      * value by concatenating them.
      *
      * @param expectedTrue the string that is expected when {@code true} is passed to the
@@ -147,7 +148,7 @@ public class BusTopicParamsTest extends TopicTestBase {
 
         BusTopicParams params = builder.build();
         assertEquals("false:false:false",
-                        "" + params.isAllowSelfSignedCerts() + ":" + params.isManaged() + ":" + params.isUseHttps());
+                        params.isAllowSelfSignedCerts() + ":" + params.isManaged() + ":" + params.isUseHttps());
 
 
         // now try the "true" case
@@ -155,6 +156,6 @@ public class BusTopicParamsTest extends TopicTestBase {
 
         params = builder.build();
         assertEquals(expectedTrue,
-                        "" + params.isAllowSelfSignedCerts() + ":" + params.isManaged() + ":" + params.isUseHttps());
+                        params.isAllowSelfSignedCerts() + ":" + params.isManaged() + ":" + params.isUseHttps());
     }
 }

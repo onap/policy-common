@@ -37,8 +37,6 @@ import org.junit.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicPropertyBuilder;
-import org.onap.policy.common.endpoints.event.comm.bus.UebTopicFactories;
-import org.onap.policy.common.endpoints.event.comm.bus.UebTopicPropertyBuilder;
 import org.onap.policy.common.endpoints.parameters.TopicParameterGroup;
 import org.onap.policy.common.endpoints.parameters.TopicParameters;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
@@ -49,11 +47,8 @@ public class TopicEndpointProxyTest {
     private static final String NOOP_SOURCE_TOPIC = "noop-source";
     private static final String NOOP_SINK_TOPIC = "noop-sink";
 
-    private static final String UEB_SOURCE_TOPIC = "ueb-source";
-    private static final String UEB_SINK_TOPIC = "ueb-sink";
-
-    private Properties configuration = new Properties();
-    private TopicParameterGroup group = new TopicParameterGroup();
+    private final Properties configuration = new Properties();
+    private final TopicParameterGroup group = new TopicParameterGroup();
 
     /**
      * Constructor.
@@ -74,18 +69,6 @@ public class TopicEndpointProxyTest {
         configuration.putAll(noopSinkBuilder.build());
         group.getTopicSinks().add(noopSinkBuilder.getParams());
 
-        UebTopicPropertyBuilder uebSourceBuilder =
-                new UebTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_UEB_SOURCE_TOPICS)
-                        .makeTopic(UEB_SOURCE_TOPIC);
-        configuration.putAll(uebSourceBuilder.build());
-        group.getTopicSources().add(uebSourceBuilder.getParams());
-
-        UebTopicPropertyBuilder uebSinkBuilder =
-                new UebTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_UEB_SINK_TOPICS)
-                        .makeTopic(UEB_SINK_TOPIC);
-        configuration.putAll(uebSinkBuilder.build());
-        group.getTopicSinks().add(uebSinkBuilder.getParams());
-
         TopicParameters invalidCommInfraParams =
                 new NoopTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_NOOP_SOURCE_TOPICS)
                         .makeTopic(NOOP_SOURCE_TOPIC).getParams();
@@ -99,19 +82,19 @@ public class TopicEndpointProxyTest {
     }
 
     private <T extends Topic> boolean allSources(List<T> topics) {
-        return exists(topics, NOOP_SOURCE_TOPIC) && exists(topics, UEB_SOURCE_TOPIC);
+        return exists(topics, NOOP_SOURCE_TOPIC);
     }
 
     private <T extends Topic> boolean allSinks(List<T> topics) {
-        return exists(topics, NOOP_SINK_TOPIC) && exists(topics, UEB_SINK_TOPIC);
+        return exists(topics, NOOP_SINK_TOPIC);
     }
 
     private <T extends Topic> boolean anySource(List<T> topics) {
-        return exists(topics, NOOP_SOURCE_TOPIC) || exists(topics, UEB_SOURCE_TOPIC);
+        return exists(topics, NOOP_SOURCE_TOPIC);
     }
 
     private <T extends Topic> boolean anySink(List<T> topics) {
-        return exists(topics, NOOP_SINK_TOPIC) || exists(topics, UEB_SINK_TOPIC);
+        return exists(topics, NOOP_SINK_TOPIC);
     }
 
     /**
@@ -121,9 +104,6 @@ public class TopicEndpointProxyTest {
     public void tearDown() {
         NoopTopicFactories.getSinkFactory().destroy();
         NoopTopicFactories.getSourceFactory().destroy();
-
-        UebTopicFactories.getSinkFactory().destroy();
-        UebTopicFactories.getSourceFactory().destroy();
     }
 
     @Test
@@ -142,7 +122,7 @@ public class TopicEndpointProxyTest {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSource> sources = manager.addTopicSources(group.getTopicSources());
-        assertSame(2, sources.size());
+        assertSame(1, sources.size());
 
         assertTrue(allSources(sources));
         assertFalse(anySink(sources));
@@ -153,7 +133,7 @@ public class TopicEndpointProxyTest {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSource> sources = manager.addTopicSources(configuration);
-        assertSame(2, sources.size());
+        assertSame(1, sources.size());
 
         assertTrue(allSources(sources));
         assertFalse(anySink(sources));
@@ -164,7 +144,7 @@ public class TopicEndpointProxyTest {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSink> sinks = manager.addTopicSinks(group.getTopicSinks());
-        assertSame(2, sinks.size());
+        assertSame(1, sinks.size());
 
         assertFalse(anySource(sinks));
         assertTrue(allSinks(sinks));
@@ -175,7 +155,7 @@ public class TopicEndpointProxyTest {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSink> sinks = manager.addTopicSinks(configuration);
-        assertSame(2, sinks.size());
+        assertSame(1, sinks.size());
 
         assertFalse(anySource(sinks));
         assertTrue(allSinks(sinks));
@@ -186,7 +166,7 @@ public class TopicEndpointProxyTest {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<Topic> topics = manager.addTopics(configuration);
-        assertSame(4, topics.size());
+        assertSame(2, topics.size());
 
         assertTrue(allSources(topics));
         assertTrue(allSinks(topics));
@@ -197,7 +177,7 @@ public class TopicEndpointProxyTest {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<Topic> topics = manager.addTopics(group);
-        assertSame(4, topics.size());
+        assertSame(2, topics.size());
 
         assertTrue(allSources(topics));
         assertTrue(allSinks(topics));
@@ -236,7 +216,7 @@ public class TopicEndpointProxyTest {
         manager.addTopicSinks(configuration);
 
         List<TopicSource> sources = manager.getTopicSources();
-        assertSame(2, sources.size());
+        assertSame(1, sources.size());
 
         assertTrue(allSources(sources));
         assertFalse(anySink(sources));
@@ -250,18 +230,10 @@ public class TopicEndpointProxyTest {
         manager.addTopicSinks(configuration);
 
         List<TopicSink> sinks = manager.getTopicSinks();
-        assertSame(2, sinks.size());
+        assertSame(1, sinks.size());
 
         assertFalse(anySource(sinks));
         assertTrue(allSinks(sinks));
-    }
-
-    @Test
-    public void testGetUebTopicSources() {
-        TopicEndpoint manager = new TopicEndpointProxy();
-
-        manager.addTopicSources(configuration);
-        assertSame(1, manager.getUebTopicSources().size());
     }
 
     @Test
@@ -270,14 +242,6 @@ public class TopicEndpointProxyTest {
 
         manager.addTopicSources(configuration);
         assertSame(1, manager.getNoopTopicSources().size());
-    }
-
-    @Test
-    public void testGetUebTopicSinks() {
-        TopicEndpoint manager = new TopicEndpointProxy();
-
-        manager.addTopicSinks(configuration);
-        assertSame(1, manager.getUebTopicSinks().size());
     }
 
     @Test
@@ -322,12 +286,9 @@ public class TopicEndpointProxyTest {
         manager.addTopicSources(configuration);
 
         assertSame(NOOP_SOURCE_TOPIC, manager.getTopicSource(CommInfrastructure.NOOP, NOOP_SOURCE_TOPIC).getTopic());
-        assertSame(UEB_SOURCE_TOPIC, manager.getTopicSource(CommInfrastructure.UEB, UEB_SOURCE_TOPIC).getTopic());
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> manager.getTopicSource(CommInfrastructure.NOOP, NOOP_SINK_TOPIC));
-        assertThatIllegalStateException()
-                .isThrownBy(() -> manager.getTopicSource(CommInfrastructure.UEB, UEB_SINK_TOPIC));
     }
 
     @Test
@@ -336,38 +297,9 @@ public class TopicEndpointProxyTest {
         manager.addTopicSinks(configuration);
 
         assertSame(NOOP_SINK_TOPIC, manager.getTopicSink(CommInfrastructure.NOOP, NOOP_SINK_TOPIC).getTopic());
-        assertSame(UEB_SINK_TOPIC, manager.getTopicSink(CommInfrastructure.UEB, UEB_SINK_TOPIC).getTopic());
 
         assertThatIllegalStateException()
                 .isThrownBy(() -> manager.getTopicSink(CommInfrastructure.NOOP, NOOP_SOURCE_TOPIC));
-        assertThatIllegalStateException()
-                .isThrownBy(() -> manager.getTopicSink(CommInfrastructure.UEB, UEB_SOURCE_TOPIC));
-    }
-
-    @Test
-    public void testGetUebTopicSource() {
-        TopicEndpoint manager = new TopicEndpointProxy();
-        manager.addTopicSources(configuration);
-
-        assertSame(UEB_SOURCE_TOPIC, manager.getUebTopicSource(UEB_SOURCE_TOPIC).getTopic());
-
-        assertThatIllegalStateException().isThrownBy(() -> manager.getUebTopicSource(NOOP_SOURCE_TOPIC));
-
-        assertThatIllegalArgumentException().isThrownBy(() -> manager.getUebTopicSource(null));
-        assertThatIllegalArgumentException().isThrownBy(() -> manager.getUebTopicSource(""));
-    }
-
-    @Test
-    public void testGetUebTopicSink() {
-        TopicEndpoint manager = new TopicEndpointProxy();
-        manager.addTopicSinks(configuration);
-
-        assertSame(UEB_SINK_TOPIC, manager.getUebTopicSink(UEB_SINK_TOPIC).getTopic());
-
-        assertThatIllegalStateException().isThrownBy(() -> manager.getUebTopicSink(NOOP_SINK_TOPIC));
-
-        assertThatIllegalArgumentException().isThrownBy(() -> manager.getUebTopicSink(null));
-        assertThatIllegalArgumentException().isThrownBy(() -> manager.getUebTopicSink(""));
     }
 
     @Test
@@ -376,8 +308,6 @@ public class TopicEndpointProxyTest {
         manager.addTopicSources(configuration);
 
         assertSame(NOOP_SOURCE_TOPIC, manager.getNoopTopicSource(NOOP_SOURCE_TOPIC).getTopic());
-
-        assertThatIllegalStateException().isThrownBy(() -> manager.getNoopTopicSource(UEB_SOURCE_TOPIC));
 
         assertThatIllegalArgumentException().isThrownBy(() -> manager.getNoopTopicSource(null));
         assertThatIllegalArgumentException().isThrownBy(() -> manager.getNoopTopicSource(""));
@@ -389,8 +319,6 @@ public class TopicEndpointProxyTest {
         manager.addTopicSinks(configuration);
 
         assertSame(NOOP_SINK_TOPIC, manager.getNoopTopicSink(NOOP_SINK_TOPIC).getTopic());
-
-        assertThatIllegalStateException().isThrownBy(() -> manager.getNoopTopicSink(UEB_SINK_TOPIC));
 
         assertThatIllegalArgumentException().isThrownBy(() -> manager.getNoopTopicSink(null));
         assertThatIllegalArgumentException().isThrownBy(() -> manager.getNoopTopicSink(""));

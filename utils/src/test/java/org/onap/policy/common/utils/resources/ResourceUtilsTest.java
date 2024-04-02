@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
- *  Modifications Copyright (C) 2020-2021, 2023 Nordix Foundation.
+ *  Modifications Copyright (C) 2020-2021, 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
 package org.onap.policy.common.utils.resources;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
@@ -303,7 +304,7 @@ public class ResourceUtilsTest {
         assertEquals("testdir/testfile.xml", normalizePath(resultD0.iterator().next()));
 
         Set<String> resultD1 = ResourceUtils.getDirectoryContents("org/onap/policy/common");
-        assertTrue(resultD1.size() > 0);
+        assertFalse(resultD1.isEmpty());
         assertEquals("org/onap/policy/common/utils/", normalizePath(resultD1.iterator().next()));
 
         Set<String> resultD2 = ResourceUtils.getDirectoryContents("org/onap/policy/common/utils/coder");
@@ -312,8 +313,8 @@ public class ResourceUtilsTest {
                 normalizePath(resultD2.iterator().next()));
 
         Set<String> resultJ0 = ResourceUtils.getDirectoryContents("com");
-        assertTrue(resultJ0.contains("com/worldturner/medeia/"));
-        assertEquals("com/worldturner/", normalizePath(resultJ0.iterator().next()));
+        assertTrue(resultJ0.contains("com/google/gson/"));
+        assertEquals("com/google/", normalizePath(resultJ0.iterator().next()));
 
         Set<String> resultJ1 = ResourceUtils.getDirectoryContents("com/google/gson");
         assertTrue(resultJ1.size() > 1);

@@ -1,55 +1,30 @@
 {
-  "locked" : false,
-  "alive" : false,
-  "topicSources" : [ {
-    "servers" : [ "my-server" ],
-    "topic" : "ueb-source",
-    "effectiveTopic" : "my-effective-topic",
-    "recentEvents" : [ ],
-    "alive" : false,
-    "locked" : false,
-    "apiKey" : "my-api-key",
-    "apiSecret" : "my-api-secret",
-    "useHttps" : true,
-    "allowTracing": false,
-    "allowSelfSignedCerts" : true,
-    "consumerGroup" : "${obj.topicSources[0].consumerGroup}",
-    "consumerInstance" : "${obj.topicSources[0].consumerInstance}",
-    "fetchTimeout" : 101,
-    "fetchLimit" : 100,
-    "topicCommInfrastructure" : "UEB"
-  },
+  "locked": false,
+  "alive": false,
+  "topicSources": [
     {
-    "servers" : [ "my-server" ],
-    "topic" : "noop-source",
-    "effectiveTopic" : "noop-source",
-    "recentEvents" : [ ],
-    "alive" : false,
-    "locked" : false,
-    "topicCommInfrastructure" : "NOOP"
-  } ],
-  "topicSinks" : [ {
-    "servers" : [ "my-server" ],
-    "topic" : "ueb-sink",
-    "effectiveTopic" : "my-effective-topic",
-    "recentEvents" : [ ],
-    "alive" : false,
-    "locked" : false,
-    "apiKey" : "my-api-key",
-    "apiSecret" : "my-api-secret",
-    "useHttps" : true,
-    "allowTracing": false,
-    "allowSelfSignedCerts" : true,
-    "topicCommInfrastructure" : "UEB",
-    "partitionKey" : "${obj.topicSinks[0].partitionKey}"
-  },
+      "servers": [
+        "my-server"
+      ],
+      "topic": "noop-source",
+      "effectiveTopic": "noop-source",
+      "recentEvents": [],
+      "alive": false,
+      "locked": false,
+      "topicCommInfrastructure": "NOOP"
+    }
+  ],
+  "topicSinks": [
     {
-    "servers" : [ "my-server" ],
-    "topic" : "noop-sink",
-    "effectiveTopic" : "noop-sink",
-    "recentEvents" : [ ],
-    "alive" : false,
-    "locked" : false,
-    "topicCommInfrastructure" : "NOOP"
-  } ]
+      "servers": [
+        "my-server"
+      ],
+      "topic": "noop-sink",
+      "effectiveTopic": "noop-sink",
+      "recentEvents": [],
+      "alive": false,
+      "locked": false,
+      "topicCommInfrastructure": "NOOP"
+    }
+  ]
 }

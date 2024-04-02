@@ -37,10 +37,6 @@ public interface Topic extends TopicRegisterable, Startable, Lockable {
      */
     enum CommInfrastructure {
         /**
-         * UEB Communication Infrastructure.
-         */
-        UEB,
-        /**
          * KAFKA Communication Infrastructure.
          */
         KAFKA,

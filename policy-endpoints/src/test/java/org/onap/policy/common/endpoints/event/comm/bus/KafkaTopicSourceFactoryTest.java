@@ -2,8 +2,7 @@
  * ============LICENSE_START=======================================================
  * ONAP Policy Engine - Common Modules
  * ================================================================================
- * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Copyright (C) 2022-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +21,7 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_KAFKA_SOURCE_TOPICS;
 
@@ -69,9 +69,9 @@ public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<Kafka
         assertEquals(MY_EFFECTIVE_TOPIC, topics.get(0).getEffectiveTopic());
 
         BusTopicParams params = getLastParams();
-        assertEquals(true, params.isManaged());
-        assertEquals(false, params.isUseHttps());
-        assertEquals(Arrays.asList(KAFKA_SERVER), params.getServers());
+        assertTrue(params.isManaged());
+        assertFalse(params.isUseHttps());
+        assertEquals(List.of(KAFKA_SERVER), params.getServers());
         assertEquals(MY_TOPIC, params.getTopic());
         assertEquals(MY_EFFECTIVE_TOPIC, params.getEffectiveTopic());
     }
@@ -154,7 +154,7 @@ public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<Kafka
     }
 
     /**
-     * Factory that records the parameters of all of the sources it creates.
+     * Factory that records the parameters of all the sources it creates.
      */
     private static class SourceFactory extends IndexedKafkaTopicSourceFactory {
         private Deque<BusTopicParams> params = new LinkedList<>();

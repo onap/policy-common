@@ -29,8 +29,6 @@ import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSource;
-import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSink;
-import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSource;
 import org.onap.policy.common.endpoints.parameters.TopicParameterGroup;
 import org.onap.policy.common.endpoints.parameters.TopicParameters;
 
@@ -129,18 +127,6 @@ public interface TopicEndpoint extends Startable, Lockable {
     TopicSource getTopicSource(Topic.CommInfrastructure commType, String topicName);
 
     /**
-     * Get the UEB Topic Source for the given topic name.
-     *
-     * @param topicName the topic name
-     *
-     * @return the UEB Topic Source
-     * @throws IllegalStateException if the entity is in an invalid state, for example multiple
-     *         TopicReaders for a topic name and communication infrastructure
-     * @throws IllegalArgumentException if invalid parameters are present
-     */
-    UebTopicSource getUebTopicSource(String topicName);
-
-    /**
      * Get the Noop Source for the given topic name.
      *
      * @param topicName the topic name.
@@ -198,18 +184,6 @@ public interface TopicEndpoint extends Startable, Lockable {
     TopicSink getTopicSink(Topic.CommInfrastructure commType, String topicName);
 
     /**
-     * Get the UEB Topic Source for the given topic name.
-     *
-     * @param topicName the topic name
-     *
-     * @return the Topic Source
-     * @throws IllegalStateException if the entity is in an invalid state, for example multiple
-     *         TopicReaders for a topic name and communication infrastructure
-     * @throws IllegalArgumentException if invalid parameters are present
-     */
-    UebTopicSink getUebTopicSink(String topicName);
-
-    /**
      * Get the no-op Topic Sink for the given topic name.
      *
      * @param topicName the topic name
@@ -234,13 +208,6 @@ public interface TopicEndpoint extends Startable, Lockable {
     KafkaTopicSink getKafkaTopicSink(String topicName);
 
     /**
-     * Gets only the UEB Topic Sources.
-     *
-     * @return the UEB Topic Source List
-     */
-    List<UebTopicSource> getUebTopicSources();
-
-    /**
      * Gets only the KAFKA Topic Sources.
      *
      * @return the KAFKA Topic Source List
@@ -253,13 +220,6 @@ public interface TopicEndpoint extends Startable, Lockable {
      * @return the NOOP Topic Source List
      */
     List<NoopTopicSource> getNoopTopicSources();
-
-    /**
-     * Gets only the UEB Topic Sinks.
-     *
-     * @return the UEB Topic Sink List
-     */
-    List<UebTopicSink> getUebTopicSinks();
 
     /**
      * Gets only the KAFKA Topic Sinks.

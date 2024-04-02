@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,6 +33,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -124,7 +126,7 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
 
         verify(pub).send(MY_PARTITION, MY_MESSAGE);
         verify(listener).onTopicEvent(CommInfrastructure.NOOP, MY_TOPIC, MY_MESSAGE);
-        assertEquals(Arrays.asList(MY_MESSAGE), Arrays.asList(sink.getRecentEvents()));
+        assertEquals(List.of(MY_MESSAGE), Arrays.asList(sink.getRecentEvents()));
 
         // arrange for send to throw an exception
         when(pub.send(anyString(), anyString())).thenThrow(new RuntimeException(EXPECTED));
@@ -138,8 +140,7 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
     @Test(expected = IllegalArgumentException.class)
     public void testSend_NullMessage() {
         sink.start();
-        BusPublisher pub = mock(BusPublisher.class);
-        sink.publisher = pub;
+        sink.publisher = mock(BusPublisher.class);
 
         sink.send(null);
     }
@@ -147,16 +148,14 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
     @Test(expected = IllegalArgumentException.class)
     public void testSend_EmptyMessage() {
         sink.start();
-        BusPublisher pub = mock(BusPublisher.class);
-        sink.publisher = pub;
+        sink.publisher = mock(BusPublisher.class);
 
         sink.send("");
     }
 
     @Test(expected = IllegalStateException.class)
     public void testSend_NotStarted() {
-        BusPublisher pub = mock(BusPublisher.class);
-        sink.publisher = pub;
+        sink.publisher = mock(BusPublisher.class);
 
         sink.send(MY_MESSAGE);
     }

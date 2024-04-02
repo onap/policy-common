@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,7 +69,7 @@ public class BidirectionalTopicClientTest {
     private static final String SOURCE_TOPIC = "my-source-topic";
     private static final String MY_TEXT = "my-text";
 
-    private static final CommInfrastructure SINK_INFRA = CommInfrastructure.UEB;
+    private static final CommInfrastructure SINK_INFRA = CommInfrastructure.NOOP;
     private static final CommInfrastructure SOURCE_INFRA = CommInfrastructure.NOOP;
 
     @Mock

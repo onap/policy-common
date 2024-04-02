@@ -61,7 +61,7 @@ public final class OnapConfigProperties {
     public static final String RESPONSE_CODE = "ResponseCode";
 
     /**
-     * Human readable description of the application specific response code.
+     * Human-readable description of the application specific response code.
      */
     public static final String RESPONSE_DESCRIPTION = "ResponseDescription";
 

@@ -23,42 +23,35 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThrows;
-import static org.junit.Assert.fail;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.att.nsa.cambria.client.CambriaConsumer;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.concurrent.CountDownLatch;
-import org.apache.commons.collections4.IteratorUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.TopicPartition;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.CambriaConsumerWrapper;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.FetchingBusConsumer;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusConsumer.KafkaConsumerWrapper;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
-import org.springframework.test.util.ReflectionTestUtils;
 
 public class BusConsumerTest extends TopicTestBase {
 
@@ -68,11 +61,18 @@ public class BusConsumerTest extends TopicTestBase {
     @Mock
     KafkaConsumer<String, String> mockedKafkaConsumer;
 
+    AutoCloseable closeable;
+
     @Before
     @Override
     public void setUp() {
         super.setUp();
-        MockitoAnnotations.initMocks(this);
+        closeable = MockitoAnnotations.openMocks(this);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        closeable.close();
     }
 
 
@@ -136,61 +136,6 @@ public class BusConsumerTest extends TopicTestBase {
         thread.interrupt();
         thread.join();
         assertThat(System.currentTimeMillis() - tstart).isLessThan(LONG_TIMEOUT_MILLIS);
-    }
-
-    @Test
-    public void testCambriaConsumerWrapper() {
-        // verify that different wrappers can be built
-        new CambriaConsumerWrapper(makeBuilder().build());
-        new CambriaConsumerWrapper(makeBuilder().useHttps(false).build());
-        new CambriaConsumerWrapper(makeBuilder().useHttps(true).build());
-        new CambriaConsumerWrapper(makeBuilder().useHttps(true).allowSelfSignedCerts(false).build());
-        new CambriaConsumerWrapper(makeBuilder().useHttps(true).allowSelfSignedCerts(true).build());
-        new CambriaConsumerWrapper(makeBuilder().apiKey(null).build());
-        new CambriaConsumerWrapper(makeBuilder().apiSecret(null).build());
-        new CambriaConsumerWrapper(makeBuilder().apiKey(null).apiSecret(null).build());
-        new CambriaConsumerWrapper(makeBuilder().userName(null).build());
-        new CambriaConsumerWrapper(makeBuilder().password(null).build());
-
-        assertThatCode(() -> new CambriaConsumerWrapper(makeBuilder().userName(null).password(null).build()))
-                        .doesNotThrowAnyException();
-    }
-
-    @Test
-    public void testCambriaConsumerWrapperFetch() throws Exception {
-        CambriaConsumer inner = mock(CambriaConsumer.class);
-        List<String> lst = Arrays.asList(MY_MESSAGE, MY_MESSAGE2);
-        when(inner.fetch()).thenReturn(lst);
-
-        CambriaConsumerWrapper cons = new CambriaConsumerWrapper(builder.build());
-        ReflectionTestUtils.setField(cons, "consumer", inner);
-
-        assertEquals(lst, IteratorUtils.toList(cons.fetch().iterator()));
-
-        // arrange to throw exception next time fetch is called
-        IOException ex = new IOException(EXPECTED);
-        when(inner.fetch()).thenThrow(ex);
-
-        cons.fetchTimeout = 10;
-
-        try {
-            cons.fetch();
-            fail("missing exception");
-
-        } catch (IOException e) {
-            assertEquals(ex, e);
-        }
-    }
-
-    @Test
-    public void testCambriaConsumerWrapperClose() {
-        CambriaConsumerWrapper cons = new CambriaConsumerWrapper(builder.build());
-        assertThatCode(cons::close).doesNotThrowAnyException();
-    }
-
-    @Test
-    public void testCambriaConsumerWrapperToString() {
-        assertNotNull(new CambriaConsumerWrapper(makeBuilder().build()).toString());
     }
 
     @Test

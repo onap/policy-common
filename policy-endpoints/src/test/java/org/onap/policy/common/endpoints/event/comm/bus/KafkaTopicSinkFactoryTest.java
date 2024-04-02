@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2022 Nordix Foundation.
+ * Copyright (C) 2022, 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,11 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_KAFKA_SINK_TOPICS;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX;
 
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
@@ -70,7 +70,7 @@ public class KafkaTopicSinkFactoryTest extends KafkaTopicFactoryTestBase<KafkaTo
 
         // check parameters that were used
         BusTopicParams params = getLastParams();
-        assertEquals(false, params.isAllowSelfSignedCerts());
+        assertFalse(params.isAllowSelfSignedCerts());
     }
 
     @Test
@@ -82,9 +82,9 @@ public class KafkaTopicSinkFactoryTest extends KafkaTopicFactoryTestBase<KafkaTo
         assertEquals(MY_EFFECTIVE_TOPIC, topics.get(0).getEffectiveTopic());
 
         BusTopicParams params = getLastParams();
-        assertEquals(true, params.isManaged());
-        assertEquals(false, params.isUseHttps());
-        assertEquals(Arrays.asList(KAFKA_SERVER), params.getServers());
+        assertTrue(params.isManaged());
+        assertFalse(params.isUseHttps());
+        assertEquals(List.of(KAFKA_SERVER), params.getServers());
         assertEquals(MY_TOPIC, params.getTopic());
         assertEquals(MY_EFFECTIVE_TOPIC, params.getEffectiveTopic());
         assertEquals(MY_PARTITION, params.getPartitionId());
@@ -178,7 +178,7 @@ public class KafkaTopicSinkFactoryTest extends KafkaTopicFactoryTestBase<KafkaTo
     }
 
     /**
-     * Factory that records the parameters of all of the sinks it creates.
+     * Factory that records the parameters of all the sinks it creates.
      */
     private static class SinkFactory extends IndexedKafkaTopicSinkFactory {
         private Deque<BusTopicParams> params = new LinkedList<>();

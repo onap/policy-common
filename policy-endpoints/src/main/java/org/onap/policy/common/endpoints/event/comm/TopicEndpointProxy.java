@@ -34,9 +34,6 @@ import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicSource;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSink;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicSource;
-import org.onap.policy.common.endpoints.event.comm.bus.UebTopicFactories;
-import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSink;
-import org.onap.policy.common.endpoints.event.comm.bus.UebTopicSource;
 import org.onap.policy.common.endpoints.parameters.TopicParameterGroup;
 import org.onap.policy.common.endpoints.parameters.TopicParameters;
 import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
@@ -90,9 +87,6 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         for (TopicParameters param : paramList) {
             switch (Topic.CommInfrastructure.valueOf(param.getTopicCommInfrastructure().toUpperCase())) {
-                case UEB:
-                    sources.add(UebTopicFactories.getSourceFactory().build(param));
-                    break;
                 case KAFKA:
                     sources.add(KafkaTopicFactories.getSourceFactory().build(param));
                     break;
@@ -114,13 +108,11 @@ class TopicEndpointProxy implements TopicEndpoint {
     @Override
     public List<TopicSource> addTopicSources(Properties properties) {
 
-        // 1. Create UEB Sources
-        // 2. Create KAFKA Sources
-        // 3. Create NOOP Sources
+        // 1. Create KAFKA Sources
+        // 2. Create NOOP Sources
 
         List<TopicSource> sources = new ArrayList<>();
 
-        sources.addAll(UebTopicFactories.getSourceFactory().build(properties));
         sources.addAll(KafkaTopicFactories.getSourceFactory().build(properties));
         sources.addAll(NoopTopicFactories.getSourceFactory().build(properties));
 
@@ -141,9 +133,6 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         for (TopicParameters param : paramList) {
             switch (Topic.CommInfrastructure.valueOf(param.getTopicCommInfrastructure().toUpperCase())) {
-                case UEB:
-                    sinks.add(UebTopicFactories.getSinkFactory().build(param));
-                    break;
                 case KAFKA:
                     sinks.add(KafkaTopicFactories.getSinkFactory().build(param));
                     break;
@@ -164,13 +153,11 @@ class TopicEndpointProxy implements TopicEndpoint {
 
     @Override
     public List<TopicSink> addTopicSinks(Properties properties) {
-        // 1. Create UEB Sinks
-        // 2. Create KAFKA Sinks
-        // 3. Create NOOP Sinks
+        // 1. Create KAFKA Sinks
+        // 2. Create NOOP Sinks
 
         final List<TopicSink> sinks = new ArrayList<>();
 
-        sinks.addAll(UebTopicFactories.getSinkFactory().build(properties));
         sinks.addAll(KafkaTopicFactories.getSinkFactory().build(properties));
         sinks.addAll(NoopTopicFactories.getSinkFactory().build(properties));
 
@@ -190,7 +177,6 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         final List<TopicSource> sources = new ArrayList<>();
 
-        sources.addAll(UebTopicFactories.getSourceFactory().inventory());
         sources.addAll(KafkaTopicFactories.getSourceFactory().inventory());
         sources.addAll(NoopTopicFactories.getSourceFactory().inventory());
 
@@ -207,12 +193,6 @@ class TopicEndpointProxy implements TopicEndpoint {
         final List<TopicSource> sources = new ArrayList<>();
 
         topicNames.forEach(topic -> {
-            try {
-                sources.add(Objects.requireNonNull(this.getUebTopicSource(topic)));
-            } catch (final Exception e) {
-                logger.debug("No UEB source for topic: {}", topic, e);
-            }
-
             try {
                 sources.add(Objects.requireNonNull(this.getKafkaTopicSource(topic)));
             } catch (final Exception e) {
@@ -234,7 +214,6 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         final List<TopicSink> sinks = new ArrayList<>();
 
-        sinks.addAll(UebTopicFactories.getSinkFactory().inventory());
         sinks.addAll(KafkaTopicFactories.getSinkFactory().inventory());
         sinks.addAll(NoopTopicFactories.getSinkFactory().inventory());
 
@@ -250,12 +229,6 @@ class TopicEndpointProxy implements TopicEndpoint {
 
         final List<TopicSink> sinks = new ArrayList<>();
         for (final String topic : topicNames) {
-            try {
-                sinks.add(Objects.requireNonNull(this.getUebTopicSink(topic)));
-            } catch (final Exception e) {
-                logger.debug("No UEB sink for topic: {}", topic, e);
-            }
-
             try {
                 sinks.add(Objects.requireNonNull(this.getKafkaTopicSink(topic)));
             } catch (final Exception e) {
@@ -280,12 +253,6 @@ class TopicEndpointProxy implements TopicEndpoint {
         final List<TopicSink> sinks = new ArrayList<>();
 
         try {
-            sinks.add(this.getUebTopicSink(topicName));
-        } catch (final Exception e) {
-            logNoSink(topicName, e);
-        }
-
-        try {
             sinks.add(this.getKafkaTopicSink(topicName));
         } catch (final Exception e) {
             logNoSink(topicName, e);
@@ -302,12 +269,6 @@ class TopicEndpointProxy implements TopicEndpoint {
 
     @GsonJsonIgnore
     @Override
-    public List<UebTopicSource> getUebTopicSources() {
-        return UebTopicFactories.getSourceFactory().inventory();
-    }
-
-    @GsonJsonIgnore
-    @Override
     public List<KafkaTopicSource> getKafkaTopicSources() {
         return KafkaTopicFactories.getSourceFactory().inventory();
     }
@@ -316,12 +277,6 @@ class TopicEndpointProxy implements TopicEndpoint {
     @Override
     public List<NoopTopicSource> getNoopTopicSources() {
         return NoopTopicFactories.getSourceFactory().inventory();
-    }
-
-    @GsonJsonIgnore
-    @Override
-    public List<UebTopicSink> getUebTopicSinks() {
-        return UebTopicFactories.getSinkFactory().inventory();
     }
 
     @Override
@@ -411,9 +366,6 @@ class TopicEndpointProxy implements TopicEndpoint {
     public void shutdown() {
         this.stop();
 
-        UebTopicFactories.getSourceFactory().destroy();
-        UebTopicFactories.getSinkFactory().destroy();
-
         KafkaTopicFactories.getSourceFactory().destroy();
         KafkaTopicFactories.getSinkFactory().destroy();
 
@@ -478,7 +430,6 @@ class TopicEndpointProxy implements TopicEndpoint {
         }
 
         return switch (commType) {
-            case UEB -> this.getUebTopicSource(topicName);
             case KAFKA -> this.getKafkaTopicSource(topicName);
             case NOOP -> this.getNoopTopicSource(topicName);
             default -> throw new UnsupportedOperationException("Unsupported " + commType.name());
@@ -496,21 +447,10 @@ class TopicEndpointProxy implements TopicEndpoint {
         }
 
         return switch (commType) {
-            case UEB -> this.getUebTopicSink(topicName);
             case KAFKA -> this.getKafkaTopicSink(topicName);
             case NOOP -> this.getNoopTopicSink(topicName);
             default -> throw new UnsupportedOperationException("Unsupported " + commType.name());
         };
-    }
-
-    @Override
-    public UebTopicSource getUebTopicSource(String topicName) {
-        return UebTopicFactories.getSourceFactory().get(topicName);
-    }
-
-    @Override
-    public UebTopicSink getUebTopicSink(String topicName) {
-        return UebTopicFactories.getSinkFactory().get(topicName);
     }
 
     @Override

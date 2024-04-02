@@ -23,19 +23,13 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
-import com.att.nsa.apiClient.http.HttpClient.ConnectionType;
-import com.att.nsa.cambria.client.CambriaBatchingPublisher;
-import com.att.nsa.cambria.client.CambriaClientBuilders;
 import io.opentelemetry.instrumentation.kafkaclients.v2_6.TracingProducerInterceptor;
-import java.net.MalformedURLException;
-import java.security.GeneralSecurityException;
 import java.util.Properties;
 import java.util.UUID;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,89 +53,6 @@ public interface BusPublisher {
      * closes the publisher.
      */
     void close();
-
-    /**
-     * Cambria based library publisher.
-     */
-    class CambriaPublisherWrapper implements BusPublisher {
-
-        private static final Logger logger = LoggerFactory.getLogger(CambriaPublisherWrapper.class);
-
-        /**
-         * The actual Cambria publisher.
-         */
-        @GsonJsonIgnore
-        protected CambriaBatchingPublisher publisher;
-
-        /**
-         * Constructor.
-         *
-         * @param busTopicParams topic parameters
-         */
-        public CambriaPublisherWrapper(BusTopicParams busTopicParams) {
-
-            var builder = new CambriaClientBuilders.PublisherBuilder();
-
-            builder.usingHosts(busTopicParams.getServers()).onTopic(busTopicParams.getTopic());
-
-            // Set read timeout to 30 seconds (TBD: this should be configurable)
-            builder.withSocketTimeout(30000);
-
-            if (busTopicParams.isUseHttps()) {
-                if (busTopicParams.isAllowSelfSignedCerts()) {
-                    builder.withConnectionType(ConnectionType.HTTPS_NO_VALIDATION);
-                } else {
-                    builder.withConnectionType(ConnectionType.HTTPS);
-                }
-            }
-
-            if (busTopicParams.isApiKeyValid() && busTopicParams.isApiSecretValid()) {
-                builder.authenticatedBy(busTopicParams.getApiKey(), busTopicParams.getApiSecret());
-            }
-
-            if (busTopicParams.isUserNameValid() && busTopicParams.isPasswordValid()) {
-                builder.authenticatedByHttp(busTopicParams.getUserName(), busTopicParams.getPassword());
-            }
-
-            try {
-                this.publisher = builder.build();
-            } catch (MalformedURLException | GeneralSecurityException e) {
-                throw new IllegalArgumentException(e);
-            }
-        }
-
-        @Override
-        public boolean send(String partitionId, String message) {
-            if (message == null) {
-                throw new IllegalArgumentException(NO_MESSAGE_PROVIDED);
-            }
-
-            try {
-                this.publisher.send(partitionId, message);
-            } catch (Exception e) {
-                logger.warn("{}: SEND of {} cannot be performed because of {}", this, message, e.getMessage(), e);
-                return false;
-            }
-            return true;
-        }
-
-        @Override
-        public void close() {
-            logger.info(LOG_CLOSE, this);
-
-            try {
-                this.publisher.close();
-            } catch (Exception e) {
-                logger.warn("{}: CLOSE FAILED because of {}", this, e.getMessage(), e);
-            }
-        }
-
-        @Override
-        public String toString() {
-            return "CambriaPublisherWrapper []";
-        }
-
-    }
 
     /**
      * Kafka based library publisher.

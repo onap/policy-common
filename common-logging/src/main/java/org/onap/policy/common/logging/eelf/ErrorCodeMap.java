@@ -3,6 +3,7 @@
  * ONAP-Logging
  * ================================================================================
  * Copyright (C) 2017-2018, 2020-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +23,7 @@ package org.onap.policy.common.logging.eelf;
 
 import java.util.EnumMap;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
@@ -86,7 +88,6 @@ public final class ErrorCodeMap {
             new ErrorCodeInfo(MISS_PROPERTY_ERROR, MISS_PROPERTY_ERROR_DESCRIPTION));
         hm.put(MessageCodes.UPDATE_ERROR, new ErrorCodeInfo(UPDATE_ERROR, UPDATE_ERROR_DESCRIPTION));
         hm.put(MessageCodes.ERROR_SYSTEM_ERROR, new ErrorCodeInfo(ERROR_SYSTEM_ERROR, ERROR_SYSTEM_ERROR_DESCRIPTION));
-        hm.put(MessageCodes.ERROR_DATA_ISSUE, new ErrorCodeInfo(ERROR_DATA_ISSUE, ERROR_DATA_ISSUE_DESCRIPTION));
         hm.put(MessageCodes.ERROR_PERMISSIONS, new ErrorCodeInfo(ERROR_PERMISSIONS, ERROR_PERMISSIONS_DESCRIPTION));
         hm.put(MessageCodes.ERROR_DATA_ISSUE, new ErrorCodeInfo(ERROR_DATA_ISSUE, ERROR_DATA_ISSUE_DESCRIPTION));
         hm.put(MessageCodes.ERROR_PROCESS_FLOW, new ErrorCodeInfo(ERROR_PROCESS_FLOW, ERROR_PROCESS_FLOW_DESCRIPTION));
@@ -100,22 +101,15 @@ public final class ErrorCodeMap {
         return hm.get(messageCode);
     }
 
+    @Getter
     static class ErrorCodeInfo {
 
-        private String errorCode;
-        private String errorDesc;
+        private final String errorCode;
+        private final String errorDesc;
 
         public ErrorCodeInfo(String errorCode, String errorDesc) {
             this.errorCode = errorCode;
             this.errorDesc = errorDesc;
-        }
-
-        public String getErrorCode() {
-            return errorCode;
-        }
-
-        public String getErrorDesc() {
-            return errorDesc;
         }
 
     }
