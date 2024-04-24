@@ -48,11 +48,6 @@ public final class PolicyEndPointProperties {
 
     public static final String PROPERTY_ALLOW_SELF_SIGNED_CERTIFICATES_SUFFIX = ".selfSignedCertificates";
 
-    /* UEB Properties */
-
-    public static final String PROPERTY_UEB_SOURCE_TOPICS = "ueb.source.topics";
-    public static final String PROPERTY_UEB_SINK_TOPICS = "ueb.sink.topics";
-
     public static final String PROPERTY_NOOP_SOURCE_TOPICS = "noop.source.topics";
     public static final String PROPERTY_NOOP_SINK_TOPICS = "noop.sink.topics";
 

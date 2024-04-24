@@ -73,12 +73,6 @@ public enum MessageCodes implements EELFResolvableResourceEnum {
 
     RULE_METRICS_INFO,
 
-    UEB_AUDIT_EXEC_INFO,
-
-    UEB_AUDIT_BEGIN_INFO,
-
-    UEB_AUDIT_END_INFO,
-
     UPDATE_ERROR,
 
     GENERAL_ERROR,
