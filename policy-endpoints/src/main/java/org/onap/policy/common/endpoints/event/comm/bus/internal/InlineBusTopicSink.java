@@ -33,8 +33,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Transport Agnostic Bus Topic Sink to carry out the core functionality to interact with a sink
- * regardless if it is UEB or Kafka.
+ * Transport Agnostic Bus Topic Sink to carry out the core functionality to interact with a sink.
  *
  */
 public abstract class InlineBusTopicSink extends BusTopicBase implements BusTopicSink {

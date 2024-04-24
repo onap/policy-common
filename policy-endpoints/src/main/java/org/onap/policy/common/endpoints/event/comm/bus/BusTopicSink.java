@@ -24,12 +24,12 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 import org.onap.policy.common.endpoints.event.comm.TopicSink;
 
 /**
- * Topic Sink over Bus Infrastructure (KAFKA/UEB).
+ * Topic Sink over Bus Infrastructure (KAFKA).
  */
 public interface BusTopicSink extends ApiKeyEnabled, TopicSink {
 
     /**
-     * Sets the UEB partition key for published messages.
+     * Sets the partition key for published messages.
      *
      * @param partitionKey the partition key
      */

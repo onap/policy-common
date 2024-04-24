@@ -24,7 +24,7 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 import org.onap.policy.common.endpoints.event.comm.TopicSource;
 
 /**
- * Generic Topic Source for UEB/KAFKA Communication Infrastructure.
+ * Generic Topic Source for Bus Communication Infrastructure.
  *
  */
 public interface BusTopicSource extends ApiKeyEnabled, TopicSource {
