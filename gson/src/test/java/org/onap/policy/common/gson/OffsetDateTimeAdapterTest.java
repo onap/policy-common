@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,22 +23,22 @@ package org.onap.policy.common.gson;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import java.time.OffsetDateTime;
 import lombok.ToString;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class OffsetDateTimeAdapterTest {
+class OffsetDateTimeAdapterTest {
     private static Gson gson =
             new GsonBuilder().registerTypeAdapter(OffsetDateTime.class, new OffsetDateTimeTypeAdapter()).create();
     private static final String TEST_DATE = "2020-01-01T12:00:00.999+05:00";
 
     @Test
-    public void test() {
+    void test() {
         InterestingFields data = new InterestingFields();
         data.date = OffsetDateTime.parse(TEST_DATE);
 

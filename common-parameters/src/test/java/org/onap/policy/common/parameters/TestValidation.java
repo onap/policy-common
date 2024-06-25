@@ -2,6 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,16 +23,16 @@
 package org.onap.policy.common.parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.parameters.annotations.Max;
 import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
 import org.onap.policy.common.parameters.annotations.Valid;
 
-public class TestValidation {
+class TestValidation {
     private static final String NOT_BLANK_STRING_MESSAGE =
                     "field 'notBlankString' type 'java.lang.String' value '' INVALID, must be a non-blank string\n"
                                     .replace('\'', '"');
@@ -66,7 +67,7 @@ public class TestValidation {
     private long maxLong;
 
     @Test
-    public void testGetValidationResult() {
+    void testGetValidationResult() {
         Contained item = new Contained();
         item.setName("item");
 
@@ -87,7 +88,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testParameterValidationResult_NotNull() throws Exception {
+    void testParameterValidationResult_NotNull() throws Exception {
         ParameterValidationResult result = new ParameterValidationResult(
                         TestValidation.class.getDeclaredField(NOT_NULL_STRING_NAME), null);
         assertEquals(ValidationStatus.INVALID, result.getStatus());
@@ -139,7 +140,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testParameterValidationResult_NotBlank() throws Exception {
+    void testParameterValidationResult_NotBlank() throws Exception {
         ParameterValidationResult result =
                         new ParameterValidationResult(TestValidation.class.getDeclaredField(NOT_BLANK_STRING_NAME), "");
         assertEquals(ValidationStatus.INVALID, result.getStatus());
@@ -180,7 +181,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testParameterValidationResult_Min() throws Exception {
+    void testParameterValidationResult_Min() throws Exception {
         ParameterValidationResult result =
                         new ParameterValidationResult(TestValidation.class.getDeclaredField(MIN_LONG_NAME), 9L);
         assertEquals(ValidationStatus.INVALID, result.getStatus());
@@ -200,7 +201,7 @@ public class TestValidation {
     }
 
     @Test
-    public void testParameterValidationResult_Max() throws Exception {
+    void testParameterValidationResult_Max() throws Exception {
         ParameterValidationResult result =
                         new ParameterValidationResult(TestValidation.class.getDeclaredField(MAX_LONG_NAME), 11L);
         assertEquals(ValidationStatus.INVALID, result.getStatus());

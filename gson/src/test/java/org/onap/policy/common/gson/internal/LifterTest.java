@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,21 +21,21 @@
 
 package org.onap.policy.common.gson.internal;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.gson.Gson;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class LifterTest {
+class LifterTest {
 
     private static Gson gson = new Gson();
 
     @Test
-    public void testLifter_testShouldLift() throws Exception {
+    void testLifter_testShouldLift() throws Exception {
         Set<String> set = new HashSet<>(Arrays.asList("abc", "def"));
         Lifter lifter = new Lifter(gson, set, LifterTest.class.getDeclaredMethod("getValue"), String.class);
 

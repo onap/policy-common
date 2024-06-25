@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +21,7 @@
 
 package org.onap.policy.common.gson.internal;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -34,10 +35,10 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.ToString;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class JacksonTypeAdapterTest {
+class JacksonTypeAdapterTest {
     private static final String HELLO = "hello";
     private static final String WORLD = "world";
 
@@ -53,8 +54,8 @@ public class JacksonTypeAdapterTest {
     /**
      * Initializes the previously defined fields.
      */
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         // create list of serializers, one for "id" and one for "value"
         sers = new ArrayList<>(2);
         sers.add(new NamedSer(HELLO) {
@@ -91,7 +92,7 @@ public class JacksonTypeAdapterTest {
     }
 
     @Test
-    public void testWriteJsonWriterT() throws Exception {
+    void testWriteJsonWriterT() throws Exception {
         Data data = new Data("abc", "def");
 
         StringWriter wtr = new StringWriter();
@@ -106,7 +107,7 @@ public class JacksonTypeAdapterTest {
      * @throws Exception if an error occurs
      */
     @Test
-    public void testWriteJsonWriterT_NotAnObject() throws Exception {
+    void testWriteJsonWriterT_NotAnObject() throws Exception {
         TypeAdapter<String> delegate = gson.getAdapter(String.class);
         JacksonTypeAdapter<String> stringAdapter = new JacksonTypeAdapter<>(gson, delegate, sers, desers);
 
@@ -117,7 +118,7 @@ public class JacksonTypeAdapterTest {
     }
 
     @Test
-    public void testReadJsonReader() throws Exception {
+    void testReadJsonReader() throws Exception {
         Data data = adapter
                         .read(new JsonReader(new StringReader("{'hello':'four','world':'score'}".replace('\'', '"'))));
 
@@ -130,7 +131,7 @@ public class JacksonTypeAdapterTest {
      * @throws Exception if an error occurs
      */
     @Test
-    public void testReadJsonReader_NotAnObject() throws Exception {
+    void testReadJsonReader_NotAnObject() throws Exception {
         TypeAdapter<String> delegate = gson.getAdapter(String.class);
         JacksonTypeAdapter<String> stringAdapter = new JacksonTypeAdapter<>(gson, delegate, sers, desers);
 

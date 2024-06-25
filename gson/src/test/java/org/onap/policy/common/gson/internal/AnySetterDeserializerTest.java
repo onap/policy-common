@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +21,9 @@
 
 package org.onap.policy.common.gson.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,12 +34,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.gson.JacksonExclusionStrategy;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.Data;
 
-public class AnySetterDeserializerTest {
+class AnySetterDeserializerTest {
 
     private static DataAdapterFactory dataAdapter = new DataAdapterFactory();
 
@@ -53,15 +54,15 @@ public class AnySetterDeserializerTest {
      *
      * @throws Exception if an error occurs
      */
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         set = new HashSet<>(Arrays.asList("id", "value"));
         deser = new AnySetterDeserializer(gson, set,
                         MapData.class.getDeclaredMethod("setItem", String.class, List.class));
     }
 
     @Test
-    public void testAnySetterDeserializer() {
+    void testAnySetterDeserializer() {
         JsonObject json = new JsonObject();
 
         // these should not be copied
