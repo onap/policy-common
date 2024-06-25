@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@
 package org.onap.policy.common.gson;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import jakarta.ws.rs.core.MediaType;
 import java.io.ByteArrayInputStream;
@@ -39,10 +39,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import lombok.ToString;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class GsonMessageBodyHandlerTest {
+class GsonMessageBodyHandlerTest {
     private static final String GEN_TYPE = "some-type";
     private static final String[] subtypes = {"json", "jSoN", "hello+json", "javascript", "x-javascript", "x-json"};
 
@@ -54,18 +54,18 @@ public class GsonMessageBodyHandlerTest {
 
     private GsonMessageBodyHandler hdlr;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         hdlr = new GsonMessageBodyHandler();
     }
 
     @Test
-    public void testIsWriteable() {
+    void testIsWriteable() {
         // null media type
         assertTrue(hdlr.isWriteable(null, null, null, null));
 
         for (String subtype : subtypes) {
-            assertTrue("writeable " + subtype, hdlr.isWriteable(null, null, null, new MediaType(GEN_TYPE, subtype)));
+            assertTrue(hdlr.isWriteable(null, null, null, new MediaType(GEN_TYPE, subtype)), "writeable " + subtype);
 
         }
 
@@ -79,12 +79,12 @@ public class GsonMessageBodyHandlerTest {
     }
 
     @Test
-    public void testGetSize() {
+    void testGetSize() {
         assertEquals(-1, hdlr.getSize(null, null, null, null, null));
     }
 
     @Test
-    public void testWriteTo_testReadFrom() throws Exception {
+    void testWriteTo_testReadFrom() throws Exception {
         ByteArrayOutputStream outstr = new ByteArrayOutputStream();
         MyObject obj1 = new MyObject(10);
         hdlr.writeTo(obj1, obj1.getClass(), CLASS_OBJ, null, null, null, outstr);
@@ -95,7 +95,7 @@ public class GsonMessageBodyHandlerTest {
     }
 
     @Test
-    public void testWriteTo_DifferentTypes() throws Exception {
+    void testWriteTo_DifferentTypes() throws Exception {
         ByteArrayOutputStream outstr = new ByteArrayOutputStream();
 
         // use a derived type, but specify the base type when writing
@@ -108,7 +108,7 @@ public class GsonMessageBodyHandlerTest {
     }
 
     @Test
-    public void testIsReadable() {
+    void testIsReadable() {
         // null media type
         assertTrue(hdlr.isReadable(null, null, null, null));
 
@@ -116,7 +116,7 @@ public class GsonMessageBodyHandlerTest {
         assertFalse(hdlr.isReadable(null, null, null, new MediaType(GEN_TYPE, null)));
 
         for (String subtype : subtypes) {
-            assertTrue("readable " + subtype, hdlr.isReadable(null, null, null, new MediaType(GEN_TYPE, subtype)));
+            assertTrue(hdlr.isReadable(null, null, null, new MediaType(GEN_TYPE, subtype)), "readable " + subtype);
 
         }
 
@@ -130,7 +130,7 @@ public class GsonMessageBodyHandlerTest {
     }
 
     @Test
-    public void testReadFrom_DifferentTypes() throws Exception {
+    void testReadFrom_DifferentTypes() throws Exception {
         ByteArrayOutputStream outstr = new ByteArrayOutputStream();
         MyObject obj1 = new MyObject(10);
         hdlr.writeTo(obj1, obj1.getClass(), CLASS_OBJ, null, null, null, outstr);
@@ -148,7 +148,7 @@ public class GsonMessageBodyHandlerTest {
     }
 
     @Test
-    public void testMapDouble() throws Exception {
+    void testMapDouble() throws Exception {
         MyMap map = new MyMap();
         map.props = new HashMap<>();
         map.props.put("plainString", "def");
@@ -171,7 +171,7 @@ public class GsonMessageBodyHandlerTest {
     }
 
     @Test
-    public void testInterestingFields() throws IOException {
+    void testInterestingFields() throws IOException {
         InterestingFields data = new InterestingFields();
         data.instant = Instant.ofEpochMilli(1583249713500L);
         data.uuid = UUID.fromString("a850cb9f-3c5e-417c-abfd-0679cdcd1ab0");

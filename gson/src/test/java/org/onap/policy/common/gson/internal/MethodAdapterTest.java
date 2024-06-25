@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,19 +22,19 @@
 package org.onap.policy.common.gson.internal;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class MethodAdapterTest {
+class MethodAdapterTest {
     private static final Gson gson = new Gson();
 
     private String saved;
 
     @Test
-    public void testMethodAdapter_testInvoke() throws Exception {
+    void testMethodAdapter_testInvoke() throws Exception {
         MethodAdapter adapter =
                 new MethodAdapter(gson, MethodAdapterTest.class.getDeclaredMethod("getValue"), String.class);
         assertEquals("hello", adapter.invoke(this));
@@ -51,7 +52,7 @@ public class MethodAdapterTest {
         return "hello";
     }
 
-    public void setValue(String val) {
+    void setValue(String val) {
         saved = val;
     }
 }

@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +21,10 @@
 
 package org.onap.policy.common.gson;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,11 +33,11 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.ToString;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.onap.policy.common.gson.annotation.GsonJsonProperty;
 
-public class JacksonFieldAdapterFactoryTest {
+class JacksonFieldAdapterFactoryTest {
 
     private static JacksonFieldAdapterFactory factory = new JacksonFieldAdapterFactory();
 
@@ -44,7 +45,7 @@ public class JacksonFieldAdapterFactoryTest {
                     .registerTypeAdapterFactory(factory).create();
 
     @Test
-    public void testCreate() {
+    void testCreate() {
         // unhandled types
         assertNull(factory.create(gson, TypeToken.get(JsonElement.class)));
         assertNull(factory.create(gson, TypeToken.get(NothingToSerialize.class)));
@@ -83,7 +84,7 @@ public class JacksonFieldAdapterFactoryTest {
     }
 
     @Test
-    public void testCreate_Lists() {
+    void testCreate_Lists() {
         DataList lst = new DataList();
         lst.theList = new ArrayList<>();
         lst.theList.add(new Data(200, "text 20"));
@@ -99,7 +100,7 @@ public class JacksonFieldAdapterFactoryTest {
     }
 
     @Test
-    public void testCreate_OnlyOutProps() {
+    void testCreate_OnlyOutProps() {
         InFieldIgnored data = new InFieldIgnored();
         data.value = "out only";
 
@@ -113,7 +114,7 @@ public class JacksonFieldAdapterFactoryTest {
     }
 
     @Test
-    public void testCreate_OnlyInProps() {
+    void testCreate_OnlyInProps() {
         OutFieldIgnored data = new OutFieldIgnored();
         data.value = "in only";
 
@@ -154,7 +155,7 @@ public class JacksonFieldAdapterFactoryTest {
             this.text = text;
         }
 
-        public void setId(int id) {
+        void setId(int id) {
             this.id = id;
         }
     }

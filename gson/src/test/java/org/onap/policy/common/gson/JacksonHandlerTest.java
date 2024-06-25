@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@
 
 package org.onap.policy.common.gson;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -35,14 +35,14 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
 import lombok.ToString;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.gson.annotation.GsonJsonAnyGetter;
 import org.onap.policy.common.gson.annotation.GsonJsonAnySetter;
 
-public class JacksonHandlerTest {
+class JacksonHandlerTest {
 
     @Test
-    public void test() throws Exception {
+    void test() throws Exception {
         JacksonHandler hdlr = new JacksonHandler();
 
         assertTrue(hdlr.isReadable(null, null, null, MediaType.APPLICATION_JSON_TYPE));
@@ -85,7 +85,7 @@ public class JacksonHandlerTest {
     }
 
     @Test
-    public void testMapDouble() throws Exception {
+    void testMapDouble() throws Exception {
         MyMap map = new MyMap();
         map.props = new HashMap<>();
         map.props.put("plainString", "def");

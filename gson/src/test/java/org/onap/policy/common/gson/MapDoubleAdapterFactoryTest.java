@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +21,8 @@
 
 package org.onap.policy.common.gson;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -30,14 +31,14 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class MapDoubleAdapterFactoryTest {
+class MapDoubleAdapterFactoryTest {
     private static Gson gson = new GsonBuilder().registerTypeAdapterFactory(new MapDoubleAdapterFactory()).create();
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testMap() {
+    void testMap() {
         MyMap map = new MyMap();
         map.data = new HashMap<>();
         map.data.put("plainString", "def");
@@ -71,7 +72,7 @@ public class MapDoubleAdapterFactoryTest {
     }
 
     @Test
-    public void testList() {
+    void testList() {
         MyList list = new MyList();
         list.data = new ArrayList<>();
         list.data.add("ghi");
@@ -93,7 +94,7 @@ public class MapDoubleAdapterFactoryTest {
     }
 
     @Test
-    public void test_ValueIsNotObject() {
+    void test_ValueIsNotObject() {
         MyDoubleMap map = new MyDoubleMap();
         map.data = new LinkedHashMap<>();
         map.data.put("plainDouble", 13.5);
@@ -110,7 +111,7 @@ public class MapDoubleAdapterFactoryTest {
     }
 
     @Test
-    public void test_KeyIsNotString() {
+    void test_KeyIsNotString() {
         MyObjectMap map = new MyObjectMap();
 
         map.data = new LinkedHashMap<>();
@@ -128,7 +129,7 @@ public class MapDoubleAdapterFactoryTest {
     }
 
     @Test
-    public void test_ListValueIsNotObject() {
+    void test_ListValueIsNotObject() {
         MyDoubleList list = new MyDoubleList();
         list.data = new ArrayList<>();
         list.data.add(13.5);
