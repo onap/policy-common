@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2020 Bell Canada. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
 package org.onap.policy.common.im;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -36,11 +36,11 @@ import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.QueryTimeoutException;
 import jakarta.persistence.TypedQuery;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
 import org.slf4j.Logger;
@@ -50,7 +50,7 @@ import org.slf4j.LoggerFactory;
  * All JUnits are designed to run in the local development environment where they have write
  * privileges and can execute time-sensitive tasks.
  */
-public class StateManagementTest extends IntegrityMonitorTestBase {
+class StateManagementTest extends IntegrityMonitorTestBase {
     private static final String LOCKED_DISABLED_FAILED_COLDSTANDBY = "locked,disabled,failed,coldstandby";
     private static final String UNLOCKED_DISABLED_FAILED_COLDSTANDBY = "unlocked,disabled,failed,coldstandby";
     private static final String UNLOCKED_ENABLED_NULL_HOTSTANDBY = "unlocked,enabled,null,hotstandby";
@@ -61,29 +61,29 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
     private static final Logger logger = LoggerFactory.getLogger(StateManagementTest.class);
     //
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws Exception {
         IntegrityMonitorTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + StateManagementTest.class.getSimpleName());
 
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         IntegrityMonitorTestBase.tearDownAfterClass();
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUpTest();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         super.tearDownTest();
     }
 
     @Test
-    public void test() throws Exception {
+    void test() throws Exception {
         logger.info("\n\nlogger.infor StateManagementTest: Entering\n\n");
 
         // These parameters are in a properties file
@@ -229,36 +229,39 @@ public class StateManagementTest extends IntegrityMonitorTestBase {
         assertEquals(UNLOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(sm));
     }
 
-    @Test(expected = StateManagementException.class)
+    @Test
     @SuppressWarnings("unchecked")
-    public void test_StateManagementInitialization_ThrowException_ifEntityManagerCreateQuerythrowsAnyException()
+    void test_StateManagementInitialization_ThrowException_ifEntityManagerCreateQuerythrowsAnyException()
             throws Exception {
-        final EntityManager mockedEm = getMockedEntityManager();
-        final EntityManagerFactory mockedEmf = getMockedEntityManagerFactory(mockedEm);
+        assertThatThrownBy(() -> {
+            final EntityManager mockedEm = getMockedEntityManager();
+            final EntityManagerFactory mockedEmf = getMockedEntityManagerFactory(mockedEm);
 
-        doThrow(PersistenceException.class).when(mockedEm).createQuery(anyString(),
+            doThrow(PersistenceException.class).when(mockedEm).createQuery(anyString(),
                 any(StateManagementEntity.class.getClass()));
 
-        new StateManagement(mockedEmf, TEST_RESOURCE_NAME);
-
+            new StateManagement(mockedEmf, TEST_RESOURCE_NAME);
+        }).isInstanceOf(StateManagementException.class);
     }
 
-    @Test(expected = StateManagementException.class)
+    @Test
     @SuppressWarnings("unchecked")
-    public void test_StateManagementInitialization_ThrowStateManagementException_ifEntityManagerThrowsAnyException()
+    void test_StateManagementInitialization_ThrowStateManagementException_ifEntityManagerThrowsAnyException()
             throws Exception {
-        final EntityManager mockedEm = getMockedEntityManager();
-        final EntityManagerFactory mockedEmf = getMockedEntityManagerFactory(mockedEm);
-        final TypedQuery<StateManagementEntity> mockedQuery = mock(TypedQuery.class);
+        assertThatThrownBy(() -> {
+            final EntityManager mockedEm = getMockedEntityManager();
+            final EntityManagerFactory mockedEmf = getMockedEntityManagerFactory(mockedEm);
+            final TypedQuery<StateManagementEntity> mockedQuery = mock(TypedQuery.class);
 
-        when(mockedQuery.setFlushMode(Mockito.any())).thenReturn(mockedQuery);
-        when(mockedQuery.setLockMode(Mockito.any())).thenReturn(mockedQuery);
-        when(mockedEm.createQuery(anyString(), any(StateManagementEntity.class.getClass()))).thenReturn(mockedQuery);
+            when(mockedQuery.setFlushMode(Mockito.any())).thenReturn(mockedQuery);
+            when(mockedQuery.setLockMode(Mockito.any())).thenReturn(mockedQuery);
+            when(mockedEm.createQuery(anyString(), any(StateManagementEntity.class.getClass())))
+                .thenReturn(mockedQuery);
 
-        doThrow(QueryTimeoutException.class).when(mockedQuery).getResultList();
+            doThrow(QueryTimeoutException.class).when(mockedQuery).getResultList();
 
-        new StateManagement(mockedEmf, TEST_RESOURCE_NAME);
-
+            new StateManagement(mockedEmf, TEST_RESOURCE_NAME);
+        }).isInstanceOf(StateManagementException.class);
     }
 
     private EntityManager getMockedEntityManager() {

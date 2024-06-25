@@ -2,6 +2,7 @@
  * ============LICENSE_START=======================================================
  * Copyright (C) 2019 Nordix Foundation.
  * Modifications Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.IOException;
-import org.junit.AfterClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.utils.resources.TextFileUtils;
 import org.slf4j.Logger;
 import org.slf4j.MDC;
@@ -37,7 +38,7 @@ import org.slf4j.ext.XLoggerFactory;
  * Test the default logging pattern.
  *
  */
-public class DefaultLoggingPatternTest {
+class DefaultLoggingPatternTest {
     // XLogger for this class
     private static final XLogger XLOGGER = XLoggerFactory.getXLogger(DefaultLoggingPatternTest.class);
 
@@ -47,7 +48,7 @@ public class DefaultLoggingPatternTest {
     /**
      * Delete logging file after test.
      */
-    @AfterClass
+    @AfterAll
     public static void deleteLogFile() {
         new File("testingLogs/common-modules/integrity-audit/logging-pattern-test.log").deleteOnExit();
     }
@@ -58,7 +59,7 @@ public class DefaultLoggingPatternTest {
      * @throws IOException on errors
      */
     @Test
-    public void testDefaultLoggingPatternXLogger() throws IOException {
+    void testDefaultLoggingPatternXLogger() throws IOException {
         testDefaultLoggingPattern(XLOGGER, "xlogger");
     }
 
@@ -68,7 +69,7 @@ public class DefaultLoggingPatternTest {
      * @throws IOException on errors
      */
     @Test
-    public void testDefaultLoggingPatternLogger() throws IOException {
+    void testDefaultLoggingPatternLogger() throws IOException {
         testDefaultLoggingPattern(LOGGER, "logger");
     }
 
@@ -77,7 +78,7 @@ public class DefaultLoggingPatternTest {
      *
      * @throws IOException on errors
      */
-    public void testDefaultLoggingPattern(final Logger logger, final String loggerString) throws IOException {
+    void testDefaultLoggingPattern(final Logger logger, final String loggerString) throws IOException {
         MDC.put("requestId", "TheRequestId");
         MDC.put("serviceInstanceId", "TheServiceInstanceId");
         MDC.put("serverName", "TheServerName");

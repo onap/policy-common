@@ -3,6 +3,7 @@
  * Integrity Audit
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +21,9 @@
 
 package org.onap.policy.common.ia;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -30,11 +31,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.ia.jpa.IaTestEntity;
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
 import org.onap.policy.common.ia.jpa.PersonSample;
@@ -46,7 +47,7 @@ import org.onap.policy.common.logging.flexlogger.Logger;
  * where they have write privileges and can execute time-sensitive
  * tasks.
  */
-public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
+class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
     private static final String ZAPHOD = "Zaphod";
 
     private static Logger logger = FlexLogger.getLogger(DbAuditCompareEntriesTest.class);
@@ -54,13 +55,13 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
     private DbDao dbDao;
     private static String resourceName = "pdp1";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() throws Exception {
         IntegrityAuditTestBase
                 .setUpBeforeClass(DEFAULT_DB_URL_PREFIX + DbAuditCompareEntriesTest.class.getSimpleName());
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         IntegrityAuditTestBase.tearDownAfterClass();
     }
@@ -69,7 +70,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
      * Set up for test cases.
      */
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
 
         logger.info("setUp: Entering");
@@ -85,7 +86,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
      * Clean up DB after each test.
      */
     @Override
-    @After
+    @AfterEach
     public void tearDown() {
         logger.info("tearDown: Entering");
 
@@ -101,7 +102,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
      */
     // @Ignore
     @Test
-    public void testSuccessfulComparison() throws Exception {
+    void testSuccessfulComparison() throws Exception {
         logger.info("testSuccessfulComparison: Entering");
 
         dbDao = new DbDao(resourceName, A_SEQ_PU, makeProperties());
@@ -171,7 +172,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
      */
     // @Ignore
     @Test
-    public void testComparisonError() throws Exception {
+    void testComparisonError() throws Exception {
         logger.info("testComparisonError: Entering");
 
         dbDao = new DbDao(resourceName, A_SEQ_PU, makeProperties());
@@ -231,7 +232,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
      */
     // @Ignore
     @Test
-    public void testCompareMissingEntries() throws Exception {
+    void testCompareMissingEntries() throws Exception {
         logger.info("testCompareMissingEntries: Entering");
 
         dbDao = new DbDao(resourceName, A_SEQ_PU, makeProperties());
@@ -317,7 +318,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
      */
     // @Ignore
     @Test
-    public void testCompareAllHashEntities() throws Exception {
+    void testCompareAllHashEntities() throws Exception {
         logger.info("testCompareAllHashEntities: Entering");
 
         dbDao = new DbDao(resourceName, A_SEQ_PU, makeProperties());
@@ -418,7 +419,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
      * Tests that comparison algorithm works for each entity in the database
      */
     @Test
-    public void testCompareAllDbEntities() throws Exception {
+    void testCompareAllDbEntities() throws Exception {
         logger.info("testCompareAllDbEntities: Entering");
 
         logger.info("Setting up DB");
@@ -482,7 +483,7 @@ public class DbAuditCompareEntriesTest extends IntegrityAuditTestBase {
      */
     // @Ignore
     @Test
-    public void testEmbeddedClass() throws Exception {
+    void testEmbeddedClass() throws Exception {
         logger.info("testEmbeddedClasses: Entering");
 
         dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
