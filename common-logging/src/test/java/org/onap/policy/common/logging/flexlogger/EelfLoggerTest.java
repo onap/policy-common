@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2018 Ericsson. All rights reserved.
  * Modifications Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,75 +23,75 @@
 package org.onap.policy.common.logging.flexlogger;
 
 import static com.att.eelf.configuration.Configuration.MDC_KEY_REQUEST_ID;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.never;
 
 import com.att.eelf.configuration.EELFLogger;
 import java.util.UUID;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.onap.policy.common.logging.eelf.MessageCodes;
 import org.onap.policy.common.logging.eelf.PolicyLogger;
 import org.slf4j.MDC;
 import org.springframework.test.util.ReflectionTestUtils;
 
-public class EelfLoggerTest {
+class EelfLoggerTest {
 
     EelfLogger eelfLogger = new EelfLogger("EelfLoggerTest", "transactionId");
 
     @Test
-    public void testEelfLoggerClassOfQ() {
+    void testEelfLoggerClassOfQ() {
         new EelfLogger(this.getClass());
         assertNotNull(PolicyLogger.getTransId());
         assertFalse(PolicyLogger.getTransId().isEmpty());
     }
 
     @Test
-    public void testEelfLoggerString() {
+    void testEelfLoggerString() {
         new EelfLogger("EelfLoggerTest");
         assertNotNull(PolicyLogger.getTransId());
         assertFalse(PolicyLogger.getTransId().isEmpty());
     }
 
     @Test
-    public void testEelfLoggerClassOfQBoolean() {
+    void testEelfLoggerClassOfQBoolean() {
         new EelfLogger(this.getClass(), true);
         assertNotNull(PolicyLogger.getTransId());
         assertFalse(PolicyLogger.getTransId().isEmpty());
     }
 
     @Test
-    public void testEelfLoggerStringBoolean() {
+    void testEelfLoggerStringBoolean() {
         new EelfLogger("EelfLoggerTest", true);
         assertNotNull(PolicyLogger.getTransId());
         assertFalse(PolicyLogger.getTransId().isEmpty());
     }
 
     @Test
-    public void testEelfLoggerClassOfQString() {
+    void testEelfLoggerClassOfQString() {
         new EelfLogger(this.getClass(), "transactionId");
         assertEquals("transactionId", PolicyLogger.getTransId());
     }
 
     @Test
-    public void testEelfLoggerStringString() {
+    void testEelfLoggerStringString() {
         new EelfLogger("EelfLoggerTest", "transactionId");
         assertEquals("transactionId", PolicyLogger.getTransId());
     }
 
     @Test
-    public void testSetAndGetTransId() {
+    void testSetAndGetTransId() {
         assertEquals("transactionId", eelfLogger.getTransId());
         eelfLogger.setTransId("transactionId2");
         assertEquals("transactionId2", eelfLogger.getTransId());
     }
 
     @Test
-    public void testDebugObject() {
+    void testDebugObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.debug("message");
@@ -102,7 +102,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testErrorObject() {
+    void testErrorObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
         eelfLogger.error("message");
@@ -113,7 +113,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testInfoObject() {
+    void testInfoObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.info("message");
@@ -124,7 +124,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testWarnObject() {
+    void testWarnObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.warn("message");
@@ -135,7 +135,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testTraceObject() {
+    void testTraceObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.trace("message");
@@ -143,7 +143,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testIsDebugEnabled() {
+    void testIsDebugEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isDebugEnabled()).thenReturn(false).thenReturn(true);
@@ -153,7 +153,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testIsInfoEnabled() {
+    void testIsInfoEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isInfoEnabled()).thenReturn(false).thenReturn(true);
@@ -162,7 +162,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testIsWarnEnabled() {
+    void testIsWarnEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isWarnEnabled()).thenReturn(false).thenReturn(true);
@@ -171,7 +171,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testIsErrorEnabled() {
+    void testIsErrorEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
         Mockito.when(mockLogger.isErrorEnabled()).thenReturn(false).thenReturn(true);
@@ -180,21 +180,14 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testIsAuditEnabled() {
-        PolicyLogger.setOverrideLogbackLevel(true);
-        PolicyLogger.setAuditLevel("ERROR");
-        assertTrue(eelfLogger.isAuditEnabled());
-    }
-
-    @Test
-    public void testIsMetricsEnabled() {
+    void testIsMetricsEnabled() {
         PolicyLogger.setOverrideLogbackLevel(true);
         PolicyLogger.setMetricsLevel("ERROR");
         assertTrue(eelfLogger.isMetricsEnabled());
     }
 
     @Test
-    public void testIsTraceEnabled() {
+    void testIsTraceEnabled() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         Mockito.when(mockLogger.isDebugEnabled()).thenReturn(false).thenReturn(true);
@@ -203,14 +196,14 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testAuditObject() {
+    void testAuditObject() {
         PolicyLogger.setOverrideLogbackLevel(true);
         PolicyLogger.setAuditLevel("ERROR");
         assertTrue(eelfLogger.isAuditEnabled());
     }
 
     @Test
-    public void testDebugObjectThrowable() {
+    void testDebugObjectThrowable() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.debug("message", new NullPointerException());
@@ -219,7 +212,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testErrorObjectThrowable() {
+    void testErrorObjectThrowable() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
         eelfLogger.error("message", new NullPointerException());
@@ -229,7 +222,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testInfoObjectThrowable() {
+    void testInfoObjectThrowable() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.info("message", new NullPointerException());
@@ -240,7 +233,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testWarnObjectThrowable() {
+    void testWarnObjectThrowable() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.warn("message", new NullPointerException());
@@ -249,7 +242,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testTraceObjectThrowable() {
+    void testTraceObjectThrowable() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.trace("message", new NullPointerException());
@@ -257,7 +250,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testAuditObjectThrowable() {
+    void testAuditObjectThrowable() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "auditLogger", mockLogger);
         eelfLogger.audit("message", new NullPointerException());
@@ -265,20 +258,20 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testRecordAuditEventStartString() {
+    void testRecordAuditEventStartString() {
         eelfLogger.recordAuditEventStart("eventId");
         assertNotNull(PolicyLogger.getEventTracker().getEventInfo().get("eventId"));
     }
 
     @Test
-    public void testRecordAuditEventStartUuid() {
+    void testRecordAuditEventStartUuid() {
         UUID uuid = UUID.randomUUID();
         eelfLogger.recordAuditEventStart(uuid);
         assertNotNull(PolicyLogger.getEventTracker().getEventInfo().get(uuid.toString()));
     }
 
     @Test
-    public void testRecordAuditEventEndStringStringString() {
+    void testRecordAuditEventEndStringStringString() {
         eelfLogger.recordAuditEventStart("eventId");
         assertNotNull(PolicyLogger.getEventTracker().getEventInfo().get("eventId"));
 
@@ -287,7 +280,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testRecordAuditEventEndUuidStringString() {
+    void testRecordAuditEventEndUuidStringString() {
         UUID uuid = UUID.randomUUID();
         eelfLogger.recordAuditEventStart(uuid);;
         assertNotNull(PolicyLogger.getEventTracker().getEventInfo().get(uuid.toString()));
@@ -297,7 +290,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testRecordAuditEventEndStringString() {
+    void testRecordAuditEventEndStringString() {
         eelfLogger.recordAuditEventStart("eventId");
         assertNotNull(PolicyLogger.getEventTracker().getEventInfo().get("eventId"));
 
@@ -306,7 +299,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testRecordAuditEventEndUuidString() {
+    void testRecordAuditEventEndUuidString() {
         UUID uuid = UUID.randomUUID();
         eelfLogger.recordAuditEventStart(uuid);;
         assertNotNull(PolicyLogger.getEventTracker().getEventInfo().get(uuid.toString()));
@@ -316,20 +309,20 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testRecordMetricEventStringString() {
+    void testRecordMetricEventStringString() {
         eelfLogger.recordMetricEvent("eventId", "str1");
         assertEquals("eventId", MDC.get(MDC_KEY_REQUEST_ID));
     }
 
     @Test
-    public void testRecordMetricEventUuidString() {
+    void testRecordMetricEventUuidString() {
         UUID uuid = UUID.randomUUID();
         eelfLogger.recordMetricEvent(uuid, "str2");
         assertEquals(uuid.toString(), MDC.get(MDC_KEY_REQUEST_ID));
     }
 
     @Test
-    public void testMetrics() {
+    void testMetrics() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "metricsLogger", mockLogger);
         eelfLogger.metrics(1);
@@ -341,7 +334,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testErrorMessageCodesThrowableStringArray() {
+    void testErrorMessageCodesThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
         eelfLogger.error(MessageCodes.GENERAL_ERROR, new NullPointerException(), "str1", "str2");
@@ -350,7 +343,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testErrorMessageCodesStringArray() {
+    void testErrorMessageCodesStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
         eelfLogger.error(MessageCodes.GENERAL_ERROR, "str1", "str2");
@@ -359,13 +352,13 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testPostMdcInfoForEventString() {
+    void testPostMdcInfoForEventString() {
         eelfLogger.postMdcInfoForEvent("transactionId");
         assertEquals("transactionId", MDC.get(MDC_KEY_REQUEST_ID));
     }
 
     @Test
-    public void testWarnMessageCodesStringArray() {
+    void testWarnMessageCodesStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.warn(MessageCodes.GENERAL_ERROR, "str1", "str2");
@@ -373,7 +366,7 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testWarnMessageCodesThrowableStringArray() {
+    void testWarnMessageCodesThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         eelfLogger.warn(MessageCodes.GENERAL_ERROR, new NullPointerException(), "str1", "str2");
@@ -383,13 +376,13 @@ public class EelfLoggerTest {
     }
 
     @Test
-    public void testPostMdcInfoForTriggeredRule() {
+    void testPostMdcInfoForTriggeredRule() {
         eelfLogger.postMdcInfoForTriggeredRule("transactionId");
         assertEquals("transactionId", MDC.get(MDC_KEY_REQUEST_ID));
     }
 
     @Test
-    public void testPostMDdcInfoForEventObject() {
+    void testPostMDdcInfoForEventObject() {
         eelfLogger.postMdcInfoForEvent(1);
         assertEquals("1", MDC.get(MDC_KEY_REQUEST_ID));
     }

@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +22,9 @@
 package org.onap.policy.common.gson.internal;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.google.gson.JsonParseException;
 import java.lang.reflect.Field;
@@ -36,14 +37,14 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.gson.annotation.GsonJsonAnyGetter;
 import org.onap.policy.common.gson.annotation.GsonJsonAnySetter;
 import org.onap.policy.common.gson.annotation.GsonJsonIgnore;
 import org.onap.policy.common.gson.annotation.GsonJsonProperty;
 
-public class ClassWalkerTest {
+class ClassWalkerTest {
 
     private static final String SET_OVERRIDE = ".setOverride";
     private static final String INVALID_FIELD_NAME = "invalidFieldName";
@@ -53,13 +54,13 @@ public class ClassWalkerTest {
     /**
      * Set up.
      */
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         walker = new MyWalker();
     }
 
     @Test
-    public void testExamineClassOfQ_testExamineField_testExamineInField_testExamineOutField() {
+    void testExamineClassOfQ_testExamineField_testExamineInField_testExamineOutField() {
         walker.walkClassHierarchy(DerivedFromBottom.class);
 
         assertEquals("[Intfc1, Intfc2, Intfc1, Intfc3, Bottom, DerivedFromBottom]", walker.classes.toString());
@@ -79,7 +80,7 @@ public class ClassWalkerTest {
     }
 
     @Test
-    public void testHasAnyGetter() {
+    void testHasAnyGetter() {
         walker.walkClassHierarchy(Object.class);
         assertNull(walker.getAnyGetter());
         assertNull(walker.getAnySetter());
@@ -94,7 +95,7 @@ public class ClassWalkerTest {
     }
 
     @Test
-    public void testHasAnySetter() {
+    void testHasAnySetter() {
         walker.walkClassHierarchy(Object.class);
         assertNull(walker.getAnySetter());
         assertNull(walker.getAnyGetter());
@@ -109,7 +110,7 @@ public class ClassWalkerTest {
     }
 
     @Test
-    public void testExamineMethod() {
+    void testExamineMethod() {
         walker.walkClassHierarchy(DerivedFromData.class);
 
         assertEquals("[Data, DerivedFromData]", walker.classes.toString());
@@ -161,7 +162,7 @@ public class ClassWalkerTest {
     }
 
     @Test
-    public void testExamineMethod_AnyGetter() {
+    void testExamineMethod_AnyGetter() {
         walker.walkClassHierarchy(AnyGetterOverride.class);
 
         assertNotNull(walker.getAnyGetter());
@@ -169,7 +170,7 @@ public class ClassWalkerTest {
     }
 
     @Test
-    public void testExamineMethod_AnySetter() {
+    void testExamineMethod_AnySetter() {
         walker.walkClassHierarchy(AnySetterOverride.class);
 
         assertNotNull(walker.getAnySetter());
@@ -177,7 +178,7 @@ public class ClassWalkerTest {
     }
 
     @Test
-    public void testGetInNotIgnored_testGetOutNotIgnored() {
+    void testGetInNotIgnored_testGetOutNotIgnored() {
         walker.walkClassHierarchy(DerivedFromData.class);
 
         assertEquals("[id, onlyIn, text, value]", new TreeSet<>(walker.getInNotIgnored()).toString());

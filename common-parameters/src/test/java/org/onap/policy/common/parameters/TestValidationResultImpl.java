@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,27 +21,27 @@
 
 package org.onap.policy.common.parameters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class TestValidationResultImpl {
+class TestValidationResultImpl {
     private static final String NAME = "my-name";
     private static final Object OBJECT = "my-object";
 
     private MyResult result;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         result = new MyResult(NAME, OBJECT);
     }
 
     @Test
-    public void testValidationResultImplStringObjectValidationStatusString() {
+    void testValidationResultImplStringObjectValidationStatusString() {
         result = new MyResult(NAME, OBJECT, ValidationStatus.INVALID, "invalid data");
         assertEquals(NAME, result.getName());
         assertEquals(OBJECT, result.getObject());
@@ -49,7 +50,7 @@ public class TestValidationResultImpl {
     }
 
     @Test
-    public void testValidateNotNull() {
+    void testValidateNotNull() {
         assertTrue(result.validateNotNull());
         assertTrue(result.isValid());
         assertNull(result.getResult());
@@ -62,7 +63,7 @@ public class TestValidationResultImpl {
     }
 
     @Test
-    public void testSetResultValidationStatus() {
+    void testSetResultValidationStatus() {
         result.setResult(ValidationStatus.WARNING);
         assertEquals(ValidationStatus.WARNING, result.getStatus());
 
@@ -75,7 +76,7 @@ public class TestValidationResultImpl {
     }
 
     @Test
-    public void testSetResult_testGetResult_testGetStatus() {
+    void testSetResult_testGetResult_testGetStatus() {
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
         assertEquals("CLEAN item has status CLEAN", result.getResult("xxx ", "yyy", true));
 
@@ -97,7 +98,7 @@ public class TestValidationResultImpl {
     }
 
     @Test
-    public void testGetName() {
+    void testGetName() {
         assertEquals(NAME, result.getName());
     }
 

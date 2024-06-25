@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,13 +27,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
 
-public class TestItemValidator extends ValidatorUtil {
+class TestItemValidator extends ValidatorUtil {
 
     // annotated fields - each field must have exactly one annotation
 
@@ -69,13 +70,13 @@ public class TestItemValidator extends ValidatorUtil {
     private String multiMatch;
 
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         bean = new BeanValidator();
     }
 
     @Test
-    public void testGetAnnotation() {
+    void testGetAnnotation() {
         // no matches
         assertThat(new ItemValidator(bean, getAnnotType("noAnnotations"), true).isEmpty()).isTrue();
 
@@ -100,12 +101,12 @@ public class TestItemValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testItemValidatorBeanValidatorAnnotation() {
+    void testItemValidatorBeanValidatorAnnotation() {
         assertThat(new ItemValidator(bean, getAnnotType("match")).isEmpty()).isFalse();
     }
 
     @Test
-    public void testItemValidatorBeanValidatorAnnotationBoolean() {
+    void testItemValidatorBeanValidatorAnnotationBoolean() {
         assertThat(new ItemValidator(bean, getAnnotType("match"), true).isEmpty()).isFalse();
 
         assertThat(new ItemValidator(bean, getAnnotType("match"), false).isEmpty()).isTrue();

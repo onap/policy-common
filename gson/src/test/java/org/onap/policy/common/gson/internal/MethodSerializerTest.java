@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,19 +21,19 @@
 
 package org.onap.policy.common.gson.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.gson.JacksonExclusionStrategy;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.Data;
 
-public class MethodSerializerTest {
+class MethodSerializerTest {
     private static final String PROP_NAME = "text";
     private static final String METHOD_NAME = "getText";
 
@@ -48,7 +49,7 @@ public class MethodSerializerTest {
     private List<Data> listField;
 
     @Test
-    public void testAddToTree() throws Exception {
+    void testAddToTree() throws Exception {
         ser = new MethodSerializer(gson, MethodSerializerTest.class.getDeclaredMethod(METHOD_NAME));
 
         // serialize null value first
@@ -74,7 +75,7 @@ public class MethodSerializerTest {
         JsonElement tree = ser.toJsonTree(listField);
 
         assertTrue(dataAdapter.isDataWritten());
-        assertEquals(DataAdapterFactory.ENCODED_LIST, tree.toString());
+        assertEquals(DataAdapterFactory.ENCODED_LIST,  tree.toString());
     }
 
     protected String getText() {

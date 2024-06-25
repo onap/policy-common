@@ -3,6 +3,7 @@
  * ONAP Policy Engine - Common Modules
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +21,14 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.time.Instant;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class EventDataTest {
+class EventDataTest {
     private static final Instant istart = Instant.ofEpochMilli(100000L);
     private static final Instant iend = Instant.ofEpochMilli(200000L);
 
@@ -35,7 +36,7 @@ public class EventDataTest {
      * Test method for {@link EventData#EventData()}.
      */
     @Test
-    public void testEventData() {
+    void testEventData() {
         EventData eventData = new EventData();
 
         assertNull(eventData.getEndTime());
@@ -47,7 +48,7 @@ public class EventDataTest {
      * Test method for {@link EventData#EventData(String, Instant, Instant)}.
      */
     @Test
-    public void testEventDataStringInstantInstant() {
+    void testEventDataStringInstantInstant() {
         EventData eventData = new EventData("myreq", istart, iend);
 
         assertEquals("myreq", eventData.getRequestId());
@@ -59,7 +60,7 @@ public class EventDataTest {
      * Test method for {@link EventData#getRequestId()} and {@link EventData#setRequestId(String)}.
      */
     @Test
-    public void testGetSetRequestId() {
+    void testGetSetRequestId() {
         EventData eventData = new EventData();
         assertNull(eventData.getRequestId());
 
@@ -74,7 +75,7 @@ public class EventDataTest {
      * Test method for {@link EventData#getStartTime()} and {@link EventData#setStartTime(Instant)}.
      */
     @Test
-    public void testGetSetStartTime() {
+    void testGetSetStartTime() {
         EventData eventData = new EventData();
         assertNull(eventData.getStartTime());
 
@@ -93,7 +94,7 @@ public class EventDataTest {
      * Test method for {@link EventData#getEndTime()} and {@link EventData#setEndTime(Instant)}.
      */
     @Test
-    public void testGetSetEndTime() {
+    void testGetSetEndTime() {
         EventData eventData = new EventData();
         assertNull(eventData.getEndTime());
 
@@ -112,7 +113,7 @@ public class EventDataTest {
      * Test method for {@link EventData#toString()}.
      */
     @Test
-    public void testToString() {
+    void testToString() {
         EventData eventData = new EventData("myreq", istart, iend);
         assertEquals("myreq Starting Time : 1970-01-01T00:01:40Z Ending Time : 1970-01-01T00:03:20Z",
                 eventData.toString());
@@ -122,7 +123,7 @@ public class EventDataTest {
      * Test method for {@link EventData#hashCode()}.
      */
     @Test
-    public void testHashCode() {
+    void testHashCode() {
         int hc1 = new EventData("abc", istart, iend).hashCode();
 
         assertNotEquals(hc1, new EventData("abd", istart, iend).hashCode());
@@ -133,7 +134,7 @@ public class EventDataTest {
      * Test method for {@link EventData#equals(Object)}.
      */
     @Test
-    public void testEqualsObject() {
+    void testEqualsObject() {
         final EventData d1 = new EventData("abc", istart, iend);
         final EventData d2 = new EventData("abd", istart, iend);
         final EventData d3 = new EventData("abc", iend, istart);
@@ -142,15 +143,15 @@ public class EventDataTest {
         assertEquals(d1, d1);
 
         // compare with null
-        assertNotEquals(d1, null);
+        assertNotEquals(null, d1);
 
         // compare with request id
         // note: ignoring sonar because we want to test d1.equals(), not "abc".equals()
         assertEquals(d1, "abc");        // NOSONAR
-        assertNotEquals(d1, "abd");
+        assertNotEquals("abd", d1);
 
         // compare with int - different class type
-        assertNotEquals(d1, 10);
+        assertNotEquals(10, d1);
 
         // "this" has null request id
         assertNotEquals(new EventData(), d1);

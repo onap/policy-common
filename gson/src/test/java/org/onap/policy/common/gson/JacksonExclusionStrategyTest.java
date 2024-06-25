@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
- * Modificaitons Copyright (C) 2023 Nordix Foundation.
+ * Modificaitons Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@
 
 package org.onap.policy.common.gson;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
@@ -33,22 +33,22 @@ import java.lang.reflect.GenericArrayType;
 import java.util.LinkedList;
 import java.util.TreeMap;
 import lombok.ToString;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-public class JacksonExclusionStrategyTest {
+class JacksonExclusionStrategyTest {
 
     private static JacksonExclusionStrategy strategy;
     private static Gson gson;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         strategy = new JacksonExclusionStrategy();
         gson = new GsonBuilder().setExclusionStrategies(strategy).create();
     }
 
     @Test
-    public void testWithGson() {
+    void testWithGson() {
         Derived data = new Derived();
         data.setId(10);
         data.setText("some text");
@@ -65,7 +65,7 @@ public class JacksonExclusionStrategyTest {
     }
 
     @Test
-    public void testShouldSkipField() throws Exception {
+    void testShouldSkipField() throws Exception {
         // should skip every field of Data
         assertTrue(strategy.shouldSkipField(new FieldAttributes(Data.class.getDeclaredField("id"))));
         assertTrue(strategy.shouldSkipField(new FieldAttributes(Data.class.getDeclaredField("text"))));
@@ -75,18 +75,18 @@ public class JacksonExclusionStrategyTest {
     }
 
     @Test
-    public void testShouldSkipClass() {
+    void testShouldSkipClass() {
         assertFalse(strategy.shouldSkipClass(null));
         assertFalse(strategy.shouldSkipClass(Object.class));
     }
 
     @Test
-    public void testIsManaged() {
+    void testIsManaged() {
         // these classes SHOULD be managed
         Class<?>[] managed = {Data.class, Intfc.class, com.google.gson.TypeAdapter.class};
 
         for (Class<?> clazz : managed) {
-            assertTrue(clazz.getName(), JacksonExclusionStrategy.isManaged(clazz));
+            assertTrue(JacksonExclusionStrategy.isManaged(clazz), clazz.getName());
         }
 
         // generic classes should NOT be managed
@@ -97,7 +97,7 @@ public class JacksonExclusionStrategyTest {
             MyMap.class, MyList.class, MyJson.class, GenericArrayType.class};
 
         for (Class<?> clazz : unmanaged) {
-            assertFalse(clazz.getName(), JacksonExclusionStrategy.isManaged(clazz));
+            assertFalse(JacksonExclusionStrategy.isManaged(clazz), clazz.getName());
         }
     }
 
@@ -113,7 +113,7 @@ public class JacksonExclusionStrategyTest {
             return id;
         }
 
-        public void setId(int id) {
+        void setId(int id) {
             this.id = id;
         }
 
@@ -121,7 +121,7 @@ public class JacksonExclusionStrategyTest {
             return text;
         }
 
-        public void setText(String text) {
+        void setText(String text) {
             this.text = text;
         }
     }
@@ -134,7 +134,7 @@ public class JacksonExclusionStrategyTest {
             return value;
         }
 
-        public void setValue(String value) {
+        void setValue(String value) {
             this.value = value;
         }
     }

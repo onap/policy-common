@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +22,7 @@
 package org.onap.policy.common.parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -30,8 +31,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import lombok.Getter;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.parameters.annotations.ClassName;
 import org.onap.policy.common.parameters.annotations.Max;
 import org.onap.policy.common.parameters.annotations.Min;
@@ -41,7 +42,7 @@ import org.onap.policy.common.parameters.annotations.Pattern;
 import org.onap.policy.common.parameters.annotations.Size;
 import org.onap.policy.common.parameters.annotations.Valid;
 
-public class TestBeanValidator {
+class TestBeanValidator {
     private static final String TOP = "top";
     private static final String STR_FIELD = "strValue";
     private static final String INT_FIELD = "intValue";
@@ -52,13 +53,13 @@ public class TestBeanValidator {
 
     private BeanValidator validator;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         validator = new BeanValidator();
     }
 
     @Test
-    public void testValidateTop_testValidateFields() {
+    void testValidateTop_testValidateFields() {
         // validate null
         assertTrue(validator.validateTop(TOP, null).isValid());
 
@@ -117,7 +118,7 @@ public class TestBeanValidator {
     }
 
     @Test
-    public void testVerNotNull() {
+    void testVerNotNull() {
         class NotNullCheck {
             @Getter
             @Min(1)
@@ -136,7 +137,7 @@ public class TestBeanValidator {
     }
 
     @Test
-    public void testVerNotBlank() {
+    void testVerNotBlank() {
         class NotBlankCheck {
             @Getter
             @NotBlank
@@ -178,7 +179,7 @@ public class TestBeanValidator {
      * Tests verSize with a collection.
      */
     @Test
-    public void testVerSizeCollection() {
+    void testVerSizeCollection() {
         class CollectionSizeCheck {
             @Getter
             @Size(min = 3)
@@ -208,7 +209,7 @@ public class TestBeanValidator {
      * Tests verSize with a map.
      */
     @Test
-    public void testVerSizeMap() {
+    void testVerSizeMap() {
         class MapSizeCheck {
             @Getter
             @Size(min = 3)
@@ -238,7 +239,7 @@ public class TestBeanValidator {
      * Tests verSize with an object for which it doesn't apply.
      */
     @Test
-    public void testVerSizeOther() {
+    void testVerSizeOther() {
         class OtherSizeCheck {
             @Getter
             @Size(min = 3)
@@ -252,7 +253,7 @@ public class TestBeanValidator {
     }
 
     @Test
-    public void testVerRegex() {
+    void testVerRegex() {
         class RegexCheck {
             @Getter
             @Pattern(regexp = "[a-f]*")
@@ -304,7 +305,7 @@ public class TestBeanValidator {
     }
 
     @Test
-    public void testVerMax() {
+    void testVerMax() {
         /*
          * Field is not a number.
          */
@@ -398,7 +399,7 @@ public class TestBeanValidator {
     }
 
     @Test
-    public void testVerMin() {
+    void testVerMin() {
         /*
          * Field is not a number.
          */
@@ -492,7 +493,7 @@ public class TestBeanValidator {
     }
 
     @Test
-    public void testVerClassName() {
+    void testVerClassName() {
         class ClassNameCheck {
             @Getter
             @ClassName
@@ -516,7 +517,7 @@ public class TestBeanValidator {
     }
 
     @Test
-    public void testVerCascade() {
+    void testVerCascade() {
         class Item {
             @Getter
             @NotNull
@@ -554,7 +555,7 @@ public class TestBeanValidator {
     }
 
     @Test
-    public void testVerCollection() {
+    void testVerCollection() {
         @Getter
         class Container {
             List<@Min(5) Integer> items;
@@ -589,7 +590,7 @@ public class TestBeanValidator {
     }
 
     @Test
-    public void testVerMap() {
+    void testVerMap() {
         @Getter
         class Container {
             Map<String, @Min(5) Integer> items;
@@ -624,7 +625,7 @@ public class TestBeanValidator {
     }
 
     @Test
-    public void testGetEntryName() {
+    void testGetEntryName() {
         assertThat(validator.getEntryName(makeEntry(null, 0))).isEmpty();
         assertThat(validator.getEntryName(makeEntry("", 0))).isEmpty();
         assertThat(validator.getEntryName(makeEntry(STRING_VALUE, 0))).isEqualTo(STRING_VALUE);

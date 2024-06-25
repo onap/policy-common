@@ -3,6 +3,7 @@
  * ONAP Policy Engine - Common Modules
  * ================================================================================
  * Copyright (C) 2018, 2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +21,15 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.Instant;
 import java.util.concurrent.ConcurrentMap;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class EventTrackInfoHandlerTest {
+class EventTrackInfoHandlerTest {
 
     private static final Instant inow = Instant.now();
     private static final Instant iexpired = Instant.ofEpochMilli(10000L);
@@ -41,7 +42,7 @@ public class EventTrackInfoHandlerTest {
 
     private EventTrackInfoHandler hdlr;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         tracker = PolicyLogger.getEventTracker();
         info = tracker.getEventInfo();
@@ -50,21 +51,21 @@ public class EventTrackInfoHandlerTest {
     /**
      * Perform set up for test cases.
      */
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         info.clear();
 
         hdlr = new EventTrackInfoHandler();
     }
 
     @Test
-    public void testNoEvents() {
+    void testNoEvents() {
         hdlr.run();
         assertEquals(0, info.size());
     }
 
     @Test
-    public void testNothingExpired() {
+    void testNothingExpired() {
         tracker.storeEventData(data1);
         tracker.storeEventData(data2);
 
@@ -73,7 +74,7 @@ public class EventTrackInfoHandlerTest {
     }
 
     @Test
-    public void testSomeExpired() {
+    void testSomeExpired() {
         // not expired
         tracker.storeEventData(data1);
         tracker.storeEventData(data2);
@@ -99,7 +100,7 @@ public class EventTrackInfoHandlerTest {
     }
 
     @Test
-    public void testMultipleRuns() {
+    void testMultipleRuns() {
 
         hdlr.run();
         assertEquals(0, info.size());
