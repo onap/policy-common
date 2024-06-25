@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2018 Ericsson. All rights reserved.
  * Modifications Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,11 +32,11 @@ import static com.att.eelf.configuration.Configuration.MDC_SERVER_IP_ADDRESS;
 import static com.att.eelf.configuration.Configuration.MDC_SERVICE_INSTANCE_ID;
 import static com.att.eelf.configuration.Configuration.MDC_SERVICE_NAME;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.never;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.PARTNER_NAME;
 import static org.onap.policy.common.logging.eelf.OnapConfigProperties.RESPONSE_CODE;
@@ -49,26 +49,26 @@ import com.att.eelf.configuration.EELFLogger.Level;
 import java.time.Instant;
 import java.util.Properties;
 import java.util.UUID;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.slf4j.MDC;
 import org.springframework.test.util.ReflectionTestUtils;
 
-public class PolicyLoggerTest {
+class PolicyLoggerTest {
 
     /**
      * Perform set up for test cases.
      */
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         Properties properties = new Properties();
         properties.setProperty("policy.component", "XACML");
         PolicyLogger.init(properties);
     }
 
     @Test
-    public void testSetAndGetDebugLevelLevel() {
+    void testSetAndGetDebugLevelLevel() {
         PolicyLogger.setDebugLevel(Level.INFO);
         assertEquals(Level.INFO, PolicyLogger.getDebugLevel());
         PolicyLogger.setDebugLevel(Level.DEBUG);
@@ -76,7 +76,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testSetAndGetAuditLevelLevel() {
+    void testSetAndGetAuditLevelLevel() {
         PolicyLogger.setAuditLevel(Level.INFO);
         assertEquals(Level.INFO, PolicyLogger.getAuditLevel());
         PolicyLogger.setAuditLevel(Level.DEBUG);
@@ -84,7 +84,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testSetAndGetMetricsLevelLevel() {
+    void testSetAndGetMetricsLevelLevel() {
         PolicyLogger.setMetricsLevel(Level.INFO);
         assertEquals(Level.INFO, PolicyLogger.getMetricsLevel());
         PolicyLogger.setMetricsLevel(Level.DEBUG);
@@ -92,7 +92,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testSetAndGetErrorLevelLevel() {
+    void testSetAndGetErrorLevelLevel() {
         PolicyLogger.setErrorLevel(Level.INFO);
         assertEquals(Level.INFO, PolicyLogger.getErrorLevel());
         PolicyLogger.setErrorLevel(Level.DEBUG);
@@ -100,14 +100,14 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testSetAndGetClassname() {
+    void testSetAndGetClassname() {
         assertEquals("ClassName", PolicyLogger.getClassname());
         PolicyLogger.setClassname("PolicyLoggerTest");
         assertEquals("PolicyLoggerTest", PolicyLogger.getClassname());
     }
 
     @Test
-    public void testPostMdcInfoForEventString() {
+    void testPostMdcInfoForEventString() {
         PolicyLogger.postMdcInfoForEvent("transactionId");
 
         assertEquals("", MDC.get(MDC_REMOTE_HOST));
@@ -123,7 +123,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testPostMdcInfoForEventStringDrools() {
+    void testPostMdcInfoForEventStringDrools() {
         Properties properties = new Properties();
         properties.setProperty("policy.component", "DROOLS");
         PolicyLogger.init(properties);
@@ -136,13 +136,13 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testSetAndGetTransId() {
+    void testSetAndGetTransId() {
         PolicyLogger.setTransId("123456");
         assertEquals("123456", PolicyLogger.getTransId());
     }
 
     @Test
-    public void testPostMdcInfoForEventObject() {
+    void testPostMdcInfoForEventObject() {
         PolicyLogger.postMdcInfoForEvent(1);
 
         assertEquals("", MDC.get(MDC_REMOTE_HOST));
@@ -158,7 +158,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testPostMdcInfoForTriggeredRule() {
+    void testPostMdcInfoForTriggeredRule() {
         PolicyLogger.postMdcInfoForTriggeredRule("transactionId");
 
         assertEquals("", MDC.get(MDC_REMOTE_HOST));
@@ -173,7 +173,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testPostMdcUuidForTriggeredRule() {
+    void testPostMdcUuidForTriggeredRule() {
         PolicyLogger.postMdcUuidForTriggeredRule(1);
 
         assertEquals("", MDC.get(MDC_REMOTE_HOST));
@@ -188,7 +188,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testInfoMessageCodesStringStringArray() {
+    void testInfoMessageCodesStringStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.info(MessageCodes.ERROR_DATA_ISSUE, "str1", "str2");
@@ -196,7 +196,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testInfoStringString() {
+    void testInfoStringString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.info("str1", "str2");
@@ -207,7 +207,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testInfoObject() {
+    void testInfoObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.info("str1");
@@ -215,7 +215,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testInfoMessageCodesThrowableStringArray() {
+    void testInfoMessageCodesThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.info(MessageCodes.ERROR_DATA_ISSUE, new NullPointerException(), "str1", "str2");
@@ -224,7 +224,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testInfoMessageCodesStringThrowableStringArray() {
+    void testInfoMessageCodesStringThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.info(MessageCodes.ERROR_DATA_ISSUE, "PolicyLoggerTest", new NullPointerException(), "str1",
@@ -234,7 +234,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testWarnMessageCodesStringStringArray() {
+    void testWarnMessageCodesStringStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn(MessageCodes.ERROR_DATA_ISSUE, "str1");
@@ -242,7 +242,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testWarnStringString() {
+    void testWarnStringString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn("str1", "str2");
@@ -253,7 +253,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testWarnObject() {
+    void testWarnObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn(1);
@@ -261,7 +261,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testWarnMessageCodesThrowableStringArray() {
+    void testWarnMessageCodesThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn(MessageCodes.ERROR_DATA_ISSUE, new NullPointerException(), "str1", "str2");
@@ -270,7 +270,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testWarnMessageCodesStringThrowableStringArray() {
+    void testWarnMessageCodesStringThrowableStringArray() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn(MessageCodes.ERROR_DATA_ISSUE, "PolicyLoggerTest", new NullPointerException(), "str1",
@@ -280,7 +280,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testWarnString() {
+    void testWarnString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
         PolicyLogger.warn("str1");
@@ -288,7 +288,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testErrorStringString() {
+    void testErrorStringString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
         PolicyLogger.error("str1", "str2");
@@ -302,7 +302,7 @@ public class PolicyLoggerTest {
     }
 
     @Test
-    public void testErrorString() {
+    void testErrorString() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
         PolicyLogger.error("str1");

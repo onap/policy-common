@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,21 +21,21 @@
 
 package org.onap.policy.common.parameters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TestObjectValidationResult {
+class TestObjectValidationResult {
     private static final String NAME = "my-name";
     private static final Object OBJECT = "my-object";
 
     private ObjectValidationResult result;
 
     @Test
-    public void testValidationResultImplStringObjectValidationStatusString() {
+    void testValidationResultImplStringObjectValidationStatusString() {
         result = new ObjectValidationResult(NAME, OBJECT, ValidationStatus.INVALID, "invalid data");
         assertEquals(NAME, result.getName());
         assertEquals(OBJECT, result.getObject());
@@ -43,7 +44,7 @@ public class TestObjectValidationResult {
     }
 
     @Test
-    public void testGetResult() {
+    void testGetResult() {
         result = new ObjectValidationResult(NAME, OBJECT);
         assertEquals(ValidationStatus.CLEAN, result.getStatus());
         assertNull(result.getResult());

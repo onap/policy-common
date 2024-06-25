@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023, 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@
 
 package org.onap.policy.common.gson.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -35,9 +35,9 @@ import com.google.gson.JsonPrimitive;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.List;
-import org.junit.After;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.gson.JacksonExclusionStrategy;
 import org.onap.policy.common.gson.annotation.GsonJsonProperty;
 import org.onap.policy.common.gson.internal.Adapter.Factory;
@@ -45,7 +45,7 @@ import org.onap.policy.common.gson.internal.DataAdapterFactory.Data;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.DerivedData;
 import org.springframework.test.util.ReflectionTestUtils;
 
-public class AdapterTest {
+class AdapterTest {
     private static final String GET_INVALID_NAME = "get$InvalidName";
     private static final String SET_INVALID_NAME = "set$InvalidName";
     private static final String EMPTY_ALIAS = "emptyAlias";
@@ -82,18 +82,18 @@ public class AdapterTest {
 
     private Data dataField;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         saveFactory = (Factory) ReflectionTestUtils.getField(Adapter.class, FACTORY_FIELD);
     }
 
-    @After
-    public void tearDown() {
+    @AfterEach
+    void tearDown() {
         ReflectionTestUtils.setField(Adapter.class, FACTORY_FIELD, saveFactory);
     }
 
     @Test
-    public void testIsManagedField() {
+    void testIsManagedField() {
         assertTrue(Adapter.isManaged(field(VALUE_NAME)));
 
         // return an invalid field name
@@ -104,7 +104,7 @@ public class AdapterTest {
     }
 
     @Test
-    public void testIsManagedMethod() {
+    void testIsManagedMethod() {
         assertTrue(Adapter.isManaged(mget(GET_VALUE_NAME)));
 
         // return an invalid method name
@@ -119,7 +119,7 @@ public class AdapterTest {
     }
 
     @Test
-    public void testAdapterField_Converter() {
+    void testAdapterField_Converter() {
         Adapter adapter = new Adapter(gson, field("dataField"));
 
         // first, write something of type Data
@@ -137,7 +137,7 @@ public class AdapterTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testAdapterField_Converter_List() {
+    void testAdapterField_Converter_List() {
         listField = DataAdapterFactory.makeList();
 
         Adapter adapter = new Adapter(gson, field("listField"));
@@ -168,7 +168,7 @@ public class AdapterTest {
     }
 
     @Test
-    public void testAdapterMethod_Converter() throws Exception {
+    void testAdapterMethod_Converter() throws Exception {
         listField = DataAdapterFactory.makeList();
 
         Method getter = mget("getMyList");
@@ -192,7 +192,7 @@ public class AdapterTest {
     }
 
     @Test
-    public void testGetPropName_testGetFullName_testMakeError() {
+    void testGetPropName_testGetFullName_testMakeError() {
         // test field
         Adapter adapter = new Adapter(gson, field(VALUE_NAME));
 
@@ -217,7 +217,7 @@ public class AdapterTest {
     }
 
     @Test
-    public void testToJsonTree() {
+    void testToJsonTree() {
         Adapter adapter = new Adapter(gson, field(VALUE_NAME));
 
         JsonElement tree = adapter.toJsonTree("hello");
@@ -226,14 +226,14 @@ public class AdapterTest {
     }
 
     @Test
-    public void testFromJsonTree() {
+    void testFromJsonTree() {
         Adapter adapter = new Adapter(gson, field(VALUE_NAME));
 
         assertEquals("world", adapter.fromJsonTree(new JsonPrimitive("world")));
     }
 
     @Test
-    public void testDetmPropName() {
+    void testDetmPropName() {
         assertEquals(EMPTY_ALIAS, Adapter.detmPropName(field(EMPTY_ALIAS)));
         assertEquals("name-with-alias", Adapter.detmPropName(field("nameWithAlias")));
         assertEquals("unaliased", Adapter.detmPropName(field("unaliased")));
@@ -246,7 +246,7 @@ public class AdapterTest {
     }
 
     @Test
-    public void testDetmGetterPropName() {
+    void testDetmGetterPropName() {
         assertEquals(EMPTY_ALIAS, Adapter.detmGetterPropName(mget("getEmptyAlias")));
         assertEquals("get-with-alias", Adapter.detmGetterPropName(mget("getWithAlias")));
         assertEquals("plain", Adapter.detmGetterPropName(mget("getPlain")));
@@ -265,7 +265,7 @@ public class AdapterTest {
     }
 
     @Test
-    public void testDetmSetterPropName() {
+    void testDetmSetterPropName() {
         assertEquals(EMPTY_ALIAS, Adapter.detmSetterPropName(mset("setEmptyAlias")));
         assertEquals("set-with-alias", Adapter.detmSetterPropName(mset("setWithAlias")));
         assertEquals("plain", Adapter.detmSetterPropName(mset("setPlain")));

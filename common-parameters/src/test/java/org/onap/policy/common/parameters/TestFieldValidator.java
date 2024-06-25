@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,13 +30,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 import lombok.Getter;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
 
-public class TestFieldValidator extends ValidatorUtil {
+class TestFieldValidator extends ValidatorUtil {
     private static final String INT_LIST_FIELD = "intList";
     private static final String INT_MAP_FIELD = "intMap";
     private static final String UNANNOTATED_FIELD = "unannotated";
@@ -113,13 +113,13 @@ public class TestFieldValidator extends ValidatorUtil {
     private int exMethod;
 
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         bean = new BeanValidator();
     }
 
     @Test
-    public void testGetAnnotation() {
+    void testGetAnnotation() {
         // field-level annotation
         assertThat(new FieldValidator(bean, TestFieldValidator.class, getField(INT_FIELD)).isEmpty()).isFalse();
 
@@ -128,7 +128,7 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testFieldValidator() throws NoSuchFieldException, SecurityException {
+    void testFieldValidator() throws NoSuchFieldException, SecurityException {
         /*
          * Note: nested classes contain fields like "$this", thus the check for "$" in the
          * variable name is already covered by the other tests.
@@ -165,7 +165,7 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testFieldValidator_SetNullAllowed() {
+    void testFieldValidator_SetNullAllowed() {
         // default - null is allowed
         assertThat(new FieldValidator(bean, TestFieldValidator.class, getField(INT_FIELD)).isNullAllowed()).isTrue();
 
@@ -179,7 +179,7 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testAddListValidator() {
+    void testAddListValidator() {
 
         // unannotated
         assertThat(new FieldValidator(bean, TestFieldValidator.class, getField("unannotatedList")).isEmpty()).isTrue();
@@ -189,7 +189,7 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testAddMapValidator() {
+    void testAddMapValidator() {
 
         // unannotated
         assertThat(new FieldValidator(bean, TestFieldValidator.class, getField("unannotatedMap")).isEmpty()).isTrue();
@@ -226,7 +226,7 @@ public class TestFieldValidator extends ValidatorUtil {
 
     @SuppressWarnings("deprecation")
     @Test
-    public void testValidateField_testGetValue() {
+    void testValidateField_testGetValue() {
         // unannotated
         BeanValidationResult result = new BeanValidationResult(MY_NAME, this);
         new FieldValidator(bean, getClass(), getField(UNANNOTATED_FIELD)).validateField(result, this);
@@ -253,7 +253,7 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testValidateField_testGetValue_ListField() {
+    void testValidateField_testGetValue_ListField() {
         // valid
         BeanValidationResult result = new BeanValidationResult(MY_NAME, this);
         intList = List.of(10, 20, 30, 40);
@@ -269,7 +269,7 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testValidateField_testGetValue_MapField() {
+    void testValidateField_testGetValue_MapField() {
         // valid
         BeanValidationResult result = new BeanValidationResult(MY_NAME, this);
         intMap = Map.of("ten", 10, "twenty", 20, "thirty", 30, "forty", 40);
@@ -285,7 +285,7 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testClassOnly() {
+    void testClassOnly() {
         // class-level annotation has no bearing on a static field
         assertThat(new FieldValidator(bean, ClassAnnot.class, getField(ClassAnnot.class, "staticValue")).isEmpty())
                         .isTrue();
@@ -297,7 +297,7 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testGetAccessor() {
+    void testGetAccessor() {
         // uses "getXxx"
         assertThat(new FieldValidator(bean, TestFieldValidator.class, getField(INT_FIELD)).isEmpty()).isFalse();
 
@@ -306,7 +306,7 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testGetMethod() {
+    void testGetMethod() {
         assertThat(new FieldValidator(bean, TestFieldValidator.class, getField(INT_FIELD)).isEmpty()).isFalse();
 
         // these are invalid for various reasons
@@ -321,7 +321,7 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testValidMethod() {
+    void testValidMethod() {
         assertThat(new FieldValidator(bean, TestFieldValidator.class, getField(INT_FIELD)).isEmpty()).isFalse();
 
         // these are invalid for various reasons
@@ -340,7 +340,7 @@ public class TestFieldValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testIsFieldAnnotated_testSetFieldAnnotated() {
+    void testIsFieldAnnotated_testSetFieldAnnotated() {
         // annotated at the field level
         assertThat(new FieldValidator(bean, getClass(), getField(INT_FIELD)).isFieldAnnotated()).isTrue();
 
@@ -352,7 +352,7 @@ public class TestFieldValidator extends ValidatorUtil {
         return -1000;
     }
 
-    public void getVoidMethod() {
+    void getVoidMethod() {
         // do nothing
     }
 

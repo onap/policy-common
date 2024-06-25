@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,20 +21,19 @@
 
 package org.onap.policy.common.gson;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class DoubleConverterTest {
+class DoubleConverterTest {
 
     @Test
-    @SuppressWarnings("unchecked")
-    public void testConvertFromDoubleObject() {
+    void testConvertFromDoubleObject() {
         // these should be unchanged
         assertNull(DoubleConverter.convertFromDouble((Object) null));
         assertEquals("hello", DoubleConverter.convertFromDouble("hello"));
@@ -68,7 +68,7 @@ public class DoubleConverterTest {
     }
 
     @Test
-    public void testConvertFromDoubleList() {
+    void testConvertFromDoubleList() {
         // null is ok
         DoubleConverter.convertFromDouble((List<Object>) null);
 
@@ -86,7 +86,7 @@ public class DoubleConverterTest {
     }
 
     @Test
-    public void testConvertFromDoubleMap() {
+    void testConvertFromDoubleMap() {
         // null is ok
         DoubleConverter.convertFromDouble((Map<String, Object>) null);
 

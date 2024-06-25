@@ -3,6 +3,7 @@
  * ONAP Policy Engine - Common Modules
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +21,17 @@
 
 package org.onap.policy.common.logging.eelf;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.Instant;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.concurrent.ConcurrentMap;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class EventTrackInfoTest {
+class EventTrackInfoTest {
 
     private static final Instant istart = Instant.ofEpochMilli(100000L);
     private static final Instant iend = Instant.ofEpochMilli(200000L);
@@ -40,8 +41,8 @@ public class EventTrackInfoTest {
 
     private EventTrackInfo info;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         info = new EventTrackInfo();
 
     }
@@ -50,15 +51,18 @@ public class EventTrackInfoTest {
      * Test method for {@link EventTrackInfo#EventTrackInfo()}.
      */
     @Test
-    public void testEventTrackInfo() {
+    void testEventTrackInfo() {
         assertNotNull(info.getEventInfo());
+    }
+
+    private void assertNotNull(ConcurrentMap<String, EventData> eventInfo) {
     }
 
     /**
      * Test method for {@link EventTrackInfo#getEventDataByRequestId(String)}.
      */
     @Test
-    public void testGetEventDataByRequestId() {
+    void testGetEventDataByRequestId() {
         info.storeEventData(data1);
         info.storeEventData(data2);
 
@@ -71,7 +75,7 @@ public class EventTrackInfoTest {
      * Test method for {@link EventTrackInfo#storeEventData(EventData)}.
      */
     @Test
-    public void testStoreEventData() {
+    void testStoreEventData() {
         // should ignore null
         info.storeEventData(null);
         assertTrue(info.getEventInfo().isEmpty());
@@ -100,7 +104,7 @@ public class EventTrackInfoTest {
      * Test method for {@link EventTrackInfo#remove(String)}.
      */
     @Test
-    public void testRemove() {
+    void testRemove() {
         info.storeEventData(data1);
         info.storeEventData(data2);
 
@@ -118,7 +122,7 @@ public class EventTrackInfoTest {
      * Test method for {@link EventTrackInfo#getEventInfo()}.
      */
     @Test
-    public void testGetEventInfo() {
+    void testGetEventInfo() {
         info.storeEventData(data1);
         info.storeEventData(data2);
 

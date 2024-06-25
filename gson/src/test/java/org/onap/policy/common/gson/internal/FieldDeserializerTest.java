@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +22,8 @@
 package org.onap.policy.common.gson.internal;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -31,11 +32,11 @@ import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import java.util.List;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.gson.JacksonExclusionStrategy;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.Data;
 
-public class FieldDeserializerTest {
+class FieldDeserializerTest {
     private static final String TEXT_FIELD_NAME = "text";
     private static final String LIST_FIELD_NAME = "listField";
     private static final String INITIAL_VALUE = "initial value";
@@ -53,7 +54,7 @@ public class FieldDeserializerTest {
     private List<Data> listField;
 
     @Test
-    public void testGetFromTree() throws Exception {
+    void testGetFromTree() throws Exception {
         deser = new FieldDeserializer(gson, FieldDeserializerTest.class.getDeclaredField(TEXT_FIELD_NAME));
 
         JsonObject json = new JsonObject();
@@ -90,7 +91,7 @@ public class FieldDeserializerTest {
     }
 
     @Test
-    public void testGetFromTree_SetEx() throws Exception {
+    void testGetFromTree_SetEx() throws Exception {
         deser = new FieldDeserializer(gson, FieldDeserializerTest.class.getDeclaredField(TEXT_FIELD_NAME)) {
             @Override
             public Object fromJsonTree(JsonElement tree) {

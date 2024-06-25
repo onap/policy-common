@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,13 +25,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.lang.annotation.Annotation;
 import java.util.concurrent.atomic.AtomicBoolean;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.parameters.annotations.Min;
 import org.onap.policy.common.parameters.annotations.NotBlank;
 import org.onap.policy.common.parameters.annotations.NotNull;
 
-public class TestValueValidator extends ValidatorUtil {
+class TestValueValidator extends ValidatorUtil {
 
     private ValueValidator validator;
 
@@ -41,13 +42,13 @@ public class TestValueValidator extends ValidatorUtil {
     private final int annotField = 1;
 
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         validator = new MyValueValidator();
     }
 
     @Test
-    public void testIsEmpty() {
+    void testIsEmpty() {
         assertThat(validator.isEmpty()).isTrue();
 
         validator.addAnnotation(NotNull.class, (result2, fieldName, value) -> true);
@@ -55,7 +56,7 @@ public class TestValueValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testValidateValue_NullValue() {
+    void testValidateValue_NullValue() {
         BeanValidationResult result = new BeanValidationResult(MY_NAME, this);
 
         validator.validateValue(result, MY_FIELD, null);
@@ -68,7 +69,7 @@ public class TestValueValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testValidateValue_NotNullValue() {
+    void testValidateValue_NotNullValue() {
         BeanValidationResult result = new BeanValidationResult(MY_NAME, this);
 
         validator.validateValue(result, MY_FIELD, HELLO);
@@ -81,7 +82,7 @@ public class TestValueValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testAddAnnotationClassOfTChecker() {
+    void testAddAnnotationClassOfTChecker() {
         // the field does not have this annotation
         validator.addAnnotation(Min.class, (result2, fieldName, value) -> true);
         assertThat(validator.isEmpty()).isTrue();
@@ -98,7 +99,7 @@ public class TestValueValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testAddAnnotationClassOfTCheckerWithAnnotOfT() {
+    void testAddAnnotationClassOfTCheckerWithAnnotOfT() {
         // the field does not have this annotation
         validator.addAnnotation(Min.class, (result2, fieldName, annot, value) -> true);
         assertThat(validator.isEmpty()).isTrue();
@@ -122,7 +123,7 @@ public class TestValueValidator extends ValidatorUtil {
     }
 
     @Test
-    public void testGetAnnotation() {
+    void testGetAnnotation() {
         assertThat(new ValueValidator().getAnnotation(NotNull.class)).isNull();
     }
 

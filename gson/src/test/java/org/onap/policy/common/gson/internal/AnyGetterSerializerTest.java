@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +22,8 @@
 package org.onap.policy.common.gson.internal;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -33,12 +34,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.gson.JacksonExclusionStrategy;
 import org.onap.policy.common.gson.internal.DataAdapterFactory.Data;
 
-public class AnyGetterSerializerTest {
+class AnyGetterSerializerTest {
 
     private static DataAdapterFactory dataAdapter = new DataAdapterFactory();
 
@@ -53,14 +54,14 @@ public class AnyGetterSerializerTest {
      *
      * @throws Exception if an error occurs
      */
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    void setUp() throws Exception {
         set = new HashSet<>(Arrays.asList("id", "value"));
         ser = new AnyGetterSerializer(gson, set, MapData.class.getDeclaredMethod("getTheMap"));
     }
 
     @Test
-    public void testAddToTree_testCopyLiftedItems() {
+    void testAddToTree_testCopyLiftedItems() {
         JsonObject tree = new JsonObject();
         tree.addProperty("hello", "world");
 
@@ -83,7 +84,7 @@ public class AnyGetterSerializerTest {
     }
 
     @Test
-    public void testAddToTree_NullMap() {
+    void testAddToTree_NullMap() {
         JsonObject tree = new JsonObject();
         tree.addProperty("hello", "world");
 
@@ -98,7 +99,7 @@ public class AnyGetterSerializerTest {
     }
 
     @Test
-    public void testAddToTree_NotAnObject() throws Exception {
+    void testAddToTree_NotAnObject() throws Exception {
         ser = new AnyGetterSerializer(gson, set, NotAnObject.class.getDeclaredMethod("getNonMap"));
 
         JsonObject tree = new JsonObject();

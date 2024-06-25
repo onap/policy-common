@@ -3,7 +3,7 @@
  * ONAP-Logging
  * ================================================================================
  * Copyright (C) 2018-2020 Ericsson, AT&T. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@
 
 package org.onap.policy.common.logging.flexlogger;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.doAnswer;
@@ -38,15 +38,15 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.logging.flexlogger.PropertyUtil.Listener;
 import org.springframework.test.util.ReflectionTestUtils;
 
-public class PropertyUtilTest {
+class PropertyUtilTest {
 
     private static final String TIMER_FIELD = "timer";
     private static final File FILE = new File("target/test.properties");
@@ -56,13 +56,13 @@ public class PropertyUtilTest {
     private Timer timer;
     private TestListener testListener;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         saveTimer = (Timer) ReflectionTestUtils.getField(PropertyUtil.LazyHolder.class, TIMER_FIELD);
 
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         ReflectionTestUtils.setField(PropertyUtil.LazyHolder.class, TIMER_FIELD, saveTimer);
 
@@ -71,8 +71,8 @@ public class PropertyUtilTest {
     /**
      * Perform test case set up.
      */
-    @Before
-    public void setUp() throws IOException {
+    @BeforeEach
+    void setUp() throws IOException {
         task = null;
         timer = mock(Timer.class);
         ReflectionTestUtils.setField(PropertyUtil.LazyHolder.class, TIMER_FIELD, timer);
@@ -91,19 +91,19 @@ public class PropertyUtilTest {
         fileOutputStream.close();
     }
 
-    @After
-    public void tearDown() throws IOException {
+    @AfterEach
+    void tearDown() throws IOException {
         PropertyUtil.stopListening(FILE, testListener);
         FILE.delete();
     }
 
     @Test
-    public void testTimer() {
+    void testTimer() {
         assertNotNull(saveTimer);
     }
 
     @Test
-    public void testGetProperties() throws IOException {
+    void testGetProperties() throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(FILE);
         Properties properties = new Properties();
         properties.put("testProperty", "testValue");
@@ -115,7 +115,7 @@ public class PropertyUtilTest {
     }
 
     @Test
-    public void testPropertiesChanged() throws IOException, InterruptedException {
+    void testPropertiesChanged() throws IOException, InterruptedException {
         PropertyUtil.getProperties(FILE, testListener);
 
         FileOutputStream fileOutputStream = new FileOutputStream(FILE);
@@ -130,7 +130,7 @@ public class PropertyUtilTest {
     }
 
     @Test
-    public void testStopListening() throws IOException {
+    void testStopListening() throws IOException {
         FileOutputStream fileOutputStream = new FileOutputStream(FILE);
         Properties properties = new Properties();
         properties.put("testProperty", "testValue");

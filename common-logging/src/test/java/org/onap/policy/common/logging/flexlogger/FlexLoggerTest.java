@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2018 Ericsson. All rights reserved.
  * Modifications Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,20 +23,20 @@
 package org.onap.policy.common.logging.flexlogger;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.logging.flexlogger.FlexLogger.PropertiesCallBack;
 import org.springframework.test.util.ReflectionTestUtils;
 
-public class FlexLoggerTest {
+class FlexLoggerTest {
 
     @Test
-    public void testGetLoggerClassOfQEelf() {
+    void testGetLoggerClassOfQEelf() {
         ReflectionTestUtils.setField(FlexLogger.class, "loggerType", LoggerType.EELF);
         Logger logger = FlexLogger.getLogger((Class<?>) null);
         assertSame(logger, FlexLogger.getLogger((Class<?>) null));
@@ -44,61 +44,61 @@ public class FlexLoggerTest {
     }
 
     @Test
-    public void testGetLoggerClassOfQSystemOut() {
+    void testGetLoggerClassOfQSystemOut() {
         ReflectionTestUtils.setField(FlexLogger.class, "loggerType", LoggerType.SYSTEMOUT);
         Logger logger = FlexLogger.getLogger(this.getClass());
         assertSame(logger, FlexLogger.getLogger(this.getClass()));
     }
 
     @Test
-    public void testGetLoggerStringEelf() {
+    void testGetLoggerStringEelf() {
         ReflectionTestUtils.setField(FlexLogger.class, "loggerType", LoggerType.EELF);
         Logger logger = FlexLogger.getLogger();
         assertSame(logger, FlexLogger.getLogger());
     }
 
     @Test
-    public void testGetLoggerStringSystemOut() {
+    void testGetLoggerStringSystemOut() {
         ReflectionTestUtils.setField(FlexLogger.class, "loggerType", LoggerType.SYSTEMOUT);
         Logger logger = FlexLogger.getLogger();
         assertSame(logger, FlexLogger.getLogger());
     }
 
     @Test
-    public void testGetLoggerClassOfQBooleanEelf() {
+    void testGetLoggerClassOfQBooleanEelf() {
         ReflectionTestUtils.setField(FlexLogger.class, "loggerType", LoggerType.EELF);
         Logger logger = FlexLogger.getLogger(this.getClass(), true);
         assertSame(logger, FlexLogger.getLogger(this.getClass(), true));
     }
 
     @Test
-    public void testGetLoggerClassOfQBooleanSystemOut() {
+    void testGetLoggerClassOfQBooleanSystemOut() {
         ReflectionTestUtils.setField(FlexLogger.class, "loggerType", LoggerType.SYSTEMOUT);
         Logger logger = FlexLogger.getLogger(this.getClass(), true);
         assertSame(logger, FlexLogger.getLogger(this.getClass(), true));
     }
 
     @Test
-    public void testGetLoggerStringBooleanEelf() {
+    void testGetLoggerStringBooleanEelf() {
         ReflectionTestUtils.setField(FlexLogger.class, "loggerType", LoggerType.EELF);
         Logger logger = FlexLogger.getLogger(true);
         assertSame(logger, FlexLogger.getLogger(true));
     }
 
     @Test
-    public void testGetLoggerStringBooleanSystemOut() {
+    void testGetLoggerStringBooleanSystemOut() {
         ReflectionTestUtils.setField(FlexLogger.class, "loggerType", LoggerType.SYSTEMOUT);
         Logger logger = FlexLogger.getLogger(true);
         assertSame(logger, FlexLogger.getLogger(true));
     }
 
     @Test
-    public void testGetClassName() {
+    void testGetClassName() {
         assertNotEquals("FlexLogger", new FlexLogger().getClassName());
     }
 
     @Test
-    public void testPropertiesCallBack() throws IOException {
+    void testPropertiesCallBack() throws IOException {
         Set<String> changedKeys = new HashSet<>();
         changedKeys.add("debugLogger.level");
         changedKeys.add("metricsLogger.level");

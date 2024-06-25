@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +22,10 @@
 package org.onap.policy.common.parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
@@ -32,10 +33,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.function.BiConsumer;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class TestBeanValidationResult {
+class TestBeanValidationResult {
     private static final String TEXT1 = "abc";
     private static final String TEXT2 = "def";
     private static final String MY_LIST = "my-list";
@@ -59,8 +60,8 @@ public class TestBeanValidationResult {
     /**
      * Sets up.
      */
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         clean = new ObjectValidationResult(TEXT1, 10);
         cleanMsg = clean.getResult("", "", true);
 
@@ -72,13 +73,13 @@ public class TestBeanValidationResult {
     }
 
     @Test
-    public void testBeanValidationResult() {
+    void testBeanValidationResult() {
         assertTrue(bean.isValid());
         assertNull(bean.getResult());
     }
 
     @Test
-    public void testAddResult_testGetResult() {
+    void testAddResult_testGetResult() {
         // null should be ok
         assertTrue(bean.addResult(null));
 
@@ -99,7 +100,7 @@ public class TestBeanValidationResult {
     }
 
     @Test
-    public void testValidateNotNull() {
+    void testValidateNotNull() {
         assertTrue(bean.validateNotNull("sub-name", "sub-object"));
         assertTrue(bean.isValid());
         assertNull(bean.getResult());
@@ -110,7 +111,7 @@ public class TestBeanValidationResult {
     }
 
     @Test
-    public void testValidateNotNullList() {
+    void testValidateNotNullList() {
         List<ValidationResult> list = Arrays.asList(clean);
         assertTrue(bean.validateNotNullList(MY_LIST, list, item -> item));
         assertTrue(bean.isValid());
@@ -124,7 +125,7 @@ public class TestBeanValidationResult {
     }
 
     @Test
-    public void testValidateNotNullList_NullList() {
+    void testValidateNotNullList_NullList() {
         List<ValidationResult> list = null;
         assertFalse(bean.validateNotNullList(MY_LIST, list, item -> item));
         assertFalse(bean.isValid());
@@ -133,7 +134,7 @@ public class TestBeanValidationResult {
     }
 
     @Test
-    public void testValidateList() {
+    void testValidateList() {
         List<ValidationResult> list = null;
         bean = new BeanValidationResult(NAME, OBJECT);
         assertTrue(bean.validateList(MY_LIST, list, item -> item));
@@ -164,7 +165,7 @@ public class TestBeanValidationResult {
     }
 
     @Test
-    public void testValidateMap() {
+    void testValidateMap() {
         Map<String, ValidationResult> map = null;
         bean = new BeanValidationResult(NAME, OBJECT);
         assertTrue(bean.validateMap(MY_MAP, map, validMapEntry()));
