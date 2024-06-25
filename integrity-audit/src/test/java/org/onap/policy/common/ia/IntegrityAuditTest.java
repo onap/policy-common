@@ -3,6 +3,7 @@
  * Integrity Audit
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +21,14 @@
 
 package org.onap.policy.common.ia;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Properties;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class IntegrityAuditTest {
+class IntegrityAuditTest {
     private static final String PROPERTIES = "properties";
     private static final String RESOURCE_NAME = "resourceName";
     private static final String SOMETHING = "something";
@@ -36,7 +37,7 @@ public class IntegrityAuditTest {
      * Test if we can access the updated bad params outside of the parmsAreBad method.
      */
     @Test
-    public void testParmsAreBad() {
+    void testParmsAreBad() {
         // Try with 2 null params
         StringBuilder badParams = new StringBuilder();
         IntegrityAudit.parmsAreBad(null, SOMETHING, null, badParams);

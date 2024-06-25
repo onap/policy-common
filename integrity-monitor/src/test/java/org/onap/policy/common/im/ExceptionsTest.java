@@ -3,6 +3,7 @@
  * Integrity Monitor
  * ================================================================================
  * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,59 +21,59 @@
 
 package org.onap.policy.common.im;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.im.jmx.ComponentAdminException;
 import org.onap.policy.common.utils.test.ExceptionsTester;
 
 /**
  * Tests various Exception subclasses.
  */
-public class ExceptionsTest extends ExceptionsTester {
+class ExceptionsTest extends ExceptionsTester {
 
     @Test
-    public void testStateTransitionException() {
+    void testStateTransitionException() {
         assertEquals(4, test(StateTransitionException.class));
     }
 
     @Test
-    public void testStateManagementException() {
+    void testStateManagementException() {
         assertEquals(4, test(StateManagementException.class));
     }
 
     @Test
-    public void testStandbyStatusException() {
+    void testStandbyStatusException() {
         assertEquals(5, test(StandbyStatusException.class));
     }
 
     @Test
-    public void testIntegrityMonitorPropertiesException() {
+    void testIntegrityMonitorPropertiesException() {
         assertEquals(4, test(IntegrityMonitorPropertiesException.class));
     }
 
     @Test
-    public void testIntegrityMonitorException() {
+    void testIntegrityMonitorException() {
         assertEquals(5, test(IntegrityMonitorException.class));
     }
 
     @Test
-    public void testForwardProgressException() {
+    void testForwardProgressException() {
         assertEquals(4, test(ForwardProgressException.class));
     }
 
     @Test
-    public void testAllSeemsWellException() {
+    void testAllSeemsWellException() {
         assertEquals(4, test(AllSeemsWellException.class));
     }
 
     @Test
-    public void testAdministrativeStateException() {
+    void testAdministrativeStateException() {
         assertEquals(4, test(AdministrativeStateException.class));
     }
 
     @Test
-    public void testComponentAdminException() {
+    void testComponentAdminException() {
         assertEquals(4, test(ComponentAdminException.class));
     }
 }

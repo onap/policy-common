@@ -3,7 +3,7 @@
  * Integrity Monitor
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
- * Modificaitons Copyright (C) 2023 Nordix Foundation.
+ * Modificaitons Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@
 package org.onap.policy.common.im;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
@@ -33,11 +33,11 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.im.jpa.ForwardProgressEntity;
 import org.onap.policy.common.im.jpa.ResourceRegistrationEntity;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
@@ -50,7 +50,7 @@ import org.springframework.test.util.ReflectionTestUtils;
  * where they have write privileges and can execute time-sensitive
  * tasks.
  */
-public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
+class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     private static final String STANDBY_STATUS = "StandbyStatus = {}\n";
     private static final String RESTARTING_MSG = "\ntestSanityJmx restarting the IntegrityMonitor";
     private static final String FALSE_STRING = "false";
@@ -88,7 +88,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     /**
      * Set up for test class.
      */
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws Exception {
         IntegrityMonitorTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + IntegrityMonitorTest.class.getSimpleName());
 
@@ -98,7 +98,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     /**
      * Tear down after test class.
      */
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         IntegrityMonitorTestBase.tearDownAfterClass();
     }
@@ -106,7 +106,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     /**
      * Set up for test cases.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUpTest();
 
@@ -117,7 +117,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     /**
      * Tear down after test cases.
      */
-    @After
+    @AfterEach
     public void tearDown() {
         if (et != null && et.isActive()) {
             try {
@@ -136,7 +136,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
      * Dependency data Recovery from bad dependency data Lock Lock restart Unlock Unlock restart
      */
     @Test
-    public void testSanityJmx() throws Exception {
+    void testSanityJmx() throws Exception {
         logger.debug("\nIntegrityMonitorTest: Entering testSanityJmx\n\n");
 
         String dependent = "group1_logparser";
@@ -301,7 +301,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     }
 
     @Test
-    public void testIm() throws Exception {
+    void testIm() throws Exception {
         logger.debug("\nIntegrityMonitorTest: Entering testIM\n\n");
 
         // Disable the integrity monitor so it will not interfere
@@ -467,7 +467,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     }
 
     @Test
-    public void testSanityState() throws Exception {
+    void testSanityState() throws Exception {
         logger.debug("\nIntegrityMonitorTest: Entering testSanityState\n\n");
 
         // parameters are passed via a properties file
@@ -525,7 +525,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     }
 
     @Test
-    public void testRefreshStateAudit() throws Exception {
+    void testRefreshStateAudit() throws Exception {
         logger.debug("\nIntegrityMonitorTest: testRefreshStateAudit Enter\n\n");
 
         // parameters are passed via a properties file
@@ -634,7 +634,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     }
 
     @Test
-    public void testStateCheck() throws Exception {
+    void testStateCheck() throws Exception {
         logger.debug("\nIntegrityMonitorTest: Entering testStateCheck\n\n");
 
         // parameters are passed via a properties file
@@ -691,7 +691,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     }
 
     @Test
-    public void testGetAllForwardProgressEntity() throws Exception {
+    void testGetAllForwardProgressEntity() throws Exception {
         logger.debug("\nIntegrityMonitorTest: Entering testGetAllForwardProgressEntity\n\n");
         // parameters are passed via a properties file
         myProp.put(IntegrityMonitorProperties.DEPENDENCY_GROUPS, "");
@@ -741,7 +741,7 @@ public class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     }
 
     @Test
-    public void testStateAudit() throws Exception {
+    void testStateAudit() throws Exception {
         logger.debug("\nIntegrityMonitorTest: Entering testStateAudit\n\n");
 
         // parameters are passed via a properties file

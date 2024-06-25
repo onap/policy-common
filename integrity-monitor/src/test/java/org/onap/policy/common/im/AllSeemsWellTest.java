@@ -3,7 +3,7 @@
  * Integrity Monitor
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
- * Modificaitons Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,23 +22,23 @@
 package org.onap.policy.common.im;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.concurrent.Semaphore;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.test.util.ReflectionTestUtils;
 
-public class AllSeemsWellTest extends IntegrityMonitorTestBase {
+class AllSeemsWellTest extends IntegrityMonitorTestBase {
     private static final String ALL_SEEMS_WELL_MSG = "'AllSeemsWellTest - ALLSEEMSWELL'";
 
     private static Logger logger = LoggerFactory.getLogger(AllSeemsWellTest.class);
@@ -52,14 +52,14 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
     /**
      * Set up for test class.
      */
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws Exception {
         IntegrityMonitorTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + AllSeemsWellTest.class.getSimpleName());
 
         resourceName = IntegrityMonitorTestBase.SITE_NAME + "." + IntegrityMonitorTestBase.NODE_TYPE;
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         IntegrityMonitorTestBase.tearDownAfterClass();
     }
@@ -68,7 +68,7 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
      * Set up for test cases.
      * @throws Exception if an error occurs
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         super.setUpTest();
 
@@ -97,13 +97,13 @@ public class AllSeemsWellTest extends IntegrityMonitorTestBase {
         ReflectionTestUtils.setField(IntegrityMonitor.class, IM_INSTANCE_FIELD, im);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         super.tearDownTest();
     }
 
     @Test
-    public void testAllSeemsWell() throws Exception {
+    void testAllSeemsWell() throws Exception {
         logger.debug("\nIntegrityMonitorTest: Entering testAllSeemsWell\n\n");
 
         // parameters are passed via a properties file

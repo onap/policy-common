@@ -3,6 +3,7 @@
  * Integrity Monitor
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +21,16 @@
 
 package org.onap.policy.common.im;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /*
  * All JUnits are designed to run in the local development environment
  * where they have write privileges and can execute time-sensitive
  * tasks.
  */
-public class StateTransitionTest {
+class StateTransitionTest {
     private static final String HOTSTANDBY = "hotstandby";
     private static final String LOCKED = "locked";
     private static final String PROMOTE = "promote";
@@ -49,3486 +50,3486 @@ public class StateTransitionTest {
     private static final String FAILED = "failed";
 
     @Test
-    public void testBad() throws StateTransitionException {
+    void testBad() throws StateTransitionException {
         // bad test case
         assertEquals("coldstandby,locked,enabled,null,", makeString(UNLOCKED, ENABLED, "null", COLDSTANDBY, "lock"));
 
     }
 
     @Test
-    public void test1() throws StateTransitionException {
+    void test1() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,", makeString(UNLOCKED, ENABLED, "null", "null", "lock"));
 
     }
 
     @Test
-    public void test2() throws StateTransitionException {
+    void test2() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, "null", "null", UNLOCK));
 
     }
 
     @Test
-    public void test3() throws StateTransitionException {
+    void test3() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,failed,", makeString(UNLOCKED, ENABLED, "null", "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test4() throws StateTransitionException {
+    void test4() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, "null", "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test5() throws StateTransitionException {
+    void test5() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, "null", "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test6() throws StateTransitionException {
+    void test6() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test7() throws StateTransitionException {
+    void test7() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, "null", "null", PROMOTE));
 
     }
 
     @Test
-    public void test8() throws StateTransitionException {
+    void test8() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, "null", "null", DEMOTE));
 
     }
 
     @Test
-    public void test9() throws StateTransitionException {
+    void test9() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, "null", COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test10() throws StateTransitionException {
+    void test10() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, "null", COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test11() throws StateTransitionException {
+    void test11() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, "null", COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test12() throws StateTransitionException {
+    void test12() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test13() throws StateTransitionException {
+    void test13() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, "null", COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test14() throws StateTransitionException {
+    void test14() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test15() throws StateTransitionException {
+    void test15() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test16() throws StateTransitionException {
+    void test16() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, "null", COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test17() throws StateTransitionException {
+    void test17() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, "null", HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test18() throws StateTransitionException {
+    void test18() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, "null", HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test19() throws StateTransitionException {
+    void test19() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, "null", HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test20() throws StateTransitionException {
+    void test20() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test21() throws StateTransitionException {
+    void test21() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, "null", HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test22() throws StateTransitionException {
+    void test22() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test23() throws StateTransitionException {
+    void test23() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test24() throws StateTransitionException {
+    void test24() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, "null", HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test25() throws StateTransitionException {
+    void test25() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test26() throws StateTransitionException {
+    void test26() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test27() throws StateTransitionException {
+    void test27() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, "null", PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test28() throws StateTransitionException {
+    void test28() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test29() throws StateTransitionException {
+    void test29() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, "null", PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test30() throws StateTransitionException {
+    void test30() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test31() throws StateTransitionException {
+    void test31() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test32() throws StateTransitionException {
+    void test32() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, "null", PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test33() throws StateTransitionException {
+    void test33() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test34() throws StateTransitionException {
+    void test34() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, FAILED, "null", UNLOCK));
 
     }
 
     @Test
-    public void test35() throws StateTransitionException {
+    void test35() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,failed,", makeString(UNLOCKED, ENABLED, FAILED, "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test36() throws StateTransitionException {
+    void test36() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, FAILED, "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test37() throws StateTransitionException {
+    void test37() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, FAILED, "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test38() throws StateTransitionException {
+    void test38() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test39() throws StateTransitionException {
+    void test39() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, FAILED, "null", PROMOTE));
 
     }
 
     @Test
-    public void test40() throws StateTransitionException {
+    void test40() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test41() throws StateTransitionException {
+    void test41() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test42() throws StateTransitionException {
+    void test42() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, FAILED, COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test43() throws StateTransitionException {
+    void test43() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, FAILED, COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test44() throws StateTransitionException {
+    void test44() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test45() throws StateTransitionException {
+    void test45() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, FAILED, COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test46() throws StateTransitionException {
+    void test46() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test47() throws StateTransitionException {
+    void test47() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test48() throws StateTransitionException {
+    void test48() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test49() throws StateTransitionException {
+    void test49() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test50() throws StateTransitionException {
+    void test50() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, FAILED, HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test51() throws StateTransitionException {
+    void test51() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, FAILED, HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test52() throws StateTransitionException {
+    void test52() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test53() throws StateTransitionException {
+    void test53() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, FAILED, HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test54() throws StateTransitionException {
+    void test54() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test55() throws StateTransitionException {
+    void test55() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test56() throws StateTransitionException {
+    void test56() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test57() throws StateTransitionException {
+    void test57() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test58() throws StateTransitionException {
+    void test58() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test59() throws StateTransitionException {
+    void test59() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, FAILED, PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test60() throws StateTransitionException {
+    void test60() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test61() throws StateTransitionException {
+    void test61() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, FAILED, PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test62() throws StateTransitionException {
+    void test62() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test63() throws StateTransitionException {
+    void test63() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test64() throws StateTransitionException {
+    void test64() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test65() throws StateTransitionException {
+    void test65() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, DEPENDENCY, "null", DEMOTE));
 
     }
 
     @Test
-    public void test66() throws StateTransitionException {
+    void test66() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, DEPENDENCY, "null", UNLOCK));
 
     }
 
     @Test
-    public void test67() throws StateTransitionException {
+    void test67() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test68() throws StateTransitionException {
+    void test68() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test69() throws StateTransitionException {
+    void test69() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test70() throws StateTransitionException {
+    void test70() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test71() throws StateTransitionException {
+    void test71() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, "null", PROMOTE));
 
     }
 
     @Test
-    public void test72() throws StateTransitionException {
+    void test72() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, DEPENDENCY, "null", DEMOTE));
 
     }
 
     @Test
-    public void test73() throws StateTransitionException {
+    void test73() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test74() throws StateTransitionException {
+    void test74() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test75() throws StateTransitionException {
+    void test75() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test76() throws StateTransitionException {
+    void test76() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test77() throws StateTransitionException {
+    void test77() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test78() throws StateTransitionException {
+    void test78() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test79() throws StateTransitionException {
+    void test79() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test80() throws StateTransitionException {
+    void test80() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test81() throws StateTransitionException {
+    void test81() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test82() throws StateTransitionException {
+    void test82() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test83() throws StateTransitionException {
+    void test83() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test84() throws StateTransitionException {
+    void test84() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test85() throws StateTransitionException {
+    void test85() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test86() throws StateTransitionException {
+    void test86() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test87() throws StateTransitionException {
+    void test87() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test88() throws StateTransitionException {
+    void test88() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test89() throws StateTransitionException {
+    void test89() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test90() throws StateTransitionException {
+    void test90() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test91() throws StateTransitionException {
+    void test91() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test92() throws StateTransitionException {
+    void test92() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test93() throws StateTransitionException {
+    void test93() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test94() throws StateTransitionException {
+    void test94() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test95() throws StateTransitionException {
+    void test95() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test96() throws StateTransitionException {
+    void test96() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test97() throws StateTransitionException {
+    void test97() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test98() throws StateTransitionException {
+    void test98() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,", makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, "null", UNLOCK));
 
     }
 
     @Test
-    public void test99() throws StateTransitionException {
+    void test99() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test100() throws StateTransitionException {
+    void test100() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test101() throws StateTransitionException {
+    void test101() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test102() throws StateTransitionException {
+    void test102() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test103() throws StateTransitionException {
+    void test103() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, "null", PROMOTE));
 
     }
 
     @Test
-    public void test104() throws StateTransitionException {
+    void test104() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test105() throws StateTransitionException {
+    void test105() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test106() throws StateTransitionException {
+    void test106() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test107() throws StateTransitionException {
+    void test107() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test108() throws StateTransitionException {
+    void test108() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test109() throws StateTransitionException {
+    void test109() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test110() throws StateTransitionException {
+    void test110() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test111() throws StateTransitionException {
+    void test111() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test112() throws StateTransitionException {
+    void test112() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test113() throws StateTransitionException {
+    void test113() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test114() throws StateTransitionException {
+    void test114() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test115() throws StateTransitionException {
+    void test115() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test116() throws StateTransitionException {
+    void test116() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test117() throws StateTransitionException {
+    void test117() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test118() throws StateTransitionException {
+    void test118() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test119() throws StateTransitionException {
+    void test119() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test120() throws StateTransitionException {
+    void test120() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test121() throws StateTransitionException {
+    void test121() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test122() throws StateTransitionException {
+    void test122() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test123() throws StateTransitionException {
+    void test123() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test124() throws StateTransitionException {
+    void test124() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test125() throws StateTransitionException {
+    void test125() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test126() throws StateTransitionException {
+    void test126() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test127() throws StateTransitionException {
+    void test127() throws StateTransitionException {
         assertEquals("providingservice,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test128() throws StateTransitionException {
+    void test128() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test129() throws StateTransitionException {
+    void test129() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,", makeString(UNLOCKED, DISABLED, "null", "null", DEMOTE));
 
     }
 
     @Test
-    public void test130() throws StateTransitionException {
+    void test130() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,null,", makeString(UNLOCKED, DISABLED, "null", "null", UNLOCK));
 
     }
 
     @Test
-    public void test131() throws StateTransitionException {
+    void test131() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,failed,", makeString(UNLOCKED, DISABLED, "null", "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test132() throws StateTransitionException {
+    void test132() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,", makeString(UNLOCKED, DISABLED, "null", "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test133() throws StateTransitionException {
+    void test133() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, "null", "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test134() throws StateTransitionException {
+    void test134() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test135() throws StateTransitionException {
+    void test135() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, "null", "null", PROMOTE));
 
     }
 
     @Test
-    public void test136() throws StateTransitionException {
+    void test136() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,", makeString(UNLOCKED, DISABLED, "null", "null", DEMOTE));
 
     }
 
     @Test
-    public void test137() throws StateTransitionException {
+    void test137() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test138() throws StateTransitionException {
+    void test138() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test139() throws StateTransitionException {
+    void test139() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, "null", COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test140() throws StateTransitionException {
+    void test140() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test141() throws StateTransitionException {
+    void test141() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, "null", COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test142() throws StateTransitionException {
+    void test142() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test143() throws StateTransitionException {
+    void test143() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, "null", COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test144() throws StateTransitionException {
+    void test144() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test145() throws StateTransitionException {
+    void test145() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,", makeString(UNLOCKED, DISABLED, "null", HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test146() throws StateTransitionException {
+    void test146() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,", makeString(UNLOCKED, DISABLED, "null", HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test147() throws StateTransitionException {
+    void test147() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, "null", HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test148() throws StateTransitionException {
+    void test148() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test149() throws StateTransitionException {
+    void test149() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, "null", HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test150() throws StateTransitionException {
+    void test150() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test151() throws StateTransitionException {
+    void test151() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, "null", HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test152() throws StateTransitionException {
+    void test152() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,", makeString(UNLOCKED, DISABLED, "null", HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test153() throws StateTransitionException {
+    void test153() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test154() throws StateTransitionException {
+    void test154() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test155() throws StateTransitionException {
+    void test155() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, "null", PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test156() throws StateTransitionException {
+    void test156() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test157() throws StateTransitionException {
+    void test157() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, "null", PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test158() throws StateTransitionException {
+    void test158() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test159() throws StateTransitionException {
+    void test159() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, "null", PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test160() throws StateTransitionException {
+    void test160() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,",
                         makeString(UNLOCKED, DISABLED, "null", PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test161() throws StateTransitionException {
+    void test161() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,", makeString(UNLOCKED, DISABLED, FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test162() throws StateTransitionException {
+    void test162() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,failed,", makeString(UNLOCKED, DISABLED, FAILED, "null", UNLOCK));
 
     }
 
     @Test
-    public void test163() throws StateTransitionException {
+    void test163() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,failed,", makeString(UNLOCKED, DISABLED, FAILED, "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test164() throws StateTransitionException {
+    void test164() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,", makeString(UNLOCKED, DISABLED, FAILED, "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test165() throws StateTransitionException {
+    void test165() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test166() throws StateTransitionException {
+    void test166() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test167() throws StateTransitionException {
+    void test167() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, FAILED, "null", PROMOTE));
 
     }
 
     @Test
-    public void test168() throws StateTransitionException {
+    void test168() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,", makeString(UNLOCKED, DISABLED, FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test169() throws StateTransitionException {
+    void test169() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test170() throws StateTransitionException {
+    void test170() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test171() throws StateTransitionException {
+    void test171() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test172() throws StateTransitionException {
+    void test172() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, FAILED, COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test173() throws StateTransitionException {
+    void test173() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test174() throws StateTransitionException {
+    void test174() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test175() throws StateTransitionException {
+    void test175() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, FAILED, COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test176() throws StateTransitionException {
+    void test176() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test177() throws StateTransitionException {
+    void test177() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test178() throws StateTransitionException {
+    void test178() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test179() throws StateTransitionException {
+    void test179() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test180() throws StateTransitionException {
+    void test180() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, FAILED, HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test181() throws StateTransitionException {
+    void test181() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test182() throws StateTransitionException {
+    void test182() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test183() throws StateTransitionException {
+    void test183() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, FAILED, HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test184() throws StateTransitionException {
+    void test184() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test185() throws StateTransitionException {
+    void test185() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test186() throws StateTransitionException {
+    void test186() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test187() throws StateTransitionException {
+    void test187() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test188() throws StateTransitionException {
+    void test188() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, FAILED, PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test189() throws StateTransitionException {
+    void test189() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test190() throws StateTransitionException {
+    void test190() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test191() throws StateTransitionException {
+    void test191() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, FAILED, PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test192() throws StateTransitionException {
+    void test192() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test193() throws StateTransitionException {
+    void test193() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, "null", DEMOTE));
 
     }
 
     @Test
-    public void test194() throws StateTransitionException {
+    void test194() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,", makeString(UNLOCKED, DISABLED, DEPENDENCY, "null", UNLOCK));
 
     }
 
     @Test
-    public void test195() throws StateTransitionException {
+    void test195() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test196() throws StateTransitionException {
+    void test196() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test197() throws StateTransitionException {
+    void test197() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test198() throws StateTransitionException {
+    void test198() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test199() throws StateTransitionException {
+    void test199() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, "null", PROMOTE));
 
     }
 
     @Test
-    public void test200() throws StateTransitionException {
+    void test200() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, "null", DEMOTE));
 
     }
 
     @Test
-    public void test201() throws StateTransitionException {
+    void test201() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test202() throws StateTransitionException {
+    void test202() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test203() throws StateTransitionException {
+    void test203() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test204() throws StateTransitionException {
+    void test204() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test205() throws StateTransitionException {
+    void test205() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test206() throws StateTransitionException {
+    void test206() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test207() throws StateTransitionException {
+    void test207() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test208() throws StateTransitionException {
+    void test208() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test209() throws StateTransitionException {
+    void test209() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test210() throws StateTransitionException {
+    void test210() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test211() throws StateTransitionException {
+    void test211() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test212() throws StateTransitionException {
+    void test212() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test213() throws StateTransitionException {
+    void test213() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test214() throws StateTransitionException {
+    void test214() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test215() throws StateTransitionException {
+    void test215() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test216() throws StateTransitionException {
+    void test216() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test217() throws StateTransitionException {
+    void test217() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test218() throws StateTransitionException {
+    void test218() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test219() throws StateTransitionException {
+    void test219() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test220() throws StateTransitionException {
+    void test220() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test221() throws StateTransitionException {
+    void test221() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test222() throws StateTransitionException {
+    void test222() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test223() throws StateTransitionException {
+    void test223() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test224() throws StateTransitionException {
+    void test224() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test225() throws StateTransitionException {
+    void test225() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test226() throws StateTransitionException {
+    void test226() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, "null", UNLOCK));
 
     }
 
     @Test
-    public void test227() throws StateTransitionException {
+    void test227() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test228() throws StateTransitionException {
+    void test228() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test229() throws StateTransitionException {
+    void test229() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test230() throws StateTransitionException {
+    void test230() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test231() throws StateTransitionException {
+    void test231() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, "null", PROMOTE));
 
     }
 
     @Test
-    public void test232() throws StateTransitionException {
+    void test232() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test233() throws StateTransitionException {
+    void test233() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test234() throws StateTransitionException {
+    void test234() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test235() throws StateTransitionException {
+    void test235() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test236() throws StateTransitionException {
+    void test236() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test237() throws StateTransitionException {
+    void test237() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test238() throws StateTransitionException {
+    void test238() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test239() throws StateTransitionException {
+    void test239() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test240() throws StateTransitionException {
+    void test240() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test241() throws StateTransitionException {
+    void test241() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test242() throws StateTransitionException {
+    void test242() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test243() throws StateTransitionException {
+    void test243() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test244() throws StateTransitionException {
+    void test244() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test245() throws StateTransitionException {
+    void test245() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test246() throws StateTransitionException {
+    void test246() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test247() throws StateTransitionException {
+    void test247() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test248() throws StateTransitionException {
+    void test248() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test249() throws StateTransitionException {
+    void test249() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test250() throws StateTransitionException {
+    void test250() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test251() throws StateTransitionException {
+    void test251() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test252() throws StateTransitionException {
+    void test252() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test253() throws StateTransitionException {
+    void test253() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test254() throws StateTransitionException {
+    void test254() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test255() throws StateTransitionException {
+    void test255() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,StandbyStatusException",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test256() throws StateTransitionException {
+    void test256() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(UNLOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test257() throws StateTransitionException {
+    void test257() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, "null", "null", DEMOTE));
 
     }
 
     @Test
-    public void test258() throws StateTransitionException {
+    void test258() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,", makeString(LOCKED, ENABLED, "null", "null", UNLOCK));
 
     }
 
     @Test
-    public void test259() throws StateTransitionException {
+    void test259() throws StateTransitionException {
         assertEquals("null,locked,disabled,failed,", makeString(LOCKED, ENABLED, "null", "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test260() throws StateTransitionException {
+    void test260() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,", makeString(LOCKED, ENABLED, "null", "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test261() throws StateTransitionException {
+    void test261() throws StateTransitionException {
         assertEquals("null,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, "null", "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test262() throws StateTransitionException {
+    void test262() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,", makeString(LOCKED, ENABLED, "null", "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test263() throws StateTransitionException {
+    void test263() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, "null", "null", PROMOTE));
 
     }
 
     @Test
-    public void test264() throws StateTransitionException {
+    void test264() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, "null", "null", DEMOTE));
 
     }
 
     @Test
-    public void test265() throws StateTransitionException {
+    void test265() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, "null", COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test266() throws StateTransitionException {
+    void test266() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(LOCKED, ENABLED, "null", COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test267() throws StateTransitionException {
+    void test267() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, "null", COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test268() throws StateTransitionException {
+    void test268() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, "null", COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test269() throws StateTransitionException {
+    void test269() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, "null", COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test270() throws StateTransitionException {
+    void test270() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, "null", COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test271() throws StateTransitionException {
+    void test271() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, "null", COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test272() throws StateTransitionException {
+    void test272() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, "null", COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test273() throws StateTransitionException {
+    void test273() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, "null", HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test274() throws StateTransitionException {
+    void test274() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(LOCKED, ENABLED, "null", HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test275() throws StateTransitionException {
+    void test275() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, "null", HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test276() throws StateTransitionException {
+    void test276() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, "null", HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test277() throws StateTransitionException {
+    void test277() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, "null", HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test278() throws StateTransitionException {
+    void test278() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, "null", HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test279() throws StateTransitionException {
+    void test279() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, "null", HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test280() throws StateTransitionException {
+    void test280() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, "null", HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test281() throws StateTransitionException {
+    void test281() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, "null", PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test282() throws StateTransitionException {
+    void test282() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(LOCKED, ENABLED, "null", PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test283() throws StateTransitionException {
+    void test283() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, "null", PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test284() throws StateTransitionException {
+    void test284() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, "null", PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test285() throws StateTransitionException {
+    void test285() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, "null", PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test286() throws StateTransitionException {
+    void test286() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, "null", PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test287() throws StateTransitionException {
+    void test287() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, "null", PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test288() throws StateTransitionException {
+    void test288() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, "null", PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test289() throws StateTransitionException {
+    void test289() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test290() throws StateTransitionException {
+    void test290() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, "null", UNLOCK));
 
     }
 
     @Test
-    public void test291() throws StateTransitionException {
+    void test291() throws StateTransitionException {
         assertEquals("null,locked,disabled,failed,", makeString(LOCKED, ENABLED, FAILED, "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test292() throws StateTransitionException {
+    void test292() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test293() throws StateTransitionException {
+    void test293() throws StateTransitionException {
         assertEquals("null,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, FAILED, "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test294() throws StateTransitionException {
+    void test294() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test295() throws StateTransitionException {
+    void test295() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, FAILED, "null", PROMOTE));
 
     }
 
     @Test
-    public void test296() throws StateTransitionException {
+    void test296() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test297() throws StateTransitionException {
+    void test297() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test298() throws StateTransitionException {
+    void test298() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test299() throws StateTransitionException {
+    void test299() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, FAILED, COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test300() throws StateTransitionException {
+    void test300() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, FAILED, COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test301() throws StateTransitionException {
+    void test301() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, FAILED, COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test302() throws StateTransitionException {
+    void test302() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, FAILED, COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test303() throws StateTransitionException {
+    void test303() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, FAILED, COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test304() throws StateTransitionException {
+    void test304() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test305() throws StateTransitionException {
+    void test305() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test306() throws StateTransitionException {
+    void test306() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test307() throws StateTransitionException {
+    void test307() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, FAILED, HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test308() throws StateTransitionException {
+    void test308() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, FAILED, HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test309() throws StateTransitionException {
+    void test309() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, FAILED, HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test310() throws StateTransitionException {
+    void test310() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, FAILED, HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test311() throws StateTransitionException {
+    void test311() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, FAILED, HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test312() throws StateTransitionException {
+    void test312() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test313() throws StateTransitionException {
+    void test313() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test314() throws StateTransitionException {
+    void test314() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(LOCKED, ENABLED, FAILED, PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test315() throws StateTransitionException {
+    void test315() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, FAILED, PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test316() throws StateTransitionException {
+    void test316() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, FAILED, PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test317() throws StateTransitionException {
+    void test317() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, FAILED, PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test318() throws StateTransitionException {
+    void test318() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, FAILED, PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test319() throws StateTransitionException {
+    void test319() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, FAILED, PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test320() throws StateTransitionException {
+    void test320() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test321() throws StateTransitionException {
+    void test321() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, DEPENDENCY, "null", DEMOTE));
 
     }
 
     @Test
-    public void test322() throws StateTransitionException {
+    void test322() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,", makeString(LOCKED, ENABLED, DEPENDENCY, "null", UNLOCK));
 
     }
 
     @Test
-    public void test323() throws StateTransitionException {
+    void test323() throws StateTransitionException {
         assertEquals("null,locked,disabled,failed,", makeString(LOCKED, ENABLED, DEPENDENCY, "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test324() throws StateTransitionException {
+    void test324() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,", makeString(LOCKED, ENABLED, DEPENDENCY, "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test325() throws StateTransitionException {
+    void test325() throws StateTransitionException {
         assertEquals("null,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test326() throws StateTransitionException {
+    void test326() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test327() throws StateTransitionException {
+    void test327() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, DEPENDENCY, "null", PROMOTE));
 
     }
 
     @Test
-    public void test328() throws StateTransitionException {
+    void test328() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, DEPENDENCY, "null", DEMOTE));
 
     }
 
     @Test
-    public void test329() throws StateTransitionException {
+    void test329() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test330() throws StateTransitionException {
+    void test330() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(LOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test331() throws StateTransitionException {
+    void test331() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test332() throws StateTransitionException {
+    void test332() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test333() throws StateTransitionException {
+    void test333() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test334() throws StateTransitionException {
+    void test334() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test335() throws StateTransitionException {
+    void test335() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test336() throws StateTransitionException {
+    void test336() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, DEPENDENCY, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test337() throws StateTransitionException {
+    void test337() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test338() throws StateTransitionException {
+    void test338() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,", makeString(LOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test339() throws StateTransitionException {
+    void test339() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test340() throws StateTransitionException {
+    void test340() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test341() throws StateTransitionException {
+    void test341() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test342() throws StateTransitionException {
+    void test342() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test343() throws StateTransitionException {
+    void test343() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test344() throws StateTransitionException {
+    void test344() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,", makeString(LOCKED, ENABLED, DEPENDENCY, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test345() throws StateTransitionException {
+    void test345() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test346() throws StateTransitionException {
+    void test346() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test347() throws StateTransitionException {
+    void test347() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test348() throws StateTransitionException {
+    void test348() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test349() throws StateTransitionException {
+    void test349() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test350() throws StateTransitionException {
+    void test350() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test351() throws StateTransitionException {
+    void test351() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test352() throws StateTransitionException {
+    void test352() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test353() throws StateTransitionException {
+    void test353() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test354() throws StateTransitionException {
+    void test354() throws StateTransitionException {
         assertEquals("null,unlocked,enabled,null,", makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, "null", UNLOCK));
 
     }
 
     @Test
-    public void test355() throws StateTransitionException {
+    void test355() throws StateTransitionException {
         assertEquals("null,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test356() throws StateTransitionException {
+    void test356() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test357() throws StateTransitionException {
+    void test357() throws StateTransitionException {
         assertEquals("null,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test358() throws StateTransitionException {
+    void test358() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test359() throws StateTransitionException {
+    void test359() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, "null", PROMOTE));
 
     }
 
     @Test
-    public void test360() throws StateTransitionException {
+    void test360() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test361() throws StateTransitionException {
+    void test361() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test362() throws StateTransitionException {
+    void test362() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test363() throws StateTransitionException {
+    void test363() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test364() throws StateTransitionException {
+    void test364() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test365() throws StateTransitionException {
+    void test365() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test366() throws StateTransitionException {
+    void test366() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test367() throws StateTransitionException {
+    void test367() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test368() throws StateTransitionException {
+    void test368() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test369() throws StateTransitionException {
+    void test369() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test370() throws StateTransitionException {
+    void test370() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test371() throws StateTransitionException {
+    void test371() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test372() throws StateTransitionException {
+    void test372() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test373() throws StateTransitionException {
+    void test373() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test374() throws StateTransitionException {
+    void test374() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test375() throws StateTransitionException {
+    void test375() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test376() throws StateTransitionException {
+    void test376() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test377() throws StateTransitionException {
+    void test377() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test378() throws StateTransitionException {
+    void test378() throws StateTransitionException {
         assertEquals("hotstandby,unlocked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test379() throws StateTransitionException {
+    void test379() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test380() throws StateTransitionException {
+    void test380() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test381() throws StateTransitionException {
+    void test381() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test382() throws StateTransitionException {
+    void test382() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test383() throws StateTransitionException {
+    void test383() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,StandbyStatusException",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test384() throws StateTransitionException {
+    void test384() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, ENABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test385() throws StateTransitionException {
+    void test385() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,null,", makeString(LOCKED, DISABLED, "null", "null", DEMOTE));
 
     }
 
     @Test
-    public void test386() throws StateTransitionException {
+    void test386() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,null,", makeString(LOCKED, DISABLED, "null", "null", UNLOCK));
 
     }
 
     @Test
-    public void test387() throws StateTransitionException {
+    void test387() throws StateTransitionException {
         assertEquals("null,locked,disabled,failed,", makeString(LOCKED, DISABLED, "null", "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test388() throws StateTransitionException {
+    void test388() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,", makeString(LOCKED, DISABLED, "null", "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test389() throws StateTransitionException {
+    void test389() throws StateTransitionException {
         assertEquals("null,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, "null", "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test390() throws StateTransitionException {
+    void test390() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,", makeString(LOCKED, DISABLED, "null", "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test391() throws StateTransitionException {
+    void test391() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,null,StandbyStatusException",
                         makeString(LOCKED, DISABLED, "null", "null", PROMOTE));
 
     }
 
     @Test
-    public void test392() throws StateTransitionException {
+    void test392() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,null,", makeString(LOCKED, DISABLED, "null", "null", DEMOTE));
 
     }
 
     @Test
-    public void test393() throws StateTransitionException {
+    void test393() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,null,", makeString(LOCKED, DISABLED, "null", COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test394() throws StateTransitionException {
+    void test394() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,", makeString(LOCKED, DISABLED, "null", COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test395() throws StateTransitionException {
+    void test395() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, "null", COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test396() throws StateTransitionException {
+    void test396() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, "null", COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test397() throws StateTransitionException {
+    void test397() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, "null", COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test398() throws StateTransitionException {
+    void test398() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, "null", COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test399() throws StateTransitionException {
+    void test399() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,null,StandbyStatusException",
                         makeString(LOCKED, DISABLED, "null", COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test400() throws StateTransitionException {
+    void test400() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,null,", makeString(LOCKED, DISABLED, "null", COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test401() throws StateTransitionException {
+    void test401() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,null,", makeString(LOCKED, DISABLED, "null", HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test402() throws StateTransitionException {
+    void test402() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,", makeString(LOCKED, DISABLED, "null", HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test403() throws StateTransitionException {
+    void test403() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, "null", HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test404() throws StateTransitionException {
+    void test404() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, "null", HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test405() throws StateTransitionException {
+    void test405() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, "null", HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test406() throws StateTransitionException {
+    void test406() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, "null", HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test407() throws StateTransitionException {
+    void test407() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,null,StandbyStatusException",
                         makeString(LOCKED, DISABLED, "null", HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test408() throws StateTransitionException {
+    void test408() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,null,", makeString(LOCKED, DISABLED, "null", HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test409() throws StateTransitionException {
+    void test409() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,null,",
                         makeString(LOCKED, DISABLED, "null", PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test410() throws StateTransitionException {
+    void test410() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,null,",
                         makeString(LOCKED, DISABLED, "null", PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test411() throws StateTransitionException {
+    void test411() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, "null", PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test412() throws StateTransitionException {
+    void test412() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, "null", PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test413() throws StateTransitionException {
+    void test413() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, "null", PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test414() throws StateTransitionException {
+    void test414() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, "null", PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test415() throws StateTransitionException {
+    void test415() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,null,StandbyStatusException",
                         makeString(LOCKED, DISABLED, "null", PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test416() throws StateTransitionException {
+    void test416() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,null,",
                         makeString(LOCKED, DISABLED, "null", PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test417() throws StateTransitionException {
+    void test417() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,", makeString(LOCKED, DISABLED, FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test418() throws StateTransitionException {
+    void test418() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,failed,", makeString(LOCKED, DISABLED, FAILED, "null", UNLOCK));
 
     }
 
     @Test
-    public void test419() throws StateTransitionException {
+    void test419() throws StateTransitionException {
         assertEquals("null,locked,disabled,failed,", makeString(LOCKED, DISABLED, FAILED, "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test420() throws StateTransitionException {
+    void test420() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,", makeString(LOCKED, DISABLED, FAILED, "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test421() throws StateTransitionException {
+    void test421() throws StateTransitionException {
         assertEquals("null,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, FAILED, "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test422() throws StateTransitionException {
+    void test422() throws StateTransitionException {
         assertEquals("null,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, FAILED, "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test423() throws StateTransitionException {
+    void test423() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,StandbyStatusException",
                         makeString(LOCKED, DISABLED, FAILED, "null", PROMOTE));
 
     }
 
     @Test
-    public void test424() throws StateTransitionException {
+    void test424() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,", makeString(LOCKED, DISABLED, FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test425() throws StateTransitionException {
+    void test425() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,", makeString(LOCKED, DISABLED, FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test426() throws StateTransitionException {
+    void test426() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(LOCKED, DISABLED, FAILED, COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test427() throws StateTransitionException {
+    void test427() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, FAILED, COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test428() throws StateTransitionException {
+    void test428() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, FAILED, COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test429() throws StateTransitionException {
+    void test429() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, FAILED, COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test430() throws StateTransitionException {
+    void test430() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, FAILED, COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test431() throws StateTransitionException {
+    void test431() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,StandbyStatusException",
                         makeString(LOCKED, DISABLED, FAILED, COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test432() throws StateTransitionException {
+    void test432() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,", makeString(LOCKED, DISABLED, FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test433() throws StateTransitionException {
+    void test433() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,", makeString(LOCKED, DISABLED, FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test434() throws StateTransitionException {
+    void test434() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,", makeString(LOCKED, DISABLED, FAILED, HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test435() throws StateTransitionException {
+    void test435() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, FAILED, HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test436() throws StateTransitionException {
+    void test436() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, FAILED, HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test437() throws StateTransitionException {
+    void test437() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, FAILED, HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test438() throws StateTransitionException {
+    void test438() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, FAILED, HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test439() throws StateTransitionException {
+    void test439() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,StandbyStatusException",
                         makeString(LOCKED, DISABLED, FAILED, HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test440() throws StateTransitionException {
+    void test440() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,", makeString(LOCKED, DISABLED, FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test441() throws StateTransitionException {
+    void test441() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test442() throws StateTransitionException {
+    void test442() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,failed,",
                         makeString(LOCKED, DISABLED, FAILED, PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test443() throws StateTransitionException {
+    void test443() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, FAILED, PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test444() throws StateTransitionException {
+    void test444() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, FAILED, PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test445() throws StateTransitionException {
+    void test445() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, FAILED, PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test446() throws StateTransitionException {
+    void test446() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, FAILED, PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test447() throws StateTransitionException {
+    void test447() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,StandbyStatusException",
                         makeString(LOCKED, DISABLED, FAILED, PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test448() throws StateTransitionException {
+    void test448() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test449() throws StateTransitionException {
+    void test449() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, "null", DEMOTE));
 
     }
 
     @Test
-    public void test450() throws StateTransitionException {
+    void test450() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,", makeString(LOCKED, DISABLED, DEPENDENCY, "null", UNLOCK));
 
     }
 
     @Test
-    public void test451() throws StateTransitionException {
+    void test451() throws StateTransitionException {
         assertEquals("null,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test452() throws StateTransitionException {
+    void test452() throws StateTransitionException {
         assertEquals("null,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test453() throws StateTransitionException {
+    void test453() throws StateTransitionException {
         assertEquals("null,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test454() throws StateTransitionException {
+    void test454() throws StateTransitionException {
         assertEquals("null,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test455() throws StateTransitionException {
+    void test455() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,StandbyStatusException",
                         makeString(LOCKED, DISABLED, DEPENDENCY, "null", PROMOTE));
 
     }
 
     @Test
-    public void test456() throws StateTransitionException {
+    void test456() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, "null", DEMOTE));
 
     }
 
     @Test
-    public void test457() throws StateTransitionException {
+    void test457() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test458() throws StateTransitionException {
+    void test458() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test459() throws StateTransitionException {
+    void test459() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test460() throws StateTransitionException {
+    void test460() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test461() throws StateTransitionException {
+    void test461() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test462() throws StateTransitionException {
+    void test462() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test463() throws StateTransitionException {
+    void test463() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,StandbyStatusException",
                         makeString(LOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test464() throws StateTransitionException {
+    void test464() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test465() throws StateTransitionException {
+    void test465() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test466() throws StateTransitionException {
+    void test466() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test467() throws StateTransitionException {
+    void test467() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test468() throws StateTransitionException {
+    void test468() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test469() throws StateTransitionException {
+    void test469() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test470() throws StateTransitionException {
+    void test470() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test471() throws StateTransitionException {
+    void test471() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,StandbyStatusException",
                         makeString(LOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test472() throws StateTransitionException {
+    void test472() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test473() throws StateTransitionException {
+    void test473() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test474() throws StateTransitionException {
+    void test474() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test475() throws StateTransitionException {
+    void test475() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test476() throws StateTransitionException {
+    void test476() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test477() throws StateTransitionException {
+    void test477() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test478() throws StateTransitionException {
+    void test478() throws StateTransitionException {
         assertEquals("coldstandby,locked,enabled,null,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test479() throws StateTransitionException {
+    void test479() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,StandbyStatusException",
                         makeString(LOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test480() throws StateTransitionException {
+    void test480() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test481() throws StateTransitionException {
+    void test481() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test482() throws StateTransitionException {
+    void test482() throws StateTransitionException {
         assertEquals("null,unlocked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, "null", UNLOCK));
 
     }
 
     @Test
-    public void test483() throws StateTransitionException {
+    void test483() throws StateTransitionException {
         assertEquals("null,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, "null", DISABLE_FAILED));
 
     }
 
     @Test
-    public void test484() throws StateTransitionException {
+    void test484() throws StateTransitionException {
         assertEquals("null,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, "null", ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test485() throws StateTransitionException {
+    void test485() throws StateTransitionException {
         assertEquals("null,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, "null", DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test486() throws StateTransitionException {
+    void test486() throws StateTransitionException {
         assertEquals("null,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, "null", ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test487() throws StateTransitionException {
+    void test487() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,StandbyStatusException",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, "null", PROMOTE));
 
     }
 
     @Test
-    public void test488() throws StateTransitionException {
+    void test488() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, "null", DEMOTE));
 
     }
 
     @Test
-    public void test489() throws StateTransitionException {
+    void test489() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test490() throws StateTransitionException {
+    void test490() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test491() throws StateTransitionException {
+    void test491() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test492() throws StateTransitionException {
+    void test492() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test493() throws StateTransitionException {
+    void test493() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test494() throws StateTransitionException {
+    void test494() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test495() throws StateTransitionException {
+    void test495() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,StandbyStatusException",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test496() throws StateTransitionException {
+    void test496() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, COLDSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test497() throws StateTransitionException {
+    void test497() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test498() throws StateTransitionException {
+    void test498() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, UNLOCK));
 
     }
 
     @Test
-    public void test499() throws StateTransitionException {
+    void test499() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test500() throws StateTransitionException {
+    void test500() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test501() throws StateTransitionException {
+    void test501() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test502() throws StateTransitionException {
+    void test502() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test503() throws StateTransitionException {
+    void test503() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,StandbyStatusException",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, PROMOTE));
 
     }
 
     @Test
-    public void test504() throws StateTransitionException {
+    void test504() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, HOTSTANDBY, DEMOTE));
 
     }
 
     @Test
-    public void test505() throws StateTransitionException {
+    void test505() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DEMOTE));
 
     }
 
     @Test
-    public void test506() throws StateTransitionException {
+    void test506() throws StateTransitionException {
         assertEquals("coldstandby,unlocked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, UNLOCK));
 
     }
 
     @Test
-    public void test507() throws StateTransitionException {
+    void test507() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DISABLE_FAILED));
 
     }
 
     @Test
-    public void test508() throws StateTransitionException {
+    void test508() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, ENABLE_NOT_FAILED));
 
     }
 
     @Test
-    public void test509() throws StateTransitionException {
+    void test509() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DISABLE_DEPENDENCY));
 
     }
 
     @Test
-    public void test510() throws StateTransitionException {
+    void test510() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, ENABLE_NO_DEPENDENCY));
 
     }
 
     @Test
-    public void test511() throws StateTransitionException {
+    void test511() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,StandbyStatusException",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, PROMOTE));
 
     }
 
     @Test
-    public void test512() throws StateTransitionException {
+    void test512() throws StateTransitionException {
         assertEquals("coldstandby,locked,disabled,dependency,failed,",
                         makeString(LOCKED, DISABLED, DEPENDENCY_FAILED, PROVIDINGSERVICE, DEMOTE));
     }

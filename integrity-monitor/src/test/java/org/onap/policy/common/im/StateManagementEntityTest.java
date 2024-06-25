@@ -3,7 +3,7 @@
  * Integrity Monitor
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,27 +21,27 @@
 
 package org.onap.policy.common.im;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import jakarta.persistence.Query;
 import java.util.List;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.im.jpa.StateManagementEntity;
 import org.onap.policy.common.utils.jpa.EntityTransCloser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class StateManagementEntityTest extends IntegrityMonitorTestBase {
+class StateManagementEntityTest extends IntegrityMonitorTestBase {
     private static final Logger logger = LoggerFactory.getLogger(StateManagementEntityTest.class);
 
     /**
      * Set up for the test class.
      */
-    @BeforeClass
+    @BeforeAll
     public static void setUpClass() throws Exception {
         IntegrityMonitorTestBase
                 .setUpBeforeClass(DEFAULT_DB_URL_PREFIX + StateManagementEntityTest.class.getSimpleName());
@@ -51,7 +51,7 @@ public class StateManagementEntityTest extends IntegrityMonitorTestBase {
     /**
      * Tear down after the test class.
      */
-    @AfterClass
+    @AfterAll
     public static void tearDownClass() {
         IntegrityMonitorTestBase.tearDownAfterClass();
     }
@@ -59,7 +59,7 @@ public class StateManagementEntityTest extends IntegrityMonitorTestBase {
     /**
      * Set up for the test cases.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUpTest();
     }
@@ -67,13 +67,13 @@ public class StateManagementEntityTest extends IntegrityMonitorTestBase {
     /**
      * Tear down after the test cases.
      */
-    @After
+    @AfterEach
     public void tearDown() {
         super.tearDownTest();
     }
 
     @Test
-    public void testJpa() throws Exception {
+    void testJpa() throws Exception {
         logger.debug("\n??? logger.infor StateManagementEntityTest: Entering\n\n");
 
         // Define the resourceName for the StateManagement constructor

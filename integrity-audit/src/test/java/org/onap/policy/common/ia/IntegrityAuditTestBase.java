@@ -3,7 +3,7 @@
  * Integrity Audit
  * ================================================================================
  * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,8 @@
 
 package org.onap.policy.common.ia;
 
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -61,7 +61,7 @@ import org.springframework.test.util.ReflectionTestUtils;
  *
  * <p>These tests use a temporary, in-memory DB, which is dropped once the tests complete.
  */
-public class IntegrityAuditTestBase {
+class IntegrityAuditTestBase {
 
     /**
      * Root of the debug logger, as defined in the logback-test.xml.
@@ -284,7 +284,7 @@ public class IntegrityAuditTestBase {
      * @param persistenceUnit the persistence unit
      * @param tableName the name of the table
      */
-    public void truncateTable(Properties properties, String persistenceUnit, String tableName) {
+    void truncateTable(Properties properties, String persistenceUnit, String tableName) {
 
         try (EntityMgrFactoryCloser emfc =
                 new EntityMgrFactoryCloser(Persistence.createEntityManagerFactory(persistenceUnit, properties));
@@ -338,7 +338,7 @@ public class IntegrityAuditTestBase {
         }
 
         List<String> remaining = getRemaining(expected, it);
-        assertTrue("missing items " + remaining, remaining.isEmpty());
+        assertTrue(remaining.isEmpty(), "missing items " + remaining);
     }
 
     /**
@@ -496,7 +496,7 @@ public class IntegrityAuditTestBase {
             appender.start();
         }
 
-        public void detach() {
+        void detach() {
             logger.detachAppender(appender);
         }
     }
@@ -554,14 +554,14 @@ public class IntegrityAuditTestBase {
          * @param sleepMs time to sleep
          * @throws InterruptedException can be interrupted
          */
-        public void sleep(long sleepMs) throws InterruptedException {
+        void sleep(long sleepMs) throws InterruptedException {
             myTime.sleep(sleepMs);
         }
 
         /**
          * Interrupts the AuditThread.
          */
-        public void interrupt() {
+        void interrupt() {
             super.stopAuditThread();
         }
 

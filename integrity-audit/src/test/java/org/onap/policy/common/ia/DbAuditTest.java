@@ -3,7 +3,7 @@
  * Integrity Audit
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,8 @@
 package org.onap.policy.common.ia;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import com.google.re2j.Pattern;
 import jakarta.persistence.EntityManager;
@@ -31,11 +31,11 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import java.util.List;
 import java.util.Properties;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
 import org.onap.policy.common.logging.flexlogger.FlexLogger;
 import org.onap.policy.common.logging.flexlogger.Logger;
@@ -49,7 +49,7 @@ import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
  * If any have been ignored (@Ignore) they will not run at the same time
  * as others. You should run them as JUnits by themselves.
  */
-public class DbAuditTest extends IntegrityAuditTestBase {
+class DbAuditTest extends IntegrityAuditTestBase {
 
     private static Logger logger = FlexLogger.getLogger(DbAuditTest.class);
 
@@ -60,13 +60,13 @@ public class DbAuditTest extends IntegrityAuditTestBase {
     private EntityManager em2;
     private DbDao dbDao;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() throws Exception {
         IntegrityAuditTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + DbAuditTest.class.getSimpleName());
         IntegrityAuditEntity.setUnitTesting(true);
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         IntegrityAuditTestBase.tearDownAfterClass();
         IntegrityAuditEntity.setUnitTesting(false);
@@ -76,7 +76,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
      * Set up for test cases.
      */
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         logger.info("setUp: Entering");
 
@@ -93,7 +93,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
      * Tear down after test cases.
      */
     @Override
-    @After
+    @AfterEach
     public void tearDown() {
         logger.info("tearDown: Entering");
 
@@ -130,7 +130,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
      * Tests printing an error to the log in the event where there are no entities saved in the database.
      */
     @Test
-    public void testNoEntities() throws Exception {
+    void testNoEntities() throws Exception {
         Properties properties = makeProperties();
 
         logger.info("noEntitiesTest: Entering");
@@ -150,7 +150,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
      * Tests the detection of only one entry in the database.
      */
     @Test
-    public void testOneEntity() throws Exception {
+    void testOneEntity() throws Exception {
         Properties properties = makeProperties();
 
         logger.info("oneEntityTest: Entering");
@@ -174,7 +174,7 @@ public class DbAuditTest extends IntegrityAuditTestBase {
      * Tests reporting mismatches and missing entries using the error log.
      */
     @Test
-    public void testMismatch() throws Exception {
+    void testMismatch() throws Exception {
         logger.info("mismatchTest: Entering");
 
         // use new URLs so we get a completely new DB

@@ -3,6 +3,7 @@
  * Integrity Audit
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +21,16 @@
 
 package org.onap.policy.common.ia;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.logging.flexlogger.FlexLogger;
 import org.onap.policy.common.logging.flexlogger.Logger;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
@@ -39,16 +40,16 @@ import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
  * where they have write privileges and can execute time-sensitive
  * tasks.
  */
-public class AuditPeriodTest extends IntegrityAuditTestBase {
+class AuditPeriodTest extends IntegrityAuditTestBase {
 
     private static Logger logger = FlexLogger.getLogger(AuditPeriodTest.class);
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() throws Exception {
         IntegrityAuditTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + AuditPeriodTest.class.getSimpleName());
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         IntegrityAuditTestBase.tearDownAfterClass();
     }
@@ -57,7 +58,7 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
      * Set up for test case.
      */
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         logger.info("setUp: Entering");
 
@@ -71,7 +72,7 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
      * Tear down after test cases.
      */
     @Override
-    @After
+    @AfterEach
     public void tearDown() {
         logger.info("tearDown: Entering");
 
@@ -85,7 +86,7 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
      * suppressed.
      */
     @Test
-    public void testNegativeAuditPeriod() throws Exception {
+    void testNegativeAuditPeriod() throws Exception {
 
         logger.info("testNegativeAuditPeriod: Entering");
 
@@ -114,7 +115,7 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
      * 100ms).
      */
     @Test
-    public void testZeroAuditPeriod() throws Exception {
+    void testZeroAuditPeriod() throws Exception {
 
         logger.info("testZeroAuditPeriod: Entering");
 
@@ -154,7 +155,7 @@ public class AuditPeriodTest extends IntegrityAuditTestBase {
      * between the audits.
      */
     @Test
-    public void testLongAuditPeriod() throws Exception {
+    void testLongAuditPeriod() throws Exception {
 
         logger.info("testLongAuditPeriod: Entering");
 

@@ -3,7 +3,7 @@
  * Integrity Audit
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +21,10 @@
 
 package org.onap.policy.common.ia;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import jakarta.persistence.PersistenceUnitUtil;
 import jakarta.persistence.Query;
@@ -38,11 +38,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.ia.jpa.IntegrityAuditEntity;
 import org.onap.policy.common.utils.jpa.EntityTransCloser;
 import org.onap.policy.common.utils.time.TestTime;
@@ -52,7 +52,7 @@ import org.onap.policy.common.utils.time.TestTime;
  * where they have write privileges and can execute time-sensitive
  * tasks.
  */
-public class DbDaoTest extends IntegrityAuditTestBase {
+class DbDaoTest extends IntegrityAuditTestBase {
     private static final String SELECT_ENTITIES =
                     "Select i from IntegrityAuditEntity i where i.resourceName=:rn and i.persistenceUnit=:pu";
     private static final String SITE_B = "SiteB";
@@ -62,18 +62,18 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
     private DbDao dbDao;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() throws Exception {
         IntegrityAuditTestBase.setUpBeforeClass(DEFAULT_DB_URL_PREFIX + DbDaoTest.class.getSimpleName());
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         IntegrityAuditTestBase.tearDownAfterClass();
     }
 
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         super.setUp();
         dbDao = null;
@@ -83,7 +83,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
      * Tear down after test cases.
      */
     @Override
-    @After
+    @AfterEach
     public void tearDown() {
         if (dbDao != null) {
             dbDao.destroy();
@@ -94,7 +94,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
     /* Tests registering a new IntegrityAuditEntity object in the DB */
     @Test
-    public void testNewRegistration() throws Exception {
+    void testNewRegistration() throws Exception {
         Properties properties = makeProperties();
 
         try (EntityTransCloser et = new EntityTransCloser(em.getTransaction())) {
@@ -121,7 +121,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
      * Tests updating an IntegrityAuditEntity if it has already been registered
      */
     @Test
-    public void testUpdateRegistration() throws Exception {
+    void testUpdateRegistration() throws Exception {
         Properties properties = makeProperties();
 
         dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
@@ -161,7 +161,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
     /* Tests obtaining all Integrity Audit Entities from a table */
     @Test
-    public void testGetIntegrityAuditEntities() throws Exception {
+    void testGetIntegrityAuditEntities() throws Exception {
         Properties properties = makeProperties();
 
         // Add some entries to the DB
@@ -178,7 +178,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
     /* Tests retrieving a DbDao instance's IntegrityAuditEntity */
     @Test
-    public void testGetMyIntegrityAuditEntity() throws Exception {
+    void testGetMyIntegrityAuditEntity() throws Exception {
         Properties properties = makeProperties();
 
         dbDao = new DbDao(resourceName, A_SEQ_PU, properties);
@@ -188,7 +188,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
     /* Tests obtaining an IntegrityAuditEntity by ID */
     @Test
-    public void testGetIntegrityAuditEntity() throws Exception {
+    void testGetIntegrityAuditEntity() throws Exception {
         Properties properties = makeProperties();
 
         // Obtain an entry from the database based on ID
@@ -224,7 +224,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
     /* Tests setting an IntegrityAuditEntity as the designated node */
     @Test
-    public void testSetDesignated() throws Exception {
+    void testSetDesignated() throws Exception {
         Properties properties = makeProperties();
 
         try (EntityTransCloser et = new EntityTransCloser(em.getTransaction())) {
@@ -263,7 +263,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
     /* Tests that the lastUpdated column in the database is updated properly */
     @Test
-    public void testSetLastUpdated() throws Exception {
+    void testSetLastUpdated() throws Exception {
         Properties properties = makeProperties();
 
         try (EntityTransCloser et = new EntityTransCloser(em.getTransaction())) {
@@ -311,7 +311,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
 
     /* Tests that all the entries from a class can be retrieved */
     @Test
-    public void testGetAllMyEntriesString() throws Exception {
+    void testGetAllMyEntriesString() throws Exception {
         Properties properties = makeProperties();
 
         // create entries for the IntegrityAuditEntity table
@@ -330,7 +330,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
      * Tests retrieving all entities in a Persistence Unit using the class name and a hashset of IDs
      */
     @Test
-    public void testGetAllMyEntriesStringHashSet() throws Exception {
+    void testGetAllMyEntriesStringHashSet() throws Exception {
         Properties properties = makeProperties();
 
         // create entries for the IntegrityAuditEntity table
@@ -365,7 +365,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
      * and class name
      */
     @Test
-    public void testGetAllEntriesStringPropertiesString() throws Exception {
+    void testGetAllEntriesStringPropertiesString() throws Exception {
         Properties properties = makeProperties();
 
         // create entries for the IntegrityAuditEntity table
@@ -386,7 +386,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
      * class name, and a hashset of IDs
      */
     @Test
-    public void testGetAllEntriesStringPropertiesStringHashSet() throws Exception {
+    void testGetAllEntriesStringPropertiesStringHashSet() throws Exception {
         Properties properties = makeProperties();
 
         // create entries for the IntegrityAuditEntity table
@@ -421,7 +421,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
      * className
      */
     @Test
-    public void testGetAllEntries() throws Exception {
+    void testGetAllEntries() throws Exception {
         Properties properties = makeProperties();
 
         // create entries for the IntegrityAuditEntity table
@@ -440,7 +440,7 @@ public class DbDaoTest extends IntegrityAuditTestBase {
     /**
      * Tests obtaining all class names of persisted classes.
      */
-    public void testGetPersistenceClassNames() throws Exception {
+    void testGetPersistenceClassNames() throws Exception {
         Properties properties = makeProperties();
 
         dbDao = new DbDao(resourceName, A_SEQ_PU, properties);

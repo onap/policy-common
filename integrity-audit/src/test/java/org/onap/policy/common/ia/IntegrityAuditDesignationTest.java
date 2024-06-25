@@ -3,6 +3,7 @@
  * Integrity Audit
  * ================================================================================
  * Copyright (C) 2017-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +21,11 @@
 
 package org.onap.policy.common.ia;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.logging.flexlogger.FlexLogger;
 import org.onap.policy.common.logging.flexlogger.Logger;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
@@ -40,7 +41,7 @@ import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
  * 
  * <p>These tests use a temporary, in-memory DB, which is dropped once the tests complete.
  */
-public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
+class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
 
     private static Logger logger = FlexLogger.getLogger(IntegrityAuditDesignationTest.class);
 
@@ -55,13 +56,13 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      */
     private static final String START_AUDIT_RE_PREFIX = "Running audit for persistenceUnit=\\w+ on resourceName=(";
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() throws Exception {
         IntegrityAuditTestBase
                 .setUpBeforeClass(DEFAULT_DB_URL_PREFIX + IntegrityAuditDesignationTest.class.getSimpleName());
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         IntegrityAuditTestBase.tearDownAfterClass();
     }
@@ -70,7 +71,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * Set up before test cases.
      */
     @Override
-    @Before
+    @BeforeEach
     public void setUp() {
         logger.info("setUp: Entering");
 
@@ -83,7 +84,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * Tear down after test cases.
      */
     @Override
-    @After
+    @AfterEach
     public void tearDown() {
         logger.info("tearDown: Entering");
 
@@ -100,7 +101,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * Note: console.log must be examined to ascertain whether or not this test was successful.
      */
     @Test
-    public void testOneResource() throws Exception {
+    void testOneResource() throws Exception {
 
         logger.info("testOneResource: Entering");
 
@@ -155,7 +156,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * Note: console.log must be examined to ascertain whether or not this test was successful.
      */
     @Test
-    public void testTwoResources() throws Exception {
+    void testTwoResources() throws Exception {
 
         logger.info("testTwoResources: Entering");
 
@@ -202,7 +203,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * Note: console.log must be examined to ascertain whether or not this test was successful.
      */
     @Test
-    public void testTwoResourcesDifferentPus() throws Exception {
+    void testTwoResourcesDifferentPus() throws Exception {
 
         logger.info("testTwoResourcesDifferentPus: Entering");
 
@@ -247,7 +248,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * Note: console.log must be examined to ascertain whether or not this test was successful.
      */
     @Test
-    public void testTwoResourcesOneDead() throws Exception {
+    void testTwoResourcesOneDead() throws Exception {
 
         logger.info("testTwoResourcesOneDead: Entering");
 
@@ -288,7 +289,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * Note: console.log must be examined to ascertain whether or not this test was successful.
      */
     @Test
-    public void testThreeResources() throws Exception {
+    void testThreeResources() throws Exception {
 
         logger.info("testThreeResources: Entering");
 
@@ -345,7 +346,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * Note: console.log must be examined to ascertain whether or not this test was successful.
      */
     @Test
-    public void testFourResourcesDifferentPus() throws Exception {
+    void testFourResourcesDifferentPus() throws Exception {
 
         logger.info("testFourResourcesDifferentPus: Entering");
 
@@ -412,7 +413,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * Note: console.log must be examined to ascertain whether or not this test was successful.
      */
     @Test
-    public void testFourResourcesOneDead() throws Exception {
+    void testFourResourcesOneDead() throws Exception {
 
         logger.info("testFourResourcesOneDead: Entering");
 
@@ -479,7 +480,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * Note: console.log must be examined to ascertain whether or not this test was successful.
      */
     @Test
-    public void testFourResourcesThreeDead() throws Exception {
+    void testFourResourcesThreeDead() throws Exception {
 
         logger.info("testFourResourcesThreeDead: Entering");
 
@@ -531,7 +532,7 @@ public class IntegrityAuditDesignationTest extends IntegrityAuditTestBase {
      * Note: console.log must be examined to ascertain whether or not this test was successful.
      */
     @Test
-    public void testDesignatedNodeDead() throws Exception {
+    void testDesignatedNodeDead() throws Exception {
         logger.info("testDesignatedNodeDead: Entering");
 
         final ExtractAppender logA = watch(debugLogger, START_AUDIT_RE);
