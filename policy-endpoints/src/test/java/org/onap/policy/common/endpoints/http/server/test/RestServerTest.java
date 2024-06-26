@@ -24,12 +24,11 @@ package org.onap.policy.common.endpoints.http.server.test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -54,10 +53,10 @@ import java.util.List;
 import java.util.Properties;
 import lombok.Getter;
 import org.apache.commons.io.IOUtils;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.onap.policy.common.endpoints.http.server.HttpServletServerFactory;
@@ -73,7 +72,7 @@ import org.onap.policy.common.utils.coder.StandardCoder;
 import org.onap.policy.common.utils.network.NetworkUtil;
 import org.springframework.test.util.ReflectionTestUtils;
 
-public class RestServerTest {
+class RestServerTest {
     private static final String METRICS_URI = "/metrics";
     private static final String SERVER1 = "my-server-A";
     private static final String SERVER2 = "my-server-B";
@@ -100,7 +99,7 @@ public class RestServerTest {
      * Starts the REST server.
      * @throws Exception if an error occurs
      */
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() throws Exception {
         saveFactory = (Factory) ReflectionTestUtils.getField(RestServer.class, FACTORY_FIELD);
 
@@ -128,7 +127,7 @@ public class RestServerTest {
     /**
      * Restores the factory and stops the REST server.
      */
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         ReflectionTestUtils.setField(RestServer.class, FACTORY_FIELD, saveFactory);
 
@@ -138,7 +137,7 @@ public class RestServerTest {
     /**
      * Initializes mocks.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         server1 = mock(HttpServletServer.class);
         server2 = mock(HttpServletServer.class);
@@ -157,7 +156,7 @@ public class RestServerTest {
     }
 
     @Test
-    public void testRestServer() {
+    void testRestServer() {
         rest = new RestServer(params, Filter2.class, Provider1.class, Provider2.class);
 
         rest.start();
@@ -170,7 +169,7 @@ public class RestServerTest {
     }
 
     @Test
-    public void testRestServerListList() {
+    void testRestServerListList() {
         rest = new RestServer(params, List.of(Filter2.class), List.of(Provider1.class, Provider2.class));
 
         rest.start();
@@ -183,12 +182,12 @@ public class RestServerTest {
     }
 
     @Test
-    public void testRestServer_MissingProviders() {
+    void testRestServer_MissingProviders() {
         assertThatIllegalArgumentException().isThrownBy(() -> new RestServer(params, List.of(Filter2.class), null));
     }
 
     @Test
-    public void testGetServerProperties_testGetProviderNames() {
+    void testGetServerProperties_testGetProviderNames() {
         rest = new RestServer(params, Provider1.class, Provider2.class);
 
         ArgumentCaptor<Properties> cap = ArgumentCaptor.forClass(Properties.class);
@@ -214,7 +213,7 @@ public class RestServerTest {
     }
 
     @Test
-    public void testExplicitPrometheusAddedToProperty() {
+    void testExplicitPrometheusAddedToProperty() {
         when(params.isPrometheus()).thenReturn(true);
         rest = new RestServer(params, Filter2.class, Provider1.class, Provider2.class);
         ArgumentCaptor<Properties> cap = ArgumentCaptor.forClass(Properties.class);
@@ -229,7 +228,7 @@ public class RestServerTest {
     }
 
     @Test
-    public void testStandardServletAddedToProperty() {
+    void testStandardServletAddedToProperty() {
         when(params.getServletUriPath()).thenReturn("/metrics");
         when(params.getServletClass()).thenReturn(MetricsServlet.class.getName());
         rest = new RestServer(params, Filter2.class, Provider1.class, Provider2.class);
@@ -247,7 +246,7 @@ public class RestServerTest {
     }
 
     @Test
-    public void testInvalidJson() throws Exception {
+    void testInvalidJson() throws Exception {
         initRealParams();
 
         assertEquals(200, roundTrip(new StandardCoder().encode(new MyRequest())));
@@ -256,7 +255,7 @@ public class RestServerTest {
     }
 
     @Test
-    public void testInvalidYaml() throws Exception {
+    void testInvalidYaml() throws Exception {
         initRealParams();
 
         assertEquals(200, roundTrip(new StandardCoder().encode(new MyRequest()),
@@ -297,13 +296,13 @@ public class RestServerTest {
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         rest = new RestServer(params, Filter2.class, Provider1.class, Provider2.class);
         assertNotNull(rest.toString());
     }
 
     @Test
-    public void testFactory() {
+    void testFactory() {
         assertNotNull(saveFactory);
         assertNotNull(saveFactory.getServerFactory());
     }

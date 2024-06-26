@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +21,18 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 import java.util.Arrays;
 import java.util.Collections;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 
@@ -46,7 +48,7 @@ public abstract class NoopTopicEndpointTest<F extends NoopTopicFactory<T>, T ext
 
     protected abstract boolean io(String message);
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -54,7 +56,7 @@ public abstract class NoopTopicEndpointTest<F extends NoopTopicFactory<T>, T ext
     }
 
     @Test
-    public void testIo() {
+    void testIo() {
         TopicListener listener = mock(TopicListener.class);
         this.endpoint.register(listener);
         this.endpoint.start();
@@ -67,28 +69,28 @@ public abstract class NoopTopicEndpointTest<F extends NoopTopicFactory<T>, T ext
         this.endpoint.unregister(listener);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testIoNullMessage() {
-        io(null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testIoEmptyMessage() {
-        io("");
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testOfferNotStarted() {
-        io(MY_MESSAGE);
+    @Test
+    void testIoNullMessage() {
+        assertThatThrownBy(() -> io(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    public void testGetTopicCommInfrastructure() {
+    void testIoEmptyMessage() {
+        assertThatThrownBy(() -> io("")).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void testOfferNotStarted() {
+        assertThatThrownBy(() -> io(MY_MESSAGE)).isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void testGetTopicCommInfrastructure() {
         assertEquals(CommInfrastructure.NOOP, this.endpoint.getTopicCommInfrastructure());
     }
 
     @Test
-    public void testStart_testStop_testShutdown() {
+    void testStart_testStop_testShutdown() {
         this.endpoint.start();
         assertTrue(this.endpoint.isAlive());
 
@@ -109,10 +111,10 @@ public abstract class NoopTopicEndpointTest<F extends NoopTopicFactory<T>, T ext
         assertFalse(this.endpoint.isAlive());
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testStart_Locked() {
+    @Test
+    void testStart_Locked() {
         this.endpoint.lock();
-        this.endpoint.start();
+        assertThatThrownBy(() -> this.endpoint.start()).isInstanceOf(IllegalStateException.class);
     }
 
 }

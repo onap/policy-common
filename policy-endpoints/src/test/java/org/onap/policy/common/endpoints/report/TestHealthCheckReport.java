@@ -2,6 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +29,7 @@ import com.openpojo.validation.rule.impl.GetterMustExistRule;
 import com.openpojo.validation.rule.impl.SetterMustExistRule;
 import com.openpojo.validation.test.impl.GetterTester;
 import com.openpojo.validation.test.impl.SetterTester;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.utils.test.ToStringTester;
 
 /**
@@ -36,10 +37,10 @@ import org.onap.policy.common.utils.test.ToStringTester;
  *
  * @author Ram Krishna Verma (ram.krishna.verma@ericsson.com)
  */
-public class TestHealthCheckReport {
+class TestHealthCheckReport {
 
     @Test
-    public void testHealthCheckReport() {
+    void testHealthCheckReport() {
         final Validator validator =
                 ValidatorBuilder.create().with(new GetterMustExistRule()).with(new SetterMustExistRule())
                         .with(new GetterTester()).with(new SetterTester()).with(new ToStringTester()).build();

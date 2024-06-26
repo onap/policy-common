@@ -24,16 +24,16 @@ package org.onap.policy.common.endpoints.event.comm;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import org.junit.After;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicPropertyBuilder;
@@ -42,7 +42,7 @@ import org.onap.policy.common.endpoints.parameters.TopicParameters;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 
-public class TopicEndpointProxyTest {
+class TopicEndpointProxyTest {
 
     private static final String NOOP_SOURCE_TOPIC = "noop-source";
     private static final String NOOP_SINK_TOPIC = "noop-sink";
@@ -100,14 +100,14 @@ public class TopicEndpointProxyTest {
     /**
      * Destroys all managed topics.
      */
-    @After
+    @AfterEach
     public void tearDown() {
         NoopTopicFactories.getSinkFactory().destroy();
         NoopTopicFactories.getSourceFactory().destroy();
     }
 
     @Test
-    public void testSerialize() {
+    void testSerialize() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         manager.addTopicSources(configuration);
@@ -118,7 +118,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testAddTopicSourcesListOfTopicParameters() {
+    void testAddTopicSourcesListOfTopicParameters() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSource> sources = manager.addTopicSources(group.getTopicSources());
@@ -129,7 +129,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testAddTopicSourcesProperties() {
+    void testAddTopicSourcesProperties() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSource> sources = manager.addTopicSources(configuration);
@@ -140,7 +140,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testAddTopicSinksListOfTopicParameters() {
+    void testAddTopicSinksListOfTopicParameters() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSink> sinks = manager.addTopicSinks(group.getTopicSinks());
@@ -151,7 +151,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testAddTopicSinksProperties() {
+    void testAddTopicSinksProperties() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<TopicSink> sinks = manager.addTopicSinks(configuration);
@@ -162,7 +162,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testAddTopicsProperties() {
+    void testAddTopicsProperties() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<Topic> topics = manager.addTopics(configuration);
@@ -173,7 +173,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testAddTopicsTopicParameterGroup() {
+    void testAddTopicsTopicParameterGroup() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<Topic> topics = manager.addTopics(group);
@@ -184,7 +184,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testAddTopicsTopicParameterGroupNull() {
+    void testAddTopicsTopicParameterGroupNull() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         List<Topic> topics = manager.addTopics(new TopicParameterGroup());
@@ -192,7 +192,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testLockSinks_lockSources_locked() {
+    void testLockSinks_lockSources_locked() {
         TopicEndpoint manager = new TopicEndpointProxy();
         manager.lock();
         for (Topic topic : manager.addTopics(group)) {
@@ -201,7 +201,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testLockSinks_lockSources_unlocked() {
+    void testLockSinks_lockSources_unlocked() {
         TopicEndpoint manager = new TopicEndpointProxy();
         for (Topic topic : manager.addTopics(group)) {
             assertFalse(topic.isLocked());
@@ -209,7 +209,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testGetTopicSources() {
+    void testGetTopicSources() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         manager.addTopicSources(configuration);
@@ -223,7 +223,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testGetTopicSinks() {
+    void testGetTopicSinks() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         manager.addTopicSources(configuration);
@@ -237,7 +237,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testGetNoopTopicSources() {
+    void testGetNoopTopicSources() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         manager.addTopicSources(configuration);
@@ -245,7 +245,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testGetNoopTopicSinks() {
+    void testGetNoopTopicSinks() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         manager.addTopicSinks(configuration);
@@ -253,7 +253,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testLifecycle() {
+    void testLifecycle() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         assertTrue(manager.start());
@@ -270,7 +270,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testLock() {
+    void testLock() {
         TopicEndpoint manager = new TopicEndpointProxy();
 
         manager.lock();
@@ -281,7 +281,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testGetTopicSource() {
+    void testGetTopicSource() {
         TopicEndpoint manager = new TopicEndpointProxy();
         manager.addTopicSources(configuration);
 
@@ -292,7 +292,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testGetTopicSink() {
+    void testGetTopicSink() {
         TopicEndpoint manager = new TopicEndpointProxy();
         manager.addTopicSinks(configuration);
 
@@ -303,7 +303,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testGetNoopTopicSource() {
+    void testGetNoopTopicSource() {
         TopicEndpoint manager = new TopicEndpointProxy();
         manager.addTopicSources(configuration);
 
@@ -314,7 +314,7 @@ public class TopicEndpointProxyTest {
     }
 
     @Test
-    public void testGetNoopTopicSink() {
+    void testGetNoopTopicSink() {
         TopicEndpoint manager = new TopicEndpointProxy();
         manager.addTopicSinks(configuration);
 

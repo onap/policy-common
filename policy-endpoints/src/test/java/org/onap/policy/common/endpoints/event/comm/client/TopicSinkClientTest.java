@@ -3,7 +3,7 @@
  * ONAP PAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2019 Nordix Foundation.
+ * Modifications Copyright (C) 2019, 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@
 package org.onap.policy.common.endpoints.event.comm.client;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -35,13 +35,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicReference;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.TopicEndpointManager;
 import org.onap.policy.common.endpoints.event.comm.TopicSink;
 
-public class TopicSinkClientTest {
+class TopicSinkClientTest {
     private static final String TOPIC = "my-topic";
 
     private TopicSinkClient client;
@@ -53,7 +53,7 @@ public class TopicSinkClientTest {
      *
      * @throws Exception if an error occurs
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         sink = mock(TopicSink.class);
         when(sink.send(anyString())).thenReturn(true);
@@ -70,7 +70,7 @@ public class TopicSinkClientTest {
         TopicEndpointManager.getManager().addTopicSinks(props);
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDown() {
         // clear all topics after the tests
         TopicEndpointManager.getManager().shutdown();
@@ -80,7 +80,7 @@ public class TopicSinkClientTest {
      * Uses a real NO-OP topic sink.
      */
     @Test
-    public void testGetTopicSinks() throws Exception {
+    void testGetTopicSinks() throws Exception {
 
         sink = TopicEndpointManager.getManager().getNoopTopicSink(TOPIC);
         assertNotNull(sink);
@@ -97,7 +97,7 @@ public class TopicSinkClientTest {
     }
 
     @Test
-    public void testTopicSinkClient() {
+    void testTopicSinkClient() {
         // unknown topic -> should throw exception
         sinks = new LinkedList<>();
         assertThatThrownBy(() -> new TopicSinkClient2(TOPIC)).isInstanceOf(TopicSinkClientException.class)
@@ -105,7 +105,7 @@ public class TopicSinkClientTest {
     }
 
     @Test
-    public void testTopicSinkClient_GetTopic() throws TopicSinkClientException {
+    void testTopicSinkClient_GetTopic() throws TopicSinkClientException {
         assertEquals(TOPIC, new TopicSinkClient(TopicEndpointManager.getManager().getNoopTopicSink(TOPIC)).getTopic());
         assertEquals(TOPIC, new TopicSinkClient(TOPIC).getTopic());
 
@@ -115,7 +115,7 @@ public class TopicSinkClientTest {
     }
 
     @Test
-    public void testSend() {
+    void testSend() {
         client.send(Arrays.asList("abc", "def"));
         verify(sink).send("['abc','def']".replace('\'', '"'));
 

@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +21,8 @@
 
 package org.onap.policy.common.endpoints.listeners;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -31,17 +32,17 @@ import static org.mockito.Mockito.verify;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.utils.coder.StandardCoderObject;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
 import org.slf4j.LoggerFactory;
 
-public class MessageTypeDispatcherTest {
+class MessageTypeDispatcherTest {
 
     /**
      * Used to attach an appender to the class' logger.
@@ -68,7 +69,7 @@ public class MessageTypeDispatcherTest {
     /**
      * Initializes statics.
      */
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         saveLevel = logger.getLevel();
         logger.setLevel(Level.INFO);
@@ -77,7 +78,7 @@ public class MessageTypeDispatcherTest {
         appender.start();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         logger.setLevel(saveLevel);
         appender.stop();
@@ -86,7 +87,7 @@ public class MessageTypeDispatcherTest {
     /**
      * Initializes mocks and a listener.
      */
-    @Before
+    @BeforeEach
     @SuppressWarnings("unchecked")
     public void setUp() {
         appender.clearExtractions();
@@ -97,13 +98,13 @@ public class MessageTypeDispatcherTest {
         primary = new MessageTypeDispatcher(TYPE_FIELD);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         logger.detachAppender(appender);
     }
 
     @Test
-    public void testRegister_testUnregister() {
+    void testRegister_testUnregister() {
         primary.register(TYPE1, secondary1);
         primary.register(TYPE2, secondary2);
 
@@ -136,7 +137,7 @@ public class MessageTypeDispatcherTest {
     }
 
     @Test
-    public void testOnTopicEvent() {
+    void testOnTopicEvent() {
         primary.register(TYPE1, secondary1);
 
         logger.addAppender(appender);

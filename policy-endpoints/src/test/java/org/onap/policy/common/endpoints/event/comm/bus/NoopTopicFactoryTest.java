@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +22,12 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX;
 
@@ -35,9 +37,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 
@@ -52,20 +54,20 @@ public abstract class NoopTopicFactoryTest<F extends NoopTopicFactory<T>, T exte
     /**
      * Creates the object to be tested.
      */
-    @Before
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
         initFactory();
     }
 
-    @After
-    public void tearDown() {
+    @AfterEach
+    void tearDown() {
         factory.destroy();
     }
 
     @Test
-    public void testBuildBusTopicParams() {
+    void testBuildBusTopicParams() {
         initFactory();
 
         T item1 = buildTopic(makeParams(servers, MY_TOPIC, true));
@@ -76,7 +78,7 @@ public abstract class NoopTopicFactoryTest<F extends NoopTopicFactory<T>, T exte
     }
 
     @Test
-    public void testBuildListOfStringStringBoolean() {
+    void testBuildListOfStringStringBoolean() {
         initFactory();
 
         T item1 = buildTopic(servers, MY_TOPIC, true);
@@ -115,18 +117,18 @@ public abstract class NoopTopicFactoryTest<F extends NoopTopicFactory<T>, T exte
         assertNotSame(item1, buildTopic(servers, MY_TOPIC, false));
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testBuildListOfStringStringBoolean_NullTopic() {
-        buildTopic(servers, null, true);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testBuildListOfStringStringBoolean_EmptyTopic() {
-        buildTopic(servers, "", true);
+    @Test
+    void testBuildListOfStringStringBoolean_NullTopic() {
+        assertThatThrownBy(() -> buildTopic(servers, null, true)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    public void testBuildProperties() {
+    void testBuildListOfStringStringBoolean_EmptyTopic() {
+        assertThatThrownBy(() -> buildTopic(servers, "", true)).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void testBuildProperties() {
         // managed topic
         initFactory();
         assertEquals(1, buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build()).size());
@@ -178,19 +180,19 @@ public abstract class NoopTopicFactoryTest<F extends NoopTopicFactory<T>, T exte
 
     @Test
     @Override
-    public void testDestroyString_testGet_testInventory() {
+    void testDestroyString_testGet_testInventory() {
         super.testDestroyString_testGet_testInventory();
         super.testDestroyString_Ex();
     }
 
     @Test
     @Override
-    public void testDestroy() {
+    void testDestroy() {
         super.testDestroy();
     }
 
     @Test
-    public void testGet() {
+    void testGet() {
         super.testGet_Ex();
     }
 

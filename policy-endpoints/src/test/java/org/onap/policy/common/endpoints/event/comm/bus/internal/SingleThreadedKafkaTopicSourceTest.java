@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,23 +22,23 @@
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 
-public class SingleThreadedKafkaTopicSourceTest extends TopicTestBase {
+class SingleThreadedKafkaTopicSourceTest extends TopicTestBase {
     private SingleThreadedKafkaTopicSource source;
 
     /**
      * Creates the object to be tested.
      */
-    @Before
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -45,24 +46,24 @@ public class SingleThreadedKafkaTopicSourceTest extends TopicTestBase {
         source = new SingleThreadedKafkaTopicSource(makeKafkaBuilder().build());
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         source.shutdown();
     }
 
-    public void testSerialize() {
+    void testSerialize() {
         assertThatCode(() -> new GsonTestUtils().compareGson(source, SingleThreadedKafkaTopicSourceTest.class))
                         .doesNotThrowAnyException();
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertTrue(source.toString().startsWith("SingleThreadedKafkaTopicSource ["));
         source.shutdown();
     }
 
     @Test
-    public void testGetTopicCommInfrastructure() {
+    void testGetTopicCommInfrastructure() {
         assertEquals(CommInfrastructure.KAFKA, source.getTopicCommInfrastructure());
     }
 

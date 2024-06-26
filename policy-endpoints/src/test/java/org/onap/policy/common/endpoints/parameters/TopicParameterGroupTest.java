@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2019 Nordix Foundation.
+ *  Copyright (C) 2019-2024 Nordix Foundation.
  *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,17 +21,17 @@
 
 package org.onap.policy.common.endpoints.parameters;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.parameters.ValidationResult;
 import org.onap.policy.common.utils.coder.Coder;
@@ -43,12 +43,12 @@ import org.onap.policy.common.utils.coder.StandardCoder;
  *
  * @author Ajith Sreekumar (ajith.sreekumar@est.tech)
  */
-public class TopicParameterGroupTest {
+class TopicParameterGroupTest {
     private static CommonTestData testData = new CommonTestData();
     private static final Coder coder = new StandardCoder();
 
     @Test
-    public void test() throws CoderException {
+    void test() throws CoderException {
         final TopicParameterGroup topicParameterGroup =
                 testData.toObject(testData.getTopicParameterGroupMap(false), TopicParameterGroup.class);
         final ValidationResult validationResult = topicParameterGroup.validate();
@@ -65,7 +65,7 @@ public class TopicParameterGroupTest {
     }
 
     @Test
-    public void testValidate() {
+    void testValidate() {
         final TopicParameterGroup topicParameterGroup =
             testData.toObject(testData.getTopicParameterGroupMap(false), TopicParameterGroup.class);
         final ValidationResult result = topicParameterGroup.validate();
@@ -74,7 +74,7 @@ public class TopicParameterGroupTest {
     }
 
     @Test
-    public void test_valid() throws Exception {
+    void test_valid() throws Exception {
         String json = testData.getParameterGroupAsString(
             "src/test/resources/org/onap/policy/common/endpoints/parameters/TopicParameters_valid.json");
         TopicParameterGroup topicParameterGroup = coder.decode(json, TopicParameterGroup.class);
@@ -84,7 +84,7 @@ public class TopicParameterGroupTest {
     }
 
     @Test
-    public void test_invalid() throws Exception {
+    void test_invalid() throws Exception {
         String json = testData.getParameterGroupAsString(
             "src/test/resources/org/onap/policy/common/endpoints/parameters/TopicParameters_invalid.json");
         TopicParameterGroup topicParameterGroup = coder.decode(json, TopicParameterGroup.class);
@@ -94,7 +94,7 @@ public class TopicParameterGroupTest {
     }
 
     @Test
-    public void test_missing_mandatory_params() throws Exception {
+    void test_missing_mandatory_params() throws Exception {
         String json = testData.getParameterGroupAsString(
             "src/test/resources/org/onap/policy/common/endpoints/parameters/TopicParameters_missing_mandatory.json");
         TopicParameterGroup topicParameterGroup = coder.decode(json, TopicParameterGroup.class);
@@ -104,7 +104,7 @@ public class TopicParameterGroupTest {
     }
 
     @Test
-    public void test_allparams() throws Exception {
+    void test_allparams() throws Exception {
         String json = testData.getParameterGroupAsString(
             "src/test/resources/org/onap/policy/common/endpoints/parameters/TopicParameters_all_params.json");
         TopicParameterGroup topicParameterGroup = coder.decode(json, TopicParameterGroup.class);

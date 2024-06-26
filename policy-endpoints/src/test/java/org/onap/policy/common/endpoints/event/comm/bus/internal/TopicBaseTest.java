@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +22,11 @@
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -33,21 +35,21 @@ import static org.mockito.Mockito.verify;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 
-public class TopicBaseTest extends TopicTestBase {
+class TopicBaseTest extends TopicTestBase {
 
     private TopicBaseImpl base;
 
     /**
      * Creates the object to be tested.
      */
-    @Before
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -55,54 +57,56 @@ public class TopicBaseTest extends TopicTestBase {
         base = new TopicBaseImpl(servers, MY_TOPIC);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testTopicBase_NullServers() {
-        new TopicBaseImpl(null, MY_TOPIC);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testTopicBase_EmptyServers() {
-        new TopicBaseImpl(Collections.emptyList(), MY_TOPIC);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testTopicBase_NullTopic() {
-        new TopicBaseImpl(servers, null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testTopicBase_EmptyTopic() {
-        new TopicBaseImpl(servers, "");
+    @Test
+    void testTopicBase_NullServers() {
+        assertThatThrownBy(() -> new TopicBaseImpl(null, MY_TOPIC)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    public void testTopicBase_EffectiveTopic() {
+    void testTopicBase_EmptyServers() {
+        List testList = Collections.emptyList();
+        assertThatThrownBy(() -> new TopicBaseImpl(testList, MY_TOPIC))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void testTopicBase_NullTopic() {
+        assertThatThrownBy(() -> new TopicBaseImpl(servers, null)).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void testTopicBase_EmptyTopic() {
+        assertThatThrownBy(() -> new TopicBaseImpl(servers, "")).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void testTopicBase_EffectiveTopic() {
         TopicBase baseEf = new TopicBaseImpl(servers, MY_TOPIC, MY_EFFECTIVE_TOPIC);
         assertEquals(MY_TOPIC, baseEf.getTopic());
         assertEquals(MY_EFFECTIVE_TOPIC, baseEf.getEffectiveTopic());
     }
 
     @Test
-    public void testTopicBase_NullEffectiveTopic() {
+    void testTopicBase_NullEffectiveTopic() {
         TopicBase baseEf = new TopicBaseImpl(servers, MY_TOPIC, null);
         assertEquals(MY_TOPIC, baseEf.getTopic());
         assertEquals(MY_TOPIC, baseEf.getEffectiveTopic());
     }
 
     @Test
-    public void testTopicBase_EmptyEffectiveTopic() {
+    void testTopicBase_EmptyEffectiveTopic() {
         TopicBase baseEf = new TopicBaseImpl(servers, MY_TOPIC, "");
         assertEquals(MY_TOPIC, baseEf.getTopic());
         assertEquals(MY_TOPIC, baseEf.getEffectiveTopic());
     }
 
     @Test
-    public void testSerialize() {
+    void testSerialize() {
         assertThatCode(() -> new GsonTestUtils().compareGson(base, TopicBaseTest.class)).doesNotThrowAnyException();
     }
 
     @Test
-    public void testRegister() {
+    void testRegister() {
         TopicListener listener = mock(TopicListener.class);
         base.register(listener);
         assertEquals(Arrays.asList(listener), base.snapshotTopicListeners());
@@ -117,13 +121,13 @@ public class TopicBaseTest extends TopicTestBase {
         assertEquals(Arrays.asList(listener, listener2), base.snapshotTopicListeners());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testRegister_NullListener() {
-        base.register(null);
+    @Test
+    void testRegister_NullListener() {
+        assertThatThrownBy(() -> base.register(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    public void testUnregister() {
+    void testUnregister() {
         // register two listeners
         TopicListener listener = mock(TopicListener.class);
         TopicListener listener2 = mock(TopicListener.class);
@@ -143,14 +147,14 @@ public class TopicBaseTest extends TopicTestBase {
         assertTrue(base.snapshotTopicListeners().isEmpty());
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testUnregister_NullListener() {
+    @Test
+    void testUnregister_NullListener() {
         base.register(mock(TopicListener.class));
-        base.unregister(null);
+        assertThatThrownBy(() -> base.unregister(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    public void testBroadcast() {
+    void testBroadcast() {
         // register two listeners
         TopicListener listener = mock(TopicListener.class);
         TopicListener listener2 = mock(TopicListener.class);
@@ -172,7 +176,7 @@ public class TopicBaseTest extends TopicTestBase {
     }
 
     @Test
-    public void testLock_testUnlock() {
+    void testLock_testUnlock() {
         assertFalse(base.isLocked());
         assertTrue(base.lock());
         assertEquals(0, base.startCount);
@@ -200,7 +204,7 @@ public class TopicBaseTest extends TopicTestBase {
      * Tests lock/unlock when the stop/start methods return false.
      */
     @Test
-    public void testLock_testUnlock_FalseReturns() {
+    void testLock_testUnlock_FalseReturns() {
 
         // lock, but stop returns false
         base.stopReturn = false;
@@ -219,7 +223,7 @@ public class TopicBaseTest extends TopicTestBase {
      * Tests lock/unlock when the start method throws an exception.
      */
     @Test
-    public void testLock_testUnlock_Exception() {
+    void testLock_testUnlock_Exception() {
 
         // lock & re-lock, but start throws an exception
         base.startEx = true;
@@ -230,7 +234,7 @@ public class TopicBaseTest extends TopicTestBase {
     }
 
     @Test
-    public void testIsLocked() {
+    void testIsLocked() {
         assertFalse(base.isLocked());
         base.lock();
         assertTrue(base.isLocked());
@@ -239,18 +243,18 @@ public class TopicBaseTest extends TopicTestBase {
     }
 
     @Test
-    public void testGetTopic() {
+    void testGetTopic() {
         assertEquals(MY_TOPIC, base.getTopic());
     }
 
     @Test
-    public void testGetEffectiveTopic() {
+    void testGetEffectiveTopic() {
         assertEquals(MY_TOPIC, base.getTopic());
         assertEquals(MY_TOPIC, base.getEffectiveTopic());
     }
 
     @Test
-    public void testIsAlive() {
+    void testIsAlive() {
         assertFalse(base.isAlive());
         base.start();
         assertTrue(base.isAlive());
@@ -259,12 +263,12 @@ public class TopicBaseTest extends TopicTestBase {
     }
 
     @Test
-    public void testGetServers() {
+    void testGetServers() {
         assertEquals(servers, base.getServers());
     }
 
     @Test
-    public void testGetRecentEvents() {
+    void testGetRecentEvents() {
         assertEquals(0, base.getRecentEvents().length);
 
         base.addEvent("recent-A");
@@ -277,7 +281,7 @@ public class TopicBaseTest extends TopicTestBase {
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertNotNull(base.toString());
     }
 

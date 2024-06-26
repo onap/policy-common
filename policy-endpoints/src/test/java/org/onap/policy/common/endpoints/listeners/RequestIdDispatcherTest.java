@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +22,8 @@
 package org.onap.policy.common.endpoints.listeners;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -31,11 +32,11 @@ import static org.mockito.Mockito.verify;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.utils.coder.Coder;
 import org.onap.policy.common.utils.coder.CoderException;
@@ -44,7 +45,7 @@ import org.onap.policy.common.utils.coder.StandardCoderObject;
 import org.onap.policy.common.utils.test.log.logback.ExtractAppender;
 import org.slf4j.LoggerFactory;
 
-public class RequestIdDispatcherTest {
+class RequestIdDispatcherTest {
 
     /**
      * Used to attach an appender to the class' logger.
@@ -75,7 +76,7 @@ public class RequestIdDispatcherTest {
     /**
      * Initializes statics.
      */
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         saveLevel = logger.getLevel();
         logger.setLevel(Level.INFO);
@@ -84,7 +85,7 @@ public class RequestIdDispatcherTest {
         appender.start();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         logger.setLevel(saveLevel);
         appender.stop();
@@ -94,7 +95,7 @@ public class RequestIdDispatcherTest {
      * Create various mocks and primary listener.
      */
     @SuppressWarnings("unchecked")
-    @Before
+    @BeforeEach
     public void setUp() {
         appender.clearExtractions();
 
@@ -106,13 +107,13 @@ public class RequestIdDispatcherTest {
         primary = new RequestIdDispatcher<>(MyMessage.class, REQID_FIELD);
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         logger.detachAppender(appender);
     }
 
     @Test
-    public void testRegisterMessageListener() {
+    void testRegisterMessageListener() {
         primary.register(secondary1);
 
         // should process message that does not have a request id
@@ -131,7 +132,7 @@ public class RequestIdDispatcherTest {
     }
 
     @Test
-    public void testRegisterStringMessageListener() {
+    void testRegisterStringMessageListener() {
         primary.register(REQID1, secondary1);
 
         // should NOT process message that does not have a request id
@@ -161,7 +162,7 @@ public class RequestIdDispatcherTest {
     }
 
     @Test
-    public void testUnregisterMessageListener() {
+    void testUnregisterMessageListener() {
         primary.register(secondary1);
         primary.register(secondary2);
 
@@ -182,7 +183,7 @@ public class RequestIdDispatcherTest {
     }
 
     @Test
-    public void testUnregisterString() {
+    void testUnregisterString() {
         primary.register(REQID1, secondary1);
         primary.register(REQID2, secondary2);
 
@@ -204,7 +205,7 @@ public class RequestIdDispatcherTest {
     }
 
     @Test
-    public void testOnTopicEvent() {
+    void testOnTopicEvent() {
         primary.register(REQID1, secondary1);
         primary.register(REQID2, secondary2);
         primary.register(secondary3);
@@ -228,7 +229,7 @@ public class RequestIdDispatcherTest {
     }
 
     @Test
-    public void testOfferToListener() {
+    void testOfferToListener() {
         logger.addAppender(appender);
 
         // no listener for this
