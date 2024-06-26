@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  * policy-endpoints
  * ================================================================================
- * Copyright (C) 2022 Nordix Foundation.
+ * Copyright (C) 2022-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import org.onap.policy.common.endpoints.event.comm.Topic;
 public abstract class KafkaTopicFactoryTestBase<T extends Topic> extends BusTopicFactoryTestBase<T> {
 
     @Override
-    public void testBuildBusTopicParams_Ex() {
+    void testBuildBusTopicParams_Ex() {
 
         super.testBuildBusTopicParams_Ex();
 

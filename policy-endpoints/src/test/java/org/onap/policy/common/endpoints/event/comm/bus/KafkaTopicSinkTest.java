@@ -20,14 +20,14 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class KafkaTopicSinkTest {
+class KafkaTopicSinkTest {
 
     @Test
-    public void test() {
+    void test() {
         assertNotNull(KafkaTopicFactories.getSinkFactory());
     }
 

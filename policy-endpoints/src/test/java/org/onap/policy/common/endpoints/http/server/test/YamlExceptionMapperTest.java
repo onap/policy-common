@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,26 +21,26 @@
 
 package org.onap.policy.common.endpoints.http.server.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import jakarta.ws.rs.core.Response;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.http.server.YamlExceptionMapper;
 import org.onap.policy.common.utils.coder.CoderException;
 import org.onap.policy.common.utils.coder.StandardYamlCoder;
 import org.yaml.snakeyaml.error.YAMLException;
 
-public class YamlExceptionMapperTest {
+class YamlExceptionMapperTest {
     private YamlExceptionMapper mapper;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mapper = new YamlExceptionMapper();
     }
 
     @Test
-    public void testToResponse() throws CoderException {
+    void testToResponse() throws CoderException {
         YAMLException ex = new YAMLException("expected exception");
         Response resp = mapper.toResponse(ex);
 

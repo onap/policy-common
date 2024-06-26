@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,15 +21,15 @@
 
 package org.onap.policy.common.endpoints.utils;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.AppenderBase;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.features.NetLoggerFeatureApi;
 import org.onap.policy.common.endpoints.features.NetLoggerFeatureProviders;
@@ -38,7 +39,7 @@ import org.slf4j.Logger;
 /**
  * Test class for network log utilities such as logging and feature invocation.
  */
-public class NetLoggerUtilTest {
+class NetLoggerUtilTest {
 
     private static final String TEST_TOPIC = "test-topic";
     private static final String MESSAGE = "hello world!";
@@ -50,7 +51,7 @@ public class NetLoggerUtilTest {
     /**
      * Obtains the test implementation of NetLoggerFeatureApi.
      */
-    @BeforeClass
+    @BeforeAll
     public static void setUp() {
         netLoggerFeature = (NetLoggerFeature) NetLoggerFeatureProviders.getProviders().getList().get(0);
     }
@@ -58,7 +59,7 @@ public class NetLoggerUtilTest {
     /**
      * Clears events list and resets return/exceptions flags before invoking every unit test.
      */
-    @Before
+    @BeforeEach
     public void reset() {
         TestAppender.clear();
         netLoggerFeature.setReturnValue(false, false);
@@ -69,7 +70,7 @@ public class NetLoggerUtilTest {
      * Tests obtaining the network logger instance.
      */
     @Test
-    public void getNetworkLoggerTest() {
+    void getNetworkLoggerTest() {
         assertEquals("network", NetLoggerUtil.getNetworkLogger().getName());
     }
 
@@ -77,7 +78,7 @@ public class NetLoggerUtilTest {
      * Tests logging a message to the network logger and invoking features before/after logging.
      */
     @Test
-    public void logTest() {
+    void logTest() {
         NetLoggerUtil.log(EventType.IN, CommInfrastructure.NOOP, TEST_TOPIC, MESSAGE);
         assertEquals(3, TestAppender.events.size());
     }
@@ -86,7 +87,7 @@ public class NetLoggerUtilTest {
      * Tests that the network logger is used to log messages if a logger is not passed in.
      */
     @Test
-    public void logDefaultTest() {
+    void logDefaultTest() {
         NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, TEST_TOPIC, MESSAGE);
         assertEquals(3, TestAppender.events.size());
         assertEquals("network", TestAppender.events.get(0).getLoggerName());
@@ -96,7 +97,7 @@ public class NetLoggerUtilTest {
      * Tests a NetLoggerFeature that replaces base implementation before logging.
      */
     @Test
-    public void beforeLogReturnTrueTest() {
+    void beforeLogReturnTrueTest() {
         netLoggerFeature.setReturnValue(true, false);
         NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, TEST_TOPIC, MESSAGE);
         assertEquals(1, TestAppender.events.size());
@@ -106,7 +107,7 @@ public class NetLoggerUtilTest {
      * Tests a NetLoggerFeature that post processes a logged message.
      */
     @Test
-    public void afterLogReturnTrueTest() {
+    void afterLogReturnTrueTest() {
         netLoggerFeature.setReturnValue(false, true);
         NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, TEST_TOPIC, MESSAGE);
         assertEquals(3, TestAppender.events.size());
@@ -116,7 +117,7 @@ public class NetLoggerUtilTest {
      * Tests throwing an exception in the before hook.
      */
     @Test
-    public void beforeLogExceptionTest() {
+    void beforeLogExceptionTest() {
         netLoggerFeature.setExceptions(true, false);
         NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, TEST_TOPIC, MESSAGE);
         assertEquals(2, TestAppender.events.size());
@@ -126,7 +127,7 @@ public class NetLoggerUtilTest {
      * Tests throwing an exception in the after hook.
      */
     @Test
-    public void afterLogExceptionTest() {
+    void afterLogExceptionTest() {
         netLoggerFeature.setExceptions(false, true);
         NetLoggerUtil.log(null, EventType.IN, CommInfrastructure.NOOP, TEST_TOPIC, MESSAGE);
         assertEquals(2, TestAppender.events.size());

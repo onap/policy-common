@@ -26,10 +26,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.Assertions.catchThrowable;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.gson.Gson;
 import io.prometheus.client.servlet.jakarta.exporter.MetricsServlet;
@@ -43,9 +43,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.UUID;
 import org.apache.commons.io.IOUtils;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.onap.policy.common.endpoints.http.server.HttpServletServerFactoryInstance;
 import org.onap.policy.common.endpoints.http.server.YamlMessageBodyHandler;
@@ -58,7 +58,7 @@ import org.slf4j.LoggerFactory;
 /**
  * HttpServletServer JUNIT tests.
  */
-public class HttpServerTest {
+class HttpServerTest {
     private static final String JVM_MEMORY_BYTES_USED = "jvm_memory_bytes_used";
     private static final String METRICS_URI = "/metrics";
     private static final String PROMETHEUS = "prometheus";
@@ -90,7 +90,7 @@ public class HttpServerTest {
     /**
      * Increments the port number, clears the servers, and resets the providers.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         incrementPort();
         portUrl = LOCALHOST_PREFIX + port;
@@ -108,7 +108,7 @@ public class HttpServerTest {
     /**
      * To delete temporary properties cadi_longitude,and cadi_latitude.
      */
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         HttpServletServerFactoryInstance.getServerFactory().destroy();
         System.clearProperty("cadi_longitude");
@@ -116,7 +116,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testDefaultPackageServer() throws Exception {
+    void testDefaultPackageServer() throws Exception {
         logger.info("-- testDefaultPackageServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
@@ -137,7 +137,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testGsonPackageServer() throws Exception {
+    void testGsonPackageServer() throws Exception {
         logger.info("-- testGsonPackageServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
@@ -166,7 +166,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testYamlPackageServer() throws Exception {
+    void testYamlPackageServer() throws Exception {
         logger.info("-- testYamlPackageServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
@@ -197,7 +197,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testDefaultClassServer() throws Exception {
+    void testDefaultClassServer() throws Exception {
         logger.info("-- testDefaultClassServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
@@ -221,7 +221,7 @@ public class HttpServerTest {
      * This test checks a server from a plain java servlet (note it uses prometheus as the sample server).
      */
     @Test
-    public void testStdServletServer() throws Exception {
+    void testStdServletServer() throws Exception {
         logger.info("-- testStdServletServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
@@ -241,7 +241,7 @@ public class HttpServerTest {
      * This test explicitly creates a prometheus server.
      */
     @Test
-    public void testExplicitPrometheusServer() throws Exception {
+    void testExplicitPrometheusServer() throws Exception {
         logger.info("-- testPrometheusServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
@@ -260,7 +260,7 @@ public class HttpServerTest {
      * This test is an all-in-one for a single server: prometheus, jax-rs, servlet, swagger, and filters.
      */
     @Test
-    public void testPrometheusJaxRsFilterSwaggerServer() throws Exception {
+    void testPrometheusJaxRsFilterSwaggerServer() throws Exception {
         logger.info("-- testPrometheusServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
@@ -291,7 +291,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testJacksonClassServer() throws Exception {
+    void testJacksonClassServer() throws Exception {
         logger.info("-- testJacksonClassServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
@@ -318,7 +318,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testGsonClassServer() throws Exception {
+    void testGsonClassServer() throws Exception {
         logger.info("-- testGsonClassServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
@@ -346,7 +346,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testYamlClassServer() throws Exception {
+    void testYamlClassServer() throws Exception {
         logger.info("-- testYamlClassServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
@@ -376,7 +376,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testSerialize() {
+    void testSerialize() {
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
                         .build("echo", LOCALHOST, port, "/", false, true);
         server.addServletPackage("/*", this.getClass().getPackage().getName());
@@ -388,7 +388,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testSingleServer() throws Exception {
+    void testSingleServer() throws Exception {
         logger.info("-- testSingleServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
@@ -415,7 +415,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testMultipleServers() throws Exception {
+    void testMultipleServers() throws Exception {
         logger.info("-- testMultipleServers() --");
 
         HttpServletServer server1 = HttpServletServerFactoryInstance.getServerFactory()
@@ -449,7 +449,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testMultiServicePackage() throws Exception {
+    void testMultiServicePackage() throws Exception {
         logger.info("-- testMultiServicePackage() --");
 
         String randomName = UUID.randomUUID().toString();
@@ -472,7 +472,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testServiceClass() throws Exception {
+    void testServiceClass() throws Exception {
         logger.info("-- testServiceClass() --");
         String randomName = UUID.randomUUID().toString();
 
@@ -491,7 +491,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testMultiServiceClass() throws Exception {
+    void testMultiServiceClass() throws Exception {
         logger.info("-- testMultiServiceClass() --");
 
         String randomName = UUID.randomUUID().toString();
@@ -515,7 +515,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testSingleStaticResourceServer() throws Exception {
+    void testSingleStaticResourceServer() throws Exception {
         logger.info("-- testSingleStaticResourceServer() --");
 
         HttpServletServer staticServer = HttpServletServerFactoryInstance.getServerFactory()
@@ -553,7 +553,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testMultiStaticResourceServer() throws Exception {
+    void testMultiStaticResourceServer() throws Exception {
         logger.info("-- testMultiStaticResourceServer() --");
 
         HttpServletServer staticResourceServer = HttpServletServerFactoryInstance.getServerFactory()
@@ -580,7 +580,7 @@ public class HttpServerTest {
     }
 
     @Test
-    public void testMultiTypesServer() throws Exception {
+    void testMultiTypesServer() throws Exception {
         logger.info("-- testMultiTypesServer() --");
 
         HttpServletServer staticResourceServer = HttpServletServerFactoryInstance.getServerFactory()

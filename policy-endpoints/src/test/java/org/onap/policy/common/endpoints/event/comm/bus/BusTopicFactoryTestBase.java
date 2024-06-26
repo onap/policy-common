@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +22,13 @@
 package org.onap.policy.common.endpoints.event.comm.bus;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_ALLOW_SELF_SIGNED_CERTIFICATES_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_HTTP_HTTPS_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX;
@@ -74,7 +75,7 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
     /**
      * Tests building a topic using BusTopicParams.
      */
-    public void testBuildBusTopicParams() {
+    void testBuildBusTopicParams() {
         initFactory();
 
         // two unmanaged topics
@@ -111,7 +112,7 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
     /**
      * Tests exception cases when building a topic using BusTopicParams.
      */
-    public void testBuildBusTopicParams_Ex() {
+    void testBuildBusTopicParams_Ex() {
         // null topic
         assertThatIllegalArgumentException().isThrownBy(() -> buildTopic(makeBuilder().topic(null).build()));
 
@@ -122,7 +123,7 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
     /**
      * Tests building a topic using a list of servers and a topic.
      */
-    public void testBuildListOfStringString() {
+    void testBuildListOfStringString() {
         initFactory();
 
         T item1 = buildTopic(servers, MY_TOPIC);
@@ -148,7 +149,7 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
      * Tests building a topic using Properties. Verifies parameters specific to Bus
      * topics.
      */
-    public void testBuildProperties() {
+    void testBuildProperties() {
         initFactory();
 
         List<T> topics = buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build());
@@ -174,7 +175,7 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
     }
 
     @Override
-    public void testBuildProperties_Variations() {
+    void testBuildProperties_Variations() {
         super.testBuildProperties_Variations();
 
         // check boolean properties that default to true
@@ -210,8 +211,8 @@ public abstract class BusTopicFactoryTestBase<T extends Topic> extends TopicFact
                 builder.setTopicProperty(builderName, value.toString());
             }
 
-            assertEquals("size for default " + value, 1, buildTopics(builder.build()).size());
-            assertTrue("default for " + value, validate.test(getLastParams()));
+            assertEquals(1, buildTopics(builder.build()).size(), "size for default " + value);
+            assertTrue(validate.test(getLastParams()), "default for " + value);
         }
     }
 

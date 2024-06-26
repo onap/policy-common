@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@
 package org.onap.policy.common.endpoints.http.server.test;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import jakarta.ws.rs.core.MediaType;
 import java.io.ByteArrayInputStream;
@@ -35,12 +35,12 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.ToString;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.http.server.YamlMessageBodyHandler;
 import org.yaml.snakeyaml.error.YAMLException;
 
-public class YamlMessageBodyHandlerTest {
+class YamlMessageBodyHandlerTest {
     private static final String EXPECTED_EXCEPTION = "expected exception";
 
     private static final String GEN_TYPE = "some-type";
@@ -54,15 +54,15 @@ public class YamlMessageBodyHandlerTest {
 
     private YamlMessageBodyHandler hdlr;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         hdlr = new YamlMessageBodyHandler();
     }
 
     @Test
-    public void testIsWriteable() {
+    void testIsWriteable() {
         for (String subtype : subtypes) {
-            assertTrue("writeable " + subtype, hdlr.isWriteable(null, null, null, new MediaType(GEN_TYPE, subtype)));
+            assertTrue(hdlr.isWriteable(null, null, null, new MediaType(GEN_TYPE, subtype)), "writeable " + subtype);
 
         }
 
@@ -79,12 +79,12 @@ public class YamlMessageBodyHandlerTest {
     }
 
     @Test
-    public void testGetSize() {
+    void testGetSize() {
         assertEquals(-1, hdlr.getSize(null, null, null, null, null));
     }
 
     @Test
-    public void testWriteTo_testReadFrom() throws Exception {
+    void testWriteTo_testReadFrom() throws Exception {
         ByteArrayOutputStream outstr = new ByteArrayOutputStream();
         MyObject obj1 = new MyObject(10);
         hdlr.writeTo(obj1, obj1.getClass(), CLASS_OBJ, null, null, null, outstr);
@@ -95,7 +95,7 @@ public class YamlMessageBodyHandlerTest {
     }
 
     @Test
-    public void testWriteTo_DifferentTypes() throws Exception {
+    void testWriteTo_DifferentTypes() throws Exception {
         ByteArrayOutputStream outstr = new ByteArrayOutputStream();
 
         // use a derived type, but specify the base type when writing
@@ -108,7 +108,7 @@ public class YamlMessageBodyHandlerTest {
     }
 
     @Test
-    public void testWriteTo_Ex() throws Exception {
+    void testWriteTo_Ex() throws Exception {
         OutputStream outstr = new OutputStream() {
             @Override
             public void write(int value) throws IOException {
@@ -124,9 +124,9 @@ public class YamlMessageBodyHandlerTest {
     }
 
     @Test
-    public void testIsReadable() {
+    void testIsReadable() {
         for (String subtype : subtypes) {
-            assertTrue("readable " + subtype, hdlr.isReadable(null, null, null, new MediaType(GEN_TYPE, subtype)));
+            assertTrue(hdlr.isReadable(null, null, null, new MediaType(GEN_TYPE, subtype)), "readable " + subtype);
 
         }
 
@@ -143,7 +143,7 @@ public class YamlMessageBodyHandlerTest {
     }
 
     @Test
-    public void testReadFrom_DifferentTypes() throws Exception {
+    void testReadFrom_DifferentTypes() throws Exception {
         ByteArrayOutputStream outstr = new ByteArrayOutputStream();
         MyObject obj1 = new MyObject(10);
         hdlr.writeTo(obj1, obj1.getClass(), CLASS_OBJ, null, null, null, outstr);
@@ -161,7 +161,7 @@ public class YamlMessageBodyHandlerTest {
     }
 
     @Test
-    public void testReadFrom_Ex() throws Exception {
+    void testReadFrom_Ex() throws Exception {
         InputStream inpstr = new InputStream() {
             @Override
             public int read() throws IOException {
@@ -176,7 +176,7 @@ public class YamlMessageBodyHandlerTest {
     }
 
     @Test
-    public void testReadFrom_Invalid() throws Exception {
+    void testReadFrom_Invalid() throws Exception {
         InputStream inpstr = new ByteArrayInputStream("plain text".getBytes());
 
         assertThatThrownBy(() -> hdlr.readFrom(CLASS_OBJ, CLASS_OBJ, null, null, null, inpstr))
@@ -186,7 +186,7 @@ public class YamlMessageBodyHandlerTest {
     }
 
     @Test
-    public void testMapDouble() throws Exception {
+    void testMapDouble() throws Exception {
         MyMap map = new MyMap();
         map.props = new HashMap<>();
         map.props.put("plainString", "def");

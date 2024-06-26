@@ -22,11 +22,11 @@
 
 package org.onap.policy.common.endpoints.http.server.test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import io.prometheus.client.servlet.jakarta.exporter.MetricsServlet;
 import jakarta.ws.rs.client.Entity;
@@ -41,10 +41,10 @@ import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import lombok.Getter;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.http.client.HttpClient;
 import org.onap.policy.common.endpoints.http.client.HttpClientConfigException;
@@ -55,7 +55,7 @@ import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.utils.network.NetworkUtil;
 
-public class HttpClientTest {
+class HttpClientTest {
     private static final String TEST_HTTP_NO_AUTH_CLIENT = "testHttpNoAuthClient";
     private static final String TEST_HTTP_AUTH_CLIENT = "testHttpAuthClient";
     private static final String LOCALHOST = "localhost";
@@ -75,7 +75,7 @@ public class HttpClientTest {
      *
      * @throws InterruptedException can be interrupted
      */
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() throws InterruptedException {
         /* echo server - http + no auth */
 
@@ -136,7 +136,7 @@ public class HttpClientTest {
     /**
      * Clear https clients and reset providers.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         HttpClientFactoryInstance.getClientFactory().destroy();
 
@@ -146,7 +146,7 @@ public class HttpClientTest {
     /**
      * After the class is created method.
      */
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         HttpServletServerFactoryInstance.getServerFactory().destroy();
         HttpClientFactoryInstance.getClientFactory().destroy();
@@ -187,7 +187,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpGetNoAuthClient() throws Exception {
+    void testHttpGetNoAuthClient() throws Exception {
         final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
             6666);
         final Response response = client.get(HELLO);
@@ -198,7 +198,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpGetNoAuthClientAsync() throws Exception {
+    void testHttpGetNoAuthClientAsync() throws Exception {
         final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
             6666);
         MyCallback callback = new MyCallback();
@@ -214,13 +214,13 @@ public class HttpClientTest {
 
     private void verifyCallback(String testName, MyCallback callback, final Response response)
                     throws InterruptedException {
-        assertTrue(testName, callback.await());
-        assertNull(testName, callback.getThrowable());
-        assertSame(testName, response, callback.getResponse());
+        assertTrue(callback.await(), testName);
+        assertNull(callback.getThrowable(), testName);
+        assertSame(response, callback.getResponse(), testName);
     }
 
     @Test
-    public void testHttpPutNoAuthClient() throws Exception {
+    void testHttpPutNoAuthClient() throws Exception {
         final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false, 6666);
 
         Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
@@ -232,7 +232,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpPutNoAuthClientAsync() throws Exception {
+    void testHttpPutNoAuthClientAsync() throws Exception {
         final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false, 6666);
 
         Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
@@ -248,7 +248,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpPostNoAuthClient() throws Exception {
+    void testHttpPostNoAuthClient() throws Exception {
         final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
             6666);
 
@@ -261,7 +261,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpPostNoAuthClientAsync() throws Exception {
+    void testHttpPostNoAuthClientAsync() throws Exception {
         final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
             6666);
 
@@ -278,7 +278,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpDeletetNoAuthClient() throws Exception {
+    void testHttpDeletetNoAuthClient() throws Exception {
         final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
             6666);
 
@@ -290,7 +290,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpDeletetNoAuthClientAsync() throws Exception {
+    void testHttpDeletetNoAuthClientAsync() throws Exception {
         final HttpClient client = getNoAuthHttpClient(TEST_HTTP_NO_AUTH_CLIENT, false,
             6666);
 
@@ -310,7 +310,7 @@ public class HttpClientTest {
      * @throws Exception if an error occurs
      */
     @Test
-    public void testHttpAsyncAuthClient() throws Exception {
+    void testHttpAsyncAuthClient() throws Exception {
         final HttpClient client = getAuthHttpClient();
 
         MyCallback callback = new MyCallback();
@@ -325,7 +325,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpGetAuthClient() throws Exception {
+    void testHttpGetAuthClient() throws Exception {
         final HttpClient client = getAuthHttpClient();
 
         final Response response = client.get(HELLO);
@@ -336,7 +336,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpPutAuthClient() throws Exception {
+    void testHttpPutAuthClient() throws Exception {
         final HttpClient client = getAuthHttpClient();
 
         Entity<MyEntity> entity = Entity.entity(new MyEntity(MY_VALUE), MediaType.APPLICATION_JSON);
@@ -348,7 +348,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpPutAuthClient_GsonProvider() throws Exception {
+    void testHttpPutAuthClient_GsonProvider() throws Exception {
         final HttpClient client = HttpClientFactoryInstance.getClientFactory()
                         .build(BusTopicParams.builder().clientName(TEST_HTTP_AUTH_CLIENT).useHttps(true)
                                         .allowSelfSignedCerts(true).hostname(LOCALHOST).port(6667).basePath(JUNIT_ECHO)
@@ -366,7 +366,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpAuthClient401() throws Exception {
+    void testHttpAuthClient401() throws Exception {
         final HttpClient client = getNoAuthHttpClient("testHttpAuthClient401", true,
             6667);
         final Response response = client.get(HELLO);
@@ -374,7 +374,7 @@ public class HttpClientTest {
     }
 
     @Test
-    public void testHttpAuthClientProps() throws Exception {
+    void testHttpAuthClientProps() throws Exception {
         final Properties httpProperties = new Properties();
 
         /* PAP and PDP services */

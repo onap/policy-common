@@ -22,10 +22,11 @@
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -34,22 +35,22 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicListener;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 
-public class InlineBusTopicSinkTest extends TopicTestBase {
+class InlineBusTopicSinkTest extends TopicTestBase {
 
     private InlineBusTopicSinkImpl sink;
 
     /**
      * Creates the object to be tested.
      */
-    @Before
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -57,19 +58,19 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
         sink = new InlineBusTopicSinkImpl(makeBuilder().build());
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         sink.shutdown();
     }
 
     @Test
-    public void testSerialize() {
+    void testSerialize() {
         assertThatCode(() -> new GsonTestUtils().compareGson(sink, InlineBusTopicSinkTest.class))
                         .doesNotThrowAnyException();
     }
 
     @Test
-    public void testInlineBusTopicSinkImpl() {
+    void testInlineBusTopicSinkImpl() {
         // verify that different wrappers can be built
         sink = new InlineBusTopicSinkImpl(makeBuilder().build());
         assertEquals(MY_PARTITION, sink.getPartitionKey());
@@ -79,7 +80,7 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
     }
 
     @Test
-    public void testStart() {
+    void testStart() {
         assertTrue(sink.start());
         assertEquals(1, sink.initCount);
 
@@ -88,14 +89,14 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
         assertEquals(1, sink.initCount);
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testStart_Locked() {
+    @Test
+    void testStart_Locked() {
         sink.lock();
-        sink.start();
+        assertThatThrownBy(() -> sink.start()).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    public void testStop() {
+    void testStop() {
         BusPublisher pub = mock(BusPublisher.class);
         sink.publisher = pub;
 
@@ -114,7 +115,7 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
     }
 
     @Test
-    public void testSend() {
+    void testSend() {
         sink.start();
         BusPublisher pub = mock(BusPublisher.class);
         sink.publisher = pub;
@@ -137,31 +138,30 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
         verify(listener).onTopicEvent(CommInfrastructure.NOOP, MY_TOPIC, MY_MESSAGE);
     }
 
-    @Test(expected = IllegalArgumentException.class)
-    public void testSend_NullMessage() {
+    @Test
+    void testSend_NullMessage() {
         sink.start();
         sink.publisher = mock(BusPublisher.class);
 
-        sink.send(null);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void testSend_EmptyMessage() {
-        sink.start();
-        sink.publisher = mock(BusPublisher.class);
-
-        sink.send("");
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testSend_NotStarted() {
-        sink.publisher = mock(BusPublisher.class);
-
-        sink.send(MY_MESSAGE);
+        assertThatThrownBy(() -> sink.send(null)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    public void testSetPartitionKey_getPartitionKey() {
+    void testSend_EmptyMessage() {
+        sink.start();
+        sink.publisher = mock(BusPublisher.class);
+
+        assertThatThrownBy(() -> sink.send("")).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test
+    void testSend_NotStarted() {
+        sink.publisher = mock(BusPublisher.class);
+        assertThatThrownBy(() -> sink.send(MY_MESSAGE)).isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void testSetPartitionKey_getPartitionKey() {
         assertEquals(MY_PARTITION, sink.getPartitionKey());
 
         sink.setPartitionKey("part-B");
@@ -169,7 +169,7 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
     }
 
     @Test
-    public void testShutdown() {
+    void testShutdown() {
         BusPublisher pub = mock(BusPublisher.class);
         sink.publisher = pub;
 
@@ -178,7 +178,7 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
     }
 
     @Test
-    public void testAnyNullOrEmpty() {
+    void testAnyNullOrEmpty() {
         assertFalse(sink.anyNullOrEmpty());
         assertFalse(sink.anyNullOrEmpty("any-none-null", "any-none-null-B"));
 
@@ -189,7 +189,7 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
     }
 
     @Test
-    public void testAllNullOrEmpty() {
+    void testAllNullOrEmpty() {
         assertTrue(sink.allNullOrEmpty());
         assertTrue(sink.allNullOrEmpty(""));
         assertTrue(sink.allNullOrEmpty(null, ""));
@@ -202,7 +202,7 @@ public class InlineBusTopicSinkTest extends TopicTestBase {
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertTrue(sink.toString().startsWith("InlineBusTopicSink ["));
     }
 

@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +23,11 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX;
 
 import java.util.List;
@@ -95,7 +96,7 @@ public abstract class TopicFactoryTestBase<T extends Topic> extends TopicTestBas
     /**
      * Tests building a topic using varied Properties.
      */
-    public void testBuildProperties_Variations() {
+    void testBuildProperties_Variations() {
         initFactory();
 
         // null topic list
@@ -116,7 +117,7 @@ public abstract class TopicFactoryTestBase<T extends Topic> extends TopicTestBas
     /**
      * Tests building multiple topics using Properties.
      */
-    public void testBuildProperties_Multiple() {
+    void testBuildProperties_Multiple() {
         initFactory();
 
         // make two fully-defined topics, and add two duplicate topic names to the list
@@ -136,7 +137,7 @@ public abstract class TopicFactoryTestBase<T extends Topic> extends TopicTestBas
     /**
      * Tests destroy(topic), get(topic), and inventory() methods.
      */
-    public void testDestroyString_testGet_testInventory() {
+    void testDestroyString_testGet_testInventory() {
         initFactory();
 
         List<T> lst = buildTopics(makePropBuilder().makeTopic(MY_TOPIC).makeTopic(TOPIC2).build());
@@ -177,7 +178,7 @@ public abstract class TopicFactoryTestBase<T extends Topic> extends TopicTestBas
     /**
      * Tests exception cases with destroy(topic).
      */
-    public void testDestroyString_Ex() {
+    void testDestroyString_Ex() {
         // null topic
         assertThatIllegalArgumentException().as("null topic").isThrownBy(() -> destroyTopic(null));
 
@@ -188,7 +189,7 @@ public abstract class TopicFactoryTestBase<T extends Topic> extends TopicTestBas
     /**
      * Tests the destroy() method.
      */
-    public void testDestroy() {
+    void testDestroy() {
         initFactory();
 
         List<T> lst = buildTopics(makePropBuilder().makeTopic(MY_TOPIC).makeTopic(TOPIC2).build());
@@ -210,7 +211,7 @@ public abstract class TopicFactoryTestBase<T extends Topic> extends TopicTestBas
     /**
      * Tests exception cases with get(topic).
      */
-    public void testGet_Ex() {
+    void testGet_Ex() {
         // null topic
         assertThatIllegalArgumentException().as("null topic").isThrownBy(() -> getTopic(null));
 
