@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "53e55fa0_208c5df5",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/TopicFactoryTestBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-26T16:14:41Z",
+      "side": 1,
+      "message": "sonar complaining here. I think index++ will update after the operation right. ++index increments before the operation",
+      "range": {
+        "startLine": 134,
+        "startChar": 33,
+        "endLine": 134,
+        "endChar": 40
+      },
+      "revId": "ffa9f8e4d1801b525dd00d8431d4a255e4bb5275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b588a0d_c3aaa2ea",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/TopicFactoryTestBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-26T16:14:41Z",
+      "side": 1,
+      "message": "as above",
+      "range": {
+        "startLine": 147,
+        "startChar": 26,
+        "endLine": 147,
+        "endChar": 33
+      },
+      "revId": "ffa9f8e4d1801b525dd00d8431d4a255e4bb5275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa16bb56_ea59d4a7",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/TopicFactoryTestBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-26T16:14:41Z",
+      "side": 1,
+      "message": "as above",
+      "range": {
+        "startLine": 199,
+        "startChar": 26,
+        "endLine": 199,
+        "endChar": 33
+      },
+      "revId": "ffa9f8e4d1801b525dd00d8431d4a255e4bb5275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "888740ff_422d5a1f",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-26T16:14:41Z",
+      "side": 1,
+      "message": "Sonar says this is not thrown by the method",
+      "range": {
+        "startLine": 183,
+        "startChar": 38,
+        "endLine": 183,
+        "endChar": 49
+      },
+      "revId": "ffa9f8e4d1801b525dd00d8431d4a255e4bb5275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "56e48a46_cc4a5859",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-26T16:14:41Z",
+      "side": 1,
+      "message": "Not sure if we want to change this now. Probably should. \u0027record\u0027 is now a restricted identifier in java",
+      "range": {
+        "startLine": 206,
+        "startChar": 39,
+        "endLine": 206,
+        "endChar": 45
+      },
+      "revId": "ffa9f8e4d1801b525dd00d8431d4a255e4bb5275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "384800db_fca639d5",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-26T16:14:41Z",
+      "side": 1,
+      "message": "also here",
+      "range": {
+        "startLine": 234,
+        "startChar": 39,
+        "endLine": 234,
+        "endChar": 45
+      },
+      "revId": "ffa9f8e4d1801b525dd00d8431d4a255e4bb5275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    }
+  ]
+}
