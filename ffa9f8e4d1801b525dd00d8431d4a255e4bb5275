@@ -24,6 +24,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c4de243_5e50dae4",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/TopicFactoryTestBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T10:39:35Z",
+      "side": 1,
+      "message": "This is not appearing as a sonar issue. It is being flagged by the IDE however, but not coming up on a sonar scan.\n\nThe IDE issue: \"The value changed at \u0027index++\u0027 is never used.\"\n\nChanging this to \"++index\" causes test failures. \nRemoving this line (134), causes the same issue to come up on the line before (133). I don\u0027t think this needs changing.",
+      "parentUuid": "53e55fa0_208c5df5",
+      "range": {
+        "startLine": 134,
+        "startChar": 33,
+        "endLine": 134,
+        "endChar": 40
+      },
+      "revId": "ffa9f8e4d1801b525dd00d8431d4a255e4bb5275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6b588a0d_c3aaa2ea",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-06-26T16:14:41Z",
       "side": 1,
       "message": "as above",
+      "range": {
+        "startLine": 147,
+        "startChar": 26,
+        "endLine": 147,
+        "endChar": 33
+      },
+      "revId": "ffa9f8e4d1801b525dd00d8431d4a255e4bb5275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ecb9cb52_8926ca37",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/TopicFactoryTestBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T10:39:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6b588a0d_c3aaa2ea",
       "range": {
         "startLine": 147,
         "startChar": 26,
@@ -70,6 +118,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a01ebd02_4323382e",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/TopicFactoryTestBase.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T10:39:35Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "aa16bb56_ea59d4a7",
+      "range": {
+        "startLine": 199,
+        "startChar": 26,
+        "endLine": 199,
+        "endChar": 33
+      },
+      "revId": "ffa9f8e4d1801b525dd00d8431d4a255e4bb5275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "888740ff_422d5a1f",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-06-26T16:14:41Z",
       "side": 1,
       "message": "Sonar says this is not thrown by the method",
+      "range": {
+        "startLine": 183,
+        "startChar": 38,
+        "endLine": 183,
+        "endChar": 49
+      },
+      "revId": "ffa9f8e4d1801b525dd00d8431d4a255e4bb5275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bbbe46f_fe0d9803",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T10:39:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "888740ff_422d5a1f",
       "range": {
         "startLine": 183,
         "startChar": 38,
@@ -116,6 +212,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "286d9542_e0e1e2ed",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T10:39:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "56e48a46_cc4a5859",
+      "range": {
+        "startLine": 206,
+        "startChar": 39,
+        "endLine": 206,
+        "endChar": 45
+      },
+      "revId": "ffa9f8e4d1801b525dd00d8431d4a255e4bb5275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "384800db_fca639d5",
@@ -129,6 +249,30 @@
       "writtenOn": "2024-06-26T16:14:41Z",
       "side": 1,
       "message": "also here",
+      "range": {
+        "startLine": 234,
+        "startChar": 39,
+        "endLine": 234,
+        "endChar": 45
+      },
+      "revId": "ffa9f8e4d1801b525dd00d8431d4a255e4bb5275",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c50ee60_5480801e",
+        "filename": "policy-endpoints/src/test/java/org/onap/policy/common/endpoints/event/comm/bus/internal/BusConsumerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T10:39:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "384800db_fca639d5",
       "range": {
         "startLine": 234,
         "startChar": 39,
