@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,30 +21,31 @@
 
 package org.onap.policy.common.utils.coder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class CoderExceptionTest {
+class CoderExceptionTest {
     private static final String STRING_VALUE = "My String";
     private static final Throwable CAUSE = new Throwable();
 
     private CoderException exc;
 
     @Test
-    public void testCoderException() {
+    void testCoderException() {
         exc = new CoderException();
 
-        assertEquals(null, exc.getMessage());
+        assertNull(exc.getMessage());
         assertSame(null, exc.getCause());
         assertNotNull(exc.toString());
     }
 
     @Test
-    public void testCoderExceptionString() {
+    void testCoderExceptionString() {
         exc = new CoderException(STRING_VALUE);
 
         assertEquals(STRING_VALUE, exc.getMessage());
@@ -52,7 +54,7 @@ public class CoderExceptionTest {
     }
 
     @Test
-    public void testCoderExceptionThrowable() {
+    void testCoderExceptionThrowable() {
         exc = new CoderException(CAUSE);
 
         assertEquals(CAUSE.toString(), exc.getMessage());
@@ -61,7 +63,7 @@ public class CoderExceptionTest {
     }
 
     @Test
-    public void testCoderExceptionStringThrowable() {
+    void testCoderExceptionStringThrowable() {
         exc = new CoderException(STRING_VALUE, CAUSE);
 
         assertEquals(STRING_VALUE, exc.getMessage());

@@ -21,11 +21,12 @@
 package org.onap.policy.common.utils.network;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -33,17 +34,17 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class NetworkUtilTest {
+class NetworkUtilTest {
     protected static Logger logger = LoggerFactory.getLogger(NetworkUtilTest.class);
 
     private static final String LOCALHOST = "localhost";
 
     @Test
-    public void test() throws InterruptedException, IOException {
+    void test() throws InterruptedException, IOException {
         assertNotNull(NetworkUtil.IPV4_WILDCARD_ADDRESS);
         assertFalse(NetworkUtil.isTcpPortOpen(LOCALHOST, NetworkUtil.allocPort(), 1, 5));
         assertNotNull(NetworkUtil.getHostname());
@@ -51,10 +52,10 @@ public class NetworkUtilTest {
     }
 
     @Test
-    public void testAlwaysTrustManager() throws Exception {
+    void testAlwaysTrustManager() throws Exception {
         TrustManager[] mgrarr = NetworkUtil.getAlwaysTrustingManager();
         assertEquals(1, mgrarr.length);
-        assertTrue(mgrarr[0] instanceof X509TrustManager);
+        assertInstanceOf(X509TrustManager.class, mgrarr[0]);
 
         X509TrustManager mgr = (X509TrustManager) mgrarr[0];
         assertNotNull(mgr.getAcceptedIssuers());
@@ -66,7 +67,7 @@ public class NetworkUtilTest {
     }
 
     @Test
-    public void testAllocPort_testAllocPortString__testAllocPortInetSocketAddress() throws Exception {
+    void testAllocPort_testAllocPortString__testAllocPortInetSocketAddress() throws Exception {
         // allocate wild-card port
         int wildCardPort = NetworkUtil.allocPort();
         assertNotEquals(0, wildCardPort);
@@ -93,7 +94,7 @@ public class NetworkUtilTest {
     }
 
     @Test
-    public void testGenUniqueName() {
+    void testGenUniqueName() {
         String name = NetworkUtil.genUniqueName(LOCALHOST);
         assertThat(name).isNotBlank().isNotEqualTo(LOCALHOST);
 
@@ -114,7 +115,7 @@ public class NetworkUtilTest {
 
         @Override
         public void run() {
-            try (Socket server = socket.accept()) {
+            try (Socket server = socket.accept()) { //NOSONAR
                 // do nothing
 
             } catch (IOException e) {

@@ -3,6 +3,7 @@
  * ONAP PAP
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +22,10 @@
 package org.onap.policy.common.utils.coder;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.when;
@@ -53,10 +54,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import lombok.ToString;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class StandardCoderTest {
+class StandardCoderTest {
     private static final String EXPECTED_EXCEPTION = "expected exception";
 
     private static final JsonParseException jpe = new JsonParseException(EXPECTED_EXCEPTION);
@@ -64,13 +65,13 @@ public class StandardCoderTest {
 
     private StandardCoder coder;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         coder = new StandardCoder();
     }
 
     @Test
-    public void testConvert() throws CoderException {
+    void testConvert() throws CoderException {
         // null source
         assertNull(coder.convert(null, StandardCoderObject.class));
 
@@ -99,7 +100,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testEncodeObject() throws Exception {
+    void testEncodeObject() throws Exception {
         List<Integer> arr = Arrays.asList(1100, 1110);
         assertEquals("[1100,1110]", coder.encode(arr));
 
@@ -110,7 +111,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testEncodeObjectBoolean() throws Exception {
+    void testEncodeObjectBoolean() throws Exception {
         final List<Integer> arr = Arrays.asList(1100, 1110);
 
         /*
@@ -136,7 +137,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testEncodeWriterObject() throws Exception {
+    void testEncodeWriterObject() throws Exception {
         List<Integer> arr = Arrays.asList(1200, 1210);
         StringWriter wtr = new StringWriter();
         coder.encode(wtr, arr);
@@ -149,7 +150,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testEncodeOutputStreamObject() throws Exception {
+    void testEncodeOutputStreamObject() throws Exception {
         List<Integer> arr = Arrays.asList(1300, 1310);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         coder.encode(stream, arr);
@@ -171,7 +172,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testEncodeFileObject() throws Exception {
+    void testEncodeFileObject() throws Exception {
         File file = new File(getClass().getResource(StandardCoder.class.getSimpleName() + ".json").getFile() + "X");
         file.deleteOnExit();
         List<Integer> arr = Arrays.asList(1400, 1410);
@@ -195,7 +196,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testDecodeStringClass() throws Exception {
+    void testDecodeStringClass() throws Exception {
         String text = "[2200,2210]";
         assertEquals(text, coder.decode(text, JsonElement.class).toString());
 
@@ -207,7 +208,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testDecodeReaderClass() throws Exception {
+    void testDecodeReaderClass() throws Exception {
         String text = "[2300,2310]";
         assertEquals(text, coder.decode(new StringReader(text), JsonElement.class).toString());
 
@@ -219,7 +220,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testDecodeInputStreamClass() throws Exception {
+    void testDecodeInputStreamClass() throws Exception {
         String text = "[2400,2410]";
         assertEquals(text,
                         coder.decode(new ByteArrayInputStream(text.getBytes(StandardCharsets.UTF_8)), JsonElement.class)
@@ -236,7 +237,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testDecodeFileClass() throws Exception {
+    void testDecodeFileClass() throws Exception {
         File file = new File(getClass().getResource(StandardCoder.class.getSimpleName() + ".json").getFile());
         String text = new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
         assertEquals(text, coder.decode(file, JsonElement.class).toString());
@@ -263,7 +264,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testToJsonTree_testFromJsonJsonElementClassT() throws Exception {
+    void testToJsonTree_testFromJsonJsonElementClassT() throws Exception {
         MyMap map = new MyMap();
         map.props = new LinkedHashMap<>();
         map.props.put("jel keyA", "jel valueA");
@@ -279,7 +280,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testConvertFromDouble() throws Exception {
+    void testConvertFromDouble() throws Exception {
         String text = "[listA, {keyA=100}, 200]";
         assertEquals(text, coder.decode(text, Object.class).toString());
 
@@ -288,7 +289,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testToStandard() throws Exception {
+    void testToStandard() throws Exception {
         MyObject obj = new MyObject();
         obj.abc = "xyz";
         StandardCoderObject sco = coder.toStandard(obj);
@@ -300,7 +301,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testFromStandard() throws Exception {
+    void testFromStandard() throws Exception {
         MyObject obj = new MyObject();
         obj.abc = "pdq";
         StandardCoderObject sco = coder.toStandard(obj);
@@ -313,7 +314,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testStandardTypeAdapter() throws Exception {
+    void testStandardTypeAdapter() throws Exception {
         String json = "{'abc':'def'}".replace('\'', '"');
         StandardCoderObject sco = coder.fromJson(json, StandardCoderObject.class);
         assertNotNull(sco.getData());
@@ -327,7 +328,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testMapDouble() throws Exception {
+    void testMapDouble() throws Exception {
         MyMap map = new MyMap();
         map.props = new HashMap<>();
         map.props.put("plainString", "def");
@@ -352,7 +353,7 @@ public class StandardCoderTest {
     }
 
     @Test
-    public void testListDouble() throws Exception {
+    void testListDouble() throws Exception {
         @SuppressWarnings("unchecked")
         List<Object> list = coder.decode("[10, 20.1, 30]", LinkedList.class);
         assertEquals("[10, 20.1, 30]", list.toString());

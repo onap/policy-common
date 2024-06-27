@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +21,17 @@
 
 package org.onap.policy.common.utils.coder;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.gson.annotations.SerializedName;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.List;
 import lombok.Getter;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class PropertyCoderTest {
+class PropertyCoderTest {
     private PropertyCoder propertyCoder = null;
     private static final String AES_ENCRYPTION_KEY = "aes_encryption_key";
 
@@ -64,13 +65,13 @@ public class PropertyCoderTest {
      *
      * @throws Exception if an error occurs
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         propertyCoder = new PropertyCoder();
     }
 
     @Test
-    public void testPropertyCoder() {
+    void testPropertyCoder() {
         MyClass data = propertyCoder.decode(json, AES_ENCRYPTION_KEY, MyClass.class);
         assertEquals("alpha", data.getPdpRestPass());
         assertEquals("hello", data.servers.get(0).pass);
@@ -80,7 +81,7 @@ public class PropertyCoderTest {
     }
 
     @Test
-    public void testPropertyCoderReader() {
+    void testPropertyCoderReader() {
         Reader reader = new StringReader(json);
         MyClass data = propertyCoder.decode(reader, AES_ENCRYPTION_KEY, MyClass.class);
         assertEquals("alpha", data.getPdpRestPass());

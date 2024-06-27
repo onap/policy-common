@@ -3,6 +3,7 @@
  * ONAP - Common Modules
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +21,17 @@
 
 package org.onap.policy.common.utils.properties;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Properties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.utils.properties.exception.PropertyAccessException;
 import org.onap.policy.common.utils.properties.exception.PropertyException;
 import org.onap.policy.common.utils.properties.exception.PropertyInvalidException;
@@ -38,7 +40,7 @@ import org.onap.policy.common.utils.properties.exception.PropertyMissingExceptio
 /**
  * Test class for PropertyConfiguration.
  */
-public class BeanConfiguratorTest {
+class BeanConfiguratorTest {
     private static final String EXPECTED_EXCEPTION = "expected exception";
     private static final String FALSE_STRING = "false";
     private static final String A_VALUE = "a.value";
@@ -72,14 +74,14 @@ public class BeanConfiguratorTest {
 
     private BeanConfigurator beancfg;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         props = new Properties();
         beancfg = new BeanConfigurator();
     }
 
     @Test
-    public void testConfigureFromProperties() throws PropertyException {
+    void testConfigureFromProperties() throws PropertyException {
         testStringValueNoDefault();
     }
 
@@ -93,7 +95,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testSetAllFields() throws Exception {
+    void testSetAllFields() throws Exception {
 
         /*
          * Implements an extra interface, just to see that it doesn't cause issues.
@@ -159,7 +161,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testSetAllFields_NoProperties() throws Exception {
+    void testSetAllFields_NoProperties() throws Exception {
 
         class Config {
 
@@ -180,12 +182,12 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testSetValueObjectFieldProperties_FieldSet() throws PropertyException {
+    void testSetValueObjectFieldProperties_FieldSet() throws PropertyException {
         testStringValueNoDefault();
     }
 
     @Test
-    public void testSetValueObjectFieldProperties_NoAnnotation() throws PropertyException {
+    void testSetValueObjectFieldProperties_NoAnnotation() throws PropertyException {
         class Config {
 
             private String value;
@@ -203,8 +205,8 @@ public class BeanConfiguratorTest {
         assertNull(cfg.value);
     }
 
-    @Test(expected = PropertyAccessException.class)
-    public void testSetValueObjectFieldProperties_WrongFieldType() throws PropertyException {
+    @Test
+    void testSetValueObjectFieldProperties_WrongFieldType() throws PropertyException {
         class Config {
 
             // Cannot set a property into an "Exception" field
@@ -218,11 +220,12 @@ public class BeanConfiguratorTest {
         }
 
         props.setProperty(THE_VALUE, STRING_VALUE);
-        beancfg.configureFromProperties(new Config(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new Config(),
+            props)).isInstanceOf(PropertyAccessException.class);
     }
 
-    @Test(expected = PropertyAccessException.class)
-    public void testGetSetter_NoSetter() throws PropertyException {
+    @Test
+    void testGetSetter_NoSetter() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE)
@@ -230,16 +233,19 @@ public class BeanConfiguratorTest {
         }
 
         props.setProperty(THE_VALUE, STRING_VALUE);
-        beancfg.configureFromProperties(new Config(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new Config(),
+            props)).isInstanceOf(PropertyAccessException.class);
     }
 
-    @Test(expected = PropertyMissingException.class)
-    public void testSetValueObjectMethodFieldPropertiesProperty_NoProperty_NoDefault() throws PropertyException {
-        beancfg.configureFromProperties(new PlainStringConfig(), props);
+    @Test
+    void testSetValueObjectMethodFieldPropertiesProperty_NoProperty_NoDefault() throws PropertyException {
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new PlainStringConfig(),
+            props)).isInstanceOf(PropertyMissingException.class);
+
     }
 
-    @Test(expected = PropertyInvalidException.class)
-    public void testSetValueObjectMethodFieldPropertiesProperty_IllegalArgEx() throws PropertyException {
+    @Test
+    void testSetValueObjectMethodFieldPropertiesProperty_IllegalArgEx() throws PropertyException {
         props.setProperty(THE_VALUE, STRING_VALUE);
 
         beancfg = new BeanConfigurator() {
@@ -249,11 +255,12 @@ public class BeanConfiguratorTest {
             }
         };
 
-        beancfg.configureFromProperties(new PlainStringConfig(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new PlainStringConfig(),
+            props)).isInstanceOf(PropertyInvalidException.class);
     }
 
-    @Test(expected = PropertyAccessException.class)
-    public void testSetValueObjectMethodFieldPropertiesProperty_MethodEx() throws PropertyException {
+    @Test
+    void testSetValueObjectMethodFieldPropertiesProperty_MethodEx() throws PropertyException {
         class Config extends PlainStringConfig {
 
             @Override
@@ -263,11 +270,12 @@ public class BeanConfiguratorTest {
         }
 
         props.setProperty(THE_VALUE, STRING_VALUE);
-        beancfg.configureFromProperties(new Config(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new Config(),
+            props)).isInstanceOf(PropertyAccessException.class);
     }
 
     @Test
-    public void testGetValue() throws PropertyException {
+    void testGetValue() throws PropertyException {
         // this class contains all of the supported field types
         class Config {
 
@@ -413,8 +421,8 @@ public class BeanConfiguratorTest {
         assertEquals(10001, cfg.primLongValue);
     }
 
-    @Test(expected = PropertyAccessException.class)
-    public void testGetValue_UnsupportedType() throws PropertyException {
+    @Test
+    void testGetValue_UnsupportedType() throws PropertyException {
         class Config {
 
             // Cannot set a property into an "Exception" field
@@ -428,12 +436,14 @@ public class BeanConfiguratorTest {
         }
 
         props.setProperty(THE_VALUE, STRING_VALUE);
-        beancfg.configureFromProperties(new Config(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new Config(),
+            props)).isInstanceOf(PropertyAccessException.class);
+
     }
 
     @Test
-    public void testCheckModifiable_OtherModifiers() throws PropertyException {
-        // this class contains all of the supported field types
+    void testCheckModifiable_OtherModifiers() throws PropertyException {
+        // this class contains all the supported field types
         class Config {
 
             @Property(name = "public")
@@ -473,14 +483,16 @@ public class BeanConfiguratorTest {
         assertEquals("a protected string", cfg.protectedString);
     }
 
-    @Test(expected = PropertyAccessException.class)
-    public void testCheckModifiable_Static() throws PropertyException {
+    @Test
+    void testCheckModifiable_Static() throws PropertyException {
         props.setProperty(THE_VALUE, STRING_VALUE);
-        beancfg.configureFromProperties(new StaticPropConfig(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new StaticPropConfig(),
+            props)).isInstanceOf(PropertyAccessException.class);
+
     }
 
-    @Test(expected = PropertyAccessException.class)
-    public void testCheckModifiable_Final() throws PropertyException {
+    @Test
+    void testCheckModifiable_Final() throws PropertyException {
         class Config {
 
             // Cannot set a property into an "final" field
@@ -489,22 +501,26 @@ public class BeanConfiguratorTest {
         }
 
         props.setProperty(THE_VALUE, STRING_VALUE);
-        beancfg.configureFromProperties(new Config(), props);
-    }
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new Config(),
+            props)).isInstanceOf(PropertyAccessException.class);
 
-    @Test(expected = PropertyAccessException.class)
-    public void testCheckMethod_Static() throws PropertyException {
-        props.setProperty(THE_VALUE, STRING_VALUE);
-        beancfg.configureFromProperties(new StaticMethodConfig(), props);
     }
 
     @Test
-    public void testGetStringValue() throws PropertyException {
+    void testCheckMethod_Static() throws PropertyException {
+        props.setProperty(THE_VALUE, STRING_VALUE);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new StaticMethodConfig(),
+            props)).isInstanceOf(PropertyAccessException.class);
+
+    }
+
+    @Test
+    void testGetStringValue() throws PropertyException {
         testStringValueNoDefault();
     }
 
     @Test
-    public void testGetBooleanValue_NoDefault() throws PropertyException {
+    void testGetBooleanValue_NoDefault() throws PropertyException {
         props.setProperty(THE_VALUE, "true");
         PlainBooleanConfig cfg = new PlainBooleanConfig();
         beancfg.configureFromProperties(cfg, props);
@@ -512,8 +528,8 @@ public class BeanConfiguratorTest {
         assertEquals(true, cfg.value);
     }
 
-    @Test(expected = PropertyInvalidException.class)
-    public void testGetBooleanValue_InvalidDefault() throws PropertyException {
+    @Test
+    void testGetBooleanValue_InvalidDefault() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = INVALID_VALUE)
@@ -526,11 +542,12 @@ public class BeanConfiguratorTest {
         }
 
         props.setProperty(THE_VALUE, "true");
-        beancfg.configureFromProperties(new Config(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new Config(),
+            props)).isInstanceOf(PropertyInvalidException.class);
     }
 
     @Test
-    public void testGetBooleanValue_ValidDefault_True() throws PropertyException {
+    void testGetBooleanValue_ValidDefault_True() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = "true")
@@ -561,7 +578,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testGetBooleanValue_ValidDefault_False() throws PropertyException {
+    void testGetBooleanValue_ValidDefault_False() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = FALSE_STRING)
@@ -592,7 +609,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testGetIntegerValue_NoDefault() throws PropertyException {
+    void testGetIntegerValue_NoDefault() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE)
@@ -611,8 +628,8 @@ public class BeanConfiguratorTest {
         assertEquals(200, cfg.value.intValue());
     }
 
-    @Test(expected = PropertyInvalidException.class)
-    public void testGetIntegerValue_InvalidDefault() throws PropertyException {
+    @Test
+    void testGetIntegerValue_InvalidDefault() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = INVALID_VALUE)
@@ -625,11 +642,13 @@ public class BeanConfiguratorTest {
         }
 
         props.setProperty(THE_VALUE, NUMBER_STRING);
-        beancfg.configureFromProperties(new Config(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new Config(),
+            props)).isInstanceOf(PropertyInvalidException.class);
+
     }
 
     @Test
-    public void testGetIntegerValue_ValidDefault() throws PropertyException {
+    void testGetIntegerValue_ValidDefault() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = "201")
@@ -654,7 +673,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testGetLongValue_NoDefault() throws PropertyException {
+    void testGetLongValue_NoDefault() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE)
@@ -673,8 +692,8 @@ public class BeanConfiguratorTest {
         assertEquals(20000L, cfg.value.longValue());
     }
 
-    @Test(expected = PropertyInvalidException.class)
-    public void testGetLongValue_InvalidDefault() throws PropertyException {
+    @Test
+    void testGetLongValue_InvalidDefault() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = INVALID_VALUE)
@@ -687,11 +706,13 @@ public class BeanConfiguratorTest {
         }
 
         props.setProperty(THE_VALUE, NUMBER_STRING_LONG);
-        beancfg.configureFromProperties(new Config(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new Config(),
+            props)).isInstanceOf(PropertyInvalidException.class);
+
     }
 
     @Test
-    public void testGetLongValue_ValidDefault() throws PropertyException {
+    void testGetLongValue_ValidDefault() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = "20001")
@@ -716,12 +737,12 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testGetPropValue_Prop_NoDefault() throws PropertyException {
+    void testGetPropValue_Prop_NoDefault() throws PropertyException {
         testStringValueNoDefault();
     }
 
     @Test
-    public void testGetPropValue_Prop_Default() throws PropertyException {
+    void testGetPropValue_Prop_Default() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = STRING_VALUE_DEFAULT)
@@ -742,7 +763,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testGetPropValue_EmptyProp_EmptyOk() throws PropertyException {
+    void testGetPropValue_EmptyProp_EmptyOk() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, accept = "empty")
@@ -763,7 +784,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testGetPropValue_NullProp_EmptyOk() throws PropertyException {
+    void testGetPropValue_NullProp_EmptyOk() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, accept = "empty")
@@ -782,7 +803,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testGetPropValue_EmptyDefault_EmptyOk() throws PropertyException {
+    void testGetPropValue_EmptyDefault_EmptyOk() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = "", accept = "empty")
@@ -801,7 +822,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testGetPropValue_Default_EmptyOk() throws PropertyException {
+    void testGetPropValue_Default_EmptyOk() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = STRING_VALUE, accept = "empty")
@@ -819,8 +840,8 @@ public class BeanConfiguratorTest {
         assertEquals(STRING_VALUE, cfg.value);
     }
 
-    @Test(expected = PropertyMissingException.class)
-    public void testGetPropValue_EmptyDefault_EmptyNotOk() throws PropertyException {
+    @Test
+    void testGetPropValue_EmptyDefault_EmptyNotOk() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = "")
@@ -832,11 +853,12 @@ public class BeanConfiguratorTest {
             }
         }
 
-        beancfg.configureFromProperties(new Config(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new Config(),
+            props)).isInstanceOf(PropertyMissingException.class);
     }
 
     @Test
-    public void testGetPropValue_Default_EmptyNotOk() throws PropertyException {
+    void testGetPropValue_Default_EmptyNotOk() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = STRING_VALUE, accept = "")
@@ -855,7 +877,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testMakeBoolean_True() throws PropertyException {
+    void testMakeBoolean_True() throws PropertyException {
         props.setProperty(THE_VALUE, "true");
         PlainBooleanConfig cfg = new PlainBooleanConfig();
         beancfg.configureFromProperties(cfg, props);
@@ -864,7 +886,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testMakeBoolean_False() throws PropertyException {
+    void testMakeBoolean_False() throws PropertyException {
         props.setProperty(THE_VALUE, FALSE_STRING);
         PlainBooleanConfig cfg = new PlainBooleanConfig();
         beancfg.configureFromProperties(cfg, props);
@@ -872,14 +894,16 @@ public class BeanConfiguratorTest {
         assertEquals(false, cfg.value);
     }
 
-    @Test(expected = PropertyInvalidException.class)
-    public void testMakeBoolean_Invalid() throws PropertyException {
+    @Test
+    void testMakeBoolean_Invalid() throws PropertyException {
         props.setProperty(THE_VALUE, INVALID_VALUE);
-        beancfg.configureFromProperties(new PlainBooleanConfig(), props);
+
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new PlainBooleanConfig(),
+            props)).isInstanceOf(PropertyInvalidException.class);
     }
 
     @Test
-    public void testMakeInteger_Valid() throws PropertyException {
+    void testMakeInteger_Valid() throws PropertyException {
         props.setProperty(THE_VALUE, "300");
         PlainPrimIntConfig cfg = new PlainPrimIntConfig();
         beancfg.configureFromProperties(cfg, props);
@@ -887,20 +911,23 @@ public class BeanConfiguratorTest {
         assertEquals(300, cfg.value);
     }
 
-    @Test(expected = PropertyInvalidException.class)
-    public void testMakeInteger_Invalid() throws PropertyException {
+    @Test
+    void testMakeInteger_Invalid() throws PropertyException {
         props.setProperty(THE_VALUE, INVALID_VALUE);
-        beancfg.configureFromProperties(new PlainPrimIntConfig(), props);
-    }
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new PlainPrimIntConfig(),
+            props)).isInstanceOf(PropertyInvalidException.class);
 
-    @Test(expected = PropertyInvalidException.class)
-    public void testMakeInteger_TooBig() throws PropertyException {
-        props.setProperty(THE_VALUE, String.valueOf(Integer.MAX_VALUE + 10L));
-        beancfg.configureFromProperties(new PlainPrimIntConfig(), props);
     }
 
     @Test
-    public void testMakeLong_Valid() throws PropertyException {
+    void testMakeInteger_TooBig() throws PropertyException {
+        props.setProperty(THE_VALUE, String.valueOf(Integer.MAX_VALUE + 10L));
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new PlainPrimIntConfig(),
+            props)).isInstanceOf(PropertyInvalidException.class);
+    }
+
+    @Test
+    void testMakeLong_Valid() throws PropertyException {
         props.setProperty(THE_VALUE, "30000");
         PlainPrimLongConfig cfg = new PlainPrimLongConfig();
         beancfg.configureFromProperties(cfg, props);
@@ -908,14 +935,15 @@ public class BeanConfiguratorTest {
         assertEquals(30000L, cfg.value);
     }
 
-    @Test(expected = PropertyInvalidException.class)
-    public void testMakeLong_Invalid() throws PropertyException {
+    @Test
+    void testMakeLong_Invalid() throws PropertyException {
         props.setProperty(THE_VALUE, INVALID_VALUE);
-        beancfg.configureFromProperties(new PlainPrimLongConfig(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new PlainPrimLongConfig(),
+            props)).isInstanceOf(PropertyInvalidException.class);
     }
 
     @Test
-    public void testCheckDefaultValue_NotEmpty_Valid() throws PropertyException {
+    void testCheckDefaultValue_NotEmpty_Valid() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = "700")
@@ -933,8 +961,8 @@ public class BeanConfiguratorTest {
         assertEquals(700L, cfg.value);
     }
 
-    @Test(expected = PropertyInvalidException.class)
-    public void testCheckDefaultValue_NotEmpty_Invalid() throws PropertyException {
+    @Test
+    void testCheckDefaultValue_NotEmpty_Invalid() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = INVALID_VALUE)
@@ -946,17 +974,18 @@ public class BeanConfiguratorTest {
             }
         }
 
-        beancfg.configureFromProperties(new Config(), props);
-    }
-
-    @Test(expected = PropertyInvalidException.class)
-    public void testCheckDefaultValue_Empty_EmptyOk_Invalid() throws PropertyException {
-
-        beancfg.configureFromProperties(new PrimLongDefaultBlankAcceptEmptyConfig(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new Config(),
+            props)).isInstanceOf(PropertyInvalidException.class);
     }
 
     @Test
-    public void testIsEmptyOkPropertyString_True() throws PropertyException {
+    void testCheckDefaultValue_Empty_EmptyOk_Invalid() {
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new PrimLongDefaultBlankAcceptEmptyConfig(),
+            props)).isInstanceOf(PropertyInvalidException.class);
+    }
+
+    @Test
+    void testIsEmptyOkPropertyString_True() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = "", accept = "empty")
@@ -984,14 +1013,15 @@ public class BeanConfiguratorTest {
         assertEquals(STRING_VALUE, cfg.value);
     }
 
-    @Test(expected = PropertyMissingException.class)
-    public void testIsEmptyOkPropertyString_False() throws PropertyException {
+    @Test
+    void testIsEmptyOkPropertyString_False() {
 
-        beancfg.configureFromProperties(new PrimLongDefaultBlankAcceptBlankConfig(), props);
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new PrimLongDefaultBlankAcceptBlankConfig(),
+            props)).isInstanceOf(PropertyException.class);
     }
 
     @Test
-    public void testIsEmptyOkProperty_True() throws PropertyException {
+    void testIsEmptyOkProperty_True() throws PropertyException {
         class Config {
 
             @Property(name = THE_VALUE, defaultValue = "", accept = "empty")
@@ -1009,14 +1039,14 @@ public class BeanConfiguratorTest {
         assertEquals("", cfg.value);
     }
 
-    @Test(expected = PropertyMissingException.class)
-    public void testIsEmptyOkProperty_False() throws PropertyException {
-
-        beancfg.configureFromProperties(new PrimLongDefaultBlankAcceptBlankConfig(), props);
+    @Test
+    void testIsEmptyOkProperty_False() {
+        assertThatThrownBy(() -> beancfg.configureFromProperties(new PrimLongDefaultBlankAcceptBlankConfig(),
+            props)).isInstanceOf(PropertyMissingException.class);
     }
 
     @Test
-    public void testPutToProperties() throws Exception {
+    void testPutToProperties() throws Exception {
 
         /*
          * Implements the extra interface, too.
@@ -1082,7 +1112,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testPutProperty() throws Exception {
+    void testPutProperty() throws Exception {
 
         class Config {
             // no annotation - should not be copied
@@ -1134,7 +1164,7 @@ public class BeanConfiguratorTest {
     }
 
     @Test
-    public void testGetGetter() throws Exception {
+    void testGetGetter() throws Exception {
 
         class Config {
             // getter method starts with "is" for these
@@ -1205,8 +1235,8 @@ public class BeanConfiguratorTest {
         assertEquals(STRING_VALUE, props.getProperty("string"));
     }
 
-    @Test(expected = PropertyAccessException.class)
-    public void testGetGetter_NoGetter() throws Exception {
+    @Test
+    void testGetGetter_NoGetter() throws Exception {
 
         class Config {
             @Property(name = THE_VALUE)
@@ -1215,11 +1245,12 @@ public class BeanConfiguratorTest {
 
         Config cfg = new Config();
         cfg.value = STRING_VALUE;
-        beancfg.addToProperties(cfg, props, "", "");
+        assertThatThrownBy(() -> beancfg.addToProperties(cfg, props, "", ""))
+            .isInstanceOf(PropertyAccessException.class);
     }
 
-    @Test(expected = PropertyAccessException.class)
-    public void testGetGetter_NoGetterForBoolean() throws Exception {
+    @Test
+    void testGetGetter_NoGetterForBoolean() throws Exception {
 
         class Config {
             @Property(name = THE_VALUE)
@@ -1228,11 +1259,12 @@ public class BeanConfiguratorTest {
 
         Config cfg = new Config();
         cfg.value = true;
-        beancfg.addToProperties(cfg, props, "", "");
+        assertThatThrownBy(() -> beancfg.addToProperties(cfg, props, "", ""))
+            .isInstanceOf(PropertyAccessException.class);
     }
 
-    @Test(expected = PropertyAccessException.class)
-    public void testGetGetter_PrivateGetter() throws Exception {
+    @Test
+    void testGetGetter_PrivateGetter() throws Exception {
 
         class Config {
             @Property(name = THE_VALUE)
@@ -1246,11 +1278,12 @@ public class BeanConfiguratorTest {
 
         Config cfg = new Config();
         cfg.value = STRING_VALUE;
-        beancfg.addToProperties(cfg, props, "", "");
+        assertThatThrownBy(() -> beancfg.addToProperties(cfg, props, "", ""))
+            .isInstanceOf(PropertyAccessException.class);
     }
 
-    @Test(expected = PropertyAccessException.class)
-    public void testGetGetter_SecurityEx() throws Exception {
+    @Test
+    void testGetGetter_SecurityEx() throws Exception {
 
         class Config {
             @Property(name = THE_VALUE)
@@ -1272,11 +1305,12 @@ public class BeanConfiguratorTest {
             }
         };
 
-        beancfg.addToProperties(cfg, props, "", "");
+        assertThatThrownBy(() -> beancfg.addToProperties(cfg, props, "", ""))
+            .isInstanceOf(PropertyAccessException.class);
     }
 
-    @Test(expected = PropertyAccessException.class)
-    public void testGetBeanValue_Ex() throws Exception {
+    @Test
+    void testGetBeanValue_Ex() throws Exception {
 
         class Config {
 
@@ -1293,8 +1327,8 @@ public class BeanConfiguratorTest {
         final Config cfg = new Config();
         cfg.value = STRING_VALUE;
 
-        beancfg.addToProperties(cfg, props, "the", "a");
-
+        assertThatThrownBy(() -> beancfg.addToProperties(cfg, props, "the", "a"))
+            .isInstanceOf(PropertyAccessException.class);
     }
 
     /**

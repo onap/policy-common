@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,19 +21,19 @@
 
 package org.onap.policy.common.utils.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.capabilities.Startable;
 import org.onap.policy.common.utils.services.ServiceManager.RunnableWithEx;
 
-public class ServiceManagerContainerTest {
+class ServiceManagerContainerTest {
     private static final String MY_NAME = "my-name";
     private static final String MY_ACTION = "my-action";
     private static final String MY_OBJECT = "my-object";
@@ -44,7 +45,7 @@ public class ServiceManagerContainerTest {
     /**
      * Set up.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         starter = mock(RunnableWithEx.class);
         stopper = mock(RunnableWithEx.class);
@@ -54,7 +55,7 @@ public class ServiceManagerContainerTest {
     }
 
     @Test
-    public void testServiceManagerContainer() throws Exception {
+    void testServiceManagerContainer() throws Exception {
         // use no-arg constructor
         cont = new MyCont();
         assertEquals("service manager", cont.getName());
@@ -64,7 +65,7 @@ public class ServiceManagerContainerTest {
     }
 
     @Test
-    public void test() throws Exception {
+    void test() throws Exception {
         assertEquals(MY_NAME, cont.getName());
 
         assertFalse(cont.isAlive());
@@ -87,7 +88,7 @@ public class ServiceManagerContainerTest {
     }
 
     @Test
-    public void testShutdown() throws Exception {
+    void testShutdown() throws Exception {
         cont.start();
         cont.shutdown();
         assertFalse(cont.isAlive());

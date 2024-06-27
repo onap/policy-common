@@ -3,7 +3,7 @@
  * Common Utils
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,21 +21,21 @@
 
 package org.onap.policy.common.utils.jpa;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import jakarta.persistence.EntityManagerFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class EntityMgrFactoryCloserTest {
+class EntityMgrFactoryCloserTest {
 
     private EntityManagerFactory factory;
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         factory = mock(EntityManagerFactory.class);
     }
@@ -45,7 +45,7 @@ public class EntityMgrFactoryCloserTest {
      * Verifies that the constructor does not do anything extra before being closed.
      */
     @Test
-    public void testEntityMgrFactoryCloser() {
+    void testEntityMgrFactoryCloser() {
         EntityMgrFactoryCloser entityMgrFactoryCloser = new EntityMgrFactoryCloser(factory);
 
         assertEquals(factory, entityMgrFactoryCloser.getFactory());
@@ -59,7 +59,7 @@ public class EntityMgrFactoryCloserTest {
     }
 
     @Test
-    public void testgetFactory() {
+    void testGetFactory() {
         try (EntityMgrFactoryCloser c = new EntityMgrFactoryCloser(factory)) {
             assertEquals(factory, c.getFactory());
         }
@@ -69,7 +69,7 @@ public class EntityMgrFactoryCloserTest {
      * Verifies that the manager gets closed when close() is invoked.
      */
     @Test
-    public void testClose() {
+    void testClose() {
         EntityMgrFactoryCloser entityMgrFactoryCloser = new EntityMgrFactoryCloser(factory);
 
         entityMgrFactoryCloser.close();
@@ -82,7 +82,7 @@ public class EntityMgrFactoryCloserTest {
      * Ensures that the manager gets closed when "try" block exits normally.
      */
     @Test
-    public void testClose_TryWithoutExcept() {
+    void testClose_TryWithoutExcept() {
         try (EntityMgrFactoryCloser entityMgrFactoryCloser = new EntityMgrFactoryCloser(factory)) {
             // No need to do anything in the try block
         }
@@ -94,7 +94,7 @@ public class EntityMgrFactoryCloserTest {
      * Ensures that the manager gets closed when "try" block throws an exception.
      */
     @Test
-    public void testClose_TryWithExcept() {
+    void testClose_TryWithExcept() {
         try {
             try (EntityMgrFactoryCloser c = new EntityMgrFactoryCloser(factory)) {
                 throw new Exception("expected exception");

@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,16 +24,17 @@ package org.onap.policy.common.utils.services;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class RegistryTest {
+class RegistryTest {
     private static final String UNKNOWN = "unknown";
     private static final String NAME_STR = "name-string";
     private static final String NAME_OBJ = "name-object";
@@ -45,7 +47,7 @@ public class RegistryTest {
     /**
      * Set up.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         Registry.newRegistry();
 
@@ -57,7 +59,7 @@ public class RegistryTest {
     /**
      * Ensure the registry is left empty when done.
      */
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         Registry.newRegistry();
     }
@@ -66,7 +68,7 @@ public class RegistryTest {
      * Sunny day scenario is tested by other tests, so we focus on exceptions here.
      */
     @Test
-    public void testRegister_Ex() {
+    void testRegister_Ex() {
         assertThatIllegalStateException().isThrownBy(() -> Registry.register(NAME_STR, DATA_STR));
 
         assertThatIllegalArgumentException().isThrownBy(() -> Registry.register(null, DATA_STR));
@@ -74,7 +76,7 @@ public class RegistryTest {
     }
 
     @Test
-    public void testRegisterOrReplace() {
+    void testRegisterOrReplace() {
         // should be able to replace
         Registry.registerOrReplace(NAME_STR, DATA_STR);
         Registry.registerOrReplace(NAME_STR, DATA_STR);
@@ -90,16 +92,16 @@ public class RegistryTest {
     }
 
     @Test
-    public void testUnregister() {
+    void testUnregister() {
         assertTrue(Registry.unregister(NAME_STR));
 
-        assertEquals(null, Registry.getOrDefault(NAME_STR, String.class, null));
+        assertNull(Registry.getOrDefault(NAME_STR, String.class, null));
 
         assertFalse(Registry.unregister(NAME_STR));
     }
 
     @Test
-    public void testGet() {
+    void testGet() {
         assertSame(DATA_STR, Registry.get(NAME_STR, String.class));
         assertSame(DATA_OBJ, Registry.get(NAME_OBJ, Object.class));
         assertSame(DATA_INT, Registry.get(NAME_INT, Integer.class));
@@ -112,24 +114,24 @@ public class RegistryTest {
     }
 
     @Test
-    public void testGetOrDefault() {
+    void testGetOrDefault() {
         assertSame(DATA_STR, Registry.getOrDefault(NAME_STR, String.class, null));
         assertSame(DATA_OBJ, Registry.getOrDefault(NAME_OBJ, Object.class, "xyz"));
         assertSame(DATA_INT, Registry.getOrDefault(NAME_INT, Integer.class, 10));
 
-        assertEquals(null, Registry.getOrDefault(UNKNOWN, String.class, null));
+        assertNull(Registry.getOrDefault(UNKNOWN, String.class, null));
         assertEquals("abc", Registry.getOrDefault(UNKNOWN, String.class, "abc"));
         assertEquals(Integer.valueOf(11), Registry.getOrDefault(UNKNOWN, Integer.class, 11));
     }
 
     @Test
-    public void testNewRegistry() {
+    void testNewRegistry() {
         assertSame(DATA_STR, Registry.get(NAME_STR, String.class));
 
         Registry.newRegistry();
 
         // should not exist
-        assertEquals(null, Registry.getOrDefault(NAME_STR, String.class, null));
+        assertNull(Registry.getOrDefault(NAME_STR, String.class, null));
 
         // should be able to register it again now
         Registry.register(NAME_STR, DATA_STR);

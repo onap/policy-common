@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +21,18 @@
 
 package org.onap.policy.common.utils.coder;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class CoderTest {
+class CoderTest {
     private static final Long LONG = 10L;
     private static final Integer INTEGER = 10;
     private static final String INT_TEXT = INTEGER.toString();
@@ -41,13 +42,13 @@ public class CoderTest {
 
     private MyCoder coder;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         coder = new MyCoder();
     }
 
     @Test
-    public void testConvert() throws CoderException {
+    void testConvert() throws CoderException {
         assertNull(coder.convert(null, String.class));
 
         // same class of object

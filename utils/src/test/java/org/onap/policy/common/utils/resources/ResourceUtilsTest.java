@@ -22,11 +22,11 @@
 
 package org.onap.policy.common.utils.resources;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -34,16 +34,16 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Set;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * The Class ResourceUtilsTest.
  *
  * @author Liam Fallon (liam.fallon@ericsson.com)
  */
-public class ResourceUtilsTest {
+class ResourceUtilsTest {
     private File tmpDir = null;
     private File tmpEmptyFile = null;
     private File tmpUsedFile = null;
@@ -63,7 +63,7 @@ public class ResourceUtilsTest {
      *
      * @throws IOException Signals that an I/O exception has occurred.
      */
-    @Before
+    @BeforeEach
     public void setupResourceUtilsTest() throws IOException {
         tmpDir = new File(System.getProperty("java.io.tmpdir"));
         tmpEmptyFile = File.createTempFile(this.getClass().getName(), ".tmp");
@@ -80,7 +80,7 @@ public class ResourceUtilsTest {
     /**
      * Clean resource utils test.
      */
-    @After
+    @AfterEach
     public void cleanDownResourceUtilsTest() {
         assertTrue(tmpEmptyFile.delete());
         assertTrue(tmpUsedFile.delete());
@@ -90,7 +90,7 @@ public class ResourceUtilsTest {
      * Test get url resource.
      */
     @Test
-    public void testgetUrlResource() {
+    void testgetUrlResource() {
         URL theUrl = ResourceUtils.getUrlResource(tmpDir.getAbsolutePath());
         assertNull(theUrl);
 
@@ -135,7 +135,7 @@ public class ResourceUtilsTest {
      * Test get local file.
      */
     @Test
-    public void testGetLocalFile() {
+    void testGetLocalFile() {
         URL theUrl = ResourceUtils.getLocalFile(tmpDir.getAbsolutePath());
         assertNotNull(theUrl);
 
@@ -183,7 +183,7 @@ public class ResourceUtilsTest {
      * Test get resource as stream.
      */
     @Test
-    public void testGetResourceAsStream() throws IOException {
+    void testGetResourceAsStream() throws IOException {
         verifyStream(tmpDir.getAbsolutePath());
         verifyStream(tmpEmptyFile.getAbsolutePath());
         verifyStream(tmpUsedFile.getAbsolutePath());
@@ -209,7 +209,7 @@ public class ResourceUtilsTest {
      * Test get resource as string.
      */
     @Test
-    public void testGetResourceAsString() {
+    void testGetResourceAsString() {
         String theString = ResourceUtils.getResourceAsString(tmpDir.getAbsolutePath());
         assertNotNull(theString);
 
@@ -250,7 +250,7 @@ public class ResourceUtilsTest {
     }
 
     @Test
-    public void testgetUrl4Resource() {
+    void testgetUrl4Resource() {
         URL theUrl = ResourceUtils.getUrl4Resource(tmpDir.getAbsolutePath());
         assertNotNull(theUrl);
 
@@ -286,7 +286,7 @@ public class ResourceUtilsTest {
     }
 
     @Test
-    public void testGetFilePath4Resource() {
+    void testGetFilePath4Resource() {
         assertNull(ResourceUtils.getFilePath4Resource(null));
         assertEquals("/something/else", ResourceUtils.getFilePath4Resource("/something/else"));
         assertTrue(ResourceUtils.getFilePath4Resource("xml/example.xml").endsWith("xml/example.xml"));
@@ -294,7 +294,7 @@ public class ResourceUtilsTest {
     }
 
     @Test
-    public void testGetDirectoryContents() throws MalformedURLException {
+    void testGetDirectoryContents() throws MalformedURLException {
         assertTrue(ResourceUtils.getDirectoryContents(null).isEmpty());
         assertTrue(ResourceUtils.getDirectoryContents("idontexist").isEmpty());
         assertTrue(ResourceUtils.getDirectoryContents("logback-test.xml").isEmpty());

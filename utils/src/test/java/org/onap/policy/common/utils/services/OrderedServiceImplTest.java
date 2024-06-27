@@ -3,6 +3,7 @@
  * utils
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +21,14 @@
 
 package org.onap.policy.common.utils.services;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class OrderedServiceImplTest {
+class OrderedServiceImplTest {
 
     private static final int HIGH_PRIORITY_NUM = -1000;
     private static final int LOW_PRIORITY_NUM = 1000;
@@ -38,7 +39,7 @@ public class OrderedServiceImplTest {
     /**
      * Saves the original state of the ordered service list to restore after each test.
      */
-    @BeforeClass
+    @BeforeAll
     public static void setup() {
         List<GenericService> implementers = GenericService.providers.getList();
         highPrioService = implementers.get(0);
@@ -48,7 +49,7 @@ public class OrderedServiceImplTest {
     /**
      * Restores original state after each test.
      */
-    @Before
+    @BeforeEach
     public void resetOrder() {
         highPrioService.setSequenceNumber(HIGH_PRIORITY_NUM);
         lowPrioService.setSequenceNumber(LOW_PRIORITY_NUM);
@@ -58,7 +59,7 @@ public class OrderedServiceImplTest {
      * Tests obtaining a list of service implementers.
      */
     @Test
-    public void getListTest() {
+    void getListTest() {
         List<GenericService> implementers = GenericService.providers.getList();
         assertEquals(2, implementers.size());
 
@@ -74,7 +75,7 @@ public class OrderedServiceImplTest {
      * with the new order.
      */
     @Test
-    public void rebuildListInvertedPriorityTest() {
+    void rebuildListInvertedPriorityTest() {
 
         List<GenericService> implementers = GenericService.providers.getList();
         assertEquals(2, implementers.size());
@@ -104,7 +105,7 @@ public class OrderedServiceImplTest {
      * if the priorities are equivalent.
      */
     @Test
-    public void rebuildListEqualPriorityTest() {
+    void rebuildListEqualPriorityTest() {
 
         List<GenericService> implementers = GenericService.providers.getList();
         assertEquals(2, implementers.size());

@@ -3,6 +3,7 @@
  * ONAP PAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +23,8 @@ package org.onap.policy.common.utils.coder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.google.gson.JsonElement;
 import java.io.StringReader;
@@ -32,22 +33,22 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import lombok.ToString;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class StandardCoderInstantAsMillisTest {
+class StandardCoderInstantAsMillisTest {
     private static final long INSTANT_MILLIS = 1583249713500L;
     private static final String INSTANT_TEXT = String.valueOf(INSTANT_MILLIS);
 
     private StandardCoder coder;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         coder = new StandardCoderInstantAsMillis();
     }
 
     @Test
-    public void testConvert() throws CoderException {
+    void testConvert() throws CoderException {
         MyObject obj = makeObject();
 
         @SuppressWarnings("unchecked")
@@ -60,7 +61,7 @@ public class StandardCoderInstantAsMillisTest {
     }
 
     @Test
-    public void testEncodeDecode() throws CoderException {
+    void testEncodeDecode() throws CoderException {
         MyObject obj = makeObject();
         assertThat(coder.encode(obj, false)).contains(INSTANT_TEXT);
         assertThat(coder.encode(obj, true)).contains(INSTANT_TEXT);
@@ -80,13 +81,13 @@ public class StandardCoderInstantAsMillisTest {
     }
 
     @Test
-    public void testJson() {
+    void testJson() {
         MyObject obj = makeObject();
         assertThat(coder.toPrettyJson(obj)).contains(INSTANT_TEXT);
     }
 
     @Test
-    public void testToJsonTree_testFromJsonJsonElementClassT() throws Exception {
+    void testToJsonTree_testFromJsonJsonElementClassT() throws Exception {
         MyMap map = new MyMap();
         map.props = new LinkedHashMap<>();
         map.props.put("jel keyA", "jel valueA");
@@ -102,7 +103,7 @@ public class StandardCoderInstantAsMillisTest {
     }
 
     @Test
-    public void testConvertFromDouble() throws Exception {
+    void testConvertFromDouble() throws Exception {
         String text = "[listA, {keyA=100}, 200]";
         assertEquals(text, coder.decode(text, Object.class).toString());
 
@@ -111,7 +112,7 @@ public class StandardCoderInstantAsMillisTest {
     }
 
     @Test
-    public void testToStandard() throws Exception {
+    void testToStandard() throws Exception {
         MyObject obj = makeObject();
         StandardCoderObject sco = coder.toStandard(obj);
         assertNotNull(sco.getData());
@@ -122,7 +123,7 @@ public class StandardCoderInstantAsMillisTest {
     }
 
     @Test
-    public void testFromStandard() throws Exception {
+    void testFromStandard() throws Exception {
         MyObject obj = new MyObject();
         obj.abc = "pdq";
         StandardCoderObject sco = coder.toStandard(obj);

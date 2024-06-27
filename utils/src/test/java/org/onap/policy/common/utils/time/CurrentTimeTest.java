@@ -3,6 +3,7 @@
  * Common Utils
  * ================================================================================
  * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +21,14 @@
 
 package org.onap.policy.common.utils.time;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class CurrentTimeTest {
+class CurrentTimeTest {
 
     @Test
-    public void testGetMillis() {
+    void testGetMillis() {
         long tcur = System.currentTimeMillis();
         long tval = new CurrentTime().getMillis();
         long tval2 = new CurrentTime().getMillis();
@@ -38,7 +39,7 @@ public class CurrentTimeTest {
     }
 
     @Test
-    public void testGetDate() {
+    void testGetDate() {
         long tcur = System.currentTimeMillis();
         long tval = new CurrentTime().getDate().getTime();
         long tval2 = new CurrentTime().getDate().getTime();
@@ -49,7 +50,7 @@ public class CurrentTimeTest {
     }
 
     @Test
-    public void testSleep() throws Exception {
+    void testSleep() throws Exception {
         long tcur = System.currentTimeMillis();
         new CurrentTime().sleep(10);
         long tend = System.currentTimeMillis();

@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +21,18 @@
 
 package org.onap.policy.common.utils.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class FeatureApiUtilsTest {
+class FeatureApiUtilsTest {
     private static final String HANDLED = "handled";
 
     private MyPred pred;
@@ -41,7 +42,7 @@ public class FeatureApiUtilsTest {
     /**
      * Initializes fields.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         tried = new LinkedList<>();
         errors = new LinkedList<>();
@@ -49,7 +50,7 @@ public class FeatureApiUtilsTest {
     }
 
     @Test
-    public void testApplyFeatureTrue() {
+    void testApplyFeatureTrue() {
         assertTrue(FeatureApiUtils.apply(Arrays.asList("exceptT0", "falseT1", HANDLED, "falseT2", HANDLED), pred,
             (str, ex) -> errors.add(str)));
 
@@ -58,7 +59,7 @@ public class FeatureApiUtilsTest {
     }
 
     @Test
-    public void testApplyFeatureFalse() {
+    void testApplyFeatureFalse() {
         List<String> lst = Arrays.asList("falseF1", "exceptF2", "falseF3");
 
         assertFalse(FeatureApiUtils.apply(lst, pred, (str, ex) -> errors.add(str)));

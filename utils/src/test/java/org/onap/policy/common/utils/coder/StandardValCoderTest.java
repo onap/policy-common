@@ -1,6 +1,7 @@
 /*
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +22,11 @@
 package org.onap.policy.common.utils.coder;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.worldturner.medeia.api.ValidationFailedException;
 import java.io.IOException;
@@ -36,10 +37,10 @@ import java.nio.file.Paths;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class StandardValCoderTest {
+class StandardValCoderTest {
     private String jsonSchema;
     private String validJson;
     private String missingReqJson;
@@ -61,7 +62,7 @@ public class StandardValCoderTest {
         public List<ValInner> aaCollection;
     }
 
-    @Before
+    @BeforeEach
     public void testSetUp() throws Exception {
         jsonSchema = getJson("src/test/resources/org/onap/policy/common/utils/coder/test.schema.json");
         validJson = getJson("src/test/resources/org/onap/policy/common/utils/coder/valid.json");
@@ -70,7 +71,7 @@ public class StandardValCoderTest {
     }
 
     @Test
-    public void testDecode() throws CoderException {
+    void testDecode() throws CoderException {
         StandardValCoder valCoder = new StandardValCoder(jsonSchema, "test-schema");
 
         ValOuter valOuter = valCoder.decode(validJson, ValOuter.class);
@@ -110,7 +111,7 @@ public class StandardValCoderTest {
     }
 
     @Test
-    public void testEncode() throws CoderException {
+    void testEncode() throws CoderException {
         StandardValCoder valCoder = new StandardValCoder(jsonSchema, "test-schema");
         ValOuter valOuter = valCoder.decode(validJson, ValOuter.class);
 
@@ -127,7 +128,7 @@ public class StandardValCoderTest {
     }
 
     @Test
-    public void testPretty() throws CoderException {
+    void testPretty() throws CoderException {
         StandardValCoder valCoder = new StandardValCoder(jsonSchema, "test-schema");
         ValOuter valOuter = valCoder.decode(validJson, ValOuter.class);
 
@@ -144,7 +145,7 @@ public class StandardValCoderTest {
     }
 
     @Test
-    public void testConformance() {
+    void testConformance() {
         StandardValCoder valCoder = new StandardValCoder(jsonSchema, "test-schema");
         assertTrue(valCoder.isConformant(validJson));
         assertFalse(valCoder.isConformant(missingReqJson));

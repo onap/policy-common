@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,14 +21,15 @@
 
 package org.onap.policy.common.utils.properties;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.Properties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class SpecPropertiesTest {
+class SpecPropertiesTest {
 
     /**
      * Property prefix of interest.
@@ -82,7 +84,7 @@ public class SpecPropertiesTest {
     /**
      * Set up the tests.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         supportingProps = new Properties();
 
@@ -96,7 +98,7 @@ public class SpecPropertiesTest {
     }
 
     @Test
-    public void testSpecPropertiesStringString() {
+    void testSpecPropertiesStringString() {
 
         // no supporting properties
         props = new SpecProperties(MY_PREFIX, MY_SPEC);
@@ -112,7 +114,7 @@ public class SpecPropertiesTest {
     }
 
     @Test
-    public void testSpecPropertiesStringStringProperties() {
+    void testSpecPropertiesStringStringProperties() {
 
         // use supportingProps as default properties
         props = new SpecProperties(MY_PREFIX, MY_SPEC, supportingProps);
@@ -127,7 +129,7 @@ public class SpecPropertiesTest {
     }
 
     @Test
-    public void testSpecPropertiesStringStringProperties_EmptyPrefix() {
+    void testSpecPropertiesStringStringProperties_EmptyPrefix() {
         supportingProps = new Properties();
 
         supportingProps.setProperty(PROP_NO_PREFIX, VAL_NO_PREFIX);
@@ -145,7 +147,7 @@ public class SpecPropertiesTest {
     }
 
     @Test
-    public void testWithTrailingDot() {
+    void testWithTrailingDot() {
         // neither has trailing dot
         assertEquals(PREFIX_GEN, props.getPrefix());
         assertEquals(PREFIX_SPEC, props.getSpecPrefix());
@@ -167,7 +169,7 @@ public class SpecPropertiesTest {
     }
 
     @Test
-    public void testGetPropertyString() {
+    void testGetPropertyString() {
         // the key does contain the prefix
         assertEquals(VAL_NO_PREFIX, props.getProperty(gen(PROP_NO_PREFIX)));
         assertNull(props.getProperty(gen(PROP_NO_PREFIX + SUFFIX)));
@@ -186,7 +188,7 @@ public class SpecPropertiesTest {
     }
 
     @Test
-    public void testGetPropertyStringString() {
+    void testGetPropertyStringString() {
         // the key does contain the prefix
         assertEquals(VAL_NO_PREFIX, props.getProperty(gen(PROP_NO_PREFIX), VAL_DEFAULT));
         assertEquals(VAL_DEFAULT, props.getProperty(gen(PROP_NO_PREFIX + SUFFIX), VAL_DEFAULT));
@@ -207,14 +209,15 @@ public class SpecPropertiesTest {
         assertNull(props.getProperty(gen(PROP_UNKNOWN), null));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testHashCode() {
-        props.hashCode();
+    @Test
+    void testHashCode() {
+        assertThatThrownBy(() -> props.hashCode())
+            .isInstanceOf(UnsupportedOperationException.class);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void testEquals() {
-        props.equals(props);
+    @Test
+    void testEquals() {
+        assertThatThrownBy(() -> props.equals(props)).isInstanceOf(UnsupportedOperationException.class);
     }
 
     private String gen(String propnm) {
