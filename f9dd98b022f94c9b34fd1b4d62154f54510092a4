@@ -24,6 +24,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfca2e0e_55594ee4",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/eelf/EventDataTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T11:03:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e04a6251_f0f79602",
+      "range": {
+        "startLine": 146,
+        "startChar": 8,
+        "endLine": 146,
+        "endChar": 34
+      },
+      "revId": "f9dd98b022f94c9b34fd1b4d62154f54510092a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb88913f_c68ab257",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-06-26T16:31:32Z",
       "side": 1,
       "message": "What is this doing?",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 5
+      },
+      "revId": "f9dd98b022f94c9b34fd1b4d62154f54510092a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee9107d5_e8917952",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/eelf/EventTrackInfoTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T11:03:44Z",
+      "side": 1,
+      "message": "Auto-generated method by IntelliJ. Thanks for spotting this. The correct import has been added and this method removed.",
+      "parentUuid": "bb88913f_c68ab257",
       "range": {
         "startLine": 58,
         "startChar": 4,
@@ -72,6 +120,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d22bf6a8_f874dbc0",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/EelfLoggerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T11:03:44Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "b0500482_960f7937",
+      "range": {
+        "startLine": 183,
+        "startChar": 9,
+        "endLine": 183,
+        "endChar": 27
+      },
+      "revId": "f9dd98b022f94c9b34fd1b4d62154f54510092a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "15ae0d80_e6ce34fc",
         "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/FlexLoggerTest.java",
         "patchSetId": 3
@@ -83,6 +155,30 @@
       "writtenOn": "2024-06-26T16:31:32Z",
       "side": 1,
       "message": "Make sure it is actually possible for this to be thrown by this method. Sonar says no",
+      "range": {
+        "startLine": 101,
+        "startChar": 41,
+        "endLine": 101,
+        "endChar": 52
+      },
+      "revId": "f9dd98b022f94c9b34fd1b4d62154f54510092a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "deb3b04d_e2c5cea3",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/FlexLoggerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T11:03:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15ae0d80_e6ce34fc",
       "range": {
         "startLine": 101,
         "startChar": 41,
@@ -116,6 +212,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c089a82_372438aa",
+        "filename": "common-parameters/src/test/java/org/onap/policy/common/parameters/TestFieldValidator.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T11:03:44Z",
+      "side": 1,
+      "message": "There are test failures when this argument is removed. Showing as no usages in my IDE however.",
+      "parentUuid": "317eb8e5_f2118982",
+      "range": {
+        "startLine": 359,
+        "startChar": 38,
+        "endLine": 359,
+        "endChar": 50
+      },
+      "revId": "f9dd98b022f94c9b34fd1b4d62154f54510092a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "198040a6_0da43db9",
@@ -139,6 +259,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b675c16_58cabfe0",
+        "filename": "gson/src/test/java/org/onap/policy/common/gson/internal/FieldSerializerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T11:03:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "198040a6_0da43db9",
+      "range": {
+        "startLine": 25,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 60
+      },
+      "revId": "f9dd98b022f94c9b34fd1b4d62154f54510092a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ee0a805_168ab79b",
@@ -152,6 +296,30 @@
       "writtenOn": "2024-06-26T16:31:32Z",
       "side": 1,
       "message": "import not used",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 35
+      },
+      "revId": "f9dd98b022f94c9b34fd1b4d62154f54510092a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f878c1af_d0e5a299",
+        "filename": "gson/src/test/java/org/onap/policy/common/gson/internal/FieldSerializerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-06-27T11:03:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ee0a805_168ab79b",
       "range": {
         "startLine": 29,
         "startChar": 0,
