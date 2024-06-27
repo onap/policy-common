@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,25 +21,25 @@
 
 package org.onap.policy.common.utils.time;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class PseudoExecutorTest {
+class PseudoExecutorTest {
     private int invoked;
     private PseudoExecutor executor;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         invoked = 0;
         executor = new PseudoExecutor();
     }
 
     @Test
-    public void test() {
+    void test() {
         assertEquals(0, executor.getQueueLength());
         assertEquals(0, executor.getTasks().size());
         assertTrue(executor.runAll(0));

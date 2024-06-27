@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +28,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class SelfSignedKeyStoreTest {
     private static final String USER_DIR_PROP = "user.dir";
@@ -42,14 +43,14 @@ public class SelfSignedKeyStoreTest {
     /**
      * Saves the user.dir property and initializes static fields.
      */
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         saveUserDir = System.getProperty(USER_DIR_PROP);
         defaultName = saveUserDir + "/" + SelfSignedKeyStore.RELATIVE_PATH;
         defaultKeystore = new File(defaultName);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         System.setProperty(USER_DIR_PROP, saveUserDir);
         delete(defaultKeystore);
@@ -108,7 +109,7 @@ public class SelfSignedKeyStoreTest {
      * Tests the constructor, when the SAN file is not found.
      */
     @Test
-    public void testSelfSignedKeyStoreStringNoSanFile() throws Exception {
+    public void testSelfSignedKeyStoreStringNoSanFile() {
         assertThatThrownBy(() -> new SelfSignedKeyStore() {
             @Override
             protected String getKeystoreSanName() {
@@ -121,7 +122,7 @@ public class SelfSignedKeyStoreTest {
      * Tests the constructor, when write fails.
      */
     @Test
-    public void testSelfSignedKeyStoreStringWriteFailure() throws Exception {
+    public void testSelfSignedKeyStoreStringWriteFailure() {
         assertThatThrownBy(() -> new SelfSignedKeyStore("target/unknown/path/to/keystore"))
                         .isInstanceOf(IOException.class);
     }

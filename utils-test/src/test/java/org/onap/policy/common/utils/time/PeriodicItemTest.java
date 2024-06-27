@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +22,15 @@
 package org.onap.policy.common.utils.time;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class PeriodicItemTest {
+class PeriodicItemTest {
     private static final long DELAY_MS = 100L;
     private static final long PERIOD_MS = 200L;
     private static final Object ASSOCIATE = new Object();
@@ -41,7 +42,7 @@ public class PeriodicItemTest {
     /**
      * Sets up objects, including {@link #item}.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         currentTime = new TestTime();
         count = 0;
@@ -49,18 +50,18 @@ public class PeriodicItemTest {
     }
 
     @Test
-    public void testBumpNextTime() {
+    void testBumpNextTime() {
         assertTrue(item.bumpNextTime());
         assertEquals(currentTime.getMillis() + PERIOD_MS, item.getNextMs());
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertNotNull(item.toString());
     }
 
     @Test
-    public void testPeriodicItem() {
+    void testPeriodicItem() {
         assertSame(ASSOCIATE, item.getAssociate());
         assertNotNull(item.getAction());
         assertEquals(currentTime.getMillis() + DELAY_MS, item.getNextMs());

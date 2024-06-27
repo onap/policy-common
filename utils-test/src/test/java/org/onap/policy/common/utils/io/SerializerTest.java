@@ -3,7 +3,7 @@
  * ONAP Policy Engine - Common Modules
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
- * Modificaitons Copyright (C) 2023 Nordix Foundation.
+ * Modificaitons Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,9 @@
 package org.onap.policy.common.utils.io;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 
@@ -37,14 +37,14 @@ import java.io.Serializable;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.utils.io.Serializer.Factory;
 import org.springframework.test.util.ReflectionTestUtils;
 
-public class SerializerTest {
+class SerializerTest {
     private static final String FACTORY = "factory";
 
     /**
@@ -52,28 +52,28 @@ public class SerializerTest {
      */
     private static Factory saveFactory;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         saveFactory = (Factory) ReflectionTestUtils.getField(Serializer.class, FACTORY);
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         ReflectionTestUtils.setField(Serializer.class, FACTORY, saveFactory);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         setFactory(saveFactory);
     }
 
     @Test
-    public void testFactory() {
+    void testFactory() {
         assertNotNull(saveFactory);
     }
 
     @Test
-    public void testSerialize() throws Exception {
+    void testSerialize() throws Exception {
         MyObject obj1 = new MyObject(3);
         byte[] data = Serializer.serialize(obj1);
         assertTrue(data.length > 0);
@@ -85,13 +85,14 @@ public class SerializerTest {
         assertEquals(obj1.value, obj2.value);
     }
 
-    @Test(expected = java.io.NotSerializableException.class)
-    public void testSerialize_Ex() throws Exception {
-        Serializer.serialize(new NotSerializable());
+    @Test
+    void testSerialize_Ex() {
+        assertThatThrownBy(() -> Serializer.serialize(new NotSerializable()))
+            .isInstanceOf(java.io.NotSerializableException.class);
     }
 
     @Test
-    public void testSerialize_ArrayCloseEx() {
+    void testSerialize_ArrayCloseEx() {
         IOException ex = new IOException("testSerialize_ArrayCloseEx");
 
         /*
@@ -125,7 +126,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void testSerialize_ObjectWriteEx() {
+    void testSerialize_ObjectWriteEx() {
         IOException ex = new IOException("testSerialize_ObjectWriteEx");
 
         /*
@@ -142,7 +143,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void testSerialize_ObjectCloseEx() throws Exception {
+    void testSerialize_ObjectCloseEx() throws Exception {
         IOException ex = new IOException("testSerialize_ObjectCloseEx");
         ObjectOutputStream oos = mock(ObjectOutputStream.class);
         doThrow(ex).when(oos).close();
@@ -168,7 +169,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void testSerialize_BothCloseEx() throws Exception {
+    void testSerialize_BothCloseEx() throws Exception {
         IOException ex = new IOException("testSerialize_BothCloseEx");
         IOException ex2 = new IOException("testSerialize_BothCloseEx_2");
         ObjectOutputStream oos = mock(ObjectOutputStream.class);
@@ -216,14 +217,14 @@ public class SerializerTest {
     }
 
     @Test
-    public void testDeserialize() throws Exception {
+    void testDeserialize() throws Exception {
         MyObject obj1 = new MyObject(3);
         MyObject obj2 = Serializer.roundTrip(obj1);
         assertEquals(obj1.value, obj2.value);
     }
 
     @Test
-    public void testDeserialize_ArrayCloseEx() throws Exception {
+    void testDeserialize_ArrayCloseEx() {
         IOException ex = new IOException("testSerialize_ObjectWriteEx");
 
         /*
@@ -252,7 +253,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void testDeserialize_ObjectReadEx() throws Exception {
+    void testDeserialize_ObjectReadEx() {
         IOException ex = new IOException("testDeserialize_ObjectReadEx");
 
         /*
@@ -269,7 +270,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void testDeserialize_ObjectRead_ClassEx() throws Exception {
+    void testDeserialize_ObjectRead_ClassEx() throws Exception {
         MyObject obj1 = new MyObject(200);
 
         // must use binary character set
@@ -302,7 +303,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void testDeserialize_ObjectCloseEx() throws Exception {
+    void testDeserialize_ObjectCloseEx() {
         IOException ex = new IOException("testDeserialize_ObjectCloseEx");
 
         /*
@@ -325,7 +326,7 @@ public class SerializerTest {
     }
 
     @Test
-    public void testDeserialize_BothCloseEx() throws Exception {
+    void testDeserialize_BothCloseEx() {
         IOException ex = new IOException("testDeserialize_BothCloseEx");
         IOException ex2 = new IOException("testDeserialize_BothCloseEx_2");
 
@@ -359,16 +360,17 @@ public class SerializerTest {
     }
 
     @Test
-    public void testRoundTrip() throws Exception {
+    void testRoundTrip() throws Exception {
         MyObject obj1 = new MyObject(3);
 
         MyObject obj2 = Serializer.roundTrip(obj1);
         assertEquals(obj1.value, obj2.value);
     }
 
-    @Test(expected = java.io.NotSerializableException.class)
-    public void testRoundTrip_Ex() throws Exception {
-        Serializer.roundTrip(new NotSerializable());
+    @Test
+    void testRoundTrip_Ex() {
+        assertThatThrownBy(() -> Serializer.roundTrip(new NotSerializable()))
+            .isInstanceOf(java.io.NotSerializableException.class);
     }
 
     /**

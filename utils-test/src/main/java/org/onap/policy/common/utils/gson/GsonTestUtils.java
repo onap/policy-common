@@ -21,7 +21,7 @@
 
 package org.onap.policy.common.utils.gson;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;

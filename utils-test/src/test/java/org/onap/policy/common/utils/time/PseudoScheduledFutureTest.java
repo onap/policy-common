@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,23 +21,24 @@
 
 package org.onap.policy.common.utils.time;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PseudoScheduledFutureTest {
+@ExtendWith(MockitoExtension.class)
+class PseudoScheduledFutureTest {
     private static final long DELAY_MS = 1000L;
 
     private int count;
@@ -49,9 +51,9 @@ public class PseudoScheduledFutureTest {
     /**
      * Sets up objects, including {@link #future}.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
-        when(work.getDelay()).thenReturn(DELAY_MS);
+        lenient().when(work.getDelay()).thenReturn(DELAY_MS);
 
         count = 0;
         future = new PseudoScheduledFuture<>(() -> ++count, true);
@@ -59,7 +61,7 @@ public class PseudoScheduledFutureTest {
     }
 
     @Test
-    public void testRun() {
+    void testRun() {
         // verify with a periodic task - should execute twice
         count = 0;
         future.run();
@@ -75,7 +77,7 @@ public class PseudoScheduledFutureTest {
     }
 
     @Test
-    public void testPseudoScheduledFutureRunnableTBoolean() throws Exception {
+    void testPseudoScheduledFutureRunnableTBoolean() throws Exception {
         final Integer result = 100;
         future = new PseudoScheduledFuture<>(() -> ++count, result, true);
         assertTrue(future.isPeriodic());
@@ -94,7 +96,7 @@ public class PseudoScheduledFutureTest {
     }
 
     @Test
-    public void testPseudoScheduledFutureCallableOfTBoolean() throws Exception {
+    void testPseudoScheduledFutureCallableOfTBoolean() throws Exception {
         assertTrue(future.isPeriodic());
         future.run();
         future.run();
@@ -111,13 +113,13 @@ public class PseudoScheduledFutureTest {
     }
 
     @Test
-    public void testGetDelay() {
+    void testGetDelay() {
         assertEquals(DELAY_MS, future.getDelay(TimeUnit.MILLISECONDS));
         assertEquals(TimeUnit.MILLISECONDS.toSeconds(DELAY_MS), future.getDelay(TimeUnit.SECONDS));
     }
 
     @Test
-    public void testCompareTo() {
+    void testCompareTo() {
         Delayed delayed = mock(Delayed.class);
         when(delayed.getDelay(TimeUnit.MILLISECONDS)).thenReturn(DELAY_MS + 1);
 
@@ -125,18 +127,18 @@ public class PseudoScheduledFutureTest {
     }
 
     @Test
-    public void testIsPeriodic() {
+    void testIsPeriodic() {
         assertTrue(future.isPeriodic());
         assertFalse(new PseudoScheduledFuture<>(() -> ++count, false).isPeriodic());
     }
 
     @Test
-    public void testGetWorkItem() {
+    void testGetWorkItem() {
         assertSame(work, future.getWorkItem());
     }
 
     @Test
-    public void testSetWorkItem() {
+    void testSetWorkItem() {
         work = mock(WorkItem.class);
         future.setWorkItem(work);
         assertSame(work, future.getWorkItem());

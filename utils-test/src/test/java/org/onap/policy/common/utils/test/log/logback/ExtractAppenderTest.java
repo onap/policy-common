@@ -3,6 +3,7 @@
  * Common Utils-Test
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +21,8 @@
 
 package org.onap.policy.common.utils.test.log.logback;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
@@ -31,13 +32,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.slf4j.LoggerFactory;
 
-public class ExtractAppenderTest {
+class ExtractAppenderTest {
     private static final String ABC_DIGIT = "abc[0-9]";
     private static final String ABC_DIGIT1 = "abc[1-9]";
     private static final String DEF_DIGIT = "def[0-9]";
@@ -58,13 +59,13 @@ public class ExtractAppenderTest {
 
     private List<Thread> threads;
 
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         logger = (Logger) LoggerFactory.getLogger(ExtractAppenderTest.class);
         logger.setLevel(Level.INFO);
     }
 
-    @Before
+    @BeforeEach
     public void setUp() {
         threads = new LinkedList<>();
     }
@@ -72,7 +73,7 @@ public class ExtractAppenderTest {
     /**
      * Tear down all appenders and threads.
      */
-    @After
+    @AfterEach
     public void tearDown() throws Exception {
         logger.detachAndStopAllAppenders();
 
@@ -83,7 +84,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testExtractAppender() {
+    void testExtractAppender() {
         AtomicInteger count = new AtomicInteger(0);
 
         ExtractAppender appender = new ExtractAppender() {
@@ -117,7 +118,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testExtractAppenderStringArray() {
+    void testExtractAppenderStringArray() {
         AtomicInteger count = new AtomicInteger(0);
 
         ExtractAppender appender = new ExtractAppender(ABC_DIGIT, DEF_DIGIT) {
@@ -156,7 +157,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testExtractAppenderQueueStringArray() {
+    void testExtractAppenderQueueStringArray() {
         // no. of matches allowed in the list
         int nallowed = 3;
 
@@ -204,7 +205,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testAppendILoggingEvent_NoPatterns() {
+    void testAppendILoggingEvent_NoPatterns() {
         ExtractAppender appender = makeAppender();
 
         logger.info(HELLO);
@@ -214,7 +215,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testAppendILoggingEvent_Formatted() {
+    void testAppendILoggingEvent_Formatted() {
         ExtractAppender appender = makeAppender();
 
         logger.info("hello {} world{}", "there", "!");
@@ -223,7 +224,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testAppendILoggingEvent_MatchFirstPattern() {
+    void testAppendILoggingEvent_MatchFirstPattern() {
         ExtractAppender appender = makeAppender(ABC_DIGIT, DEF_DIGIT);
 
         logger.info("hello abc1");
@@ -233,7 +234,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testAppendILoggingEvent_MatchLastPattern() {
+    void testAppendILoggingEvent_MatchLastPattern() {
         ExtractAppender appender = makeAppender(ABC_DIGIT, DEF_DIGIT);
 
         logger.info("hello def1");
@@ -243,7 +244,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testAppendILoggingEvent_Group1() {
+    void testAppendILoggingEvent_Group1() {
         ExtractAppender appender = makeAppender("hello (abc)|(xyz)", DEF_DIGIT);
 
         logger.info("hello abc, world!");
@@ -253,7 +254,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testAppendILoggingEvent_Group3() {
+    void testAppendILoggingEvent_Group3() {
         ExtractAppender appender = makeAppender("hello (abc)|(pdq)|(xyz)", DEF_DIGIT);
 
         logger.info("say hello xyz, world!");
@@ -263,7 +264,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testAppendILoggingEvent_NoGroup() {
+    void testAppendILoggingEvent_NoGroup() {
         ExtractAppender appender = makeAppender(HELLO_ABC);
 
         logger.info("say hello abc, world!");
@@ -273,7 +274,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testGetExtracted() {
+    void testGetExtracted() {
         ExtractAppender appender = makeAppender(ABC_DIGIT1);
 
         logger.info(HELLO_ABC1_WORLD);
@@ -289,7 +290,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testClearExtractions() {
+    void testClearExtractions() {
         final ExtractAppender appender = makeAppender(ABC_DIGIT1);
 
         logger.info(HELLO_ABC1_WORLD);
@@ -312,7 +313,7 @@ public class ExtractAppenderTest {
     }
 
     @Test
-    public void testSetPattern() {
+    void testSetPattern() {
         final ExtractAppender appender = makeAppender(ABC_DIGIT1);
 
         logger.info(HELLO_ABC1_WORLD);
@@ -334,7 +335,7 @@ public class ExtractAppenderTest {
      * Launches threads doing everything in parallel to ensure nothing crashes.
      */
     @Test
-    public void test_MultiThreaded() throws Exception {
+    void test_MultiThreaded() throws Exception {
         // when to stop
         long tend = System.currentTimeMillis() + 250;
 

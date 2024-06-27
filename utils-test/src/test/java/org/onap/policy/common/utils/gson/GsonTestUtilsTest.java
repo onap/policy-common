@@ -23,9 +23,9 @@ package org.onap.policy.common.utils.gson;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -38,26 +38,26 @@ import java.io.IOException;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class GsonTestUtilsTest {
+class GsonTestUtilsTest {
     private static final String HELLO = "hello";
 
     private GsonTestUtils utils;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         utils = new GsonTestUtils();
     }
 
     @Test
-    public void testGetGson() {
+    void testGetGson() {
         assertNotNull(utils.getGson());
     }
 
     @Test
-    public void testGsonRoundTrip() {
+    void testGsonRoundTrip() {
         Data data = new Data();
         data.setId(500);
 
@@ -71,7 +71,7 @@ public class GsonTestUtilsTest {
     }
 
     @Test
-    public void testCompareGsonObjectClass_testCompareGsonObjectFile() {
+    void testCompareGsonObjectClass_testCompareGsonObjectFile() {
         Data data = new Data();
         data.setId(500);
         data.setText(HELLO);
@@ -98,7 +98,7 @@ public class GsonTestUtilsTest {
     }
 
     @Test
-    public void testCompareGsonObjectString() {
+    void testCompareGsonObjectString() {
         Data data = new Data();
         data.setId(600);
         data.setText(HELLO);
@@ -108,7 +108,7 @@ public class GsonTestUtilsTest {
     }
 
     @Test
-    public void testCompareGsonObjectJsonElement() {
+    void testCompareGsonObjectJsonElement() {
         Data data = new Data();
         data.setId(650);
         data.setText(HELLO);
@@ -125,7 +125,7 @@ public class GsonTestUtilsTest {
     }
 
     @Test
-    public void testApplyScripts() {
+    void testApplyScripts() {
         Data data = new Data();
         data.setId(700);
         data.setText(HELLO);
@@ -144,7 +144,7 @@ public class GsonTestUtilsTest {
     }
 
     @Test
-    public void testReorderJsonObject() {
+    void testReorderJsonObject() {
         // insert properties in a non-alphabetical order
         JsonObject inner = new JsonObject();
         inner.addProperty("objBint", 100);
@@ -168,7 +168,7 @@ public class GsonTestUtilsTest {
     }
 
     @Test
-    public void testReorderJsonArray() {
+    void testReorderJsonArray() {
         // insert properties in a non-alphabetical order
         JsonObject inner = new JsonObject();
         inner.add("objCNull", JsonNull.INSTANCE);
@@ -185,7 +185,7 @@ public class GsonTestUtilsTest {
     }
 
     @Test
-    public void testReorderJsonElement() {
+    void testReorderJsonElement() {
         // null element
         JsonElement jsonEl = null;
         assertNull(utils.reorder(jsonEl));
