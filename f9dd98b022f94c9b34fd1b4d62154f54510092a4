@@ -95,6 +95,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34cda31e_3f00375d",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/eelf/EventTrackInfoTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-27T11:27:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee9107d5_e8917952",
+      "range": {
+        "startLine": 58,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 5
+      },
+      "revId": "f9dd98b022f94c9b34fd1b4d62154f54510092a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b0500482_960f7937",
@@ -132,6 +156,30 @@
       "side": 1,
       "message": "Removed.",
       "parentUuid": "b0500482_960f7937",
+      "range": {
+        "startLine": 183,
+        "startChar": 9,
+        "endLine": 183,
+        "endChar": 27
+      },
+      "revId": "f9dd98b022f94c9b34fd1b4d62154f54510092a4",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b831d1ed_db40099f",
+        "filename": "common-logging/src/test/java/org/onap/policy/common/logging/flexlogger/EelfLoggerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 183,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-27T11:27:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d22bf6a8_f874dbc0",
       "range": {
         "startLine": 183,
         "startChar": 9,
