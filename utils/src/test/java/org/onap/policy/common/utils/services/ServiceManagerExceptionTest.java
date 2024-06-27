@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,32 +21,32 @@
 
 package org.onap.policy.common.utils.services;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ServiceManagerExceptionTest {
+class ServiceManagerExceptionTest {
     private ServiceManagerException sme;
 
     @Test
-    public void testServiceManagerException() {
+    void testServiceManagerException() {
         sme = new ServiceManagerException();
         assertNull(sme.getMessage());
         assertNull(sme.getCause());
     }
 
     @Test
-    public void testServiceManagerExceptionString() {
+    void testServiceManagerExceptionString() {
         sme = new ServiceManagerException("hello");
         assertEquals("hello", sme.getMessage());
         assertNull(sme.getCause());
     }
 
     @Test
-    public void testServiceManagerExceptionThrowable() {
+    void testServiceManagerExceptionThrowable() {
         Throwable thrown = new Throwable("expected exception");
         sme = new ServiceManagerException(thrown);
         assertNotNull(sme.getMessage());
@@ -53,7 +54,7 @@ public class ServiceManagerExceptionTest {
     }
 
     @Test
-    public void testServiceManagerExceptionStringThrowable() {
+    void testServiceManagerExceptionStringThrowable() {
         Throwable thrown = new Throwable("another expected exception");
         sme = new ServiceManagerException("world", thrown);
         assertEquals("world", sme.getMessage());

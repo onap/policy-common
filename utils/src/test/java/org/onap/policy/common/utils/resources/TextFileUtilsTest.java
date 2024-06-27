@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2019 Nordix Foundation.
+ *  Copyright (C) 2019-2024 Nordix Foundation.
  *  Modifications Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,25 +22,25 @@
 package org.onap.policy.common.utils.resources;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test text file utilities.
  *
  * @author Liam Fallon (liam.fallon@est.tech)
  */
-public class TextFileUtilsTest {
+class TextFileUtilsTest {
 
     private static final String FILE_CONTENT = "This is the contents of a text file";
 
     @Test
-    public void testPutToFile() throws IOException {
+    void testPutToFile() throws IOException {
         final File tempTextFile = File.createTempFile("Test", ".txt");
         tempTextFile.deleteOnExit();
 
@@ -56,7 +56,7 @@ public class TextFileUtilsTest {
     }
 
     @Test
-    public void testPutToFileWithNewPath() throws IOException {
+    void testPutToFileWithNewPath() throws IOException {
         String tempDirAndFileName = System.getProperty("java.io.tmpdir") + "/non/existant/path/Test.txt";
         FileUtils.forceDeleteOnExit(new File(tempDirAndFileName));
 
@@ -72,7 +72,7 @@ public class TextFileUtilsTest {
     }
 
     @Test
-    public void testCreateTempFile() throws IOException {
+    void testCreateTempFile() throws IOException {
         var file = TextFileUtils.createTempFile("textFileUtilsTest", ".txt");
         file.deleteOnExit();
 
@@ -80,7 +80,7 @@ public class TextFileUtilsTest {
     }
 
     @Test
-    public void testSetDefaultPermissions() throws IOException {
+    void testSetDefaultPermissions() throws IOException {
         var file = new File("target/tempfile.txt");
         file.deleteOnExit();
 

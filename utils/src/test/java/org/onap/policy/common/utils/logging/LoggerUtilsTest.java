@@ -3,6 +3,7 @@
 * ONAP Policy
 * ================================================================================
 * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
+* Modifications Copyright (C) 2024 Nordix Foundation
 * ================================================================================
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -22,20 +23,20 @@
 
 package org.onap.policy.common.utils.logging;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-@RunWith(MockitoJUnitRunner.class)
-public class LoggerUtilsTest {
+@ExtendWith(MockitoExtension.class)
+class LoggerUtilsTest {
     protected static final Logger logger = LoggerFactory.getLogger(LoggerUtilsTest.class);
 
     @Test
-    public void testMarker() {
+    void testMarker() {
         assertTrue(logger.isInfoEnabled());
         logger.info("line 1");
         logger.info(LoggerUtils.METRIC_LOG_MARKER, "line 1 Metric");

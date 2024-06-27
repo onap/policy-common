@@ -1,6 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +19,7 @@
 
 package org.onap.policy.common.utils.properties;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.util.AbstractSet;
@@ -29,14 +30,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.utils.coder.CoderException;
 import org.onap.policy.common.utils.coder.StandardCoder;
 
-public class PropertyObjectUtilsTest {
+class PropertyObjectUtilsTest {
 
     @Test
-    public void testToObject() {
+    void testToObject() {
         Map<String, String> map = Map.of("abc", "def", "ghi", "jkl");
         Properties props = new Properties();
         props.putAll(map);
@@ -48,7 +49,7 @@ public class PropertyObjectUtilsTest {
         // with dotted prefix - other items skipped
         map = Map.of("pfx.abc", "def", "ghi", "jkl", "pfx.mno", "pqr", "differentpfx.stu", "vwx");
         props.clear();
-        props.putAll(Map.of("pfx.abc", "def", "ghi", "jkl", "pfx.mno", "pqr", "differentpfx.stu", "vwx"));
+        props.putAll(map);
         result = PropertyObjectUtils.toObject(props, "pfx.");
         map = Map.of("abc", "def", "mno", "pqr");
         assertEquals(map, result);
@@ -59,7 +60,7 @@ public class PropertyObjectUtilsTest {
     }
 
     @Test
-    public void testSetProperty() {
+    void testSetProperty() {
         // one, two, and three components in the name, the last two with subscripts
         Map<String, Object> map = Map.of("one", "one.abc", "two.def", "two.ghi", "three.jkl.mno[0]", "three.pqr",
                         "three.jkl.mno[1]", "three.stu");
@@ -79,7 +80,7 @@ public class PropertyObjectUtilsTest {
     }
 
     @Test
-    public void testGetNode() {
+    void testGetNode() {
         Map<String, Object> map = Map.of("abc[0].def", "node.ghi", "abc[0].jkl", "node.mno", "abc[1].def", "node.pqr");
         Properties props = new Properties();
         props.putAll(map);
@@ -98,7 +99,7 @@ public class PropertyObjectUtilsTest {
     }
 
     @Test
-    public void testExpand() {
+    void testExpand() {
         // add subscripts out of order
         Properties props = makeProperties("abc[2]", "expand.def", "abc[1]", "expand.ghi");
 
@@ -113,7 +114,7 @@ public class PropertyObjectUtilsTest {
     }
 
     @Test
-    public void testGetObject() {
+    void testGetObject() {
         // first value is primitive, while second is a map
         Properties props = makeProperties("object.abc", "object.def", "object.abc.ghi", "object.jkl");
 
@@ -128,7 +129,7 @@ public class PropertyObjectUtilsTest {
     }
 
     @Test
-    public void testGetArray() {
+    void testGetArray() {
         // first value is primitive, while second is an array
         Properties props = makeProperties("array.abc", "array.def", "array.abc[0].ghi", "array.jkl");
 
@@ -145,7 +146,7 @@ public class PropertyObjectUtilsTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testCompressLists() throws IOException, CoderException {
+    void testCompressLists() throws IOException, CoderException {
         assertEquals("plain-string", PropertyObjectUtils.compressLists("plain-string").toString());
 
         // @formatter:off

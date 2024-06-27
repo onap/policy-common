@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2021, 2023 Nordix Foundation.
+ *  Copyright (C) 2021-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,15 +23,15 @@ package org.onap.policy.common.utils.cmd;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class TestCommandLineArguments {
+class TestCommandLineArguments {
     private static final String FAKE_HELP_CLASS = "org.onap.policy.HelpClass";
     private static final String FAKE_COMPONENT = "fake policy cpm";
     private static final String TEST_CONFIG_FILE = "cmdFiles/configuration.json";
@@ -43,19 +43,19 @@ public class TestCommandLineArguments {
     CommandLineArgumentsHandler testCmd = new CommandLineArgumentsHandler(FAKE_HELP_CLASS, FAKE_COMPONENT);
 
     @Test
-    public void testVersion() throws CommandLineException {
+    void testVersion() throws CommandLineException {
         String[] version = {"-v"};
         assertThat(testCmd.parse(version)).startsWith("ONAP Version test.");
     }
 
     @Test
-    public void testHelp() throws CommandLineException {
+    void testHelp() throws CommandLineException {
         String[] help = {"-h"};
         assertThat(testCmd.parse(help)).startsWith("usage: org.onap.policy.HelpClass [options...]");
     }
 
     @Test
-    public void testParse() throws CommandLineException {
+    void testParse() throws CommandLineException {
         String[] args = {"-c", TEST_CONFIG_FILE};
         testCmd.parse(args);
 
@@ -64,14 +64,14 @@ public class TestCommandLineArguments {
     }
 
     @Test
-    public void testParse_ShouldThrowExceptionWithInvalidArguments() {
+    void testParse_ShouldThrowExceptionWithInvalidArguments() {
         String[] invalidArgs = {"-a"};
         assertThatThrownBy(() -> testCmd.parse(invalidArgs)).hasMessage(ERR_MSG_INVALID_ARGS)
                 .hasRootCauseMessage("Unrecognized option: -a");
     }
 
     @Test
-    public void testParse_ShouldThrowExceptionWithExtraArguments() {
+    void testParse_ShouldThrowExceptionWithExtraArguments() {
         String[] remainingArgs = {"-c", TEST_CONFIG_FILE, "extraArgs"};
         String expectedErrorMsg =
                 "too many command line arguments specified: [-c, cmdFiles/configuration.json, extraArgs]";
@@ -79,55 +79,55 @@ public class TestCommandLineArguments {
     }
 
     @Test
-    public void testParse_ShouldThrowExceptionWhenFileNameNull() {
+    void testParse_ShouldThrowExceptionWhenFileNameNull() {
         String[] nullArgs = {"-c", null};
         assertThatThrownBy(() -> testCmd.parse(nullArgs)).hasMessage(ERR_MSG_INVALID_ARGS);
     }
 
     @Test
-    public void testValidate() throws CommandLineException {
+    void testValidate() throws CommandLineException {
         String[] validConfigArgs = {"-c", TEST_CONFIG_FILE};
         testCmd.parse(validConfigArgs);
         assertThatCode(() -> testCmd.validate()).doesNotThrowAnyException();
     }
 
     @Test
-    public void testValidate_ShouldThrowExceptionWhenConfigFileNotPresent() throws CommandLineException {
+    void testValidate_ShouldThrowExceptionWhenConfigFileNotPresent() throws CommandLineException {
         String[] versionArgs = {"-v"};
         testCmd.parse(versionArgs);
         assertValidate(versionArgs, ERR_MSG_POLICY_CONFIG_FILE);
     }
 
     @Test
-    public void testValidate_ShouldThrowExceptionWhenFileNameEmpty() {
+    void testValidate_ShouldThrowExceptionWhenFileNameEmpty() {
         String[] argsOnlyKeyNoValue = {"-c", ""};
         assertValidate(argsOnlyKeyNoValue, ERR_MSG_POLICY_CONFIG_FILE);
         assertFalse(testCmd.checkSetConfigurationFilePath());
     }
 
     @Test
-    public void testValidate_ShouldThrowExceptionWhenFileNameEmptySpace() {
+    void testValidate_ShouldThrowExceptionWhenFileNameEmptySpace() {
         String[] argsOnlyKeyNoValue = {"-c", " "};
         assertValidate(argsOnlyKeyNoValue, ERR_MSG_POLICY_CONFIG_FILE);
         assertFalse(testCmd.checkSetConfigurationFilePath());
     }
 
     @Test
-    public void testValidate_ShouldThrowExceptionWhenFileNameDoesNotExist() {
+    void testValidate_ShouldThrowExceptionWhenFileNameDoesNotExist() {
         String[] fileNameNotExistentArgs = {"-c", "someFileName.json"};
         assertValidate(fileNameNotExistentArgs,
                 "fake policy cpm configuration file \"someFileName.json\" does not exist");
     }
 
     @Test
-    public void testValidate_ShouldThrowExceptionWhenFileNameIsNotFile() {
+    void testValidate_ShouldThrowExceptionWhenFileNameIsNotFile() {
         String[] folderAsFileNameArgs = {"-c", "src/test/resources"};
         assertValidate(folderAsFileNameArgs,
                 "fake policy cpm configuration file \"src/test/resources\" is not a normal file");
     }
 
     @Test
-    public void testAddExtraOptions() throws CommandLineException {
+    void testAddExtraOptions() throws CommandLineException {
         Option extra = Option.builder("p").longOpt("property-file")
                 .desc("the full path to the topic property file to use, the property file contains the "
                         + FAKE_COMPONENT + " properties")
@@ -149,7 +149,7 @@ public class TestCommandLineArguments {
     }
 
     @Test
-    public void testNewOptions() throws CommandLineException {
+    void testNewOptions() throws CommandLineException {
         Options newOptions = new Options();
         newOptions.addOption(
                 Option.builder("a").longOpt("fake-option").desc("the fake property to check command line parse")
@@ -163,7 +163,7 @@ public class TestCommandLineArguments {
 
         assertTrue(testCmdExtraOpt.getCommandLine().hasOption("a"));
 
-        // should raise exception as -c is not present on options;
+        // should raise exception as -c is not present on options
         // default options should've been replaced by constructor parameter.
         String[] argsError = {"-c", "aaaa.json"};
         assertThatThrownBy(() -> testCmdExtraOpt.parse(argsError)).hasMessage(ERR_MSG_INVALID_ARGS)

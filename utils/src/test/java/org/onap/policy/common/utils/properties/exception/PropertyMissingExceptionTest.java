@@ -3,6 +3,7 @@
  * ONAP Policy Engine - Common Modules
  * ================================================================================
  * Copyright (C) 2018, 2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +21,12 @@
 
 package org.onap.policy.common.utils.properties.exception;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test class for PropertyMissingException.
  */
-public class PropertyMissingExceptionTest extends SupportBasicPropertyExceptionTester {
+class PropertyMissingExceptionTest extends SupportBasicPropertyExceptionTester {
 
     /**
      * Test method for
@@ -33,7 +34,7 @@ public class PropertyMissingExceptionTest extends SupportBasicPropertyExceptionT
      * (java.lang.String, java.lang.String)}.
      */
     @Test
-    public void testPropertyExceptionStringField() {
+    void testPropertyExceptionStringField() {
         verifyPropertyExceptionStringField_AllPopulated(new PropertyMissingException(PROPERTY, FIELD));
         verifyPropertyExceptionStringField_NullProperty(new PropertyMissingException(null, FIELD));
         verifyPropertyExceptionStringField_NullField(new PropertyMissingException(PROPERTY, null));

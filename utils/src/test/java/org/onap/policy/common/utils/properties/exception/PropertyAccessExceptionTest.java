@@ -3,6 +3,7 @@
  * ONAP Policy Engine - Common Modules
  * ================================================================================
  * Copyright (C) 2018, 2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +21,12 @@
 
 package org.onap.policy.common.utils.properties.exception;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Test class for PropertyAccessException.
  */
-public class PropertyAccessExceptionTest extends SupportBasicPropertyExceptionTester {
+class PropertyAccessExceptionTest extends SupportBasicPropertyExceptionTester {
 
     /**
      * Test method for
@@ -33,7 +34,7 @@ public class PropertyAccessExceptionTest extends SupportBasicPropertyExceptionTe
      * (java.lang.String, java.lang.String)}.
      */
     @Test
-    public void testPropertyAccessExceptionStringField() {
+    void testPropertyAccessExceptionStringField() {
         verifyPropertyExceptionStringField_AllPopulated(new PropertyAccessException(PROPERTY, FIELD));
         verifyPropertyExceptionStringField_NullProperty(new PropertyAccessException(null, FIELD));
         verifyPropertyExceptionStringField_NullField(new PropertyAccessException(PROPERTY, null));
@@ -46,7 +47,7 @@ public class PropertyAccessExceptionTest extends SupportBasicPropertyExceptionTe
      * (java.lang.String, java.lang.String, java.lang.String)}.
      */
     @Test
-    public void testPropertyAccessExceptionStringFieldString() {
+    void testPropertyAccessExceptionStringFieldString() {
         verifyPropertyExceptionStringFieldString(new PropertyAccessException(PROPERTY, FIELD, MESSAGE));
     }
 
@@ -56,7 +57,7 @@ public class PropertyAccessExceptionTest extends SupportBasicPropertyExceptionTe
      * (java.lang.String, java.lang.String, java.lang.Throwable)}.
      */
     @Test
-    public void testPropertyAccessExceptionStringFieldThrowable() {
+    void testPropertyAccessExceptionStringFieldThrowable() {
         verifyPropertyExceptionStringFieldThrowable(new PropertyAccessException(PROPERTY, FIELD, THROWABLE));
     }
 
@@ -66,7 +67,7 @@ public class PropertyAccessExceptionTest extends SupportBasicPropertyExceptionTe
      * (java.lang.String, java.lang.String, java.lang.String, java.lang.Throwable)}.
      */
     @Test
-    public void testPropertyAccessExceptionStringFieldStringThrowable() {
+    void testPropertyAccessExceptionStringFieldStringThrowable() {
         verifyPropertyExceptionStringFieldStringThrowable(
                         new PropertyAccessException(PROPERTY, FIELD, MESSAGE, THROWABLE));
     }

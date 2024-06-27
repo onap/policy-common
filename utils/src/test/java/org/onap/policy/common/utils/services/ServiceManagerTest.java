@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +23,9 @@ package org.onap.policy.common.utils.services;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -32,12 +33,12 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.LinkedList;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.capabilities.Startable;
 import org.onap.policy.common.utils.services.ServiceManager.RunnableWithEx;
 
-public class ServiceManagerTest {
+class ServiceManagerTest {
     private static final String MY_NAME = "my-name";
     private static final String ALREADY_RUNNING = MY_NAME + " is already running";
     private static final String EXPECTED_EXCEPTION = "expected exception";
@@ -47,23 +48,23 @@ public class ServiceManagerTest {
     /**
      * Initializes {@link #svcmgr}.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         svcmgr = new ServiceManager(MY_NAME);
     }
 
     @Test
-    public void testServiceName() {
+    void testServiceName() {
         assertEquals("service manager", new ServiceManager().getName());
     }
 
     @Test
-    public void testGetName() {
+    void testGetName() {
         assertEquals(MY_NAME, svcmgr.getName());
     }
 
     @Test
-    public void testAddAction() throws Exception {
+    void testAddAction() throws Exception {
         RunnableWithEx start1 = mock(RunnableWithEx.class);
         RunnableWithEx stop1 = mock(RunnableWithEx.class);
         svcmgr.addAction("first action", start1, stop1);
@@ -90,7 +91,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testAddStartable() {
+    void testAddStartable() {
         Startable start1 = mock(Startable.class);
         svcmgr.addService("first startable", start1);
 
@@ -115,7 +116,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testStart() {
+    void testStart() {
         Startable start1 = mock(Startable.class);
         svcmgr.addService("test start", start1);
 
@@ -136,7 +137,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testStart_Ex() {
+    void testStart_Ex() {
         Startable start1 = mock(Startable.class);
         svcmgr.addService("test start ex", start1);
 
@@ -173,7 +174,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testStart_RewindEx() {
+    void testStart_RewindEx() {
         Startable start1 = mock(Startable.class);
         svcmgr.addService("test start rewind", start1);
 
@@ -201,7 +202,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testStop() {
+    void testStop() {
         Startable start1 = mock(Startable.class);
         svcmgr.addService("first stop", start1);
 
@@ -221,7 +222,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testStop_Ex() throws Exception {
+    void testStop_Ex() throws Exception {
         RunnableWithEx start1 = mock(RunnableWithEx.class);
         RunnableWithEx stop1 = mock(RunnableWithEx.class);
         svcmgr.addAction("first stop ex", start1, stop1);
@@ -245,7 +246,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testShutdown() {
+    void testShutdown() {
         Startable start1 = mock(Startable.class);
         svcmgr.addService("first stop", start1);
 
@@ -265,7 +266,7 @@ public class ServiceManagerTest {
     }
 
     @Test
-    public void testRewind() {
+    void testRewind() {
         RunnableWithEx starter = mock(RunnableWithEx.class);
         LinkedList<String> lst = new LinkedList<>();
 

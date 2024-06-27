@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +22,10 @@
 package org.onap.policy.common.utils.coder;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.io.FileReader;
@@ -35,11 +36,11 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Map;
 import lombok.EqualsAndHashCode;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.yaml.snakeyaml.error.YAMLException;
 
-public class YamlJsonTranslatorTest {
+class YamlJsonTranslatorTest {
     private static final File YAML_FILE =
                     new File("src/test/resources/org/onap/policy/common/utils/coder/YamlJsonTranslator.yaml");
 
@@ -51,7 +52,7 @@ public class YamlJsonTranslatorTest {
      *
      * @throws IOException if an error occurs
      */
-    @Before
+    @BeforeEach
     public void setUp() throws IOException {
         translator = new YamlJsonTranslator();
 
@@ -61,7 +62,7 @@ public class YamlJsonTranslatorTest {
     }
 
     @Test
-    public void testToYamlObject() {
+    void testToYamlObject() {
         String yaml = translator.toYaml(cont);
 
         Container cont2 = translator.fromYaml(yaml, Container.class);
@@ -69,7 +70,7 @@ public class YamlJsonTranslatorTest {
     }
 
     @Test
-    public void testToYamlWriterObject() throws IOException {
+    void testToYamlWriterObject() throws IOException {
         IOException ex = new IOException("expected exception");
 
         // writer that throws an exception when the write() method is invoked
@@ -96,14 +97,14 @@ public class YamlJsonTranslatorTest {
     }
 
     @Test
-    public void testFromYamlStringClassOfT() throws IOException {
+    void testFromYamlStringClassOfT() throws IOException {
         String yaml = new String(Files.readAllBytes(YAML_FILE.toPath()), StandardCharsets.UTF_8);
         Container cont2 = translator.fromYaml(yaml, Container.class);
         assertEquals(cont, cont2);
     }
 
     @Test
-    public void testFromYamlReaderClassOfT() {
+    void testFromYamlReaderClassOfT() {
         verify(cont);
     }
 

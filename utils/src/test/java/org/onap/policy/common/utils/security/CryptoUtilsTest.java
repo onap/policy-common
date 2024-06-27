@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +21,12 @@
 
 package org.onap.policy.common.utils.security;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.security.GeneralSecurityException;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * Unit test for simple App.
  */
 
-public class CryptoUtilsTest {
+class CryptoUtilsTest {
     private static Logger logger = LoggerFactory.getLogger(CryptoUtilsTest.class);
     private static final String PASS = "HelloWorld";
     private static final String SECRET_KEY = "MTIzNDU2Nzg5MDEyMzQ1Ng==";
@@ -42,7 +43,7 @@ public class CryptoUtilsTest {
     private static final String ENCRYPTED_MSG = "original value : {}  encrypted value: {}";
 
     @Test
-    public void testEncrypt() throws GeneralSecurityException {
+    void testEncrypt() throws GeneralSecurityException {
         logger.info("testEncrypt:");
         CryptoCoder cryptoUtils = new CryptoUtils(SECRET_KEY);
         String encryptedValue = cryptoUtils.encrypt(PASS);
@@ -55,7 +56,7 @@ public class CryptoUtilsTest {
     }
 
     @Test
-    public void testDecrypt() throws GeneralSecurityException {
+    void testDecrypt() throws GeneralSecurityException {
         logger.info("testDecrypt:");
         CryptoCoder cryptoUtils = new CryptoUtils(SECRET_KEY);
         String decryptedValue = cryptoUtils.decrypt(ENCRYPTED_PASS);
@@ -64,7 +65,7 @@ public class CryptoUtilsTest {
     }
 
     @Test
-    public void testStaticEncrypt() {
+    void testStaticEncrypt() {
         logger.info("testStaticEncrypt:");
         String encryptedValue = CryptoUtils.encrypt(PASS, SECRET_KEY);
         logger.info(ENCRYPTED_MSG, PASS, encryptedValue);
@@ -75,7 +76,7 @@ public class CryptoUtilsTest {
     }
 
     @Test
-    public void testStaticDecrypt() {
+    void testStaticDecrypt() {
         logger.info("testStaticDecrypt:");
         String decryptedValue = CryptoUtils.decrypt(ENCRYPTED_PASS, SECRET_KEY);
         logger.info(DECRYPTED_MSG, ENCRYPTED_PASS, decryptedValue);
@@ -83,7 +84,7 @@ public class CryptoUtilsTest {
     }
 
     @Test
-    public void testBadInputs() {
+    void testBadInputs() {
         String badKey = CryptoUtils.encrypt(PASS, "test");
         assertEquals(PASS, badKey);
 
@@ -104,7 +105,7 @@ public class CryptoUtilsTest {
     }
 
     @Test
-    public void testAll() {
+    void testAll() {
         logger.info("testAll:");
         String encryptedValue = CryptoUtils.encrypt(PASS, SECRET_KEY);
         logger.info(ENCRYPTED_MSG, PASS, encryptedValue);

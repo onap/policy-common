@@ -3,7 +3,7 @@
  * Common Utils
  * ================================================================================
  * Copyright (C) 2018-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 
 package org.onap.policy.common.utils.jpa;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -29,17 +29,17 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import jakarta.persistence.EntityTransaction;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class EntityTransCloserTest {
+class EntityTransCloserTest {
 
     private EntityTransaction trans;
 
     /**
      * Set up EntityTransaction mock.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         trans = mock(EntityTransaction.class);
 
@@ -53,7 +53,7 @@ public class EntityTransCloserTest {
      * being closed.
      */
     @Test
-    public void testEntityTransCloser() {
+    void testEntityTransCloser() {
         EntityTransCloser entityTransCloser = new EntityTransCloser(trans);
 
         assertEquals(trans, entityTransCloser.getTransaction());
@@ -71,7 +71,7 @@ public class EntityTransCloserTest {
     }
 
     @Test
-    public void testGetTransation() {
+    void testGetTransaction() {
         try (EntityTransCloser t = new EntityTransCloser(trans)) {
             assertEquals(trans, t.getTransaction());
         }
@@ -82,7 +82,7 @@ public class EntityTransCloserTest {
      * is active.
      */
     @Test
-    public void testClose_Active() {
+    void testClose_Active() {
         EntityTransCloser entityTransCloser = new EntityTransCloser(trans);
 
         when(trans.isActive()).thenReturn(true);
@@ -99,7 +99,7 @@ public class EntityTransCloserTest {
      * when and no transaction is active.
      */
     @Test
-    public void testClose_Inactive() {
+    void testClose_Inactive() {
         EntityTransCloser entityTransCloser = new EntityTransCloser(trans);
 
         when(trans.isActive()).thenReturn(false);
@@ -116,7 +116,7 @@ public class EntityTransCloserTest {
      * normally and a transaction is active.
      */
     @Test
-    public void testClose_TryWithoutExcept_Active() {
+    void testClose_TryWithoutExcept_Active() {
         when(trans.isActive()).thenReturn(true);
 
         try (EntityTransCloser entityTransCloser = new EntityTransCloser(trans)) {
@@ -133,7 +133,7 @@ public class EntityTransCloserTest {
      * "try" block exits normally and no transaction is active.
      */
     @Test
-    public void testClose_TryWithoutExcept_Inactive() {
+    void testClose_TryWithoutExcept_Inactive() {
         when(trans.isActive()).thenReturn(false);
 
         try (EntityTransCloser entityTransCloser = new EntityTransCloser(trans)) {
@@ -150,7 +150,7 @@ public class EntityTransCloserTest {
      * an exception and a transaction is active.
      */
     @Test
-    public void testClose_TryWithExcept_Active() {
+    void testClose_TryWithExcept_Active() {
         when(trans.isActive()).thenReturn(true);
 
         try {
@@ -172,7 +172,7 @@ public class EntityTransCloserTest {
      * "try" block throws an exception and no transaction is active.
      */
     @Test
-    public void testClose_TryWithExcept_Inactive() {
+    void testClose_TryWithExcept_Inactive() {
         when(trans.isActive()).thenReturn(false);
 
         try {
@@ -193,7 +193,7 @@ public class EntityTransCloserTest {
      * Verifies that commit() only commits, and that the subsequent close() does not re-commit.
      */
     @Test
-    public void testCommit() {
+    void testCommit() {
         EntityTransCloser entityTransCloser = new EntityTransCloser(trans);
 
         entityTransCloser.commit();
@@ -205,7 +205,7 @@ public class EntityTransCloserTest {
         // closed, but not re-committed
         entityTransCloser.close();
 
-        verify(trans, times(1)).commit();
+        verify(trans).commit();
     }
 
     /**
@@ -213,7 +213,7 @@ public class EntityTransCloserTest {
      * back.
      */
     @Test
-    public void testRollback() {
+    void testRollback() {
         EntityTransCloser entityTransCloser = new EntityTransCloser(trans);
 
         entityTransCloser.rollback();

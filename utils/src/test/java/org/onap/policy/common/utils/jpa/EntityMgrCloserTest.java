@@ -3,7 +3,7 @@
  * Common Utils
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,21 +21,21 @@
 
 package org.onap.policy.common.utils.jpa;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 
 import jakarta.persistence.EntityManager;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class EntityMgrCloserTest {
+class EntityMgrCloserTest {
 
     private EntityManager mgr;
 
 
-    @Before
+    @BeforeEach
     public void setUp() {
         mgr = mock(EntityManager.class);
     }
@@ -45,7 +45,7 @@ public class EntityMgrCloserTest {
      * Verifies that the constructor does not do anything extra before being closed.
      */
     @Test
-    public void testEntityMgrCloser() {
+    void testEntityMgrCloser() {
         EntityMgrCloser entityMgrCloser = new EntityMgrCloser(mgr);
 
         assertEquals(mgr, entityMgrCloser.getManager());
@@ -59,7 +59,7 @@ public class EntityMgrCloserTest {
     }
 
     @Test
-    public void testGetManager() {
+    void testGetManager() {
         try (EntityMgrCloser c = new EntityMgrCloser(mgr)) {
             assertEquals(mgr, c.getManager());
         }
@@ -69,7 +69,7 @@ public class EntityMgrCloserTest {
      * Verifies that the manager gets closed when close() is invoked.
      */
     @Test
-    public void testClose() {
+    void testClose() {
         EntityMgrCloser entityMgrCloser = new EntityMgrCloser(mgr);
 
         entityMgrCloser.close();
@@ -82,7 +82,7 @@ public class EntityMgrCloserTest {
      * Ensures that the manager gets closed when "try" block exits normally.
      */
     @Test
-    public void testClose_TryWithoutExcept() {
+    void testClose_TryWithoutExcept() {
         try (EntityMgrCloser entityMgrCloser = new EntityMgrCloser(mgr)) {
             // No need to do anything in the try block
         }
@@ -94,7 +94,7 @@ public class EntityMgrCloserTest {
      * Ensures that the manager gets closed when "try" block throws an exception.
      */
     @Test
-    public void testClose_TryWithExcept() {
+    void testClose_TryWithExcept() {
         try {
             try (EntityMgrCloser c = new EntityMgrCloser(mgr)) {
                 throw new Exception("expected exception");

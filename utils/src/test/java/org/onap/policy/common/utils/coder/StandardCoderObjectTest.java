@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +22,16 @@
 package org.onap.policy.common.utils.coder;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class StandardCoderObjectTest {
+class StandardCoderObjectTest {
     private static final Gson gson = new Gson();
 
     private static final String PROP1 = "abc";
@@ -48,24 +49,24 @@ public class StandardCoderObjectTest {
      *
      * @throws Exception if an error occurs
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         sco = new StandardCoderObject(gson.fromJson(JSON, JsonElement.class));
     }
 
     @Test
-    public void testStandardCoderObject() {
+    void testStandardCoderObject() {
         assertNull(new StandardCoderObject().getData());
     }
 
     @Test
-    public void testStandardCoderObjectJsonElement() {
+    void testStandardCoderObjectJsonElement() {
         assertNotNull(sco.getData());
         assertEquals(JSON, gson.toJson(sco.getData()));
     }
 
     @Test
-    public void testGetString() throws Exception {
+    void testGetString() throws Exception {
         // one field
         assertEquals(VAL1, sco.getString(PROP1));
 
@@ -93,7 +94,7 @@ public class StandardCoderObjectTest {
     }
 
     @Test
-    public void testGetFieldFromObject() {
+    void testGetFieldFromObject() {
         // not an object
         assertNull(sco.getFieldFromObject(fromJson("[]"), PROP1));
 
@@ -105,7 +106,7 @@ public class StandardCoderObjectTest {
     }
 
     @Test
-    public void testGetItemFromArray() {
+    void testGetItemFromArray() {
         // not an array
         assertNull(sco.getItemFromArray(fromJson("{}"), 0));
 

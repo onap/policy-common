@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2016-2018 Ericsson. All rights reserved.
- *  Modifications Copyright (C) 2019 Nordix Foundation.
+ *  Modifications Copyright (C) 2019-2024 Nordix Foundation.
  *  Modifications Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,17 +23,17 @@
 package org.onap.policy.common.utils.validation;
 
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * The Class ResourceUtilsTest.
  *
  * @author Liam Fallon (liam.fallon@ericsson.com)
  */
-public class AssertionsTest {
+class AssertionsTest {
     private static final String HELLO = "Hello";
     private static final String IT_IS_OK = "it is OK";
     private static final String IT_IS_NULL = "it is null";
@@ -41,7 +41,7 @@ public class AssertionsTest {
     private static final String IT_IS_FALSE = "it is false";
 
     @Test
-    public void testAssertions() {
+    void testAssertions() {
         Assertions.argumentNotFalse(true, IT_IS_TRUE);
 
         assertThatIllegalArgumentException().isThrownBy(() -> Assertions.argumentNotFalse(false, IT_IS_FALSE))

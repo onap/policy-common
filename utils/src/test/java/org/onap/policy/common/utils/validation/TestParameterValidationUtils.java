@@ -2,6 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
+ *  Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,27 +22,27 @@
 
 package org.onap.policy.common.utils.validation;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 /**
  * Class to perform unit test of ParameterValidationUtils.
  *
  * @author Ram Krishna Verma (ram.krishna.verma@ericsson.com)
  */
-public class TestParameterValidationUtils {
+class TestParameterValidationUtils {
 
     @Test
-    public void testValidateStringParameter() {
+    void testValidateStringParameter() {
         assertTrue(ParameterValidationUtils.validateStringParameter("Policy"));
         assertFalse(ParameterValidationUtils.validateStringParameter(null));
         assertFalse(ParameterValidationUtils.validateStringParameter(""));
     }
 
     @Test
-    public void testValidateIntParameter() {
+    void testValidateIntParameter() {
         assertTrue(ParameterValidationUtils.validateIntParameter(5555));
         assertTrue(ParameterValidationUtils.validateIntParameter(Integer.valueOf(7777)));
         assertFalse(ParameterValidationUtils.validateIntParameter(0));
@@ -49,7 +50,7 @@ public class TestParameterValidationUtils {
     }
 
     @Test
-    public void testValidateLongParameter() {
+    void testValidateLongParameter() {
         assertTrue(ParameterValidationUtils.validateLongParameter(5555L));
         assertTrue(ParameterValidationUtils.validateLongParameter(Long.valueOf(7777L)));
         assertFalse(ParameterValidationUtils.validateLongParameter(0L));

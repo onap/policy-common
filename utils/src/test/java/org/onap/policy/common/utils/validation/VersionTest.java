@@ -3,7 +3,7 @@
  * ONAP PAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2019 Nordix Foundation.
+ * Modifications Copyright (C) 2019-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,15 +21,15 @@
 
 package org.onap.policy.common.utils.validation;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class VersionTest {
+class VersionTest {
     private static final String TYPE = "my-type";
     private static final String NAME = "my-name";
 
@@ -39,20 +39,20 @@ public class VersionTest {
 
     private Version vers;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         vers = new Version(MAJOR, MINOR, PATCH);
     }
 
     @Test
-    public void testHashCode() {
+    void testHashCode() {
         int hash = vers.hashCode();
         int hash2 = new Version(MAJOR, MINOR, PATCH + 1).hashCode();
         assertNotEquals(hash, hash2);
     }
 
     @Test
-    public void testMakeVersion() {
+    void testMakeVersion() {
         assertEquals("9.8.7", Version.makeVersion(TYPE, NAME, "9.8.7").toString());
         assertEquals("9.0.0", Version.makeVersion(TYPE, NAME, "9").toString());
 
@@ -65,14 +65,14 @@ public class VersionTest {
     }
 
     @Test
-    public void testNewVersion() {
+    void testNewVersion() {
         vers = vers.newVersion();
         assertEquals("11.0.0", vers.toString());
     }
 
     @Test
-    public void testEquals() {
-        assertNotEquals(vers, null);
+    void testEquals() {
+        assertNotEquals(null, vers);
         assertNotEquals(vers, new Object());
 
         assertEquals(vers, vers);
@@ -85,7 +85,7 @@ public class VersionTest {
     }
 
     @Test
-    public void testCompareTo() {
+    void testCompareTo() {
         vers = new Version(101, 201, 301);
 
         // equals case
@@ -111,32 +111,32 @@ public class VersionTest {
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertEquals("10.2.3", vers.toString());
     }
 
     @Test
-    public void testGetMajor() {
+    void testGetMajor() {
         assertEquals(MAJOR, vers.getMajor());
     }
 
     @Test
-    public void testGetMinor() {
+    void testGetMinor() {
         assertEquals(MINOR, vers.getMinor());
     }
 
     @Test
-    public void testGetPatch() {
+    void testGetPatch() {
         assertEquals(PATCH, vers.getPatch());
     }
 
     @Test
-    public void testVersionIntIntInt() {
+    void testVersionIntIntInt() {
         assertEquals("5.6.7", new Version(5, 6, 7).toString());
     }
 
     @Test
-    public void testVersion() {
+    void testVersion() {
         assertEquals("0.0.0", new Version().toString());
     }
 }

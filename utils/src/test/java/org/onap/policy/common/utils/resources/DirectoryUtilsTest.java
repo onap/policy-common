@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,12 +26,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.io.IOException;
 import java.nio.file.Path;
 import org.apache.commons.io.FileUtils;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class DirectoryUtilsTest {
+class DirectoryUtilsTest {
 
     @Test
-    public void testCreateTempDirectory() throws IOException {
+    void testCreateTempDirectory() throws IOException {
         Path path = DirectoryUtils.createTempDirectory("directoryUtilsTest");
 
         var file = path.toFile();
