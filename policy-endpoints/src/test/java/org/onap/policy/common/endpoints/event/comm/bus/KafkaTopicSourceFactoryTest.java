@@ -20,22 +20,21 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_KAFKA_SOURCE_TOPICS;
 
-import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 
-public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<KafkaTopicSource> {
+class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<KafkaTopicSource> {
 
     private SourceFactory factory;
 
@@ -44,7 +43,7 @@ public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<Kafka
     /**
      * Creates the object to be tested.
      */
-    @Before
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -52,14 +51,14 @@ public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<Kafka
         factory = new SourceFactory();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         factory.destroy();
     }
 
     @Test
     @Override
-    public void testBuildProperties() {
+    void testBuildProperties() {
 
         initFactory();
 
@@ -78,24 +77,24 @@ public class KafkaTopicSourceFactoryTest extends KafkaTopicFactoryTestBase<Kafka
 
     @Test
     @Override
-    public void testDestroyString_testGet_testInventory() {
+    void testDestroyString_testGet_testInventory() {
         super.testDestroyString_testGet_testInventory();
         super.testDestroyString_Ex();
     }
 
     @Test
     @Override
-    public void testDestroy() {
+    void testDestroy() {
         super.testDestroy();
     }
 
     @Test
-    public void testGet() {
+    void testGet() {
         super.testGet_Ex();
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertTrue(factory.toString().startsWith("IndexedKafkaTopicSourceFactory ["));
     }
 

@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +21,16 @@
 
 package org.onap.policy.common.endpoints.utils;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Properties;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class PropertyUtilsTest {
+class PropertyUtilsTest {
     private static final String DFLT_STRING = "my-default";
     private static final int DLFT_INT = 1000;
 
@@ -42,7 +42,7 @@ public class PropertyUtilsTest {
     /**
      * Initializes {@link #utils}.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         Properties properties = new Properties();
         properties.put("myPrefix.my-string", "some text");
@@ -66,7 +66,7 @@ public class PropertyUtilsTest {
     }
 
     @Test
-    public void testGetString() {
+    void testGetString() {
         assertEquals("some text", utils.getString(".my-string", DFLT_STRING));
         assertEquals(DFLT_STRING, utils.getString(".empty-string", DFLT_STRING));
         assertEquals(DFLT_STRING, utils.getString(".missing-string", DFLT_STRING));
@@ -77,7 +77,7 @@ public class PropertyUtilsTest {
     }
 
     @Test
-    public void testGetBoolean() {
+    void testGetBoolean() {
         assertTrue(utils.getBoolean(".my-bool", false));
         assertFalse(utils.getBoolean(".my-bool2", true));
         assertTrue(utils.getBoolean(".empty-bool", true));
@@ -90,7 +90,7 @@ public class PropertyUtilsTest {
     }
 
     @Test
-    public void testGetInteger() {
+    void testGetInteger() {
         assertEquals(100, utils.getInteger(".my-int", DLFT_INT));
         assertEquals(200, utils.getInteger(".my-int2", DLFT_INT));
         assertEquals(DLFT_INT, utils.getInteger(".empty-int", DLFT_INT));

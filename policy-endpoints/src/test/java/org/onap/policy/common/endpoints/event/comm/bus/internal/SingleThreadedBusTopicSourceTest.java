@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +23,10 @@ package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -36,9 +38,9 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Arrays;
 import java.util.Collections;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
@@ -47,7 +49,7 @@ import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 import org.onap.policy.common.utils.network.NetworkUtil;
 
-public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
+class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     private Thread thread;
     private BusConsumer cons;
     private TopicListener listener;
@@ -56,7 +58,7 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     /**
      * Creates the object to be tested, as well as various mocks.
      */
-    @Before
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -67,19 +69,19 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
         source = new SingleThreadedBusTopicSourceImpl(makeBuilder().build());
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         source.shutdown();
     }
 
     @Test
-    public void testSerialize() {
+    void testSerialize() {
         assertThatCode(() -> new GsonTestUtils().compareGson(source, SingleThreadedBusTopicSourceTest.class))
                         .doesNotThrowAnyException();
     }
 
     @Test
-    public void testRegister() {
+    void testRegister() {
         source.register(listener);
         assertEquals(1, source.initCount);
         source.offer(MY_MESSAGE);
@@ -112,7 +114,7 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     }
 
     @Test
-    public void testUnregister() {
+    void testUnregister() {
         TopicListener listener2 = mock(TopicListener.class);
         source.register(listener);
         source.register(listener2);
@@ -139,12 +141,12 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertTrue(source.toString().startsWith("SingleThreadedBusTopicSource ["));
     }
 
     @Test
-    public void testMakePollerThread() {
+    void testMakePollerThread() {
         SingleThreadedBusTopicSource source2 = new SingleThreadedBusTopicSource(makeBuilder().build()) {
             @Override
             public CommInfrastructure getTopicCommInfrastructure() {
@@ -161,7 +163,7 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     }
 
     @Test
-    public void testSingleThreadedBusTopicSource() {
+    void testSingleThreadedBusTopicSource() {
         // Note: if the value contains "-", it's probably a UUID
 
         // verify that different wrappers can be built
@@ -189,7 +191,7 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     }
 
     @Test
-    public void testStart() {
+    void testStart() {
         source.start();
         assertTrue(source.isAlive());
         assertEquals(1, source.initCount);
@@ -209,20 +211,23 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
         verify(thread, times(2)).start();
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testStart_Locked() {
+    @Test
+    void testStart_Locked() {
         source.lock();
-        source.start();
-    }
-
-    @Test(expected = IllegalStateException.class)
-    public void testStart_InitEx() {
-        source.initEx = true;
-        source.start();
+        assertThatThrownBy(() -> source.start()).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    public void testStop() {
+    void testStart_InitEx() {
+        assertThatThrownBy(() -> {
+            source.initEx = true;
+
+            source.start();
+        }).isInstanceOf(IllegalStateException.class);
+    }
+
+    @Test
+    void testStop() {
         source.start();
         source.stop();
         verify(cons).close();
@@ -238,7 +243,7 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     }
 
     @Test
-    public void testRun() throws Exception {
+    void testRun() throws Exception {
         source.register(listener);
 
         /*
@@ -293,30 +298,30 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     }
 
     @Test
-    public void testOffer() {
+    void testOffer() {
         source.register(listener);
         source.offer(MY_MESSAGE);
         verify(listener).onTopicEvent(CommInfrastructure.NOOP, MY_TOPIC, MY_MESSAGE);
         assertEquals(Arrays.asList(MY_MESSAGE), Arrays.asList(source.getRecentEvents()));
     }
 
-    @Test(expected = IllegalStateException.class)
-    public void testOffer_NotStarted() {
-        source.offer(MY_MESSAGE);
+    @Test
+    void testOffer_NotStarted() {
+        assertThatThrownBy(() -> source.offer(MY_MESSAGE)).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    public void testGetConsumerGroup() {
+    void testGetConsumerGroup() {
         assertEquals(MY_CONS_GROUP, source.getConsumerGroup());
     }
 
     @Test
-    public void testGetConsumerInstance() {
+    void testGetConsumerInstance() {
         assertEquals(MY_CONS_INST, source.getConsumerInstance());
     }
 
     @Test
-    public void testShutdown() {
+    void testShutdown() {
         source.register(listener);
 
         source.shutdown();
@@ -325,12 +330,12 @@ public class SingleThreadedBusTopicSourceTest extends TopicTestBase {
     }
 
     @Test
-    public void testGetFetchTimeout() {
+    void testGetFetchTimeout() {
         assertEquals(MY_FETCH_TIMEOUT, source.getFetchTimeout());
     }
 
     @Test
-    public void testGetFetchLimit() {
+    void testGetFetchLimit() {
         assertEquals(MY_FETCH_LIMIT, source.getFetchLimit());
     }
 

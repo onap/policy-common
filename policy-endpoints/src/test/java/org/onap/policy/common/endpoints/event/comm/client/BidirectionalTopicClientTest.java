@@ -23,14 +23,15 @@ package org.onap.policy.common.endpoints.event.comm.client;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNotSame;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.atLeast;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,15 +42,15 @@ import java.util.concurrent.TimeUnit;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
 import org.onap.policy.common.endpoints.event.comm.TopicEndpoint;
 import org.onap.policy.common.endpoints.event.comm.TopicEndpointManager;
@@ -60,8 +61,8 @@ import org.onap.policy.common.utils.coder.Coder;
 import org.onap.policy.common.utils.coder.CoderException;
 import org.onap.policy.common.utils.coder.StandardCoder;
 
-@RunWith(MockitoJUnitRunner.class)
-public class BidirectionalTopicClientTest {
+@ExtendWith(MockitoExtension.class)
+class BidirectionalTopicClientTest {
     private static final Coder coder = new StandardCoder();
     private static final long MAX_WAIT_MS = 5000;
     private static final long SHORT_WAIT_MS = 1;
@@ -89,7 +90,7 @@ public class BidirectionalTopicClientTest {
     /**
      * Configures the endpoints.
      */
-    @BeforeClass
+    @BeforeAll
     public static void setUpBeforeClass() {
         Properties props = new Properties();
         props.setProperty("noop.sink.topics", SINK_TOPIC);
@@ -101,7 +102,7 @@ public class BidirectionalTopicClientTest {
         TopicEndpointManager.getManager().addTopicSources(props);
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearDownAfterClass() {
         // clear all topics after the tests
         TopicEndpointManager.getManager().shutdown();
@@ -110,19 +111,19 @@ public class BidirectionalTopicClientTest {
     /**
      * Creates mocks and an initial client object.
      */
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
-        when(sink.send(anyString())).thenReturn(true);
-        when(sink.getTopicCommInfrastructure()).thenReturn(SINK_INFRA);
+        lenient().when(sink.send(anyString())).thenReturn(true);
+        lenient().when(sink.getTopicCommInfrastructure()).thenReturn(SINK_INFRA);
 
-        when(source.offer(anyString())).thenReturn(true);
-        when(source.getTopicCommInfrastructure()).thenReturn(SOURCE_INFRA);
+        lenient().when(source.offer(anyString())).thenReturn(true);
+        lenient().when(source.getTopicCommInfrastructure()).thenReturn(SOURCE_INFRA);
 
-        when(endpoint.getTopicSinks(anyString())).thenReturn(Arrays.asList());
-        when(endpoint.getTopicSinks(SINK_TOPIC)).thenReturn(Arrays.asList(sink));
+        lenient().when(endpoint.getTopicSinks(anyString())).thenReturn(Arrays.asList());
+        lenient().when(endpoint.getTopicSinks(SINK_TOPIC)).thenReturn(Arrays.asList(sink));
 
-        when(endpoint.getTopicSources(any())).thenReturn(Arrays.asList());
-        when(endpoint.getTopicSources(Arrays.asList(SOURCE_TOPIC))).thenReturn(Arrays.asList(source));
+        lenient().when(endpoint.getTopicSources(any())).thenReturn(Arrays.asList());
+        lenient().when(endpoint.getTopicSources(Arrays.asList(SOURCE_TOPIC))).thenReturn(Arrays.asList(source));
 
         theMessage = new MyMessage(MY_TEXT);
 
@@ -131,13 +132,13 @@ public class BidirectionalTopicClientTest {
         context = new Context();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         context.stop();
     }
 
     @Test
-    public void testBidirectionalTopicClient_testGetters() {
+    void testBidirectionalTopicClient_testGetters() {
         assertSame(sink, client.getSink());
         assertSame(source, client.getSource());
         assertEquals(SINK_TOPIC, client.getSinkTopic());
@@ -150,7 +151,7 @@ public class BidirectionalTopicClientTest {
      * Tests the constructor when the sink or source cannot be found.
      */
     @Test
-    public void testBidirectionalTopicClientExceptions() {
+    void testBidirectionalTopicClientExceptions() {
         assertThatThrownBy(() -> new BidirectionalTopicClient2("unknown-sink", SOURCE_TOPIC))
                         .isInstanceOf(BidirectionalTopicClientException.class)
                         .hasMessage("no sinks for topic: unknown-sink");
@@ -171,7 +172,7 @@ public class BidirectionalTopicClientTest {
      * Tests the "delegate" methods.
      */
     @Test
-    public void testDelegates() {
+    void testDelegates() {
         assertTrue(client.send("hello"));
         verify(sink).send("hello");
 
@@ -186,7 +187,7 @@ public class BidirectionalTopicClientTest {
     }
 
     @Test
-    public void testGetTopicEndpointManager() throws BidirectionalTopicClientException {
+    void testGetTopicEndpointManager() throws BidirectionalTopicClientException {
         // use a real manager
         client = new BidirectionalTopicClient(SINK_TOPIC, SOURCE_TOPIC);
         assertNotNull(client.getTopicEndpointManager());
@@ -199,7 +200,7 @@ public class BidirectionalTopicClientTest {
     }
 
     @Test
-    public void testAwaitReceipt() throws Exception {
+    void testAwaitReceipt() throws Exception {
         context.start(theMessage);
         assertThat(context.awaitSend(1)).isTrue();
 
@@ -213,7 +214,7 @@ public class BidirectionalTopicClientTest {
     }
 
     @Test
-    public void testAwaitReceipt_AlreadyDone() throws Exception {
+    void testAwaitReceipt_AlreadyDone() throws Exception {
         context.start(theMessage);
         assertThat(context.awaitSend(1)).isTrue();
 
@@ -227,7 +228,7 @@ public class BidirectionalTopicClientTest {
     }
 
     @Test
-    public void testAwaitReceipt_MessageDoesNotMatch() throws Exception {
+    void testAwaitReceipt_MessageDoesNotMatch() throws Exception {
         context.start(theMessage);
         assertThat(context.awaitSend(1)).isTrue();
 
@@ -242,7 +243,7 @@ public class BidirectionalTopicClientTest {
     }
 
     @Test
-    public void testAwaitReceipt_DecodeFails() throws Exception {
+    void testAwaitReceipt_DecodeFails() throws Exception {
         context.start(theMessage);
         assertThat(context.awaitSend(1)).isTrue();
 
@@ -260,7 +261,7 @@ public class BidirectionalTopicClientTest {
     }
 
     @Test
-    public void testAwaitReceipt_Interrupted() throws InterruptedException {
+    void testAwaitReceipt_Interrupted() throws InterruptedException {
         context.start(theMessage);
         assertThat(context.awaitSend(1)).isTrue();
 
@@ -270,7 +271,7 @@ public class BidirectionalTopicClientTest {
     }
 
     @Test
-    public void testAwaitReceipt_MultipleLoops() throws Exception {
+    void testAwaitReceipt_MultipleLoops() throws Exception {
         context.start(theMessage);
 
         // wait for multiple "send" calls
@@ -282,7 +283,7 @@ public class BidirectionalTopicClientTest {
     }
 
     @Test
-    public void testStop() throws InterruptedException {
+    void testStop() throws InterruptedException {
         context.start(theMessage);
         assertThat(context.awaitSend(1)).isTrue();
 

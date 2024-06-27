@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2018-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,25 +22,25 @@
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.utils.gson.GsonTestUtils;
 
-public class BusTopicBaseTest extends TopicTestBase {
+class BusTopicBaseTest extends TopicTestBase {
 
     private BusTopicBaseImpl base;
 
     /**
      * Initializes the object to be tested.
      */
-    @Before
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -48,46 +49,46 @@ public class BusTopicBaseTest extends TopicTestBase {
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertNotNull(base.toString());
     }
 
     @Test
-    public void testSerialize() {
+    void testSerialize() {
         assertThatCode(() -> new GsonTestUtils().compareGson(base, BusTopicBaseTest.class)).doesNotThrowAnyException();
     }
 
     @Test
-    public void testGetApiKey() {
+    void testGetApiKey() {
         assertEquals(MY_API_KEY, base.getApiKey());
     }
 
     @Test
-    public void testGetApiSecret() {
+    void testGetApiSecret() {
         assertEquals(MY_API_SECRET, base.getApiSecret());
     }
 
     @Test
-    public void testIsUseHttps() {
-        assertEquals(true, base.isUseHttps());
-        assertEquals(false, new BusTopicBaseImpl(builder.useHttps(false).build()).isUseHttps());
+    void testIsUseHttps() {
+        assertTrue(base.isUseHttps());
+        assertFalse(new BusTopicBaseImpl(builder.useHttps(false).build()).isUseHttps());
     }
 
     @Test
-    public void testIsAllowSelfSignedCerts() {
-        assertEquals(true, base.isAllowSelfSignedCerts());
-        assertEquals(false, new BusTopicBaseImpl(builder.allowSelfSignedCerts(false).build()).isAllowSelfSignedCerts());
+    void testIsAllowSelfSignedCerts() {
+        assertTrue(base.isAllowSelfSignedCerts());
+        assertFalse(new BusTopicBaseImpl(builder.allowSelfSignedCerts(false).build()).isAllowSelfSignedCerts());
     }
 
     @Test
-    public void testTopic() {
+    void testTopic() {
         assertEquals(MY_TOPIC, base.getTopic());
         assertEquals(MY_EFFECTIVE_TOPIC, base.getEffectiveTopic());
         assertNotEquals(base.getTopic(), base.getEffectiveTopic());
     }
 
     @Test
-    public void testAnyNullOrEmpty() {
+    void testAnyNullOrEmpty() {
         assertFalse(base.anyNullOrEmpty());
         assertFalse(base.anyNullOrEmpty("any-none-null", "any-none-null-B"));
 
@@ -98,7 +99,7 @@ public class BusTopicBaseTest extends TopicTestBase {
     }
 
     @Test
-    public void testAllNullOrEmpty() {
+    void testAllNullOrEmpty() {
         assertTrue(base.allNullOrEmpty());
         assertTrue(base.allNullOrEmpty(""));
         assertTrue(base.allNullOrEmpty(null, ""));

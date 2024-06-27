@@ -20,9 +20,9 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_KAFKA_SINK_TOPICS;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX;
 
@@ -30,12 +30,12 @@ import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 
-public class KafkaTopicSinkFactoryTest extends KafkaTopicFactoryTestBase<KafkaTopicSink> {
+class KafkaTopicSinkFactoryTest extends KafkaTopicFactoryTestBase<KafkaTopicSink> {
 
     private SinkFactory factory;
     public static final String KAFKA_SERVER = "localhost:9092";
@@ -43,7 +43,7 @@ public class KafkaTopicSinkFactoryTest extends KafkaTopicFactoryTestBase<KafkaTo
     /**
      * Creates the object to be tested.
      */
-    @Before
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
@@ -51,21 +51,21 @@ public class KafkaTopicSinkFactoryTest extends KafkaTopicFactoryTestBase<KafkaTo
         factory = new SinkFactory();
     }
 
-    @After
+    @AfterEach
     public void tearDown() {
         factory.destroy();
     }
 
     @Test
     @Override
-    public void testBuildBusTopicParams() {
+    void testBuildBusTopicParams() {
         super.testBuildBusTopicParams();
         super.testBuildBusTopicParams_Ex();
     }
 
     @Test
     @Override
-    public void testBuildListOfStringString() {
+    void testBuildListOfStringString() {
         super.testBuildListOfStringString();
 
         // check parameters that were used
@@ -75,7 +75,7 @@ public class KafkaTopicSinkFactoryTest extends KafkaTopicFactoryTestBase<KafkaTo
 
     @Test
     @Override
-    public void testBuildProperties() {
+    void testBuildProperties() {
         List<KafkaTopicSink> topics = buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build());
         assertEquals(1, topics.size());
         assertEquals(MY_TOPIC, topics.get(0).getTopic());
@@ -102,24 +102,24 @@ public class KafkaTopicSinkFactoryTest extends KafkaTopicFactoryTestBase<KafkaTo
 
     @Test
     @Override
-    public void testDestroyString_testGet_testInventory() {
+    void testDestroyString_testGet_testInventory() {
         super.testDestroyString_testGet_testInventory();
         super.testDestroyString_Ex();
     }
 
     @Test
     @Override
-    public void testDestroy() {
+    void testDestroy() {
         super.testDestroy();
     }
 
     @Test
-    public void testGet() {
+    void testGet() {
         super.testGet_Ex();
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertTrue(factory.toString().startsWith("IndexedKafkaTopicSinkFactory ["));
     }
 

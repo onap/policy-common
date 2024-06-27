@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2019 Nordix Foundation.
+ *  Copyright (C) 2019-2024 Nordix Foundation.
  *  Modifications Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,12 +22,12 @@
 package org.onap.policy.common.endpoints.parameters;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.parameters.ValidationResult;
 import org.onap.policy.common.utils.coder.Coder;
 import org.onap.policy.common.utils.coder.StandardCoder;
@@ -37,13 +37,13 @@ import org.onap.policy.common.utils.coder.StandardCoder;
  *
  * @author Ajith Sreekumar (ajith.sreekumar@est.tech)
  */
-public class RestServerParametersTest {
+class RestServerParametersTest {
 
     private static CommonTestData testData = new CommonTestData();
     private static final Coder coder = new StandardCoder();
 
     @Test
-    public void test() {
+    void test() {
         final RestServerParameters restServerParameters =
                 testData.toObject(testData.getRestServerParametersMap(false), RestServerParameters.class);
         final ValidationResult validationResult = restServerParameters.validate();
@@ -57,7 +57,7 @@ public class RestServerParametersTest {
     }
 
     @Test
-    public void testValidate() {
+    void testValidate() {
         final RestServerParameters restServerParameters =
             testData.toObject(testData.getRestServerParametersMap(false), RestServerParameters.class);
         final ValidationResult result = restServerParameters.validate();
@@ -66,7 +66,7 @@ public class RestServerParametersTest {
     }
 
     @Test
-    public void test_valid() throws Exception {
+    void test_valid() throws Exception {
         String json = testData.getParameterGroupAsString(
             "src/test/resources/org/onap/policy/common/endpoints/parameters/RestServerParameters_valid.json");
         RestServerParameters restServerParameters = coder.decode(json, RestServerParameters.class);
@@ -76,7 +76,7 @@ public class RestServerParametersTest {
     }
 
     @Test
-    public void test_invalid() throws Exception {
+    void test_invalid() throws Exception {
         String json = testData.getParameterGroupAsString(
             "src/test/resources/org/onap/policy/common/endpoints/parameters/RestServerParameters_invalid.json");
         RestServerParameters restServerParameters = coder.decode(json, RestServerParameters.class);

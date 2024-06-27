@@ -21,28 +21,28 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus.internal;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.BiConsumer;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.bus.TopicTestBase;
 import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams.TopicParamsBuilder;
 
-public class BusTopicParamsTest extends TopicTestBase {
+class BusTopicParamsTest extends TopicTestBase {
 
-    @Before
+    @BeforeEach
     @Override
     public void setUp() {
         super.setUp();
     }
 
     @Test
-    public void testGetters() {
+    void testGetters() {
         BusTopicParams params = makeBuilder().build();
 
         assertEquals(addProps, params.getAdditionalProps());
@@ -73,7 +73,7 @@ public class BusTopicParamsTest extends TopicTestBase {
     }
 
     @Test
-    public void testBooleanGetters() {
+    void testBooleanGetters() {
         // ensure that booleans are independent of each other
         testBoolean("true:false:false", TopicParamsBuilder::allowSelfSignedCerts);
         testBoolean("false:true:false", TopicParamsBuilder::managed);
@@ -81,7 +81,7 @@ public class BusTopicParamsTest extends TopicTestBase {
     }
 
     @Test
-    public void testValidators() {
+    void testValidators() {
         BusTopicParams params = makeBuilder().build();
 
         // test validity methods
@@ -106,7 +106,7 @@ public class BusTopicParamsTest extends TopicTestBase {
     }
 
     @Test
-    public void testInvertedValidators() {
+    void testInvertedValidators() {
         assertFalse(makeBuilder().additionalProps(null).build().isAdditionalPropsValid());
         assertTrue(makeBuilder().aftEnvironment("").build().isAftEnvironmentInvalid());
         assertFalse(makeBuilder().apiKey("").build().isApiKeyValid());

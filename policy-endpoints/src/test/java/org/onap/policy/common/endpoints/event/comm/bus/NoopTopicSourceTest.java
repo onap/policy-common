@@ -3,6 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +21,12 @@
 
 package org.onap.policy.common.endpoints.event.comm.bus;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class NoopTopicSourceTest extends NoopTopicEndpointTest<NoopTopicSourceFactory, NoopTopicSource> {
+class NoopTopicSourceTest extends NoopTopicEndpointTest<NoopTopicSourceFactory, NoopTopicSource> {
 
     public NoopTopicSourceTest() {
         super(new NoopTopicSourceFactory());
@@ -37,12 +38,12 @@ public class NoopTopicSourceTest extends NoopTopicEndpointTest<NoopTopicSourceFa
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertTrue(this.endpoint.toString().startsWith("NoopTopicSource"));
     }
 
     @Test
-    public void testOffer() {
+    void testOffer() {
         NoopTopicSource source = new NoopTopicSource(servers, MY_TOPIC) {
             @Override
             protected boolean broadcast(String message) {
