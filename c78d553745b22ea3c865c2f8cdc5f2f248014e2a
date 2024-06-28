@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cc1a4a5_70375a4f",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/BeanConfiguratorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 6070
+      },
+      "writtenOn": "2024-06-28T13:53:11Z",
+      "side": 1,
+      "message": "Do you want to use junit 5 assertThrows here? \n\nassertThrows(PropertyAccessException.class, () -\u003e {\n            beancfg.configureFromProperties(new Config(), props);\n        });",
+      "range": {
+        "startLine": 223,
+        "startChar": 8,
+        "endLine": 224,
+        "endChar": 64
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc409447_e460f07e",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/BeanConfiguratorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 6070
+      },
+      "writtenOn": "2024-06-28T13:53:11Z",
+      "side": 1,
+      "message": "Same comment in this file for using assertThrows library.",
+      "range": {
+        "startLine": 236,
+        "startChar": 8,
+        "endLine": 236,
+        "endChar": 26
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1f137de_393ef2e3",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/SpecPropertiesTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6070
+      },
+      "writtenOn": "2024-06-28T13:53:11Z",
+      "side": 1,
+      "message": "Should we use assertThrows from junit 5?",
+      "range": {
+        "startLine": 24,
+        "startChar": 46,
+        "endLine": 24,
+        "endChar": 64
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    }
+  ]
+}
