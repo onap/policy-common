@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7adeceea_432f35f6",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/logging/LoggerUtilsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-28T14:14:54Z",
+      "side": 1,
+      "message": "Add nordix license",
+      "range": {
+        "startLine": 5,
+        "startChar": 2,
+        "endLine": 5,
+        "endChar": 69
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f78ad9d5_03e10959",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/network/NetworkUtilTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-28T14:14:54Z",
+      "side": 1,
+      "message": "Add nordix license",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 28
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9cc1a4a5_70375a4f",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/BeanConfiguratorTest.java",
         "patchSetId": 1
@@ -49,6 +95,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "afbfd980_26fc8f47",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/BeanConfiguratorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-28T14:14:54Z",
+      "side": 1,
+      "message": "this method is exactly the same as testGetBooleanValue_NoDefault",
+      "range": {
+        "startLine": 880,
+        "startChar": 9,
+        "endLine": 880,
+        "endChar": 29
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14e3d27f_652267a2",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/PropertyObjectUtilsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-28T14:14:54Z",
+      "side": 1,
+      "message": "variable not used",
+      "range": {
+        "startLine": 50,
+        "startChar": 8,
+        "endLine": 50,
+        "endChar": 98
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d1f137de_393ef2e3",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/SpecPropertiesTest.java",
         "patchSetId": 1
@@ -65,6 +157,29 @@
         "startChar": 46,
         "endLine": 24,
         "endChar": 64
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b20311f_6d452286",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/validation/VersionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 7603
+      },
+      "writtenOn": "2024-06-28T14:14:54Z",
+      "side": 1,
+      "message": "update license",
+      "range": {
+        "startLine": 6,
+        "startChar": 31,
+        "endLine": 6,
+        "endChar": 42
       },
       "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
