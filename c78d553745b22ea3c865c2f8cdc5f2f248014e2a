@@ -236,6 +236,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "332cad2d_f9fda45b",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/BeanConfiguratorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 6070
+      },
+      "writtenOn": "2024-07-01T11:40:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "1162749e_f847012f",
+      "range": {
+        "startLine": 880,
+        "startChar": 9,
+        "endLine": 880,
+        "endChar": 29
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14e3d27f_652267a2",
@@ -320,6 +344,30 @@
       "side": 1,
       "message": "We\u0027ve used the assertJ assertThatThrownBy method throughout these JUnit 5 reviews in both models and common. I have changed it to the JUnit 5 assertThrows method in this review. We may need a separate Jira to replace the assertJ assertThatThrownBy import with the JUnit 5 assertThrows import that has been introduced in the previous reviews.",
       "parentUuid": "d1f137de_393ef2e3",
+      "range": {
+        "startLine": 24,
+        "startChar": 46,
+        "endLine": 24,
+        "endChar": 64
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a5f8c7d_845db86f",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/SpecPropertiesTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6070
+      },
+      "writtenOn": "2024-07-01T11:40:58Z",
+      "side": 1,
+      "message": "I think its okay if there are other tests that uses assertJ. Performance wise I am not sure which is better.",
+      "parentUuid": "633ff5fb_32a4e3d8",
       "range": {
         "startLine": 24,
         "startChar": 46,
