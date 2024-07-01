@@ -24,6 +24,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e919921_7b7240ce",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/logging/LoggerUtilsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-07-01T11:17:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7adeceea_432f35f6",
+      "range": {
+        "startLine": 5,
+        "startChar": 2,
+        "endLine": 5,
+        "endChar": 69
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f78ad9d5_03e10959",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-06-28T14:14:54Z",
       "side": 1,
       "message": "Add nordix license",
+      "range": {
+        "startLine": 2,
+        "startChar": 15,
+        "endLine": 2,
+        "endChar": 28
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6c9eeb9_16e70417",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/network/NetworkUtilTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-07-01T11:17:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f78ad9d5_03e10959",
       "range": {
         "startLine": 2,
         "startChar": 15,
@@ -70,6 +118,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aaa4d70_c74946cd",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/BeanConfiguratorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-07-01T11:17:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9cc1a4a5_70375a4f",
+      "range": {
+        "startLine": 223,
+        "startChar": 8,
+        "endLine": 224,
+        "endChar": 64
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc409447_e460f07e",
@@ -83,6 +155,30 @@
       "writtenOn": "2024-06-28T13:53:11Z",
       "side": 1,
       "message": "Same comment in this file for using assertThrows library.",
+      "range": {
+        "startLine": 236,
+        "startChar": 8,
+        "endLine": 236,
+        "endChar": 26
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "20fc2430_8a5419ff",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/BeanConfiguratorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-07-01T11:17:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "fc409447_e460f07e",
       "range": {
         "startLine": 236,
         "startChar": 8,
@@ -118,6 +214,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1162749e_f847012f",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/BeanConfiguratorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 880,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-07-01T11:17:48Z",
+      "side": 1,
+      "message": "Removed",
+      "parentUuid": "afbfd980_26fc8f47",
+      "range": {
+        "startLine": 880,
+        "startChar": 9,
+        "endLine": 880,
+        "endChar": 29
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14e3d27f_652267a2",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/PropertyObjectUtilsTest.java",
         "patchSetId": 1
@@ -129,6 +249,30 @@
       "writtenOn": "2024-06-28T14:14:54Z",
       "side": 1,
       "message": "variable not used",
+      "range": {
+        "startLine": 50,
+        "startChar": 8,
+        "endLine": 50,
+        "endChar": 98
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18403618_7c222b02",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/PropertyObjectUtilsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-07-01T11:17:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14e3d27f_652267a2",
       "range": {
         "startLine": 50,
         "startChar": 8,
@@ -164,6 +308,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "633ff5fb_32a4e3d8",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/SpecPropertiesTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-07-01T11:17:48Z",
+      "side": 1,
+      "message": "We\u0027ve used the assertJ assertThatThrownBy method throughout these JUnit 5 reviews in both models and common. I have changed it to the JUnit 5 assertThrows method in this review. We may need a separate Jira to replace the assertJ assertThatThrownBy import with the JUnit 5 assertThrows import that has been introduced in the previous reviews.",
+      "parentUuid": "d1f137de_393ef2e3",
+      "range": {
+        "startLine": 24,
+        "startChar": 46,
+        "endLine": 24,
+        "endChar": 64
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0b20311f_6d452286",
         "filename": "utils/src/test/java/org/onap/policy/common/utils/validation/VersionTest.java",
         "patchSetId": 1
@@ -175,6 +343,30 @@
       "writtenOn": "2024-06-28T14:14:54Z",
       "side": 1,
       "message": "update license",
+      "range": {
+        "startLine": 6,
+        "startChar": 31,
+        "endLine": 6,
+        "endChar": 42
+      },
+      "revId": "c78d553745b22ea3c865c2f8cdc5f2f248014e2a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9df5a6a7_aba72072",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/validation/VersionTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-07-01T11:17:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b20311f_6d452286",
       "range": {
         "startLine": 6,
         "startChar": 31,
