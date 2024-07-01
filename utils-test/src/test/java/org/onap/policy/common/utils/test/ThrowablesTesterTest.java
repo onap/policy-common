@@ -3,6 +3,7 @@
  * Common Utils-Test
  * ================================================================================
  * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,58 +21,73 @@
 
 package org.onap.policy.common.utils.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ThrowablesTesterTest {
+class ThrowablesTesterTest {
 
     @Test
-    public void test() {
+    void test() {
         assertEquals(2, new ThrowablesTester().testAllThrowable(SimpleThrowable.class));
         assertEquals(5, new ThrowablesTester().testAllThrowable(StaticThrowable.class));
     }
 
     @Test
-    public void testNoConstructorsThrowable() {
+    void testNoConstructorsThrowable() {
         // this will not throw an error, but it should return 0, as there are
         // no matching constructors
         assertEquals(0, new ThrowablesTester().testAllThrowable(NoConstructorsThrowable.class));
     }
 
-    @Test(expected = AssertionError.class)
-    public void testIgnoreMessageThrowable() {
-        new ThrowablesTester().testAllThrowable(IgnoreMessageThrowable.class);
+    @Test
+    void testIgnoreMessageThrowable() {
+        ThrowablesTester tester = new ThrowablesTester();
+        assertThatThrownBy(() -> tester.testAllThrowable(IgnoreMessageThrowable.class))
+            .isInstanceOf(AssertionError.class);
     }
 
-    @Test(expected = AssertionError.class)
-    public void testIgnoreCauseThrowable() {
-        new ThrowablesTester().testAllThrowable(IgnoreCauseThrowable.class);
+    @Test
+    void testIgnoreCauseThrowable() {
+        ThrowablesTester tester = new ThrowablesTester();
+        assertThatThrownBy(() -> tester.testAllThrowable(IgnoreCauseThrowable.class))
+            .isInstanceOf(AssertionError.class);
     }
 
-    @Test(expected = AssertionError.class)
-    public void testAlwaysSuppressThrowable() {
-        new ThrowablesTester().testAllThrowable(AlwaysSuppressThrowable.class);
+    @Test
+    void testAlwaysSuppressThrowable() {
+        ThrowablesTester tester = new ThrowablesTester();
+        assertThatThrownBy(() -> tester.testAllThrowable(AlwaysSuppressThrowable.class))
+            .isInstanceOf(AssertionError.class);
     }
 
-    @Test(expected = AssertionError.class)
-    public void testNeverSuppressThrowable() {
-        new ThrowablesTester().testAllThrowable(NeverSuppressThrowable.class);
+    @Test
+    void testNeverSuppressThrowable() {
+        ThrowablesTester tester = new ThrowablesTester();
+        assertThatThrownBy(() -> tester.testAllThrowable(NeverSuppressThrowable.class))
+            .isInstanceOf(AssertionError.class);
     }
 
-    @Test(expected = AssertionError.class)
-    public void testAlwaysWritableThrowable() {
-        new ThrowablesTester().testAllThrowable(AlwaysWritableThrowable.class);
+    @Test
+    void testAlwaysWritableThrowable() {
+        ThrowablesTester tester = new ThrowablesTester();
+        assertThatThrownBy(() -> tester.testAllThrowable(AlwaysWritableThrowable.class))
+            .isInstanceOf(AssertionError.class);
     }
 
-    @Test(expected = AssertionError.class)
-    public void testNeverWritableThrowable() {
-        new ThrowablesTester().testAllThrowable(NeverWritableThrowable.class);
+    @Test
+    void testNeverWritableThrowable() {
+        ThrowablesTester tester = new ThrowablesTester();
+        assertThatThrownBy(() -> tester.testAllThrowable(NeverWritableThrowable.class))
+            .isInstanceOf(AssertionError.class);
     }
 
-    @Test(expected = ConstructionError.class)
-    public void testThrowInstantiationException() {
-        new ThrowablesTester().testAllThrowable(ThrowInstantiationThrowable.class);
+    @Test
+    void testThrowInstantiationException() {
+        ThrowablesTester tester = new ThrowablesTester();
+        assertThatThrownBy(() -> tester.testAllThrowable(ThrowInstantiationThrowable.class))
+            .isInstanceOf(AssertionError.class);
     }
 
     /**

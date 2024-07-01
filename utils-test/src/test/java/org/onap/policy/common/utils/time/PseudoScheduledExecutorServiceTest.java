@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,10 +22,10 @@
 package org.onap.policy.common.utils.time;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collections;
 import java.util.List;
@@ -32,10 +33,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class PseudoScheduledExecutorServiceTest {
+class PseudoScheduledExecutorServiceTest {
     private static final long DELAY_MS = 100L;
     private static final long PERIOD_MS = 200L;
     private static final List<Callable<Object>> EMPTY_CALLABLES = Collections.emptyList();
@@ -48,7 +49,7 @@ public class PseudoScheduledExecutorServiceTest {
     /**
      * Sets up objects, including {@link #svc}.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         ran = 0;
         called = 0;
@@ -57,7 +58,7 @@ public class PseudoScheduledExecutorServiceTest {
     }
 
     @Test
-    public void testShutdown() {
+    void testShutdown() {
         // submit some tasks
         svc.submit(new MyRun());
         svc.schedule(new MyRun(), 1L, TimeUnit.SECONDS);
@@ -70,7 +71,7 @@ public class PseudoScheduledExecutorServiceTest {
     }
 
     @Test
-    public void testShutdownNow() {
+    void testShutdownNow() {
         // submit some tasks
         svc.submit(new MyRun());
         svc.schedule(new MyRun(), 1L, TimeUnit.SECONDS);
@@ -83,7 +84,7 @@ public class PseudoScheduledExecutorServiceTest {
     }
 
     @Test
-    public void testIsShutdown_testIsTerminated() {
+    void testIsShutdown_testIsTerminated() {
         assertFalse(svc.isShutdown());
         assertFalse(svc.isTerminated());
 
@@ -93,7 +94,7 @@ public class PseudoScheduledExecutorServiceTest {
     }
 
     @Test
-    public void testAwaitTermination() throws InterruptedException {
+    void testAwaitTermination() throws InterruptedException {
         assertFalse(svc.awaitTermination(1L, TimeUnit.SECONDS));
 
         svc.shutdown();
@@ -101,7 +102,7 @@ public class PseudoScheduledExecutorServiceTest {
     }
 
     @Test
-    public void testSubmitCallableOfT() throws Exception {
+    void testSubmitCallableOfT() throws Exception {
         Future<Integer> future = svc.submit(new MyCallable());
         currentTime.runOneTask(0);
 
@@ -113,7 +114,7 @@ public class PseudoScheduledExecutorServiceTest {
     }
 
     @Test
-    public void testSubmitRunnableT() throws Exception {
+    void testSubmitRunnableT() throws Exception {
         Future<Integer> future = svc.submit(new MyRun(), 2);
         currentTime.runOneTask(0);
 
@@ -125,7 +126,7 @@ public class PseudoScheduledExecutorServiceTest {
     }
 
     @Test
-    public void testSubmitRunnable() throws Exception {
+    void testSubmitRunnable() throws Exception {
         assertNotNull(svc.submit(new MyRun()));
         currentTime.runOneTask(0);
 
@@ -136,31 +137,31 @@ public class PseudoScheduledExecutorServiceTest {
     }
 
     @Test
-    public void testInvokeAllCollectionOfQextendsCallableOfT() {
+    void testInvokeAllCollectionOfQextendsCallableOfT() {
         assertThatThrownBy(() -> svc.invokeAll(EMPTY_CALLABLES))
                         .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
-    public void testInvokeAllCollectionOfQextendsCallableOfTLongTimeUnit() {
+    void testInvokeAllCollectionOfQextendsCallableOfTLongTimeUnit() {
         assertThatThrownBy(() -> svc.invokeAll(EMPTY_CALLABLES, 1, TimeUnit.MILLISECONDS))
                         .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
-    public void testInvokeAnyCollectionOfQextendsCallableOfT() {
+    void testInvokeAnyCollectionOfQextendsCallableOfT() {
         assertThatThrownBy(() -> svc.invokeAny(EMPTY_CALLABLES))
                         .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
-    public void testInvokeAnyCollectionOfQextendsCallableOfTLongTimeUnit() {
+    void testInvokeAnyCollectionOfQextendsCallableOfTLongTimeUnit() {
         assertThatThrownBy(() -> svc.invokeAny(EMPTY_CALLABLES, 1, TimeUnit.MILLISECONDS))
                         .isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
-    public void testExecute() throws InterruptedException {
+    void testExecute() throws InterruptedException {
         svc.execute(new MyRun());
         currentTime.runOneTask(0);
 
@@ -171,7 +172,7 @@ public class PseudoScheduledExecutorServiceTest {
     }
 
     @Test
-    public void testScheduleRunnableLongTimeUnit() throws InterruptedException {
+    void testScheduleRunnableLongTimeUnit() throws InterruptedException {
         assertNotNull(svc.schedule(new MyRun(), DELAY_MS, TimeUnit.MILLISECONDS));
 
         assertEquals(DELAY_MS, oneTaskElapsedTime());
@@ -182,7 +183,7 @@ public class PseudoScheduledExecutorServiceTest {
     }
 
     @Test
-    public void testScheduleCallableOfVLongTimeUnit() throws Exception {
+    void testScheduleCallableOfVLongTimeUnit() throws Exception {
         ScheduledFuture<Integer> future = svc.schedule(new MyCallable(), DELAY_MS, TimeUnit.MILLISECONDS);
 
         assertEquals(DELAY_MS, oneTaskElapsedTime());
@@ -194,7 +195,7 @@ public class PseudoScheduledExecutorServiceTest {
     }
 
     @Test
-    public void testScheduleAtFixedRate() throws InterruptedException {
+    void testScheduleAtFixedRate() throws InterruptedException {
         final ScheduledFuture<?> future =
                         svc.scheduleAtFixedRate(new MyRun(), DELAY_MS, PERIOD_MS, TimeUnit.MILLISECONDS);
 
@@ -218,7 +219,7 @@ public class PseudoScheduledExecutorServiceTest {
     }
 
     @Test
-    public void testScheduleWithFixedDelay() throws InterruptedException {
+    void testScheduleWithFixedDelay() throws InterruptedException {
         final ScheduledFuture<?> future =
                         svc.scheduleWithFixedDelay(new MyRun(), DELAY_MS, PERIOD_MS, TimeUnit.MILLISECONDS);
 

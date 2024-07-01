@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2018-2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,11 +23,11 @@ package org.onap.policy.common.utils.time;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.awaitility.Awaitility.await;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CountDownLatch;
@@ -35,23 +36,23 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class TestTimeMultiTest {
+class TestTimeMultiTest {
     private static final long SHORT_WAIT_MS = 100L;
     private static final long DELAY_MS = 500L;
     private static final long MAX_WAIT_MS = 5000L;
 
     private TestTimeMulti multi;
 
-    @Before
+    @BeforeEach
     public void setUp() {
         multi = new TestTimeMulti();
     }
 
     @Test
-    public void testSleep() throws InterruptedException {
+    void testSleep() throws InterruptedException {
         // negative sleep time
         final long tbegin = multi.getMillis();
         MyThread thread = new MyThread(-5);
@@ -81,17 +82,17 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testTestTimeMulti() {
+    void testTestTimeMulti() {
         assertTrue(multi.getMaxWaitMs() > 0);
     }
 
     @Test
-    public void testTestTimeMultiLong() {
+    void testTestTimeMultiLong() {
         assertEquals(200, new TestTimeMulti(200).getMaxWaitMs());
     }
 
     @Test
-    public void testIsEmpty_testQueueLength() throws InterruptedException {
+    void testIsEmpty_testQueueLength() throws InterruptedException {
         assertTrue(multi.isEmpty());
 
         // queue up two items
@@ -114,7 +115,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testDestroy() throws InterruptedException {
+    void testDestroy() throws InterruptedException {
         // this won't interrupt
         multi.enqueue(new WorkItem(multi, DELAY_MS));
 
@@ -143,7 +144,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testRunOneTask() throws InterruptedException {
+    void testRunOneTask() throws InterruptedException {
         // nothing in the queue yet
         assertFalse(multi.runOneTask(0));
 
@@ -163,7 +164,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testWaitFor() throws InterruptedException {
+    void testWaitFor() throws InterruptedException {
         // queue up a couple of items
         multi.enqueue(new WorkItem(multi, DELAY_MS));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 2));
@@ -179,7 +180,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testWaitFor_EmptyQueue() throws InterruptedException {
+    void testWaitFor_EmptyQueue() throws InterruptedException {
         multi = new TestTimeMulti(SHORT_WAIT_MS);
 
         final long realBegin = System.currentTimeMillis();
@@ -192,7 +193,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testWaitUntilCallable() throws InterruptedException {
+    void testWaitUntilCallable() throws InterruptedException {
         multi.enqueue(new WorkItem(multi, DELAY_MS));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 2));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 3));
@@ -209,7 +210,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testWaitUntilCallable_InterruptEx() throws InterruptedException {
+    void testWaitUntilCallable_InterruptEx() throws InterruptedException {
         multi = new TestTimeMulti();
 
         Callable<Boolean> callable = () -> {
@@ -237,7 +238,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testWaitUntilCallable_ConditionThrowsEx() throws InterruptedException {
+    void testWaitUntilCallable_ConditionThrowsEx() throws InterruptedException {
         multi = new TestTimeMulti();
 
         Callable<Boolean> callable = () -> {
@@ -252,7 +253,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testWaitUntilCallable_NeverSatisfied() throws InterruptedException {
+    void testWaitUntilCallable_NeverSatisfied() throws InterruptedException {
         multi = new TestTimeMulti(SHORT_WAIT_MS);
 
         final long realBegin = System.currentTimeMillis();
@@ -262,7 +263,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testWaitUntilLongTimeUnitCallable() throws InterruptedException {
+    void testWaitUntilLongTimeUnitCallable() throws InterruptedException {
         multi.enqueue(new WorkItem(multi, DELAY_MS));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 2));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 3));
@@ -279,7 +280,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testWaitUntilLongTimeUnitCallable_PseudoTimeExpires() throws InterruptedException {
+    void testWaitUntilLongTimeUnitCallable_PseudoTimeExpires() throws InterruptedException {
         multi.enqueue(new WorkItem(multi, DELAY_MS));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 2));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 3));
@@ -291,7 +292,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testRunItem() throws InterruptedException {
+    void testRunItem() throws InterruptedException {
         AtomicBoolean fired = new AtomicBoolean(false);
         multi.enqueue(new MyWorkItem(fired));
 
@@ -305,7 +306,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testRunItem_Rescheduled() throws InterruptedException {
+    void testRunItem_Rescheduled() throws InterruptedException {
         AtomicBoolean fired = new AtomicBoolean(false);
 
         multi.enqueue(new MyWorkItem(fired) {
@@ -326,7 +327,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testRunItem_Canceled() throws InterruptedException {
+    void testRunItem_Canceled() throws InterruptedException {
         AtomicBoolean fired = new AtomicBoolean(false);
 
         multi.enqueue(new MyWorkItem(fired) {
@@ -354,7 +355,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testEnqueue() throws InterruptedException {
+    void testEnqueue() throws InterruptedException {
         CountDownLatch started = new CountDownLatch(1);
         CountDownLatch finished = new CountDownLatch(1);
         AtomicReference<InterruptedException> ex = new AtomicReference<>();
@@ -390,7 +391,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testCancelItems() throws InterruptedException {
+    void testCancelItems() throws InterruptedException {
         AtomicBoolean fired1 = new AtomicBoolean();
         multi.enqueue(new MyWorkItem(fired1));
 
@@ -420,7 +421,7 @@ public class TestTimeMultiTest {
     }
 
     @Test
-    public void testPurgeItems() throws InterruptedException {
+    void testPurgeItems() throws InterruptedException {
         AtomicBoolean fired = new AtomicBoolean();
 
         // queue up two that are canceled, one that is not

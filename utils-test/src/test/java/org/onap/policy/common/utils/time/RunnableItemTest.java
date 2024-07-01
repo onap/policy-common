@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +21,17 @@
 
 package org.onap.policy.common.utils.time;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.FutureTask;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class RunnableItemTest {
+class RunnableItemTest {
     private static final long DELAY_MS = 100L;
     private static final Object ASSOCIATE = new Object();
 
@@ -41,7 +42,7 @@ public class RunnableItemTest {
     /**
      * Sets up objects, including {@link #item}.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         currentTime = new TestTime();
         count = 0;
@@ -49,7 +50,7 @@ public class RunnableItemTest {
     }
 
     @Test
-    public void testWasCancelled() {
+    void testWasCancelled() {
         assertFalse(item.wasCancelled());
 
         FutureTask<Object> future = new FutureTask<>(() -> count++);
@@ -61,13 +62,13 @@ public class RunnableItemTest {
     }
 
     @Test
-    public void testIsAssociatedWith() {
+    void testIsAssociatedWith() {
         assertFalse(item.isAssociatedWith(this));
         assertTrue(item.isAssociatedWith(ASSOCIATE));
     }
 
     @Test
-    public void testFire() {
+    void testFire() {
         item.fire();
         assertEquals(1, count);
 
@@ -78,7 +79,7 @@ public class RunnableItemTest {
     }
 
     @Test
-    public void testRunnableItem_testGetAssociate_testGetAction() {
+    void testRunnableItem_testGetAssociate_testGetAction() {
         assertSame(ASSOCIATE, item.getAssociate());
         assertNotNull(item.getAction());
         assertEquals(currentTime.getMillis() + DELAY_MS, item.getNextMs());
@@ -96,7 +97,7 @@ public class RunnableItemTest {
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertNotNull(item.toString());
     }
 }

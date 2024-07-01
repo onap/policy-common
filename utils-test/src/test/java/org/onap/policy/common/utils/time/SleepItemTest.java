@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,17 +21,17 @@
 
 package org.onap.policy.common.utils.time;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class SleepItemTest {
+class SleepItemTest {
     private static final int SLEEP_MS = 250;
     private static final long MAX_WAIT_MS = 5000L;
 
@@ -44,7 +45,7 @@ public class SleepItemTest {
     /**
      * Sets up objects, including {@link #item}.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         currentTime = new TestTime();
         started = new CountDownLatch(1);
@@ -70,7 +71,7 @@ public class SleepItemTest {
     }
 
     @Test
-    public void testInterrupt() throws InterruptedException {
+    void testInterrupt() throws InterruptedException {
         startThread();
 
         item.interrupt();
@@ -80,7 +81,7 @@ public class SleepItemTest {
     }
 
     @Test
-    public void testFire_testAwait() throws InterruptedException {
+    void testFire_testAwait() throws InterruptedException {
         startThread();
 
         // verify that it hasn't finished yet
@@ -95,12 +96,12 @@ public class SleepItemTest {
     }
 
     @Test
-    public void testSleepItem() {
+    void testSleepItem() {
         assertEquals(currentTime.getMillis() + SLEEP_MS, item.getNextMs());
     }
 
     @Test
-    public void testToString() {
+    void testToString() {
         assertNotNull(item.toString());
     }
 

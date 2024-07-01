@@ -3,6 +3,7 @@
  * Common Utils-Test
  * ================================================================================
  * Copyright (C) 2018 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,21 +21,24 @@
 
 package org.onap.policy.common.utils.test;
 
-import static org.junit.Assert.assertEquals;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public class ExceptionsTesterTest {
+class ExceptionsTesterTest {
 
     @Test
-    public void test() {
+    void test() {
         assertEquals(2, new ExceptionsTester().test(SimpleException.class));
         assertEquals(8, new ExceptionsTester().test(StaticException.class));
     }
 
-    @Test(expected = AssertionError.class)
-    public void testNoConstructorsException() {
-        new ExceptionsTester().test(NoConstructorsException.class);
+    @Test
+    void testNoConstructorsException() {
+        ExceptionsTester tester = new ExceptionsTester();
+        assertThatThrownBy(() -> tester.test(NoConstructorsException.class))
+            .isInstanceOf(AssertionError.class);
     }
 
     /**

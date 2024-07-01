@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,16 +22,16 @@
 package org.onap.policy.common.utils.time;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Date;
 import java.util.TimerTask;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class PseudoTimerTest {
+class PseudoTimerTest {
     private static final long DELAY_MS = 1000L;
     private static final long PERIOD_MS = 2000L;
 
@@ -41,7 +42,7 @@ public class PseudoTimerTest {
     /**
      * Sets up objects, including {@link #timer}.
      */
-    @Before
+    @BeforeEach
     public void setUp() {
         count = 0;
         currentTime = new TestTimeMulti();
@@ -49,7 +50,7 @@ public class PseudoTimerTest {
     }
 
     @Test
-    public void testCancel() {
+    void testCancel() {
         // schedule two tasks
         timer.scheduleAtFixedRate(new MyTask(), DELAY_MS, PERIOD_MS);
         timer.schedule(new MyTask(), DELAY_MS);
@@ -64,13 +65,13 @@ public class PseudoTimerTest {
     }
 
     @Test
-    public void testPurge() {
+    void testPurge() {
         assertEquals(0, timer.purge());
         assertEquals(0, timer.purge());
     }
 
     @Test
-    public void testScheduleTimerTaskLong() throws InterruptedException {
+    void testScheduleTimerTaskLong() throws InterruptedException {
         timer.schedule(new MyTask(), DELAY_MS);
         assertFalse(currentTime.isEmpty());
 
@@ -82,14 +83,14 @@ public class PseudoTimerTest {
     }
 
     @Test
-    public void testScheduleTimerTaskDate() {
+    void testScheduleTimerTaskDate() {
         MyTask task = new MyTask();
         Date curdate = new Date();
         assertThatThrownBy(() -> timer.schedule(task, curdate)).isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
-    public void testScheduleTimerTaskLongLong() throws InterruptedException {
+    void testScheduleTimerTaskLongLong() throws InterruptedException {
         timer.schedule(new MyTask(), DELAY_MS, PERIOD_MS);
         assertFalse(currentTime.isEmpty());
 
@@ -105,14 +106,14 @@ public class PseudoTimerTest {
     }
 
     @Test
-    public void testScheduleTimerTaskDateLong() {
+    void testScheduleTimerTaskDateLong() {
         MyTask task = new MyTask();
         Date curdate = new Date();
         assertThatThrownBy(() -> timer.schedule(task, curdate, 1L)).isInstanceOf(UnsupportedOperationException.class);
     }
 
     @Test
-    public void testScheduleAtFixedRateTimerTaskLongLong() throws InterruptedException {
+    void testScheduleAtFixedRateTimerTaskLongLong() throws InterruptedException {
         timer.scheduleAtFixedRate(new MyTask(), DELAY_MS, PERIOD_MS);
         assertFalse(currentTime.isEmpty());
 
@@ -128,7 +129,7 @@ public class PseudoTimerTest {
     }
 
     @Test
-    public void testScheduleAtFixedRateTimerTaskDateLong() {
+    void testScheduleAtFixedRateTimerTaskDateLong() {
         MyTask task = new MyTask();
         Date curdate = new Date();
         assertThatThrownBy(() -> timer.scheduleAtFixedRate(task, curdate, 1L))
