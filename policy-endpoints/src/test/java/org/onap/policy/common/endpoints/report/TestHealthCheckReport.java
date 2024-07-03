@@ -22,13 +22,15 @@
 
 package org.onap.policy.common.endpoints.report;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Order;
+import com.openpojo.reflection.filters.FilterClassName;
+import com.openpojo.validation.Validator;
+import com.openpojo.validation.ValidatorBuilder;
+import com.openpojo.validation.rule.impl.GetterMustExistRule;
+import com.openpojo.validation.rule.impl.SetterMustExistRule;
+import com.openpojo.validation.test.impl.GetterTester;
+import com.openpojo.validation.test.impl.SetterTester;
 import org.junit.jupiter.api.Test;
+import org.onap.policy.common.utils.test.ToStringTester;
 
 /**
  * Class to perform unit test of HealthCheckReport.
@@ -37,39 +39,12 @@ import org.junit.jupiter.api.Test;
  */
 class TestHealthCheckReport {
 
-    private static final int CODE_INT = 12345;
-    private static final String URL_STRING = "http://test-url.test";
-    private static final String NAME_STRING = "testName";
-    private static final String MESSAGE_STRING = "Testing the getters and setters";
-    private static final boolean HEALTHY_BOOL = true;
-
-    static HealthCheckReport report;
-
-    @BeforeAll
-    static void setUp() {
-        report = new HealthCheckReport();
-    }
-
     @Test
-    void testHealthCheckReportConstructor() {
-        assertNotNull(report);
-    }
-
-    @Test
-    void testHealthCheckReportGettersAndSetters() {
-        report.setCode(CODE_INT);
-        report.setUrl(URL_STRING);
-        report.setName(NAME_STRING);
-        report.setHealthy(HEALTHY_BOOL);
-        report.setMessage(MESSAGE_STRING);
-
-        assertEquals(CODE_INT, report.getCode());
-        assertEquals(URL_STRING, report.getUrl());
-        assertEquals(NAME_STRING, report.getName());
-        assertEquals(HEALTHY_BOOL, report.isHealthy());
-        assertEquals(MESSAGE_STRING, report.getMessage());
-
-        assertThat(report.toString()).contains("code=12345", "url=http://test-url.test",
-            "name=testName", "healthy=true", "message=Testing the getters and setters");
+    void testHealthCheckReport() {
+        final Validator validator =
+                ValidatorBuilder.create().with(new GetterMustExistRule()).with(new SetterMustExistRule())
+                        .with(new GetterTester()).with(new SetterTester()).with(new ToStringTester()).build();
+        validator.validate(HealthCheckReport.class.getPackage().getName(),
+                new FilterClassName(HealthCheckReport.class.getName()));
     }
 }
