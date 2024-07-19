@@ -87,7 +87,7 @@ class StandardCoderInstantAsMillisTest {
     }
 
     @Test
-    void testToJsonTree_testFromJsonJsonElementClassT() throws Exception {
+    void testToJsonTree_testFromJsonJsonElementClassT() {
         MyMap map = new MyMap();
         map.props = new LinkedHashMap<>();
         map.props.put("jel keyA", "jel valueA");

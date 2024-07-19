@@ -21,24 +21,23 @@
 
 package org.onap.policy.common.utils.coder;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import com.worldturner.medeia.api.ValidationFailedException;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.onap.policy.common.utils.resources.ResourceUtils;
 
 class StandardValCoderTest {
     private String jsonSchema;
@@ -63,7 +62,7 @@ class StandardValCoderTest {
     }
 
     @BeforeEach
-    public void testSetUp() throws Exception {
+    public void testSetUp() {
         jsonSchema = getJson("src/test/resources/org/onap/policy/common/utils/coder/test.schema.json");
         validJson = getJson("src/test/resources/org/onap/policy/common/utils/coder/valid.json");
         missingReqJson = getJson("src/test/resources/org/onap/policy/common/utils/coder/missing-required.json");
@@ -72,7 +71,7 @@ class StandardValCoderTest {
 
     @Test
     void testDecode() throws CoderException {
-        StandardValCoder valCoder = new StandardValCoder(jsonSchema, "test-schema");
+        StandardValCoder valCoder = new StandardValCoder(jsonSchema);
 
         ValOuter valOuter = valCoder.decode(validJson, ValOuter.class);
         assertValidJson(valOuter);
@@ -85,34 +84,22 @@ class StandardValCoderTest {
             valCoder.decode(missingReqJson, ValOuter.class);
             fail("missing required field should have been flagged by the schema validation");
         } catch (CoderException e) {
-            assertEquals("required", ((ValidationFailedException) e.getCause()).getFailures().get(0).getRule());
-            assertEquals("aaCollection",
-                ((ValidationFailedException) e.getCause()).getFailures().get(0).getProperty());
-            assertEquals("Required property aaCollection is missing from object",
-                ((ValidationFailedException) e.getCause()).getFailures().get(0).getMessage());
+            assertThat(e.getMessage()).contains("Missing property aaCollection");
         }
 
         try {
             valCoder.decode(badRegexJson, ValOuter.class);
             fail("bad regex should have been flagged by the schema validation");
         } catch (CoderException e) {
-            assertEquals("properties", ((ValidationFailedException) e.getCause()).getFailures().get(0).getRule());
-            assertEquals("aaString",
-                    ((ValidationFailedException) e.getCause()).getFailures().get(0).getProperty());
-            assertEquals("Property validation failed",
-                    ((ValidationFailedException) e.getCause()).getFailures().get(0).getMessage());
-            assertEquals("pattern",
-                    ((ValidationFailedException) e.getCause()).getFailures()
-                            .get(0).getDetails().iterator().next().getRule());
-            assertEquals("Pattern ^([a-z]*)$ is not contained in text",
-                    ((ValidationFailedException) e.getCause()).getFailures()
-                            .get(0).getDetails().iterator().next().getMessage());
+            assertThat(e.getMessage())
+                .contains("Validation errors: \"abc123\" at #/aaString failed")
+                .contains("Did not match pattern: ^([a-z]*)$");
         }
     }
 
     @Test
     void testEncode() throws CoderException {
-        StandardValCoder valCoder = new StandardValCoder(jsonSchema, "test-schema");
+        StandardValCoder valCoder = new StandardValCoder(jsonSchema);
         ValOuter valOuter = valCoder.decode(validJson, ValOuter.class);
 
         String valOuterJson = valCoder.encode(valOuter);
@@ -129,7 +116,7 @@ class StandardValCoderTest {
 
     @Test
     void testPretty() throws CoderException {
-        StandardValCoder valCoder = new StandardValCoder(jsonSchema, "test-schema");
+        StandardValCoder valCoder = new StandardValCoder(jsonSchema);
         ValOuter valOuter = valCoder.decode(validJson, ValOuter.class);
 
         String valOuterJson = valCoder.encode(valOuter);
@@ -146,10 +133,31 @@ class StandardValCoderTest {
 
     @Test
     void testConformance() {
-        StandardValCoder valCoder = new StandardValCoder(jsonSchema, "test-schema");
+        StandardValCoder valCoder = new StandardValCoder(jsonSchema);
         assertTrue(valCoder.isConformant(validJson));
         assertFalse(valCoder.isConformant(missingReqJson));
         assertFalse(valCoder.isConformant(badRegexJson));
+    }
+
+    @Test
+    void testNullValues() throws CoderException {
+        StandardValCoder valCoder = new StandardValCoder(jsonSchema);
+        assertThrows(NullPointerException.class, () -> valCoder.toJson(null));
+        assertThrows(NullPointerException.class, () -> valCoder.isConformant(null));
+        assertThrows(NullPointerException.class, () -> valCoder.conformance(null));
+
+        assertThrows(NullPointerException.class, () -> valCoder.toJson(null, null));
+        var writer = new StringWriter();
+        assertThrows(NullPointerException.class, () -> valCoder.toJson(writer, null));
+        ValOuter valOuter = valCoder.decode(validJson, ValOuter.class);
+        assertThrows(NullPointerException.class, () -> valCoder.toJson(null, valOuter));
+    }
+
+    @Test
+    void testConstructor() {
+        assertThrows(NullPointerException.class, () -> new StandardValCoder(null));
+
+        assertThrows(CoderRuntimeException.class, () -> new StandardValCoder("$schema"));
     }
 
     private void assertValidJson(ValOuter valOuter) {
@@ -160,7 +168,7 @@ class StandardValCoderTest {
         assertEquals(Integer.valueOf(1200), valOuter.getAaCollection().get(0).getSubItemInteger());
     }
 
-    private String getJson(String filePath) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(filePath)));
+    private String getJson(String filePath) {
+        return ResourceUtils.getResourceAsString(filePath);
     }
 }

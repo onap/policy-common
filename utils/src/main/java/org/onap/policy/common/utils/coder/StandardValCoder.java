@@ -1,6 +1,7 @@
 /*--
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +21,17 @@
 
 package org.onap.policy.common.utils.coder;
 
-import com.worldturner.medeia.api.JsonSchemaVersion;
-import com.worldturner.medeia.api.SchemaSource;
-import com.worldturner.medeia.api.StringSchemaSource;
-import com.worldturner.medeia.api.ValidationFailedException;
-import com.worldturner.medeia.api.gson.MedeiaGsonApi;
-import com.worldturner.medeia.schema.validation.SchemaValidator;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import lombok.NonNull;
 import lombok.ToString;
+import net.jimblackler.jsonschemafriend.GenerationException;
+import net.jimblackler.jsonschemafriend.Schema;
+import net.jimblackler.jsonschemafriend.SchemaStore;
+import net.jimblackler.jsonschemafriend.ValidationException;
+import net.jimblackler.jsonschemafriend.Validator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,31 +42,29 @@ import org.slf4j.LoggerFactory;
 @ToString
 public class StandardValCoder extends StandardCoder {
 
-    // The medeia-validator library integrates better than
-    // other libraries considered with GSON, and therefore
-    // the StandardCoder.
-
     private static final Logger logger = LoggerFactory.getLogger(StandardValCoder.class);
 
-    private final MedeiaGsonApi validatorApi = new MedeiaGsonApi();
-    private final SchemaValidator validator;
+    private final Schema schema;
 
     /**
      * StandardCoder with validation.
      */
-    public StandardValCoder(@NonNull String jsonSchema, @NonNull String name) {
-        SchemaSource schemaSource = new StringSchemaSource(jsonSchema, JsonSchemaVersion.DRAFT07, null, name);
-        this.validator = validatorApi.loadSchema(schemaSource);
+    public StandardValCoder(@NonNull String jsonSchema) {
+        try {
+            SchemaStore store = new SchemaStore();
+            this.schema = store.loadSchemaJson(jsonSchema);
+        } catch (GenerationException e) {
+            throw new CoderRuntimeException(e);
+        }
     }
 
     @Override
     protected String toPrettyJson(Object object) {
-        /*
-         * The validator strips off the "pretty" stuff (i.e., spaces), thus we have to validate and generate the pretty
-         * JSON in separate steps.
-         */
-        gson.toJson(object, object.getClass(), validatorApi.createJsonWriter(validator, new StringWriter()));
-
+        try {
+            validate(gsonPretty.toJson(object));
+        } catch (CoderException e) {
+            throw new CoderRuntimeException(e);
+        }
         return super.toPrettyJson(object);
     }
 
@@ -79,18 +77,28 @@ public class StandardValCoder extends StandardCoder {
 
     @Override
     protected void toJson(@NonNull Writer target, @NonNull Object object) {
-        gson.toJson(object, object.getClass(), validatorApi.createJsonWriter(validator, target));
+        try {
+            validate(gson.toJson(object));
+        } catch (CoderException e) {
+            throw new CoderRuntimeException(e);
+        }
+        gson.toJson(object, object.getClass(), target);
     }
 
     @Override
     protected <T> T fromJson(@NonNull Reader source, @NonNull Class<T> clazz) {
-        return convertFromDouble(clazz, gson.fromJson(validatorApi.createJsonReader(validator, source), clazz));
+        return convertFromDouble(clazz, gson.fromJson(source, clazz));
     }
 
     @Override
     protected <T> T fromJson(String json, Class<T> clazz) {
+        try {
+            validate(json);
+        } catch (CoderException e) {
+            throw new CoderRuntimeException(e);
+        }
         var reader = new StringReader(json);
-        return convertFromDouble(clazz, gson.fromJson(validatorApi.createJsonReader(validator, reader), clazz));
+        return convertFromDouble(clazz, gson.fromJson(reader, clazz));
     }
 
     /**
@@ -99,21 +107,32 @@ public class StandardValCoder extends StandardCoder {
     public boolean isConformant(@NonNull String json) {
         try {
             conformance(json);
-        } catch (CoderException e) {
-            logger.info("JSON is not conformant to schema", e);
+            return true;
+        } catch (Exception e) {
+            logger.error("JSON is not conformant to schema", e);
             return false;
         }
-        return true;
     }
 
     /**
      * Check a json string for conformance against its schema definition.
      */
     public void conformance(@NonNull String json) throws CoderException {
+        validate(json);
+    }
+
+    private void validate(Object object) throws CoderException {
         try {
-            validatorApi.parseAll(validatorApi.createJsonReader(validator, new StringReader(json)));
-        } catch (ValidationFailedException e) {
-            throw new CoderException(e);
+            final var validator = new Validator();
+            validator.validate(schema, object);
+        } catch (ValidationException exception) {
+            var error = String.format("JSON validation failed: %s", exception.getMessage());
+            logger.error(error);
+            throw new CoderException(error);
         }
+    }
+
+    private void validate(String json) throws CoderException {
+        validate(gson.fromJson(json, Object.class));
     }
 }

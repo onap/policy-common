@@ -49,6 +49,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Utilities used to test encoding and decoding of Policy objects.
  */
+@Getter
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class GsonTestUtils {
 
@@ -67,7 +68,6 @@ public class GsonTestUtils {
     /**
      * Used to encode and decode an object via gson.
      */
-    @Getter
     private Gson gson;
 
     /**

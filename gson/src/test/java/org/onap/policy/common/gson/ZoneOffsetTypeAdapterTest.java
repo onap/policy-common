@@ -33,7 +33,7 @@ import lombok.ToString;
 import org.junit.jupiter.api.Test;
 
 class ZoneOffsetTypeAdapterTest {
-    private static Gson gson =
+    private static final Gson gson =
             new GsonBuilder().registerTypeAdapter(ZoneOffset.class, new ZoneOffsetTypeAdapter()).create();
     private static final String TEST_ZONE = "+05:00";
 

@@ -1,9 +1,11 @@
 {
-    "aaString": "abcd",
-    "anInteger": 90,
-    "aaBoolean": true,
-    "aaCollection": [ {
-        "subItemString": "defg",
-        "subItemInteger": 1200
-    }]
+  "aaString": "abcd",
+  "anInteger": 90,
+  "aaBoolean": true,
+  "aaCollection": [
+    {
+      "subItemString": "defg",
+      "subItemInteger": 1200
+    }
+  ]
 }

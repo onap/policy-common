@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -179,7 +180,6 @@ public class StandardCoder implements Coder {
     public <T> T decode(String json, Class<T> clazz) throws CoderException {
         try {
             return fromJson(json, clazz);
-
         } catch (RuntimeException e) {
             throw new CoderException(e);
         }
@@ -378,7 +378,7 @@ public class StandardCoder implements Coder {
         /**
          * Used to read/write a JsonElement.
          */
-        private static TypeAdapter<JsonElement> elementAdapter = new Gson().getAdapter(JsonElement.class);
+        private static final TypeAdapter<JsonElement> elementAdapter = new Gson().getAdapter(JsonElement.class);
 
         @Override
         public void write(JsonWriter out, StandardCoderObject value) throws IOException {

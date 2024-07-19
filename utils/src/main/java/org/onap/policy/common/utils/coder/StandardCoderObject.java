@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +22,7 @@
 package org.onap.policy.common.utils.coder;
 
 import com.google.gson.JsonElement;
+import java.io.Serial;
 import java.io.Serializable;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -33,6 +35,8 @@ import lombok.Getter;
  */
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class StandardCoderObject implements Serializable {
+
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**
@@ -56,9 +60,8 @@ public class StandardCoderObject implements Serializable {
      * Gets a field's value from this object, traversing the object hierarchy.
      *
      * @param fields field hierarchy. These may be strings, identifying fields within the
-     *        object, or Integers, identifying an index within an array
-     * @return the field value or {@code null} if the field does not exist or is not a
-     *         primitive
+     *               object, or Integers, identifying an index within an array
+     * @return the field value or {@code null} if the field does not exist or is not a primitive
      */
     public String getString(Object... fields) {
 
@@ -87,9 +90,8 @@ public class StandardCoderObject implements Serializable {
      * Gets an item from an object.
      *
      * @param element object from which to extract the item
-     * @param field name of the field from which to extract the item
-     * @return the item, or {@code null} if the element is not an object or if the field
-     *         does not exist
+     * @param field   name of the field from which to extract the item
+     * @return the item, or {@code null} if the element is not an object or if the field does not exist
      */
     protected JsonElement getFieldFromObject(JsonElement element, String field) {
         if (!element.isJsonObject()) {
@@ -103,9 +105,8 @@ public class StandardCoderObject implements Serializable {
      * Gets an item from an array.
      *
      * @param element array from which to extract the item
-     * @param index index of the item to extract
-     * @return the item, or {@code null} if the element is not an array or if the index is
-     *         out of bounds
+     * @param index   index of the item to extract
+     * @return the item, or {@code null} if the element is not an array or if the index is out of bounds
      */
     protected JsonElement getItemFromArray(JsonElement element, int index) {
         if (index < 0) {

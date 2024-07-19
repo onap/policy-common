@@ -45,12 +45,8 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.worldturner.medeia</groupId>
-            <artifactId>medeia-validator-gson</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.worldturner.medeia</groupId>
-            <artifactId>medeia-validator-core</artifactId>
+            <groupId>net.jimblackler.jsonschemafriend</groupId>
+            <artifactId>core</artifactId>
         </dependency>
         <dependency>
             <groupId>commons-net</groupId>
