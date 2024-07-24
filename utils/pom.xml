@@ -45,10 +45,6 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>net.jimblackler.jsonschemafriend</groupId>
-            <artifactId>core</artifactId>
-        </dependency>
-        <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
         </dependency>
