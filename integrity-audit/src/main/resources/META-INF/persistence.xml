@@ -4,7 +4,7 @@
   Integrity Audit
   ================================================================================
   Copyright (C) 2017 AT&T Intellectual Property. All rights reserved.
-  Modifications Copyright (C) 2023 Nordix Foundation.
+  Modifications Copyright (C) 2023-2024 Nordix Foundation.
   ================================================================================
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -20,9 +20,9 @@
   ============LICENSE_END=========================================================
   -->
 
-<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+<persistence version="3.1" xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd">
     <persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
         <!-- Limited use for generating the DB and schema files for iatest DB - uses hibernate -->
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
@@ -30,8 +30,8 @@
         <class>org.onap.policy.common.ia.jpa.IaTestEntity</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
-            <property name="jakarta.persistence.schema-generation.database.action" value="create" />
-            <property name="hibernate.show_sql" value="false" />
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+            <property name="hibernate.show_sql" value="false"/>
         </properties>
     </persistence-unit>
 
@@ -41,7 +41,7 @@
         <class>org.onap.policy.common.ia.jpa.IntegrityAuditEntity</class>
         <shared-cache-mode>NONE</shared-cache-mode>
         <properties>
-            <property name="hibernate.show_sql" value="false" />
+            <property name="hibernate.show_sql" value="false"/>
         </properties>
     </persistence-unit>
 </persistence>
