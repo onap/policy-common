@@ -3,6 +3,7 @@
  * ONAP-Logging
  * ================================================================================
  * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,8 +61,7 @@ public class EventData {
         if (obj == null) {
             return false;
         }
-        if (obj instanceof String) {
-            String otherRequestId = (String) obj;
+        if (obj instanceof String otherRequestId) {
             return requestId != null && requestId.equals(otherRequestId);
         }
         if (getClass() != obj.getClass()) {

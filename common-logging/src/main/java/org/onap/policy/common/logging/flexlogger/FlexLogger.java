@@ -3,7 +3,7 @@
  * ONAP-Logging
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import org.onap.policy.common.logging.flexlogger.PropertyUtil.Listener;
 /**
  * FlexLogger acts as factory to generate instances of Logger based on logger type.
  */
-public class FlexLogger extends SecurityManager {
+public class FlexLogger {
 
     private static final String GET_LOGGER_PREFIX = "FlexLogger:getLogger : loggerType = ";
     private static LoggerType loggerType = LoggerType.EELF;
@@ -95,8 +95,11 @@ public class FlexLogger extends SecurityManager {
      * Returns the calling class name.
      */
     public String getClassName() {
-        displayMessage("getClassContext()[3].getName() " + getClassContext()[3].getName());
-        return getClassContext()[3].getName();
+        StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
+        if (stackTrace.length > 3) {
+            return stackTrace[3].getClassName();
+        }
+        return "UnknownClass";
     }
 
     /**

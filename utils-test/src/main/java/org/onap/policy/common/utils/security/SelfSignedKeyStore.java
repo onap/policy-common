@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +37,6 @@ import java.security.cert.CertificateException;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import lombok.Getter;
 import org.bouncycastle.asn1.x500.X500Name;
 import org.bouncycastle.asn1.x509.Extension;
@@ -77,7 +77,7 @@ public class SelfSignedKeyStore {
      * @throws IOException if an I/O error occurs
      * @throws InterruptedException if an interrupt occurs
      */
-    public SelfSignedKeyStore() throws IOException, InterruptedException {
+    public SelfSignedKeyStore() throws IOException {
         this(RELATIVE_PATH);
     }
 
@@ -89,7 +89,7 @@ public class SelfSignedKeyStore {
      * @throws IOException if an I/O error occurs
      * @throws InterruptedException if an interrupt occurs
      */
-    public SelfSignedKeyStore(String relativePath) throws IOException, InterruptedException {
+    public SelfSignedKeyStore(String relativePath) throws IOException {
         keystoreName = System.getProperty("user.dir") + "/" + relativePath;
 
         // use existing file if it isn't too old

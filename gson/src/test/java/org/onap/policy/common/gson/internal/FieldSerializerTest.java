@@ -51,7 +51,7 @@ class FieldSerializerTest {
     private List<Data> listField;
 
     @Test
-    public void testAddToTree() throws Exception {
+    void testAddToTree() throws Exception {
         ser = new FieldSerializer(gson, FieldSerializerTest.class.getDeclaredField(TEXT_FIELD_NAME));
 
         // serialize null value first

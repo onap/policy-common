@@ -57,7 +57,7 @@ public class SelfSignedKeyStoreTest {
     }
 
     @Test
-    public void testSelfSignedKeyStore() throws Exception {
+    void testSelfSignedKeyStore() throws Exception {
         SelfSignedKeyStore ks = new SelfSignedKeyStore();
 
         assertThat(ks.getKeystoreName()).isEqualTo(defaultName);
@@ -65,7 +65,7 @@ public class SelfSignedKeyStoreTest {
     }
 
     @Test
-    public void testSelfSignedKeyStoreString() throws IOException, InterruptedException {
+    void testSelfSignedKeyStoreString() throws IOException, InterruptedException {
         String relName = "target/my-keystore";
         String altName = saveUserDir + "/" + relName;
         File altFile = new File(altName);
@@ -82,7 +82,7 @@ public class SelfSignedKeyStoreTest {
      * Tests the constructor, when the keystore already exists.
      */
     @Test
-    public void testSelfSignedKeyStoreStringExists() throws Exception {
+    void testSelfSignedKeyStoreStringExists() throws Exception {
         new SelfSignedKeyStore();
         assertThat(defaultKeystore).exists();
 
@@ -109,7 +109,7 @@ public class SelfSignedKeyStoreTest {
      * Tests the constructor, when the SAN file is not found.
      */
     @Test
-    public void testSelfSignedKeyStoreStringNoSanFile() {
+    void testSelfSignedKeyStoreStringNoSanFile() {
         assertThatThrownBy(() -> new SelfSignedKeyStore() {
             @Override
             protected String getKeystoreSanName() {
@@ -122,13 +122,13 @@ public class SelfSignedKeyStoreTest {
      * Tests the constructor, when write fails.
      */
     @Test
-    public void testSelfSignedKeyStoreStringWriteFailure() {
+    void testSelfSignedKeyStoreStringWriteFailure() {
         assertThatThrownBy(() -> new SelfSignedKeyStore("target/unknown/path/to/keystore"))
                         .isInstanceOf(IOException.class);
     }
 
     @Test
-    public void testGetKeystoreName() throws Exception {
+    void testGetKeystoreName() throws Exception {
         String relpath = SelfSignedKeyStore.RELATIVE_PATH;
 
         // append the first part of the relative path to user.dir

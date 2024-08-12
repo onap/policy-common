@@ -264,7 +264,7 @@ class StandardCoderTest {
     }
 
     @Test
-    void testToJsonTree_testFromJsonJsonElementClassT() throws Exception {
+    void testToJsonTree_testFromJsonJsonElementClassT() {
         MyMap map = new MyMap();
         map.props = new LinkedHashMap<>();
         map.props.put("jel keyA", "jel valueA");
@@ -314,7 +314,7 @@ class StandardCoderTest {
     }
 
     @Test
-    void testStandardTypeAdapter() throws Exception {
+    void testStandardTypeAdapter() {
         String json = "{'abc':'def'}".replace('\'', '"');
         StandardCoderObject sco = coder.fromJson(json, StandardCoderObject.class);
         assertNotNull(sco.getData());

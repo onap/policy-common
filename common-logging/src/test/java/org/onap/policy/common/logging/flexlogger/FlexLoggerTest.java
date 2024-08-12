@@ -26,7 +26,6 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.Test;

@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.security.GeneralSecurityException;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,7 +42,7 @@ class CryptoUtilsTest {
     private static final String ENCRYPTED_MSG = "original value : {}  encrypted value: {}";
 
     @Test
-    void testEncrypt() throws GeneralSecurityException {
+    void testEncrypt() {
         logger.info("testEncrypt:");
         CryptoCoder cryptoUtils = new CryptoUtils(SECRET_KEY);
         String encryptedValue = cryptoUtils.encrypt(PASS);
@@ -56,7 +55,7 @@ class CryptoUtilsTest {
     }
 
     @Test
-    void testDecrypt() throws GeneralSecurityException {
+    void testDecrypt() {
         logger.info("testDecrypt:");
         CryptoCoder cryptoUtils = new CryptoUtils(SECRET_KEY);
         String decryptedValue = cryptoUtils.decrypt(ENCRYPTED_PASS);

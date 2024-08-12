@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -257,11 +258,11 @@ public class YamlJsonTranslator {
      * @return a gson element corresponding to the node
      */
     protected JsonElement makeJson(Node node) {
-        if (node instanceof MappingNode) {
-            return makeJsonObject((MappingNode) node);
+        if (node instanceof MappingNode mappingNode) {
+            return makeJsonObject(mappingNode);
 
-        } else if (node instanceof SequenceNode) {
-            return makeJsonArray((SequenceNode) node);
+        } else if (node instanceof SequenceNode sequenceNode) {
+            return makeJsonArray(sequenceNode);
 
         } else {
             return makeJsonPrim((ScalarNode) node);

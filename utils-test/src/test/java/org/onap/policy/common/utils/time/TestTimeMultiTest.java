@@ -115,7 +115,7 @@ class TestTimeMultiTest {
     }
 
     @Test
-    void testDestroy() throws InterruptedException {
+    void testDestroy() {
         // this won't interrupt
         multi.enqueue(new WorkItem(multi, DELAY_MS));
 
@@ -193,7 +193,7 @@ class TestTimeMultiTest {
     }
 
     @Test
-    void testWaitUntilCallable() throws InterruptedException {
+    void testWaitUntilCallable() {
         multi.enqueue(new WorkItem(multi, DELAY_MS));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 2));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 3));
@@ -238,7 +238,7 @@ class TestTimeMultiTest {
     }
 
     @Test
-    void testWaitUntilCallable_ConditionThrowsEx() throws InterruptedException {
+    void testWaitUntilCallable_ConditionThrowsEx() {
         multi = new TestTimeMulti();
 
         Callable<Boolean> callable = () -> {
@@ -253,7 +253,7 @@ class TestTimeMultiTest {
     }
 
     @Test
-    void testWaitUntilCallable_NeverSatisfied() throws InterruptedException {
+    void testWaitUntilCallable_NeverSatisfied() {
         multi = new TestTimeMulti(SHORT_WAIT_MS);
 
         final long realBegin = System.currentTimeMillis();
@@ -263,7 +263,7 @@ class TestTimeMultiTest {
     }
 
     @Test
-    void testWaitUntilLongTimeUnitCallable() throws InterruptedException {
+    void testWaitUntilLongTimeUnitCallable() {
         multi.enqueue(new WorkItem(multi, DELAY_MS));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 2));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 3));
@@ -280,7 +280,7 @@ class TestTimeMultiTest {
     }
 
     @Test
-    void testWaitUntilLongTimeUnitCallable_PseudoTimeExpires() throws InterruptedException {
+    void testWaitUntilLongTimeUnitCallable_PseudoTimeExpires() {
         multi.enqueue(new WorkItem(multi, DELAY_MS));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 2));
         multi.enqueue(new WorkItem(multi, DELAY_MS * 3));

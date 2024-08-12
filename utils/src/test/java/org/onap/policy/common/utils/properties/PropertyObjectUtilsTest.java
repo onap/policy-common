@@ -146,7 +146,7 @@ class PropertyObjectUtilsTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    void testCompressLists() throws IOException, CoderException {
+    void testCompressLists() throws CoderException {
         assertEquals("plain-string", PropertyObjectUtils.compressLists("plain-string").toString());
 
         // @formatter:off

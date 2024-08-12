@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class WorkItemTest {
+class WorkItemTest {
     private TestTime currentTime;
     private WorkItem item;
 
@@ -40,7 +40,7 @@ public class WorkItemTest {
     }
 
     @Test
-    public void testWorkItem() {
+    void testWorkItem() {
         assertThatIllegalArgumentException().isThrownBy(() -> new WorkItem(currentTime, -1));
 
         // should not throw an exception
@@ -48,22 +48,22 @@ public class WorkItemTest {
     }
 
     @Test
-    public void testGetDelay() {
+    void testGetDelay() {
         assertEquals(1, item.getDelay());
     }
 
     @Test
-    public void testWasCancelled() {
+    void testWasCancelled() {
         assertFalse(item.wasCancelled());
     }
 
     @Test
-    public void testBumpNextTime() {
+    void testBumpNextTime() {
         assertFalse(item.bumpNextTime());
     }
 
     @Test
-    public void testBumpNextTimeLong() {
+    void testBumpNextTimeLong() {
         assertThatIllegalArgumentException().isThrownBy(() -> item.bumpNextTime(-1));
 
         long cur = currentTime.getMillis();
@@ -77,24 +77,24 @@ public class WorkItemTest {
     }
 
     @Test
-    public void testInterrupt() {
+    void testInterrupt() {
         item.interrupt();
         assertFalse(Thread.interrupted());
     }
 
     @Test
-    public void testIsAssociatedWith() {
+    void testIsAssociatedWith() {
         assertFalse(item.isAssociatedWith(this));
     }
 
     @Test
-    public void testFire() {
+    void testFire() {
         // ensure no exception is thrown
         assertThatCode(() -> item.fire()).doesNotThrowAnyException();
     }
 
     @Test
-    public void testGetNextMs() {
+    void testGetNextMs() {
         assertEquals(currentTime.getMillis() + 1, item.getNextMs());
         assertEquals(currentTime.getMillis() + 10, new WorkItem(currentTime, 10).getNextMs());
     }

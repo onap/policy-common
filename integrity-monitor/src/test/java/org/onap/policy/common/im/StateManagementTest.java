@@ -99,7 +99,7 @@ class StateManagementTest extends IntegrityMonitorTestBase {
         logger.info("\n\nStateManagementTest: Exit\n\n");
     }
 
-    private void test_1(final StateManagement sm) throws StateManagementException, IntegrityMonitorException {
+    private void test_1(final StateManagement sm) throws IntegrityMonitorException {
         logger.info("\n??? initial state");
         assertEquals(UNLOCKED_ENABLED_NULL_NULL, makeString(sm));
 
@@ -167,7 +167,7 @@ class StateManagementTest extends IntegrityMonitorTestBase {
         assertEquals(UNLOCKED_ENABLED_NULL_HOTSTANDBY, makeString(sm2));
     }
 
-    private void test_2(final StateManagement sm) throws StateManagementException, IntegrityMonitorException {
+    private void test_2(final StateManagement sm) throws IntegrityMonitorException {
         // D3 If demote() is called while standbyStatus is null and
         // adminState is locked or opState is disabled,
         // the state shall transition to coldstandby
@@ -231,8 +231,7 @@ class StateManagementTest extends IntegrityMonitorTestBase {
 
     @Test
     @SuppressWarnings("unchecked")
-    void test_StateManagementInitialization_ThrowException_ifEntityManagerCreateQuerythrowsAnyException()
-            throws Exception {
+    void test_StateManagementInitialization_ThrowException_ifEntityManagerCreateQuerythrowsAnyException() {
         assertThatThrownBy(() -> {
             final EntityManager mockedEm = getMockedEntityManager();
             final EntityManagerFactory mockedEmf = getMockedEntityManagerFactory(mockedEm);
@@ -246,8 +245,7 @@ class StateManagementTest extends IntegrityMonitorTestBase {
 
     @Test
     @SuppressWarnings("unchecked")
-    void test_StateManagementInitialization_ThrowStateManagementException_ifEntityManagerThrowsAnyException()
-            throws Exception {
+    void test_StateManagementInitialization_ThrowStateManagementException_ifEntityManagerThrowsAnyException() {
         assertThatThrownBy(() -> {
             final EntityManager mockedEm = getMockedEntityManager();
             final EntityManagerFactory mockedEmf = getMockedEntityManagerFactory(mockedEm);

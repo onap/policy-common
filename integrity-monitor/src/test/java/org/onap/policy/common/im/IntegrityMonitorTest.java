@@ -559,7 +559,7 @@ class IntegrityMonitorTest extends IntegrityMonitorTestBase {
         @SuppressWarnings("rawtypes")
         List resourceList = query.getResultList();
         if (resourceList.isEmpty()) {
-            logger.debug("Record not found, resourceName: " + resourceName);
+            logger.debug("Record not found, resourceName: {}", resourceName);
             fail("missing record");
         }
 
@@ -626,7 +626,7 @@ class IntegrityMonitorTest extends IntegrityMonitorTestBase {
             assertEquals(StateManagement.HOT_STANDBY, sme1.getStandbyStatus());
             logger.debug("--");
         } else {
-            logger.debug("Record not found, resourceName: " + resourceName);
+            logger.debug("Record not found, resourceName: {}", resourceName);
             fail("record not found");
         }
 

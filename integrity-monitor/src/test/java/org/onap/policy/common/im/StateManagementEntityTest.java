@@ -73,7 +73,7 @@ class StateManagementEntityTest extends IntegrityMonitorTestBase {
     }
 
     @Test
-    void testJpa() throws Exception {
+    void testJpa() {
         logger.debug("\n??? logger.infor StateManagementEntityTest: Entering\n\n");
 
         // Define the resourceName for the StateManagement constructor

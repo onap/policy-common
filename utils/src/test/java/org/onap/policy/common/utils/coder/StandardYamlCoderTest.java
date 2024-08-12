@@ -104,7 +104,7 @@ class StandardYamlCoderTest {
     }
 
     @Test
-    void testStandardTypeAdapter() throws Exception {
+    void testStandardTypeAdapter() {
         String yaml = "abc: def\n";
         StandardCoderObject sco = coder.fromJson(yaml, StandardCoderObject.class);
         assertNotNull(sco.getData());

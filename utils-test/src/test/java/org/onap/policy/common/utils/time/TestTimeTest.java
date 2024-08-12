@@ -26,10 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-public class TestTimeTest {
+class TestTimeTest {
 
     @Test
-    public void test() throws Exception {
+    void test() throws Exception {
         TestTime tm = new TestTime();
         TestTime tm2 = new TestTime();
 

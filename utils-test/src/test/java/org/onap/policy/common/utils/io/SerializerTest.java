@@ -361,7 +361,7 @@ class SerializerTest {
 
     @Test
     void testRoundTrip() throws Exception {
-        MyObject obj1 = new MyObject(3);
+        MyObject obj1 = new MyObject(4);
 
         MyObject obj2 = Serializer.roundTrip(obj1);
         assertEquals(obj1.value, obj2.value);
