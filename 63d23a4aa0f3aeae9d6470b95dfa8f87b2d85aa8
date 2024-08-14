@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18901caf_052efea1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-08-14T08:52:54Z",
+      "side": 1,
+      "message": "These will be handled in a separate review",
+      "revId": "63d23a4aa0f3aeae9d6470b95dfa8f87b2d85aa8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48de3cc0_121c20da",
@@ -14,6 +31,30 @@
       "writtenOn": "2024-08-14T08:27:48Z",
       "side": 1,
       "message": "typo",
+      "range": {
+        "startLine": 6,
+        "startChar": 3,
+        "endLine": 6,
+        "endChar": 16
+      },
+      "revId": "63d23a4aa0f3aeae9d6470b95dfa8f87b2d85aa8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ae6fe65_42240bfb",
+        "filename": "integrity-monitor/src/test/java/org/onap/policy/common/im/IntegrityMonitorTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-08-14T08:52:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48de3cc0_121c20da",
       "range": {
         "startLine": 6,
         "startChar": 3,
@@ -47,6 +88,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "397917a8_7a28e9ee",
+        "filename": "utils-test/src/test/java/org/onap/policy/common/utils/security/SelfSignedKeyStoreTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-08-14T08:52:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4005f7c4_69627ec6",
+      "range": {
+        "startLine": 68,
+        "startChar": 60,
+        "endLine": 68,
+        "endChar": 80
+      },
+      "revId": "63d23a4aa0f3aeae9d6470b95dfa8f87b2d85aa8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "351b182e_3a6e4fdb",
@@ -70,6 +135,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "032da221_879ba60a",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/properties/PropertyObjectUtilsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-08-14T08:52:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "351b182e_3a6e4fdb",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 24,
+        "endChar": 27
+      },
+      "revId": "63d23a4aa0f3aeae9d6470b95dfa8f87b2d85aa8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "706eaf3e_3d7c2e79",
@@ -83,6 +172,30 @@
       "writtenOn": "2024-08-14T08:27:48Z",
       "side": 1,
       "message": "This can be made final",
+      "range": {
+        "startLine": 37,
+        "startChar": 26,
+        "endLine": 37,
+        "endChar": 32
+      },
+      "revId": "63d23a4aa0f3aeae9d6470b95dfa8f87b2d85aa8",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34e7a9a3_399baa1c",
+        "filename": "utils/src/test/java/org/onap/policy/common/utils/security/CryptoUtilsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-08-14T08:52:54Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "706eaf3e_3d7c2e79",
       "range": {
         "startLine": 37,
         "startChar": 26,
