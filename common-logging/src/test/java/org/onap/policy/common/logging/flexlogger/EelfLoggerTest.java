@@ -23,6 +23,7 @@
 package org.onap.policy.common.logging.flexlogger;
 
 import static com.att.eelf.configuration.Configuration.MDC_KEY_REQUEST_ID;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -102,6 +103,16 @@ class EelfLoggerTest {
     }
 
     @Test
+    void testDebugObjectArgs() {
+        EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
+        eelfLogger.debug("message", "arg1", "arg2");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isDebugEnabled()).thenReturn(true);
+        assertTrue(eelfLogger.isDebugEnabled());
+    }
+
+    @Test
     void testErrorObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
@@ -110,6 +121,16 @@ class EelfLoggerTest {
         Mockito.when(mockLogger.isErrorEnabled()).thenReturn(true);
         eelfLogger.error("message");
         Mockito.verify(mockLogger).error(MessageCodes.GENERAL_ERROR, "message");
+    }
+
+    @Test
+    void testErrorObjectArgs() {
+        EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
+        ReflectionTestUtils.setField(PolicyLogger.class, "errorLogger", mockLogger);
+        eelfLogger.error("message", "args1", "arg2");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isErrorEnabled()).thenReturn(true);
+        assertTrue(eelfLogger.isErrorEnabled());
     }
 
     @Test
@@ -124,6 +145,16 @@ class EelfLoggerTest {
     }
 
     @Test
+    void testInfoObjectArgs() {
+        EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
+        eelfLogger.info("message", "arg1", "arg2");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isInfoEnabled()).thenReturn(true);
+        assertTrue(eelfLogger.isInfoEnabled());
+    }
+
+    @Test
     void testWarnObject() {
         EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
         ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
@@ -132,6 +163,16 @@ class EelfLoggerTest {
         Mockito.when(mockLogger.isWarnEnabled()).thenReturn(true);
         eelfLogger.warn("message");
         Mockito.verify(mockLogger).warn(MessageCodes.GENERAL_INFO, "message");
+    }
+
+    @Test
+    void testWarnObjectArgs() {
+        EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
+        ReflectionTestUtils.setField(PolicyLogger.class, "debugLogger", mockLogger);
+        eelfLogger.warn("message", "arg1", "arg2");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isWarnEnabled()).thenReturn(true);
+        assertTrue(eelfLogger.isWarnEnabled());
     }
 
     @Test
@@ -184,6 +225,8 @@ class EelfLoggerTest {
         PolicyLogger.setOverrideLogbackLevel(true);
         PolicyLogger.setMetricsLevel("ERROR");
         assertTrue(eelfLogger.isMetricsEnabled());
+        PolicyLogger.setMetricsLevel(EELFLogger.Level.OFF);
+        assertFalse(eelfLogger.isMetricsEnabled());
     }
 
     @Test
@@ -200,6 +243,8 @@ class EelfLoggerTest {
         PolicyLogger.setOverrideLogbackLevel(true);
         PolicyLogger.setAuditLevel("ERROR");
         assertTrue(eelfLogger.isAuditEnabled());
+        PolicyLogger.setAuditLevel(EELFLogger.Level.OFF);
+        assertFalse(eelfLogger.isAuditEnabled());
     }
 
     @Test
@@ -255,6 +300,20 @@ class EelfLoggerTest {
         ReflectionTestUtils.setField(PolicyLogger.class, "auditLogger", mockLogger);
         eelfLogger.audit("message", new NullPointerException());
         Mockito.verify(mockLogger).info("{}", "message");
+    }
+
+    @Test
+    void testAuditObjectArgs() {
+        EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
+        ReflectionTestUtils.setField(PolicyLogger.class, "auditLogger", mockLogger);
+        assertThatCode(() -> eelfLogger.audit("messagearg1")).doesNotThrowAnyException();
+    }
+
+    @Test
+    void testAuditObjectArgsAndMessage() {
+        EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
+        ReflectionTestUtils.setField(PolicyLogger.class, "auditLogger", mockLogger);
+        assertThatCode(() -> eelfLogger.audit("message", "arg1", "arg2")).doesNotThrowAnyException();
     }
 
     @Test
@@ -331,6 +390,16 @@ class EelfLoggerTest {
         eelfLogger.metrics(1);
         Mockito.verify(mockLogger).info(Mockito.eq(MessageCodes.RULE_METRICS_INFO), Mockito.anyString(),
                 Mockito.eq("1"));
+    }
+
+    @Test
+    void testMetricsArgs() {
+        EELFLogger mockLogger = Mockito.mock(EELFLogger.class);
+        ReflectionTestUtils.setField(PolicyLogger.class, "metricsLogger", mockLogger);
+        eelfLogger.metrics("metricsMessage", "arg1", "arg2");
+        Mockito.verify(mockLogger, never()).info(Mockito.anyString(), Mockito.anyString());
+        Mockito.when(mockLogger.isInfoEnabled()).thenReturn(true);
+        assertFalse(eelfLogger.isMetricsEnabled());
     }
 
     @Test

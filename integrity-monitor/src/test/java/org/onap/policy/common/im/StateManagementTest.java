@@ -22,8 +22,10 @@
 
 package org.onap.policy.common.im;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
@@ -165,6 +167,12 @@ class StateManagementTest extends IntegrityMonitorTestBase {
         logger.info("\n??? demote() test case D4");
         sm2.demote();
         assertEquals(UNLOCKED_ENABLED_NULL_HOTSTANDBY, makeString(sm2));
+
+        logger.info("\n??? demote() test case D7");
+        sm2.demote("otherResourceName");
+        assertEquals(UNLOCKED_ENABLED_NULL_HOTSTANDBY, makeString(sm2));
+        sm2.demote(null);
+        assertEquals(UNLOCKED_ENABLED_NULL_HOTSTANDBY, makeString(sm2));
     }
 
     private void test_2(final StateManagement sm) throws IntegrityMonitorException {
@@ -227,6 +235,17 @@ class StateManagementTest extends IntegrityMonitorTestBase {
         logger.info("\n??? State change notification test case 6 - promote()");
         assertThatThrownBy(sm::promote).isInstanceOf(IntegrityMonitorException.class);
         assertEquals(UNLOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(sm));
+
+        logger.info("\n??? State change notification test case 7 - disableFailed()");
+        sm.disableFailed(null);
+        assertEquals(UNLOCKED_DISABLED_FAILED_COLDSTANDBY, makeString(stateChangeNotifier.getStateManagement()));
+
+        assertThatCode(() -> stateChangeNotifier.getStateManagement()
+            .getStandbyStatus("otherResourceName")).doesNotThrowAnyException();
+        assertNotNull(stateChangeNotifier.getStateManagement()
+            .getStandbyStatus("otherResourceName"));
+
+        assertThatCode(() -> sm.deleteAllStateManagementEntities()).doesNotThrowAnyException();
     }
 
     @Test

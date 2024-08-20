@@ -22,6 +22,7 @@
 
 package org.onap.policy.common.logging.flexlogger;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -67,6 +68,22 @@ class SystemOutLoggerTest {
     }
 
     @Test
+    void testDebugObjectArgs() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        PrintStream old = System.out;
+        try {
+            systemOutLogger.setTransId("transactionId");
+            System.setOut(ps);
+            systemOutLogger.debug("message", "arg1", "arg2");
+            assertThat(baos.toString()).contains("messagearg1");
+        } finally {
+            System.out.flush();
+            System.setOut(old);
+        }
+    }
+
+    @Test
     void testErrorObject() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
@@ -99,6 +116,22 @@ class SystemOutLoggerTest {
     }
 
     @Test
+    void testInfoObjectArgs() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        PrintStream old = System.out;
+        try {
+            systemOutLogger.setTransId("transactionId");
+            System.setOut(ps);
+            systemOutLogger.info("message", "arg1", "arg2");
+            assertThat(baos.toString()).contains("messagearg1");
+        } finally {
+            System.out.flush();
+            System.setOut(old);
+        }
+    }
+
+    @Test
     void testWarnObject() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
@@ -108,6 +141,22 @@ class SystemOutLoggerTest {
             System.setOut(ps);
             systemOutLogger.warn("message");
             assertTrue(baos.toString().contains("transactionId|SystemOutLoggerTest : message"));
+        } finally {
+            System.out.flush();
+            System.setOut(old);
+        }
+    }
+
+    @Test
+    void testWarnObjectArgs() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        PrintStream old = System.out;
+        try {
+            systemOutLogger.setTransId("transactionId");
+            System.setOut(ps);
+            systemOutLogger.warn("message", "arg1", "arg2");
+            assertThat(baos.toString()).contains("messagearg1");
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -200,6 +249,22 @@ class SystemOutLoggerTest {
             System.setOut(ps);
             systemOutLogger.audit("message");
             assertTrue(baos.toString().contains("transactionId|SystemOutLoggerTest : message"));
+        } finally {
+            System.out.flush();
+            System.setOut(old);
+        }
+    }
+
+    @Test
+    void testAuditObjectArgs() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        PrintStream old = System.out;
+        try {
+            systemOutLogger.setTransId("transactionId");
+            System.setOut(ps);
+            systemOutLogger.audit("message", "arg1", "arg2");
+            assertThat(baos.toString()).contains("messagearg1");
         } finally {
             System.out.flush();
             System.setOut(old);
@@ -347,6 +412,21 @@ class SystemOutLoggerTest {
     }
 
     @Test
+    void testMetricsArgs() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        PrintStream old = System.out;
+        try {
+            System.setOut(ps);
+            systemOutLogger.metrics("message", "arg1", "arg2");
+            assertThat(baos.toString()).contains("messagearg1");
+        } finally {
+            System.out.flush();
+            System.setOut(old);
+        }
+    }
+
+    @Test
     void testErrorMessageCodesThrowableStringArray() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
@@ -373,6 +453,22 @@ class SystemOutLoggerTest {
             systemOutLogger.error(MessageCodes.ERROR_DATA_ISSUE, "str1", "str2");
             assertTrue(baos.toString().contains("transactionId|SystemOutLoggerTest : MessageCode:"
                     + MessageCodes.ERROR_DATA_ISSUE + "[str1, str2]"));
+        } finally {
+            System.out.flush();
+            System.setOut(old);
+        }
+    }
+
+    @Test
+    void testErrorMessageCodesObjectArray() {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(baos);
+        PrintStream old = System.out;
+        try {
+            System.setOut(ps);
+            systemOutLogger.setTransId("transactionId");
+            systemOutLogger.error("Object args", "str1", "str2");
+            assertThat(baos.toString()).contains("Object args");
         } finally {
             System.out.flush();
             System.setOut(old);

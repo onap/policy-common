@@ -467,6 +467,34 @@ class IntegrityMonitorTest extends IntegrityMonitorTestBase {
     }
 
     @Test
+    void testCannotCreateTwoInstances() throws Exception {
+        IntegrityMonitor im = makeMonitor(resourceName, myProp); // NOSONAR first instance created
+        assertThatThrownBy(() -> {
+            monitorSem = new Semaphore(0);
+            junitSem = new Semaphore(0);
+
+            new IntegrityMonitor(resourceName, myProp) {
+
+                @Override
+                protected void runStarted() throws InterruptedException {
+                    monitorSem.acquire();
+
+                    junitSem.release();
+                    monitorSem.acquire();
+                }
+
+                @Override
+                protected void monitorCompleted() throws InterruptedException {
+                    junitSem.release();
+                    monitorSem.acquire();
+                }
+            };
+        }).isInstanceOf(IntegrityMonitorException.class)
+            .hasMessageContaining("IM object exists and only one instance allowed");
+
+    }
+
+    @Test
     void testSanityState() throws Exception {
         logger.debug("\nIntegrityMonitorTest: Entering testSanityState\n\n");
 

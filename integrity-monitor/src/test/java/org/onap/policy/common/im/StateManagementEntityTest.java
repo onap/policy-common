@@ -21,6 +21,7 @@
 
 package org.onap.policy.common.im;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import jakarta.persistence.Query;
@@ -100,6 +101,14 @@ class StateManagementEntityTest extends IntegrityMonitorTestBase {
         sme.setStandbyStatus(StateManagement.COLD_STANDBY);
         assertEquals(StateManagement.COLD_STANDBY, sme.getStandbyStatus());
 
+        StateManagementEntity smeClone = StateManagementEntity.clone(sme);
+        assertEquals(sme.getAdminState(), smeClone.getAdminState());
+        assertEquals(sme.getOpState(), smeClone.getOpState());
+        assertEquals(sme.getResourceName(), smeClone.getResourceName());
+        assertEquals(sme.getStandbyStatus(), smeClone.getStandbyStatus());
+
+        assertThatCode(smeClone::preUpdate).doesNotThrowAnyException();
+
         try (EntityTransCloser et = new EntityTransCloser(em.getTransaction())) {
             logger.debug("??? before persist");
             em.persist(sme);
@@ -134,5 +143,7 @@ class StateManagementEntityTest extends IntegrityMonitorTestBase {
         }
 
         logger.debug("\n\nJpaTest: Exit\n\n");
+
+
     }
 }

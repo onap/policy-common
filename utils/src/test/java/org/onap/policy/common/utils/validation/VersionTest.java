@@ -52,6 +52,19 @@ class VersionTest {
     }
 
     @Test
+    void testConstructor() {
+        Version versionTest = new Version("1.0.2");
+        assertEquals(1, versionTest.getMajor());
+        assertEquals(0, versionTest.getMinor());
+        assertEquals(2, versionTest.getPatch());
+
+        versionTest = new Version("null");
+        assertEquals(0, versionTest.getMajor());
+        assertEquals(0, versionTest.getMinor());
+        assertEquals(0, versionTest.getPatch());
+    }
+
+    @Test
     void testMakeVersion() {
         assertEquals("9.8.7", Version.makeVersion(TYPE, NAME, "9.8.7").toString());
         assertEquals("9.0.0", Version.makeVersion(TYPE, NAME, "9").toString());
