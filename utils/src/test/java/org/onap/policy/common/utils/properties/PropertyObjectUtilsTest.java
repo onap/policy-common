@@ -21,7 +21,6 @@ package org.onap.policy.common.utils.properties;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.io.IOException;
 import java.util.AbstractSet;
 import java.util.Arrays;
 import java.util.Iterator;

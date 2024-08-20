@@ -21,10 +21,14 @@
 
 package org.onap.policy.common.utils.security;
 
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
 
+import javax.crypto.spec.SecretKeySpec;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,12 +46,20 @@ class CryptoUtilsTest {
     private static final String ENCRYPTED_MSG = "original value : {}  encrypted value: {}";
 
     @Test
+    void testConstructor() {
+        SecretKeySpec skspecMock = mock(SecretKeySpec.class);
+        assertThatCode(() -> new CryptoUtils(skspecMock)).doesNotThrowAnyException();
+    }
+
+    @Test
     void testEncrypt() {
         logger.info("testEncrypt:");
         CryptoCoder cryptoUtils = new CryptoUtils(SECRET_KEY);
         String encryptedValue = cryptoUtils.encrypt(PASS);
         logger.info(ENCRYPTED_MSG, PASS, encryptedValue);
         assertTrue(encryptedValue.startsWith("enc:"));
+
+        assertTrue(CryptoUtils.isEncrypted(encryptedValue));
 
         String decryptedValue = cryptoUtils.decrypt(encryptedValue);
         logger.info(DECRYPTED_MSG, encryptedValue, decryptedValue);
@@ -61,6 +73,7 @@ class CryptoUtilsTest {
         String decryptedValue = cryptoUtils.decrypt(ENCRYPTED_PASS);
         logger.info(DECRYPTED_MSG, ENCRYPTED_PASS, decryptedValue);
         assertEquals(PASS, decryptedValue);
+        assertFalse(CryptoUtils.isEncrypted(decryptedValue));
     }
 
     @Test
@@ -119,5 +132,21 @@ class CryptoUtilsTest {
 
         String decryptedAgain = CryptoUtils.decrypt(decryptedValue, SECRET_KEY);
         assertEquals(decryptedValue, decryptedAgain);
+    }
+
+    @Test
+    void testMain() {
+        SecretKeySpec skspecMock = mock(SecretKeySpec.class);
+        new CryptoUtils(skspecMock);
+
+        String[] stringsForTesting = new String[1];
+        stringsForTesting[0] = "dec";
+        assertThatCode(() -> CryptoUtils.main(stringsForTesting)).doesNotThrowAnyException();
+
+        stringsForTesting[0] = "enc";
+        assertThatCode(() -> CryptoUtils.main(stringsForTesting)).doesNotThrowAnyException();
+
+        stringsForTesting[0] = "abc";
+        assertThatCode(() -> CryptoUtils.main(stringsForTesting)).doesNotThrowAnyException();
     }
 }
