@@ -65,7 +65,7 @@ public class SelfSignedKeyStoreTest {
     }
 
     @Test
-    void testSelfSignedKeyStoreString() throws IOException, InterruptedException {
+    void testSelfSignedKeyStoreString() throws IOException {
         String relName = "target/my-keystore";
         String altName = saveUserDir + "/" + relName;
         File altFile = new File(altName);

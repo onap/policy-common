@@ -45,7 +45,7 @@ import org.slf4j.LoggerFactory;
  * implementation(s).
  */
 @Getter
-class TopicEndpointProxy implements TopicEndpoint {
+public class TopicEndpointProxy implements TopicEndpoint {
     /**
      * Logger.
      */

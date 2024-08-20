@@ -24,6 +24,7 @@ package org.onap.policy.common.endpoints.event.comm;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException;
 import static org.assertj.core.api.Assertions.assertThatIllegalStateException;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -35,6 +36,8 @@ import java.util.Properties;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
+import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicFactories;
+import org.onap.policy.common.endpoints.event.comm.bus.KafkaTopicPropertyBuilder;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicFactories;
 import org.onap.policy.common.endpoints.event.comm.bus.NoopTopicPropertyBuilder;
 import org.onap.policy.common.endpoints.parameters.TopicParameterGroup;
@@ -46,6 +49,9 @@ class TopicEndpointProxyTest {
 
     private static final String NOOP_SOURCE_TOPIC = "noop-source";
     private static final String NOOP_SINK_TOPIC = "noop-sink";
+
+    private static final String KAFKA_SOURCE_TOPIC = "kafka-source";
+    private static final String KAFKA_SINK_TOPIC = "kafka-sink";
 
     private final Properties configuration = new Properties();
     private final TopicParameterGroup group = new TopicParameterGroup();
@@ -104,6 +110,8 @@ class TopicEndpointProxyTest {
     public void tearDown() {
         NoopTopicFactories.getSinkFactory().destroy();
         NoopTopicFactories.getSourceFactory().destroy();
+        KafkaTopicFactories.getSinkFactory().destroy();
+        KafkaTopicFactories.getSourceFactory().destroy();
     }
 
     @Test
@@ -126,6 +134,29 @@ class TopicEndpointProxyTest {
 
         assertTrue(allSources(sources));
         assertFalse(anySink(sources));
+
+        sources = manager.addTopicSources(group.getTopicSources());
+        assertSame(1, sources.size());
+        assertTrue(allSources(sources));
+    }
+
+    @Test
+    void testAddTopicSourcesKafka() {
+        TopicEndpoint manager = new TopicEndpointProxy();
+
+        KafkaTopicPropertyBuilder kafkaTopicPropertyBuilder =
+            new KafkaTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_KAFKA_SOURCE_TOPICS)
+                .makeTopic(KAFKA_SOURCE_TOPIC);
+
+        configuration.putAll(kafkaTopicPropertyBuilder.build());
+        group.getTopicSources().add(kafkaTopicPropertyBuilder.getParams());
+        List<TopicSource> sources = manager.addTopicSources(group.getTopicSources());
+        assertSame(2, sources.size());
+
+        configuration.remove(KAFKA_SOURCE_TOPIC);
+        group.setTopicSources(new LinkedList<>());
+        sources = manager.addTopicSources(group.getTopicSources());
+        assertSame(0, sources.size());
     }
 
     @Test
@@ -148,6 +179,28 @@ class TopicEndpointProxyTest {
 
         assertFalse(anySource(sinks));
         assertTrue(allSinks(sinks));
+    }
+
+    @Test
+    void testAddTopicSinksListOfTopicParametersKafka() {
+        TopicEndpoint manager = new TopicEndpointProxy();
+
+        List<TopicSink> sinks = manager.addTopicSinks(group.getTopicSinks());
+        assertSame(1, sinks.size());
+
+        KafkaTopicPropertyBuilder kafkaTopicPropertyBuilder =
+            new KafkaTopicPropertyBuilder(PolicyEndPointProperties.PROPERTY_KAFKA_SINK_TOPICS)
+                .makeTopic(KAFKA_SINK_TOPIC);
+
+        configuration.putAll(kafkaTopicPropertyBuilder.build());
+        group.getTopicSources().add(kafkaTopicPropertyBuilder.getParams());
+        sinks = manager.addTopicSinks(group.getTopicSources());
+        assertSame(2, sinks.size());
+
+        configuration.remove(KAFKA_SOURCE_TOPIC);
+        group.setTopicSources(new LinkedList<>());
+        sinks = manager.addTopicSinks(group.getTopicSources());
+        assertSame(0, sinks.size());
     }
 
     @Test
@@ -220,6 +273,13 @@ class TopicEndpointProxyTest {
 
         assertTrue(allSources(sources));
         assertFalse(anySink(sources));
+
+        assertThatThrownBy(() -> manager.getKafkaTopicSource("testTopic"))
+            .hasMessageContaining("KafkaTopiceSource for testTopic not found");
+
+        List<String> topicName = null;
+        assertThatThrownBy(() -> manager.getTopicSources(topicName))
+            .hasMessageContaining("must provide a list of topics");
     }
 
     @Test
@@ -234,6 +294,20 @@ class TopicEndpointProxyTest {
 
         assertFalse(anySource(sinks));
         assertTrue(allSinks(sinks));
+
+        final List<String> sinks2 = null;
+        assertThatThrownBy(() -> manager.getTopicSinks(sinks2)).hasMessageContaining("must provide a list of topics");
+
+        List<String> sinks3 = List.of(NOOP_SINK_TOPIC);
+        assertThatCode(() -> manager.getTopicSinks(sinks3)).doesNotThrowAnyException();
+
+        String sinkTest = null;
+        assertThatThrownBy(() -> manager.getTopicSinks(sinkTest))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessageContaining("Invalid parameter");
+
+        assertThatThrownBy(() -> manager.getKafkaTopicSink("testTopic"))
+            .hasMessageContaining("KafkaTopicSink for testTopic not found");
     }
 
     @Test
