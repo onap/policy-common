@@ -22,6 +22,7 @@ package org.onap.policy.common.endpoints.event.comm.bus;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_KAFKA_SINK_TOPICS;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX;
@@ -88,6 +89,7 @@ class KafkaTopicSinkFactoryTest extends KafkaTopicFactoryTestBase<KafkaTopicSink
         assertEquals(MY_TOPIC, params.getTopic());
         assertEquals(MY_EFFECTIVE_TOPIC, params.getEffectiveTopic());
         assertEquals(MY_PARTITION, params.getPartitionId());
+        assertNotNull(params.getAdditionalProps());
 
         List<KafkaTopicSink> topics2 = buildTopics(makePropBuilder().makeTopic(TOPIC3)
             .removeTopicProperty(PROPERTY_TOPIC_EFFECTIVE_TOPIC_SUFFIX).build());
@@ -98,6 +100,13 @@ class KafkaTopicSinkFactoryTest extends KafkaTopicFactoryTestBase<KafkaTopicSink
         initFactory();
 
         assertEquals(1, buildTopics(makePropBuilder().makeTopic(MY_TOPIC).build()).size());
+    }
+
+    @Test
+    void testBuildFromProperties() {
+        Properties props = makePropBuilder().makeTopic(MY_TOPIC).build();
+        var listTopic = factory.build(props);
+        assertNotNull(listTopic);
     }
 
     @Test

@@ -1,6 +1,6 @@
 /*
  * ============LICENSE_START=======================================================
- * Copyright (C) 2022 Nordix Foundation.
+ * Copyright (C) 2022, 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,17 +26,25 @@ import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperti
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SERVERS_SUFFIX;
 import static org.onap.policy.common.endpoints.properties.PolicyEndPointProperties.PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX;
 
-import java.util.Arrays;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import org.onap.policy.common.endpoints.parameters.TopicParameters;
 
+@Getter
 public class KafkaTopicPropertyBuilder extends TopicPropertyBuilder {
 
     public static final String SERVER = "localhost:9092";
     public static final String TOPIC2 = "my-topic-2";
+    public static final String ADDITIONAL_PROPS = "{\"security.protocol\": \"SASL_PLAINTEXT\","
+        + "\"sasl.mechanism\": \"SCRAM-SHA-512\",\"sasl.jaas.config\": "
+        + "\"org.apache.kafka.common.security.plain.PlainLoginModule "
+        + "required username=abc password=abc serviceName=kafka;\"}";
 
-    @Getter
-    private TopicParameters params = new TopicParameters();
+    private final TopicParameters params = new TopicParameters();
 
     /**
      * Constructs the object.
@@ -61,6 +69,7 @@ public class KafkaTopicPropertyBuilder extends TopicPropertyBuilder {
         setTopicProperty(PROPERTY_HTTP_HTTPS_SUFFIX, "true");
         setTopicProperty(PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX, MY_PARTITION);
         setTopicProperty(PROPERTY_TOPIC_SERVERS_SUFFIX, SERVER);
+        setTopicProperty(".additionalProps", ADDITIONAL_PROPS);
 
         params.setTopicCommInfrastructure("kafka");
         params.setTopic(topic);
@@ -68,8 +77,17 @@ public class KafkaTopicPropertyBuilder extends TopicPropertyBuilder {
         params.setManaged(true);
         params.setUseHttps(true);
         params.setPartitionId(MY_PARTITION);
-        params.setServers(Arrays.asList(SERVER));
+        params.setServers(List.of(SERVER));
+        params.setAdditionalProps(getAdditionalProps());
 
         return this;
+    }
+
+    private Map<String, String> getAdditionalProps() {
+        try {
+            return new ObjectMapper().readValue(ADDITIONAL_PROPS, Map.class);
+        } catch (JsonProcessingException e) {
+            return Collections.emptyMap();
+        }
     }
 }
