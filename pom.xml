@@ -52,10 +52,7 @@
         <module>utils-test</module>
         <module>utils</module>
         <module>gson</module>
-        <module>common-logging</module>
         <module>common-parameters</module>
-        <module>integrity-audit</module>
-        <module>integrity-monitor</module>
         <module>policy-endpoints</module>
         <module>spring-utils</module>
     </modules>

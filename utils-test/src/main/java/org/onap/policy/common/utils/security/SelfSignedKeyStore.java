@@ -75,7 +75,6 @@ public class SelfSignedKeyStore {
      * Generates the keystore, if it does not exist or if it's more than a few hours old.
      *
      * @throws IOException if an I/O error occurs
-     * @throws InterruptedException if an interrupt occurs
      */
     public SelfSignedKeyStore() throws IOException {
         this(RELATIVE_PATH);
@@ -87,7 +86,6 @@ public class SelfSignedKeyStore {
      * @param relativePath path to the keystore, relative to the "user.dir" system
      *        property
      * @throws IOException if an I/O error occurs
-     * @throws InterruptedException if an interrupt occurs
      */
     public SelfSignedKeyStore(String relativePath) throws IOException {
         keystoreName = System.getProperty("user.dir") + "/" + relativePath;

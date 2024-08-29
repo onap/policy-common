@@ -1,1 +1,0 @@
-2019-12-05T13:24:14.110Z|TheRequestId|TheServiceInstanceId|main|TheServerName|TheServiceName|TheInstanceUuid|INFO|TheSeverity|TheServerIpAddress|TheServer|TheClientIpAddress|org.onap.policy.common.ia.DefaultLoggingPatternTest||This is a test logging string for xlogger
