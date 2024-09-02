@@ -43,6 +43,7 @@ public final class PolicyEndPointProperties {
     public static final String PROPERTY_TOPIC_SOURCE_FETCH_TIMEOUT_SUFFIX = ".fetchTimeout";
     public static final String PROPERTY_TOPIC_SOURCE_FETCH_LIMIT_SUFFIX = ".fetchLimit";
     public static final String PROPERTY_MANAGED_SUFFIX = ".managed";
+    public static final String PROPERTY_ADDITIONAL_PROPS_SUFFIX = ".additionalProps";
 
     public static final String PROPERTY_TOPIC_SINK_PARTITION_KEY_SUFFIX = ".partitionKey";
 
