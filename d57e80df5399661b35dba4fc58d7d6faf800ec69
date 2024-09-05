@@ -16,6 +16,24 @@
       "message": "hey, your review looks pretty good, just a couple of things that sonar reported on the pipeline run\nhttps://sonarcloud.io/project/issues?issueStatuses\u003dOPEN%2CCONFIRMED\u0026sinceLeakPeriod\u003dtrue\u0026branch\u003d138840-2\u0026id\u003donap_policy-common",
       "revId": "d57e80df5399661b35dba4fc58d7d6faf800ec69",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ddf21532_008d80b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2024-09-05T07:54:07Z",
+      "side": 1,
+      "message": "Done. Can we merge this?",
+      "parentUuid": "618eea46_499a72a2",
+      "revId": "d57e80df5399661b35dba4fc58d7d6faf800ec69",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     }
   ]
 }
