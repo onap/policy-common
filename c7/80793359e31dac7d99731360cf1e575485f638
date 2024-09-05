@@ -1,0 +1,8 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Verified+1: ONAP Required GHA <releng+onap.required.gha@linuxfoundation.org>
+Code-Review+2: Adheli Tavares <adheli.tavares@est.tech>
+Submitted-by: Adheli Tavares <adheli.tavares@est.tech>
+Submitted-at: Thu, 05 Sep 2024 16:00:48 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/policy/common/+/138840
+Project: policy/common
+Branch: refs/heads/master
