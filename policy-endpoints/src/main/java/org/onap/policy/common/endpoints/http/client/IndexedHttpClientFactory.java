@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2019, 2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2023 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,10 +29,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import org.apache.commons.lang3.StringUtils;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.http.client.internal.JerseyClient;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
-import org.onap.policy.common.endpoints.utils.PropertyUtils;
+import org.onap.policy.common.parameters.topic.BusTopicParams;
+import org.onap.policy.common.utils.properties.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

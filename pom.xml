@@ -49,12 +49,13 @@
 
     <modules>
         <module>capabilities</module>
-        <module>utils-test</module>
-        <module>utils</module>
-        <module>gson</module>
         <module>common-parameters</module>
-        <module>policy-endpoints</module>
+        <module>gson</module>
+        <module>utils</module>
+        <module>utils-test</module>
         <module>spring-utils</module>
+        <module>message-bus</module>
+        <module>policy-endpoints</module>
     </modules>
 
     <build>

@@ -3,6 +3,7 @@
  * utils
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2024 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,22 +36,22 @@ import org.slf4j.LoggerFactory;
  */
 public class OrderedServiceImpl<T extends OrderedService> {
     // logger
-    private static Logger  logger = LoggerFactory.getLogger(OrderedServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(OrderedServiceImpl.class);
 
     // sorted list of instances implementing the service
     private List<T> implementers = null;
 
     // 'ServiceLoader' that is used to discover and create the services
-    private ServiceLoader<T> serviceLoader = null;
+    private final ServiceLoader<T> serviceLoader;
 
     // use this to ensure that we only use one unique instance of each class
-    private static Map<Class<?>, OrderedService> classToSingleton = new HashMap<>();
+    private static final Map<Class<?>, OrderedService> classToSingleton = new HashMap<>();
 
     /**
      * Constructor - create the 'ServiceLoader' instance.
      *
      * @param clazz the class object associated with 'T' (I supposed it could
-     *     be a subclass, but I'm not sure this is useful)
+     *              be a subclass, but I'm not sure if this is useful)
      */
     public OrderedServiceImpl(Class<T> clazz) {
         // This constructor wouldn't be needed if 'T.class' was legal
@@ -60,8 +61,7 @@ public class OrderedServiceImpl<T extends OrderedService> {
     /**
      * Get List of implementers.
      *
-     * @return the sorted list of services implementing interface 'T' discovered
-     *     by 'ServiceLoader'.
+     * @return the sorted list of services implementing interface 'T' discovered by 'ServiceLoader'.
      */
     public synchronized List<T> getList() {
         if (implementers == null) {
@@ -78,12 +78,11 @@ public class OrderedServiceImpl<T extends OrderedService> {
      * expensive operation in terms of CPU and elapsed time, so it is best if it
      * isn't invoked too frequently.
      *
-     * @return the sorted list of services implementing interface 'T' discovered
-     *      by 'ServiceLoader'.
+     * @return the sorted list of services implementing interface 'T' discovered by 'ServiceLoader'.
      */
     @SuppressWarnings("unchecked")
     public synchronized List<T> rebuildList() {
-        // build a list of all of the current implementors
+        // build a list of all the current implementors
         List<T> tmp = new LinkedList<>();
         for (T service : serviceLoader) {
             tmp.add((T) getSingleton(service));
@@ -91,7 +90,7 @@ public class OrderedServiceImpl<T extends OrderedService> {
 
         // Sort the list according to sequence number, and then alphabetically
         // according to full class name.
-        Collections.sort(tmp, (o1, o2) -> {
+        tmp.sort((o1, o2) -> {
             int s1 = o1.getSequenceNumber();
             int s2 = o2.getSequenceNumber();
             if (s1 < s2) {
@@ -112,7 +111,7 @@ public class OrderedServiceImpl<T extends OrderedService> {
     /**
      * If a service implements multiple APIs managed by 'ServiceLoader', a
      * separate instance is created for each API. This method ensures that
-     * the first instance is used in all of the lists.
+     * the first instance is used in all the lists.
      *
      * @param service this is the object created by ServiceLoader
      * @return the object to use in place of 'service'. If 'service' is the first

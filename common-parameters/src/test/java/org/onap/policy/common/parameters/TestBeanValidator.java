@@ -82,9 +82,6 @@ class TestBeanValidator {
         data.strValue = STRING_VALUE;
         assertTrue(validator.validateTop(TOP, data).isValid());
 
-        /**
-         * Repeat with a subclass.
-         */
         @Getter
         class Derived extends Data {
             @Min(10)
@@ -119,8 +116,8 @@ class TestBeanValidator {
 
     @Test
     void testVerNotNull() {
+        @Getter
         class NotNullCheck {
-            @Getter
             @Min(1)
             @NotNull
             Integer intValue;
@@ -138,8 +135,8 @@ class TestBeanValidator {
 
     @Test
     void testVerNotBlank() {
+        @Getter
         class NotBlankCheck {
-            @Getter
             @NotBlank
             String strValue;
         }
@@ -164,8 +161,8 @@ class TestBeanValidator {
         /*
          * Class with "blank" annotation on an integer.
          */
+        @Getter
         class NotBlankInt {
-            @Getter
             @NotBlank
             int intValue;
         }
@@ -180,8 +177,8 @@ class TestBeanValidator {
      */
     @Test
     void testVerSizeCollection() {
+        @Getter
         class CollectionSizeCheck {
-            @Getter
             @Size(min = 3)
             Collection<Integer> items;
         }
@@ -210,8 +207,8 @@ class TestBeanValidator {
      */
     @Test
     void testVerSizeMap() {
+        @Getter
         class MapSizeCheck {
-            @Getter
             @Size(min = 3)
             Map<Integer, Integer> items;
         }
@@ -240,8 +237,8 @@ class TestBeanValidator {
      */
     @Test
     void testVerSizeOther() {
+        @Getter
         class OtherSizeCheck {
-            @Getter
             @Size(min = 3)
             Integer items;
         }
@@ -254,8 +251,8 @@ class TestBeanValidator {
 
     @Test
     void testVerRegex() {
+        @Getter
         class RegexCheck {
-            @Getter
             @Pattern(regexp = "[a-f]*")
             String strValue;
         }
@@ -272,8 +269,8 @@ class TestBeanValidator {
         assertTrue(validator.validateTop(TOP, regexCheck).isValid());
 
         // invalid regex
+        @Getter
         class InvalidRegexCheck {
-            @Getter
             @Pattern(regexp = "[a-f")
             String strValue;
         }
@@ -292,8 +289,8 @@ class TestBeanValidator {
         /*
          * Class with "regex" annotation on an integer.
          */
+        @Getter
         class RegexInt {
-            @Getter
             @Pattern(regexp = "[a-f]*")
             int intValue;
         }
@@ -309,8 +306,8 @@ class TestBeanValidator {
         /*
          * Field is not a number.
          */
+        @Getter
         class NonNumeric {
-            @Getter
             @Max(100)
             String strValue;
         }
@@ -322,68 +319,68 @@ class TestBeanValidator {
         /*
          * Integer field.
          */
+        @Getter
         class IntField {
-            @Getter
             @Max(100)
             Integer intValue;
         }
 
         // ok value
         IntField intField = new IntField();
-        assertNumeric("testVerMax-integer", intField, value -> {
+        assertNumeric(intField, value -> {
             intField.intValue = value;
-        }, INT_FIELD, "maximum", INT_VALUE, 100, 101);
+        }, INT_FIELD, "maximum", 100, 101);
 
         /*
          * Long field.
          */
+        @Getter
         class LongField {
-            @Getter
             @Max(100)
             Long numValue;
         }
 
         // ok value
         LongField longField = new LongField();
-        assertNumeric("testVerMax-long", longField, value -> {
+        assertNumeric(longField, value -> {
             longField.numValue = (long) value;
-        }, NUM_FIELD, "maximum", INT_VALUE, 100, 101);
+        }, NUM_FIELD, "maximum", 100, 101);
 
         /*
          * Float field.
          */
+        @Getter
         class FloatField {
-            @Getter
             @Max(100)
             Float numValue;
         }
 
         // ok value
         FloatField floatField = new FloatField();
-        assertNumeric("testVerMax-float", floatField, value -> {
+        assertNumeric(floatField, value -> {
             floatField.numValue = (float) value;
-        }, NUM_FIELD, "maximum", INT_VALUE, 100, 101);
+        }, NUM_FIELD, "maximum", 100, 101);
 
         /*
          * Double field.
          */
+        @Getter
         class DoubleField {
-            @Getter
             @Max(100)
             Double numValue;
         }
 
         // ok value
         DoubleField doubleField = new DoubleField();
-        assertNumeric("testVerMax-double", doubleField, value -> {
+        assertNumeric(doubleField, value -> {
             doubleField.numValue = (double) value;
-        }, NUM_FIELD, "maximum", INT_VALUE, 100, 101);
+        }, NUM_FIELD, "maximum", 100, 101);
 
         /*
          * Atomic Integer field (which is a subclass of Number).
          */
+        @Getter
         class AtomIntValue {
-            @Getter
             @Max(100)
             AtomicInteger numValue;
         }
@@ -403,8 +400,8 @@ class TestBeanValidator {
         /*
          * Field is not a number.
          */
+        @Getter
         class NonNumeric {
-            @Getter
             @Min(10)
             String strValue;
         }
@@ -416,68 +413,68 @@ class TestBeanValidator {
         /*
          * Integer field.
          */
+        @Getter
         class IntField {
-            @Getter
             @Min(10)
             Integer intValue;
         }
 
         // ok value
         IntField intField = new IntField();
-        assertNumeric("testVerMin-integer", intField, value -> {
+        assertNumeric(intField, value -> {
             intField.intValue = value;
-        }, INT_FIELD, "minimum", INT_VALUE, 10, 1);
+        }, INT_FIELD, "minimum", 10, 1);
 
         /*
          * Long field.
          */
+        @Getter
         class LongField {
-            @Getter
             @Min(10)
             Long numValue;
         }
 
         // ok value
         LongField longField = new LongField();
-        assertNumeric("testVerMin-long", longField, value -> {
+        assertNumeric(longField, value -> {
             longField.numValue = (long) value;
-        }, NUM_FIELD, "minimum", INT_VALUE, 10, 1);
+        }, NUM_FIELD, "minimum", 10, 1);
 
         /*
          * Float field.
          */
+        @Getter
         class FloatField {
-            @Getter
             @Min(10)
             Float numValue;
         }
 
         // ok value
         FloatField floatField = new FloatField();
-        assertNumeric("testVerMin-float", floatField, value -> {
+        assertNumeric(floatField, value -> {
             floatField.numValue = (float) value;
-        }, NUM_FIELD, "minimum", INT_VALUE, 10, 1);
+        }, NUM_FIELD, "minimum", 10, 1);
 
         /*
          * Double field.
          */
+        @Getter
         class DoubleField {
-            @Getter
             @Min(10)
             Double numValue;
         }
 
         // ok value
         DoubleField doubleField = new DoubleField();
-        assertNumeric("testVerMin-double", doubleField, value -> {
+        assertNumeric(doubleField, value -> {
             doubleField.numValue = (double) value;
-        }, NUM_FIELD, "minimum", INT_VALUE, 10, 1);
+        }, NUM_FIELD, "minimum", 10, 1);
 
         /*
          * Atomic Integer field (which is a subclass of Number).
          */
+        @Getter
         class AtomIntValue {
-            @Getter
             @Min(10)
             AtomicInteger numValue;
         }
@@ -494,8 +491,8 @@ class TestBeanValidator {
 
     @Test
     void testVerClassName() {
+        @Getter
         class ClassNameCheck {
-            @Getter
             @ClassName
             String strValue;
         }
@@ -518,8 +515,8 @@ class TestBeanValidator {
 
     @Test
     void testVerCascade() {
+        @Getter
         class Item {
-            @Getter
             @NotNull
             Integer intValue;
         }
@@ -626,27 +623,26 @@ class TestBeanValidator {
 
     @Test
     void testGetEntryName() {
-        assertThat(validator.getEntryName(makeEntry(null, 0))).isEmpty();
-        assertThat(validator.getEntryName(makeEntry("", 0))).isEmpty();
-        assertThat(validator.getEntryName(makeEntry(STRING_VALUE, 0))).isEqualTo(STRING_VALUE);
+        assertThat(validator.getEntryName(makeEntry(null))).isEmpty();
+        assertThat(validator.getEntryName(makeEntry(""))).isEmpty();
+        assertThat(validator.getEntryName(makeEntry(STRING_VALUE))).isEqualTo(STRING_VALUE);
     }
 
     /**
      * Makes a Map entry with the given key and value.
      *
      * @param key desired key
-     * @param value desired value
      * @return a new Map entry
      */
-    private Map.Entry<String, Integer> makeEntry(String key, int value) {
+    private Map.Entry<String, Integer> makeEntry(String key) {
         HashMap<String, Integer> map = new HashMap<>();
-        map.put(key, value);
+        map.put(key, 0);
         return map.entrySet().iterator().next();
     }
 
-    private <T> void assertNumeric(String testName, T object, Consumer<Integer> setter, String fieldName,
-                    String expectedText, int inside, int edge, int outside) {
-        setter.accept(inside);
+    private <T> void assertNumeric(T object, Consumer<Integer> setter, String fieldName,
+                                   String expectedText, int edge, int outside) {
+        setter.accept(TestBeanValidator.INT_VALUE);
         assertTrue(validator.validateTop(TOP, object).isValid());
 
         // on the edge

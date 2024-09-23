@@ -36,7 +36,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
-import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.Setter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.onap.policy.common.gson.annotation.GsonJsonAnyGetter;
@@ -63,20 +64,17 @@ class ClassWalkerTest {
     void testExamineClassOfQ_testExamineField_testExamineInField_testExamineOutField() {
         walker.walkClassHierarchy(DerivedFromBottom.class);
 
-        assertEquals("[Intfc1, Intfc2, Intfc1, Intfc3, Bottom, DerivedFromBottom]", walker.classes.toString());
+        assertEquals("[InterfaceOne, InterfaceTwo, InterfaceOne, InterfaceThree, Bottom, DerivedFromBottom]",
+            walker.classes.toString());
 
-        List<String> inFields = walker.getInProps(Field.class).stream().map(Field::getName)
-                        .collect(Collectors.toList());
-        Collections.sort(inFields);
+        List<String> inFields = walker.getInProps(Field.class).stream().map(Field::getName).sorted().toList();
         assertEquals("[exposedField, overriddenValue, transField]", inFields.toString());
 
-        List<String> outFields = walker.getInProps(Field.class).stream().map(Field::getName)
-                        .collect(Collectors.toList());
-        Collections.sort(outFields);
+        List<String> outFields = walker.getInProps(Field.class).stream().map(Field::getName).sorted().toList();
         assertEquals("[exposedField, overriddenValue, transField]", outFields.toString());
 
         // should work with interfaces without throwing an NPE
-        walker.walkClassHierarchy(Intfc1.class);
+        walker.walkClassHierarchy(InterfaceOne.class);
     }
 
     @Test
@@ -127,17 +125,13 @@ class ClassWalkerTest {
         assertNotNull(walker.getAnyGetter());
         assertEquals("getTheMap", walker.getAnyGetter().getName());
 
-        List<String> getters = walker.getOutProps(Method.class).stream().map(Method::getName)
-                        .collect(Collectors.toList());
-        Collections.sort(getters);
+        List<String> getters = walker.getOutProps(Method.class).stream().map(Method::getName).sorted().toList();
         assertEquals("[getId, getOnlyOut, getValue]", getters.toString());
 
         assertNotNull(walker.getAnySetter());
         assertEquals("setMapValue", walker.getAnySetter().getName());
 
-        List<String> setters = walker.getInProps(Method.class).stream().map(Method::getName)
-                        .collect(Collectors.toList());
-        Collections.sort(setters);
+        List<String> setters = walker.getInProps(Method.class).stream().map(Method::getName).sorted().toList();
         assertEquals("[setId, setOnlyIn, setValue]", setters.toString());
 
         // getter with invalid parameter count
@@ -189,8 +183,8 @@ class ClassWalkerTest {
      * Walker subclass that records items that are examined.
      */
     private static class MyWalker extends ClassWalker {
-        private List<String> classes = new ArrayList<>();
-        private List<String> methods = new ArrayList<>();
+        private final List<String> classes = new ArrayList<>();
+        private final List<String> methods = new ArrayList<>();
 
         @Override
         protected void examine(Class<?> clazz) {
@@ -218,19 +212,19 @@ class ClassWalkerTest {
         }
     }
 
-    protected static interface Intfc1 {
-        int id = 1000;
+    protected interface InterfaceOne {
+        int id = 1000; // NOSONAR I think this is meant to be accessible as fields, not constants
     }
 
-    protected static interface Intfc2 {
-        String text = "intfc2-text";
+    protected interface InterfaceTwo {
+        String text = "intfc2-text"; // NOSONAR I think this is meant to be accessible as fields, not constants
     }
 
-    private static interface Intfc3 {
+    private interface InterfaceThree {
 
     }
 
-    protected static class Bottom implements Intfc1, Intfc3 {
+    protected static class Bottom implements InterfaceOne, InterfaceThree {
         private int id;
         public String value;
 
@@ -259,7 +253,7 @@ class ClassWalkerTest {
         }
     }
 
-    protected static class DerivedFromBottom extends Bottom implements Intfc1, Intfc2 {
+    protected static class DerivedFromBottom extends Bottom implements InterfaceOne, InterfaceTwo {
         private String text;
         protected String anotherValue;
 
@@ -277,27 +271,17 @@ class ClassWalkerTest {
         }
     }
 
+    @Setter
     protected static class Data {
+        @Getter
         private int id;
+        // this will be ignored, because there's already a field by this name
         private String text;
-
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
 
         // not public, but property provided
         @GsonJsonProperty("text")
         protected String getText() {
             return text;
-        }
-
-        // this will be ignored, because there's already a field by this name
-        public void setText(String text) {
-            this.text = text;
         }
 
         // should only show up in the output list

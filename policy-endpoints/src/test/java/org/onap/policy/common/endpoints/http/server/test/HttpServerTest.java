@@ -242,7 +242,7 @@ class HttpServerTest {
      */
     @Test
     void testExplicitPrometheusServer() throws Exception {
-        logger.info("-- testPrometheusServer() --");
+        logger.info("-- testExplicitPrometheusServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
             .build(PROMETHEUS, LOCALHOST, port, "/", false, true);
@@ -261,7 +261,7 @@ class HttpServerTest {
      */
     @Test
     void testPrometheusJaxRsFilterSwaggerServer() throws Exception {
-        logger.info("-- testPrometheusServer() --");
+        logger.info("-- testPrometheusJaxRsFilterSwaggerServer() --");
 
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
             .build(PROMETHEUS, LOCALHOST, port, "/", true, true);

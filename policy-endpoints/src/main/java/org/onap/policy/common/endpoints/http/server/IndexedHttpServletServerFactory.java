@@ -31,7 +31,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
 import org.onap.policy.common.endpoints.http.server.internal.JettyStaticResourceServer;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
-import org.onap.policy.common.endpoints.utils.PropertyUtils;
+import org.onap.policy.common.utils.properties.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -112,7 +112,7 @@ class TestBeanValidationResult {
 
     @Test
     void testValidateNotNullList() {
-        List<ValidationResult> list = Arrays.asList(clean);
+        List<ValidationResult> list = List.of(clean);
         assertTrue(bean.validateNotNullList(MY_LIST, list, item -> item));
         assertTrue(bean.isValid());
         assertNull(bean.getResult());
@@ -141,7 +141,7 @@ class TestBeanValidationResult {
         assertTrue(bean.isValid());
         assertNull(bean.getResult());
 
-        list = Arrays.asList(clean);
+        list = List.of(clean);
         bean = new BeanValidationResult(NAME, OBJECT);
         assertTrue(bean.validateList(MY_LIST, list, item -> item));
         assertTrue(bean.isValid());

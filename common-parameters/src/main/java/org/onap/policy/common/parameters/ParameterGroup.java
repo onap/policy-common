@@ -1,8 +1,9 @@
 /*-
- * ============LICENSE_START=======================================================
+ * ============LICENSE_START=========================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
- * ================================================================================
+ * Modifications Copyright (C) 2024 Nordix Foundation.
+ * ==================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -33,14 +34,14 @@ public interface ParameterGroup {
      *
      * @return the group name
      */
-    public String getName();
+    String getName();
 
     /**
      * Set the group name.
      *
      * @param name the group name
      */
-    public void setName(final String name);
+    void setName(final String name);
 
     /**
      * Validate parameters.

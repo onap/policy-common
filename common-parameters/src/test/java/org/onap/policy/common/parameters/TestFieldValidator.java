@@ -101,7 +101,7 @@ class TestFieldValidator extends ValidatorUtil {
     private int voidMethod;
 
     /**
-     * Accessor is {@link #getParameterizedMethod()}, which requires a parameter.
+     * Accessor is {@link #getParameterizedMethod(boolean)}, which requires a parameter.
      */
     @Min(0)
     private int parameterizedMethod;
@@ -357,7 +357,7 @@ class TestFieldValidator extends ValidatorUtil {
     }
 
     public int getParameterizedMethod(boolean flag) {
-        return 0;
+        return flag ? 0 : 1;
     }
 
     public int getExMethod() {

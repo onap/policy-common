@@ -41,11 +41,11 @@ import java.util.TreeMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import lombok.Getter;
+import lombok.Setter;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.onap.policy.common.endpoints.event.comm.bus.internal.BusTopicParams;
 import org.onap.policy.common.endpoints.http.client.HttpClient;
 import org.onap.policy.common.endpoints.http.client.HttpClientConfigException;
 import org.onap.policy.common.endpoints.http.client.HttpClientFactoryInstance;
@@ -53,6 +53,7 @@ import org.onap.policy.common.endpoints.http.server.HttpServletServer;
 import org.onap.policy.common.endpoints.http.server.HttpServletServerFactoryInstance;
 import org.onap.policy.common.endpoints.http.server.internal.JettyJerseyServer;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
+import org.onap.policy.common.parameters.topic.BusTopicParams;
 import org.onap.policy.common.utils.network.NetworkUtil;
 
 class HttpClientTest {
@@ -532,20 +533,14 @@ class HttpClientTest {
     }
 
 
+    @Setter
+    @Getter
     static class MyEntity {
 
         private String myParameter;
 
         public MyEntity(final String myParameter) {
             this.myParameter = myParameter;
-        }
-
-        public void setMyParameter(final String myParameter) {
-            this.myParameter = myParameter;
-        }
-
-        public String getMyParameter() {
-            return myParameter;
         }
 
     }
@@ -557,7 +552,7 @@ class HttpClientTest {
         @Getter
         private Throwable throwable;
 
-        private CountDownLatch latch = new CountDownLatch(1);
+        private final CountDownLatch latch = new CountDownLatch(1);
 
         @Override
         public void completed(Response response) {

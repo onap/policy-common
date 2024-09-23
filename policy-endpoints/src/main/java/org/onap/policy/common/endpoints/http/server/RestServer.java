@@ -29,9 +29,9 @@ import java.util.Optional;
 import java.util.Properties;
 import java.util.stream.Collectors;
 import lombok.ToString;
-import org.onap.policy.common.endpoints.parameters.RestServerParameters;
 import org.onap.policy.common.endpoints.properties.PolicyEndPointProperties;
 import org.onap.policy.common.gson.GsonMessageBodyHandler;
+import org.onap.policy.common.parameters.rest.RestServerParameters;
 import org.onap.policy.common.utils.services.ServiceManagerContainer;
 
 /**

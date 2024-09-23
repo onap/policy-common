@@ -34,7 +34,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.onap.policy.common.endpoints.event.comm.Topic.CommInfrastructure;
+import org.onap.policy.common.message.bus.event.Topic.CommInfrastructure;
 import org.onap.policy.common.utils.coder.Coder;
 import org.onap.policy.common.utils.coder.CoderException;
 import org.onap.policy.common.utils.coder.StandardCoder;
@@ -62,8 +62,6 @@ class ScoListenerTest {
     private static final Coder coder = new StandardCoder();
 
     private ScoListener<MyMessage> primary;
-    private MyMessage status;
-    private StandardCoderObject sco;
 
     /**
      * Initializes statics.
@@ -108,8 +106,8 @@ class ScoListenerTest {
     void testOnTopicEvent() {
         primary = spy(primary);
 
-        status = new MyMessage(NAME);
-        sco = makeSco(status);
+        MyMessage status = new MyMessage(NAME);
+        StandardCoderObject sco = makeSco(status);
         primary.onTopicEvent(INFRA, TOPIC, sco);
         verify(primary).onTopicEvent(INFRA, TOPIC, sco, status);
 
@@ -117,7 +115,7 @@ class ScoListenerTest {
 
         // undecodable message
         logger.addAppender(appender);
-        primary.onTopicEvent(INFRA, TOPIC, makeSco("[]"));
+        primary.onTopicEvent(INFRA, TOPIC, makeSco());
         verify(primary, times(1)).onTopicEvent(INFRA, TOPIC, sco, status);
         assertTrue(appender.getExtracted().toString().contains("unable to decode"));
     }
@@ -125,12 +123,11 @@ class ScoListenerTest {
     /**
      * Makes a standard object from a JSON string.
      *
-     * @param source message to be converted
      * @return a standard object representing the message
      */
-    private StandardCoderObject makeSco(String source) {
+    private StandardCoderObject makeSco() {
         try {
-            return coder.decode(source, StandardCoderObject.class);
+            return coder.decode("[]", StandardCoderObject.class);
 
         } catch (CoderException e) {
             throw new RuntimeException(e);
@@ -184,13 +181,10 @@ class ScoListenerTest {
             }
             MyMessage other = (MyMessage) obj;
             if (name == null) {
-                if (other.name != null) {
-                    return false;
-                }
-            } else if (!name.equals(other.name)) {
-                return false;
+                return other.name == null;
+            } else {
+                return name.equals(other.name);
             }
-            return true;
         }
     }
 }
