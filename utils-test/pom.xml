@@ -26,7 +26,7 @@
     <parent>
         <groupId>org.onap.policy.common</groupId>
         <artifactId>common-modules</artifactId>
-        <version>3.0.1-SNAPSHOT</version>
+        <version>3.0.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>utils-test</artifactId>
