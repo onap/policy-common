@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2024 Nordix Foundation
+ * Modifications Copyright (C) 2024-2025 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ class StandardCoderObjectTest {
     private static final String PROP1 = "abc";
     private static final String PROP2 = "ghi";
     private static final Integer PROP2_INDEX = 1;
-    private static final String PROP2b = "jkl";
+    private static final String PROP_2_B = "jkl";
     private static final String VAL1 = "def";
     private static final String VAL2 = "mno";
     private static final String JSON = "{'abc':'def','ghi':[{},{'jkl':'mno'}]}".replace('\'', '"');
@@ -71,7 +71,7 @@ class StandardCoderObjectTest {
         assertEquals(VAL1, sco.getString(PROP1));
 
         // multiple fields
-        assertEquals(VAL2, sco.getString(PROP2, PROP2_INDEX, PROP2b));
+        assertEquals(VAL2, sco.getString(PROP2, PROP2_INDEX, PROP_2_B));
 
         // not found
         assertNull(sco.getString("xyz"));

@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2024 Nordix Foundation
+ * Modifications Copyright (C) 2024-2025 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,8 +62,7 @@ class TestValueValidator extends ValidatorUtil {
         validator.validateValue(result, MY_FIELD, null);
         assertThat(result.getResult()).isNull();
 
-        validator.addAnnotation(NotNull.class,
-            (result2, fieldName, value) -> result2.validateNotNull(fieldName, value));
+        validator.addAnnotation(NotNull.class, BeanValidationResult::validateNotNull);
         validator.validateValue(result, MY_FIELD, null);
         assertThat(result.getResult()).contains(MY_FIELD, "null");
     }
@@ -75,8 +74,7 @@ class TestValueValidator extends ValidatorUtil {
         validator.validateValue(result, MY_FIELD, HELLO);
         assertThat(result.getResult()).isNull();
 
-        validator.addAnnotation(NotNull.class,
-            (result2, fieldName, value) -> result2.validateNotNull(fieldName, value));
+        validator.addAnnotation(NotNull.class, BeanValidationResult::validateNotNull);
         validator.validateValue(result, MY_FIELD, HELLO);
         assertThat(result.getResult()).isNull();
     }
@@ -93,7 +91,6 @@ class TestValueValidator extends ValidatorUtil {
         assertThat(validator.isNullAllowed()).isTrue();
 
         // "null" flag should become false with this annotation
-        assertThat(validator.isNullAllowed()).isTrue();
         validator.addAnnotation(NotNull.class, (result2, fieldName, value) -> true);
         assertThat(validator.isNullAllowed()).isFalse();
     }
@@ -109,7 +106,7 @@ class TestValueValidator extends ValidatorUtil {
 
         // the field DOES have this annotation
         validator.addAnnotation(NotNull.class, (result2, fieldName, annot, value) -> {
-            wasNull.set(annot instanceof NotNull);
+            wasNull.set(annot != null);
             return result2.validateNotNull(fieldName, value);
         });
         assertThat(validator.isEmpty()).isFalse();

@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2024 Nordix Foundation.
+ * Modifications Copyright (C) 2024-2025 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
@@ -119,11 +120,11 @@ class BidirectionalTopicClientTest {
         lenient().when(source.offer(anyString())).thenReturn(true);
         lenient().when(source.getTopicCommInfrastructure()).thenReturn(SOURCE_INFRA);
 
-        lenient().when(endpoint.getTopicSinks(anyString())).thenReturn(Arrays.asList());
-        lenient().when(endpoint.getTopicSinks(SINK_TOPIC)).thenReturn(Arrays.asList(sink));
+        lenient().when(endpoint.getTopicSinks(anyString())).thenReturn(List.of());
+        lenient().when(endpoint.getTopicSinks(SINK_TOPIC)).thenReturn(List.of(sink));
 
-        lenient().when(endpoint.getTopicSources(any())).thenReturn(Arrays.asList());
-        lenient().when(endpoint.getTopicSources(Arrays.asList(SOURCE_TOPIC))).thenReturn(Arrays.asList(source));
+        lenient().when(endpoint.getTopicSources(any())).thenReturn(List.of());
+        lenient().when(endpoint.getTopicSources(List.of(SOURCE_TOPIC))).thenReturn(List.of(source));
 
         theMessage = new MyMessage(MY_TEXT);
 
@@ -161,7 +162,7 @@ class BidirectionalTopicClientTest {
             .hasMessage("no sources for topic: unknown-source");
 
         // too many sources
-        when(endpoint.getTopicSources(Arrays.asList(SOURCE_TOPIC))).thenReturn(Arrays.asList(source, source));
+        when(endpoint.getTopicSources(List.of(SOURCE_TOPIC))).thenReturn(Arrays.asList(source, source));
 
         assertThatThrownBy(() -> new BidirectionalTopicClient2(SINK_TOPIC, SOURCE_TOPIC))
             .isInstanceOf(BidirectionalTopicClientException.class)
@@ -381,9 +382,9 @@ class BidirectionalTopicClientTest {
 
                 @Override
                 public boolean send(String messageText) {
-                    boolean result = super.send(messageText);
+                    boolean messageSent = super.send(messageText);
                     sendSem.release();
-                    return result;
+                    return messageSent;
                 }
 
                 @Override

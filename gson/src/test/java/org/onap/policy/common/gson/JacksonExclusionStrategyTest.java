@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
- * Modificaitons Copyright (C) 2023-2024 Nordix Foundation.
+ * Modificaitons Copyright (C) 2023-2025 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,9 +29,12 @@ import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
+import java.io.Serial;
 import java.lang.reflect.GenericArrayType;
 import java.util.LinkedList;
 import java.util.TreeMap;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -91,7 +94,7 @@ class JacksonExclusionStrategyTest {
 
         // generic classes should NOT be managed
         Class<?>[] unmanaged = {
-            new Data[0].getClass(), Enum.class, boolean.class, byte.class, short.class, int.class,
+            Data[].class, Enum.class, boolean.class, byte.class, short.class, int.class,
             long.class, float.class, double.class, char.class, Boolean.class, Byte.class, Short.class,
             Integer.class, Long.class, Float.class, Double.class, Character.class, String.class,
             MyMap.class, MyList.class, MyJson.class, GenericArrayType.class};
@@ -104,21 +107,15 @@ class JacksonExclusionStrategyTest {
     /**
      * Used to verify that no fields are exposed.
      */
+    @Getter
+    @Setter
     @ToString
     public static class Data {
         private int id;
         public String text;
 
-        public int getId() {
-            return id;
-        }
-
         void setId(int id) {
             this.id = id;
-        }
-
-        public String getText() {
-            return text;
         }
 
         void setText(String text) {
@@ -126,13 +123,10 @@ class JacksonExclusionStrategyTest {
         }
     }
 
+    @Getter
     @ToString(callSuper = true)
     public static class Derived extends Data {
         protected String value;
-
-        public String getValue() {
-            return value;
-        }
 
         void setValue(String value) {
             this.value = value;
@@ -142,34 +136,34 @@ class JacksonExclusionStrategyTest {
     /**
      * Used to verify that enums are not managed.
      */
-    public static enum Enum {
+    public enum Enum {
         UP, DOWN,
     }
 
     /**
      * Used to verify that interfaces <i>are</i> managed.
      */
-    public static interface Intfc {
+    public interface Intfc {
         int getId();
     }
 
     /**
      * Used to verify that Maps are not managed.
      */
+    @Getter
     public static class MyMap extends TreeMap<String, Data> {
+        @Serial
         private static final long serialVersionUID = 1L;
 
         private int mapId;
 
-        public int getMapId() {
-            return mapId;
-        }
     }
 
     /**
      * Used to verify that Collections are not managed.
      */
     public static class MyList extends LinkedList<Data> {
+        @Serial
         private static final long serialVersionUID = 1L;
     }
 

@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2024 Nordix Foundation
+ * Modifications Copyright (C) 2024-2025 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ class PropertyCoderTest {
      * For "pass", the encrypted value was generated via:
      *  java org.onap.policy.common.utils.security.CryptoUtils enc hello abcdefghijklmnopqrstuvwxyzabcdef
      */
-    private static final String json =
+    private static final String JSON =
             ("{'aes_encryption_key':'abcdefghijklmnopqrstuvwxyzabcdef'"
             + ",'xacml.pdp.rest.password':'enc:FSfOhDygtmnX3gkMSfTFMoBFW+AG5k6goNj2KZgQmeF0DqgcMg=='"
             + ",'xacml.pdp.rest.user':'testpdp'"
@@ -72,7 +72,7 @@ class PropertyCoderTest {
 
     @Test
     void testPropertyCoder() {
-        MyClass data = propertyCoder.decode(json, AES_ENCRYPTION_KEY, MyClass.class);
+        MyClass data = propertyCoder.decode(JSON, AES_ENCRYPTION_KEY, MyClass.class);
         assertEquals("alpha", data.getPdpRestPass());
         assertEquals("hello", data.servers.get(0).pass);
         assertEquals("server1", data.servers.get(0).name);
@@ -82,7 +82,7 @@ class PropertyCoderTest {
 
     @Test
     void testPropertyCoderReader() {
-        Reader reader = new StringReader(json);
+        Reader reader = new StringReader(JSON);
         MyClass data = propertyCoder.decode(reader, AES_ENCRYPTION_KEY, MyClass.class);
         assertEquals("alpha", data.getPdpRestPass());
         assertEquals("hello", data.servers.get(0).pass);

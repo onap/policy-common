@@ -2,7 +2,7 @@
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
  *  Modifications Copyright (C) 2020 AT&T Intellectual Property. All rights reserved.
- *  Modifications Copyright (C) 2024 Nordix Foundation
+ *  Modifications Copyright (C) 2024-2025 Nordix Foundation
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,6 @@ class TestParameterValidationUtils {
     @Test
     void testValidateIntParameter() {
         assertTrue(ParameterValidationUtils.validateIntParameter(5555));
-        assertTrue(ParameterValidationUtils.validateIntParameter(Integer.valueOf(7777)));
         assertFalse(ParameterValidationUtils.validateIntParameter(0));
         assertFalse(ParameterValidationUtils.validateIntParameter(-1));
     }
@@ -52,7 +51,6 @@ class TestParameterValidationUtils {
     @Test
     void testValidateLongParameter() {
         assertTrue(ParameterValidationUtils.validateLongParameter(5555L));
-        assertTrue(ParameterValidationUtils.validateLongParameter(Long.valueOf(7777L)));
         assertFalse(ParameterValidationUtils.validateLongParameter(0L));
         assertFalse(ParameterValidationUtils.validateLongParameter(-1L));
     }
