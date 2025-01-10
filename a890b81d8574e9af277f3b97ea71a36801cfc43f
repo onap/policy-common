@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "337dc301_56cac44f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2025-01-10T10:17:40Z",
+      "side": 1,
+      "message": "- suggestion to have the package name healthcheck\n- suggestion to move the specialized implementations to their respective existing packages (kafka and noop).\n- code coverage needs to be 90% or more.",
+      "revId": "a890b81d8574e9af277f3b97ea71a36801cfc43f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "088b21b7_02e1c999",
+        "filename": "message-bus/src/main/java/org/onap/policy/common/message/bus/check/KafkaHealthCheck.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2025-01-10T10:17:40Z",
+      "side": 1,
+      "message": "logger.warn sound more appropriate, considering is not a breakpoint, but not a good result either.",
+      "range": {
+        "startLine": 48,
+        "startChar": 19,
+        "endLine": 48,
+        "endChar": 23
+      },
+      "revId": "a890b81d8574e9af277f3b97ea71a36801cfc43f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef771ee3_3be1615b",
+        "filename": "message-bus/src/main/java/org/onap/policy/common/message/bus/check/KafkaHealthCheck.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2025-01-10T10:17:40Z",
+      "side": 1,
+      "message": "logger.warn - same as above",
+      "range": {
+        "startLine": 53,
+        "startChar": 16,
+        "endLine": 53,
+        "endChar": 49
+      },
+      "revId": "a890b81d8574e9af277f3b97ea71a36801cfc43f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "accef438_996d30ac",
+        "filename": "message-bus/src/main/java/org/onap/policy/common/message/bus/check/KafkaHealthCheck.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2025-01-10T10:17:40Z",
+      "side": 1,
+      "message": "logger.warn - same as above",
+      "range": {
+        "startLine": 85,
+        "startChar": 12,
+        "endLine": 85,
+        "endChar": 55
+      },
+      "revId": "a890b81d8574e9af277f3b97ea71a36801cfc43f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5aed1253_55f37a4f",
+        "filename": "message-bus/src/main/java/org/onap/policy/common/message/bus/check/KafkaHealthCheck.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2025-01-10T10:17:40Z",
+      "side": 1,
+      "message": "logger.warn - same as above",
+      "range": {
+        "startLine": 91,
+        "startChar": 16,
+        "endLine": 91,
+        "endChar": 67
+      },
+      "revId": "a890b81d8574e9af277f3b97ea71a36801cfc43f",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    }
+  ]
+}
