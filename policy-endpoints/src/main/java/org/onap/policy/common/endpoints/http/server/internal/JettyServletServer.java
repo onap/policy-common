@@ -33,9 +33,12 @@ import java.util.Map;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.ToString;
-import org.eclipse.jetty.security.ConstraintMapping;
-import org.eclipse.jetty.security.ConstraintSecurityHandler;
+import org.apache.commons.lang3.StringUtils;
+import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
+import org.eclipse.jetty.security.Constraint;
 import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.security.SecurityHandler;
 import org.eclipse.jetty.security.UserStore;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.CustomRequestLog;
@@ -45,9 +48,6 @@ import org.eclipse.jetty.server.SecureRequestCustomizer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.Slf4jRequestLogWriter;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
-import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Credential;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.onap.policy.common.endpoints.http.server.HttpServletServer;
@@ -150,16 +150,15 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     /**
      * Constructor.
      *
-     * @param name server name
-     * @param host server host
-     * @param port server port
+     * @param name         server name
+     * @param host         server host
+     * @param port         server port
      * @param sniHostCheck SNI Host checking flag
-     * @param contextPath context path
-     *
+     * @param contextPath  context path
      * @throws IllegalArgumentException if invalid parameters are passed in
      */
     protected JettyServletServer(String name, boolean https, String host, int port, boolean sniHostCheck,
-        String contextPath) {
+                                 String contextPath) {
         String srvName = name;
 
         if (srvName == null || srvName.isEmpty()) {
@@ -209,10 +208,6 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
 
         this.jettyServer.addConnector(this.connector);
         this.jettyServer.setHandler(context);
-    }
-
-    protected JettyServletServer(String name, String host, int port, boolean sniHostCheck, String contextPath) {
-        this(name, false, host, port, sniHostCheck, contextPath);
     }
 
     @Override
@@ -287,11 +282,11 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     public void setBasicAuthentication(String user, String password, String servletPath) {
         String srvltPath = servletPath;
 
-        if (user == null || user.isEmpty() || password == null || password.isEmpty()) {
+        if (StringUtils.isBlank(user) || StringUtils.isBlank(password)) {
             throw new IllegalArgumentException("Missing user and/or password");
         }
 
-        if (srvltPath == null || srvltPath.isEmpty()) {
+        if (StringUtils.isBlank(srvltPath)) {
             srvltPath = "/*";
         }
 
@@ -303,21 +298,12 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
         hashLoginService.setUserStore(userStore);
         hashLoginService.setName(this.connector.getName() + "-login-service");
 
-        var constraint = new Constraint();
-        constraint.setName(Constraint.__BASIC_AUTH);
-        constraint.setRoles(new String[] {
-            "user"
-        });
-        constraint.setAuthenticate(true);
+        var constraint = Constraint.from("user");
 
-        var constraintMapping = new ConstraintMapping();
-        constraintMapping.setConstraint(constraint);
-        constraintMapping.setPathSpec(srvltPath);
-
-        var securityHandler = new ConstraintSecurityHandler();
+        var securityHandler = new SecurityHandler.PathMapped();
+        securityHandler.put(srvltPath, constraint);
         securityHandler.setAuthenticator(new BasicAuthenticator());
         securityHandler.setRealmName(this.connector.getName() + "-realm");
-        securityHandler.addConstraintMapping(constraintMapping);
         securityHandler.setLoginService(hashLoginService);
 
         this.context.setSecurityHandler(securityHandler);
@@ -332,7 +318,7 @@ public abstract class JettyServletServer implements HttpServletServer, Runnable 
     @Override
     public void run() {
         try {
-            logger.info("{}: STARTING", this);
+            logger.info("{}: RUN", this);
 
             this.jettyServer.start();
 

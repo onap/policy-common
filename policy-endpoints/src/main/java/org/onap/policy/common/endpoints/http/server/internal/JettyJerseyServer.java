@@ -3,7 +3,7 @@
  * policy-endpoints
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2019-2020,2023 Nordix Foundation.
+ * Modifications Copyright (C) 2019-2020, 2023, 2025 Nordix Foundation.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,14 +17,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
 
 package org.onap.policy.common.endpoints.http.server.internal;
 
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jetty.servlet.ServletContextHandler;
-import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.ee10.servlet.ServletContextHandler;
+import org.eclipse.jetty.ee10.servlet.ServletHolder;
 import org.glassfish.jersey.server.ServerProperties;
 import org.glassfish.jersey.servlet.ServletContainer;
 import org.onap.policy.common.endpoints.http.server.JsonExceptionMapper;
@@ -246,7 +248,7 @@ public class JettyJerseyServer extends JettyServletServer {
 
     @Override
     public String toString() {
-        return "JettyJerseyServer [Jerseyservlets=" + servlets
+        return "JettyJerseyServer [JerseyServlets=" + servlets
             + ", swaggerId=" + swaggerId
             + ", toString()=" + super.toString()
             + "]";
