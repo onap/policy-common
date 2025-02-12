@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2020, 2023-2024 Nordix Foundation.
+ * Modifications Copyright (C) 2020, 2023-2025 Nordix Foundation.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,6 +17,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
 
@@ -32,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.google.gson.Gson;
-import io.prometheus.client.servlet.jakarta.exporter.MetricsServlet;
+import io.prometheus.metrics.exporter.servlet.jakarta.PrometheusMetricsServlet;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -59,7 +61,7 @@ import org.slf4j.LoggerFactory;
  * HttpServletServer JUNIT tests.
  */
 class HttpServerTest {
-    private static final String JVM_MEMORY_BYTES_USED = "jvm_memory_bytes_used";
+    private static final String JVM_MEMORY_BYTES_USED = "jvm_memory_used_bytes";
     private static final String METRICS_URI = "/metrics";
     private static final String PROMETHEUS = "prometheus";
     private static final String LOCALHOST = "localhost";
@@ -227,7 +229,7 @@ class HttpServerTest {
         HttpServletServer server = HttpServletServerFactoryInstance.getServerFactory()
             .build(PROMETHEUS, LOCALHOST, port, "/", false, true);
 
-        server.addStdServletClass("/prom-generic-servlet/metrics", MetricsServlet.class.getName());
+        server.addStdServletClass("/prom-generic-servlet/metrics", PrometheusMetricsServlet.class.getName());
         server.waitedStart(5000);
 
         assertTrue(HttpServletServerFactoryInstance.getServerFactory().get(port).isAlive());

@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2018 Samsung Electronics Co., Ltd.
- * Modifications Copyright 2023-2024 Nordix Foundation.
+ * Modifications Copyright 2023-2025 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
 
@@ -28,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import io.prometheus.client.servlet.jakarta.exporter.MetricsServlet;
+import io.prometheus.metrics.exporter.servlet.jakarta.PrometheusMetricsServlet;
 import jakarta.ws.rs.client.Entity;
 import jakarta.ws.rs.client.InvocationCallback;
 import jakarta.ws.rs.core.MediaType;
@@ -403,7 +405,8 @@ class HttpClientTest {
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
                         + PolicyEndPointProperties.PROPERTY_MANAGED_SUFFIX, "true");
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
-                        + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_CLASS_SUFFIX, MetricsServlet.class.getName());
+                        + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_CLASS_SUFFIX,
+            PrometheusMetricsServlet.class.getName());
         httpProperties.setProperty(PolicyEndPointProperties.PROPERTY_HTTP_SERVER_SERVICES + DOT_PAP
                                            + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_URIPATH_SUFFIX,
                                    "/pap/test/random/metrics");

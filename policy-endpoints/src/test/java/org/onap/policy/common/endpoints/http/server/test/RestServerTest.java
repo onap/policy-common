@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
- * Modifications Copyright (C) 2023-2024 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2025 Nordix Foundation.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ *
+ * SPDX-License-Identifier: Apache-2.0
  * ============LICENSE_END=========================================================
  */
 
@@ -32,7 +34,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import io.prometheus.client.servlet.jakarta.exporter.MetricsServlet;
+import io.prometheus.metrics.exporter.servlet.jakarta.PrometheusMetricsServlet;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
@@ -230,7 +232,7 @@ class RestServerTest {
     @Test
     void testStandardServletAddedToProperty() {
         when(params.getServletUriPath()).thenReturn("/metrics");
-        when(params.getServletClass()).thenReturn(MetricsServlet.class.getName());
+        when(params.getServletClass()).thenReturn(PrometheusMetricsServlet.class.getName());
         rest = new RestServer(params, Filter2.class, Provider1.class, Provider2.class);
         ArgumentCaptor<Properties> cap = ArgumentCaptor.forClass(Properties.class);
         verify(serverFactory).build(cap.capture());
@@ -241,7 +243,7 @@ class RestServerTest {
         assertEquals("false", props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_PROMETHEUS_SUFFIX));
         assertEquals(METRICS_URI,
             props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_URIPATH_SUFFIX));
-        assertEquals(MetricsServlet.class.getName(),
+        assertEquals(PrometheusMetricsServlet.class.getName(),
             props.getProperty(svcpfx + PolicyEndPointProperties.PROPERTY_HTTP_SERVLET_CLASS_SUFFIX));
     }
 
