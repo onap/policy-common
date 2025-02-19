@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52dcbbab_e2dc59e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2025-02-19T13:14:59Z",
+      "side": 1,
+      "message": "seems all good. did you run CSITs? I see some tags and one metric name changed.",
+      "revId": "6324d28cf7147c0f3366f7e0f1e5a0053da5e513",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    }
+  ]
+}
