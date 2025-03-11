@@ -24,6 +24,30 @@
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a95c8efa_2fc11ccd",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2025-03-11T14:50:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b74ab106_fca9876b",
+      "range": {
+        "startLine": 6,
+        "startChar": 46,
+        "endLine": 6,
+        "endChar": 50
+      },
+      "revId": "7ba1a232c87b8c14eae8417ac8490ffb3fa97ada",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d364d7eb_f13f244a",
@@ -37,6 +61,30 @@
       "writtenOn": "2025-03-11T14:38:49Z",
       "side": 1,
       "message": "if possible, add the SPDX-License-Identifier: Apache-2.0",
+      "range": {
+        "startLine": 18,
+        "startChar": 24,
+        "endLine": 18,
+        "endChar": 31
+      },
+      "revId": "7ba1a232c87b8c14eae8417ac8490ffb3fa97ada",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b93db902_3bb6fa3a",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 6722
+      },
+      "writtenOn": "2025-03-11T14:50:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d364d7eb_f13f244a",
       "range": {
         "startLine": 18,
         "startChar": 24,
