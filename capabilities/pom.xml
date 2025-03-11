@@ -2,6 +2,7 @@
   ============LICENSE_START=======================================================
    Copyright (C) 2018 Ericsson. All rights reserved.
    Modifications Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
+   Modifications Copyright (C) 2025 Nordix Foundation.
   ================================================================================
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -25,7 +26,7 @@
     <parent>
         <groupId>org.onap.policy.common</groupId>
         <artifactId>common-modules</artifactId>
-        <version>3.1.1-SNAPSHOT</version>
+        <version>3.1.2-SNAPSHOT</version>
     </parent>
 
     <artifactId>capabilities</artifactId>
