@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f60943ba_b42e5fb0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 7625
+      },
+      "writtenOn": "2025-03-11T16:52:38Z",
+      "side": 1,
+      "message": "update the licenses years / SPDX-License-Identifier: Apache-2.0",
+      "revId": "0669843a68ef279e4a0b88faff78aa8dd75d0321",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a"
+    }
+  ]
+}
