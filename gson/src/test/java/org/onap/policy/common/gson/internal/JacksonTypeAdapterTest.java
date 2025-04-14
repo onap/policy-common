@@ -1,10 +1,10 @@
 /*
- * ============LICENSE_START=======================================================
+ * ============LICENSE_START==============================================================
  * ONAP
- * ================================================================================
+ * =======================================================================================
  * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2024 Nordix Foundation
- * ================================================================================
+ * Modifications Copyright (C) 2024-2025 OpenInfra Foundation Europe. All rights reserved.
+ * =======================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,7 +16,9 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ============LICENSE_END=========================================================
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ * ============LICENSE_END================================================================
  */
 
 package org.onap.policy.common.gson.internal;
@@ -27,6 +29,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.TypeAdapter;
+import com.google.gson.TypeAdapterFactory;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
@@ -45,7 +48,7 @@ class JacksonTypeAdapterTest {
     /**
      * Gson object that excludes fields, as we're going to process the fields ourselves.
      */
-    private static Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
+    private static final Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
     private JacksonTypeAdapter<Data> adapter;
     private List<Serializer> sers;
@@ -86,7 +89,14 @@ class JacksonTypeAdapterTest {
             }
         });
 
-        TypeAdapter<Data> delegate = gson.getDelegateAdapter(null, TypeToken.get(Data.class));
+        TypeAdapterFactory factory = new TypeAdapterFactory() {
+            @Override
+            public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
+                return null;
+            }
+        };
+
+        TypeAdapter<Data> delegate = gson.getDelegateAdapter(factory, TypeToken.get(Data.class));
 
         adapter = new JacksonTypeAdapter<>(gson, delegate, sers, desers);
     }
