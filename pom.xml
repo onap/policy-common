@@ -33,7 +33,7 @@
 
     <groupId>org.onap.policy.common</groupId>
     <artifactId>common-modules</artifactId>
-    <version>3.1.2-SNAPSHOT</version>
+    <version>3.1.2</version>
 
     <packaging>pom</packaging>
 
