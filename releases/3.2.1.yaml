@@ -1,0 +1,4 @@
+distribution_type: 'maven'
+version: '3.2.1'
+project: 'policy-common'
+log_dir: 'policy-common-maven-stage-master/1427/'
