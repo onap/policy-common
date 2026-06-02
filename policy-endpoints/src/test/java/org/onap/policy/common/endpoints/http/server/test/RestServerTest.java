@@ -4,7 +4,7 @@
  * ================================================================================
  * Copyright (C) 2019-2021 AT&T Intellectual Property. All rights reserved.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
- * Modifications Copyright (C) 2023-2025 Nordix Foundation.
+ * Modifications Copyright (C) 2023-2026 OpenInfra Foundation Europe. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,6 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Properties;
 import lombok.Getter;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -291,7 +290,7 @@ class RestServerTest {
         if (code == 200) {
             errorMsg = "";
         } else {
-            errorMsg = IOUtils.toString(conn.getErrorStream(), StandardCharsets.UTF_8);
+            errorMsg = new String(conn.getErrorStream().readAllBytes(), StandardCharsets.UTF_8);
         }
 
         return code;

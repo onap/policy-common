@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2019 Nordix Foundation.
+ *  Copyright (C) 2019, 2026 OpenInfra Foundation Europe. All rights reserved.
  *  Modifications Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,11 +26,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,7 +102,9 @@ public final class TextFileUtils {
      * @throws IOException on errors reading text from the file
      */
     public static String getReaderAsString(final Reader textReader) throws IOException {
-        return IOUtils.toString(textReader);
+        var writer = new StringWriter();
+        textReader.transferTo(writer);
+        return writer.toString();
     }
 
     /**

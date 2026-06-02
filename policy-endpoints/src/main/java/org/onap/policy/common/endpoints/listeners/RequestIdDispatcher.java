@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2019, 2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2024 Nordix Foundation.
+ * Modifications Copyright (C) 2024-2026 OpenInfra Foundation Europe. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@
 
 package org.onap.policy.common.endpoints.listeners;
 
-import com.google.common.base.Strings;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import org.apache.commons.lang3.StringUtils;
 import org.onap.policy.common.message.bus.event.Topic.CommInfrastructure;
 import org.onap.policy.common.utils.coder.StandardCoderObject;
 import org.slf4j.Logger;
@@ -83,7 +83,7 @@ public class RequestIdDispatcher<T> extends ScoListener<T> {
      * @param listener listener to be registered
      */
     public void register(String reqid, TypedMessageListener<T> listener) {
-        if (Strings.isNullOrEmpty(reqid)) {
+        if (StringUtils.isEmpty(reqid)) {
             throw new IllegalArgumentException("attempt to register a listener with an empty request id");
         }
 
@@ -115,7 +115,7 @@ public class RequestIdDispatcher<T> extends ScoListener<T> {
         var reqid = sco.getString(requestIdFieldNames);
 
         // dispatch the message
-        if (Strings.isNullOrEmpty(reqid)) {
+        if (StringUtils.isEmpty(reqid)) {
             // it's an autonomous message - offer it to all autonomous listeners
             if (listeners.isEmpty()) {
                 logger.info("no listeners for autonomous message of type {}", message.getClass().getSimpleName());

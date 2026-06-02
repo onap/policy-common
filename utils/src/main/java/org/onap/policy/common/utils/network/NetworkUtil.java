@@ -3,6 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
+ * Modifications Copyright (C) 2026 OpenInfra Foundation Europe. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,11 +27,12 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.cert.X509Certificate;
 import java.util.UUID;
 import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.commons.net.util.TrustManagerUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +53,7 @@ public final class NetworkUtil {
     /**
      * A trust manager that always trusts certificates.
      */
-    private static final TrustManager[] ALWAYS_TRUST_MANAGER = { TrustManagerUtils.getAcceptAllTrustManager() };
+    private static final TrustManager[] ALWAYS_TRUST_MANAGER = { getAcceptAllTrustManager() };
 
     /**
      * Allocates an available port on which a server may listen.
@@ -182,4 +184,24 @@ public final class NetworkUtil {
     public static String genUniqueName(String prefix) {
         return prefix + "-" + UUID.randomUUID();
     }
+
+    private static TrustManager getAcceptAllTrustManager() {
+        return new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(X509Certificate[] chain, String authType) {
+
+            }
+
+            @Override
+            public void checkServerTrusted(X509Certificate[] chain, String authType) {
+
+            }
+
+            @Override
+            public X509Certificate[] getAcceptedIssuers() {
+                return new X509Certificate[0];
+            }
+        };
+    }
+
 }
