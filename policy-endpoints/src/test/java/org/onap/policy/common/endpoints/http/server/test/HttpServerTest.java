@@ -3,7 +3,7 @@
  * ONAP
  * ================================================================================
  * Copyright (C) 2017-2020 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2020, 2023-2025 Nordix Foundation.
+ * Modifications Copyright (C) 2020-2026 OpenInfra Foundation Europe. All rights reserved.
  * Modifications Copyright (C) 2021 Bell Canada. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,7 +44,6 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.UUID;
-import org.apache.commons.io.IOUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -652,7 +651,7 @@ class HttpServerTest {
         conn.setDoOutput(true);
         conn.setRequestProperty("Content-Type", mediaType);
         conn.setRequestProperty("Accept", mediaType);
-        IOUtils.write(post, conn.getOutputStream(), StandardCharsets.UTF_8);
+        conn.getOutputStream().write(post.getBytes(StandardCharsets.UTF_8));
         return response(conn);
     }
 
@@ -665,7 +664,7 @@ class HttpServerTest {
      */
     private String response(URLConnection conn) throws IOException {
         try (InputStream inpstr = conn.getInputStream()) {
-            return String.join("", IOUtils.readLines(inpstr, StandardCharsets.UTF_8));
+            return new String(inpstr.readAllBytes(), StandardCharsets.UTF_8).replace("\n", "").replace("\r", "");
         }
     }
 

@@ -1,6 +1,6 @@
 /*-
  * ============LICENSE_START=======================================================
- *  Copyright (C) 2019-2024 Nordix Foundation.
+ *  Copyright (C) 2019-2026 OpenInfra Foundation Europe. All rights reserved.
  *  Modifications Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -58,7 +57,7 @@ class TextFileUtilsTest {
     @Test
     void testPutToFileWithNewPath() throws IOException {
         String tempDirAndFileName = System.getProperty("java.io.tmpdir") + "/non/existant/path/Test.txt";
-        FileUtils.forceDeleteOnExit(new File(tempDirAndFileName));
+        new File(tempDirAndFileName).deleteOnExit();
 
         TextFileUtils.putStringAsTextFile(FILE_CONTENT, tempDirAndFileName);
 

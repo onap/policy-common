@@ -1,7 +1,7 @@
 /*-
  * ============LICENSE_START=======================================================
  *  Copyright (C) 2018 Ericsson. All rights reserved.
- *  Modifications Copyright (C) 2020, 2023 Nordix Foundation.
+ *  Modifications Copyright (C) 2020-2026 OpenInfra Foundation Europe. All rights reserved.
  *  Modifications Copyright (C) 2020-2021 AT&T Intellectual Property. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -37,7 +37,6 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,7 +88,7 @@ public final class ResourceUtils {
             if (resourceStream == null) {
                 return null;
             }
-            return IOUtils.toString(resourceStream, StandardCharsets.UTF_8);
+            return new String(resourceStream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (final IOException e) {
             LOGGER.debug("error reading resource stream {}", resourceName, e);
             return null;
