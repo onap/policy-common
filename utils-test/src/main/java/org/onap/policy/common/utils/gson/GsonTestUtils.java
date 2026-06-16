@@ -3,7 +3,7 @@
  * policy-management
  * ================================================================================
  * Copyright (C) 2017-2021 AT&T Intellectual Property. All rights reserved.
- * Modifications Copyright (C) 2024 Nordix Foundation.
+ * Modifications Copyright (C) 2024-2026 OpenInfra Foundation Europe. All rights reserved.
  * ================================================================================
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ import org.apache.commons.jexl3.JexlBuilder;
 import org.apache.commons.jexl3.JexlContext;
 import org.apache.commons.jexl3.JexlEngine;
 import org.apache.commons.jexl3.MapContext;
+import org.apache.commons.jexl3.introspection.JexlPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -230,7 +231,7 @@ public class GsonTestUtils {
     private static JexlEngine getEngine() {
         if (engineInstance == null) {
             // race condition here, but it's ok to overwrite with a new engine
-            engineInstance = new JexlBuilder().create();
+            engineInstance = new JexlBuilder().permissions(JexlPermissions.UNRESTRICTED).create();
         }
 
         return engineInstance;
