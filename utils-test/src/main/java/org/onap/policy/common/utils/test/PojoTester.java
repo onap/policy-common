@@ -20,7 +20,6 @@
 
 package org.onap.policy.common.utils.test;
 
-import com.openpojo.reflection.PojoClass;
 import com.openpojo.reflection.filters.FilterNonConcrete;
 import com.openpojo.reflection.impl.PojoClassFactory;
 import com.openpojo.validation.ValidatorBuilder;
@@ -30,7 +29,6 @@ import com.openpojo.validation.rule.impl.NoPublicFieldsExceptStaticFinalRule;
 import com.openpojo.validation.rule.impl.SetterMustExistRule;
 import com.openpojo.validation.test.impl.GetterTester;
 import com.openpojo.validation.test.impl.SetterTester;
-import java.util.List;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,28 +43,7 @@ import org.apache.commons.lang3.ArrayUtils;
 public class PojoTester {
 
     // excludes classes whose simple name ends with any of these suffixes
-    private static final String ENDS_WITH_PATTERN =
-            ".*(Utils|Converter|Comparator|Builder|Factory|Impl)$";
-
-    // excludes test fixtures and stubs (Dummy prefix)
-    private static final String DUMMY_PATTERN = "Dummy.*";
-
-    // excludes inner/anonymous classes (e.g. Foo$Bar, Foo$1) and empty simple names
-    private static final String INNER_CLASS_PATTERN = ".*\\$.*|";
-
-    private static final String BUILTIN_EXCLUDE_PATTERN =
-            ENDS_WITH_PATTERN + "|" + DUMMY_PATTERN + "|" + INNER_CLASS_PATTERN;
-
-    /**
-     * Tests all POJOs in the specified package (non-recursive), excluding classes matching
-     * the builtin pattern plus any additional exclusion patterns provided by the caller.
-     *
-     * @param packageName the package to scan for POJO classes (no subpackages)
-     * @param additionalExclusions extra regex fragments to exclude (matched against simple name)
-     */
-    public static void testPojosFlat(String packageName, String... additionalExclusions) {
-        validate(PojoClassFactory.getPojoClasses(packageName, new FilterNonConcrete()), additionalExclusions);
-    }
+    private static final String BUILTIN_EXCLUDE_PATTERN = ".*(Utils|Converter|Comparator|Builder|Factory|Impl)$";
 
     /**
      * Tests all POJOs in the specified package (recursive), excluding classes matching
@@ -79,18 +56,28 @@ public class PojoTester {
      * @param additionalExclusions extra regex fragments to exclude (matched against simple name)
      */
     public static void testPojos(String packageName, String... additionalExclusions) {
-        validate(PojoClassFactory.getPojoClassesRecursively(packageName, new FilterNonConcrete()),
-                additionalExclusions);
+        testPojos(packageName, true, additionalExclusions);
     }
 
-    private static void validate(List<PojoClass> pojoClasses, String... additionalExclusions) {
+    /**
+     * Tests all POJOs in the specified package (recursive), excluding classes matching
+     * the builtin pattern plus any additional exclusion patterns provided by the caller.
+     *
+     * <p>Additional exclusions are exact simple-name matches (anchored by {@code matches()}).
+     * Use {@code .*Foo.*} if substring matching is needed.
+     *
+     * @param packageName the package to scan for POJO classes
+     * @param validateToString whether to verify toString() method overrides default Object.toString()
+     * @param additionalExclusions extra regex fragments to exclude (matched against simple name)
+     */
+    public static void testPojos(String packageName, boolean validateToString, String... additionalExclusions) {
+        var pojoClasses = PojoClassFactory.getPojoClassesRecursively(packageName, new FilterNonConcrete());
         var pattern = buildPattern(additionalExclusions);
-        pojoClasses.removeIf(pc -> isTestClass(pc.getClazz())
-                || pc.getClazz().getSimpleName().matches(pattern));
+        pojoClasses.removeIf(pc -> isTestClass(pc.getClazz()) || pc.getClazz().getSimpleName().matches(pattern));
         if (pojoClasses.isEmpty()) {
             throw new IllegalArgumentException("No POJO classes found");
         }
-        pojoClasses.forEach(pc -> log.info("Testing class: {}", pc.getClazz().getSimpleName()));
+        pojoClasses.forEach(pc -> log.info("Testing POJO class: {}", pc.getClazz().getSimpleName()));
 
         var validator = ValidatorBuilder
                 .create()
@@ -100,7 +87,7 @@ public class PojoTester {
                 .with(new NoPublicFieldsExceptStaticFinalRule())
                 .with(new SetterTester())
                 .with(new GetterTester())
-                .with(new ToStringTester())
+                .with(validateToString ? new ToStringTester() : null)
                 .build();
         validator.validate(pojoClasses);
     }
